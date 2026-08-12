@@ -323,6 +323,8 @@
     applyTheme(); // aplicăm tema salvată la pornire
 
     function openInfoModal() {
+        const existingOverlay = document.querySelector('.modal-overlay');
+        if (existingOverlay) existingOverlay.remove();
         const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true'); overlay.setAttribute('aria-labelledby', 'info-title');
         overlay.innerHTML = `<div class="modal"><h4 id="info-title">📖 GHID DE COMPLETARE</h4><div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;"><p><strong>1. DATE PPL</strong><br>• <strong>Sex:</strong> selectați Masculin/Feminin. Implicit este MASCULIN.<br>• <strong>Data nașterii:</strong> format zz.ll.aaaa.<br>• <strong>Observații:</strong> opțional.</p><p><strong>2. PEDEAPSA</strong><br>• <strong>Articol liberare condiționată:</strong> alegeți articolul corespunzător.<br>• <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>• <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei (fără limite).<br>• <strong>Data începerii:</strong> prima zi de executare. Butonul AZI completează automat.</p><p><strong>3. PERIOADE DEDUSE</strong><br>• Adăugați perioadele care se scad (arest preventiv, reținere etc.).<br>• Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).</p><p><strong>4. RECURS COMPENSATORIU</strong><br>• Introduceți direct numărul de zile deduse (Legea 169/2017).</p><p><strong>5. PERIOADE ADĂUGATE</strong><br>• Evadare/boală: zile = data_final − data_inițial (capete excluse).<br>• Întrerupere: zile = data_final − data_inițial − 1.</p><p><strong>6. REST RĂMAS</strong><br>• Opțional: data liberării condiționate.</p><hr style="border-color:var(--border);margin:12px 0;"><p style="font-size:0.8rem;color:var(--text-light);"><strong>🔒 Confidențialitate și securitate</strong><br>Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p></div><button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button></div>`;
         document.body.appendChild(overlay); overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
@@ -355,14 +357,30 @@
     function applyDateMask(e) { const input = e.target; let val = input.value.replace(/\D/g, ''); if (val.length > 8) val = val.slice(0, 8); let formatted = ''; if (val.length > 0) formatted += val.substring(0, 2); if (val.length >= 3) formatted += '.' + val.substring(2, 4); if (val.length >= 5) formatted += '.' + val.substring(4, 8); input.value = formatted; }
     document.addEventListener('input', function(e) { if (e.target.classList.contains('date-masked')) applyDateMask(e); });
     function setToday(inputId) { const input = document.getElementById(inputId); if (input) input.value = fmtDate(today()); }
-    function updateCaseBadge() { const cases = JSON.parse(localStorage.getItem('anpCases') || '{}'); const count = Object.keys(cases).length; const badge = document.getElementById('caseCountBadge'); if (!badge) return; if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
+
+    // ========== FUNCȚII AJUTĂTOARE PENTRU CITIREA SPEȚELOR ==========
+    function getCases() {
+        try {
+            return JSON.parse(localStorage.getItem('anpCases') || '{}');
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function updateCaseBadge() {
+        const cases = getCases();
+        const count = Object.keys(cases).length;
+        const badge = document.getElementById('caseCountBadge');
+        if (!badge) return;
+        if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
+    }
 
     // ========== SALVARE / ÎNCĂRCARE / REDENUMIRE / ȘTERGERE ==========
     function saveCase() {
         const name = prompt('Nume speță:');
         if (!name || !name.trim()) return;
         const trimmedName = name.trim();
-        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const cases = getCases();
         if (cases[trimmedName]) {
             if (!confirm(`Există deja o speță cu numele "${trimmedName}". Dorești să o suprascrii?`)) return;
         }
@@ -390,7 +408,7 @@
     function openLoadModal() {
         const existingOverlay = document.querySelector('.modal-overlay');
         if (existingOverlay) existingOverlay.remove();
-        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const cases = getCases();
         const names = Object.keys(cases);
         if (names.length === 0) {
             alert('Nicio speță salvată.');
@@ -416,9 +434,13 @@
     }
 
     window.loadCaseByName = function(name) {
-        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const cases = getCases();
         if (!cases[name]) return;
         const d = cases[name];
+
+        // Ascundem rezultatele vechi pentru a evita confuzia
+        document.getElementById('resultsCard').classList.add('hidden');
+
         currentSex = d.sex || 'M';
         sexToggle.checked = currentSex === 'M';
         updateSexUI();
@@ -445,7 +467,7 @@
 
     window.deleteCase = function(name) {
         if (!confirm(`Sigur doriți să ștergeți speța "${name}"?`)) return;
-        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const cases = getCases();
         delete cases[name];
         localStorage.setItem('anpCases', JSON.stringify(cases));
         document.querySelector('.modal-overlay')?.remove();
@@ -459,7 +481,7 @@
         if (!newName || !newName.trim()) return;
         const trimmedNew = newName.trim();
         if (trimmedNew === oldName) return;
-        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const cases = getCases();
         if (cases[trimmedNew]) {
             alert('Există deja o speță cu acest nume. Alege alt nume.');
             return;
