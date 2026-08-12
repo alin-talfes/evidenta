@@ -338,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addNonExecBtn').addEventListener('click', addNonExecRow);
 
     document.getElementById('calcBtn').addEventListener('click', calculateAll);
-    document.getElementById('exportCsvBtn').addEventListener('click', exportCSV);
     document.getElementById('copyResultsBtn').addEventListener('click', copyResults);
     document.getElementById('exportPdfBtn').addEventListener('click', exportPDF);
     document.getElementById('toggleStepsBtn').addEventListener('click', toggleSteps);
