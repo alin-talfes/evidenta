@@ -112,7 +112,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.1</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.2</div>
 </div>
 
 <script>
@@ -254,6 +254,7 @@
         document.getElementById('errorContainer').classList.remove('visible');
     }
 
+    // Unifică intervalele și returnează suma zilelor, tratând suprapunerile (pentru deduceri)
     function sumIntervals(intervals) {
         if (!intervals.length) return 0;
         const sorted = intervals.slice().sort((a,b) => a[0].getTime()-b[0].getTime());
@@ -318,13 +319,18 @@
             totalDays = daysBetween(startDate, theorExp) + 1;
         }
 
+        // Deduceri: unificare intervale + manuale
         const dedIntervals = []; document.querySelectorAll('.deduction-row').forEach(r => { const sD=parseDate(r.querySelector('.ded-start').value.trim()), eD=parseDate(r.querySelector('.ded-end').value.trim()); if(sD&&eD) dedIntervals.push([sD,eD]); });
         let ded = sumIntervals(dedIntervals);
         document.querySelectorAll('.manual-days').forEach(i=>{ const v=parseInt(i.value); if(!isNaN(v)&&v>0) ded+=v; });
         if (ded > totalDays) { errC.innerHTML = '• Deducerile depășesc mandatul total.'; errC.classList.add('visible'); return; }
 
-        const nonIntervals = []; document.querySelectorAll('.non-exec-row').forEach(r => { const sD=parseDate(r.querySelector('.ne-start').value.trim()), eD=parseDate(r.querySelector('.ne-end').value.trim()); if(sD&&eD) nonIntervals.push([sD,eD]); });
-        const non = sumIntervals(nonIntervals);
+        // Neexecutate: adunăm direct valorile corecte din câmpuri (calculate deja corect)
+        let non = 0;
+        document.querySelectorAll('.ne-days').forEach(inp => {
+            const v = parseInt(inp.value);
+            if (!isNaN(v) && v > 0) non += v;
+        });
 
         let realExp = new Date(theorExp); realExp.setDate(realExp.getDate() - ded + non);
         const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, sex);
