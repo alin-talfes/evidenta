@@ -138,6 +138,67 @@
             letter-spacing: 1px;
             margin-bottom: 6px;
             color: var(--text-light);
+            position: relative;
+        }
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            background: #1a1a2e;
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            text-transform: none;
+            letter-spacing: 0.3px;
+            font-weight: 400;
+            white-space: normal;
+            width: 220px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 50;
+            line-height: 1.4;
+        }
+        .tooltip:hover::after, .tooltip:focus-visible::after {
+            opacity: 1;
+        }
+        .tooltip-btn {
+            position: relative;
+        }
+        .tooltip-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            text-transform: none;
+            letter-spacing: 0.3px;
+            font-weight: 400;
+            white-space: normal;
+            width: 220px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 50;
+            line-height: 1.4;
+        }
+        .tooltip-btn:hover::after, .tooltip-btn:focus-visible::after {
+            opacity: 1;
         }
         select, input[type="number"], input[type="text"], textarea {
             width: 100%;
@@ -291,9 +352,9 @@
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
 <div class="container">
     <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
-        <button class="btn-utility primary" onclick="saveCase()" aria-label="Salvează speța curentă">💾 SALVEAZĂ</button>
-        <button class="btn-utility" onclick="openLoadModal()" id="loadBtn" aria-label="Încarcă o speță salvată">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge" aria-label="Număr spețe salvate">0</span></button>
-        <button class="btn-utility" onclick="confirmReset()" aria-label="Resetează toate câmpurile">↺ RESET</button>
+        <button class="btn-utility primary tooltip-btn" onclick="saveCase()" aria-label="Salvează speța curentă" data-tooltip="Salvează toate datele introduse ca o speță locală, pentru a o putea reîncărca ulterior.">💾 SALVEAZĂ</button>
+        <button class="btn-utility tooltip-btn" onclick="openLoadModal()" id="loadBtn" aria-label="Încarcă o speță salvată" data-tooltip="Deschide o listă cu toate spețele salvate. Poți încărca sau șterge orice speță.">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge" aria-label="Număr spețe salvate">0</span></button>
+        <button class="btn-utility tooltip-btn" onclick="confirmReset()" aria-label="Resetează toate câmpurile" data-tooltip="Resetează toate câmpurile și șterge ultima salvare automată. Confirmarea este necesară.">↺ RESET</button>
     </div>
     <div class="header">
         <h1 id="main-title">⚖️ CALCULATOR PEDEPSE</h1>
@@ -303,18 +364,18 @@
         <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
         <div class="form-grid">
             <div>
-                <label for="sex">Sex</label>
+                <label for="sex" class="tooltip" data-tooltip="Selectați sexul persoanei private de libertate. Necesar pentru stabilirea categoriei de vârstă (BĂTRÂN: bărbați ≥ 60 ani, femei ≥ 55/60 ani).">Sex</label>
                 <select id="sex" aria-required="true"><option value="">—</option><option value="M">Masculin</option><option value="F">Feminin</option></select>
             </div>
             <div>
-                <label for="birthDate">Data nașterii</label>
+                <label for="birthDate" class="tooltip" data-tooltip="Data nașterii în format zz.ll.aaaa. Vârsta exactă se calculează automat la data de azi și determină categoria de vârstă.">Data nașterii</label>
                 <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="birthDate-format">
                 <span id="birthDate-format" class="hidden">Format zz.ll.aaaa</span>
             </div>
             <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;" aria-live="polite"></div>
         </div>
         <div style="margin-top:12px;">
-            <label for="observations">📝 Observații / Nume PPL (opțional)</label>
+            <label for="observations" class="tooltip" data-tooltip="Numele deținutului sau orice alte observații relevante. Opțional. Apare în raportul de rezultate și în exportul CSV.">📝 Observații / Nume PPL (opțional)</label>
             <textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea>
         </div>
     </div>
@@ -323,11 +384,11 @@
         <h3 id="sentence-heading">⚖️ 2. PEDEAPSA</h3>
         <div class="form-grid">
             <div>
-                <label for="liberationArticle">Articol liberare condiționată</label>
+                <label for="liberationArticle" class="tooltip" data-tooltip="Articolul din Codul penal care stabilește fracțiile de liberare condiționată. Determină automat fracția obligatorie și totală.">Articol liberare condiționată</label>
                 <select id="liberationArticle" aria-required="true"><option value="">—</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. 2</option><option value="VCP603">VCP art. 60 alin. 3</option></select>
             </div>
             <div>
-                <label for="lifeSentence">Detențiune pe viață</label>
+                <label for="lifeSentence" class="tooltip" data-tooltip="Bifați dacă pedeapsa este detențiunea pe viață. Se vor aplica regulile specifice: fracție ½ / ½, plafon 20 ani (7305 zile).">Detențiune pe viață</label>
                 <label class="toggle-switch" style="margin-top:8px;">
                     <input type="checkbox" id="lifeSentence">
                     <span class="toggle-slider" aria-hidden="true"></span>
@@ -336,12 +397,12 @@
             </div>
         </div>
         <div id="sentenceDuration" class="form-grid" style="margin-top:8px;">
-            <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
-            <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
-            <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
+            <div><label for="durYears" class="tooltip" data-tooltip="Anii din durata totală a pedepsei. Se adună calendaristic, nu cu 1 an = 365 zile.">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
+            <div><label for="durMonths" class="tooltip" data-tooltip="Lunile din durata totală a pedepsei. Se adună calendaristic.">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
+            <div><label for="durDays" class="tooltip" data-tooltip="Zilele din durata totală a pedepsei. Se adună calendaristic.">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
         </div>
         <div style="margin-top:12px;">
-            <label for="startDate">Data începerii executării pedepsei</label>
+            <label for="startDate" class="tooltip" data-tooltip="Prima zi de executare a pedepsei. Se include în toate calculele. Folosiți butonul AZI pentru data curentă.">Data începerii executării pedepsei</label>
             <div class="date-wrapper">
                 <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="startDate-format">
                 <button type="button" class="btn-today" onclick="setToday('startDate')">AZI</button>
@@ -352,16 +413,25 @@
 
     <div class="card" aria-labelledby="deductions-heading">
         <h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3>
+        <div style="margin-bottom:8px;">
+            <label class="tooltip" style="display:inline-block;margin-bottom:8px;" data-tooltip="Perioadele care se scad din mandat: arest preventiv, reținere, arest la domiciliu, executări anterioare. Se calculează cu capete incluse (zile = sfârșit − început + 1).">ℹ️ Cum se completează?</label>
+        </div>
         <div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div>
         <button class="btn btn-outline btn-sm" onclick="addDedRow()" aria-label="Adaugă o perioadă dedusă">+ Adaugă</button>
     </div>
     <div class="card" aria-labelledby="recurs-heading">
         <h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3>
+        <div style="margin-bottom:8px;">
+            <label class="tooltip" style="display:inline-block;margin-bottom:8px;" data-tooltip="Zile deduse prin hotărâri judecătorești (Legea 169/2017) fără a defini o perioadă anume. Se adaugă direct la totalul deducerilor.">ℹ️ Cum se completează?</label>
+        </div>
         <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
         <button class="btn btn-outline btn-sm" onclick="addManDedRow()" aria-label="Adaugă recurs compensatoriu">+ Adaugă</button>
     </div>
     <div class="card" aria-labelledby="nonExec-heading">
         <h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3>
+        <div style="margin-bottom:8px;">
+            <label class="tooltip" style="display:inline-block;margin-bottom:8px;" data-tooltip="Perioadele care se adaugă la mandat: evadare, întrerupere, provocarea bolii. Reguli diferite: evadarea/boala: capete excluse; întreruperea: ambele capete executate, deci zile = final − inițial − 1.">ℹ️ Cum se completează?</label>
+        </div>
         <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
         <button class="btn btn-outline btn-sm" onclick="addNonExecRow()" aria-label="Adaugă o perioadă adăugată">+ Adaugă</button>
     </div>
@@ -370,7 +440,7 @@
         <h3 id="rest-heading">📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
         <div class="form-grid">
             <div>
-                <label for="conditionalReleaseDate">Data liberării condiționate</label>
+                <label for="conditionalReleaseDate" class="tooltip" data-tooltip="Data la care deținutul a fost liberat condiționat. Se calculează automat restul rămas de executat (diferența până la expirarea reală).">Data liberării condiționate</label>
                 <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="condRelease-format">
                 <span id="condRelease-format" class="hidden">Format zz.ll.aaaa</span>
             </div>
@@ -379,8 +449,8 @@
 
     <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="btn-row">
-        <button class="btn btn-gold" onclick="calculateAll()" aria-label="Calculează toate termenele">📐 CALCULEAZĂ</button>
-        <button class="btn btn-outline" onclick="exportCSV()" aria-label="Exportă rezultatele în format CSV">📊 EXPORTĂ CSV</button>
+        <button class="btn btn-gold tooltip-btn" onclick="calculateAll()" aria-label="Calculează toate termenele" data-tooltip="Aplică toate regulile de calcul și afișează rezultatele detaliate, inclusiv fracțiile, datele și cronologia termenelor.">📐 CALCULEAZĂ</button>
+        <button class="btn btn-outline tooltip-btn" onclick="exportCSV()" aria-label="Exportă rezultatele în format CSV" data-tooltip="Descarcă un fișier CSV cu toate datele introduse și rezultatele calculate, pentru arhivare sau prelucrare ulterioară.">📊 EXPORTĂ CSV</button>
     </div>
 
     <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
@@ -391,7 +461,7 @@
             <h4 style="color:var(--gold);" id="timeline-heading">📅 CRONOLOGIE TERMENE</h4>
             <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
         </div>
-        <button class="btn btn-outline btn-sm" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;" aria-expanded="false" aria-controls="stepsContainer">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
+        <button class="btn btn-outline btn-sm tooltip-btn" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;" aria-expanded="false" aria-controls="stepsContainer" data-tooltip="Afișează sau ascunde pașii detaliați ai calculului, explicând fiecare etapă (mandat, deduceri, fracții, rotunjiri).">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
         <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
             <h4 id="steps-heading">🧮 PAȘII CALCULULUI</h4>
             <ol id="stepsList"></ol>
@@ -399,7 +469,7 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.11</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.12</footer>
 </div>
 
 <script>
