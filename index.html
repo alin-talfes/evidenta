@@ -384,8 +384,8 @@
             <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;" aria-live="polite"></div>
         </div>
         <div style="margin-top:12px;">
-            <label for="observations">📝 Observații / Nume PPL (opțional)</label>
-            <textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea>
+            <label for="observations">📝 OBSERVAȚII (OPȚIONAL)</label>
+            <textarea id="observations" rows="2" placeholder=""></textarea>
         </div>
     </div>
 
@@ -421,25 +421,16 @@
 
     <div class="card" aria-labelledby="deductions-heading">
         <h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3>
-        <div style="margin-bottom:8px;">
-            <span style="display:inline-block;font-size:0.7rem;color:var(--text-light);">ℹ️ Cum se completează?</span>
-        </div>
         <div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div>
         <button class="btn btn-outline btn-sm" onclick="addDedRow()" aria-label="Adaugă o perioadă dedusă">+ Adaugă</button>
     </div>
     <div class="card" aria-labelledby="recurs-heading">
         <h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3>
-        <div style="margin-bottom:8px;">
-            <span style="display:inline-block;font-size:0.7rem;color:var(--text-light);">ℹ️ Cum se completează?</span>
-        </div>
         <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
         <button class="btn btn-outline btn-sm" onclick="addManDedRow()" aria-label="Adaugă recurs compensatoriu">+ Adaugă</button>
     </div>
     <div class="card" aria-labelledby="nonExec-heading">
         <h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3>
-        <div style="margin-bottom:8px;">
-            <span style="display:inline-block;font-size:0.7rem;color:var(--text-light);">ℹ️ Cum se completează?</span>
-        </div>
         <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
         <button class="btn btn-outline btn-sm" onclick="addNonExecRow()" aria-label="Adaugă o perioadă adăugată">+ Adaugă</button>
     </div>
@@ -476,7 +467,7 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.18</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.19</footer>
 </div>
 
 <script>
@@ -526,6 +517,12 @@
 
                     <p><strong>6. REST RĂMAS</strong><br>
                     • Opțional: introduceți data liberării condiționate pentru a calcula restul de executat.</p>
+
+                    <hr style="border-color:var(--border);margin:12px 0;">
+                    <p style="font-size:0.8rem;color:var(--text-light);">
+                        <strong>🔒 Confidențialitate și securitate</strong><br>
+                        Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.
+                    </p>
                 </div>
                 <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
             </div>
@@ -600,7 +597,6 @@
         { article:"VCP603", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3] }
     ];
 
-    // Sex toggle: MASCULIN dreapta (checked), FEMININ stanga (unchecked)
     const sexToggle = document.getElementById('sexToggle');
     const sexLabelM = document.getElementById('sexLabelM');
     const sexLabelF = document.getElementById('sexLabelF');
@@ -620,7 +616,6 @@
     sexToggle.addEventListener('change', updateSexUI);
     updateSexUI();
 
-    // ========== DATE MASK ==========
     function applyDateMask(e) {
         const input = e.target;
         let val = input.value.replace(/\D/g, '');
@@ -631,20 +626,15 @@
         if (val.length >= 5) formatted += '.' + val.substring(4, 8);
         input.value = formatted;
     }
-
     document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('date-masked')) {
-            applyDateMask(e);
-        }
+        if (e.target.classList.contains('date-masked')) { applyDateMask(e); }
     });
 
-    // ========== TODAY BUTTON ==========
     function setToday(inputId) {
         const input = document.getElementById(inputId);
         if (input) input.value = fmtDate(today());
     }
 
-    // ========== BADGE ==========
     function updateCaseBadge() {
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         const count = Object.keys(cases).length;
@@ -654,7 +644,6 @@
         else { badge.classList.add('hidden'); }
     }
 
-    // ========== STORAGE ==========
     function saveCase() {
         const name = prompt('Nume speță:');
         if (!name || !name.trim()) return;
@@ -1054,7 +1043,6 @@
         const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
         const quarantineEnd = new Date(startDate); quarantineEnd.setDate(quarantineEnd.getDate() + 20);
 
-        // Alerte
         const alertDates = [
             { label: 'Fracție minimă obligatorie', date: mDate },
             { label: 'Data propusă (totală)', date: tDate },
@@ -1079,7 +1067,6 @@
         document.getElementById('alertsContainer').innerHTML = alertsHtml;
         document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
 
-        // Timeline
         const timelineItems = [
             { label: 'Început executare', date: startDate },
             { label: 'Carantină expiră', date: quarantineEnd },
@@ -1116,7 +1103,7 @@
 
         const nume=document.getElementById('observations').value.trim();
         let html='';
-        if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații / Nume PPL</div><div class="result-value">${nume}</div></div>`;
+        if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații</div><div class="result-value">${nume}</div></div>`;
 
         html+=`<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">`;
         html+=`<div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>`;
@@ -1159,7 +1146,7 @@
         let csv = 'Indicator,Valoare\n';
         csv += `"Sex","${currentSex === 'M' ? 'Masculin' : 'Feminin'}"\n`;
         csv += `"Data nașterii","${document.getElementById('birthDate').value}"\n`;
-        csv += `"Observații / Nume PPL","${document.getElementById('observations').value}"\n`;
+        csv += `"Observații","${document.getElementById('observations').value}"\n`;
         csv += `"Articol LC","${document.getElementById('liberationArticle').value}"\n`;
         csv += `"Detențiune pe viață","${document.getElementById('lifeSentence').checked ? 'Da' : 'Nu'}"\n`;
         csv += `"Durată","${document.getElementById('durYears').value} ani, ${document.getElementById('durMonths').value} luni, ${document.getElementById('durDays').value} zile"\n`;
