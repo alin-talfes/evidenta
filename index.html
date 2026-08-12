@@ -15,6 +15,7 @@
             --text-light: #A0A5B0;
             --border: #2a2a35;
             --danger: #ff6b6b;
+            --warning: #ffa726;
             --radius: 16px;
             --input-radius: 14px;
             --shadow: 0 2px 8px rgba(0,0,0,0.3);
@@ -176,6 +177,9 @@
         .result-item.important { border-left-color: var(--gold); background: rgba(201, 162, 39, 0.08); }
         .result-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-light); font-weight: 600; margin-bottom: 5px; }
         .result-value { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); word-break: break-word; }
+        .result-warning { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+        .result-warning.expired { color: var(--danger); }
+        .result-warning.soon { color: var(--warning); }
         .tag { display: inline-block; padding: 4px 12px; border-radius: 14px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3px; }
         .tag-minor { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
         .tag-tanar { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
@@ -285,7 +289,7 @@
             <ol id="stepsList"></ol>
         </div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | BETA 0.3</div>
+    <div class="footer">CALCULATOR PEDEPSE | BETA 0.4</div>
 </div>
 
 <script>
@@ -610,6 +614,20 @@
         return err;
     }
 
+    // Funcție helper pentru atenționări
+    function formatDateWithWarning(date) {
+        if (!date || isNaN(date)) return fmtDate(date);
+        const t = today();
+        const diff = daysBetween(t, date);
+        let warning = '';
+        if (diff < 0) {
+            warning = ' <span class="result-warning expired">(Atenție, a expirat)</span>';
+        } else if (diff <= 30) {
+            warning = ' <span class="result-warning soon">(Atenție)</span>';
+        }
+        return `${fmtDate(date)}${warning}`;
+    }
+
     function calculateAll() {
         const errC = document.getElementById('errorContainer'); errC.classList.remove('visible');
         const birthDate = parseDate(document.getElementById('birthDate').value.trim());
@@ -705,7 +723,7 @@
                 const restDays = Math.max(0, daysBetween(condReleaseDate, realExp));
                 steps.push(`Rest rămas după liberarea condiționată (${fmtDate(condReleaseDate)}): ${fmtDate(realExp)} − ${fmtDate(condReleaseDate)} = ${restDays} zile.`);
                 restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT (după liberarea condiționată)</h4><div class="result-grid">`;
-                restHtml += `<div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${fmtDate(condReleaseDate)}</div></div>`;
+                restHtml += `<div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${formatDateWithWarning(condReleaseDate)}</div></div>`;
                 restHtml += `<div class="result-item important"><div class="result-label">Rest rămas</div><div class="result-value">${restDays} zile</div></div>`;
                 restHtml += `</div></div>`;
             }
@@ -716,8 +734,8 @@
         if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații / Nume PPL</div><div class="result-value">${nume}</div></div>`;
 
         html+=`<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">`;
-        html+=`<div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${fmtDate(theorExp)}</div></div>`;
-        html+=`<div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${fmtDate(realExp)}</div></div>`;
+        html+=`<div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>`;
+        html+=`<div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value" style="color:#ff6b6b;">${non} zile</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Zile executate efectiv</div><div class="result-value">${executedDays} zile</div></div>`;
@@ -725,18 +743,18 @@
         html+=`</div></div>`;
 
         html+=`<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">`;
-        html+=`<div class="result-item"><div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div><div class="result-value"><span class="fraction">${fracStr(mR)}</span> → (fără deduceri: ${mDays}z / cu deduceri: ${daysBetween(startDate, mDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${fmtDate(mDate)}</div></div>`;
-        html+=`<div class="result-item"><div class="result-label">DATA PROPOZABILĂ</div><div class="result-value"><span class="fraction">${fracStr(tR)}</span> → (fără deduceri: ${tDays}z / cu deduceri: ${daysBetween(startDate, tDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${fmtDate(tDate)}</div></div>`;
+        html+=`<div class="result-item"><div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div><div class="result-value"><span class="fraction">${fracStr(mR)}</span> → (fără deduceri: ${mDays}z / cu deduceri: ${daysBetween(startDate, mDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div></div>`;
+        html+=`<div class="result-item"><div class="result-label">DATA PROPOZABILĂ</div><div class="result-value"><span class="fraction">${fracStr(tR)}</span> → (fără deduceri: ${tDays}z / cu deduceri: ${daysBetween(startDate, tDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div></div>`;
         html+=`</div></div>`;
 
         html+=`<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid">`;
-        html+=`<div class="result-item"><div class="result-label">1/5 mandat</div><div class="result-value">(fără deduceri: ${fifth}z / cu deduceri: ${daysBetween(startDate, fDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${fmtDate(fDate)}</div></div>`;
+        html+=`<div class="result-item"><div class="result-label">1/5 mandat</div><div class="result-value">(fără deduceri: ${fifth}z / cu deduceri: ${daysBetween(startDate, fDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>`;
         html+=`</div></div>`;
 
         html+=`<div class="result-section"><h4>ALTE DATE</h4><div class="result-grid">`;
         html+=`<div class="result-item"><div class="result-label">Articol LC</div><div class="result-value">${articleInfo}</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Mandat total</div><div class="result-value">${totalDays} zile</div></div>`;
-        html+=`<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${fmtDate(quarantineEnd)}</div></div>`;
+        html+=`<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div></div>`;
         html+=`</div></div>`;
 
         html += restHtml;
