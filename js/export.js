@@ -44,7 +44,7 @@ function exportCSV() {
     const blob = new Blob([csv], { type: 'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'calculator_pedepse.csv';
+    a.download = 'calculator_evidenta_pedepse.csv';
     a.click();
 }
 
@@ -108,7 +108,7 @@ function exportPDF() {
     printWindow.document.write(`
         <html>
             <head>
-                <title>Calculator Pedepse - Rezultate</title>
+                <title>Calculator Evidență Pedepse - Rezultate</title>
                 <style>
                     body { font-family: Arial, sans-serif; margin: 20px; }
                     h1 { text-align: center; font-size: 20px; }
@@ -129,9 +129,9 @@ function exportPDF() {
                 </style>
             </head>
             <body>
-                <h1>CALCULATOR PEDEPSE - REZULTATE</h1>
+                <h1>CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE</h1>
                 <div>${content.innerHTML}</div>
-                <div class="footer">CALCULATOR PEDEPSE | v1.0 | © Alin Talfeș</div>
+                <div class="footer">CALCULATOR EVIDENȚĂ PEDEPSE | v1.1 | © Alin Talfeș</div>
                 <script>
                     window.onload = function() { window.print(); }
                 <\/script>
