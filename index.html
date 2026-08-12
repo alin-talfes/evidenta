@@ -367,14 +367,14 @@
         <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
         <div class="form-grid">
             <div>
-                <label class="tooltip" data-tooltip="Selectați sexul persoanei private de libertate. Necesar pentru stabilirea categoriei de vârstă (BĂTRÂN: bărbați ≥ 60 ani, femei ≥ 55/60 ani). Implicit Masculin.">Sex</label>
+                <label class="tooltip" data-tooltip="Selectați sexul persoanei private de libertate. Necesar pentru stabilirea categoriei de vârstă (BĂTRÂN: bărbați ≥ 60 ani, femei ≥ 55/60 ani). Implicit MASCULIN.">Sex</label>
                 <div class="sex-toggle-wrapper">
-                    <span class="sex-label" id="sexLabelM">MASCULIN</span>
+                    <span class="sex-label" id="sexLabelF">FEMININ</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="sexToggle" checked>
                         <span class="toggle-slider" aria-hidden="true"></span>
                     </label>
-                    <span class="sex-label" id="sexLabelF">FEMININ</span>
+                    <span class="sex-label active" id="sexLabelM">MASCULIN</span>
                 </div>
             </div>
             <div>
@@ -479,7 +479,7 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.15</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.16</footer>
 </div>
 
 <script>
@@ -548,7 +548,7 @@
         { article:"VCP603", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3] }
     ];
 
-    // Sex toggle
+    // Sex toggle: MASCULIN dreapta (checked), FEMININ stanga (unchecked)
     const sexToggle = document.getElementById('sexToggle');
     const sexLabelM = document.getElementById('sexLabelM');
     const sexLabelF = document.getElementById('sexLabelF');
