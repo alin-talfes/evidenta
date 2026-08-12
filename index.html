@@ -66,6 +66,18 @@
         .steps-container { background: rgba(200,169,81,0.03); border-radius:8px; padding:12px; margin-top:12px; font-size:0.85rem; line-height:1.6; border:1px solid var(--border); }
         .steps-container h4 { color: var(--gold); margin-bottom:6px; }
         .steps-container ol { padding-left:20px; color: var(--text-light); }
+
+        /* Modal */
+        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:100; display:flex; align-items:center; justify-content:center; }
+        .modal { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px; max-width:450px; width:90%; }
+        .modal h4 { color:var(--gold); margin-bottom:12px; }
+        .modal ul { list-style:none; max-height:300px; overflow-y:auto; margin-bottom:12px; }
+        .modal li { display:flex; align-items:center; justify-content:space-between; padding:8px 10px; border-radius:6px; margin-bottom:4px; background:rgba(200,169,81,0.04); border:1px solid transparent; }
+        .modal li:hover { border-color:var(--gold); }
+        .modal li span { flex:1; color:var(--text); cursor:pointer; font-size:0.9rem; }
+        .modal li button { background:transparent; border:1px solid var(--danger); color:var(--danger); border-radius:6px; padding:4px 8px; cursor:pointer; font-size:0.7rem; }
+        .modal li button:hover { background:rgba(255,107,107,0.1); }
+        .modal .close-btn { margin-top:8px; }
         @media (max-width:480px) { .form-grid { grid-template-columns:1fr; } .result-grid { grid-template-columns:1fr; } .header h1 { font-size:1.1rem; } }
     </style>
 </head>
@@ -73,7 +85,7 @@
 <div class="container">
     <div class="top-bar">
         <button class="btn-utility" onclick="saveCase()">💾 Salvează caz</button>
-        <button class="btn-utility" onclick="loadCase()">📂 Încarcă caz</button>
+        <button class="btn-utility" onclick="openLoadModal()">📂 Încarcă caz</button>
         <button class="btn-utility" onclick="resetAll()">↺ Reset</button>
     </div>
     <div class="header">
@@ -130,7 +142,7 @@
             <ol id="stepsList"></ol>
         </div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 1.0</div>
+    <div class="footer">CALCULATOR PEDEPSE | BETA 0.1</div>
 </div>
 
 <script>
@@ -200,6 +212,8 @@
 
     // ========== STORAGE ==========
     function saveCase() {
+        const name = prompt('Nume caz (ex: Popescu Ion):');
+        if (!name || !name.trim()) return;
         const data = {
             sex: document.getElementById('sex').value,
             birthDate: document.getElementById('birthDate').value,
@@ -215,20 +229,32 @@
             manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
             nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type').value, start: r.querySelector('.ne-start').value, end: r.querySelector('.ne-end').value}))
         };
-        const name = prompt('Nume caz (ex: Nume Prenume):', 'Nume Prenume');
-        if (!name) return;
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
-        cases[name] = data;
+        cases[name.trim()] = data;
         localStorage.setItem('anpCases', JSON.stringify(cases));
         alert('Caz salvat!');
     }
 
-    function loadCase() {
+    function openLoadModal() {
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         const names = Object.keys(cases);
         if (names.length === 0) { alert('Niciun caz salvat.'); return; }
-        const name = prompt('Nume caz:\n' + names.join('\n'));
-        if (!name || !cases[name]) return;
+        // Creează modalul
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        let html = '<div class="modal"><h4>Selectează sau șterge un caz</h4><ul>';
+        names.forEach(name => {
+            html += `<li><span onclick="loadCaseByName('${name.replace(/'/g, "\\'")}')">${name}</span><button onclick="deleteCase('${name.replace(/'/g, "\\'")}')">🗑️</button></li>`;
+        });
+        html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button></div>';
+        overlay.innerHTML = html;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+    }
+
+    window.loadCaseByName = function(name) {
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        if (!cases[name]) return;
         const d = cases[name];
         document.getElementById('sex').value = d.sex; sex = d.sex;
         document.getElementById('birthDate').value = d.birthDate;
@@ -248,8 +274,20 @@
         document.getElementById('nonExecContainer').innerHTML = '';
         (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); last.querySelector('.ne-type').value = r.type; last.querySelector('.ne-start').value = r.start; last.querySelector('.ne-end').value = r.end; updNonExec(last); });
         updAgeTag(); updSpecCond();
+        document.querySelector('.modal-overlay')?.remove();
         alert('Caz încărcat!');
-    }
+    };
+
+    window.deleteCase = function(name) {
+        if (!confirm(`Sigur doriți să ștergeți cazul "${name}"?`)) return;
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        delete cases[name];
+        localStorage.setItem('anpCases', JSON.stringify(cases));
+        document.querySelector('.modal-overlay')?.remove();
+        alert('Caz șters!');
+        // Redeschide modalul pentru a vedea lista actualizată
+        setTimeout(openLoadModal, 100);
+    };
 
     function autoSave() {
         const data = {
@@ -438,7 +476,6 @@
 
         const steps = [];
 
-        // Pas 1: Mandat total
         let totalDays, theorExp;
         if (life) {
             const d20 = new Date(startDate); d20.setFullYear(d20.getFullYear()+20); d20.setDate(d20.getDate()-1);
@@ -453,14 +490,12 @@
             steps.push(`Numărăm zilele dintre ${fmtDate(startDate)} și ${fmtDate(theorExp)}, inclusiv ambele capete: ${totalDays} zile. Acesta este mandatul total.`);
         }
 
-        // Pas 2: Deduceri
         const dedIntervals = []; document.querySelectorAll('.deduction-row').forEach(r => { const sD=parseDate(r.querySelector('.ded-start').value.trim()), eD=parseDate(r.querySelector('.ded-end').value.trim()); if(sD&&eD) dedIntervals.push([sD,eD]); });
         let ded = sumIntervals(dedIntervals);
         document.querySelectorAll('.manual-days').forEach(i=>{ const v=parseInt(i.value); if(!isNaN(v)&&v>0) ded+=v; });
         if (ded > totalDays) { errC.innerHTML = '• Deducerile depășesc mandatul total.'; errC.classList.add('visible'); return; }
         steps.push(`Perioadele deduse însumează ${ded} zile (după unificarea suprapunerilor).`);
 
-        // Pas 3: Neexecutate
         let non = 0;
         document.querySelectorAll('.ne-days').forEach(inp => {
             const v = parseInt(inp.value);
@@ -468,11 +503,9 @@
         });
         steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile.`);
 
-        // Pas 4: Expirare reală
         let realExp = new Date(theorExp); realExp.setDate(realExp.getDate() - ded + non);
         steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
 
-        // Pas 5: Categorie vârstă și fracții
         const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, sex);
         steps.push(`La data începerii executării, deținutul avea categoria de vârstă: ${ageAtExpiry}.`);
 
@@ -493,13 +526,11 @@
         steps.push(`Articolul aplicabil: ${articleInfo}.`);
         steps.push(`Fracția minimă obligatorie: ${fracStr(mR)}. Fracția totală/propozabilă: ${fracStr(tR)}.`);
 
-        // Pas 6: Zile fracții
         let mDays=Math.floor(totalDays*mR), tDays=Math.floor(totalDays*tR);
         if(mDays>pM)mDays=pM; if(tDays>pT)tDays=pT;
         steps.push(`Fracția minimă: Math.floor(${totalDays} × ${fracStr(mR)}) = ${mDays} zile (din mandatul total).`);
         steps.push(`Fracția totală: Math.floor(${totalDays} × ${fracStr(tR)}) = ${tDays} zile (din mandatul total).`);
 
-        // Pas 7: Date fracții
         let mDate=new Date(startDate); mDate.setDate(mDate.getDate()+mDays-1); mDate.setDate(mDate.getDate()-ded+non);
         let tDate=new Date(startDate); tDate.setDate(tDate.getDate()+tDays-1); tDate.setDate(tDate.getDate()-ded+non);
         const fifth=Math.floor(totalDays/5);
@@ -507,11 +538,9 @@
         steps.push(`Data fracției minime: ${fmtDate(startDate)} + ${mDays} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(mDate)}.`);
         steps.push(`Data fracției totale: ${fmtDate(startDate)} + ${tDays} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(tDate)}.`);
 
-        // Pas 8: 1/5
         steps.push(`Termenul de reanalizare 1/5: Math.floor(${totalDays} / 5) = ${fifth} zile.`);
         steps.push(`Data 1/5: ${fmtDate(startDate)} + ${fifth} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(fDate)}.`);
 
-        // Pas 9: Alte date
         const executedDays = Math.max(0, daysBetween(startDate, today()) + 1);
         const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
         steps.push(`Zile executate efectiv până astăzi (${fmtDate(today())}): ${executedDays} zile.`);
@@ -521,7 +550,6 @@
         quarantineEnd.setDate(quarantineEnd.getDate() + 20);
         steps.push(`Carantina și observarea: ${fmtDate(startDate)} + 20 zile = ${fmtDate(quarantineEnd)}.`);
 
-        // Rest rămas opțional
         let restHtml = '';
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr && parseDate(condReleaseStr)) {
@@ -536,7 +564,6 @@
             }
         }
 
-        // Construire HTML rezultate
         const nume=document.getElementById('observations').value.trim();
         let html='';
         if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații / Nume PPL</div><div class="result-value">${nume}</div></div>`;
