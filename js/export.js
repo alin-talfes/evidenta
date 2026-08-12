@@ -106,55 +106,6 @@ function buildInputDataHTML(data) {
 }
 
 /**
- * Exportă datele introduse și rezultatele în format CSV.
- */
-function exportCSV() {
-    const data = getInputData();
-    let csv = 'SECȚIUNE,Indicator,Valoare\n';
-
-    csv += `"DATE INTRODUSE","Sex","${data.sex}"\n`;
-    csv += `"DATE INTRODUSE","Data nașterii","${data.birthDate}"\n`;
-    csv += `"DATE INTRODUSE","Observații","${data.observations}"\n`;
-    csv += `"DATE INTRODUSE","Articol LC","${data.art}"\n`;
-    csv += `"DATE INTRODUSE","Detențiune pe viață","${data.life ? 'Da' : 'Nu'}"\n`;
-    csv += `"DATE INTRODUSE","Durată","${data.y} ani, ${data.m} luni, ${data.d} zile"\n`;
-    csv += `"DATE INTRODUSE","Data începerii","${data.start}"\n`;
-    csv += `"DATE INTRODUSE","Data liberării condiționate","${data.condRelease}"\n`;
-
-    data.dedRows.forEach((r, i) => {
-        csv += `"DATE INTRODUSE","Perioadă dedusă ${i + 1}","${r.start} - ${r.end}"\n`;
-    });
-
-    data.manDed.forEach((v, i) => {
-        if (parseInt(v) > 0) csv += `"DATE INTRODUSE","Recurs compensatoriu ${i + 1}","${v} zile"\n`;
-    });
-
-    data.nonRows.forEach((r, i) => {
-        csv += `"DATE INTRODUSE","Perioadă adăugată ${i + 1}","${r.type} (${r.start} - ${r.end})"\n`;
-    });
-
-    if (data.masuriRefDate || data.masuriDays !== '0') {
-        csv += `"DATE INTRODUSE","Măsuri preventive","Ref: ${data.masuriRefDate}, Zile: ${data.masuriDays}, Rezultat: ${data.masuriResult}"\n`;
-    }
-
-    csv += '\n"REZULTATE",,\n';
-    const content = document.getElementById('resultsContent');
-    if (content) {
-        content.querySelectorAll('.result-item').forEach(item => {
-            const label = item.querySelector('.result-label')?.innerText || '';
-            const value = item.querySelector('.result-value')?.innerText || '';
-            csv += `"REZULTATE","${label}","${value}"\n`;
-        });
-    }
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'calculator_evidenta_pedepse.csv';
-    a.click();
-}
-
-/**
  * Copiază rezultatele în clipboard.
  */
 function copyResults() {
