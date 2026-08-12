@@ -307,7 +307,7 @@
 
         .toggle-switch { position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
         .toggle-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-        .toggle-slider { width: 42px; height: 24px; background: var(--border); border-radius: 12px; transition: all 0.2s; }
+        .toggle-slider { width: 42px; height: 24px; background: var(--border); border-radius: 12px; transition: all 0.2s; flex-shrink: 0; }
         .toggle-slider:before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: var(--text-light); border-radius: 50%; transition: all 0.2s; }
         .toggle-switch input:checked + .toggle-slider { background: var(--gold); }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #0F1115; }
@@ -358,8 +358,12 @@
         <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
         <div class="form-grid">
             <div>
-                <label for="sex" class="tooltip" data-tooltip="Selectați sexul persoanei private de libertate. Necesar pentru stabilirea categoriei de vârstă (BĂTRÂN: bărbați ≥ 60 ani, femei ≥ 55/60 ani).">Sex</label>
-                <select id="sex" aria-required="true"><option value="">—</option><option value="M">Masculin</option><option value="F">Feminin</option></select>
+                <label class="tooltip" data-tooltip="Selectați sexul persoanei private de libertate. Necesar pentru stabilirea categoriei de vârstă (BĂTRÂN: bărbați ≥ 60 ani, femei ≥ 55/60 ani). Implicit Masculin.">Sex</label>
+                <label class="toggle-switch" style="margin-top:8px;">
+                    <input type="checkbox" id="sexToggle" checked>
+                    <span class="toggle-slider" aria-hidden="true"></span>
+                    <span style="font-size:0.82rem;color:var(--text-light);" id="sexLabel">Masculin</span>
+                </label>
             </div>
             <div>
                 <label for="birthDate" class="tooltip" data-tooltip="Data nașterii în format zz.ll.aaaa. Vârsta exactă se calculează automat la data de azi și determină categoria de vârstă.">Data nașterii</label>
@@ -463,11 +467,11 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.13</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.14</footer>
 </div>
 
 <script>
-    // ========== UTILS (Corectate și verificate) ==========
+    // ========== UTILS ==========
     const parseDate = (str) => {
         if (!str) return null;
         str = str.trim();
@@ -476,10 +480,7 @@
             const day = parseInt(parts[0], 10), month = parseInt(parts[1], 10), year = parseInt(parts[2], 10);
             if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
                 const d = new Date(year, month - 1, day);
-                // Verificare strictă: ziua și luna trebuie să corespundă
-                if (d.getDate() === day && d.getMonth() === month - 1 && d.getFullYear() === year) {
-                    return d;
-                }
+                if (d.getDate() === day && d.getMonth() === month - 1 && d.getFullYear() === year) return d;
             }
         }
         return null;
@@ -512,7 +513,7 @@
         if (ageY < 18) return "MINOR";
         if (ageY < 21) return "TANAR";
         const articleEl = document.getElementById('liberationArticle');
-        const isNCP = articleEl ? articleEl.value.startsWith("NCP") : false;
+        const isNCP = articleEl ? articleEl.value.startsWith("NCP") : true;
         const elderly = isNCP ? (ageY >= 60) : ((currentSex==='M' && ageY >= 60) || (currentSex==='F' && ageY >= 55));
         return elderly ? "BATRAN" : "MAJOR";
     };
@@ -535,6 +536,16 @@
         { article:"VCP603", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3] }
     ];
 
+    // Sex toggle
+    const sexToggle = document.getElementById('sexToggle');
+    const sexLabel = document.getElementById('sexLabel');
+    let currentSex = 'M';
+    sexToggle.addEventListener('change', function() {
+        currentSex = this.checked ? 'M' : 'F';
+        sexLabel.textContent = currentSex === 'M' ? 'Masculin' : 'Feminin';
+        updAgeTag();
+    });
+
     // ========== DATE MASK ==========
     function applyDateMask(e) {
         const input = e.target;
@@ -556,9 +567,7 @@
     // ========== TODAY BUTTON ==========
     function setToday(inputId) {
         const input = document.getElementById(inputId);
-        if (input) {
-            input.value = fmtDate(today());
-        }
+        if (input) input.value = fmtDate(today());
     }
 
     // ========== BADGE ==========
@@ -567,12 +576,8 @@
         const count = Object.keys(cases).length;
         const badge = document.getElementById('caseCountBadge');
         if (!badge) return;
-        if (count > 0) {
-            badge.textContent = count;
-            badge.classList.remove('hidden');
-        } else {
-            badge.classList.add('hidden');
-        }
+        if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+        else { badge.classList.add('hidden'); }
     }
 
     // ========== STORAGE ==========
@@ -580,7 +585,7 @@
         const name = prompt('Nume speță:');
         if (!name || !name.trim()) return;
         const data = {
-            sex: document.getElementById('sex').value,
+            sex: currentSex,
             birthDate: document.getElementById('birthDate').value,
             observations: document.getElementById('observations').value,
             life: document.getElementById('lifeSentence').checked,
@@ -626,7 +631,9 @@
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         if (!cases[name]) return;
         const d = cases[name];
-        document.getElementById('sex').value = d.sex || '';
+        currentSex = d.sex || 'M';
+        sexToggle.checked = currentSex === 'M';
+        sexLabel.textContent = currentSex === 'M' ? 'Masculin' : 'Feminin';
         document.getElementById('birthDate').value = d.birthDate || '';
         document.getElementById('observations').value = d.observations || '';
         document.getElementById('lifeSentence').checked = d.life || false;
@@ -662,7 +669,7 @@
     function autoSave() {
         try {
             const data = {
-                sex: document.getElementById('sex').value,
+                sex: currentSex,
                 birthDate: document.getElementById('birthDate').value,
                 observations: document.getElementById('observations').value,
                 life: document.getElementById('lifeSentence').checked,
@@ -677,7 +684,7 @@
                 nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''}))
             };
             localStorage.setItem('anpLastCase', JSON.stringify(data));
-        } catch(e) { /* ignorăm erorile de stocare */ }
+        } catch(e) {}
     }
 
     (function() {
@@ -686,7 +693,9 @@
         if (!last) return;
         try {
             const d = JSON.parse(last);
-            document.getElementById('sex').value = d.sex || '';
+            currentSex = d.sex || 'M';
+            sexToggle.checked = currentSex === 'M';
+            sexLabel.textContent = currentSex === 'M' ? 'Masculin' : 'Feminin';
             document.getElementById('birthDate').value = d.birthDate || '';
             document.getElementById('observations').value = d.observations || '';
             document.getElementById('lifeSentence').checked = d.life || false;
@@ -704,11 +713,9 @@
             document.getElementById('nonExecContainer').innerHTML = '';
             (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } });
             updAgeTag();
-        } catch(e) { /* ignorăm erorile de parsare */ }
+        } catch(e) {}
     })();
 
-    let currentSex = '';
-    document.getElementById('sex').addEventListener('change', function(){ currentSex = this.value; updAgeTag(); });
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
     document.getElementById('liberationArticle').addEventListener('change', updAgeTag);
     document.getElementById('lifeSentence').addEventListener('change', function(){
@@ -722,8 +729,7 @@
         const bd = parseDate(b);
         if (!bd) { tag.innerHTML = '<small>Format invalid</small>'; return; }
         const a = ageExact(bd, today());
-        const sexValue = document.getElementById('sex').value;
-        const cat = getAgeCategoryAtDate(bd, today(), sexValue);
+        const cat = getAgeCategoryAtDate(bd, today(), currentSex);
         const catClass = cat==='MINOR'?'tag-minor':cat==='TANAR'?'tag-tanar':cat==='BATRAN'?'tag-batran':'tag-major';
         tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`;
     }
@@ -739,12 +745,8 @@
     function updDed(r) {
         const s = r.querySelector('.ded-start').value.trim(), e = r.querySelector('.ded-end').value.trim();
         const f = r.querySelector('.ded-days');
-        if (s && e) {
-            const a = parseDate(s), b = parseDate(e);
-            f.value = (a && b && b >= a) ? daysBetween(a, b) + 1 : 'Eroare';
-        } else {
-            f.value = '';
-        }
+        if (s && e) { const a = parseDate(s), b = parseDate(e); f.value = (a && b && b >= a) ? daysBetween(a, b) + 1 : 'Eroare'; }
+        else f.value = '';
     }
     function addManDedRow() {
         const r = document.createElement('div'); r.className = 'period-row';
@@ -771,22 +773,18 @@
                 const diff = daysBetween(a, b);
                 if (typ === 'interruption') f.value = diff - 1;
                 else f.value = diff;
-            } else {
-                f.value = 'Eroare';
-            }
-        } else {
-            f.value = '';
-        }
+            } else f.value = 'Eroare';
+        } else f.value = '';
     }
 
     function confirmReset() {
-        if (confirm('Sigur doriți să resetați toate câmpurile?')) {
-            resetAll();
-        }
+        if (confirm('Sigur doriți să resetați toate câmpurile?')) resetAll();
     }
 
     function resetAll() {
-        document.getElementById('sex').value = '';
+        currentSex = 'M';
+        sexToggle.checked = true;
+        sexLabel.textContent = 'Masculin';
         document.getElementById('birthDate').value = '';
         document.getElementById('liberationArticle').value = '';
         document.getElementById('lifeSentence').checked = false;
@@ -803,7 +801,6 @@
         document.getElementById('ageTag').innerHTML = '';
         document.getElementById('errorContainer').classList.remove('visible');
         localStorage.removeItem('anpLastCase');
-        currentSex = '';
     }
 
     function sumIntervals(intervals) {
@@ -813,17 +810,14 @@
         let currentEnd = sorted[0][1];
         for (let i=1; i<sorted.length; i++) {
             const [start, end] = sorted[i];
-            if (start <= currentEnd) {
-                if (end > currentEnd) { total += daysBetween(currentEnd, end); currentEnd = end; }
-            } else { total += daysBetween(start, end) + 1; currentEnd = end; }
+            if (start <= currentEnd) { if (end > currentEnd) { total += daysBetween(currentEnd, end); currentEnd = end; } }
+            else { total += daysBetween(start, end) + 1; currentEnd = end; }
         }
         return total;
     }
 
     function validateInputs(birthDate, startDate, life, art, y, m, d) {
         const err = [];
-        const sexValue = document.getElementById('sex').value;
-        if (!sexValue) err.push('Selectați sexul.');
         if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.');
         if (!startDate) err.push('Data începerii este invalidă sau incompletă.');
         if (!life && !art) err.push('Selectați articolul de liberare condiționată.');
@@ -865,11 +859,8 @@
         const t = today();
         const diff = daysBetween(t, date);
         let warning = '';
-        if (diff < 0) {
-            warning = ' <span class="result-warning expired">(Atenție, a expirat)</span>';
-        } else if (diff <= 30) {
-            warning = ' <span class="result-warning soon">(Atenție)</span>';
-        }
+        if (diff < 0) warning = ' <span class="result-warning expired">(Atenție, a expirat)</span>';
+        else if (diff <= 30) warning = ' <span class="result-warning soon">(Atenție)</span>';
         return `${fmtDate(date)}${warning}`;
     }
 
@@ -889,19 +880,15 @@
 
     window.addEventListener('beforeunload', function(e) {
         const hasData = () => {
-            const sexVal = document.getElementById('sex').value;
             const birth = document.getElementById('birthDate').value.trim();
             const start = document.getElementById('startDate').value.trim();
             const life = document.getElementById('lifeSentence').checked;
             const y = parseInt(document.getElementById('durYears').value)||0;
             const m = parseInt(document.getElementById('durMonths').value)||0;
             const d = parseInt(document.getElementById('durDays').value)||0;
-            return sexVal || parseDate(birth) || parseDate(start) || (!life && (y > 0 || m > 0 || d > 0));
+            return parseDate(birth) || parseDate(start) || (!life && (y > 0 || m > 0 || d > 0));
         };
-        if (hasData()) {
-            e.preventDefault();
-            e.returnValue = '';
-        }
+        if (hasData()) { e.preventDefault(); e.returnValue = ''; }
     });
 
     function calculateAll() {
@@ -914,13 +901,11 @@
         const y = parseInt(document.getElementById('durYears').value)||0;
         const m = parseInt(document.getElementById('durMonths').value)||0;
         const d = parseInt(document.getElementById('durDays').value)||0;
-        const sexValue = document.getElementById('sex').value;
 
         const err = validateInputs(birthDate, startDate, life, art, y, m, d);
         if (err.length>0) { errC.innerHTML = err.map(e=>'• '+e).join('<br>'); errC.classList.add('visible'); return; }
 
         const steps = [];
-
         let totalDays, theorExp;
         if (life) {
             const d20 = new Date(startDate); d20.setFullYear(d20.getFullYear()+20); d20.setDate(d20.getDate()-1);
@@ -930,9 +915,9 @@
             theorExp = addCalendarSafe(startDate, y, m, d); theorExp.setDate(theorExp.getDate()-1);
             totalDays = daysBetween(startDate, theorExp) + 1;
             steps.push(`Data începerii executării: ${fmtDate(startDate)}. Durata pedepsei: ${y} ani, ${m} luni, ${d} zile.`);
-            steps.push(`Adunăm calendaristic la data începerii: anii, apoi lunile, apoi zilele. Scădem o zi (regula OMJ 2188/C/2022).`);
+            steps.push(`Adunăm calendaristic: anii, apoi lunile, apoi zilele. Scădem o zi (regula OMJ 2188/C/2022).`);
             steps.push(`Expirarea teoretică este ${fmtDate(theorExp)}.`);
-            steps.push(`Numărăm zilele dintre ${fmtDate(startDate)} și ${fmtDate(theorExp)}, inclusiv ambele capete: ${totalDays} zile. Acesta este mandatul total.`);
+            steps.push(`Numărăm zilele dintre ${fmtDate(startDate)} și ${fmtDate(theorExp)}, inclusiv ambele capete: ${totalDays} zile.`);
         }
 
         const dedIntervals = [];
@@ -947,16 +932,13 @@
         steps.push(`Perioadele deduse însumează ${ded} zile (după unificarea suprapunerilor).`);
 
         let non = 0;
-        document.querySelectorAll('.ne-days').forEach(inp => {
-            const v = parseInt(inp.value);
-            if (!isNaN(v) && v > 0) non += v;
-        });
+        document.querySelectorAll('.ne-days').forEach(inp => { const v = parseInt(inp.value); if (!isNaN(v) && v > 0) non += v; });
         steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile.`);
 
         let realExp = new Date(theorExp); realExp.setDate(realExp.getDate() - ded + non);
         steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
 
-        const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, sexValue);
+        const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, currentSex);
         steps.push(`La data începerii executării, deținutul avea categoria de vârstă: ${ageAtExpiry}.`);
 
         let mR=1/2, tR=2/3, pM=Infinity, pT=Infinity, articleInfo='';
@@ -975,16 +957,10 @@
             } else {
                 const rule = liberationRules.find(r => r.article === art && r.age.includes(ageAtExpiry) && ((r.life&&life) || (!r.life && ((r.maxYears&&!sentenceOver10)||(r.minYears&&sentenceOver10)||(!r.maxYears&&!r.minYears)))));
                 if (rule) {
-                    mR=rule.mandatory[0]/rule.mandatory[1];
-                    tR=rule.total[0]/rule.total[1];
-                    pM=rule.mandatory[2]||Infinity;
-                    pT=rule.total[2]||Infinity;
+                    mR=rule.mandatory[0]/rule.mandatory[1]; tR=rule.total[0]/rule.total[1];
+                    pM=rule.mandatory[2]||Infinity; pT=rule.total[2]||Infinity;
                     articleInfo=`${art} (${ageAtExpiry}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`;
-                } else {
-                    errC.innerHTML='• Nu există regulă de liberare pentru această combinație articol/vârstă/durată.';
-                    errC.classList.add('visible');
-                    return;
-                }
+                } else { errC.innerHTML='• Nu există regulă de liberare pentru această combinație.'; errC.classList.add('visible'); return; }
             }
         }
         steps.push(`Articolul aplicabil: ${articleInfo}.`);
@@ -999,21 +975,12 @@
         let tDate=new Date(startDate); tDate.setDate(tDate.getDate()+tDays-1); tDate.setDate(tDate.getDate()-ded+non);
         const fifth=Math.floor(totalDays/5);
         let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth-1); fDate.setDate(fDate.getDate()-ded+non);
-        steps.push(`Data fracției minime: ${fmtDate(startDate)} + ${mDays} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(mDate)}.`);
-        steps.push(`Data fracției totale: ${fmtDate(startDate)} + ${tDays} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(tDate)}.`);
-        steps.push(`Termenul de reanalizare 1/5: Math.floor(${totalDays} / 5) = ${fifth} zile.`);
-        steps.push(`Data 1/5: ${fmtDate(startDate)} + ${fifth} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(fDate)}.`);
 
         const executedDays = Math.max(0, daysBetween(startDate, today()) + 1);
         const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
-        steps.push(`Zile executate efectiv până astăzi (${fmtDate(today())}): ${executedDays} zile.`);
-        steps.push(`Rest rămas până la expirarea reală: ${remaining} zile.`);
+        const quarantineEnd = new Date(startDate); quarantineEnd.setDate(quarantineEnd.getDate() + 20);
 
-        const quarantineEnd = new Date(startDate);
-        quarantineEnd.setDate(quarantineEnd.getDate() + 20);
-        steps.push(`Carantina și observarea: ${fmtDate(startDate)} + 20 zile = ${fmtDate(quarantineEnd)}.`);
-
-        // --- ALERTS ---
+        // Alerte
         const alertDates = [
             { label: 'Fracție minimă obligatorie', date: mDate },
             { label: 'Data propusă (totală)', date: tDate },
@@ -1026,23 +993,19 @@
         alertDates.forEach(item => {
             if (!item.date || isNaN(item.date)) return;
             const diff = daysBetween(t, item.date);
-            if (diff >= 0 && diff <= 30) {
-                alerts.push({ label: item.label, diff });
-            }
+            if (diff >= 0 && diff <= 30) alerts.push({ label: item.label, diff });
         });
 
         let alertsHtml = '';
         if (alerts.length > 0) {
             alertsHtml = `<div class="alerts-container"><h4>⚠️ ALERTE – Termene apropiate</h4><ul>`;
-            alerts.forEach(a => {
-                alertsHtml += `<li>⚠️ ${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(alertDates.find(x => x.label === a.label).date)})</li>`;
-            });
+            alerts.forEach(a => alertsHtml += `<li>⚠️ ${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(alertDates.find(x => x.label === a.label).date)})</li>`);
             alertsHtml += `</ul></div>`;
         }
         document.getElementById('alertsContainer').innerHTML = alertsHtml;
         document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
 
-        // --- TIMELINE ---
+        // Timeline
         const timelineItems = [
             { label: 'Început executare', date: startDate },
             { label: 'Carantină expiră', date: quarantineEnd },
@@ -1053,10 +1016,7 @@
             { label: 'Expirare reală', date: realExp }
         ];
         const condReleaseStr2 = document.getElementById('conditionalReleaseDate').value.trim();
-        if (condReleaseStr2) {
-            const condDate = parseDate(condReleaseStr2);
-            if (condDate) timelineItems.push({ label: 'Data liberării condiționate', date: condDate });
-        }
+        if (condReleaseStr2) { const condDate = parseDate(condReleaseStr2); if (condDate) timelineItems.push({ label: 'Data liberării condiționate', date: condDate }); }
         timelineItems.sort((a,b) => a.date - b.date);
         let timelineHtml = '';
         timelineItems.forEach(item => {
@@ -1073,7 +1033,6 @@
             const condReleaseDate = parseDate(condReleaseStr);
             if (realExp) {
                 const restDays = Math.max(0, daysBetween(condReleaseDate, realExp));
-                steps.push(`Rest rămas după liberarea condiționată (${fmtDate(condReleaseDate)}): ${fmtDate(realExp)} − ${fmtDate(condReleaseDate)} = ${restDays} zile.`);
                 restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT (după liberarea condiționată)</h4><div class="result-grid">`;
                 restHtml += `<div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${formatDateWithWarning(condReleaseDate)}</div></div>`;
                 restHtml += `<div class="result-item important"><div class="result-label">Rest rămas</div><div class="result-value">${restDays} zile</div></div>`;
@@ -1108,7 +1067,6 @@
         html+=`<div class="result-item"><div class="result-label">Mandat total</div><div class="result-value">${totalDays} zile</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div></div>`;
         html+=`</div></div>`;
-
         html += restHtml;
 
         document.getElementById('resultsContent').innerHTML = html;
@@ -1125,7 +1083,7 @@
 
     function exportCSV() {
         let csv = 'Indicator,Valoare\n';
-        csv += `"Sex","${document.getElementById('sex').value}"\n`;
+        csv += `"Sex","${currentSex === 'M' ? 'Masculin' : 'Feminin'}"\n`;
         csv += `"Data nașterii","${document.getElementById('birthDate').value}"\n`;
         csv += `"Observații / Nume PPL","${document.getElementById('observations').value}"\n`;
         csv += `"Articol LC","${document.getElementById('liberationArticle').value}"\n`;
