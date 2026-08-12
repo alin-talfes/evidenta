@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CALCULATOR PEDEPSE – Biroul Evidență Deținuți</title>
+    <title>CALCULATOR PEDEPSE</title>
     <style>
         :root {
             --bg: #0a0a0f;
@@ -73,7 +73,7 @@
         <button class="btn-utility" onclick="resetAll()">↺ Reset</button>
     </div>
     <div class="header">
-        <h1><span class="icon">⚖️</span> CALCULATOR PEDEPSE<br><small style="font-size:0.8rem;font-weight:400;color:#b0b0b0;">Biroul Evidență Deținuți</small></h1>
+        <h1><span class="icon">⚖️</span> CALCULATOR PEDEPSE</h1>
     </div>
 
     <div class="card"><h3>📌 1. Date personale</h3>
@@ -112,7 +112,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE – Biroul Evidență Deținuți | v2.2</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.1</div>
 </div>
 
 <script>
@@ -348,7 +348,8 @@
         if(mDays>pM)mDays=pM; if(tDays>pT)tDays=pT;
         let mDate=new Date(startDate); mDate.setDate(mDate.getDate()+mDays-1); mDate.setDate(mDate.getDate()-ded+non);
         let tDate=new Date(startDate); tDate.setDate(tDate.getDate()+tDays-1); tDate.setDate(tDate.getDate()-ded+non);
-        const fifth=Math.floor(totalDays/5); let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth-1); fDate.setDate(fDate.getDate()-ded+non);
+        const fifth=Math.floor(totalDays/5);
+        let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth); fDate.setDate(fDate.getDate()-ded+non);
         const executedDays=Math.max(0, daysBetween(startDate, today())+1-ded-non);
 
         const quarantineEnd = new Date(startDate);
