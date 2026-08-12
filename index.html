@@ -48,6 +48,7 @@
             position: sticky;
             top: 8px;
             z-index: 10;
+            align-items: center;
         }
         .btn-utility {
             flex: 1;
@@ -66,9 +67,26 @@
             gap: 6px;
             transition: all 0.2s ease;
             white-space: nowrap;
+            position: relative;
         }
         .btn-utility:hover { background: rgba(201, 162, 39, 0.12); border-color: var(--gold); color: var(--gold-light); }
         .btn-utility.primary { color: var(--gold-light); }
+        .badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: var(--gold);
+            color: #0F1115;
+            font-size: 0.65rem;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0;
+        }
         .header {
             background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 60%, #0d0d1a 100%);
             border: 1px solid var(--border);
@@ -201,6 +219,18 @@
         .steps-container ol { padding-left: 24px; color: var(--text-light); }
         .steps-container ol li { margin-bottom: 6px; }
 
+        .alerts-container {
+            background: rgba(255, 167, 38, 0.06);
+            border: 1px solid rgba(255, 167, 38, 0.3);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            margin-top: 16px;
+        }
+        .alerts-container h4 { color: var(--warning); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .alerts-container ul { list-style: none; }
+        .alerts-container ul li { padding: 6px 0; color: var(--text-light); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255, 167, 38, 0.1); }
+        .alerts-container ul li:last-child { border-bottom: none; }
+
         .toggle-switch { position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
         .toggle-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
         .toggle-slider { width: 42px; height: 24px; background: var(--border); border-radius: 12px; transition: all 0.2s; }
@@ -225,7 +255,7 @@
 <div class="container">
     <div class="top-bar">
         <button class="btn-utility primary" onclick="saveCase()">💾 SALVEAZĂ</button>
-        <button class="btn-utility" onclick="openLoadModal()">📂 ÎNCARCĂ</button>
+        <button class="btn-utility" onclick="openLoadModal()" id="loadBtn">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
         <button class="btn-utility" onclick="confirmReset()">↺ RESET</button>
     </div>
     <div class="header">
@@ -284,12 +314,13 @@
     <div class="card hidden" id="resultsCard">
         <h3>📊 REZULTATE</h3>
         <div id="resultsContent"></div>
+        <div id="alertsContainer" class="alerts-container hidden"></div>
         <div id="stepsContainer" class="steps-container hidden">
             <h4>🧮 PAȘII CALCULULUI</h4>
             <ol id="stepsList"></ol>
         </div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | BETA 0.6</div>
+    <div class="footer">CALCULATOR PEDEPSE | BETA 0.7</div>
 </div>
 
 <script>
@@ -375,6 +406,19 @@
         }
     });
 
+    // ========== BADGE ==========
+    function updateCaseBadge() {
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const count = Object.keys(cases).length;
+        const badge = document.getElementById('caseCountBadge');
+        if (count > 0) {
+            badge.textContent = count;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+
     // ========== STORAGE ==========
     function saveCase() {
         const name = prompt('Nume speță:');
@@ -397,6 +441,7 @@
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         cases[name.trim()] = data;
         localStorage.setItem('anpCases', JSON.stringify(cases));
+        updateCaseBadge();
         alert('Speță salvată!');
     }
 
@@ -448,6 +493,7 @@
         delete cases[name];
         localStorage.setItem('anpCases', JSON.stringify(cases));
         document.querySelector('.modal-overlay')?.remove();
+        updateCaseBadge();
         alert('Speță ștearsă!');
         setTimeout(openLoadModal, 100);
     };
@@ -472,6 +518,7 @@
     }
 
     (function() {
+        updateCaseBadge();
         const last = localStorage.getItem('anpLastCase');
         if (!last) return;
         try {
@@ -731,6 +778,35 @@
         const quarantineEnd = new Date(startDate);
         quarantineEnd.setDate(quarantineEnd.getDate() + 20);
         steps.push(`Carantina și observarea: ${fmtDate(startDate)} + 20 zile = ${fmtDate(quarantineEnd)}.`);
+
+        // --- ALERTS ---
+        const alertDates = [
+            { label: 'Fracție minimă obligatorie', date: mDate },
+            { label: 'Data propusă (totală)', date: tDate },
+            { label: 'Termen 1/5', date: fDate },
+            { label: 'Expirare reală', date: realExp },
+            { label: 'Carantină expiră', date: quarantineEnd }
+        ];
+        const alerts = [];
+        const t = today();
+        alertDates.forEach(item => {
+            if (!item.date || isNaN(item.date)) return;
+            const diff = daysBetween(t, item.date);
+            if (diff >= 0 && diff <= 30) {
+                alerts.push({ label: item.label, diff });
+            }
+        });
+
+        let alertsHtml = '';
+        if (alerts.length > 0) {
+            alertsHtml = `<div class="alerts-container"><h4>⚠️ ALERTE – Termene apropiate</h4><ul>`;
+            alerts.forEach(a => {
+                alertsHtml += `<li>⚠️ ${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(alertDates.find(x => x.label === a.label).date)})</li>`;
+            });
+            alertsHtml += `</ul></div>`;
+        }
+        document.getElementById('alertsContainer').innerHTML = alertsHtml;
+        document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
 
         let restHtml = '';
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
