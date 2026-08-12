@@ -36,7 +36,15 @@
             --shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { touch-action: manipulation; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
+        html {
+            touch-action: manipulation;
+            -webkit-text-size-adjust: 100%;
+            overflow-x: hidden;
+            width: 100%;
+            overscroll-behavior: contain;
+            text-rendering: optimizeLegibility;
+            font-synthesis: none;
+        }
         body {
             background: var(--bg);
             font-family: var(--font);
@@ -48,6 +56,7 @@
             max-width: 100vw;
             line-height: 1.5;
             transition: background 0.3s, color 0.3s;
+            min-height: 0;
         }
         .container { max-width: 960px; margin: 0 auto; width: 100%; }
         .top-actions { display: flex; gap: 10px; margin-bottom: 12px; justify-content: center; }
@@ -59,13 +68,15 @@
             letter-spacing: 0.8px; cursor: pointer; display: inline-flex;
             align-items: center; justify-content: center; gap: 8px;
             transition: all 0.2s ease; text-transform: uppercase;
+            will-change: transform;
         }
         .btn-big:hover, .btn-big:focus-visible { background: rgba(201, 162, 39, 0.15); border-color: var(--gold); color: var(--gold-light); outline: none; }
         .top-bar {
             display: flex; gap: 10px; margin-bottom: 16px;
-            background: rgba(22, 24, 32, 0.6); backdrop-filter: blur(10px);
+            background: rgba(22, 24, 32, 0.6); backdrop-filter: blur(8px);
             padding: 6px; border-radius: var(--input-radius); border: 1px solid var(--border);
             position: sticky; top: 8px; z-index: 10; align-items: center;
+            will-change: transform;
         }
         body.light .top-bar { background: rgba(255,255,255,0.8); }
         .btn-utility {
@@ -96,6 +107,7 @@
             background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow);
             padding: 20px 22px; margin-bottom: 16px; border: 1px solid var(--border);
             border-left: 3px solid rgba(201, 162, 39, 0.5); transition: border-color 0.2s, background 0.3s;
+            contain: layout paint;
         }
         .card h3 {
             font-size: 0.9rem; color: var(--gold-light); margin-bottom: 14px; padding-bottom: 8px;
@@ -125,6 +137,7 @@
         .period-row {
             display: flex; gap: 10px; align-items: flex-end; background: rgba(201, 162, 39, 0.03);
             padding: 12px; border-radius: var(--input-radius); margin-bottom: 10px; flex-wrap: wrap; border: 1px solid var(--border);
+            contain: layout paint;
         }
         .period-row > div { flex: 1 1 95px; min-width: 85px; }
         .btn {
@@ -143,7 +156,7 @@
         .result-section { margin-top: 20px; }
         .result-section h4 { color: var(--gold); font-size: 0.85rem; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
         .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
-        .result-item { background: rgba(201, 162, 39, 0.04); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--primary); }
+        .result-item { background: rgba(201, 162, 39, 0.04); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--primary); contain: layout paint; }
         .result-item.important { border-left-color: var(--gold); background: rgba(201, 162, 39, 0.08); }
         .result-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-light); font-weight: 600; margin-bottom: 5px; }
         .result-value { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); word-break: break-word; }
@@ -182,7 +195,7 @@
         .sex-label { font-size: 0.8rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; }
         .sex-label.active { color: var(--gold-light); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; contain: layout paint; }
         .modal h4 { color: var(--gold); margin-bottom: 12px; }
         .modal ul { list-style: none; max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
         .modal li { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; margin-bottom: 4px; background: rgba(201, 162, 39, 0.04); border: 1px solid transparent; transition: border-color 0.2s; }
@@ -205,6 +218,21 @@
         .skip-link { position: absolute; top: -40px; left: 0; background: var(--gold); color: #0F1115; padding: 8px; z-index: 200; }
         .skip-link:focus { top: 0; }
         @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } .result-grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.2rem; } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+            .btn-big, .btn-utility, .btn, .btn-outline, .btn-gold, .btn-danger, .btn-today, .btn-sm {
+                transition: none !important;
+                transform: none !important;
+            }
+            .top-bar, .modal-overlay {
+                backdrop-filter: none !important;
+            }
+        }
     </style>
 </head>
 <body>
