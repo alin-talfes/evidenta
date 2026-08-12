@@ -123,7 +123,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.5</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.6</div>
 </div>
 
 <script>
@@ -383,23 +383,19 @@
         const tDaysAdjusted = daysBetween(startDate, tDate) + 1;
         const fifthAdjusted = daysBetween(startDate, fDate) + 1;
 
+        // Calcul rest rămas după liberare condiționată (diferența directă între expirarea reală și data liberării)
         let restHtml = '';
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr && parseDate(condReleaseStr)) {
             const condReleaseDate = parseDate(condReleaseStr);
-            const daysServedUntilRelease = daysBetween(startDate, condReleaseDate) + 1 - ded - non;
-            const remainingAfterRelease = totalDays - daysServedUntilRelease;
-            if (remainingAfterRelease > 0) {
-                const restExpiry = new Date(condReleaseDate);
-                restExpiry.setDate(restExpiry.getDate() + remainingAfterRelease);
+            if (realExp) {
+                const restDays = Math.max(0, daysBetween(condReleaseDate, realExp));
                 restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT (după liberarea condiționată)</h4><div class="result-grid">`;
                 restHtml += `<div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${fmtDate(condReleaseDate)}</div></div>`;
-                restHtml += `<div class="result-item"><div class="result-label">Zile executate până la liberare</div><div class="result-value">${daysServedUntilRelease} zile</div></div>`;
-                restHtml += `<div class="result-item important"><div class="result-label">Rest rămas de executat</div><div class="result-value">${remainingAfterRelease} zile</div></div>`;
-                restHtml += `<div class="result-item"><div class="result-label">Data estimată a expirării restului</div><div class="result-value">${fmtDate(restExpiry)}</div></div>`;
+                restHtml += `<div class="result-item important"><div class="result-label">Rest rămas</div><div class="result-value">${restDays} zile</div></div>`;
                 restHtml += `</div></div>`;
             } else {
-                restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT</h4><p style="color:var(--gold-light);">Nu există rest rămas (pedeapsa a fost executată integral la data liberării).</p></div>`;
+                restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT</h4><p style="color:var(--gold-light);">Nu se poate calcula (detențiune pe viață).</p></div>`;
             }
         }
 
