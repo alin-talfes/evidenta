@@ -167,12 +167,8 @@
             z-index: 50;
             line-height: 1.4;
         }
-        .tooltip:hover::after, .tooltip:focus-visible::after {
-            opacity: 1;
-        }
-        .tooltip-btn {
-            position: relative;
-        }
+        .tooltip:hover::after, .tooltip:focus-visible::after { opacity: 1; }
+        .tooltip-btn { position: relative; }
         .tooltip-btn::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -197,9 +193,7 @@
             z-index: 50;
             line-height: 1.4;
         }
-        .tooltip-btn:hover::after, .tooltip-btn:focus-visible::after {
-            opacity: 1;
-        }
+        .tooltip-btn:hover::after, .tooltip-btn:focus-visible::after { opacity: 1; }
         select, input[type="number"], input[type="text"], textarea {
             width: 100%;
             padding: 10px 12px;
@@ -397,9 +391,9 @@
             </div>
         </div>
         <div id="sentenceDuration" class="form-grid" style="margin-top:8px;">
-            <div><label for="durYears" class="tooltip" data-tooltip="Anii din durata totală a pedepsei. Se adună calendaristic, nu cu 1 an = 365 zile.">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
-            <div><label for="durMonths" class="tooltip" data-tooltip="Lunile din durata totală a pedepsei. Se adună calendaristic.">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
-            <div><label for="durDays" class="tooltip" data-tooltip="Zilele din durata totală a pedepsei. Se adună calendaristic.">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
+            <div><label for="durYears" class="tooltip" data-tooltip="Anii din durata totală a pedepsei. Se adună calendaristic, nu cu 1 an = 365 zile.">Ani</label><input type="number" id="durYears" value="0" min="0" max="99"></div>
+            <div><label for="durMonths" class="tooltip" data-tooltip="Lunile din durata totală a pedepsei. Se adună calendaristic.">Luni</label><input type="number" id="durMonths" value="0" min="0" max="11"></div>
+            <div><label for="durDays" class="tooltip" data-tooltip="Zilele din durata totală a pedepsei. Se adună calendaristic.">Zile</label><input type="number" id="durDays" value="0" min="0" max="31"></div>
         </div>
         <div style="margin-top:12px;">
             <label for="startDate" class="tooltip" data-tooltip="Prima zi de executare a pedepsei. Se include în toate calculele. Folosiți butonul AZI pentru data curentă.">Data începerii executării pedepsei</label>
@@ -469,20 +463,23 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.12</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.13</footer>
 </div>
 
 <script>
-    // ========== UTILS ==========
+    // ========== UTILS (Corectate și verificate) ==========
     const parseDate = (str) => {
         if (!str) return null;
         str = str.trim();
         const parts = str.split('.');
         if (parts.length === 3) {
-            const day = parseInt(parts[0]), month = parseInt(parts[1]), year = parseInt(parts[2]);
+            const day = parseInt(parts[0], 10), month = parseInt(parts[1], 10), year = parseInt(parts[2], 10);
             if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
                 const d = new Date(year, month - 1, day);
-                if (d.getDate() === day && d.getMonth() === month - 1 && d.getFullYear() === year) return d;
+                // Verificare strictă: ziua și luna trebuie să corespundă
+                if (d.getDate() === day && d.getMonth() === month - 1 && d.getFullYear() === year) {
+                    return d;
+                }
             }
         }
         return null;
@@ -510,12 +507,13 @@
         return { y, m, d };
     };
 
-    const getAgeCategoryAtDate = (birthDate, targetDate, sex) => {
+    const getAgeCategoryAtDate = (birthDate, targetDate, currentSex) => {
         const ageY = ageExact(birthDate, targetDate).y;
         if (ageY < 18) return "MINOR";
         if (ageY < 21) return "TANAR";
-        const isNCP = document.getElementById('liberationArticle').value.startsWith("NCP");
-        const elderly = isNCP ? (ageY >= 60) : ((sex==='M' && ageY >= 60) || (sex==='F' && ageY >= 55));
+        const articleEl = document.getElementById('liberationArticle');
+        const isNCP = articleEl ? articleEl.value.startsWith("NCP") : false;
+        const elderly = isNCP ? (ageY >= 60) : ((currentSex==='M' && ageY >= 60) || (currentSex==='F' && ageY >= 55));
         return elderly ? "BATRAN" : "MAJOR";
     };
 
@@ -568,6 +566,7 @@
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         const count = Object.keys(cases).length;
         const badge = document.getElementById('caseCountBadge');
+        if (!badge) return;
         if (count > 0) {
             badge.textContent = count;
             badge.classList.remove('hidden');
@@ -591,9 +590,9 @@
             d: document.getElementById('durDays').value,
             start: document.getElementById('startDate').value,
             condRelease: document.getElementById('conditionalReleaseDate').value,
-            dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start').value, end: r.querySelector('.ded-end').value})),
+            dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})),
             manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
-            nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type').value, start: r.querySelector('.ne-start').value, end: r.querySelector('.ne-end').value}))
+            nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''}))
         };
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         cases[name.trim()] = data;
@@ -613,7 +612,8 @@
         overlay.setAttribute('aria-labelledby', 'modal-title');
         let html = '<div class="modal"><h4 id="modal-title">Selectează sau șterge o speță</h4><ul role="listbox">';
         names.forEach(name => {
-            html += `<li role="option" tabindex="0"><span onclick="loadCaseByName('${name.replace(/'/g, "\\'")}')" role="button" tabindex="0">${name}</span><button onclick="deleteCase('${name.replace(/'/g, "\\'")}')" aria-label="Șterge speța ${name}">🗑️</button></li>`;
+            const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            html += `<li role="option" tabindex="0"><span onclick="window.loadCaseByName('${safeName}')" role="button" tabindex="0">${name}</span><button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">🗑️</button></li>`;
         });
         html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()" aria-label="Închide fereastra">Închide</button></div>';
         overlay.innerHTML = html;
@@ -626,24 +626,24 @@
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
         if (!cases[name]) return;
         const d = cases[name];
-        document.getElementById('sex').value = d.sex; sex = d.sex;
-        document.getElementById('birthDate').value = d.birthDate;
-        document.getElementById('observations').value = d.observations;
-        document.getElementById('lifeSentence').checked = d.life;
+        document.getElementById('sex').value = d.sex || '';
+        document.getElementById('birthDate').value = d.birthDate || '';
+        document.getElementById('observations').value = d.observations || '';
+        document.getElementById('lifeSentence').checked = d.life || false;
         document.getElementById('sentenceDuration').classList.toggle('hidden', d.life);
-        document.getElementById('liberationArticle').value = d.art;
-        document.getElementById('durYears').value = d.y;
-        document.getElementById('durMonths').value = d.m;
-        document.getElementById('durDays').value = d.d;
-        document.getElementById('startDate').value = d.start;
+        document.getElementById('liberationArticle').value = d.art || '';
+        document.getElementById('durYears').value = d.y || 0;
+        document.getElementById('durMonths').value = d.m || 0;
+        document.getElementById('durDays').value = d.d || 0;
+        document.getElementById('startDate').value = d.start || '';
         document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
         document.getElementById('deductionsContainer').innerHTML = '';
-        (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); last.querySelector('.ded-start').value = r.start; last.querySelector('.ded-end').value = r.end; updDed(last); });
+        (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } });
         document.getElementById('manualDeductionsContainer').innerHTML = '';
-        (d.manDed||[]).forEach(v => { addManDedRow(); document.querySelector('.manual-days:last-child').value = v; });
+        (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; });
         document.getElementById('nonExecContainer').innerHTML = '';
-        (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); last.querySelector('.ne-type').value = r.type; last.querySelector('.ne-start').value = r.start; last.querySelector('.ne-end').value = r.end; updNonExec(last); });
-        updAgeTag(); updSpecCond();
+        (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } });
+        updAgeTag();
         document.querySelector('.modal-overlay')?.remove();
         alert('Speță încărcată!');
     };
@@ -660,22 +660,24 @@
     };
 
     function autoSave() {
-        const data = {
-            sex: document.getElementById('sex').value,
-            birthDate: document.getElementById('birthDate').value,
-            observations: document.getElementById('observations').value,
-            life: document.getElementById('lifeSentence').checked,
-            art: document.getElementById('liberationArticle').value,
-            y: document.getElementById('durYears').value,
-            m: document.getElementById('durMonths').value,
-            d: document.getElementById('durDays').value,
-            start: document.getElementById('startDate').value,
-            condRelease: document.getElementById('conditionalReleaseDate').value,
-            dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start').value, end: r.querySelector('.ded-end').value})),
-            manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
-            nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type').value, start: r.querySelector('.ne-start').value, end: r.querySelector('.ne-end').value}))
-        };
-        localStorage.setItem('anpLastCase', JSON.stringify(data));
+        try {
+            const data = {
+                sex: document.getElementById('sex').value,
+                birthDate: document.getElementById('birthDate').value,
+                observations: document.getElementById('observations').value,
+                life: document.getElementById('lifeSentence').checked,
+                art: document.getElementById('liberationArticle').value,
+                y: document.getElementById('durYears').value,
+                m: document.getElementById('durMonths').value,
+                d: document.getElementById('durDays').value,
+                start: document.getElementById('startDate').value,
+                condRelease: document.getElementById('conditionalReleaseDate').value,
+                dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})),
+                manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
+                nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''}))
+            };
+            localStorage.setItem('anpLastCase', JSON.stringify(data));
+        } catch(e) { /* ignorăm erorile de stocare */ }
     }
 
     (function() {
@@ -684,7 +686,7 @@
         if (!last) return;
         try {
             const d = JSON.parse(last);
-            document.getElementById('sex').value = d.sex || ''; sex = d.sex || '';
+            document.getElementById('sex').value = d.sex || '';
             document.getElementById('birthDate').value = d.birthDate || '';
             document.getElementById('observations').value = d.observations || '';
             document.getElementById('lifeSentence').checked = d.life || false;
@@ -696,22 +698,23 @@
             document.getElementById('startDate').value = d.start || '';
             document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
             document.getElementById('deductionsContainer').innerHTML = '';
-            (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); last.querySelector('.ded-start').value = r.start; last.querySelector('.ded-end').value = r.end; updDed(last); });
+            (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } });
             document.getElementById('manualDeductionsContainer').innerHTML = '';
-            (d.manDed||[]).forEach(v => { addManDedRow(); document.querySelector('.manual-days:last-child').value = v; });
+            (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; });
             document.getElementById('nonExecContainer').innerHTML = '';
-            (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); last.querySelector('.ne-type').value = r.type; last.querySelector('.ne-start').value = r.start; last.querySelector('.ne-end').value = r.end; updNonExec(last); });
-            updAgeTag(); updSpecCond();
-        } catch(e) {}
+            (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } });
+            updAgeTag();
+        } catch(e) { /* ignorăm erorile de parsare */ }
     })();
 
-    let sex = '';
-    document.getElementById('sex').addEventListener('change', function(){ sex = this.value; updAgeTag(); });
+    let currentSex = '';
+    document.getElementById('sex').addEventListener('change', function(){ currentSex = this.value; updAgeTag(); });
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
     document.getElementById('liberationArticle').addEventListener('change', updAgeTag);
     document.getElementById('lifeSentence').addEventListener('change', function(){
         document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked);
     });
+
     function updAgeTag() {
         const b = document.getElementById('birthDate').value.trim();
         const tag = document.getElementById('ageTag');
@@ -719,11 +722,11 @@
         const bd = parseDate(b);
         if (!bd) { tag.innerHTML = '<small>Format invalid</small>'; return; }
         const a = ageExact(bd, today());
-        const cat = getAgeCategoryAtDate(bd, today(), sex);
+        const sexValue = document.getElementById('sex').value;
+        const cat = getAgeCategoryAtDate(bd, today(), sexValue);
         const catClass = cat==='MINOR'?'tag-minor':cat==='TANAR'?'tag-tanar':cat==='BATRAN'?'tag-batran':'tag-major';
         tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`;
     }
-    function updSpecCond() {}
 
     function addDedRow() {
         const r = document.createElement('div'); r.className = 'period-row deduction-row';
@@ -736,8 +739,12 @@
     function updDed(r) {
         const s = r.querySelector('.ded-start').value.trim(), e = r.querySelector('.ded-end').value.trim();
         const f = r.querySelector('.ded-days');
-        if (s && e) { const a = parseDate(s), b = parseDate(e); f.value = (a && b && b >= a) ? daysBetween(a, b) + 1 : 'Eroare'; }
-        else f.value = '';
+        if (s && e) {
+            const a = parseDate(s), b = parseDate(e);
+            f.value = (a && b && b >= a) ? daysBetween(a, b) + 1 : 'Eroare';
+        } else {
+            f.value = '';
+        }
     }
     function addManDedRow() {
         const r = document.createElement('div'); r.className = 'period-row';
@@ -764,8 +771,12 @@
                 const diff = daysBetween(a, b);
                 if (typ === 'interruption') f.value = diff - 1;
                 else f.value = diff;
-            } else f.value = 'Eroare';
-        } else f.value = '';
+            } else {
+                f.value = 'Eroare';
+            }
+        } else {
+            f.value = '';
+        }
     }
 
     function confirmReset() {
@@ -775,12 +786,14 @@
     }
 
     function resetAll() {
-        document.getElementById('sex').value = ''; sex = '';
+        document.getElementById('sex').value = '';
         document.getElementById('birthDate').value = '';
         document.getElementById('liberationArticle').value = '';
         document.getElementById('lifeSentence').checked = false;
         document.getElementById('sentenceDuration').classList.remove('hidden');
-        document.getElementById('durYears').value = 0; document.getElementById('durMonths').value = 0; document.getElementById('durDays').value = 0;
+        document.getElementById('durYears').value = 0;
+        document.getElementById('durMonths').value = 0;
+        document.getElementById('durDays').value = 0;
         document.getElementById('startDate').value = '';
         document.getElementById('conditionalReleaseDate').value = '';
         document.getElementById('deductionsContainer').innerHTML = '';
@@ -790,6 +803,7 @@
         document.getElementById('ageTag').innerHTML = '';
         document.getElementById('errorContainer').classList.remove('visible');
         localStorage.removeItem('anpLastCase');
+        currentSex = '';
     }
 
     function sumIntervals(intervals) {
@@ -808,36 +822,39 @@
 
     function validateInputs(birthDate, startDate, life, art, y, m, d) {
         const err = [];
-        sex = document.getElementById('sex').value;
-        if (!sex) err.push('Selectați sexul.');
-        if (!birthDate) err.push('Data nașterii invalidă.');
-        if (!startDate) err.push('Data începerii invalidă.');
+        const sexValue = document.getElementById('sex').value;
+        if (!sexValue) err.push('Selectați sexul.');
+        if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.');
+        if (!startDate) err.push('Data începerii este invalidă sau incompletă.');
         if (!life && !art) err.push('Selectați articolul de liberare condiționată.');
         if (!life && y===0 && m===0 && d===0) err.push('Introduceți durata pedepsei.');
         if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.');
+        if (y < 0 || y > 99) err.push('Anii trebuie să fie între 0 și 99.');
+        if (m < 0 || m > 11) err.push('Lunile trebuie să fie între 0 și 11.');
+        if (d < 0 || d > 31) err.push('Zilele trebuie să fie între 0 și 31.');
         document.querySelectorAll('.deduction-row').forEach((r,i) => {
             const st = r.querySelector('.ded-start').value.trim(), en = r.querySelector('.ded-end').value.trim();
-            if (!st||!en) err.push(`Deducerea ${i+1}: date incomplete.`);
+            if (!st||!en) err.push(`Deducerea ${i+1}: ambele date sunt obligatorii.`);
             else {
                 const sD = parseDate(st), eD = parseDate(en);
-                if (!sD||!eD) err.push(`Deducerea ${i+1}: format invalid.`);
-                else if (eD < sD) err.push(`Deducerea ${i+1}: sfârșit înainte de început.`);
+                if (!sD||!eD) err.push(`Deducerea ${i+1}: format dată invalid.`);
+                else if (eD < sD) err.push(`Deducerea ${i+1}: data sfârșitului este înaintea începutului.`);
             }
         });
         document.querySelectorAll('.non-exec-row').forEach((r,i) => {
             const st = r.querySelector('.ne-start').value.trim(), en = r.querySelector('.ne-end').value.trim();
-            if (!st||!en) err.push(`Perioada neexecutată ${i+1}: date incomplete.`);
+            if (!st||!en) err.push(`Perioada adăugată ${i+1}: ambele date sunt obligatorii.`);
             else {
                 const sD = parseDate(st), eD = parseDate(en);
-                if (!sD||!eD) err.push(`Perioada neexecutată ${i+1}: format invalid.`);
-                else if (eD <= sD) err.push(`Perioada neexecutată ${i+1}: date invalide.`);
+                if (!sD||!eD) err.push(`Perioada adăugată ${i+1}: format dată invalid.`);
+                else if (eD <= sD) err.push(`Perioada adăugată ${i+1}: data finală trebuie să fie strict după data inițială.`);
             }
         });
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr) {
             const condDate = parseDate(condReleaseStr);
             if (!condDate) err.push('Data liberării condiționate este invalidă.');
-            else if (condDate < startDate) err.push('Data liberării condiționate este înainte de începerea pedepsei.');
+            else if (startDate && condDate < startDate) err.push('Data liberării condiționate este înainte de începerea pedepsei.');
             else if (condDate > today()) err.push('Data liberării condiționate este în viitor.');
         }
         return err;
@@ -870,17 +887,16 @@
         }
     }
 
-    // ========== CONFIRMARE LA PĂRĂSIREA PAGINII ==========
     window.addEventListener('beforeunload', function(e) {
         const hasData = () => {
-            const sex = document.getElementById('sex').value;
+            const sexVal = document.getElementById('sex').value;
             const birth = document.getElementById('birthDate').value.trim();
             const start = document.getElementById('startDate').value.trim();
             const life = document.getElementById('lifeSentence').checked;
             const y = parseInt(document.getElementById('durYears').value)||0;
             const m = parseInt(document.getElementById('durMonths').value)||0;
             const d = parseInt(document.getElementById('durDays').value)||0;
-            return sex || parseDate(birth) || parseDate(start) || (!life && (y > 0 || m > 0 || d > 0));
+            return sexVal || parseDate(birth) || parseDate(start) || (!life && (y > 0 || m > 0 || d > 0));
         };
         if (hasData()) {
             e.preventDefault();
@@ -889,13 +905,17 @@
     });
 
     function calculateAll() {
-        const errC = document.getElementById('errorContainer'); errC.classList.remove('visible');
+        const errC = document.getElementById('errorContainer');
+        errC.classList.remove('visible');
         const birthDate = parseDate(document.getElementById('birthDate').value.trim());
         const startDate = parseDate(document.getElementById('startDate').value.trim());
         const life = document.getElementById('lifeSentence').checked;
         const art = document.getElementById('liberationArticle').value;
-        const y = parseInt(document.getElementById('durYears').value)||0, m = parseInt(document.getElementById('durMonths').value)||0, d = parseInt(document.getElementById('durDays').value)||0;
-        sex = document.getElementById('sex').value;
+        const y = parseInt(document.getElementById('durYears').value)||0;
+        const m = parseInt(document.getElementById('durMonths').value)||0;
+        const d = parseInt(document.getElementById('durDays').value)||0;
+        const sexValue = document.getElementById('sex').value;
+
         const err = validateInputs(birthDate, startDate, life, art, y, m, d);
         if (err.length>0) { errC.innerHTML = err.map(e=>'• '+e).join('<br>'); errC.classList.add('visible'); return; }
 
@@ -905,7 +925,7 @@
         if (life) {
             const d20 = new Date(startDate); d20.setFullYear(d20.getFullYear()+20); d20.setDate(d20.getDate()-1);
             totalDays = daysBetween(startDate, d20) + 1; theorExp = d20;
-            steps.push(`Pedepsa este detențiune pe viață. Se folosește plafonul de 20 ani (7305 zile).`);
+            steps.push(`Pedepsa este detențiune pe viață. Se folosește plafonul de 20 ani (${totalDays} zile).`);
         } else {
             theorExp = addCalendarSafe(startDate, y, m, d); theorExp.setDate(theorExp.getDate()-1);
             totalDays = daysBetween(startDate, theorExp) + 1;
@@ -915,7 +935,12 @@
             steps.push(`Numărăm zilele dintre ${fmtDate(startDate)} și ${fmtDate(theorExp)}, inclusiv ambele capete: ${totalDays} zile. Acesta este mandatul total.`);
         }
 
-        const dedIntervals = []; document.querySelectorAll('.deduction-row').forEach(r => { const sD=parseDate(r.querySelector('.ded-start').value.trim()), eD=parseDate(r.querySelector('.ded-end').value.trim()); if(sD&&eD) dedIntervals.push([sD,eD]); });
+        const dedIntervals = [];
+        document.querySelectorAll('.deduction-row').forEach(r => {
+            const sD=parseDate(r.querySelector('.ded-start').value.trim());
+            const eD=parseDate(r.querySelector('.ded-end').value.trim());
+            if(sD&&eD) dedIntervals.push([sD,eD]);
+        });
         let ded = sumIntervals(dedIntervals);
         document.querySelectorAll('.manual-days').forEach(i=>{ const v=parseInt(i.value); if(!isNaN(v)&&v>0) ded+=v; });
         if (ded > totalDays) { errC.innerHTML = '• Deducerile depășesc mandatul total.'; errC.classList.add('visible'); return; }
@@ -931,7 +956,7 @@
         let realExp = new Date(theorExp); realExp.setDate(realExp.getDate() - ded + non);
         steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
 
-        const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, sex);
+        const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, sexValue);
         steps.push(`La data începerii executării, deținutul avea categoria de vârstă: ${ageAtExpiry}.`);
 
         let mR=1/2, tR=2/3, pM=Infinity, pT=Infinity, articleInfo='';
@@ -940,12 +965,26 @@
             const totalMonths = y*12 + m + d/30; const sentenceOver10 = totalMonths > 120;
             if (art === 'NCP100') {
                 const expiresBefore60 = theorExp < new Date(birthDate.getFullYear()+60, birthDate.getMonth(), birthDate.getDate());
-                if (expiresBefore60) { if(sentenceOver10){mR=2/3;tR=3/4;pM=7305;pT=7305;} else{mR=1/2;tR=2/3;} articleInfo = `NCP art. 100 (${ageAtExpiry}, expiră < 60 ani) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`; }
-                else { if(sentenceOver10){mR=1/2;tR=2/3;pM=7305;pT=7305;} else{mR=1/3;tR=1/2;} articleInfo = `NCP art. 100 (${ageAtExpiry}, expiră ≥ 60 ani) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`; }
+                if (expiresBefore60) {
+                    if(sentenceOver10){mR=2/3;tR=3/4;pM=7305;pT=7305;} else{mR=1/2;tR=2/3;}
+                    articleInfo = `NCP art. 100 (${ageAtExpiry}, expiră < 60 ani) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`;
+                } else {
+                    if(sentenceOver10){mR=1/2;tR=2/3;pM=7305;pT=7305;} else{mR=1/3;tR=1/2;}
+                    articleInfo = `NCP art. 100 (${ageAtExpiry}, expiră ≥ 60 ani) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`;
+                }
             } else {
                 const rule = liberationRules.find(r => r.article === art && r.age.includes(ageAtExpiry) && ((r.life&&life) || (!r.life && ((r.maxYears&&!sentenceOver10)||(r.minYears&&sentenceOver10)||(!r.maxYears&&!r.minYears)))));
-                if (rule) { mR=rule.mandatory[0]/rule.mandatory[1]; tR=rule.total[0]/rule.total[1]; pM=rule.mandatory[2]||Infinity; pT=rule.total[2]||Infinity; articleInfo=`${art} (${ageAtExpiry}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`; }
-                else { errC.innerHTML='• Nu există regulă de liberare.'; errC.classList.add('visible'); return; }
+                if (rule) {
+                    mR=rule.mandatory[0]/rule.mandatory[1];
+                    tR=rule.total[0]/rule.total[1];
+                    pM=rule.mandatory[2]||Infinity;
+                    pT=rule.total[2]||Infinity;
+                    articleInfo=`${art} (${ageAtExpiry}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`;
+                } else {
+                    errC.innerHTML='• Nu există regulă de liberare pentru această combinație articol/vârstă/durată.';
+                    errC.classList.add('visible');
+                    return;
+                }
             }
         }
         steps.push(`Articolul aplicabil: ${articleInfo}.`);
@@ -962,7 +1001,6 @@
         let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth-1); fDate.setDate(fDate.getDate()-ded+non);
         steps.push(`Data fracției minime: ${fmtDate(startDate)} + ${mDays} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(mDate)}.`);
         steps.push(`Data fracției totale: ${fmtDate(startDate)} + ${tDays} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(tDate)}.`);
-
         steps.push(`Termenul de reanalizare 1/5: Math.floor(${totalDays} / 5) = ${fifth} zile.`);
         steps.push(`Data 1/5: ${fmtDate(startDate)} + ${fifth} zile − 1 − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(fDate)}.`);
 
@@ -1014,8 +1052,9 @@
             { label: 'Expirare teoretică', date: theorExp },
             { label: 'Expirare reală', date: realExp }
         ];
-        if (document.getElementById('conditionalReleaseDate').value.trim()) {
-            const condDate = parseDate(document.getElementById('conditionalReleaseDate').value.trim());
+        const condReleaseStr2 = document.getElementById('conditionalReleaseDate').value.trim();
+        if (condReleaseStr2) {
+            const condDate = parseDate(condReleaseStr2);
             if (condDate) timelineItems.push({ label: 'Data liberării condiționate', date: condDate });
         }
         timelineItems.sort((a,b) => a.date - b.date);
@@ -1100,7 +1139,7 @@
         });
         document.querySelectorAll('.manual-days').forEach((inp,i) => { const v=parseInt(inp.value); if(v>0) csv += `"Recurs compensatoriu ${i+1}","${v} zile"\n`; });
         document.querySelectorAll('.non-exec-row').forEach((r,i) => {
-            const typ=r.querySelector('.ne-type').value;
+            const typ=r.querySelector('.ne-type')?.value || '';
             const st=r.querySelector('.ne-start').value.trim();
             const en=r.querySelector('.ne-end').value.trim();
             if (st && en) csv += `"Perioadă adăugată ${i+1} (${typ})","${st} - ${en}"\n`;
@@ -1121,7 +1160,6 @@
         a.click();
     }
 
-    // Keyboard support for modal
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const overlay = document.querySelector('.modal-overlay');
