@@ -4,722 +4,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CALCULATOR PEDEPSE</title>
-    <style>
-        :root {
-            --bg: #12141A;
-            --card-bg: #161820;
-            --primary: #C9A227;
-            --gold: #C9A227;
-            --gold-light: #D4AF37;
-            --text: #e6e6e6;
-            --text-light: #B0B5C0;
-            --border: #2a2a35;
-            --danger: #ff6b6b;
-            --warning: #ffa726;
-            --radius: 18px;
-            --input-radius: 14px;
-            --shadow: 0 2px 10px rgba(0,0,0,0.25);
-            --font: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-            /* Dark mode input improvements */
-            --input-bg: #1b1f2a;
-            --input-border: #3a4150;
-            --input-placeholder: #8a92a6;
-            --label-color: #c0c6d2;
-        }
-        body.light {
-            --bg: #f5f5f5;
-            --card-bg: #ffffff;
-            --primary: #b8941f;
-            --gold: #b8941f;
-            --gold-light: #c9a227;
-            --text: #1a1a1a;
-            --text-light: #555;
-            --border: #ddd;
-            --danger: #d32f2f;
-            --warning: #e67e22;
-            --shadow: 0 2px 8px rgba(0,0,0,0.1);
-            /* Light mode input improvements */
-            --input-bg: #ffffff;
-            --input-border: #b0b5c0;
-            --input-placeholder: #6a6f78;
-            --label-color: #4a4f58;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html {
-            touch-action: manipulation;
-            -webkit-text-size-adjust: 100%;
-            overflow-x: hidden;
-            width: 100%;
-            overscroll-behavior: contain;
-            text-rendering: optimizeLegibility;
-            font-synthesis: none;
-        }
-        body {
-            background: var(--bg);
-            font-family: var(--font);
-            color: var(--text);
-            padding: 12px;
-            font-size: 16px;
-            overflow-x: hidden;
-            width: 100%;
-            max-width: 100vw;
-            line-height: 1.5;
-            transition: background 0.3s, color 0.3s;
-            min-height: 0;
-        }
-        .container { max-width: 960px; margin: 0 auto; width: 100%; }
-        .top-actions { display: flex; gap: 10px; margin-bottom: 12px; justify-content: center; }
-        .btn-big {
-            flex: 1; max-width: 200px;
-            background: rgba(201, 162, 39, 0.08); border: 1px solid var(--border);
-            color: var(--text-light); border-radius: var(--input-radius);
-            padding: 14px 16px; font-size: 0.85rem; font-weight: 700;
-            letter-spacing: 0.8px; cursor: pointer; display: inline-flex;
-            align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.2s ease; text-transform: uppercase;
-            will-change: transform;
-        }
-        .btn-big:hover, .btn-big:focus-visible { background: rgba(201, 162, 39, 0.15); border-color: var(--gold); color: var(--gold-light); outline: none; }
-        .top-bar {
-            display: flex; gap: 10px; margin-bottom: 16px;
-            background: rgba(22, 24, 32, 0.6); backdrop-filter: blur(8px);
-            padding: 6px; border-radius: var(--input-radius); border: 1px solid var(--border);
-            position: sticky; top: 8px; z-index: 10; align-items: center;
-            will-change: transform;
-        }
-        body.light .top-bar { background: rgba(255,255,255,0.8); }
-        .btn-utility {
-            flex: 1; background: rgba(201, 162, 39, 0.05);
-            border: 1px solid var(--border); color: var(--text-light);
-            border-radius: var(--input-radius); padding: 10px 14px;
-            font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px;
-            cursor: pointer; display: inline-flex; align-items: center;
-            justify-content: center; gap: 6px; transition: all 0.2s ease;
-            white-space: nowrap; position: relative;
-        }
-        .btn-utility:hover, .btn-utility:focus-visible { background: rgba(201, 162, 39, 0.12); border-color: var(--gold); color: var(--gold-light); outline: none; }
-        .btn-utility.primary { color: var(--gold-light); }
-        .badge {
-            position: absolute; top: -6px; right: -6px;
-            background: var(--gold); color: #0F1115; font-size: 0.65rem;
-            font-weight: 700; width: 20px; height: 20px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; letter-spacing: 0;
-        }
-        .header {
-            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 60%, #0d0d1a 100%);
-            border: 1px solid var(--border); color: var(--gold-light);
-            padding: 14px 16px; border-radius: var(--radius); margin-bottom: 18px; text-align: center;
-        }
-        body.light .header { background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 60%, #f0f0f0 100%); color: #1a1a1a; border-color: #ccc; }
-        .header h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: 1.5px; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.2; }
-        .card {
-            background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow);
-            padding: 20px 22px; margin-bottom: 16px; border: 1px solid var(--border);
-            border-left: 3px solid rgba(201, 162, 39, 0.5); transition: border-color 0.2s, background 0.3s;
-            contain: layout paint;
-        }
-        .card h3 {
-            font-size: 0.95rem; color: var(--gold-light); margin-bottom: 14px; padding-bottom: 10px;
-            border-bottom: 3px solid; border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
-            display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: 0.3px;
-        }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
-        label { display: block; font-weight: 600; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: var(--label-color); }
-        select, input[type="number"], input[type="text"], textarea {
-            width: 100%; padding: 10px 12px; border: 1.5px solid var(--input-border);
-            border-radius: var(--input-radius); font-size: 0.9rem; background: var(--input-bg);
-            color: var(--text); font-family: var(--font-mono); min-height: 44px;
-            transition: border-color 0.2s, box-shadow 0.2s; letter-spacing: 0.3px;
-        }
-        select:focus, input:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1); outline: none; }
-        input::placeholder, textarea::placeholder { color: var(--input-placeholder); }
-        .date-wrapper { display: flex; gap: 4px; align-items: center; }
-        .date-wrapper input { flex: 1; }
-        .btn-today {
-            flex-shrink: 0; background: rgba(201, 162, 39, 0.08); border: 1.5px solid var(--gold);
-            color: var(--gold-light); border-radius: var(--input-radius); padding: 0 10px;
-            font-size: 0.7rem; font-weight: 700; cursor: pointer; height: 44px;
-            display: flex; align-items: center; transition: all 0.2s; letter-spacing: 0.5px;
-        }
-        .btn-today:hover { background: rgba(201, 162, 39, 0.2); border-color: var(--gold-light); color: #fff; }
-        .period-row {
-            display: flex; gap: 10px; align-items: flex-end; background: rgba(201, 162, 39, 0.03);
-            padding: 12px; border-radius: var(--input-radius); margin-bottom: 10px; flex-wrap: wrap; border: 1px solid var(--border);
-            contain: layout paint;
-        }
-        .period-row > div { flex: 1 1 95px; min-width: 85px; }
-        .btn {
-            padding: 10px 18px; border-radius: var(--input-radius); font-weight: 600;
-            font-size: 0.82rem; cursor: pointer; border: none; min-height: 42px;
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-            transition: all 0.2s ease; letter-spacing: 0.4px;
-        }
-        .btn-outline { background: transparent; color: var(--gold-light); border: 1.5px solid var(--gold); }
-        .btn-outline:hover, .btn-outline:focus-visible { background: rgba(201, 162, 39, 0.1); transform: translateY(-1px); outline: none; }
-        .btn-gold { background: var(--gold); color: #0F1115; font-weight: 700; }
-        .btn-gold:hover, .btn-gold:focus-visible { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3); outline: none; }
-        .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
-        .btn-danger:hover, .btn-danger:focus-visible { background: rgba(255, 107, 107, 0.1); outline: none; }
-        .btn-sm { padding: 6px 12px; font-size: 0.72rem; min-height: 32px; }
-        .result-section { margin-top: 20px; }
-        .result-section h4 { color: var(--gold); font-size: 0.85rem; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
-        .result-item { background: rgba(201, 162, 39, 0.04); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--primary); contain: layout paint; }
-        .result-item.important { border-left-color: var(--gold); background: rgba(201, 162, 39, 0.08); }
-        .result-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--label-color); font-weight: 600; margin-bottom: 5px; }
-        .result-value { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); word-break: break-word; }
-        .result-warning { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
-        .result-warning.expired { color: var(--danger); }
-        .result-warning.soon { color: var(--warning); }
-        .tag { display: inline-block; padding: 4px 12px; border-radius: 14px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3px; }
-        .tag-minor { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
-        .tag-tanar { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
-        .tag-major { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
-        .tag-batran { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .hidden { display: none !important; }
-        small { color: var(--text-light); font-size: 0.72rem; }
-        .fraction { font-family: var(--font-mono); font-size: 1.1em; }
-        .error-message { background: rgba(255, 107, 107, 0.08); color: var(--danger); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 0.82rem; display: none; border: 1px solid rgba(255, 107, 107, 0.2); }
-        .error-message.visible { display: block; }
-        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
-        .btn-row .btn { flex: 1 1 180px; } /* butoanele se întind pe rânduri egale */
-        .footer { text-align: center; padding: 16px 0; font-size: 0.7rem; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 24px; letter-spacing: 0.5px; }
-        .steps-container { background: rgba(201, 162, 39, 0.03); border-radius: var(--radius); padding: 16px; margin-top: 16px; font-size: 0.85rem; line-height: 1.7; border: 1px solid var(--border); }
-        .steps-container h4 { color: var(--gold); margin-bottom: 8px; }
-        .steps-container ol { padding-left: 24px; color: var(--text-light); }
-        .steps-container ol li { margin-bottom: 6px; }
-        .alerts-container { background: rgba(255, 167, 38, 0.06); border: 1px solid rgba(255, 167, 38, 0.3); border-radius: var(--radius); padding: 14px 18px; margin-top: 16px; }
-        .alerts-container h4 { color: var(--warning); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .alerts-container ul { list-style: none; }
-        .alerts-container ul li { padding: 6px 0; color: var(--text-light); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255, 167, 38, 0.1); }
-        .alerts-container ul li:last-child { border-bottom: none; }
-        .toggle-switch { position: relative; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
-        .toggle-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
-        .toggle-slider { width: 42px; height: 24px; background: var(--border); border-radius: 12px; transition: all 0.2s; flex-shrink: 0; }
-        .toggle-slider:before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: var(--text-light); border-radius: 50%; transition: all 0.2s; }
-        .toggle-switch input:checked + .toggle-slider { background: var(--gold); }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #0F1115; }
-        .toggle-switch input:focus-visible + .toggle-slider { outline: 2px solid var(--gold-light); outline-offset: 2px; }
-        .sex-toggle-wrapper { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-        .sex-label { font-size: 0.8rem; font-weight: 600; color: var(--label-color); text-transform: uppercase; }
-        .sex-label.active { color: var(--gold-light); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; contain: layout paint; }
-        .modal h4 { color: var(--gold); margin-bottom: 12px; }
-        .modal ul { list-style: none; max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
-        .modal li { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; margin-bottom: 4px; background: rgba(201, 162, 39, 0.04); border: 1px solid transparent; transition: border-color 0.2s; }
-        .modal li:hover { border-color: var(--gold); }
-        .modal li span { flex: 1; color: var(--text); cursor: pointer; font-size: 0.9rem; }
-        .modal li button { background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 0.7rem; transition: all 0.2s; }
-        .modal li button:hover, .modal li button:focus-visible { background: rgba(255, 107, 107, 0.1); outline: none; }
-        .modal .close-btn { margin-top: 8px; }
-        .timeline { list-style: none; padding: 0; margin: 16px 0 0 0; position: relative; }
-        .timeline::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 2px; background: var(--border); }
-        .timeline li { position: relative; padding-left: 40px; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-light); }
-        .timeline li::before { content: ''; position: absolute; left: 10px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--gold); }
-        .timeline li.passed::before { background: var(--danger); border-color: var(--danger); }
-        .timeline li .tl-date { font-weight: 600; color: var(--gold-light); margin-right: 8px; }
-        .timeline li .tl-label { color: var(--text-light); }
-        .timeline li.passed .tl-date { color: var(--danger); }
-        .timeline li.passed .tl-label { text-decoration: line-through; color: #6A6F78; }
-        :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
-        [tabindex="-1"]:focus { outline: none; }
-        .skip-link { position: absolute; top: -40px; left: 0; background: var(--gold); color: #0F1115; padding: 8px; z-index: 200; }
-        .skip-link:focus { top: 0; }
-        @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } .result-grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.2rem; } }
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                transition-duration: 0.01ms !important;
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                scroll-behavior: auto !important;
-            }
-            .btn-big, .btn-utility, .btn, .btn-outline, .btn-gold, .btn-danger, .btn-today, .btn-sm {
-                transition: none !important;
-                transform: none !important;
-            }
-            .top-bar, .modal-overlay {
-                backdrop-filter: none !important;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
-<div class="container">
-    <div class="top-actions">
-        <button class="btn-big" id="themeToggle" onclick="toggleTheme()">☀️ MOD LIGHT</button>
-        <button class="btn-big" onclick="openInfoModal()">ℹ️ INFORMAȚII</button>
-    </div>
-    <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
-        <button class="btn-utility primary" onclick="saveCase()">💾 SALVEAZĂ</button>
-        <button class="btn-utility" onclick="openLoadModal()" id="loadBtn">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
-        <button class="btn-utility" onclick="confirmReset()">↺ RESET</button>
-    </div>
-    <div class="header"><h1 id="main-title">⚖️ CALCULATOR PEDEPSE</h1></div>
-    <main id="main-content">
-    <div class="card" aria-labelledby="date-ppl-heading">
-        <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
-        <div class="form-grid">
-            <div><label>Sex</label><div class="sex-toggle-wrapper"><span class="sex-label" id="sexLabelF">FEMININ</span><label class="toggle-switch"><input type="checkbox" id="sexToggle" checked><span class="toggle-slider" aria-hidden="true"></span></label><span class="sex-label active" id="sexLabelM">MASCULIN</span></div></div>
-            <div><label for="birthDate">Data nașterii</label><input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa"></div>
-            <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;" aria-live="polite"></div>
+    <div class="container">
+        <div class="top-actions">
+            <button class="btn-big" id="themeToggle">☀️ MOD LIGHT</button>
+            <button class="btn-big" id="infoBtn">ℹ️ INFORMAȚII</button>
         </div>
-        <div style="margin-top:14px;"><label for="observations">📝 OBSERVAȚII (OPȚIONAL)</label><textarea id="observations" rows="2" placeholder=""></textarea></div>
-    </div>
-    <div class="card" aria-labelledby="sentence-heading">
-        <h3 id="sentence-heading">⚖️ 2. PEDEAPSA</h3>
-        <div class="form-grid">
-            <div><label for="liberationArticle">Articol liberare condiționată</label><select id="liberationArticle" aria-required="true"><option value="">—</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. 2</option><option value="VCP603">VCP art. 60 alin. 3</option></select></div>
-            <div><label for="lifeSentence">Detențiune pe viață</label><label class="toggle-switch" style="margin-top:10px;"><input type="checkbox" id="lifeSentence"><span class="toggle-slider" aria-hidden="true"></span><span style="font-size:0.8rem;color:var(--label-color);">Bifați dacă este cazul</span></label></div>
+        <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
+            <button class="btn-utility primary" id="saveBtn">💾 SALVEAZĂ</button>
+            <button class="btn-utility" id="loadBtn">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
+            <button class="btn-utility" id="resetBtn">↺ RESET</button>
         </div>
-        <div id="sentenceDuration" class="form-grid" style="margin-top:10px;">
-            <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
-            <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
-            <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
+        <div class="header">
+            <h1 id="main-title">⚖️ CALCULATOR PEDEPSE</h1>
         </div>
-        <div style="margin-top:14px;"><label for="startDate">Data începerii executării pedepsei</label><div class="date-wrapper"><input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" onclick="setToday('startDate')">AZI</button></div></div>
+        <main id="main-content">
+            <div class="card" aria-labelledby="date-ppl-heading">
+                <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
+                <div class="form-grid">
+                    <div>
+                        <label>Sex</label>
+                        <div class="sex-toggle-wrapper">
+                            <span class="sex-label" id="sexLabelF">FEMININ</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="sexToggle" checked>
+                                <span class="toggle-slider" aria-hidden="true"></span>
+                            </label>
+                            <span class="sex-label active" id="sexLabelM">MASCULIN</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="birthDate">Data nașterii</label>
+                        <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa">
+                    </div>
+                    <div id="ageTag" class="age-tag" aria-live="polite"></div>
+                </div>
+                <div class="mt-12">
+                    <label for="observations">📝 OBSERVAȚII (OPȚIONAL)</label>
+                    <textarea id="observations" rows="2" placeholder=""></textarea>
+                </div>
+            </div>
+
+            <div class="card" aria-labelledby="sentence-heading">
+                <h3 id="sentence-heading">⚖️ 2. PEDEAPSA</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="liberationArticle">Articol liberare condiționată</label>
+                        <select id="liberationArticle" aria-required="true">
+                            <option value="">—</option>
+                            <option value="NCP100">NCP art. 100</option>
+                            <option value="NCP99">NCP art. 99 (viață)</option>
+                            <option value="NCP124">NCP art. 124</option>
+                            <option value="NCP125">NCP art. 125</option>
+                            <option value="VCP59">VCP art. 59</option>
+                            <option value="VCP591">VCP art. 59¹</option>
+                            <option value="VCP602">VCP art. 60 alin. 2</option>
+                            <option value="VCP603">VCP art. 60 alin. 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="lifeSentence">Detențiune pe viață</label>
+                        <label class="toggle-switch" style="margin-top:8px;">
+                            <input type="checkbox" id="lifeSentence">
+                            <span class="toggle-slider" aria-hidden="true"></span>
+                            <span class="life-label">Bifați dacă este cazul</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="sentenceDuration" class="form-grid mt-8">
+                    <div>
+                        <label for="durYears">Ani</label>
+                        <input type="number" id="durYears" value="0" min="0">
+                    </div>
+                    <div>
+                        <label for="durMonths">Luni</label>
+                        <input type="number" id="durMonths" value="0" min="0">
+                    </div>
+                    <div>
+                        <label for="durDays">Zile</label>
+                        <input type="number" id="durDays" value="0" min="0">
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <label for="startDate">Data începerii executării pedepsei</label>
+                    <div class="date-wrapper">
+                        <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa">
+                        <button type="button" class="btn-today" data-target="startDate">AZI</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" aria-labelledby="deductions-heading">
+                <h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3>
+                <div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div>
+                <button class="btn btn-outline btn-sm" id="addDedBtn">+ Adaugă</button>
+            </div>
+
+            <div class="card" aria-labelledby="recurs-heading">
+                <h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3>
+                <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
+                <button class="btn btn-outline btn-sm" id="addManDedBtn">+ Adaugă</button>
+            </div>
+
+            <div class="card" aria-labelledby="nonExec-heading">
+                <h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3>
+                <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
+                <button class="btn btn-outline btn-sm" id="addNonExecBtn">+ Adaugă</button>
+            </div>
+
+            <div class="card" id="restCard" aria-labelledby="rest-heading">
+                <h3 id="rest-heading">📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="conditionalReleaseDate">Data liberării condiționate</label>
+                        <div class="date-wrapper">
+                            <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            <button type="button" class="btn-today" data-target="conditionalReleaseDate">AZI</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" aria-labelledby="masuri-preventive-heading">
+                <h3 id="masuri-preventive-heading">🛡️ MĂSURI PREVENTIVE</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="masuriRefDate">Dată referință</label>
+                        <div class="date-wrapper">
+                            <input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="masuriDays">Adaugă zile</label>
+                        <input type="number" id="masuriDays" value="0" min="0">
+                    </div>
+                    <div>
+                        <label>Rezultat</label>
+                        <input type="text" id="masuriResult" readonly class="result-input" tabindex="-1">
+                    </div>
+                </div>
+                <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
+            </div>
+
+            <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-gold" id="calcBtn">📐 CALCULEAZĂ</button>
+                <button class="btn btn-outline" id="exportCsvBtn">📊 EXPORTĂ CSV</button>
+                <button class="btn btn-outline" id="copyResultsBtn">📋 COPIAZĂ REZULTATELE</button>
+                <button class="btn btn-outline" id="exportPdfBtn">📄 EXPORTĂ PDF</button>
+            </div>
+
+            <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
+                <h3 id="results-heading">📊 REZULTATE</h3>
+                <div id="resultsContent"></div>
+                <div id="alertsContainer" class="alerts-container hidden" role="alert" aria-live="polite"></div>
+                <div id="timelineContainer" class="hidden mt-16">
+                    <h4 style="color:var(--gold);" id="timeline-heading">📅 CRONOLOGIE TERMENE</h4>
+                    <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
+                </div>
+                <button class="btn btn-outline btn-sm mt-12" id="toggleStepsBtn" aria-expanded="false" aria-controls="stepsContainer">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
+                <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
+                    <h4 id="steps-heading">🧮 PAȘII CALCULULUI</h4>
+                    <ol id="stepsList"></ol>
+                    <p class="footnote">Notă: Math.floor(x) = partea întreagă inferioară (rotunjire în jos, în defavoarea condamnatului).</p>
+                </div>
+            </div>
+        </main>
+        <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | v1.0 | © Alin Talfeș</footer>
     </div>
-    <div class="card" aria-labelledby="deductions-heading"><h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3><div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div><button class="btn btn-outline btn-sm" onclick="addDedRow()">+ Adaugă</button></div>
-    <div class="card" aria-labelledby="recurs-heading"><h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3><div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
-    <div class="card" aria-labelledby="nonExec-heading"><h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3><div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div><button class="btn btn-outline btn-sm" onclick="addNonExecRow()">+ Adaugă</button></div>
-    <div class="card" id="restCard" aria-labelledby="rest-heading"><h3 id="rest-heading">📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3><div class="form-grid"><div><label for="conditionalReleaseDate">Data liberării condiționate</label><div class="date-wrapper"><input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" onclick="setToday('conditionalReleaseDate')">AZI</button></div></div></div></div>
-    <div class="card" aria-labelledby="masuri-preventive-heading">
-        <h3 id="masuri-preventive-heading">🛡️ MĂSURI PREVENTIVE</h3>
-        <div class="form-grid">
-            <div><label for="masuriRefDate">Dată referință</label><div class="date-wrapper"><input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa"></div></div>
-            <div><label for="masuriDays">Adaugă zile</label><input type="number" id="masuriDays" value="0" min="0"></div>
-            <div><label>Rezultat</label><input type="text" id="masuriResult" readonly style="background:rgba(201,162,39,0.1);border-color:var(--gold);font-weight:600;color:var(--text);" tabindex="-1"></div>
-        </div>
-        <p style="margin-top:12px;font-size:0.75rem;color:var(--text-light);"><em>Ziua nr. 1 o reprezintă ziua de referință.</em></p>
-    </div>
-    <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
-    <div class="btn-row">
-        <button class="btn btn-gold" onclick="calculateAll()">📐 CALCULEAZĂ</button>
-        <button class="btn btn-outline" onclick="exportCSV()">📊 EXPORTĂ CSV</button>
-        <button class="btn btn-outline" onclick="copyResults()">📋 COPIAZĂ REZULTATELE</button>
-        <button class="btn btn-outline" onclick="exportPDF()">📄 EXPORTĂ PDF</button>
-    </div>
-    <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
-        <h3 id="results-heading">📊 REZULTATE</h3>
-        <div id="resultsContent"></div>
-        <div id="alertsContainer" class="alerts-container hidden" role="alert" aria-live="polite"></div>
-        <div id="timelineContainer" class="hidden" style="margin-top:16px;"><h4 style="color:var(--gold);" id="timeline-heading">📅 CRONOLOGIE TERMENE</h4><ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul></div>
-        <button class="btn btn-outline btn-sm" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;" aria-expanded="false" aria-controls="stepsContainer">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
-        <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading"><h4 id="steps-heading">🧮 PAȘII CALCULULUI</h4><ol id="stepsList"></ol><p style="margin-top:8px;font-size:0.8rem;color:var(--text-light);"><em>Notă: Math.floor(x) = partea întreagă inferioară (rotunjire în jos, în defavoarea condamnatului).</em></p></div>
-    </div>
-    </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | v1.0 | © Alin Talfeș</footer>
-</div>
-<script>
-    // ========== THEME TOGGLE ==========
-    function applyTheme() {
-        const saved = localStorage.getItem('anpTheme');
-        if (saved === 'light') {
-            document.body.classList.add('light');
-            document.getElementById('themeToggle').innerHTML = '🌙 MOD DARK';
-        } else {
-            document.body.classList.remove('light');
-            document.getElementById('themeToggle').innerHTML = '☀️ MOD LIGHT';
-        }
-    }
-    function toggleTheme() {
-        document.body.classList.toggle('light');
-        const isLight = document.body.classList.contains('light');
-        localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
-        document.getElementById('themeToggle').innerHTML = isLight ? '🌙 MOD DARK' : '☀️ MOD LIGHT';
-    }
-    applyTheme(); // aplicăm tema salvată la pornire
-
-    function openInfoModal() {
-        const existingOverlay = document.querySelector('.modal-overlay');
-        if (existingOverlay) existingOverlay.remove();
-        const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true'); overlay.setAttribute('aria-labelledby', 'info-title');
-        overlay.innerHTML = `<div class="modal"><h4 id="info-title">📖 GHID DE COMPLETARE</h4><div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;"><p><strong>1. DATE PPL</strong><br>• <strong>Sex:</strong> selectați Masculin/Feminin. Implicit este MASCULIN.<br>• <strong>Data nașterii:</strong> format zz.ll.aaaa.<br>• <strong>Observații:</strong> opțional.</p><p><strong>2. PEDEAPSA</strong><br>• <strong>Articol liberare condiționată:</strong> alegeți articolul corespunzător.<br>• <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>• <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei (fără limite).<br>• <strong>Data începerii:</strong> prima zi de executare. Butonul AZI completează automat.</p><p><strong>3. PERIOADE DEDUSE</strong><br>• Adăugați perioadele care se scad (arest preventiv, reținere etc.).<br>• Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).</p><p><strong>4. RECURS COMPENSATORIU</strong><br>• Introduceți direct numărul de zile deduse (Legea 169/2017).</p><p><strong>5. PERIOADE ADĂUGATE</strong><br>• Evadare/boală: zile = data_final − data_inițial (capete excluse).<br>• Întrerupere: zile = data_final − data_inițial − 1.</p><p><strong>6. REST RĂMAS</strong><br>• Opțional: data liberării condiționate.</p><hr style="border-color:var(--border);margin:12px 0;"><p style="font-size:0.8rem;color:var(--text-light);"><strong>🔒 Confidențialitate și securitate</strong><br>Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p></div><button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button></div>`;
-        document.body.appendChild(overlay); overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-    }
-
-    // ========== UTILS ==========
-    const parseDate = (str) => { if (!str) return null; str = str.trim(); const parts = str.split('.'); if (parts.length === 3) { const day = parseInt(parts[0], 10), month = parseInt(parts[1], 10), year = parseInt(parts[2], 10); if (!isNaN(day) && !isNaN(month) && !isNaN(year)) { const d = new Date(year, month - 1, day); if (d.getDate() === day && d.getMonth() === month - 1 && d.getFullYear() === year) return d; } } return null; };
-    const fmtDate = (d) => d && !isNaN(d) ? `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}` : '—';
-    const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
-    const daysBetween = (a,b) => Math.round((b.getTime()-a.getTime())/86400000);
-    const addCalendarSafe = (date, years, months, days) => { const d = new Date(date); d.setFullYear(d.getFullYear() + years); d.setMonth(d.getMonth() + months); d.setDate(d.getDate() + days); return d; };
-    const ageExact = (birth, now) => { let y = now.getFullYear() - birth.getFullYear(), m = now.getMonth() - birth.getMonth(), d = now.getDate() - birth.getDate(); if (d < 0) { m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); } if (m < 0) { y--; m += 12; } return { y, m, d }; };
-    const getAgeCategoryAtDate = (birthDate, targetDate, currentSex) => { const ageY = ageExact(birthDate, targetDate).y; if (ageY < 18) return "MINOR"; if (ageY < 21) return "TANAR"; const articleEl = document.getElementById('liberationArticle'); const isNCP = articleEl ? articleEl.value.startsWith("NCP") : true; const elderly = isNCP ? (ageY >= 60) : ((currentSex==='M' && ageY >= 60) || (currentSex==='F' && ageY >= 55)); return elderly ? "BATRAN" : "MAJOR"; };
-    const liberationRules = [
-        { article:"NCP100", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3] }, { article:"NCP100", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3,7305], total:[3,4,7305] },
-        { article:"NCP100", age:["BATRAN"], maxYears:10, mandatory:[1,3], total:[1,2] }, { article:"NCP100", age:["BATRAN"], minYears:10, mandatory:[1,2,7305], total:[2,3,7305] },
-        { article:"NCP99",  age:["MINOR","TANAR","MAJOR","BATRAN"], life:true, mandatory:[1,2,7305], total:[1,2,7305] },
-        { article:"NCP124", age:["MINOR","TANAR","MAJOR","BATRAN"], mandatory:[1,2], total:[1,2] }, { article:"NCP125", age:["MINOR","TANAR","MAJOR","BATRAN"], mandatory:[1,2], total:[1,2] },
-        { article:"VCP59",  age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3] }, { article:"VCP59",  age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3], total:[3,4] },
-        { article:"VCP591", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,3], total:[1,2] }, { article:"VCP591", age:["MAJOR","TANAR"], minYears:10, mandatory:[1,2], total:[2,3] },
-        { article:"VCP602", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,3] }, { article:"VCP602", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,2] },
-        { article:"VCP603", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,4] }, { article:"VCP603", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3] }
-    ];
-
-    const sexToggle = document.getElementById('sexToggle'), sexLabelM = document.getElementById('sexLabelM'), sexLabelF = document.getElementById('sexLabelF');
-    let currentSex = 'M';
-    function updateSexUI() { if (sexToggle.checked) { currentSex = 'M'; sexLabelM.classList.add('active'); sexLabelF.classList.remove('active'); } else { currentSex = 'F'; sexLabelF.classList.add('active'); sexLabelM.classList.remove('active'); } updAgeTag(); }
-    sexToggle.addEventListener('change', updateSexUI); updateSexUI();
-
-    function applyDateMask(e) { const input = e.target; let val = input.value.replace(/\D/g, ''); if (val.length > 8) val = val.slice(0, 8); let formatted = ''; if (val.length > 0) formatted += val.substring(0, 2); if (val.length >= 3) formatted += '.' + val.substring(2, 4); if (val.length >= 5) formatted += '.' + val.substring(4, 8); input.value = formatted; }
-    document.addEventListener('input', function(e) { if (e.target.classList.contains('date-masked')) applyDateMask(e); });
-    function setToday(inputId) { const input = document.getElementById(inputId); if (input) input.value = fmtDate(today()); }
-
-    // ========== FUNCȚII AJUTĂTOARE PENTRU CITIREA SPEȚELOR ==========
-    function getCases() {
-        try {
-            return JSON.parse(localStorage.getItem('anpCases') || '{}');
-        } catch (e) {
-            return {};
-        }
-    }
-
-    function updateCaseBadge() {
-        const cases = getCases();
-        const count = Object.keys(cases).length;
-        const badge = document.getElementById('caseCountBadge');
-        if (!badge) return;
-        if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-    }
-
-    // ========== SALVARE / ÎNCĂRCARE / REDENUMIRE / ȘTERGERE ==========
-    function saveCase() {
-        const name = prompt('Nume speță:');
-        if (!name || !name.trim()) return;
-        const trimmedName = name.trim();
-        const cases = getCases();
-        if (cases[trimmedName]) {
-            if (!confirm(`Există deja o speță cu numele "${trimmedName}". Dorești să o suprascrii?`)) return;
-        }
-        const data = {
-            sex: currentSex,
-            birthDate: document.getElementById('birthDate').value,
-            observations: document.getElementById('observations').value,
-            life: document.getElementById('lifeSentence').checked,
-            art: document.getElementById('liberationArticle').value,
-            y: document.getElementById('durYears').value,
-            m: document.getElementById('durMonths').value,
-            d: document.getElementById('durDays').value,
-            start: document.getElementById('startDate').value,
-            condRelease: document.getElementById('conditionalReleaseDate').value,
-            dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})),
-            manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
-            nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''}))
-        };
-        cases[trimmedName] = data;
-        localStorage.setItem('anpCases', JSON.stringify(cases));
-        updateCaseBadge();
-        alert('Speță salvată!');
-    }
-
-    function openLoadModal() {
-        const existingOverlay = document.querySelector('.modal-overlay');
-        if (existingOverlay) existingOverlay.remove();
-        const cases = getCases();
-        const names = Object.keys(cases);
-        if (names.length === 0) {
-            alert('Nicio speță salvată.');
-            return;
-        }
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        overlay.setAttribute('role', 'dialog');
-        overlay.setAttribute('aria-modal', 'true');
-        overlay.setAttribute('aria-labelledby', 'modal-title');
-        let html = '<div class="modal"><h4 id="modal-title">Selectează sau șterge o speță</h4>';
-        html += '<p style="font-size:0.8rem;color:var(--text-light);margin-bottom:8px;">Click pe speță pentru a o încărca.</p>';
-        html += '<ul role="listbox">';
-        names.forEach(name => {
-            const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            html += `<li role="option" tabindex="0"><span onclick="window.loadCaseByName('${safeName}')" role="button" tabindex="0">${name}</span><div style="display:flex;gap:4px;"><button onclick="window.renameCase('${safeName}')" aria-label="Redenumește speța ${name}" style="background:transparent;border:1px solid var(--primary);color:var(--gold-light);border-radius:8px;padding:6px 8px;cursor:pointer;font-size:0.7rem;">✏️</button><button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">🗑️</button></div></li>`;
-        });
-        html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()" aria-label="Închide fereastra">Închide</button></div>';
-        overlay.innerHTML = html;
-        document.body.appendChild(overlay);
-        overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-        setTimeout(() => { const first = overlay.querySelector('li[role="option"]'); if (first) first.focus(); }, 100);
-    }
-
-    window.loadCaseByName = function(name) {
-        const cases = getCases();
-        if (!cases[name]) return;
-        const d = cases[name];
-
-        // Ascundem rezultatele vechi pentru a evita confuzia
-        document.getElementById('resultsCard').classList.add('hidden');
-
-        currentSex = d.sex || 'M';
-        sexToggle.checked = currentSex === 'M';
-        updateSexUI();
-        document.getElementById('birthDate').value = d.birthDate || '';
-        document.getElementById('observations').value = d.observations || '';
-        document.getElementById('lifeSentence').checked = d.life || false;
-        document.getElementById('sentenceDuration').classList.toggle('hidden', d.life);
-        document.getElementById('liberationArticle').value = d.art || '';
-        document.getElementById('durYears').value = d.y || 0;
-        document.getElementById('durMonths').value = d.m || 0;
-        document.getElementById('durDays').value = d.d || 0;
-        document.getElementById('startDate').value = d.start || '';
-        document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
-        document.getElementById('deductionsContainer').innerHTML = '';
-        (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } });
-        document.getElementById('manualDeductionsContainer').innerHTML = '';
-        (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; });
-        document.getElementById('nonExecContainer').innerHTML = '';
-        (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } });
-        updAgeTag();
-        document.querySelector('.modal-overlay')?.remove();
-        alert('Speță încărcată!');
-    };
-
-    window.deleteCase = function(name) {
-        if (!confirm(`Sigur doriți să ștergeți speța "${name}"?`)) return;
-        const cases = getCases();
-        delete cases[name];
-        localStorage.setItem('anpCases', JSON.stringify(cases));
-        document.querySelector('.modal-overlay')?.remove();
-        updateCaseBadge();
-        alert('Speță ștearsă!');
-        setTimeout(openLoadModal, 100);
-    };
-
-    window.renameCase = function(oldName) {
-        const newName = prompt('Nume nou pentru speță:', oldName);
-        if (!newName || !newName.trim()) return;
-        const trimmedNew = newName.trim();
-        if (trimmedNew === oldName) return;
-        const cases = getCases();
-        if (cases[trimmedNew]) {
-            alert('Există deja o speță cu acest nume. Alege alt nume.');
-            return;
-        }
-        const data = cases[oldName];
-        delete cases[oldName];
-        cases[trimmedNew] = data;
-        localStorage.setItem('anpCases', JSON.stringify(cases));
-        document.querySelector('.modal-overlay')?.remove();
-        updateCaseBadge();
-        alert('Speță redenumită!');
-        setTimeout(openLoadModal, 100);
-    };
-
-    function autoSave() { try { const data = { sex: currentSex, birthDate: document.getElementById('birthDate').value, observations: document.getElementById('observations').value, life: document.getElementById('lifeSentence').checked, art: document.getElementById('liberationArticle').value, y: document.getElementById('durYears').value, m: document.getElementById('durMonths').value, d: document.getElementById('durDays').value, start: document.getElementById('startDate').value, condRelease: document.getElementById('conditionalReleaseDate').value, dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})), manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value), nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''})) }; localStorage.setItem('anpLastCase', JSON.stringify(data)); } catch(e) {} }
-    (function() { updateCaseBadge(); const last = localStorage.getItem('anpLastCase'); if (!last) return; try { const d = JSON.parse(last); currentSex = d.sex || 'M'; sexToggle.checked = currentSex === 'M'; updateSexUI(); document.getElementById('birthDate').value = d.birthDate || ''; document.getElementById('observations').value = d.observations || ''; document.getElementById('lifeSentence').checked = d.life || false; document.getElementById('sentenceDuration').classList.toggle('hidden', d.life); document.getElementById('liberationArticle').value = d.art || ''; document.getElementById('durYears').value = d.y || 0; document.getElementById('durMonths').value = d.m || 0; document.getElementById('durDays').value = d.d || 0; document.getElementById('startDate').value = d.start || ''; document.getElementById('conditionalReleaseDate').value = d.condRelease || ''; document.getElementById('deductionsContainer').innerHTML = ''; (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } }); document.getElementById('manualDeductionsContainer').innerHTML = ''; (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; }); document.getElementById('nonExecContainer').innerHTML = ''; (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } }); updAgeTag(); } catch(e) {} })();
-    document.getElementById('birthDate').addEventListener('input', updAgeTag); document.getElementById('liberationArticle').addEventListener('change', updAgeTag); document.getElementById('lifeSentence').addEventListener('change', function(){ document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked); });
-    function updAgeTag() { const b = document.getElementById('birthDate').value.trim(); const tag = document.getElementById('ageTag'); if (!b) { tag.innerHTML = ''; return; } const bd = parseDate(b); if (!bd) { tag.innerHTML = '<small>Format invalid</small>'; return; } const a = ageExact(bd, today()); const cat = getAgeCategoryAtDate(bd, today(), currentSex); const catClass = cat==='MINOR'?'tag-minor':cat==='TANAR'?'tag-tanar':cat==='BATRAN'?'tag-batran':'tag-major'; tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`; }
-
-    function addDedRow() { const r = document.createElement('div'); r.className = 'period-row deduction-row'; r.setAttribute('role', 'listitem'); r.innerHTML = `<div><label>Început</label><input type="text" class="ded-start date-masked" placeholder="zz.ll.aaaa"></div><div><label>Sfârșit</label><input type="text" class="ded-end date-masked" placeholder="zz.ll.aaaa"></div><div style="min-width:50px;"><label>Zile</label><input type="text" class="ded-days" readonly style="background:rgba(0,0,0,0.2);font-weight:600;" tabindex="-1"></div><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button>`; document.getElementById('deductionsContainer').appendChild(r); r.querySelector('.ded-start').addEventListener('input', ()=>updDed(r)); r.querySelector('.ded-end').addEventListener('input', ()=>updDed(r)); }
-    function updDed(r) { const s = r.querySelector('.ded-start').value.trim(), e = r.querySelector('.ded-end').value.trim(); const f = r.querySelector('.ded-days'); if (s && e) { const a = parseDate(s), b = parseDate(e); f.value = (a && b && b >= a) ? daysBetween(a, b) + 1 : 'Eroare'; } else f.value = ''; }
-    function addManDedRow() { const r = document.createElement('div'); r.className = 'period-row'; r.setAttribute('role', 'listitem'); r.innerHTML = `<div style="flex:2;"><label>Zile (Legea 169/2017)</label><input type="number" class="manual-days" value="0" min="0"></div><div style="flex:1;"><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button></div>`; document.getElementById('manualDeductionsContainer').appendChild(r); }
-    function addNonExecRow() { const r = document.createElement('div'); r.className = 'period-row non-exec-row'; r.setAttribute('role', 'listitem'); r.innerHTML = `<div><label>Tip</label><select class="ne-type"><option value="escape">Evadare</option><option value="illness">Boală</option><option value="interruption">Întrerupere</option></select></div><div><label>Data început</label><input type="text" class="ne-start date-masked" placeholder="zz.ll.aaaa"></div><div><label>Data final</label><input type="text" class="ne-end date-masked" placeholder="zz.ll.aaaa"></div><div style="min-width:50px;"><label>Zile</label><input type="text" class="ne-days" readonly style="background:rgba(255,0,0,0.1);font-weight:600;color:#ff6b6b;" tabindex="-1"></div><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button>`; document.getElementById('nonExecContainer').appendChild(r); r.querySelector('.ne-start').addEventListener('input', ()=>updNonExec(r)); r.querySelector('.ne-end').addEventListener('input', ()=>updNonExec(r)); r.querySelector('.ne-type').addEventListener('change', ()=>updNonExec(r)); }
-    function updNonExec(r) { const s = r.querySelector('.ne-start').value.trim(), e = r.querySelector('.ne-end').value.trim(); const typ = r.querySelector('.ne-type').value; const f = r.querySelector('.ne-days'); if (s && e) { const a = parseDate(s), b = parseDate(e); if (a && b && b > a) { const diff = daysBetween(a, b); if (typ === 'interruption') f.value = diff - 1; else f.value = diff; } else f.value = 'Eroare'; } else f.value = ''; }
-    function confirmReset() { if (confirm('Sigur doriți să resetați toate câmpurile?')) resetAll(); }
-    function resetAll() {
-        currentSex = 'M'; sexToggle.checked = true; updateSexUI();
-        document.getElementById('birthDate').value = '';
-        document.getElementById('observations').value = '';
-        document.getElementById('liberationArticle').value = '';
-        document.getElementById('lifeSentence').checked = false;
-        document.getElementById('sentenceDuration').classList.remove('hidden');
-        document.getElementById('durYears').value = 0;
-        document.getElementById('durMonths').value = 0;
-        document.getElementById('durDays').value = 0;
-        document.getElementById('startDate').value = '';
-        document.getElementById('conditionalReleaseDate').value = '';
-        document.getElementById('deductionsContainer').innerHTML = '';
-        document.getElementById('manualDeductionsContainer').innerHTML = '';
-        document.getElementById('nonExecContainer').innerHTML = '';
-        document.getElementById('masuriRefDate').value = '';
-        document.getElementById('masuriDays').value = 0;
-        document.getElementById('masuriResult').value = '';
-        document.getElementById('resultsCard').classList.add('hidden');
-        document.getElementById('ageTag').innerHTML = '';
-        document.getElementById('errorContainer').classList.remove('visible');
-        localStorage.removeItem('anpLastCase');
-        calcMasuriPreventive();
-    }
-    function sumIntervals(intervals) { if (!intervals.length) return 0; const sorted = intervals.slice().sort((a,b) => a[0].getTime()-b[0].getTime()); let total = daysBetween(sorted[0][0], sorted[0][1]) + 1; let currentEnd = sorted[0][1]; for (let i=1; i<sorted.length; i++) { const [start, end] = sorted[i]; if (start <= currentEnd) { if (end > currentEnd) { total += daysBetween(currentEnd, end); currentEnd = end; } } else { total += daysBetween(start, end) + 1; currentEnd = end; } } return total; }
-    function validateInputs(birthDate, startDate, life, art, y, m, d) { const err = []; if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.'); if (!startDate) err.push('Data începerii este invalidă sau incompletă.'); if (!life && !art) err.push('Selectați articolul de liberare condiționată.'); if (!life && y===0 && m===0 && d===0) err.push('Introduceți durata pedepsei.'); if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.'); document.querySelectorAll('.deduction-row').forEach((r,i) => { const st = r.querySelector('.ded-start').value.trim(), en = r.querySelector('.ded-end').value.trim(); if (!st||!en) err.push(`Deducerea ${i+1}: ambele date sunt obligatorii.`); else { const sD = parseDate(st), eD = parseDate(en); if (!sD||!eD) err.push(`Deducerea ${i+1}: format dată invalid.`); else if (eD < sD) err.push(`Deducerea ${i+1}: data sfârșitului este înaintea începutului.`); } }); document.querySelectorAll('.non-exec-row').forEach((r,i) => { const st = r.querySelector('.ne-start').value.trim(), en = r.querySelector('.ne-end').value.trim(); if (!st||!en) err.push(`Perioada adăugată ${i+1}: ambele date sunt obligatorii.`); else { const sD = parseDate(st), eD = parseDate(en); if (!sD||!eD) err.push(`Perioada adăugată ${i+1}: format dată invalid.`); else if (eD <= sD) err.push(`Perioada adăugată ${i+1}: data finală trebuie să fie strict după data inițială.`); } }); return err; }
-    function formatDateWithWarning(date) { if (!date || isNaN(date)) return fmtDate(date); const t = today(); const diff = daysBetween(t, date); let warning = ''; if (diff < 0) warning = ' <span class="result-warning expired">(Atenție, a expirat)</span>'; else if (diff <= 30) warning = ' <span class="result-warning soon">(Atenție)</span>'; return `${fmtDate(date)}${warning}`; }
-    function toggleSteps() { const container = document.getElementById('stepsContainer'); const btn = document.getElementById('toggleStepsBtn'); if (container.classList.contains('hidden')) { container.classList.remove('hidden'); btn.innerHTML = '🧮 ASCUNDE PAȘII CALCULULUI'; btn.setAttribute('aria-expanded', 'true'); } else { container.classList.add('hidden'); btn.innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI'; btn.setAttribute('aria-expanded', 'false'); } }
-    window.addEventListener('beforeunload', function(e) { const hasData = () => { const birth = document.getElementById('birthDate').value.trim(); const start = document.getElementById('startDate').value.trim(); const life = document.getElementById('lifeSentence').checked; const y = parseInt(document.getElementById('durYears').value)||0; const m = parseInt(document.getElementById('durMonths').value)||0; const d = parseInt(document.getElementById('durDays').value)||0; return parseDate(birth) || parseDate(start) || (!life && (y > 0 || m > 0 || d > 0)); }; if (hasData()) { e.preventDefault(); e.returnValue = ''; } });
-    function fracStr(r){ if(r===1/3)return'⅓';if(r===1/2)return'½';if(r===2/3)return'⅔';if(r===3/4)return'¾';if(r===1/4)return'¼';if(r===1/100)return'1/100';return r.toString(); }
-
-    function calculateAll() {
-        const errC = document.getElementById('errorContainer'); errC.classList.remove('visible');
-        const birthDate = parseDate(document.getElementById('birthDate').value.trim()); const startDate = parseDate(document.getElementById('startDate').value.trim());
-        const life = document.getElementById('lifeSentence').checked; const art = document.getElementById('liberationArticle').value;
-        const y = parseInt(document.getElementById('durYears').value)||0; const m = parseInt(document.getElementById('durMonths').value)||0; const d = parseInt(document.getElementById('durDays').value)||0;
-        const err = validateInputs(birthDate, startDate, life, art, y, m, d);
-        if (err.length>0) { errC.innerHTML = err.map(e=>'• '+e).join('<br>'); errC.classList.add('visible'); return; }
-
-        const steps = []; let totalDays, theorExp;
-        if (life) { const d20 = new Date(startDate); d20.setFullYear(d20.getFullYear()+20); d20.setDate(d20.getDate()-1); totalDays = daysBetween(startDate, d20) + 1; theorExp = d20; steps.push(`Pedepsa este detențiune pe viață. Se folosește plafonul de 20 ani (${totalDays} zile).`); }
-        else { theorExp = addCalendarSafe(startDate, y, m, d); theorExp.setDate(theorExp.getDate()-1); totalDays = daysBetween(startDate, theorExp) + 1; steps.push(`Data începerii executării: ${fmtDate(startDate)}. Durata pedepsei: ${y} ani, ${m} luni, ${d} zile.`); steps.push(`Adunăm calendaristic: anii, apoi lunile, apoi zilele. Scădem o zi (regula OMJ 2188/C/2022).`); steps.push(`Expirarea teoretică este ${fmtDate(theorExp)}.`); steps.push(`Numărăm zilele dintre ${fmtDate(startDate)} și ${fmtDate(theorExp)}, inclusiv ambele capete: ${totalDays} zile.`); }
-
-        const dedIntervals = []; document.querySelectorAll('.deduction-row').forEach(r => { const sD=parseDate(r.querySelector('.ded-start').value.trim()), eD=parseDate(r.querySelector('.ded-end').value.trim()); if(sD&&eD) dedIntervals.push([sD,eD]); });
-        let ded = sumIntervals(dedIntervals); document.querySelectorAll('.manual-days').forEach(i=>{ const v=parseInt(i.value); if(!isNaN(v)&&v>0) ded+=v; });
-        if (ded > totalDays) { errC.innerHTML = '• Deducerile depășesc mandatul total.'; errC.classList.add('visible'); return; } steps.push(`Perioadele deduse însumează ${ded} zile (după unificarea suprapunerilor).`);
-        let non = 0; document.querySelectorAll('.ne-days').forEach(inp => { const v = parseInt(inp.value); if (!isNaN(v) && v > 0) non += v; }); steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile.`);
-        let realExp = new Date(theorExp); realExp.setDate(realExp.getDate() - ded + non); steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
-        const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, currentSex); steps.push(`La data începerii executării, deținutul avea categoria de vârstă: ${ageAtExpiry}.`);
-
-        let mR=1/2, tR=2/3, pM=Infinity, pT=Infinity, articleInfo='';
-        if (life) { mR=1/2; tR=1/2; pM=totalDays; pT=totalDays; articleInfo='NCP art. 99 (viață)'; }
-        else { const totalMonths = y*12 + m + d/30; const sentenceOver10 = totalMonths > 120; if (art === 'NCP100') { const expiresBefore60 = theorExp < new Date(birthDate.getFullYear()+60, birthDate.getMonth(), birthDate.getDate()); if (expiresBefore60) { if(sentenceOver10){mR=2/3;tR=3/4;pM=7305;pT=7305;} else{mR=1/2;tR=2/3;} articleInfo = `NCP art. 100 (${ageAtExpiry}, expiră < 60 ani) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`; } else { if(sentenceOver10){mR=1/2;tR=2/3;pM=7305;pT=7305;} else{mR=1/3;tR=1/2;} articleInfo = `NCP art. 100 (${ageAtExpiry}, expiră ≥ 60 ani) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`; } } else { const rule = liberationRules.find(r => r.article === art && r.age.includes(ageAtExpiry) && ((r.life&&life) || (!r.life && ((r.maxYears&&!sentenceOver10)||(r.minYears&&sentenceOver10)||(!r.maxYears&&!r.minYears))))); if (rule) { mR=rule.mandatory[0]/rule.mandatory[1]; tR=rule.total[0]/rule.total[1]; pM=rule.mandatory[2]||Infinity; pT=rule.total[2]||Infinity; articleInfo=`${art} (${ageAtExpiry}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`; } else { errC.innerHTML='• Nu există regulă de liberare pentru această combinație.'; errC.classList.add('visible'); return; } } }
-        steps.push(`Articolul aplicabil: ${articleInfo}.`); steps.push(`Fracția minimă obligatorie: ${fracStr(mR)}. Fracția totală/propozabilă: ${fracStr(tR)}.`);
-        let mDays=Math.floor(totalDays*mR), tDays=Math.floor(totalDays*tR); if(mDays>pM)mDays=pM; if(tDays>pT)tDays=pT;
-        steps.push(`Fracția minimă: Math.floor(${totalDays} × ${fracStr(mR)}) = ${mDays} zile (din mandatul total). Math.floor rotunjește în jos (în defavoarea condamnatului).`); steps.push(`Fracția totală: Math.floor(${totalDays} × ${fracStr(tR)}) = ${tDays} zile (din mandatul total).`);
-        let mDate=new Date(startDate); mDate.setDate(mDate.getDate()+mDays-1); mDate.setDate(mDate.getDate()-ded+non);
-        let tDate=new Date(startDate); tDate.setDate(tDate.getDate()+tDays-1); tDate.setDate(tDate.getDate()-ded+non);
-        const fifth=Math.floor(totalDays/5); let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth-1); fDate.setDate(fDate.getDate()-ded+non);
-        const executedDays = Math.max(0, daysBetween(startDate, today()) + 1); const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
-        const quarantineEnd = new Date(startDate); quarantineEnd.setDate(quarantineEnd.getDate() + 20);
-
-        const alertDates = [{ label: 'Fracție minimă obligatorie', date: mDate },{ label: 'Data propusă (totală)', date: tDate },{ label: 'Termen 1/5', date: fDate },{ label: 'Expirare reală', date: realExp },{ label: 'Carantină expiră', date: quarantineEnd }];
-        const alerts = []; const t = today(); alertDates.forEach(item => { if (!item.date || isNaN(item.date)) return; const diff = daysBetween(t, item.date); if (diff >= 0 && diff <= 30) alerts.push({ label: item.label, diff }); });
-        let alertsHtml = ''; if (alerts.length > 0) { alertsHtml = `<div class="alerts-container"><h4>⚠️ ALERTE – Termene apropiate</h4><ul>`; alerts.forEach(a => alertsHtml += `<li>⚠️ ${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(alertDates.find(x => x.label === a.label).date)})</li>`); alertsHtml += `</ul></div>`; }
-        document.getElementById('alertsContainer').innerHTML = alertsHtml; document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
-
-        const timelineItems = [{ label: 'Început executare', date: startDate },{ label: 'Carantină expiră', date: quarantineEnd },{ label: '1/5 mandat', date: fDate },{ label: 'Fracție minimă obligatorie', date: mDate },{ label: 'Data propusă (totală)', date: tDate },{ label: 'Expirare teoretică', date: theorExp },{ label: 'Expirare reală', date: realExp }];
-        const condReleaseStr2 = document.getElementById('conditionalReleaseDate').value.trim(); if (condReleaseStr2) { const condDate = parseDate(condReleaseStr2); if (condDate) timelineItems.push({ label: 'Data liberării condiționate', date: condDate }); }
-        timelineItems.sort((a,b) => a.date - b.date); let timelineHtml = ''; timelineItems.forEach(item => { const diff = daysBetween(t, item.date); const passed = diff < 0; timelineHtml += `<li class="${passed ? 'passed' : ''}"><span class="tl-date">${fmtDate(item.date)}</span> <span class="tl-label">${item.label}</span></li>`; });
-        document.getElementById('timelineList').innerHTML = timelineHtml; document.getElementById('timelineContainer').classList.remove('hidden');
-
-        let restHtml = ''; const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
-        if (condReleaseStr && parseDate(condReleaseStr)) { const condReleaseDate = parseDate(condReleaseStr); if (realExp) { const restDays = Math.max(0, daysBetween(condReleaseDate, realExp)); restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT (după liberarea condiționată)</h4><div class="result-grid"><div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${formatDateWithWarning(condReleaseDate)}</div></div><div class="result-item important"><div class="result-label">Rest rămas</div><div class="result-value">${restDays} zile</div></div></div></div>`; } }
-
-        const nume=document.getElementById('observations').value.trim(); let html=''; if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații</div><div class="result-value">${nume}</div></div>`;
-        html+=`<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid"><div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div><div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div><div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div><div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value" style="color:#ff6b6b;">${non} zile</div></div><div class="result-item"><div class="result-label">Zile executate efectiv</div><div class="result-value">${executedDays} zile</div></div><div class="result-item"><div class="result-label">Rest rămas</div><div class="result-value">${remaining} zile</div></div></div></div>`;
-        html+=`<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid"><div class="result-item"><div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div><div class="result-value"><span class="fraction">${fracStr(mR)}</span> → (fără deduceri: ${mDays}z / cu deduceri: ${daysBetween(startDate, mDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div></div><div class="result-item"><div class="result-label">DATA PROPOZABILĂ</div><div class="result-value"><span class="fraction">${fracStr(tR)}</span> → (fără deduceri: ${tDays}z / cu deduceri: ${daysBetween(startDate, tDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div></div></div></div>`;
-        html+=`<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid"><div class="result-item"><div class="result-label">1/5 mandat</div><div class="result-value">(fără deduceri: ${fifth}z / cu deduceri: ${daysBetween(startDate, fDate)+1}z)</div><div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div></div></div>`;
-        html+=`<div class="result-section"><h4>ALTE DATE</h4><div class="result-grid"><div class="result-item"><div class="result-label">Articol LC</div><div class="result-value">${articleInfo}</div></div><div class="result-item"><div class="result-label">Mandat total</div><div class="result-value">${totalDays} zile</div></div><div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div></div></div></div>`;
-        html += restHtml;
-
-        document.getElementById('resultsContent').innerHTML = html;
-        document.getElementById('stepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
-        document.getElementById('stepsContainer').classList.add('hidden'); document.getElementById('toggleStepsBtn').innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI'; document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
-        document.getElementById('resultsCard').classList.remove('hidden'); autoSave();
-    }
-
-    function exportCSV() {
-        let csv = 'Indicator,Valoare\n'; csv += `"Sex","${currentSex === 'M' ? 'Masculin' : 'Feminin'}"\n`; csv += `"Data nașterii","${document.getElementById('birthDate').value}"\n`; csv += `"Observații","${document.getElementById('observations').value}"\n`; csv += `"Articol LC","${document.getElementById('liberationArticle').value}"\n`; csv += `"Detențiune pe viață","${document.getElementById('lifeSentence').checked ? 'Da' : 'Nu'}"\n`; csv += `"Durată","${document.getElementById('durYears').value} ani, ${document.getElementById('durMonths').value} luni, ${document.getElementById('durDays').value} zile"\n`; csv += `"Data începerii","${document.getElementById('startDate').value}"\n`;
-        document.querySelectorAll('.deduction-row').forEach((r,i) => { const st = r.querySelector('.ded-start').value.trim(); const en = r.querySelector('.ded-end').value.trim(); if (st && en) csv += `"Perioadă dedusă ${i+1}","${st} - ${en}"\n`; });
-        document.querySelectorAll('.manual-days').forEach((inp,i) => { const v=parseInt(inp.value); if(v>0) csv += `"Recurs compensatoriu ${i+1}","${v} zile"\n`; });
-        document.querySelectorAll('.non-exec-row').forEach((r,i) => { const typ=r.querySelector('.ne-type')?.value || ''; const st=r.querySelector('.ne-start').value.trim(); const en=r.querySelector('.ne-end').value.trim(); if (st && en) csv += `"Perioadă adăugată ${i+1} (${typ})","${st} - ${en}"\n`; });
-        csv += '\n'; const content = document.getElementById('resultsContent'); if (content) { content.querySelectorAll('.result-item').forEach(item => { const label = item.querySelector('.result-label')?.innerText || ''; const value = item.querySelector('.result-value')?.innerText || ''; csv += `"${label}","${value}"\n`; }); }
-        const blob = new Blob([csv], {type:'text/csv'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'calculator_pedepse.csv'; a.click();
-    }
-
-    // ========== COPIAZĂ REZULTATELE ==========
-    function copyResults() {
-        const content = document.getElementById('resultsContent');
-        if (!content || content.innerHTML.trim() === '') {
-            alert('Nu există rezultate de copiat. Apasă întâi „CALCULEAZĂ”.');
-            return;
-        }
-        const text = content.innerText.trim();
-        if (!text) {
-            alert('Nu există text de copiat.');
-            return;
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Rezultatele au fost copiate în clipboard.');
-            }).catch(() => {
-                fallbackCopy(text);
-            });
-        } else {
-            fallbackCopy(text);
-        }
-    }
-    function fallbackCopy(text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            document.execCommand('copy');
-            alert('Rezultatele au fost copiate în clipboard.');
-        } catch (e) {
-            alert('Copierea a eșuat. Te rugăm să copiezi manual.');
-        }
-        document.body.removeChild(textarea);
-    }
-
-    // ========== EXPORT PDF ==========
-    function exportPDF() {
-        const content = document.getElementById('resultsContent');
-        if (!content || content.innerHTML.trim() === '') {
-            alert('Nu există rezultate pentru export. Apasă întâi „CALCULEAZĂ”.');
-            return;
-        }
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
-        if (!printWindow) {
-            alert('Fereastra pop-up a fost blocată. Permite pop-up-urile pentru a exporta PDF.');
-            return;
-        }
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Calculator Pedepse - Rezultate</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        h1 { text-align: center; font-size: 20px; }
-                        .result-section { margin-bottom: 20px; }
-                        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-                        .result-item { border: 1px solid #ddd; border-radius: 8px; padding: 10px; break-inside: avoid; }
-                        .result-label { font-size: 11px; text-transform: uppercase; color: #666; margin-bottom: 4px; }
-                        .result-value { font-size: 14px; font-weight: bold; color: #111; }
-                        .result-warning { font-size: 12px; }
-                        .expired { color: #d32f2f; }
-                        .soon { color: #e67e22; }
-                        .fraction { font-size: 16px; }
-                        .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; }
-                        @media print {
-                            body { margin: 0; }
-                            .no-print { display: none; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>CALCULATOR PEDEPSE - REZULTATE</h1>
-                    <div>${content.innerHTML}</div>
-                    <div class="footer">CALCULATOR PEDEPSE | v1.0 | © Alin Talfeș</div>
-                    <script>
-                        window.onload = function() { window.print(); }
-                    <\/script>
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-    }
-
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { const overlay = document.querySelector('.modal-overlay'); if (overlay) overlay.remove(); } });
-
-    // ========== MĂSURI PREVENTIVE (calcul live, opțional) ==========
-    function calcMasuriPreventive() {
-        const refDate = parseDate(document.getElementById('masuriRefDate').value.trim());
-        const days = parseInt(document.getElementById('masuriDays').value);
-        const resultInput = document.getElementById('masuriResult');
-        if (!refDate || isNaN(days) || days < 0) {
-            resultInput.value = '';
-            return;
-        }
-        if (days === 0) {
-            resultInput.value = fmtDate(refDate);
-            return;
-        }
-        const resultDate = addCalendarSafe(refDate, 0, 0, days - 1);
-        resultInput.value = fmtDate(resultDate);
-    }
-    document.getElementById('masuriRefDate').addEventListener('input', calcMasuriPreventive);
-    document.getElementById('masuriDays').addEventListener('input', calcMasuriPreventive);
-    calcMasuriPreventive();
-</script>
+    <script src="js/utils.js"></script>
+    <script src="js/rules.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
