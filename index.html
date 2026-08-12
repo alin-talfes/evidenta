@@ -102,6 +102,18 @@
     <div class="card"><h3>🔢 4. Deduceri manuale (Legea 169/2017)</h3><div id="manualDeductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
     <div class="card"><h3>🚫 5. Perioade neexecutate</h3><div id="nonExecContainer"></div><button class="btn btn-outline btn-sm" onclick="addNonExecRow()">+ Adaugă</button></div>
 
+    <!-- Modul rest rămas după liberare condiționată -->
+    <div class="card" id="restCard">
+        <h3>📉 6. Calcul rest rămas (opțional)</h3>
+        <div class="form-grid">
+            <div>
+                <label>Data liberării condiționate</label>
+                <input type="text" id="conditionalReleaseDate" placeholder="zz.ll.aaaa">
+                <div class="helper-text">Se completează doar dacă deținutul a fost liberat condiționat și a rămas cu un rest de executat.</div>
+            </div>
+        </div>
+    </div>
+
     <div id="errorContainer" class="error-message"></div>
     <div class="btn-row">
         <button class="btn btn-gold" onclick="calculateAll()">📐 Calculează</button>
@@ -112,7 +124,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.3</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.4</div>
 </div>
 
 <script>
@@ -246,6 +258,7 @@
         document.getElementById('sentenceDuration').classList.remove('hidden');
         document.getElementById('durYears').value = 0; document.getElementById('durMonths').value = 0; document.getElementById('durDays').value = 0;
         document.getElementById('startDate').value = '';
+        document.getElementById('conditionalReleaseDate').value = '';
         document.getElementById('deductionsContainer').innerHTML = '';
         document.getElementById('manualDeductionsContainer').innerHTML = '';
         document.getElementById('nonExecContainer').innerHTML = '';
@@ -295,6 +308,14 @@
                 else if (eD <= sD) err.push(`Perioada neexecutată ${i+1}: date invalide.`);
             }
         });
+        // Validare data liberării condiționate (opțional)
+        const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
+        if (condReleaseStr) {
+            const condDate = parseDate(condReleaseStr);
+            if (!condDate) err.push('Data liberării condiționate este invalidă.');
+            else if (condDate < startDate) err.push('Data liberării condiționate este înainte de începerea pedepsei.');
+            else if (condDate > today()) err.push('Data liberării condiționate este în viitor.');
+        }
         return err;
     }
 
@@ -369,6 +390,27 @@
         const tDaysAdjusted = daysBetween(startDate, tDate) + 1;
         const fifthAdjusted = daysBetween(startDate, fDate) + 1;
 
+        // === CALCUL REST RĂMAS DUPĂ LIBERARE CONDIȚIONATĂ ===
+        let restHtml = '';
+        const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
+        if (condReleaseStr && parseDate(condReleaseStr)) {
+            const condReleaseDate = parseDate(condReleaseStr);
+            const daysServedUntilRelease = daysBetween(startDate, condReleaseDate) + 1 - ded - non;
+            const remainingAfterRelease = totalDays - daysServedUntilRelease;
+            if (remainingAfterRelease > 0) {
+                const restExpiry = new Date(condReleaseDate);
+                restExpiry.setDate(restExpiry.getDate() + remainingAfterRelease);
+                restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT (după liberarea condiționată)</h4><div class="result-grid">`;
+                restHtml += `<div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${fmtDate(condReleaseDate)}</div></div>`;
+                restHtml += `<div class="result-item"><div class="result-label">Zile executate până la liberare</div><div class="result-value">${daysServedUntilRelease} zile</div></div>`;
+                restHtml += `<div class="result-item important"><div class="result-label">Rest rămas de executat</div><div class="result-value">${remainingAfterRelease} zile</div></div>`;
+                restHtml += `<div class="result-item"><div class="result-label">Data estimată a expirării restului</div><div class="result-value">${fmtDate(restExpiry)}</div></div>`;
+                restHtml += `</div></div>`;
+            } else {
+                restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT</h4><p style="color:var(--gold-light);">Nu există rest rămas (pedeapsa a fost executată integral la data liberării).</p></div>`;
+            }
+        }
+
         const nume=document.getElementById('observations').value.trim();
         let html='';
         if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Nume deținut</div><div class="result-value">${nume}</div></div>`;
@@ -396,6 +438,8 @@
         html+=`<div class="result-item"><div class="result-label">Mandat total</div><div class="result-value">${totalDays} zile</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${fmtDate(quarantineEnd)}</div></div>`;
         html+=`</div></div>`;
+
+        html += restHtml;
 
         document.getElementById('resultsContent').innerHTML=html;
         document.getElementById('resultsCard').classList.remove('hidden');
