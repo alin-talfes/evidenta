@@ -248,6 +248,18 @@
         .modal li button { background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 0.7rem; transition: all 0.2s; }
         .modal li button:hover { background: rgba(255, 107, 107, 0.1); }
         .modal .close-btn { margin-top: 8px; }
+
+        /* Cronologie */
+        .timeline { list-style: none; padding: 0; margin: 16px 0 0 0; position: relative; }
+        .timeline::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline li { position: relative; padding-left: 40px; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-light); }
+        .timeline li::before { content: ''; position: absolute; left: 10px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--gold); }
+        .timeline li.passed::before { background: var(--danger); border-color: var(--danger); }
+        .timeline li .tl-date { font-weight: 600; color: var(--gold-light); margin-right: 8px; }
+        .timeline li .tl-label { color: var(--text-light); }
+        .timeline li.passed .tl-date { color: var(--danger); }
+        .timeline li.passed .tl-label { text-decoration: line-through; color: #666; }
+
         @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } .result-grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.2rem; } }
     </style>
 </head>
@@ -315,12 +327,18 @@
         <h3>📊 REZULTATE</h3>
         <div id="resultsContent"></div>
         <div id="alertsContainer" class="alerts-container hidden"></div>
+        <div id="timelineContainer" class="hidden" style="margin-top:16px;">
+            <h4 style="color:var(--gold);">📅 CRONOLOGIE TERMENE</h4>
+            <ul id="timelineList" class="timeline"></ul>
+        </div>
+        <button class="btn btn-outline btn-sm" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
         <div id="stepsContainer" class="steps-container hidden">
             <h4>🧮 PAȘII CALCULULUI</h4>
             <ol id="stepsList"></ol>
+            <p style="margin-top:8px;font-size:0.8rem;color:var(--text-light);"><em>Notă: Math.floor(x) = partea întreagă inferioară (rotunjire în jos, în defavoarea condamnatului).</em></p>
         </div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | BETA 0.7</div>
+    <div class="footer">CALCULATOR PEDEPSE | BETA 0.8</div>
 </div>
 
 <script>
@@ -692,6 +710,18 @@
         return `${fmtDate(date)}${warning}`;
     }
 
+    function toggleSteps() {
+        const container = document.getElementById('stepsContainer');
+        const btn = document.getElementById('toggleStepsBtn');
+        if (container.classList.contains('hidden')) {
+            container.classList.remove('hidden');
+            btn.innerHTML = '🧮 ASCUNDE PAȘII CALCULULUI';
+        } else {
+            container.classList.add('hidden');
+            btn.innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
+        }
+    }
+
     function calculateAll() {
         const errC = document.getElementById('errorContainer'); errC.classList.remove('visible');
         const birthDate = parseDate(document.getElementById('birthDate').value.trim());
@@ -757,7 +787,7 @@
 
         let mDays=Math.floor(totalDays*mR), tDays=Math.floor(totalDays*tR);
         if(mDays>pM)mDays=pM; if(tDays>pT)tDays=pT;
-        steps.push(`Fracția minimă: Math.floor(${totalDays} × ${fracStr(mR)}) = ${mDays} zile (din mandatul total).`);
+        steps.push(`Fracția minimă: Math.floor(${totalDays} × ${fracStr(mR)}) = ${mDays} zile (din mandatul total). Math.floor rotunjește în jos (în defavoarea condamnatului).`);
         steps.push(`Fracția totală: Math.floor(${totalDays} × ${fracStr(tR)}) = ${tDays} zile (din mandatul total).`);
 
         let mDate=new Date(startDate); mDate.setDate(mDate.getDate()+mDays-1); mDate.setDate(mDate.getDate()-ded+non);
@@ -808,6 +838,30 @@
         document.getElementById('alertsContainer').innerHTML = alertsHtml;
         document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
 
+        // --- TIMELINE ---
+        const timelineItems = [
+            { label: 'Început executare', date: startDate },
+            { label: 'Carantină expiră', date: quarantineEnd },
+            { label: '1/5 mandat', date: fDate },
+            { label: 'Fracție minimă obligatorie', date: mDate },
+            { label: 'Data propusă (totală)', date: tDate },
+            { label: 'Expirare teoretică', date: theorExp },
+            { label: 'Expirare reală', date: realExp }
+        ];
+        if (document.getElementById('conditionalReleaseDate').value.trim()) {
+            const condDate = parseDate(document.getElementById('conditionalReleaseDate').value.trim());
+            if (condDate) timelineItems.push({ label: 'Data liberării condiționate', date: condDate });
+        }
+        timelineItems.sort((a,b) => a.date - b.date);
+        let timelineHtml = '';
+        timelineItems.forEach(item => {
+            const diff = daysBetween(t, item.date);
+            const passed = diff < 0;
+            timelineHtml += `<li class="${passed ? 'passed' : ''}"><span class="tl-date">${fmtDate(item.date)}</span> <span class="tl-label">${item.label}</span></li>`;
+        });
+        document.getElementById('timelineList').innerHTML = timelineHtml;
+        document.getElementById('timelineContainer').classList.remove('hidden');
+
         let restHtml = '';
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr && parseDate(condReleaseStr)) {
@@ -854,7 +908,8 @@
 
         document.getElementById('resultsContent').innerHTML = html;
         document.getElementById('stepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
-        document.getElementById('stepsContainer').classList.remove('hidden');
+        document.getElementById('stepsContainer').classList.add('hidden');
+        document.getElementById('toggleStepsBtn').innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
         document.getElementById('resultsCard').classList.remove('hidden');
 
         autoSave();
