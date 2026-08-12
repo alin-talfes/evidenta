@@ -12,7 +12,7 @@
             --gold: #C9A227;
             --gold-light: #D4AF37;
             --text: #e6e6e6;
-            --text-light: #A0A5B0;
+            --text-light: #B0B5C0;
             --border: #2a2a35;
             --danger: #ff6b6b;
             --warning: #ffa726;
@@ -69,7 +69,7 @@
             white-space: nowrap;
             position: relative;
         }
-        .btn-utility:hover { background: rgba(201, 162, 39, 0.12); border-color: var(--gold); color: var(--gold-light); }
+        .btn-utility:hover, .btn-utility:focus-visible { background: rgba(201, 162, 39, 0.12); border-color: var(--gold); color: var(--gold-light); outline: none; }
         .btn-utility.primary { color: var(--gold-light); }
         .badge {
             position: absolute;
@@ -157,7 +157,7 @@
             box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
             outline: none;
         }
-        input::placeholder, textarea::placeholder { color: #555; }
+        input::placeholder, textarea::placeholder { color: #6A6F78; }
         .period-row {
             display: flex;
             gap: 10px;
@@ -186,11 +186,11 @@
             letter-spacing: 0.4px;
         }
         .btn-outline { background: transparent; color: var(--gold-light); border: 1.5px solid var(--gold); }
-        .btn-outline:hover { background: rgba(201, 162, 39, 0.1); transform: translateY(-1px); }
+        .btn-outline:hover, .btn-outline:focus-visible { background: rgba(201, 162, 39, 0.1); transform: translateY(-1px); outline: none; }
         .btn-gold { background: var(--gold); color: #0F1115; font-weight: 700; }
-        .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3); }
+        .btn-gold:hover, .btn-gold:focus-visible { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3); outline: none; }
         .btn-danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
-        .btn-danger:hover { background: rgba(255, 107, 107, 0.1); }
+        .btn-danger:hover, .btn-danger:focus-visible { background: rgba(255, 107, 107, 0.1); outline: none; }
         .btn-sm { padding: 6px 12px; font-size: 0.72rem; min-height: 32px; }
         .result-section { margin-top: 20px; }
         .result-section h4 { color: var(--gold); font-size: 0.85rem; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
@@ -237,6 +237,7 @@
         .toggle-slider:before { content: ""; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: var(--text-light); border-radius: 50%; transition: all 0.2s; }
         .toggle-switch input:checked + .toggle-slider { background: var(--gold); }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #0F1115; }
+        .toggle-switch input:focus-visible + .toggle-slider { outline: 2px solid var(--gold-light); outline-offset: 2px; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 450px; width: 90%; }
@@ -246,10 +247,9 @@
         .modal li:hover { border-color: var(--gold); }
         .modal li span { flex: 1; color: var(--text); cursor: pointer; font-size: 0.9rem; }
         .modal li button { background: transparent; border: 1px solid var(--danger); color: var(--danger); border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 0.7rem; transition: all 0.2s; }
-        .modal li button:hover { background: rgba(255, 107, 107, 0.1); }
+        .modal li button:hover, .modal li button:focus-visible { background: rgba(255, 107, 107, 0.1); outline: none; }
         .modal .close-btn { margin-top: 8px; }
 
-        /* Cronologie */
         .timeline { list-style: none; padding: 0; margin: 16px 0 0 0; position: relative; }
         .timeline::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 2px; background: var(--border); }
         .timeline li { position: relative; padding-left: 40px; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-light); }
@@ -258,87 +258,129 @@
         .timeline li .tl-date { font-weight: 600; color: var(--gold-light); margin-right: 8px; }
         .timeline li .tl-label { color: var(--text-light); }
         .timeline li.passed .tl-date { color: var(--danger); }
-        .timeline li.passed .tl-label { text-decoration: line-through; color: #666; }
+        .timeline li.passed .tl-label { text-decoration: line-through; color: #6A6F78; }
+
+        /* Focus visible helper */
+        :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+        [tabindex="-1"]:focus { outline: none; }
+
+        /* Skip link */
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--gold); color: #0F1115; padding: 8px; z-index: 200; }
+        .skip-link:focus { top: 0; }
 
         @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } .result-grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.2rem; } }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
 <div class="container">
-    <div class="top-bar">
-        <button class="btn-utility primary" onclick="saveCase()">💾 SALVEAZĂ</button>
-        <button class="btn-utility" onclick="openLoadModal()" id="loadBtn">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
-        <button class="btn-utility" onclick="confirmReset()">↺ RESET</button>
+    <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
+        <button class="btn-utility primary" onclick="saveCase()" aria-label="Salvează speța curentă">💾 SALVEAZĂ</button>
+        <button class="btn-utility" onclick="openLoadModal()" id="loadBtn" aria-label="Încarcă o speță salvată">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge" aria-label="Număr spețe salvate">0</span></button>
+        <button class="btn-utility" onclick="confirmReset()" aria-label="Resetează toate câmpurile">↺ RESET</button>
     </div>
     <div class="header">
-        <h1>⚖️ CALCULATOR PEDEPSE</h1>
+        <h1 id="main-title">⚖️ CALCULATOR PEDEPSE</h1>
     </div>
-
-    <div class="card"><h3>📌 1. DATE PPL</h3>
+    <main id="main-content">
+    <div class="card" aria-labelledby="date-ppl-heading">
+        <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
         <div class="form-grid">
-            <div><label>Sex</label><select id="sex"><option value="">—</option><option value="M">Masculin</option><option value="F">Feminin</option></select></div>
-            <div><label>Data nașterii</label><input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa"></div>
-            <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;"></div>
-        </div>
-        <div style="margin-top:12px;"><label>📝 Observații / Nume PPL (opțional)</label><textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea></div>
-    </div>
-
-    <div class="card"><h3>⚖️ 2. PEDEAPSA</h3>
-        <div class="form-grid">
-            <div><label>Articol liberare condiționată</label><select id="liberationArticle"><option value="">—</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. 2</option><option value="VCP603">VCP art. 60 alin. 3</option></select></div>
             <div>
-                <label>Detențiune pe viață</label>
+                <label for="sex">Sex</label>
+                <select id="sex" aria-required="true"><option value="">—</option><option value="M">Masculin</option><option value="F">Feminin</option></select>
+            </div>
+            <div>
+                <label for="birthDate">Data nașterii</label>
+                <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="birthDate-format">
+                <span id="birthDate-format" class="hidden">Format zz.ll.aaaa</span>
+            </div>
+            <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;" aria-live="polite"></div>
+        </div>
+        <div style="margin-top:12px;">
+            <label for="observations">📝 Observații / Nume PPL (opțional)</label>
+            <textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea>
+        </div>
+    </div>
+
+    <div class="card" aria-labelledby="sentence-heading">
+        <h3 id="sentence-heading">⚖️ 2. PEDEAPSA</h3>
+        <div class="form-grid">
+            <div>
+                <label for="liberationArticle">Articol liberare condiționată</label>
+                <select id="liberationArticle" aria-required="true"><option value="">—</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. 2</option><option value="VCP603">VCP art. 60 alin. 3</option></select>
+            </div>
+            <div>
+                <label for="lifeSentence">Detențiune pe viață</label>
                 <label class="toggle-switch" style="margin-top:8px;">
                     <input type="checkbox" id="lifeSentence">
-                    <span class="toggle-slider"></span>
+                    <span class="toggle-slider" aria-hidden="true"></span>
                     <span style="font-size:0.8rem;color:var(--text-light);">Bifați dacă este cazul</span>
                 </label>
             </div>
         </div>
         <div id="sentenceDuration" class="form-grid" style="margin-top:8px;">
-            <div><label>Ani</label><input type="number" id="durYears" value="0" min="0"></div>
-            <div><label>Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
-            <div><label>Zile</label><input type="number" id="durDays" value="0" min="0"></div>
+            <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
+            <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
+            <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
         </div>
-        <div style="margin-top:12px;"><label>Data începerii executării pedepsei</label><input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa"></div>
+        <div style="margin-top:12px;">
+            <label for="startDate">Data începerii executării pedepsei</label>
+            <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="startDate-format">
+            <span id="startDate-format" class="hidden">Format zz.ll.aaaa</span>
+        </div>
     </div>
 
-    <div class="card"><h3>📅 3. PERIOADE DEDUSE</h3><div id="deductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addDedRow()">+ Adaugă</button></div>
-    <div class="card"><h3>🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3><div id="manualDeductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
-    <div class="card"><h3>🚫 5. PERIOADE ADĂUGATE</h3><div id="nonExecContainer"></div><button class="btn btn-outline btn-sm" onclick="addNonExecRow()">+ Adaugă</button></div>
+    <div class="card" aria-labelledby="deductions-heading">
+        <h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3>
+        <div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div>
+        <button class="btn btn-outline btn-sm" onclick="addDedRow()" aria-label="Adaugă o perioadă dedusă">+ Adaugă</button>
+    </div>
+    <div class="card" aria-labelledby="recurs-heading">
+        <h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3>
+        <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
+        <button class="btn btn-outline btn-sm" onclick="addManDedRow()" aria-label="Adaugă recurs compensatoriu">+ Adaugă</button>
+    </div>
+    <div class="card" aria-labelledby="nonExec-heading">
+        <h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3>
+        <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
+        <button class="btn btn-outline btn-sm" onclick="addNonExecRow()" aria-label="Adaugă o perioadă adăugată">+ Adaugă</button>
+    </div>
 
-    <div class="card" id="restCard">
-        <h3>📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
+    <div class="card" id="restCard" aria-labelledby="rest-heading">
+        <h3 id="rest-heading">📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
         <div class="form-grid">
             <div>
-                <label>Data liberării condiționate</label>
-                <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa">
+                <label for="conditionalReleaseDate">Data liberării condiționate</label>
+                <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="condRelease-format">
+                <span id="condRelease-format" class="hidden">Format zz.ll.aaaa</span>
             </div>
         </div>
     </div>
 
-    <div id="errorContainer" class="error-message"></div>
+    <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="btn-row">
-        <button class="btn btn-gold" onclick="calculateAll()">📐 CALCULEAZĂ</button>
-        <button class="btn btn-outline" onclick="exportCSV()">📊 EXPORTĂ CSV</button>
+        <button class="btn btn-gold" onclick="calculateAll()" aria-label="Calculează toate termenele">📐 CALCULEAZĂ</button>
+        <button class="btn btn-outline" onclick="exportCSV()" aria-label="Exportă rezultatele în format CSV">📊 EXPORTĂ CSV</button>
     </div>
 
-    <div class="card hidden" id="resultsCard">
-        <h3>📊 REZULTATE</h3>
+    <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
+        <h3 id="results-heading">📊 REZULTATE</h3>
         <div id="resultsContent"></div>
-        <div id="alertsContainer" class="alerts-container hidden"></div>
+        <div id="alertsContainer" class="alerts-container hidden" role="alert" aria-live="polite"></div>
         <div id="timelineContainer" class="hidden" style="margin-top:16px;">
-            <h4 style="color:var(--gold);">📅 CRONOLOGIE TERMENE</h4>
-            <ul id="timelineList" class="timeline"></ul>
+            <h4 style="color:var(--gold);" id="timeline-heading">📅 CRONOLOGIE TERMENE</h4>
+            <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
         </div>
-        <button class="btn btn-outline btn-sm" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
-        <div id="stepsContainer" class="steps-container hidden">
-            <h4>🧮 PAȘII CALCULULUI</h4>
+        <button class="btn btn-outline btn-sm" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;" aria-expanded="false" aria-controls="stepsContainer">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
+        <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
+            <h4 id="steps-heading">🧮 PAȘII CALCULULUI</h4>
             <ol id="stepsList"></ol>
             <p style="margin-top:8px;font-size:0.8rem;color:var(--text-light);"><em>Notă: Math.floor(x) = partea întreagă inferioară (rotunjire în jos, în defavoarea condamnatului).</em></p>
         </div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | BETA 0.8</div>
+    </main>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.9</footer>
 </div>
 
 <script>
@@ -469,14 +511,19 @@
         if (names.length === 0) { alert('Nicio speță salvată.'); return; }
         const overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
-        let html = '<div class="modal"><h4>Selectează sau șterge o speță</h4><ul>';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-labelledby', 'modal-title');
+        let html = '<div class="modal"><h4 id="modal-title">Selectează sau șterge o speță</h4><ul role="listbox">';
         names.forEach(name => {
-            html += `<li><span onclick="loadCaseByName('${name.replace(/'/g, "\\'")}')">${name}</span><button onclick="deleteCase('${name.replace(/'/g, "\\'")}')">🗑️</button></li>`;
+            html += `<li role="option" tabindex="0"><span onclick="loadCaseByName('${name.replace(/'/g, "\\'")}')" role="button" tabindex="0">${name}</span><button onclick="deleteCase('${name.replace(/'/g, "\\'")}')" aria-label="Șterge speța ${name}">🗑️</button></li>`;
         });
-        html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button></div>';
+        html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()" aria-label="Închide fereastra">Închide</button></div>';
         overlay.innerHTML = html;
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+        // Focus first item
+        setTimeout(() => { const first = overlay.querySelector('li[role="option"]'); if (first) first.focus(); }, 100);
     }
 
     window.loadCaseByName = function(name) {
@@ -584,7 +631,8 @@
 
     function addDedRow() {
         const r = document.createElement('div'); r.className = 'period-row deduction-row';
-        r.innerHTML = `<div><label>Început</label><input type="text" class="ded-start date-masked" placeholder="zz.ll.aaaa"></div><div><label>Sfârșit</label><input type="text" class="ded-end date-masked" placeholder="zz.ll.aaaa"></div><div style="min-width:50px;"><label>Zile</label><input type="text" class="ded-days" readonly style="background:rgba(0,0,0,0.2);font-weight:600;"></div><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();">✕</button>`;
+        r.setAttribute('role', 'listitem');
+        r.innerHTML = `<div><label>Început</label><input type="text" class="ded-start date-masked" placeholder="zz.ll.aaaa"></div><div><label>Sfârșit</label><input type="text" class="ded-end date-masked" placeholder="zz.ll.aaaa"></div><div style="min-width:50px;"><label>Zile</label><input type="text" class="ded-days" readonly style="background:rgba(0,0,0,0.2);font-weight:600;" tabindex="-1"></div><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button>`;
         document.getElementById('deductionsContainer').appendChild(r);
         r.querySelector('.ded-start').addEventListener('input', ()=>updDed(r));
         r.querySelector('.ded-end').addEventListener('input', ()=>updDed(r));
@@ -597,12 +645,14 @@
     }
     function addManDedRow() {
         const r = document.createElement('div'); r.className = 'period-row';
-        r.innerHTML = `<div style="flex:2;"><label>Zile (Legea 169/2017)</label><input type="number" class="manual-days" value="0" min="0"></div><div style="flex:1;"><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();">✕</button></div>`;
+        r.setAttribute('role', 'listitem');
+        r.innerHTML = `<div style="flex:2;"><label>Zile (Legea 169/2017)</label><input type="number" class="manual-days" value="0" min="0"></div><div style="flex:1;"><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button></div>`;
         document.getElementById('manualDeductionsContainer').appendChild(r);
     }
     function addNonExecRow() {
         const r = document.createElement('div'); r.className = 'period-row non-exec-row';
-        r.innerHTML = `<div><label>Tip</label><select class="ne-type"><option value="escape">Evadare</option><option value="illness">Boală</option><option value="interruption">Întrerupere</option></select></div><div><label>Data început</label><input type="text" class="ne-start date-masked" placeholder="zz.ll.aaaa"></div><div><label>Data final</label><input type="text" class="ne-end date-masked" placeholder="zz.ll.aaaa"></div><div style="min-width:50px;"><label>Zile</label><input type="text" class="ne-days" readonly style="background:rgba(255,0,0,0.1);font-weight:600;color:#ff6b6b;"></div><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();">✕</button>`;
+        r.setAttribute('role', 'listitem');
+        r.innerHTML = `<div><label>Tip</label><select class="ne-type"><option value="escape">Evadare</option><option value="illness">Boală</option><option value="interruption">Întrerupere</option></select></div><div><label>Data început</label><input type="text" class="ne-start date-masked" placeholder="zz.ll.aaaa"></div><div><label>Data final</label><input type="text" class="ne-end date-masked" placeholder="zz.ll.aaaa"></div><div style="min-width:50px;"><label>Zile</label><input type="text" class="ne-days" readonly style="background:rgba(255,0,0,0.1);font-weight:600;color:#ff6b6b;" tabindex="-1"></div><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button>`;
         document.getElementById('nonExecContainer').appendChild(r);
         r.querySelector('.ne-start').addEventListener('input', ()=>updNonExec(r));
         r.querySelector('.ne-end').addEventListener('input', ()=>updNonExec(r));
@@ -716,9 +766,11 @@
         if (container.classList.contains('hidden')) {
             container.classList.remove('hidden');
             btn.innerHTML = '🧮 ASCUNDE PAȘII CALCULULUI';
+            btn.setAttribute('aria-expanded', 'true');
         } else {
             container.classList.add('hidden');
             btn.innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
+            btn.setAttribute('aria-expanded', 'false');
         }
     }
 
@@ -910,6 +962,7 @@
         document.getElementById('stepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
         document.getElementById('stepsContainer').classList.add('hidden');
         document.getElementById('toggleStepsBtn').innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
+        document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
         document.getElementById('resultsCard').classList.remove('hidden');
 
         autoSave();
@@ -953,6 +1006,14 @@
         a.download = 'calculator_pedepse.csv';
         a.click();
     }
+
+    // Keyboard support for modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const overlay = document.querySelector('.modal-overlay');
+            if (overlay) overlay.remove();
+        }
+    });
 </script>
 </body>
 </html>
