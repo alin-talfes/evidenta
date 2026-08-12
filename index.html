@@ -123,7 +123,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.7</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.8</div>
 </div>
 
 <script>
@@ -371,8 +371,7 @@
         let mDate=new Date(startDate); mDate.setDate(mDate.getDate()+mDays-1); mDate.setDate(mDate.getDate()-ded+non);
         let tDate=new Date(startDate); tDate.setDate(tDate.getDate()+tDays-1); tDate.setDate(tDate.getDate()-ded+non);
         const fifth=Math.floor(totalDays/5);
-        // Data 1/5 conform regulii: start + fifth (fără -1)
-        let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth); fDate.setDate(fDate.getDate()-ded+non);
+        let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth-1); fDate.setDate(fDate.getDate()-ded+non);
 
         const executedDays = Math.max(0, daysBetween(startDate, today()) + 1);
         const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
@@ -384,7 +383,6 @@
         const tDaysAdjusted = daysBetween(startDate, tDate) + 1;
         const fifthAdjusted = daysBetween(startDate, fDate) + 1;
 
-        // Calcul rest rămas după liberare condiționată (diferența directă între expirarea reală și data liberării)
         let restHtml = '';
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr && parseDate(condReleaseStr)) {
