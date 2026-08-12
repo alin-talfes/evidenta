@@ -71,7 +71,6 @@ function buildInputDataHTML(data) {
     html += `<div class="result-item"><div class="result-label">Data începerii</div><div class="result-value">${data.start || '—'}</div></div>`;
     html += `<div class="result-item"><div class="result-label">Data liberării condiționate</div><div class="result-value">${data.condRelease || '—'}</div></div>`;
 
-    // Perioade deduse
     if (data.dedRows.length > 0) {
         html += '<div class="result-item" style="grid-column: span 2;"><div class="result-label">Perioade deduse</div><div class="result-value">';
         data.dedRows.forEach((r, i) => {
@@ -80,7 +79,6 @@ function buildInputDataHTML(data) {
         html += '</div></div>';
     }
 
-    // Recurs compensatoriu
     if (data.manDed.length > 0) {
         html += '<div class="result-item"><div class="result-label">Recurs compensatoriu</div><div class="result-value">';
         data.manDed.forEach((v, i) => {
@@ -89,7 +87,6 @@ function buildInputDataHTML(data) {
         html += '</div></div>';
     }
 
-    // Perioade adăugate
     if (data.nonRows.length > 0) {
         html += '<div class="result-item" style="grid-column: span 2;"><div class="result-label">Perioade adăugate</div><div class="result-value">';
         data.nonRows.forEach((r, i) => {
@@ -98,7 +95,6 @@ function buildInputDataHTML(data) {
         html += '</div></div>';
     }
 
-    // Măsuri preventive
     if (data.masuriRefDate || data.masuriDays !== '0') {
         html += '<div class="result-item"><div class="result-label">Măsuri preventive</div><div class="result-value">';
         html += `Ref: ${data.masuriRefDate || '—'}<br>Zile: ${data.masuriDays}<br>Rezultat: ${data.masuriResult || '—'}`;
@@ -116,7 +112,6 @@ function exportCSV() {
     const data = getInputData();
     let csv = 'SECȚIUNE,Indicator,Valoare\n';
 
-    // Date introduse
     csv += `"DATE INTRODUSE","Sex","${data.sex}"\n`;
     csv += `"DATE INTRODUSE","Data nașterii","${data.birthDate}"\n`;
     csv += `"DATE INTRODUSE","Observații","${data.observations}"\n`;
@@ -142,7 +137,6 @@ function exportCSV() {
         csv += `"DATE INTRODUSE","Măsuri preventive","Ref: ${data.masuriRefDate}, Zile: ${data.masuriDays}, Rezultat: ${data.masuriResult}"\n`;
     }
 
-    // Rezultate
     csv += '\n"REZULTATE",,\n';
     const content = document.getElementById('resultsContent');
     if (content) {
@@ -204,7 +198,8 @@ function fallbackCopy(text) {
 }
 
 /**
- * Exportă datele introduse și rezultatele ca PDF (fereastră de tipărire).
+ * Exportă datele introduse și rezultatele ca PDF (fereastră de tipărire),
+ * cu stiluri compacte pentru a încăpea pe o singură pagină.
  */
 function exportPDF() {
     const content = document.getElementById('resultsContent');
@@ -225,21 +220,26 @@ function exportPDF() {
             <head>
                 <title>Calculator Evidență Pedepse - Rezultate</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 20px; }
-                    h1 { text-align: center; font-size: 20px; }
-                    .result-section { margin-bottom: 20px; }
-                    .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-                    .result-item { border: 1px solid #ddd; border-radius: 8px; padding: 10px; break-inside: avoid; }
-                    .result-label { font-size: 11px; text-transform: uppercase; color: #666; margin-bottom: 4px; }
-                    .result-value { font-size: 14px; font-weight: bold; color: #111; }
-                    .result-warning { font-size: 12px; }
+                    @page {
+                        size: A4;
+                        margin: 5mm;
+                    }
+                    * { box-sizing: border-box; margin: 0; padding: 0; }
+                    body { font-family: Arial, sans-serif; margin: 0; font-size: 9px; line-height: 1.3; }
+                    h1 { text-align: center; font-size: 14px; margin-bottom: 8px; }
+                    .result-section { margin-bottom: 8px; }
+                    .result-section h4 { font-size: 10px; margin-bottom: 4px; }
+                    .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; }
+                    .result-item { border: 1px solid #ddd; border-radius: 4px; padding: 4px 6px; break-inside: avoid; page-break-inside: avoid; }
+                    .result-label { font-size: 7px; text-transform: uppercase; color: #666; margin-bottom: 2px; }
+                    .result-value { font-size: 9px; font-weight: bold; color: #111; word-break: break-word; }
+                    .result-warning { font-size: 8px; }
                     .expired { color: #d32f2f; }
                     .soon { color: #e67e22; }
-                    .fraction { font-size: 16px; }
-                    .footer { margin-top: 30px; text-align: center; font-size: 10px; color: #888; }
+                    .fraction { font-size: 10px; }
+                    .footer { margin-top: 10px; text-align: center; font-size: 7px; color: #888; }
                     @media print {
-                        body { margin: 0; }
-                        .no-print { display: none; }
+                        body { -webkit-print-color-adjust: exact; }
                     }
                 </style>
             </head>
