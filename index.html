@@ -22,6 +22,19 @@
             --font: 'Inter', system-ui, -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
         }
+        body.light {
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --primary: #b8941f;
+            --gold: #b8941f;
+            --gold-light: #c9a227;
+            --text: #1a1a1a;
+            --text-light: #555;
+            --border: #ddd;
+            --danger: #d32f2f;
+            --warning: #e67e22;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { touch-action: manipulation; -webkit-text-size-adjust: 100%; overflow-x: hidden; width: 100%; }
         body {
@@ -34,8 +47,35 @@
             width: 100%;
             max-width: 100vw;
             line-height: 1.5;
+            transition: background 0.3s, color 0.3s;
         }
         .container { max-width: 960px; margin: 0 auto; width: 100%; }
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            justify-content: center;
+        }
+        .btn-big {
+            flex: 1;
+            max-width: 200px;
+            background: rgba(201, 162, 39, 0.08);
+            border: 1px solid var(--border);
+            color: var(--text-light);
+            border-radius: var(--input-radius);
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        .btn-big:hover, .btn-big:focus-visible { background: rgba(201, 162, 39, 0.15); border-color: var(--gold); color: var(--gold-light); outline: none; }
         .top-bar {
             display: flex;
             gap: 10px;
@@ -50,6 +90,7 @@
             z-index: 10;
             align-items: center;
         }
+        body.light .top-bar { background: rgba(255,255,255,0.8); }
         .btn-utility {
             flex: 1;
             background: rgba(201, 162, 39, 0.05);
@@ -96,6 +137,11 @@
             margin-bottom: 20px;
             text-align: center;
         }
+        body.light .header {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 60%, #f0f0f0 100%);
+            color: #1a1a1a;
+            border-color: #ccc;
+        }
         .header h1 {
             font-size: 1.4rem;
             font-weight: 800;
@@ -114,7 +160,7 @@
             margin-bottom: 16px;
             border: 1px solid var(--border);
             border-left: 3px solid rgba(201, 162, 39, 0.5);
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, background 0.3s;
         }
         .card h3 {
             font-size: 0.9rem;
@@ -140,60 +186,6 @@
             color: var(--text-light);
             position: relative;
         }
-        .tooltip {
-            position: relative;
-            cursor: help;
-        }
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 0;
-            background: #1a1a2e;
-            color: var(--text);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            text-transform: none;
-            letter-spacing: 0.3px;
-            font-weight: 400;
-            white-space: normal;
-            width: 220px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 50;
-            line-height: 1.4;
-        }
-        .tooltip:hover::after, .tooltip:focus-visible::after { opacity: 1; }
-        .tooltip-btn { position: relative; }
-        .tooltip-btn::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1a1a2e;
-            color: var(--text);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            text-transform: none;
-            letter-spacing: 0.3px;
-            font-weight: 400;
-            white-space: normal;
-            width: 220px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 50;
-            line-height: 1.4;
-        }
-        .tooltip-btn:hover::after, .tooltip-btn:focus-visible::after { opacity: 1; }
         select, input[type="number"], input[type="text"], textarea {
             width: 100%;
             padding: 10px 12px;
@@ -206,6 +198,10 @@
             min-height: 44px;
             transition: border-color 0.2s, box-shadow 0.2s;
             letter-spacing: 0.3px;
+        }
+        body.light select, body.light input[type="number"], body.light input[type="text"], body.light textarea {
+            background: #fff;
+            border-color: #ccc;
         }
         select:focus, input:focus, textarea:focus {
             border-color: var(--gold);
@@ -323,7 +319,7 @@
         .sex-label.active { color: var(--gold-light); }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 450px; width: 90%; }
+        .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
         .modal h4 { color: var(--gold); margin-bottom: 12px; }
         .modal ul { list-style: none; max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
         .modal li { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; margin-bottom: 4px; background: rgba(201, 162, 39, 0.04); border: 1px solid transparent; transition: border-color 0.2s; }
@@ -354,10 +350,14 @@
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
 <div class="container">
+    <div class="top-actions">
+        <button class="btn-big" id="themeToggle" onclick="toggleTheme()">☀️ MOD LIGHT</button>
+        <button class="btn-big" onclick="openInfoModal()">ℹ️ INFORMAȚII</button>
+    </div>
     <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
-        <button class="btn-utility primary tooltip-btn" onclick="saveCase()" aria-label="Salvează speța curentă" data-tooltip="Salvează toate datele introduse ca o speță locală, pentru a o putea reîncărca ulterior.">💾 SALVEAZĂ</button>
-        <button class="btn-utility tooltip-btn" onclick="openLoadModal()" id="loadBtn" aria-label="Încarcă o speță salvată" data-tooltip="Deschide o listă cu toate spețele salvate. Poți încărca sau șterge orice speță.">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge" aria-label="Număr spețe salvate">0</span></button>
-        <button class="btn-utility tooltip-btn" onclick="confirmReset()" aria-label="Resetează toate câmpurile" data-tooltip="Resetează toate câmpurile și șterge ultima salvare automată. Confirmarea este necesară.">↺ RESET</button>
+        <button class="btn-utility primary" onclick="saveCase()">💾 SALVEAZĂ</button>
+        <button class="btn-utility" onclick="openLoadModal()" id="loadBtn">📂 ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
+        <button class="btn-utility" onclick="confirmReset()">↺ RESET</button>
     </div>
     <div class="header">
         <h1 id="main-title">⚖️ CALCULATOR PEDEPSE</h1>
@@ -367,7 +367,7 @@
         <h3 id="date-ppl-heading">📌 1. DATE PPL</h3>
         <div class="form-grid">
             <div>
-                <label class="tooltip" data-tooltip="Selectați sexul persoanei private de libertate. Necesar pentru stabilirea categoriei de vârstă (BĂTRÂN: bărbați ≥ 60 ani, femei ≥ 55/60 ani). Implicit MASCULIN.">Sex</label>
+                <label>Sex</label>
                 <div class="sex-toggle-wrapper">
                     <span class="sex-label" id="sexLabelF">FEMININ</span>
                     <label class="toggle-switch">
@@ -378,14 +378,13 @@
                 </div>
             </div>
             <div>
-                <label for="birthDate" class="tooltip" data-tooltip="Data nașterii în format zz.ll.aaaa. Vârsta exactă se calculează automat la data de azi și determină categoria de vârstă.">Data nașterii</label>
-                <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="birthDate-format">
-                <span id="birthDate-format" class="hidden">Format zz.ll.aaaa</span>
+                <label for="birthDate">Data nașterii</label>
+                <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa">
             </div>
             <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;" aria-live="polite"></div>
         </div>
         <div style="margin-top:12px;">
-            <label for="observations" class="tooltip" data-tooltip="Numele deținutului sau orice alte observații relevante. Opțional. Apare în raportul de rezultate și în exportul CSV.">📝 Observații / Nume PPL (opțional)</label>
+            <label for="observations">📝 Observații / Nume PPL (opțional)</label>
             <textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea>
         </div>
     </div>
@@ -394,11 +393,11 @@
         <h3 id="sentence-heading">⚖️ 2. PEDEAPSA</h3>
         <div class="form-grid">
             <div>
-                <label for="liberationArticle" class="tooltip" data-tooltip="Articolul din Codul penal care stabilește fracțiile de liberare condiționată. Determină automat fracția obligatorie și totală.">Articol liberare condiționată</label>
+                <label for="liberationArticle">Articol liberare condiționată</label>
                 <select id="liberationArticle" aria-required="true"><option value="">—</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. 2</option><option value="VCP603">VCP art. 60 alin. 3</option></select>
             </div>
             <div>
-                <label for="lifeSentence" class="tooltip" data-tooltip="Bifați dacă pedeapsa este detențiunea pe viață. Se vor aplica regulile specifice: fracție ½ / ½, plafon 20 ani (7305 zile).">Detențiune pe viață</label>
+                <label for="lifeSentence">Detențiune pe viață</label>
                 <label class="toggle-switch" style="margin-top:8px;">
                     <input type="checkbox" id="lifeSentence">
                     <span class="toggle-slider" aria-hidden="true"></span>
@@ -407,24 +406,23 @@
             </div>
         </div>
         <div id="sentenceDuration" class="form-grid" style="margin-top:8px;">
-            <div><label for="durYears" class="tooltip" data-tooltip="Anii din durata totală a pedepsei. Se adună calendaristic, nu cu 1 an = 365 zile.">Ani</label><input type="number" id="durYears" value="0" min="0" max="99"></div>
-            <div><label for="durMonths" class="tooltip" data-tooltip="Lunile din durata totală a pedepsei. Se adună calendaristic.">Luni</label><input type="number" id="durMonths" value="0" min="0" max="11"></div>
-            <div><label for="durDays" class="tooltip" data-tooltip="Zilele din durata totală a pedepsei. Se adună calendaristic.">Zile</label><input type="number" id="durDays" value="0" min="0" max="31"></div>
+            <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0" max="99"></div>
+            <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0" max="11"></div>
+            <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0" max="31"></div>
         </div>
         <div style="margin-top:12px;">
-            <label for="startDate" class="tooltip" data-tooltip="Prima zi de executare a pedepsei. Se include în toate calculele. Folosiți butonul AZI pentru data curentă.">Data începerii executării pedepsei</label>
+            <label for="startDate">Data începerii executării pedepsei</label>
             <div class="date-wrapper">
-                <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="startDate-format">
+                <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa">
                 <button type="button" class="btn-today" onclick="setToday('startDate')">AZI</button>
             </div>
-            <span id="startDate-format" class="hidden">Format zz.ll.aaaa</span>
         </div>
     </div>
 
     <div class="card" aria-labelledby="deductions-heading">
         <h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3>
         <div style="margin-bottom:8px;">
-            <span class="tooltip" style="display:inline-block;font-size:0.7rem;color:var(--text-light);cursor:help;" data-tooltip="Perioadele care se scad din mandat: arest preventiv, reținere, arest la domiciliu, executări anterioare. Se calculează cu capete incluse (zile = sfârșit − început + 1).">ℹ️ Cum se completează?</span>
+            <span style="display:inline-block;font-size:0.7rem;color:var(--text-light);">ℹ️ Cum se completează?</span>
         </div>
         <div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div>
         <button class="btn btn-outline btn-sm" onclick="addDedRow()" aria-label="Adaugă o perioadă dedusă">+ Adaugă</button>
@@ -432,7 +430,7 @@
     <div class="card" aria-labelledby="recurs-heading">
         <h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3>
         <div style="margin-bottom:8px;">
-            <span class="tooltip" style="display:inline-block;font-size:0.7rem;color:var(--text-light);cursor:help;" data-tooltip="Zile deduse prin hotărâri judecătorești (Legea 169/2017) fără a defini o perioadă anume. Se adaugă direct la totalul deducerilor.">ℹ️ Cum se completează?</span>
+            <span style="display:inline-block;font-size:0.7rem;color:var(--text-light);">ℹ️ Cum se completează?</span>
         </div>
         <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
         <button class="btn btn-outline btn-sm" onclick="addManDedRow()" aria-label="Adaugă recurs compensatoriu">+ Adaugă</button>
@@ -440,7 +438,7 @@
     <div class="card" aria-labelledby="nonExec-heading">
         <h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3>
         <div style="margin-bottom:8px;">
-            <span class="tooltip" style="display:inline-block;font-size:0.7rem;color:var(--text-light);cursor:help;" data-tooltip="Perioadele care se adaugă la mandat: evadare, întrerupere, provocarea bolii. Reguli diferite: evadarea/boala: capete excluse; întreruperea: ambele capete executate, deci zile = final − inițial − 1.">ℹ️ Cum se completează?</span>
+            <span style="display:inline-block;font-size:0.7rem;color:var(--text-light);">ℹ️ Cum se completează?</span>
         </div>
         <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
         <button class="btn btn-outline btn-sm" onclick="addNonExecRow()" aria-label="Adaugă o perioadă adăugată">+ Adaugă</button>
@@ -450,17 +448,16 @@
         <h3 id="rest-heading">📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
         <div class="form-grid">
             <div>
-                <label for="conditionalReleaseDate" class="tooltip" data-tooltip="Data la care deținutul a fost liberat condiționat. Se calculează automat restul rămas de executat (diferența până la expirarea reală).">Data liberării condiționate</label>
-                <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="condRelease-format">
-                <span id="condRelease-format" class="hidden">Format zz.ll.aaaa</span>
+                <label for="conditionalReleaseDate">Data liberării condiționate</label>
+                <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa">
             </div>
         </div>
     </div>
 
     <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="btn-row">
-        <button class="btn btn-gold tooltip-btn" onclick="calculateAll()" aria-label="Calculează toate termenele" data-tooltip="Aplică toate regulile de calcul și afișează rezultatele detaliate, inclusiv fracțiile, datele și cronologia termenelor.">📐 CALCULEAZĂ</button>
-        <button class="btn btn-outline tooltip-btn" onclick="exportCSV()" aria-label="Exportă rezultatele în format CSV" data-tooltip="Descarcă un fișier CSV cu toate datele introduse și rezultatele calculate, pentru arhivare sau prelucrare ulterioară.">📊 EXPORTĂ CSV</button>
+        <button class="btn btn-gold" onclick="calculateAll()">📐 CALCULEAZĂ</button>
+        <button class="btn btn-outline" onclick="exportCSV()">📊 EXPORTĂ CSV</button>
     </div>
 
     <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
@@ -471,7 +468,7 @@
             <h4 style="color:var(--gold);" id="timeline-heading">📅 CRONOLOGIE TERMENE</h4>
             <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
         </div>
-        <button class="btn btn-outline btn-sm tooltip-btn" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;" aria-expanded="false" aria-controls="stepsContainer" data-tooltip="Afișează sau ascunde pașii detaliați ai calculului, explicând fiecare etapă (mandat, deduceri, fracții, rotunjiri).">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
+        <button class="btn btn-outline btn-sm" id="toggleStepsBtn" onclick="toggleSteps()" style="margin-top:12px;" aria-expanded="false" aria-controls="stepsContainer">🧮 AFIȘEAZĂ PAȘII CALCULULUI</button>
         <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
             <h4 id="steps-heading">🧮 PAȘII CALCULULUI</h4>
             <ol id="stepsList"></ol>
@@ -479,10 +476,65 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.16</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.18</footer>
 </div>
 
 <script>
+    // ========== THEME TOGGLE ==========
+    function toggleTheme() {
+        document.body.classList.toggle('light');
+        const btn = document.getElementById('themeToggle');
+        if (document.body.classList.contains('light')) {
+            btn.innerHTML = '🌙 MOD DARK';
+        } else {
+            btn.innerHTML = '☀️ MOD LIGHT';
+        }
+    }
+
+    // ========== INFO MODAL ==========
+    function openInfoModal() {
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-labelledby', 'info-title');
+        const html = `
+            <div class="modal">
+                <h4 id="info-title">📖 GHID DE COMPLETARE</h4>
+                <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
+                    <p><strong>1. DATE PPL</strong><br>
+                    • <strong>Sex:</strong> selectați Masculin/Feminin. Implicit este MASCULIN. Necesar pentru stabilirea categoriei de vârstă.<br>
+                    • <strong>Data nașterii:</strong> format zz.ll.aaaa (ex: 01.01.1980).<br>
+                    • <strong>Observații:</strong> nume sau alte mențiuni (opțional).</p>
+
+                    <p><strong>2. PEDEAPSA</strong><br>
+                    • <strong>Articol liberare condiționată:</strong> alegeți articolul corespunzător din NCP sau VCP.<br>
+                    • <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>
+                    • <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei.<br>
+                    • <strong>Data începerii:</strong> prima zi de executare. Butonul AZI completează automat data curentă.</p>
+
+                    <p><strong>3. PERIOADE DEDUSE</strong><br>
+                    • Adăugați perioadele care se scad (arest preventiv, reținere etc.).<br>
+                    • Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).</p>
+
+                    <p><strong>4. RECURS COMPENSATORIU</strong><br>
+                    • Introduceți direct numărul de zile deduse conform Legii 169/2017.</p>
+
+                    <p><strong>5. PERIOADE ADĂUGATE</strong><br>
+                    • Evadare/boală: zile = data_final − data_inițial (capete excluse).<br>
+                    • Întrerupere: zile = data_final − data_inițial − 1 (ambele capete executate).</p>
+
+                    <p><strong>6. REST RĂMAS</strong><br>
+                    • Opțional: introduceți data liberării condiționate pentru a calcula restul de executat.</p>
+                </div>
+                <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
+            </div>
+        `;
+        overlay.innerHTML = html;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+    }
+
     // ========== UTILS ==========
     const parseDate = (str) => {
         if (!str) return null;
