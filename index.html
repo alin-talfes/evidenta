@@ -275,6 +275,15 @@
     <div class="card" aria-labelledby="recurs-heading"><h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3><div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
     <div class="card" aria-labelledby="nonExec-heading"><h3 id="nonExec-heading">🚫 5. PERIOADE ADĂUGATE</h3><div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div><button class="btn btn-outline btn-sm" onclick="addNonExecRow()">+ Adaugă</button></div>
     <div class="card" id="restCard" aria-labelledby="rest-heading"><h3 id="rest-heading">📉 6. CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3><div class="form-grid"><div><label for="conditionalReleaseDate">Data liberării condiționate</label><div class="date-wrapper"><input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" onclick="setToday('conditionalReleaseDate')">AZI</button></div></div></div></div>
+    <div class="card" aria-labelledby="masuri-preventive-heading">
+        <h3 id="masuri-preventive-heading">🛡️ MĂSURI PREVENTIVE</h3>
+        <div class="form-grid">
+            <div><label for="masuriRefDate">Dată referință</label><div class="date-wrapper"><input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa"></div></div>
+            <div><label for="masuriDays">Adaugă zile</label><input type="number" id="masuriDays" value="0" min="0"></div>
+            <div><label>Rezultat</label><input type="text" id="masuriResult" readonly style="background:rgba(201,162,39,0.08);font-weight:600;" tabindex="-1"></div>
+        </div>
+        <p style="margin-top:8px;font-size:0.75rem;color:var(--text-light);"><em>Ziua nr. 1 o reprezintă ziua de referință.</em></p>
+    </div>
     <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="btn-row"><button class="btn btn-gold" onclick="calculateAll()">📐 CALCULEAZĂ</button><button class="btn btn-outline" onclick="exportCSV()">📊 EXPORTĂ CSV</button></div>
     <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
@@ -414,6 +423,26 @@
         const blob = new Blob([csv], {type:'text/csv'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'calculator_pedepse.csv'; a.click();
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { const overlay = document.querySelector('.modal-overlay'); if (overlay) overlay.remove(); } });
+
+    // ========== MĂSURI PREVENTIVE (calcul live, opțional) ==========
+    function calcMasuriPreventive() {
+        const refDate = parseDate(document.getElementById('masuriRefDate').value.trim());
+        const days = parseInt(document.getElementById('masuriDays').value);
+        const resultInput = document.getElementById('masuriResult');
+        if (!refDate || isNaN(days) || days < 0) {
+            resultInput.value = '';
+            return;
+        }
+        if (days === 0) {
+            resultInput.value = fmtDate(refDate);
+            return;
+        }
+        const resultDate = addCalendarSafe(refDate, 0, 0, days - 1);
+        resultInput.value = fmtDate(resultDate);
+    }
+    document.getElementById('masuriRefDate').addEventListener('input', calcMasuriPreventive);
+    document.getElementById('masuriDays').addEventListener('input', calcMasuriPreventive);
+    calcMasuriPreventive();
 </script>
 </body>
 </html>
