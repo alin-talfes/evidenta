@@ -76,13 +76,13 @@
         <h1><span class="icon">⚖️</span> CALCULATOR PEDEPSE</h1>
     </div>
 
-    <div class="card"><h3>📌 1. Date personale</h3>
+    <div class="card"><h3>📌 1. Date PPL</h3>
         <div class="form-grid">
             <div><label>Sex</label><select id="sex"><option value="">—</option><option value="M">Masculin</option><option value="F">Feminin</option></select></div>
             <div><label>Data nașterii</label><input type="text" id="birthDate" placeholder="zz.ll.aaaa"></div>
             <div id="ageTag" style="display:flex;align-items:flex-end;gap:4px;"></div>
         </div>
-        <div style="margin-top:10px;"><label>📝 Nume deținut (opțional)</label><textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea></div>
+        <div style="margin-top:10px;"><label>📝 Observații / Nume PPL (opțional)</label><textarea id="observations" rows="2" placeholder="ex: Popescu Ion"></textarea></div>
     </div>
 
     <div class="card"><h3>⚖️ 2. Pedeapsa</h3>
@@ -95,16 +95,15 @@
             <div><label>Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
             <div><label>Zile</label><input type="number" id="durDays" value="0" min="0"></div>
         </div>
-        <div style="margin-top:10px;"><label>Data începerii pedepsei</label><input type="text" id="startDate" placeholder="zz.ll.aaaa"></div>
+        <div style="margin-top:10px;"><label>Data începerii executării pedepsei</label><input type="text" id="startDate" placeholder="zz.ll.aaaa"></div>
     </div>
 
-    <div class="card"><h3>📅 3. Deduceri (capete incluse)</h3><div id="deductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addDedRow()">+ Adaugă</button></div>
-    <div class="card"><h3>🔢 4. Deduceri manuale (Legea 169/2017)</h3><div id="manualDeductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
-    <div class="card"><h3>🚫 5. Perioade neexecutate</h3><div id="nonExecContainer"></div><button class="btn btn-outline btn-sm" onclick="addNonExecRow()">+ Adaugă</button></div>
+    <div class="card"><h3>📅 3. Perioade deduse</h3><div id="deductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addDedRow()">+ Adaugă</button></div>
+    <div class="card"><h3>🔢 4. Recurs compensatoriu (Legea 169/2017)</h3><div id="manualDeductionsContainer"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
+    <div class="card"><h3>🚫 5. Perioade adăugate</h3><div id="nonExecContainer"></div><button class="btn btn-outline btn-sm" onclick="addNonExecRow()">+ Adaugă</button></div>
 
-    <!-- Modul rest rămas după liberare condiționată -->
     <div class="card" id="restCard">
-        <h3>📉 6. Calcul rest rămas (opțional)</h3>
+        <h3>📉 6. Calcul rest rămas de executat (opțional)</h3>
         <div class="form-grid">
             <div>
                 <label>Data liberării condiționate</label>
@@ -124,7 +123,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.4</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.5</div>
 </div>
 
 <script>
@@ -308,7 +307,6 @@
                 else if (eD <= sD) err.push(`Perioada neexecutată ${i+1}: date invalide.`);
             }
         });
-        // Validare data liberării condiționate (opțional)
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr) {
             const condDate = parseDate(condReleaseStr);
@@ -339,13 +337,11 @@
             totalDays = daysBetween(startDate, theorExp) + 1;
         }
 
-        // Deduceri: unificare intervale + manuale
         const dedIntervals = []; document.querySelectorAll('.deduction-row').forEach(r => { const sD=parseDate(r.querySelector('.ded-start').value.trim()), eD=parseDate(r.querySelector('.ded-end').value.trim()); if(sD&&eD) dedIntervals.push([sD,eD]); });
         let ded = sumIntervals(dedIntervals);
         document.querySelectorAll('.manual-days').forEach(i=>{ const v=parseInt(i.value); if(!isNaN(v)&&v>0) ded+=v; });
         if (ded > totalDays) { errC.innerHTML = '• Deducerile depășesc mandatul total.'; errC.classList.add('visible'); return; }
 
-        // Neexecutate: adunăm direct valorile corecte din câmpuri (calculate deja corect)
         let non = 0;
         document.querySelectorAll('.ne-days').forEach(inp => {
             const v = parseInt(inp.value);
@@ -377,10 +373,7 @@
         const fifth=Math.floor(totalDays/5);
         let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth); fDate.setDate(fDate.getDate()-ded+non);
 
-        // Zile executate efectiv: pur și simplu zilele calendaristice de la început până azi (inclusiv)
         const executedDays = Math.max(0, daysBetween(startDate, today()) + 1);
-
-        // Rest rămas: zilele până la expirarea reală, inclusiv ziua curentă
         const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
 
         const quarantineEnd = new Date(startDate);
@@ -390,7 +383,6 @@
         const tDaysAdjusted = daysBetween(startDate, tDate) + 1;
         const fifthAdjusted = daysBetween(startDate, fDate) + 1;
 
-        // === CALCUL REST RĂMAS DUPĂ LIBERARE CONDIȚIONATĂ ===
         let restHtml = '';
         const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
         if (condReleaseStr && parseDate(condReleaseStr)) {
@@ -413,7 +405,7 @@
 
         const nume=document.getElementById('observations').value.trim();
         let html='';
-        if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Nume deținut</div><div class="result-value">${nume}</div></div>`;
+        if(nume) html+=`<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații / Nume PPL</div><div class="result-value">${nume}</div></div>`;
 
         html+=`<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">`;
         html+=`<div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${fmtDate(theorExp)}</div></div>`;
@@ -451,7 +443,7 @@
         let csv = 'Indicator,Valoare\n';
         csv += `"Sex","${document.getElementById('sex').value}"\n`;
         csv += `"Data nașterii","${document.getElementById('birthDate').value}"\n`;
-        csv += `"Nume deținut","${document.getElementById('observations').value}"\n`;
+        csv += `"Observații / Nume PPL","${document.getElementById('observations').value}"\n`;
         csv += `"Articol LC","${document.getElementById('liberationArticle').value}"\n`;
         csv += `"Detențiune pe viață","${document.getElementById('lifeSentence').checked ? 'Da' : 'Nu'}"\n`;
         csv += `"Durată","${document.getElementById('durYears').value} ani, ${document.getElementById('durMonths').value} luni, ${document.getElementById('durDays').value} zile"\n`;
@@ -459,14 +451,14 @@
         document.querySelectorAll('.deduction-row').forEach((r,i) => {
             const st = r.querySelector('.ded-start').value.trim();
             const en = r.querySelector('.ded-end').value.trim();
-            if (st && en) csv += `"Deducere perioadă ${i+1}","${st} - ${en}"\n`;
+            if (st && en) csv += `"Perioadă dedusă ${i+1}","${st} - ${en}"\n`;
         });
-        document.querySelectorAll('.manual-days').forEach((inp,i) => { const v=parseInt(inp.value); if(v>0) csv += `"Deducere manuală ${i+1}","${v} zile"\n`; });
+        document.querySelectorAll('.manual-days').forEach((inp,i) => { const v=parseInt(inp.value); if(v>0) csv += `"Recurs compensatoriu ${i+1}","${v} zile"\n`; });
         document.querySelectorAll('.non-exec-row').forEach((r,i) => {
             const typ=r.querySelector('.ne-type').value;
             const st=r.querySelector('.ne-start').value.trim();
             const en=r.querySelector('.ne-end').value.trim();
-            if (st && en) csv += `"Perioadă neexecutată ${i+1} (${typ})","${st} - ${en}"\n`;
+            if (st && en) csv += `"Perioadă adăugată ${i+1} (${typ})","${st} - ${en}"\n`;
         });
         csv += '\n';
         const content = document.getElementById('resultsContent');
