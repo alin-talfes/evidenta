@@ -222,7 +222,7 @@
     <div class="top-bar">
         <button class="btn-utility" onclick="saveCase()">💾 SALVEAZĂ SPEȚĂ</button>
         <button class="btn-utility" onclick="openLoadModal()">📂 ÎNCARCĂ SPEȚĂ</button>
-        <button class="btn-utility" onclick="resetAll()">↺ RESET</button>
+        <button class="btn-utility" onclick="confirmReset()">↺ RESET</button>
     </div>
     <div class="header">
         <h1><span class="icon">⚖️</span> CALCULATOR PEDEPSE</h1>
@@ -285,7 +285,7 @@
             <ol id="stepsList"></ol>
         </div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | BETA 0.2</div>
+    <div class="footer">CALCULATOR PEDEPSE | BETA 0.3</div>
 </div>
 
 <script>
@@ -533,6 +533,12 @@
                 else f.value = diff;
             } else f.value = 'Eroare';
         } else f.value = '';
+    }
+
+    function confirmReset() {
+        if (confirm('Sigur doriți să resetați toate câmpurile?')) {
+            resetAll();
+        }
     }
 
     function resetAll() {
