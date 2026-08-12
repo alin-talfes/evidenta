@@ -158,6 +158,25 @@
             outline: none;
         }
         input::placeholder, textarea::placeholder { color: #6A6F78; }
+        .date-wrapper { display: flex; gap: 4px; align-items: center; }
+        .date-wrapper input { flex: 1; }
+        .btn-today {
+            flex-shrink: 0;
+            background: rgba(201, 162, 39, 0.08);
+            border: 1px solid var(--border);
+            color: var(--text-light);
+            border-radius: var(--input-radius);
+            padding: 0 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .btn-today:hover { background: rgba(201, 162, 39, 0.18); border-color: var(--gold); color: var(--gold-light); }
         .period-row {
             display: flex;
             gap: 10px;
@@ -260,11 +279,8 @@
         .timeline li.passed .tl-date { color: var(--danger); }
         .timeline li.passed .tl-label { text-decoration: line-through; color: #6A6F78; }
 
-        /* Focus visible helper */
         :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
         [tabindex="-1"]:focus { outline: none; }
-
-        /* Skip link */
         .skip-link { position: absolute; top: -40px; left: 0; background: var(--gold); color: #0F1115; padding: 8px; z-index: 200; }
         .skip-link:focus { top: 0; }
 
@@ -326,7 +342,10 @@
         </div>
         <div style="margin-top:12px;">
             <label for="startDate">Data începerii executării pedepsei</label>
-            <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="startDate-format">
+            <div class="date-wrapper">
+                <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa" aria-describedby="startDate-format">
+                <button type="button" class="btn-today" onclick="setToday('startDate')">AZI</button>
+            </div>
             <span id="startDate-format" class="hidden">Format zz.ll.aaaa</span>
         </div>
     </div>
@@ -380,7 +399,7 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.9</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.11</footer>
 </div>
 
 <script>
@@ -466,6 +485,14 @@
         }
     });
 
+    // ========== TODAY BUTTON ==========
+    function setToday(inputId) {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.value = fmtDate(today());
+        }
+    }
+
     // ========== BADGE ==========
     function updateCaseBadge() {
         const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
@@ -522,7 +549,6 @@
         overlay.innerHTML = html;
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-        // Focus first item
         setTimeout(() => { const first = overlay.querySelector('li[role="option"]'); if (first) first.focus(); }, 100);
     }
 
@@ -773,6 +799,24 @@
             btn.setAttribute('aria-expanded', 'false');
         }
     }
+
+    // ========== CONFIRMARE LA PĂRĂSIREA PAGINII ==========
+    window.addEventListener('beforeunload', function(e) {
+        const hasData = () => {
+            const sex = document.getElementById('sex').value;
+            const birth = document.getElementById('birthDate').value.trim();
+            const start = document.getElementById('startDate').value.trim();
+            const life = document.getElementById('lifeSentence').checked;
+            const y = parseInt(document.getElementById('durYears').value)||0;
+            const m = parseInt(document.getElementById('durMonths').value)||0;
+            const d = parseInt(document.getElementById('durDays').value)||0;
+            return sex || parseDate(birth) || parseDate(start) || (!life && (y > 0 || m > 0 || d > 0));
+        };
+        if (hasData()) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
 
     function calculateAll() {
         const errC = document.getElementById('errorContainer'); errC.classList.remove('visible');
