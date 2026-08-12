@@ -356,10 +356,124 @@
     document.addEventListener('input', function(e) { if (e.target.classList.contains('date-masked')) applyDateMask(e); });
     function setToday(inputId) { const input = document.getElementById(inputId); if (input) input.value = fmtDate(today()); }
     function updateCaseBadge() { const cases = JSON.parse(localStorage.getItem('anpCases') || '{}'); const count = Object.keys(cases).length; const badge = document.getElementById('caseCountBadge'); if (!badge) return; if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); } }
-    function saveCase() { const name = prompt('Nume speță:'); if (!name || !name.trim()) return; const data = { sex: currentSex, birthDate: document.getElementById('birthDate').value, observations: document.getElementById('observations').value, life: document.getElementById('lifeSentence').checked, art: document.getElementById('liberationArticle').value, y: document.getElementById('durYears').value, m: document.getElementById('durMonths').value, d: document.getElementById('durDays').value, start: document.getElementById('startDate').value, condRelease: document.getElementById('conditionalReleaseDate').value, dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})), manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value), nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''})) }; const cases = JSON.parse(localStorage.getItem('anpCases') || '{}'); cases[name.trim()] = data; localStorage.setItem('anpCases', JSON.stringify(cases)); updateCaseBadge(); alert('Speță salvată!'); }
-    function openLoadModal() { const cases = JSON.parse(localStorage.getItem('anpCases') || '{}'); const names = Object.keys(cases); if (names.length === 0) { alert('Nicio speță salvată.'); return; } const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true'); overlay.setAttribute('aria-labelledby', 'modal-title'); let html = '<div class="modal"><h4 id="modal-title">Selectează sau șterge o speță</h4><ul role="listbox">'; names.forEach(name => { const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;'); html += `<li role="option" tabindex="0"><span onclick="window.loadCaseByName('${safeName}')" role="button" tabindex="0">${name}</span><button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">🗑️</button></li>`; }); html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()" aria-label="Închide fereastra">Închide</button></div>'; overlay.innerHTML = html; document.body.appendChild(overlay); overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); }); setTimeout(() => { const first = overlay.querySelector('li[role="option"]'); if (first) first.focus(); }, 100); }
-    window.loadCaseByName = function(name) { const cases = JSON.parse(localStorage.getItem('anpCases') || '{}'); if (!cases[name]) return; const d = cases[name]; currentSex = d.sex || 'M'; sexToggle.checked = currentSex === 'M'; updateSexUI(); document.getElementById('birthDate').value = d.birthDate || ''; document.getElementById('observations').value = d.observations || ''; document.getElementById('lifeSentence').checked = d.life || false; document.getElementById('sentenceDuration').classList.toggle('hidden', d.life); document.getElementById('liberationArticle').value = d.art || ''; document.getElementById('durYears').value = d.y || 0; document.getElementById('durMonths').value = d.m || 0; document.getElementById('durDays').value = d.d || 0; document.getElementById('startDate').value = d.start || ''; document.getElementById('conditionalReleaseDate').value = d.condRelease || ''; document.getElementById('deductionsContainer').innerHTML = ''; (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } }); document.getElementById('manualDeductionsContainer').innerHTML = ''; (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; }); document.getElementById('nonExecContainer').innerHTML = ''; (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } }); updAgeTag(); document.querySelector('.modal-overlay')?.remove(); alert('Speță încărcată!'); };
-    window.deleteCase = function(name) { if (!confirm(`Sigur doriți să ștergeți speța "${name}"?`)) return; const cases = JSON.parse(localStorage.getItem('anpCases') || '{}'); delete cases[name]; localStorage.setItem('anpCases', JSON.stringify(cases)); document.querySelector('.modal-overlay')?.remove(); updateCaseBadge(); alert('Speță ștearsă!'); setTimeout(openLoadModal, 100); };
+
+    // ========== SALVARE / ÎNCĂRCARE / REDENUMIRE / ȘTERGERE ==========
+    function saveCase() {
+        const name = prompt('Nume speță:');
+        if (!name || !name.trim()) return;
+        const trimmedName = name.trim();
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        if (cases[trimmedName]) {
+            if (!confirm(`Există deja o speță cu numele "${trimmedName}". Dorești să o suprascrii?`)) return;
+        }
+        const data = {
+            sex: currentSex,
+            birthDate: document.getElementById('birthDate').value,
+            observations: document.getElementById('observations').value,
+            life: document.getElementById('lifeSentence').checked,
+            art: document.getElementById('liberationArticle').value,
+            y: document.getElementById('durYears').value,
+            m: document.getElementById('durMonths').value,
+            d: document.getElementById('durDays').value,
+            start: document.getElementById('startDate').value,
+            condRelease: document.getElementById('conditionalReleaseDate').value,
+            dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})),
+            manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
+            nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''}))
+        };
+        cases[trimmedName] = data;
+        localStorage.setItem('anpCases', JSON.stringify(cases));
+        updateCaseBadge();
+        alert('Speță salvată!');
+    }
+
+    function openLoadModal() {
+        const existingOverlay = document.querySelector('.modal-overlay');
+        if (existingOverlay) existingOverlay.remove();
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const names = Object.keys(cases);
+        if (names.length === 0) {
+            alert('Nicio speță salvată.');
+            return;
+        }
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-labelledby', 'modal-title');
+        let html = '<div class="modal"><h4 id="modal-title">Selectează sau șterge o speță</h4>';
+        html += '<p style="font-size:0.8rem;color:var(--text-light);margin-bottom:8px;">Click pe speță pentru a o încărca.</p>';
+        html += '<ul role="listbox">';
+        names.forEach(name => {
+            const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            html += `<li role="option" tabindex="0"><span onclick="window.loadCaseByName('${safeName}')" role="button" tabindex="0">${name}</span><div style="display:flex;gap:4px;"><button onclick="window.renameCase('${safeName}')" aria-label="Redenumește speța ${name}" style="background:transparent;border:1px solid var(--primary);color:var(--gold-light);border-radius:8px;padding:6px 8px;cursor:pointer;font-size:0.7rem;">✏️</button><button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">🗑️</button></div></li>`;
+        });
+        html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()" aria-label="Închide fereastra">Închide</button></div>';
+        overlay.innerHTML = html;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+        setTimeout(() => { const first = overlay.querySelector('li[role="option"]'); if (first) first.focus(); }, 100);
+    }
+
+    window.loadCaseByName = function(name) {
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        if (!cases[name]) return;
+        const d = cases[name];
+        currentSex = d.sex || 'M';
+        sexToggle.checked = currentSex === 'M';
+        updateSexUI();
+        document.getElementById('birthDate').value = d.birthDate || '';
+        document.getElementById('observations').value = d.observations || '';
+        document.getElementById('lifeSentence').checked = d.life || false;
+        document.getElementById('sentenceDuration').classList.toggle('hidden', d.life);
+        document.getElementById('liberationArticle').value = d.art || '';
+        document.getElementById('durYears').value = d.y || 0;
+        document.getElementById('durMonths').value = d.m || 0;
+        document.getElementById('durDays').value = d.d || 0;
+        document.getElementById('startDate').value = d.start || '';
+        document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
+        document.getElementById('deductionsContainer').innerHTML = '';
+        (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } });
+        document.getElementById('manualDeductionsContainer').innerHTML = '';
+        (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; });
+        document.getElementById('nonExecContainer').innerHTML = '';
+        (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } });
+        updAgeTag();
+        document.querySelector('.modal-overlay')?.remove();
+        alert('Speță încărcată!');
+    };
+
+    window.deleteCase = function(name) {
+        if (!confirm(`Sigur doriți să ștergeți speța "${name}"?`)) return;
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        delete cases[name];
+        localStorage.setItem('anpCases', JSON.stringify(cases));
+        document.querySelector('.modal-overlay')?.remove();
+        updateCaseBadge();
+        alert('Speță ștearsă!');
+        setTimeout(openLoadModal, 100);
+    };
+
+    window.renameCase = function(oldName) {
+        const newName = prompt('Nume nou pentru speță:', oldName);
+        if (!newName || !newName.trim()) return;
+        const trimmedNew = newName.trim();
+        if (trimmedNew === oldName) return;
+        const cases = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        if (cases[trimmedNew]) {
+            alert('Există deja o speță cu acest nume. Alege alt nume.');
+            return;
+        }
+        const data = cases[oldName];
+        delete cases[oldName];
+        cases[trimmedNew] = data;
+        localStorage.setItem('anpCases', JSON.stringify(cases));
+        document.querySelector('.modal-overlay')?.remove();
+        updateCaseBadge();
+        alert('Speță redenumită!');
+        setTimeout(openLoadModal, 100);
+    };
+
     function autoSave() { try { const data = { sex: currentSex, birthDate: document.getElementById('birthDate').value, observations: document.getElementById('observations').value, life: document.getElementById('lifeSentence').checked, art: document.getElementById('liberationArticle').value, y: document.getElementById('durYears').value, m: document.getElementById('durMonths').value, d: document.getElementById('durDays').value, start: document.getElementById('startDate').value, condRelease: document.getElementById('conditionalReleaseDate').value, dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({start: r.querySelector('.ded-start')?.value || '', end: r.querySelector('.ded-end')?.value || ''})), manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value), nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({type: r.querySelector('.ne-type')?.value || 'escape', start: r.querySelector('.ne-start')?.value || '', end: r.querySelector('.ne-end')?.value || ''})) }; localStorage.setItem('anpLastCase', JSON.stringify(data)); } catch(e) {} }
     (function() { updateCaseBadge(); const last = localStorage.getItem('anpLastCase'); if (!last) return; try { const d = JSON.parse(last); currentSex = d.sex || 'M'; sexToggle.checked = currentSex === 'M'; updateSexUI(); document.getElementById('birthDate').value = d.birthDate || ''; document.getElementById('observations').value = d.observations || ''; document.getElementById('lifeSentence').checked = d.life || false; document.getElementById('sentenceDuration').classList.toggle('hidden', d.life); document.getElementById('liberationArticle').value = d.art || ''; document.getElementById('durYears').value = d.y || 0; document.getElementById('durMonths').value = d.m || 0; document.getElementById('durDays').value = d.d || 0; document.getElementById('startDate').value = d.start || ''; document.getElementById('conditionalReleaseDate').value = d.condRelease || ''; document.getElementById('deductionsContainer').innerHTML = ''; (d.dedRows||[]).forEach(r => { addDedRow(); const last = document.querySelector('.deduction-row:last-child'); if (last) { last.querySelector('.ded-start').value = r.start || ''; last.querySelector('.ded-end').value = r.end || ''; updDed(last); } }); document.getElementById('manualDeductionsContainer').innerHTML = ''; (d.manDed||[]).forEach(v => { addManDedRow(); const last = document.querySelector('.manual-days:last-child'); if (last) last.value = v; }); document.getElementById('nonExecContainer').innerHTML = ''; (d.nonRows||[]).forEach(r => { addNonExecRow(); const last = document.querySelector('.non-exec-row:last-child'); if (last) { last.querySelector('.ne-type').value = r.type || 'escape'; last.querySelector('.ne-start').value = r.start || ''; last.querySelector('.ne-end').value = r.end || ''; updNonExec(last); } }); updAgeTag(); } catch(e) {} })();
     document.getElementById('birthDate').addEventListener('input', updAgeTag); document.getElementById('liberationArticle').addEventListener('change', updAgeTag); document.getElementById('lifeSentence').addEventListener('change', function(){ document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked); });
