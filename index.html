@@ -112,7 +112,7 @@
         <h3>📊 Rezultate</h3>
         <div id="resultsContent"></div>
     </div>
-    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.2</div>
+    <div class="footer">CALCULATOR PEDEPSE | ALPHA 0.3</div>
 </div>
 
 <script>
@@ -254,7 +254,6 @@
         document.getElementById('errorContainer').classList.remove('visible');
     }
 
-    // Unifică intervalele și returnează suma zilelor, tratând suprapunerile (pentru deduceri)
     function sumIntervals(intervals) {
         if (!intervals.length) return 0;
         const sorted = intervals.slice().sort((a,b) => a[0].getTime()-b[0].getTime());
@@ -356,7 +355,12 @@
         let tDate=new Date(startDate); tDate.setDate(tDate.getDate()+tDays-1); tDate.setDate(tDate.getDate()-ded+non);
         const fifth=Math.floor(totalDays/5);
         let fDate=new Date(startDate); fDate.setDate(fDate.getDate()+fifth); fDate.setDate(fDate.getDate()-ded+non);
-        const executedDays=Math.max(0, daysBetween(startDate, today())+1-ded-non);
+
+        // Zile executate efectiv: pur și simplu zilele calendaristice de la început până azi (inclusiv)
+        const executedDays = Math.max(0, daysBetween(startDate, today()) + 1);
+
+        // Rest rămas: zilele până la expirarea reală, inclusiv ziua curentă
+        const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
 
         const quarantineEnd = new Date(startDate);
         quarantineEnd.setDate(quarantineEnd.getDate() + 20);
@@ -375,6 +379,7 @@
         html+=`<div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value" style="color:#ff6b6b;">${non} zile</div></div>`;
         html+=`<div class="result-item"><div class="result-label">Zile executate efectiv</div><div class="result-value">${executedDays} zile</div></div>`;
+        html+=`<div class="result-item"><div class="result-label">Rest rămas</div><div class="result-value">${remaining} zile</div></div>`;
         html+=`</div></div>`;
 
         html+=`<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">`;
