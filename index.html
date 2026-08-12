@@ -21,6 +21,11 @@
             --shadow: 0 2px 10px rgba(0,0,0,0.25);
             --font: 'Inter', system-ui, -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            /* Dark mode input improvements */
+            --input-bg: #1b1f2a;
+            --input-border: #3a4150;
+            --input-placeholder: #8a92a6;
+            --label-color: #c0c6d2;
         }
         body.light {
             --bg: #f5f5f5;
@@ -34,6 +39,11 @@
             --danger: #d32f2f;
             --warning: #e67e22;
             --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            /* Light mode input improvements */
+            --input-bg: #ffffff;
+            --input-border: #b0b5c0;
+            --input-placeholder: #6a6f78;
+            --label-color: #4a4f58;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html {
@@ -82,7 +92,7 @@
         .btn-utility {
             flex: 1; background: rgba(201, 162, 39, 0.05);
             border: 1px solid var(--border); color: var(--text-light);
-            border-radius: var(--input-radius); padding: 10px 12px;
+            border-radius: var(--input-radius); padding: 10px 14px;
             font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px;
             cursor: pointer; display: inline-flex; align-items: center;
             justify-content: center; gap: 6px; transition: all 0.2s ease;
@@ -99,7 +109,7 @@
         .header {
             background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 60%, #0d0d1a 100%);
             border: 1px solid var(--border); color: var(--gold-light);
-            padding: 16px; border-radius: var(--radius); margin-bottom: 20px; text-align: center;
+            padding: 14px 16px; border-radius: var(--radius); margin-bottom: 18px; text-align: center;
         }
         body.light .header { background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 60%, #f0f0f0 100%); color: #1a1a1a; border-color: #ccc; }
         .header h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: 1.5px; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.2; }
@@ -110,30 +120,29 @@
             contain: layout paint;
         }
         .card h3 {
-            font-size: 0.9rem; color: var(--gold-light); margin-bottom: 14px; padding-bottom: 8px;
-            border-bottom: 2px solid; border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
-            display: flex; align-items: center; gap: 8px; font-weight: 600; letter-spacing: 0.3px;
+            font-size: 0.95rem; color: var(--gold-light); margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 3px solid; border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
+            display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: 0.3px;
         }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-        label { display: block; font-weight: 600; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; color: var(--text-light); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+        label { display: block; font-weight: 600; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: var(--label-color); }
         select, input[type="number"], input[type="text"], textarea {
-            width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
-            border-radius: var(--input-radius); font-size: 0.9rem; background: #0f1115;
+            width: 100%; padding: 10px 12px; border: 1.5px solid var(--input-border);
+            border-radius: var(--input-radius); font-size: 0.9rem; background: var(--input-bg);
             color: var(--text); font-family: var(--font-mono); min-height: 44px;
             transition: border-color 0.2s, box-shadow 0.2s; letter-spacing: 0.3px;
         }
-        body.light select, body.light input[type="number"], body.light input[type="text"], body.light textarea { background: #fff; border-color: #ccc; }
         select:focus, input:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1); outline: none; }
-        input::placeholder, textarea::placeholder { color: #6A6F78; }
+        input::placeholder, textarea::placeholder { color: var(--input-placeholder); }
         .date-wrapper { display: flex; gap: 4px; align-items: center; }
         .date-wrapper input { flex: 1; }
         .btn-today {
-            flex-shrink: 0; background: rgba(201, 162, 39, 0.08); border: 1px solid var(--border);
-            color: var(--text-light); border-radius: var(--input-radius); padding: 0 10px;
-            font-size: 0.7rem; font-weight: 600; cursor: pointer; height: 44px;
+            flex-shrink: 0; background: rgba(201, 162, 39, 0.08); border: 1.5px solid var(--gold);
+            color: var(--gold-light); border-radius: var(--input-radius); padding: 0 10px;
+            font-size: 0.7rem; font-weight: 700; cursor: pointer; height: 44px;
             display: flex; align-items: center; transition: all 0.2s; letter-spacing: 0.5px;
         }
-        .btn-today:hover { background: rgba(201, 162, 39, 0.18); border-color: var(--gold); color: var(--gold-light); }
+        .btn-today:hover { background: rgba(201, 162, 39, 0.2); border-color: var(--gold-light); color: #fff; }
         .period-row {
             display: flex; gap: 10px; align-items: flex-end; background: rgba(201, 162, 39, 0.03);
             padding: 12px; border-radius: var(--input-radius); margin-bottom: 10px; flex-wrap: wrap; border: 1px solid var(--border);
@@ -158,7 +167,7 @@
         .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
         .result-item { background: rgba(201, 162, 39, 0.04); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--primary); contain: layout paint; }
         .result-item.important { border-left-color: var(--gold); background: rgba(201, 162, 39, 0.08); }
-        .result-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-light); font-weight: 600; margin-bottom: 5px; }
+        .result-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--label-color); font-weight: 600; margin-bottom: 5px; }
         .result-value { font-size: 1.05rem; font-weight: 700; color: var(--gold-light); word-break: break-word; }
         .result-warning { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
         .result-warning.expired { color: var(--danger); }
@@ -174,6 +183,7 @@
         .error-message { background: rgba(255, 107, 107, 0.08); color: var(--danger); padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 0.82rem; display: none; border: 1px solid rgba(255, 107, 107, 0.2); }
         .error-message.visible { display: block; }
         .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
+        .btn-row .btn { flex: 1 1 180px; } /* butoanele se întind pe rânduri egale */
         .footer { text-align: center; padding: 16px 0; font-size: 0.7rem; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 24px; letter-spacing: 0.5px; }
         .steps-container { background: rgba(201, 162, 39, 0.03); border-radius: var(--radius); padding: 16px; margin-top: 16px; font-size: 0.85rem; line-height: 1.7; border: 1px solid var(--border); }
         .steps-container h4 { color: var(--gold); margin-bottom: 8px; }
@@ -191,8 +201,8 @@
         .toggle-switch input:checked + .toggle-slider { background: var(--gold); }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #0F1115; }
         .toggle-switch input:focus-visible + .toggle-slider { outline: 2px solid var(--gold-light); outline-offset: 2px; }
-        .sex-toggle-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-        .sex-label { font-size: 0.8rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; }
+        .sex-toggle-wrapper { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+        .sex-label { font-size: 0.8rem; font-weight: 600; color: var(--label-color); text-transform: uppercase; }
         .sex-label.active { color: var(--gold-light); }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; contain: layout paint; }
@@ -256,20 +266,20 @@
             <div><label for="birthDate">Data nașterii</label><input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa"></div>
             <div id="ageTag" style="display:flex;align-items:flex-end;gap:6px;" aria-live="polite"></div>
         </div>
-        <div style="margin-top:12px;"><label for="observations">📝 OBSERVAȚII (OPȚIONAL)</label><textarea id="observations" rows="2" placeholder=""></textarea></div>
+        <div style="margin-top:14px;"><label for="observations">📝 OBSERVAȚII (OPȚIONAL)</label><textarea id="observations" rows="2" placeholder=""></textarea></div>
     </div>
     <div class="card" aria-labelledby="sentence-heading">
         <h3 id="sentence-heading">⚖️ 2. PEDEAPSA</h3>
         <div class="form-grid">
             <div><label for="liberationArticle">Articol liberare condiționată</label><select id="liberationArticle" aria-required="true"><option value="">—</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. 2</option><option value="VCP603">VCP art. 60 alin. 3</option></select></div>
-            <div><label for="lifeSentence">Detențiune pe viață</label><label class="toggle-switch" style="margin-top:8px;"><input type="checkbox" id="lifeSentence"><span class="toggle-slider" aria-hidden="true"></span><span style="font-size:0.8rem;color:var(--text-light);">Bifați dacă este cazul</span></label></div>
+            <div><label for="lifeSentence">Detențiune pe viață</label><label class="toggle-switch" style="margin-top:10px;"><input type="checkbox" id="lifeSentence"><span class="toggle-slider" aria-hidden="true"></span><span style="font-size:0.8rem;color:var(--label-color);">Bifați dacă este cazul</span></label></div>
         </div>
-        <div id="sentenceDuration" class="form-grid" style="margin-top:8px;">
+        <div id="sentenceDuration" class="form-grid" style="margin-top:10px;">
             <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
             <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
             <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
         </div>
-        <div style="margin-top:12px;"><label for="startDate">Data începerii executării pedepsei</label><div class="date-wrapper"><input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" onclick="setToday('startDate')">AZI</button></div></div>
+        <div style="margin-top:14px;"><label for="startDate">Data începerii executării pedepsei</label><div class="date-wrapper"><input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" onclick="setToday('startDate')">AZI</button></div></div>
     </div>
     <div class="card" aria-labelledby="deductions-heading"><h3 id="deductions-heading">📅 3. PERIOADE DEDUSE</h3><div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div><button class="btn btn-outline btn-sm" onclick="addDedRow()">+ Adaugă</button></div>
     <div class="card" aria-labelledby="recurs-heading"><h3 id="recurs-heading">🔢 4. RECURS COMPENSATORIU (Legea 169/2017)</h3><div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div><button class="btn btn-outline btn-sm" onclick="addManDedRow()">+ Adaugă</button></div>
@@ -280,9 +290,9 @@
         <div class="form-grid">
             <div><label for="masuriRefDate">Dată referință</label><div class="date-wrapper"><input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa"></div></div>
             <div><label for="masuriDays">Adaugă zile</label><input type="number" id="masuriDays" value="0" min="0"></div>
-            <div><label>Rezultat</label><input type="text" id="masuriResult" readonly style="background:rgba(201,162,39,0.08);font-weight:600;" tabindex="-1"></div>
+            <div><label>Rezultat</label><input type="text" id="masuriResult" readonly style="background:rgba(201,162,39,0.1);border-color:var(--gold);font-weight:600;color:var(--text);" tabindex="-1"></div>
         </div>
-        <p style="margin-top:8px;font-size:0.75rem;color:var(--text-light);"><em>Ziua nr. 1 o reprezintă ziua de referință.</em></p>
+        <p style="margin-top:12px;font-size:0.75rem;color:var(--text-light);"><em>Ziua nr. 1 o reprezintă ziua de referință.</em></p>
     </div>
     <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
     <div class="btn-row">
