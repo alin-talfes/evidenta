@@ -406,9 +406,9 @@
             </div>
         </div>
         <div id="sentenceDuration" class="form-grid" style="margin-top:8px;">
-            <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0" max="99"></div>
-            <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0" max="11"></div>
-            <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0" max="31"></div>
+            <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
+            <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
+            <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
         </div>
         <div style="margin-top:12px;">
             <label for="startDate">Data începerii executării pedepsei</label>
@@ -467,7 +467,7 @@
         </div>
     </div>
     </main>
-    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.19</footer>
+    <footer class="footer" role="contentinfo">CALCULATOR PEDEPSE | BETA 0.20</footer>
 </div>
 
 <script>
@@ -475,11 +475,7 @@
     function toggleTheme() {
         document.body.classList.toggle('light');
         const btn = document.getElementById('themeToggle');
-        if (document.body.classList.contains('light')) {
-            btn.innerHTML = '🌙 MOD DARK';
-        } else {
-            btn.innerHTML = '☀️ MOD LIGHT';
-        }
+        btn.innerHTML = document.body.classList.contains('light') ? '🌙 MOD DARK' : '☀️ MOD LIGHT';
     }
 
     // ========== INFO MODAL ==========
@@ -489,34 +485,34 @@
         overlay.setAttribute('role', 'dialog');
         overlay.setAttribute('aria-modal', 'true');
         overlay.setAttribute('aria-labelledby', 'info-title');
-        const html = `
+        overlay.innerHTML = `
             <div class="modal">
                 <h4 id="info-title">📖 GHID DE COMPLETARE</h4>
                 <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
                     <p><strong>1. DATE PPL</strong><br>
-                    • <strong>Sex:</strong> selectați Masculin/Feminin. Implicit este MASCULIN. Necesar pentru stabilirea categoriei de vârstă.<br>
+                    • <strong>Sex:</strong> selectați Masculin/Feminin. Implicit este MASCULIN.<br>
                     • <strong>Data nașterii:</strong> format zz.ll.aaaa (ex: 01.01.1980).<br>
                     • <strong>Observații:</strong> nume sau alte mențiuni (opțional).</p>
 
                     <p><strong>2. PEDEAPSA</strong><br>
-                    • <strong>Articol liberare condiționată:</strong> alegeți articolul corespunzător din NCP sau VCP.<br>
+                    • <strong>Articol liberare condiționată:</strong> alegeți articolul corespunzător.<br>
                     • <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>
-                    • <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei.<br>
-                    • <strong>Data începerii:</strong> prima zi de executare. Butonul AZI completează automat data curentă.</p>
+                    • <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei (fără limite).<br>
+                    • <strong>Data începerii:</strong> prima zi de executare. Butonul AZI completează automat.</p>
 
                     <p><strong>3. PERIOADE DEDUSE</strong><br>
                     • Adăugați perioadele care se scad (arest preventiv, reținere etc.).<br>
                     • Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).</p>
 
                     <p><strong>4. RECURS COMPENSATORIU</strong><br>
-                    • Introduceți direct numărul de zile deduse conform Legii 169/2017.</p>
+                    • Introduceți direct numărul de zile deduse (Legea 169/2017).</p>
 
                     <p><strong>5. PERIOADE ADĂUGATE</strong><br>
                     • Evadare/boală: zile = data_final − data_inițial (capete excluse).<br>
-                    • Întrerupere: zile = data_final − data_inițial − 1 (ambele capete executate).</p>
+                    • Întrerupere: zile = data_final − data_inițial − 1.</p>
 
                     <p><strong>6. REST RĂMAS</strong><br>
-                    • Opțional: introduceți data liberării condiționate pentru a calcula restul de executat.</p>
+                    • Opțional: data liberării condiționate.</p>
 
                     <hr style="border-color:var(--border);margin:12px 0;">
                     <p style="font-size:0.8rem;color:var(--text-light);">
@@ -527,7 +523,6 @@
                 <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
             </div>
         `;
-        overlay.innerHTML = html;
         document.body.appendChild(overlay);
         overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
     }
@@ -552,12 +547,9 @@
 
     const addCalendarSafe = (date, years, months, days) => {
         const d = new Date(date);
-        const targetDay = d.getDate();
-        d.setDate(1);
+        // JavaScript face automat rollover pentru luni și zile
         d.setFullYear(d.getFullYear() + years);
         d.setMonth(d.getMonth() + months);
-        const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
-        d.setDate(Math.min(targetDay, lastDay));
         d.setDate(d.getDate() + days);
         return d;
     };
@@ -886,9 +878,6 @@
         if (!life && !art) err.push('Selectați articolul de liberare condiționată.');
         if (!life && y===0 && m===0 && d===0) err.push('Introduceți durata pedepsei.');
         if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.');
-        if (y < 0 || y > 99) err.push('Anii trebuie să fie între 0 și 99.');
-        if (m < 0 || m > 11) err.push('Lunile trebuie să fie între 0 și 11.');
-        if (d < 0 || d > 31) err.push('Zilele trebuie să fie între 0 și 31.');
         document.querySelectorAll('.deduction-row').forEach((r,i) => {
             const st = r.querySelector('.ded-start').value.trim(), en = r.querySelector('.ded-end').value.trim();
             if (!st||!en) err.push(`Deducerea ${i+1}: ambele date sunt obligatorii.`);
