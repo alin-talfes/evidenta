@@ -104,13 +104,14 @@
         })();
 
         // ===== Utilitare =====
+        // 1 an = 12 luni, 1 lună = 30 zile (regula pentru calculul sporului și adunări)
         function toDays(years, months, days) {
-            return years * 365 + months * 30 + days;
+            return years * 360 + months * 30 + days;
         }
 
         function fromDays(totalDays) {
-            const years = Math.floor(totalDays / 365);
-            const remainder = totalDays % 365;
+            const years = Math.floor(totalDays / 360);
+            const remainder = totalDays % 360;
             const months = Math.floor(remainder / 30);
             const days = remainder % 30;
             return { years, months, days };
