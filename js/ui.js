@@ -294,6 +294,7 @@ function openInfoModal() {
 
 /**
  * Deschide modalul cu bazele legale (OMJ 2188/C/2022).
+ * Butonul de închidere este fix în partea de jos, mereu accesibil.
  */
 function openLegalModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
@@ -305,8 +306,9 @@ function openLegalModal() {
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'legal-title');
 
-    let html = '<div class="modal"><h4 id="legal-title">BAZA LEGALA (OMJ 2188/C/2022)</h4>';
-    html += '<div style="max-height: 70vh; overflow-y: auto;">';
+    let html = '<div class="modal" style="display:flex; flex-direction:column; max-height:80vh;">';
+    html += '<h4 id="legal-title" style="margin-bottom:8px;">BAZA LEGALA (OMJ 2188/C/2022)</h4>';
+    html += '<div style="flex:1; overflow-y:auto; max-height: calc(80vh - 100px);">';
 
     if (typeof legalArticles !== 'undefined' && legalArticles.length > 0) {
         legalArticles.forEach(article => {
@@ -321,7 +323,10 @@ function openLegalModal() {
     }
 
     html += '</div>';
-    html += '<button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button></div>';
+    html += '<div style="text-align:right; margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">';
+    html += '<button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button>';
+    html += '</div>';
+    html += '</div>';
 
     overlay.innerHTML = html;
     document.body.appendChild(overlay);
