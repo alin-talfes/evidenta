@@ -105,6 +105,30 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
         }
+        .date-wrapper {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .date-wrapper input { flex: 1; }
+        .btn-today {
+            flex-shrink: 0;
+            background: rgba(201, 162, 39, 0.08);
+            border: 1.5px solid var(--gold);
+            color: var(--gold-light);
+            border-radius: var(--input-radius);
+            padding: 0 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .btn-today:hover { background: rgba(201, 162, 39, 0.2); }
         .btn {
             padding: 10px 18px;
             border-radius: var(--input-radius);
@@ -145,7 +169,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-btn">Înapoi la Calculator evidență pedepse</a>
+        <a href="index.html" class="back-btn">Înapoi la Calculator pedepse</a>
         <div class="header">CALCULATOR TERMENE PROCEDURALE PENALE</div>
 
         <div class="card">
@@ -153,15 +177,18 @@
             <div class="row">
                 <div>
                     <label for="startDateInput">Data început (zz.ll.aaaa)</label>
-                    <input type="text" id="startDateInput" placeholder="zz.ll.aaaa" value="05.01.2026">
+                    <div class="date-wrapper">
+                        <input type="text" id="startDateInput" class="date-masked" placeholder="zz.ll.aaaa">
+                        <button type="button" class="btn-today" onclick="setToday('startDateInput')">AZI</button>
+                    </div>
                 </div>
                 <div>
                     <label for="startTimeInput">Ora început (hh:mm)</label>
-                    <input type="text" id="startTimeInput" placeholder="hh:mm" value="09:00">
+                    <input type="text" id="startTimeInput" class="time-masked" placeholder="hh:mm">
                 </div>
             </div>
             <label for="durationInput">Durată</label>
-            <input type="number" id="durationInput" value="10" min="1">
+            <input type="number" id="durationInput" min="1" placeholder="ex: 10">
 
             <label for="unitSelect">Unitate de măsură</label>
             <select id="unitSelect">
@@ -195,21 +222,21 @@
             <div class="row">
                 <div>
                     <label for="sentDateInput">Data trimiterii (zz.ll.aaaa)</label>
-                    <input type="text" id="sentDateInput" placeholder="zz.ll.aaaa">
+                    <input type="text" id="sentDateInput" class="date-masked" placeholder="zz.ll.aaaa">
                 </div>
                 <div>
                     <label for="sentTimeInput">Ora trimiterii (hh:mm)</label>
-                    <input type="text" id="sentTimeInput" placeholder="hh:mm" value="12:00">
+                    <input type="text" id="sentTimeInput" class="time-masked" placeholder="hh:mm">
                 </div>
             </div>
             <div class="row">
                 <div>
                     <label for="receivedDateInput">Data primirii (opțional)</label>
-                    <input type="text" id="receivedDateInput" placeholder="zz.ll.aaaa">
+                    <input type="text" id="receivedDateInput" class="date-masked" placeholder="zz.ll.aaaa">
                 </div>
                 <div>
                     <label for="receivedTimeInput">Ora primirii (opțional)</label>
-                    <input type="text" id="receivedTimeInput" placeholder="hh:mm">
+                    <input type="text" id="receivedTimeInput" class="time-masked" placeholder="hh:mm">
                 </div>
             </div>
             <label style="display:flex; align-items:center;">
@@ -223,6 +250,29 @@
     </div>
 
     <script>
+        // ===== Mascare automată =====
+        function applyDateMask(input) {
+            let val = input.value.replace(/\D/g, '');
+            if (val.length > 8) val = val.slice(0, 8);
+            let formatted = '';
+            if (val.length > 0) formatted += val.substring(0, 2);
+            if (val.length >= 3) formatted += '.' + val.substring(2, 4);
+            if (val.length >= 5) formatted += '.' + val.substring(4, 8);
+            input.value = formatted;
+        }
+        function applyTimeMask(input) {
+            let val = input.value.replace(/\D/g, '');
+            if (val.length > 4) val = val.slice(0, 4);
+            let formatted = '';
+            if (val.length > 0) formatted += val.substring(0, 2);
+            if (val.length >= 3) formatted += ':' + val.substring(2, 4);
+            input.value = formatted;
+        }
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('date-masked')) applyDateMask(e.target);
+            if (e.target.classList.contains('time-masked')) applyTimeMask(e.target);
+        });
+
         // ===== Funcții parsare/formatare =====
         function parseRoDate(str) {
             if (!str) return null;
@@ -237,12 +287,12 @@
             return d;
         }
         function parseRoTime(str) {
-            if (!str) return { hours: 9, minutes: 0 };
+            if (!str) return { hours: 0, minutes: 0 };
             const parts = str.trim().split(':');
-            if (parts.length !== 2) return { hours: 9, minutes: 0 };
+            if (parts.length !== 2) return { hours: 0, minutes: 0 };
             const hours = parseInt(parts[0], 10);
             const minutes = parseInt(parts[1], 10);
-            if (isNaN(hours) || isNaN(minutes)) return { hours: 9, minutes: 0 };
+            if (isNaN(hours) || isNaN(minutes)) return { hours: 0, minutes: 0 };
             return { hours, minutes };
         }
         function combineRoDateTime(dateStr, timeStr) {
@@ -258,6 +308,10 @@
         }
         function formatRoDateTime(date) {
             return `${formatRoDate(date)} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        }
+        function setToday(inputId) {
+            const input = document.getElementById(inputId);
+            if (input) input.value = formatRoDate(new Date());
         }
 
         // ===== Sărbători legale 2026-2028 =====
@@ -349,7 +403,7 @@
 
         function calculateDeadline({ start, duration, unit, termType = 'general', actType = null }) {
             if (!['hours', 'days', 'months', 'years'].includes(unit)) {
-                throw new Error('Unitate invalidă. Folosește "hours", "days", "months" sau "years".');
+                throw new Error('Unitate invalidă.');
             }
             if (duration <= 0) throw new Error('Durata trebuie să fie un număr pozitiv.');
 
@@ -383,13 +437,11 @@
             let deadline = rawDeadline;
             let workingDayAdjustment = false;
 
-            // Ajustare zi nelucrătoare doar pentru termenele generale (art. 269 alin. (4))
             if (!isPreventive && isNonWorkingDay(rawDeadline)) {
                 deadline = nextWorkingDay(rawDeadline);
                 workingDayAdjustment = true;
             }
 
-            // Excepția RIL 3/2025 (doar pentru termene generale pe zile)
             const rilActTypes = ['rechizitoriu', 'prelungire_arest_preventiv', 'prelungire_arest_la_domiciliu'];
             if (!isPreventive && unit === 'days' && rilActTypes.includes(actType)) {
                 const effectiveDeadline = previousWorkingDay(deadline);
@@ -426,7 +478,6 @@
             if (sentDay < deadlineDay) return true;
             if (sentDay > deadlineDay) return false;
 
-            // HP 12/2020: e-mail/fax în ultima zi a unui termen pe zile
             if (sentByEmailOrFax && unit === 'days') return true;
 
             if (!receivedDate) return true;
@@ -450,9 +501,18 @@
             const termType = document.getElementById('termTypeSelect').value;
             const actType = document.getElementById('actTypeSelect').value;
 
-            const start = combineRoDateTime(startDateStr, startTimeStr);
+            if (!startDateStr) {
+                alert('Completează data de început.');
+                return;
+            }
+            if (isNaN(duration) || duration <= 0) {
+                alert('Introdu o durată validă.');
+                return;
+            }
+
+            const start = combineRoDateTime(startDateStr, startTimeStr || '00:00');
             if (!start) {
-                alert('Introdu o dată validă în format zz.ll.aaaa');
+                alert('Data de început este invalidă.');
                 return;
             }
 
@@ -487,17 +547,21 @@
             const receivedTimeStr = document.getElementById('receivedTimeInput').value.trim();
             const emailFax = document.getElementById('emailFaxCheckbox').checked;
 
-            if (!sentDateStr) {
-                alert('Introdu data trimiterii.');
+            if (!startDateStr || !sentDateStr) {
+                alert('Completează data de început și data trimiterii.');
+                return;
+            }
+            if (isNaN(duration) || duration <= 0) {
+                alert('Introdu o durată validă.');
                 return;
             }
 
-            const start = combineRoDateTime(startDateStr, startTimeStr);
-            const sent = combineRoDateTime(sentDateStr, sentTimeStr);
-            const received = receivedDateStr ? combineRoDateTime(receivedDateStr, receivedTimeStr || '12:00') : null;
+            const start = combineRoDateTime(startDateStr, startTimeStr || '00:00');
+            const sent = combineRoDateTime(sentDateStr, sentTimeStr || '00:00');
+            const received = receivedDateStr ? combineRoDateTime(receivedDateStr, receivedTimeStr || '00:00') : null;
 
             if (!start || !sent || (receivedDateStr && !received)) {
-                alert('Verifică datele introduse.');
+                alert('Date invalide.');
                 return;
             }
 
