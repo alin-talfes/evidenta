@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator evidență pedepse</title>
     <link rel="stylesheet" href="css/style.css?v=5">
+    <style>
+        /* Forțează aranjarea butoanelor principale pe două coloane */
+        .top-actions {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            margin-bottom: 12px !important;
+        }
+        .top-actions .btn-big {
+            flex: 1 1 48% !important;
+            max-width: 48% !important;
+            min-width: 0 !important;
+            padding: 12px 10px !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+        }
+        @media (max-width: 480px) {
+            .top-actions .btn-big {
+                flex: 1 1 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
