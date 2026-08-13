@@ -260,6 +260,11 @@
                 <option value="prelungire_arest_la_domiciliu">Prelungire arest la domiciliu</option>
             </select>
 
+            <label style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="definitiveCheckbox" style="width:auto; margin-bottom:0;">
+                Adaugă 1 zi lucrătoare pentru data rămânerii definitive
+            </label>
+
             <button class="btn" onclick="calculateTerm()">Calculează termen</button>
             <div id="deadlineResult" class="result" style="display:none;"></div>
         </div>
@@ -535,42 +540,48 @@
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: ''
+                actType: '',
+                definitive: false
             },
             contestatie: {
                 duration: 3,
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: ''
+                actType: '',
+                definitive: true
             },
             apel: {
                 duration: 10,
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: ''
+                actType: '',
+                definitive: true
             },
             recurs: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: ''
+                actType: '',
+                definitive: true
             },
             arest_preventiv: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'calendar',
                 termType: 'preventive',
-                actType: 'prelungire_arest_preventiv'
+                actType: 'prelungire_arest_preventiv',
+                definitive: false
             },
             arest_domiciliu: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'calendar',
                 termType: 'preventive',
-                actType: 'prelungire_arest_la_domiciliu'
+                actType: 'prelungire_arest_la_domiciliu',
+                definitive: false
             }
         };
 
@@ -583,6 +594,7 @@
             document.getElementById('calcModeSelect').value = preset.calcMode;
             document.getElementById('termTypeSelect').value = preset.termType;
             document.getElementById('actTypeSelect').value = preset.actType;
+            document.getElementById('definitiveCheckbox').checked = preset.definitive;
         }
 
         // ===== Interfață =====
@@ -594,6 +606,7 @@
             const calcMode = document.getElementById('calcModeSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
             const actType = document.getElementById('actTypeSelect').value;
+            const definitiveChecked = document.getElementById('definitiveCheckbox').checked;
 
             if (!startDateStr) {
                 alert('Completează data de început.');
@@ -612,6 +625,12 @@
 
             try {
                 const res = calculateDeadline({ start, duration, unit, termType, calcMode, actType: actType || null });
+
+                let definitiveDate = null;
+                if (definitiveChecked && unit === 'days') {
+                    definitiveDate = addWorkingDays(res.effectiveDeadline, 1);
+                }
+
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
                 const rawStr = unit === 'hours' ? formatRoDateTime(res.rawDeadline) : formatRoDate(res.rawDeadline);
@@ -627,6 +646,9 @@
                     html += `<strong>Termen-limită după excepția RIL 3/2025:</strong> ${effectiveStr}<br>`;
                 } else {
                     html += `<strong>Termen-limită efectiv:</strong> ${effectiveStr}<br>`;
+                }
+                if (definitiveDate) {
+                    html += `<strong>Data rămânerii definitive:</strong> ${formatRoDate(definitiveDate)}<br>`;
                 }
                 html += `<strong>Ajustare zi lucrătoare:</strong> ${res.workingDayAdjustment ? 'Da' : 'Nu'}<br>`;
                 html += `<strong>Excepție:</strong> ${res.exception || 'Niciuna'}`;
