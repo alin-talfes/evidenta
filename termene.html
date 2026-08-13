@@ -201,8 +201,7 @@
             <label for="termTypeSelect">Tip termen</label>
             <select id="termTypeSelect">
                 <option value="general">General (art. 269)</option>
-                <option value="preventive">Preventiv (art. 271)</option>
-                <option value="restrictive">Restrictiv (art. 271)</option>
+                <option value="preventive">Preventiv/Restrictiv (art. 271)</option>
             </select>
 
             <label for="actTypeSelect">Tip act (pentru excepția RIL 3/2025)</label>
@@ -215,37 +214,6 @@
 
             <button class="btn" onclick="calculateTerm()">Calculează termen</button>
             <div id="deadlineResult" class="result" style="display:none;"></div>
-        </div>
-
-        <div class="card">
-            <h3>Verificare depunere în termen</h3>
-            <div class="row">
-                <div>
-                    <label for="sentDateInput">Data trimiterii (zz.ll.aaaa)</label>
-                    <input type="text" id="sentDateInput" class="date-masked" placeholder="zz.ll.aaaa">
-                </div>
-                <div>
-                    <label for="sentTimeInput">Ora trimiterii (hh:mm)</label>
-                    <input type="text" id="sentTimeInput" class="time-masked" placeholder="hh:mm">
-                </div>
-            </div>
-            <div class="row">
-                <div>
-                    <label for="receivedDateInput">Data primirii (opțional)</label>
-                    <input type="text" id="receivedDateInput" class="date-masked" placeholder="zz.ll.aaaa">
-                </div>
-                <div>
-                    <label for="receivedTimeInput">Ora primirii (opțional)</label>
-                    <input type="text" id="receivedTimeInput" class="time-masked" placeholder="hh:mm">
-                </div>
-            </div>
-            <label style="display:flex; align-items:center;">
-                <input type="checkbox" id="emailFaxCheckbox" style="width:auto; margin-right:8px; margin-bottom:0;">
-                Trimis prin e-mail/fax
-            </label>
-
-            <button class="btn" onclick="checkSubmission()">Verifică dacă este în termen</button>
-            <div id="submissionResult" class="result" style="display:none;"></div>
         </div>
     </div>
 
@@ -407,7 +375,7 @@
             }
             if (duration <= 0) throw new Error('Durata trebuie să fie un număr pozitiv.');
 
-            const isPreventive = termType === 'preventive' || termType === 'restrictive';
+            const isPreventive = termType === 'preventive';
 
             if (unit === 'hours') {
                 const startDate = new Date(start);
@@ -415,7 +383,8 @@
                 const deadline = new Date(startDate);
                 deadline.setHours(deadline.getHours() + duration);
                 return {
-                    deadline,
+                    rawDeadline: deadline,
+                    deadline: deadline,
                     effectiveDeadline: deadline,
                     rule: isPreventive ? 'art. 271' : 'art. 269',
                     workingDayAdjustment: false,
@@ -446,6 +415,7 @@
             if (!isPreventive && unit === 'days' && rilActTypes.includes(actType)) {
                 const effectiveDeadline = previousWorkingDay(deadline);
                 return {
+                    rawDeadline,
                     deadline,
                     effectiveDeadline,
                     rule: 'art. 269',
@@ -455,37 +425,13 @@
             }
 
             return {
+                rawDeadline,
                 deadline,
                 effectiveDeadline: deadline,
                 rule: isPreventive ? 'art. 271' : 'art. 269',
                 workingDayAdjustment,
                 exception: null
             };
-        }
-
-        function isSubmissionInTerm({ start, duration, unit, termType = 'general', actType = null, sentDate, receivedDate = null, sentByEmailOrFax = false }) {
-            const result = calculateDeadline({ start, duration, unit, termType, actType });
-            const deadline = result.effectiveDeadline;
-
-            if (unit === 'hours') {
-                const sent = new Date(sentDate);
-                return sent <= deadline;
-            }
-
-            const sentDay = parseDate(sentDate);
-            const deadlineDay = parseDate(deadline);
-
-            if (sentDay < deadlineDay) return true;
-            if (sentDay > deadlineDay) return false;
-
-            if (sentByEmailOrFax && unit === 'days') return true;
-
-            if (!receivedDate) return true;
-
-            const received = new Date(receivedDate);
-            const endOfDeadline = new Date(deadlineDay);
-            endOfDeadline.setHours(23, 59, 59, 999);
-            return received <= endOfDeadline;
         }
 
         function getHolidays() {
@@ -520,65 +466,24 @@
                 const res = calculateDeadline({ start, duration, unit, termType, actType: actType || null });
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
-                const deadlineStr = unit === 'hours' ? formatRoDateTime(res.deadline) : formatRoDate(res.deadline);
+                const rawStr = unit === 'hours' ? formatRoDateTime(res.rawDeadline) : formatRoDate(res.rawDeadline);
                 const effectiveStr = unit === 'hours' ? formatRoDateTime(res.effectiveDeadline) : formatRoDate(res.effectiveDeadline);
-                resultDiv.innerHTML = `
-                    <strong>Regula aplicată:</strong> ${res.rule}<br>
-                    <strong>Termen-limită brut:</strong> ${deadlineStr}<br>
-                    <strong>Termen-limită efectiv:</strong> ${effectiveStr}<br>
-                    <strong>Ajustare zi lucrătoare:</strong> ${res.workingDayAdjustment ? 'Da' : 'Nu'}<br>
-                    <strong>Excepție:</strong> ${res.exception || 'Niciuna'}
-                `;
-            } catch (err) {
-                alert(err.message);
-            }
-        }
 
-        function checkSubmission() {
-            const startDateStr = document.getElementById('startDateInput').value.trim();
-            const startTimeStr = document.getElementById('startTimeInput').value.trim();
-            const duration = parseInt(document.getElementById('durationInput').value);
-            const unit = document.getElementById('unitSelect').value;
-            const termType = document.getElementById('termTypeSelect').value;
-            const actType = document.getElementById('actTypeSelect').value;
-            const sentDateStr = document.getElementById('sentDateInput').value.trim();
-            const sentTimeStr = document.getElementById('sentTimeInput').value.trim();
-            const receivedDateStr = document.getElementById('receivedDateInput').value.trim();
-            const receivedTimeStr = document.getElementById('receivedTimeInput').value.trim();
-            const emailFax = document.getElementById('emailFaxCheckbox').checked;
+                let html = `<strong>Regula aplicată:</strong> ${res.rule}<br>`;
+                html += `<strong>Termen-limită brut:</strong> ${rawStr}<br>`;
+                if (res.workingDayAdjustment) {
+                    const adjustedStr = unit === 'hours' ? formatRoDateTime(res.deadline) : formatRoDate(res.deadline);
+                    html += `<strong>Termen-limită după ajustare weekend:</strong> ${adjustedStr}<br>`;
+                }
+                if (res.exception) {
+                    html += `<strong>Termen-limită după excepția RIL 3/2025:</strong> ${effectiveStr}<br>`;
+                } else {
+                    html += `<strong>Termen-limită efectiv:</strong> ${effectiveStr}<br>`;
+                }
+                html += `<strong>Ajustare zi lucrătoare:</strong> ${res.workingDayAdjustment ? 'Da' : 'Nu'}<br>`;
+                html += `<strong>Excepție:</strong> ${res.exception || 'Niciuna'}`;
 
-            if (!startDateStr || !sentDateStr) {
-                alert('Completează data de început și data trimiterii.');
-                return;
-            }
-            if (isNaN(duration) || duration <= 0) {
-                alert('Introdu o durată validă.');
-                return;
-            }
-
-            const start = combineRoDateTime(startDateStr, startTimeStr || '00:00');
-            const sent = combineRoDateTime(sentDateStr, sentTimeStr || '00:00');
-            const received = receivedDateStr ? combineRoDateTime(receivedDateStr, receivedTimeStr || '00:00') : null;
-
-            if (!start || !sent || (receivedDateStr && !received)) {
-                alert('Date invalide.');
-                return;
-            }
-
-            try {
-                const inTerm = isSubmissionInTerm({
-                    start,
-                    duration,
-                    unit,
-                    termType,
-                    actType: actType || null,
-                    sentDate: sent,
-                    receivedDate: received,
-                    sentByEmailOrFax: emailFax
-                });
-                const resultDiv = document.getElementById('submissionResult');
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = `<strong>Rezultat:</strong> ${inTerm ? 'Depunerea este ÎN TERMEN.' : 'Depunerea este ÎN AFARA TERMENULUI.'}`;
+                resultDiv.innerHTML = html;
             } catch (err) {
                 alert(err.message);
             }
