@@ -1,11 +1,17 @@
 // ========== INTERFAȚĂ UTILIZATOR (DOM) ==========
 
+// Variabila globală pentru sexul curent (M/F)
 let currentSex = 'M';
 
+// Referințe către elementele DOM pentru toggle-ul de sex
 const sexToggle = document.getElementById('sexToggle');
 const sexLabelM = document.getElementById('sexLabelM');
 const sexLabelF = document.getElementById('sexLabelF');
 
+/**
+ * Actualizează interfața pentru selectarea sexului.
+ * Setează variabila globală currentSex și evidențiază eticheta corespunzătoare.
+ */
 function updateSexUI() {
     if (sexToggle.checked) {
         currentSex = 'M';
@@ -19,6 +25,10 @@ function updateSexUI() {
     updAgeTag();
 }
 
+/**
+ * Aplică masca pentru câmpurile de dată (zz.ll.aaaa).
+ * @param {Event} e - evenimentul input
+ */
 function applyDateMask(e) {
     const input = e.target;
     let val = input.value.replace(/\D/g, '');
@@ -30,11 +40,19 @@ function applyDateMask(e) {
     input.value = formatted;
 }
 
+/**
+ * Setează data de azi în câmpul specificat.
+ * @param {string} inputId - id-ul input-ului
+ */
 function setToday(inputId) {
     const input = document.getElementById(inputId);
     if (input) input.value = fmtDate(today());
 }
 
+/**
+ * Actualizează eticheta de vârstă și categorie.
+ * Afișează vârsta exactă și categoria (MINOR, TANAR, MAJOR, BATRAN).
+ */
 function updAgeTag() {
     const b = document.getElementById('birthDate').value.trim();
     const tag = document.getElementById('ageTag');
@@ -56,6 +74,10 @@ function updAgeTag() {
     tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`;
 }
 
+/**
+ * Adaugă un rând pentru perioadă dedusă.
+ * Creează elemente cu clasele și atributele necesare.
+ */
 function addDedRow() {
     const r = document.createElement('div');
     r.className = 'period-row deduction-row';
@@ -71,6 +93,10 @@ function addDedRow() {
     r.querySelector('.ded-end').addEventListener('input', () => updDed(r));
 }
 
+/**
+ * Actualizează numărul de zile pentru un rând de deducere.
+ * @param {HTMLElement} r - rândul perioadei
+ */
 function updDed(r) {
     const s = r.querySelector('.ded-start').value.trim();
     const e = r.querySelector('.ded-end').value.trim();
@@ -84,6 +110,9 @@ function updDed(r) {
     }
 }
 
+/**
+ * Adaugă un rând pentru recurs compensatoriu.
+ */
 function addManDedRow() {
     const r = document.createElement('div');
     r.className = 'period-row';
@@ -95,6 +124,9 @@ function addManDedRow() {
     document.getElementById('manualDeductionsContainer').appendChild(r);
 }
 
+/**
+ * Adaugă un rând pentru perioadă adăugată.
+ */
 function addNonExecRow() {
     const r = document.createElement('div');
     r.className = 'period-row non-exec-row';
@@ -116,6 +148,10 @@ function addNonExecRow() {
     r.querySelector('.ne-type').addEventListener('change', () => updNonExec(r));
 }
 
+/**
+ * Actualizează numărul de zile pentru un rând de perioadă adăugată.
+ * @param {HTMLElement} r - rândul perioadei
+ */
 function updNonExec(r) {
     const s = r.querySelector('.ne-start').value.trim();
     const e = r.querySelector('.ne-end').value.trim();
@@ -136,10 +172,16 @@ function updNonExec(r) {
     }
 }
 
+/**
+ * Confirmă resetarea și apoi resetează toate câmpurile.
+ */
 function confirmReset() {
     if (confirm('Sigur doriți să resetați toate câmpurile?')) resetAll();
 }
 
+/**
+ * Resetează toate câmpurile formularului și rezultatele.
+ */
 function resetAll() {
     currentSex = 'M';
     sexToggle.checked = true;
@@ -168,6 +210,9 @@ function resetAll() {
     calcMasuriPreventive();
 }
 
+/**
+ * Afișează sau ascunde pașii de calcul.
+ */
 function toggleSteps() {
     const container = document.getElementById('stepsContainer');
     const btn = document.getElementById('toggleStepsBtn');
@@ -182,6 +227,10 @@ function toggleSteps() {
     }
 }
 
+/**
+ * Deschide modalul cu informații și ghid de utilizare detaliat.
+ * Butonul de închidere este plasat în colțul din dreapta sus.
+ */
 function openInfoModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -191,59 +240,71 @@ function openInfoModal() {
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'info-title');
-    overlay.innerHTML = `
-        <div class="modal">
-            <h4 id="info-title">GHID DE UTILIZARE</h4>
-            <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
-                <p><strong>1. DATE GENERALE PPL</strong><br>
-                - <strong>Sex:</strong> alegeți Masculin/Feminin. Implicit este MASCULIN.<br>
-                - <strong>Data nașterii:</strong> format zz.ll.aaaa.<br>
-                - <strong>Observații:</strong> opțional, note pentru speță.</p>
 
-                <p><strong>2. DETALII PEDEAPSĂ PPL</strong><br>
-                - <strong>Articol liberare condiționată:</strong> selectați articolul corespunzător (NCP sau VCP).<br>
-                - <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>
-                - <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei.<br>
-                - <strong>Data începerii executării:</strong> prima zi de executare. Butonul AZI completează automat.</p>
+    let html = '<div class="modal" style="display:flex; flex-direction:column; max-height:80vh;">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">';
+    html += '<h4 id="info-title" style="margin:0;">GHID DE UTILIZARE</h4>';
+    html += '<button class="btn btn-outline btn-sm close-btn" onclick="this.closest(\'.modal-overlay\').remove()" style="flex-shrink:0;">Închide</button>';
+    html += '</div>';
+    html += '<div style="flex:1; overflow-y:auto;">';
 
-                <p><strong>3. PERIOADE DEDUSE</strong><br>
-                - Adăugați perioadele care se scad (arest preventiv, reținere, arest la domiciliu etc.).<br>
-                - Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).<br>
-                - Dacă perioadele se suprapun, acestea sunt unificate automat.</p>
+    html += `
+        <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
+            <p><strong>1. DATE GENERALE PPL</strong><br>
+            - <strong>Sex:</strong> alegeți Masculin/Feminin. Implicit este MASCULIN.<br>
+            - <strong>Data nașterii:</strong> format zz.ll.aaaa.<br>
+            - <strong>Observații:</strong> opțional, note pentru speță.</p>
 
-                <p><strong>4. RECURS COMPENSATORIU (Legea 169/2017)</strong><br>
-                - Introduceți direct numărul de zile deduse, conform legii.</p>
+            <p><strong>2. DETALII PEDEAPSĂ PPL</strong><br>
+            - <strong>Articol liberare condiționată:</strong> selectați articolul corespunzător (NCP sau VCP).<br>
+            - <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>
+            - <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei.<br>
+            - <strong>Data începerii executării:</strong> prima zi de executare. Butonul AZI completează automat.</p>
 
-                <p><strong>5. PERIOADE ADĂUGATE</strong><br>
-                - <strong>Evadare/boală:</strong> zile = data_final − data_inițial (capete excluse).<br>
-                - <strong>Întrerupere:</strong> zile = data_final − data_inițial − 1.<br>
-                Aceste zile se adaugă la pedeapsă.</p>
+            <p><strong>3. PERIOADE DEDUSE</strong><br>
+            - Adăugați perioadele care se scad (arest preventiv, reținere, arest la domiciliu etc.).<br>
+            - Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).<br>
+            - Dacă perioadele se suprapun, acestea sunt unificate automat.</p>
 
-                <p><strong>6. CALCUL REST RĂMAS DE EXECUTAT</strong><br>
-                - Opțional: data liberării condiționate pentru calculul restului rămas.</p>
+            <p><strong>4. RECURS COMPENSATORIU (Legea 169/2017)</strong><br>
+            - Introduceți direct numărul de zile deduse, conform legii.</p>
 
-                <p><strong>PRELUNGIRI MĂSURI PREVENTIVE</strong><br>
-                - Opțional: dată de referință și număr de zile.<br>
-                - Calcul: prima zi este chiar data de referință. Rezultatul este afișat live.</p>
+            <p><strong>5. PERIOADE ADĂUGATE</strong><br>
+            - <strong>Evadare/boală:</strong> zile = data_final − data_inițial (capete excluse).<br>
+            - <strong>Întrerupere:</strong> zile = data_final − data_inițial − 1.<br>
+            Aceste zile se adaugă la pedeapsă.</p>
 
-                <p><strong>REZULTATE</strong><br>
-                - După apăsarea „CALCULEAZĂ”, obțineți expirările, fracțiunile, datele corespunzătoare, pașii de calcul și cronologia termenelor.<br>
-                - Puteți scădea zile muncite din data propozabilă direct în rezultate.<br>
-                - Exportați PDF sau copiați rezultatele.</p>
+            <p><strong>6. CALCUL REST RĂMAS DE EXECUTAT</strong><br>
+            - Opțional: data liberării condiționate pentru calculul restului rămas.</p>
 
-                <hr style="border-color:var(--border);margin:12px 0;">
-                <p style="font-size:0.8rem;color:var(--text-light);"><strong>Confidențialitate și securitate</strong><br>
-                Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p>
-            </div>
-            <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
+            <p><strong>PRELUNGIRI MĂSURI PREVENTIVE</strong><br>
+            - Opțional: dată de referință și număr de zile.<br>
+            - Calcul: prima zi este chiar data de referință. Rezultatul este afișat live.</p>
+
+            <p><strong>REZULTATE</strong><br>
+            - După apăsarea „CALCULEAZĂ”, obțineți expirările, fracțiunile, datele corespunzătoare, pașii de calcul și cronologia termenelor.<br>
+            - Puteți scădea zile muncite din data propozabilă direct în rezultate.<br>
+            - Exportați PDF sau copiați rezultatele.</p>
+
+            <hr style="border-color:var(--border);margin:12px 0;">
+            <p style="font-size:0.8rem;color:var(--text-light);"><strong>Confidențialitate și securitate</strong><br>
+            Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p>
         </div>
     `;
+
+    html += '</div></div>';
+
+    overlay.innerHTML = html;
     document.body.appendChild(overlay);
     overlay.addEventListener('click', function(e) {
         if (e.target === overlay) overlay.remove();
     });
 }
 
+/**
+ * Deschide modalul cu bazele legale (OMJ 2188/C/2022).
+ * Butonul de închidere este plasat în colțul din dreapta sus.
+ */
 function openLegalModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -273,8 +334,7 @@ function openLegalModal() {
         html += '<p style="font-size:0.85rem;color:var(--text-light);">Baza legală nu a fost încărcată. Verificați fișierul legal.js.</p>';
     }
 
-    html += '</div>';
-    html += '</div>';
+    html += '</div></div>';
 
     overlay.innerHTML = html;
     document.body.appendChild(overlay);
@@ -283,6 +343,9 @@ function openLegalModal() {
     });
 }
 
+/**
+ * Deschide modalul de încărcare a spețelor salvate.
+ */
 function openLoadModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -326,6 +389,11 @@ function openLoadModal() {
     }, 100);
 }
 
+/**
+ * Formatează o dată cu avertisment vizual (expirat/curând).
+ * @param {Date} date - data
+ * @returns {string} - HTML cu data și avertisment
+ */
 function formatDateWithWarning(date) {
     if (!date || isNaN(date)) return fmtDate(date);
     const t = today();
