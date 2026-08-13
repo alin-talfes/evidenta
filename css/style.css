@@ -78,7 +78,6 @@ body {
 }
 
 /* ========== BUTOANE PRINCIPALE (SUS) ========== */
-/* Aranjează butoanele pe două coloane, câte două pe rând */
 .top-actions {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -119,7 +118,6 @@ body {
     outline: none;
 }
 
-/* Pe ecrane mici, o singură coloană */
 @media (max-width: 480px) {
     .top-actions {
         grid-template-columns: 1fr;
