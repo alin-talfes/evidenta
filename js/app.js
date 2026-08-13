@@ -173,9 +173,18 @@ function calculateAll() {
 
     // Perioade adăugate
     let non = 0;
-    document.querySelectorAll('.ne-days').forEach(inp => {
-        const v = parseInt(inp.value);
-        if (!isNaN(v) && v > 0) non += v;
+    const nonRowsData = []; // pentru export
+    document.querySelectorAll('.non-exec-row').forEach(r => {
+        const type = r.querySelector('.ne-type').value;
+        const sD = parseDate(r.querySelector('.ne-start').value.trim());
+        const eD = parseDate(r.querySelector('.ne-end').value.trim());
+        if (sD && eD) {
+            const diff = daysBetween(sD, eD);
+            let daysToAdd = diff;
+            if (type === 'interruption') daysToAdd = diff - 1;
+            non += daysToAdd;
+            nonRowsData.push({ type, start: fmtDate(sD), end: fmtDate(eD), days: daysToAdd });
+        }
     });
     steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile.`);
 
@@ -374,6 +383,30 @@ function calculateAll() {
 
     // Inițializare scădere zile muncite
     updateProposedDateWithWorkDays();
+
+    // ===== SALVARE GLOBALĂ PENTRU EXPORT =====
+    window.lastCalculation = {
+        life,
+        sex: currentSex,
+        birthDate,
+        startDate,
+        theorExp,
+        realExp,
+        ded,
+        non,
+        dedIntervals, // array de [Date, Date]
+        nonRowsData, // array de { type, start, end, days }
+        recursDays: ded - sumIntervals(dedIntervals), // zile recurs compensatoriu separate
+        tDays,
+        tDate,
+        mR,
+        tR,
+        articleInfo,
+        fifth,
+        fDate,
+        workDaysInput: document.getElementById('workDaysInput')?.value || '0',
+        workDaysResult: document.getElementById('workDaysResult')?.value || ''
+    };
 
     autoSave();
 }
