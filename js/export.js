@@ -107,6 +107,7 @@ function buildInputDataHTML(data) {
         html += '</div></div>';
     }
 
+    // Secțiunea pentru scăderea zilelor muncite – afișăm valorile ca text, nu ca inputuri
     if (data.workDaysInput !== '0' || data.workDaysResult) {
         html += '<div class="result-item"><div class="result-label">Zile muncite scăzute</div><div class="result-value">';
         html += `Zile introduse: ${data.workDaysInput}<br>Noua dată propozabilă: ${data.workDaysResult || '—'}`;
@@ -115,72 +116,6 @@ function buildInputDataHTML(data) {
 
     html += '</div></div>';
     return html;
-}
-
-/**
- * Construiește textul complet pentru copiere.
- * @returns {string} - text formatat
- */
-function buildFullReportText() {
-    const data = getInputData();
-    let text = 'CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE\n\n';
-
-    // Date introduse
-    text += '==== DATE INTRODUSE ====\n';
-    text += `Sex: ${data.sex}\n`;
-    text += `Data nașterii: ${data.birthDate || '—'}\n`;
-    text += `Observații: ${data.observations || '—'}\n`;
-    text += `Articol LC: ${data.art || '—'}\n`;
-    text += `Detențiune pe viață: ${data.life ? 'Da' : 'Nu'}\n`;
-    text += `Durată: ${data.y} ani, ${data.m} luni, ${data.d} zile\n`;
-    text += `Data începerii: ${data.start || '—'}\n`;
-    text += `Data liberării condiționate: ${data.condRelease || '—'}\n`;
-
-    if (data.dedRows.length > 0) {
-        text += 'Perioade deduse:\n';
-        data.dedRows.forEach((r, i) => {
-            text += `  ${i + 1}. ${r.start || '—'} - ${r.end || '—'} (${r.days || '—'} zile)\n`;
-        });
-    }
-
-    if (data.manDed.length > 0) {
-        text += 'Recurs compensatoriu:\n';
-        data.manDed.forEach((v, i) => {
-            if (parseInt(v) > 0) text += `  ${i + 1}. ${v} zile\n`;
-        });
-    }
-
-    if (data.nonRows.length > 0) {
-        text += 'Perioade adăugate:\n';
-        data.nonRows.forEach((r, i) => {
-            text += `  ${i + 1}. ${r.type} (${r.start || '—'} - ${r.end || '—'}) ${r.days || '—'} zile\n`;
-        });
-    }
-
-    if (data.masuriRefDate || data.masuriDays !== '0') {
-        text += `Măsuri preventive: Ref: ${data.masuriRefDate || '—'}, Zile: ${data.masuriDays}, Rezultat: ${data.masuriResult || '—'}\n`;
-    }
-
-    if (data.workDaysInput !== '0' || data.workDaysResult) {
-        text += `Zile muncite scăzute: ${data.workDaysInput} zile -> Noua dată propozabilă: ${data.workDaysResult || '—'}\n`;
-    }
-
-    text += '\n==== REZULTATE ====\n';
-    const resultsContent = document.getElementById('resultsContent');
-    if (resultsContent) {
-        text += resultsContent.innerText.trim() + '\n';
-    }
-
-    // Pași de calcul
-    const stepsList = document.getElementById('stepsList');
-    if (stepsList && stepsList.children.length > 0) {
-        text += '\n==== PAȘII CALCULULUI ====\n';
-        stepsList.querySelectorAll('li').forEach(li => {
-            text += li.innerText + '\n';
-        });
-    }
-
-    return text;
 }
 
 /**
@@ -227,13 +162,77 @@ function fallbackCopy(text) {
 }
 
 /**
- * Construiește HTML-ul pașilor de calcul pentru export.
- * @returns {string} - HTML
+ * Construiește textul complet pentru copiere.
+ * @returns {string} - text formatat
  */
-function buildStepsHTML() {
+function buildFullReportText() {
+    const data = getInputData();
+    let text = 'CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE\n\n';
+
+    // Date introduse
+    text += '==== DATE INTRODUSE ====\n';
+    text += `Sex: ${data.sex}\n`;
+    text += `Data nașterii: ${data.birthDate || '—'}\n`;
+    text += `Observații: ${data.observations || '—'}\n`;
+    text += `Articol LC: ${data.art || '—'}\n`;
+    text += `Detențiune pe viață: ${data.life ? 'Da' : 'Nu'}\n`;
+    text += `Durată: ${data.y} ani, ${data.m} luni, ${data.d} zile\n`;
+    text += `Data începerii: ${data.start || '—'}\n`;
+    text += `Data liberării condiționate: ${data.condRelease || '—'}\n`;
+
+    if (data.dedRows.length > 0) {
+        text += 'Perioade deduse:\n';
+        data.dedRows.forEach((r, i) => {
+            text += `  ${i + 1}. ${r.start || '—'} - ${r.end || '—'} (${r.days || '—'} zile)\n`;
+        });
+    }
+
+    if (data.manDed.length > 0) {
+        text += 'Recurs compensatoriu:\n';
+        data.manDed.forEach((v, i) => {
+            if (parseInt(v) > 0) text += `  ${i + 1}. ${v} zile\n`;
+        });
+    }
+
+    if (data.nonRows.length > 0) {
+        text += 'Perioade adăugate:\n';
+        data.nonRows.forEach((r, i) => {
+            text += `  ${i + 1}. ${r.type} (${r.start || '—'} - ${r.end || '—'}) ${r.days || '—'} zile\n`;
+        });
+    }
+
+    if (data.masuriRefDate || data.masuriDays !== '0') {
+        text += `Măsuri preventive: Ref: ${data.masuriRefDate || '—'}, Zile: ${data.masuriDays}, Rezultat: ${data.masuriResult || '—'}\n`;
+    }
+
+    // Zile muncite scăzute
+    if (data.workDaysInput !== '0' || data.workDaysResult) {
+        text += `Zile muncite scăzute: ${data.workDaysInput} zile -> Noua dată propozabilă: ${data.workDaysResult || '—'}\n`;
+    }
+
+    text += '\n==== REZULTATE ====\n';
+    const resultsContent = document.getElementById('resultsContent');
+    if (resultsContent) {
+        // Înlocuim valorile inputurilor cu text pentru copiere
+        const clone = resultsContent.cloneNode(true);
+        clone.querySelectorAll('input').forEach(input => {
+            const span = document.createElement('span');
+            span.textContent = input.value;
+            input.parentNode.replaceChild(span, input);
+        });
+        text += clone.innerText.trim() + '\n';
+    }
+
+    // Pași de calcul
     const stepsList = document.getElementById('stepsList');
-    if (!stepsList || stepsList.children.length === 0) return '';
-    return `<div class="result-section"><h4>PAȘII CALCULULUI</h4><ol>${stepsList.innerHTML}</ol></div>`;
+    if (stepsList && stepsList.children.length > 0) {
+        text += '\n==== PAȘII CALCULULUI ====\n';
+        stepsList.querySelectorAll('li').forEach(li => {
+            text += li.innerText + '\n';
+        });
+    }
+
+    return text;
 }
 
 /**
@@ -248,6 +247,14 @@ function exportPDF() {
     }
     const data = getInputData();
     const inputHTML = buildInputDataHTML(data);
+
+    // Clonăm conținutul rezultatelor și setăm atributele value pentru inputuri
+    const contentClone = content.cloneNode(true);
+    contentClone.querySelectorAll('input').forEach(input => {
+        input.setAttribute('value', input.value);
+    });
+    const resultsHTML = contentClone.innerHTML;
+
     const stepsHTML = buildStepsHTML();
 
     const printWindow = window.open('', '_blank', 'width=800,height=600');
@@ -288,9 +295,9 @@ function exportPDF() {
             <body>
                 <h1>CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE</h1>
                 ${inputHTML}
-                ${content.innerHTML}
+                ${resultsHTML}
                 ${stepsHTML}
-                <div class="footer">CALCULATOR EVIDENȚĂ PEDEPSE | v1.1 | © Alin Talfeș</div>
+                <div class="footer">CALCULATOR EVIDENȚĂ PEDEPSE | v1.7 | © Alin Talfeș</div>
                 <script>
                     window.onload = function() { window.print(); }
                 <\/script>
@@ -299,4 +306,14 @@ function exportPDF() {
     `);
     printWindow.document.close();
     printWindow.focus();
+}
+
+/**
+ * Construiește HTML-ul pașilor de calcul pentru export.
+ * @returns {string} - HTML
+ */
+function buildStepsHTML() {
+    const stepsList = document.getElementById('stepsList');
+    if (!stepsList || stepsList.children.length === 0) return '';
+    return `<div class="result-section"><h4>PAȘII CALCULULUI</h4><ol>${stepsList.innerHTML}</ol></div>`;
 }
