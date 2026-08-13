@@ -4,7 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CALCULATOR PEDEPSE</title>
-    <link rel="stylesheet" href="css/style.css?v=11">
+    <link rel="stylesheet" href="css/style.css?v=12">
+    <style>
+        /* ========== ÎMBUNĂTĂȚIRI DESIGN V1.6 ========== */
+        /* Tranziție meniu principal */
+        #mainMenu {
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #mainMenu.hidden {
+            opacity: 0;
+            transform: translateY(-5px);
+            pointer-events: none;
+        }
+
+        /* Butoanele din meniu să aibă un hover mai plăcut */
+        .top-actions .btn-big {
+            transition: all 0.25s ease;
+        }
+        .top-actions .btn-big:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 162, 39, 0.2);
+        }
+
+        /* Carduri cu hover subtil */
+        .card {
+            transition: border-color 0.2s, background 0.3s, box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        body.light .card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Focus mai vizibil pentru elementele interactive */
+        :focus-visible {
+            outline: 3px solid var(--gold-light);
+            outline-offset: 2px;
+        }
+
+        /* Spațiere mai aerisită pentru bara de sus */
+        .top-bar {
+            gap: 10px;
+            padding: 10px 14px;
+        }
+
+        /* Aliniere mai bună a butonului de temă */
+        #themeToggle {
+            margin-left: 6px;
+        }
+
+        /* Îmbunătățire câmpuri invalide (adăugat prin JavaScript mai jos) */
+        .input-invalid {
+            border-color: var(--danger) !important;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15) !important;
+        }
+    </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
@@ -186,15 +243,15 @@
                 </div>
             </div>
         </main>
-        <footer class="footer" role="contentinfo">CALCULATOR EVIDENȚĂ PEDEPSE | v1.5 | © Alin Talfeș</footer>
+        <footer class="footer" role="contentinfo">CALCULATOR EVIDENȚĂ PEDEPSE | v1.6 | © Alin Talfeș</footer>
     </div>
-    <script src="js/utils.js?v=11"></script>
-    <script src="js/rules.js?v=11"></script>
-    <script src="js/legal.js?v=11"></script>
-    <script src="js/storage.js?v=11"></script>
-    <script src="js/export.js?v=11"></script>
-    <script src="js/ui.js?v=11"></script>
-    <script src="js/app.js?v=11"></script>
+    <script src="js/utils.js?v=12"></script>
+    <script src="js/rules.js?v=12"></script>
+    <script src="js/legal.js?v=12"></script>
+    <script src="js/storage.js?v=12"></script>
+    <script src="js/export.js?v=12"></script>
+    <script src="js/ui.js?v=12"></script>
+    <script src="js/app.js?v=12"></script>
     <script>
         // Suprascriem funcțiile de temă pentru a folosi emoji-uri
         (function() {
