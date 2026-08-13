@@ -345,6 +345,7 @@ body.light .header {
     border-left: 3px solid rgba(201, 162, 39, 0.5);
     transition: border-color var(--transition-base), background 0.3s, box-shadow 0.2s;
     contain: layout paint;
+    height: auto;
 }
 
 .card:hover {
@@ -456,19 +457,21 @@ input[type="number"]:placeholder-shown {
     color: var(--gold-light);
 }
 
-/* ========== RÂNDURI PERIOADE ========== */
+/* ========== RÂNDURI PERIOADE / PENALITĂȚI ========== */
 .period-row,
 .penalty-row {
+    position: relative;
     display: flex;
-    gap: var(--gap-md);
+    flex-wrap: wrap;
+    gap: var(--gap-sm);
     align-items: flex-end;
     background: rgba(201, 162, 39, 0.03);
     padding: var(--gap-md);
     border-radius: var(--radius-md);
     margin-bottom: var(--gap-sm);
-    flex-wrap: wrap;
     border: var(--border-width) solid var(--border);
-    contain: layout paint;
+    height: auto;
+    min-height: 0;
 }
 
 .period-row > div,
@@ -479,8 +482,14 @@ input[type="number"]:placeholder-shown {
 
 .penalty-row .btn-danger,
 .period-row .btn-danger {
+    position: absolute;
+    top: 8px;
+    right: 8px;
     flex: 0 0 auto;
-    align-self: center;
+    align-self: flex-start;
+    padding: 4px 8px;
+    min-height: 32px;
+    font-size: 0.7rem;
 }
 
 /* ========== BUTOANE GENERALE ========== */
@@ -1062,13 +1071,34 @@ small { color: var(--text-light); font-size: 0.72rem; }
     .penalty-row,
     .period-row {
         flex-direction: column;
+        padding: var(--gap-md);
+        gap: var(--gap-sm);
     }
     .penalty-row > div,
     .period-row > div {
         flex: 1 1 100%;
+        min-width: 100%;
     }
     .result-box .big-result {
         font-size: 1.4rem;
+    }
+    .card {
+        padding: 16px 14px;
+        margin-bottom: var(--gap-md);
+    }
+    .top-actions .btn-big {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+    label {
+        font-size: 0.65rem;
+        margin-bottom: 6px;
+    }
+    select,
+    input[type="number"],
+    input[type="text"],
+    textarea {
+        min-height: 44px;
     }
 }
 
