@@ -189,8 +189,8 @@
                 concursResultDays = maxPenalty.totalDays + bonusDays;
 
                 details.push(`Pedeapsa cea mai grea (concurs): ${formatDuration(maxPenalty)}`);
-                details.push(`Totalul celorlalte pedepse (concurs): ${othersTotalDays} zile`);
-                details.push(`Spor 1/3: ${bonusDays} zile (${formatDuration(fromDays(bonusDays))})`);
+                details.push(`Totalul celorlalte pedepse (concurs): ${formatDuration(fromDays(othersTotalDays))}`);
+                details.push(`Spor 1/3: ${formatDuration(fromDays(bonusDays))}`);
                 details.push(`Rezultanta concurs: ${formatDuration(fromDays(concursResultDays))}`);
             }
 
