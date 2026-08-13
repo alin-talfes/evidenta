@@ -136,9 +136,11 @@
                 <option value="prelungire_arest_la_domiciliu">Prelungire arest la domiciliu</option>
             </select>
 
-            <label style="display:flex; align-items:center; gap:8px;">
-                <input type="checkbox" id="definitiveCheckbox" style="width:auto; margin-bottom:0;" checked>
-                Adaugă 1 zi lucrătoare pentru data rămânerii definitive
+            <!-- Toggle switch pentru data rămânerii definitive -->
+            <label class="toggle-switch" style="margin-top:12px;">
+                <input type="checkbox" id="definitiveCheckbox" checked>
+                <span class="toggle-slider" aria-hidden="true"></span>
+                <span class="life-label">Adaugă 1 zi lucrătoare pentru data rămânerii definitive</span>
             </label>
 
             <button class="btn btn-gold" onclick="calculateTerm()">Calculează termen</button>
