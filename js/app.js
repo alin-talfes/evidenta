@@ -373,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Evenimente butoane
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
     document.getElementById('infoBtn').addEventListener('click', openInfoModal);
+    document.getElementById('legalBtn').addEventListener('click', openLegalModal);
     document.getElementById('saveBtn').addEventListener('click', saveCase);
     document.getElementById('loadBtn').addEventListener('click', openLoadModal);
     document.getElementById('resetBtn').addEventListener('click', confirmReset);
