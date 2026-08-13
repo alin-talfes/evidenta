@@ -35,6 +35,10 @@ function getInputData() {
     const masuriDays = document.getElementById('masuriDays').value;
     const masuriResult = document.getElementById('masuriResult').value.trim();
 
+    // Date pentru scăderea zilelor muncite
+    const workDaysInput = document.getElementById('workDaysInput')?.value.trim() || '0';
+    const workDaysResult = document.getElementById('workDaysResult')?.value.trim() || '';
+
     return {
         sex,
         birthDate,
@@ -51,7 +55,9 @@ function getInputData() {
         nonRows,
         masuriRefDate,
         masuriDays,
-        masuriResult
+        masuriResult,
+        workDaysInput,
+        workDaysResult
     };
 }
 
@@ -98,6 +104,13 @@ function buildInputDataHTML(data) {
     if (data.masuriRefDate || data.masuriDays !== '0') {
         html += '<div class="result-item"><div class="result-label">Măsuri preventive</div><div class="result-value">';
         html += `Ref: ${data.masuriRefDate || '—'}<br>Zile: ${data.masuriDays}<br>Rezultat: ${data.masuriResult || '—'}`;
+        html += '</div></div>';
+    }
+
+    // Secțiunea pentru scăderea zilelor muncite
+    if (data.workDaysInput !== '0' || data.workDaysResult) {
+        html += '<div class="result-item"><div class="result-label">Zile muncite scăzute</div><div class="result-value">';
+        html += `Zile introduse: ${data.workDaysInput}<br>Noua dată propozabilă: ${data.workDaysResult || '—'}`;
         html += '</div></div>';
     }
 
