@@ -22,7 +22,7 @@ function updateSexUI() {
         if (sexLabelF) sexLabelF.classList.add('active');
         if (sexLabelM) sexLabelM.classList.remove('active');
     }
-    updAgeTag();
+    if (typeof updAgeTag === 'function') updAgeTag();
 }
 
 /**
@@ -250,9 +250,13 @@ function openInfoModal() {
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'info-title');
+
     overlay.innerHTML = `
         <div class="modal">
-            <h4 id="info-title">INFORMAȚII ȘI GHID DE UTILIZARE</h4>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h4 id="info-title" style="margin:0;">INFORMAȚII ȘI GHID DE UTILIZARE</h4>
+                <button class="btn btn-outline btn-sm close-btn" onclick="this.closest('.modal-overlay').remove()" style="flex-shrink:0;">Închide</button>
+            </div>
             <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
                 <p><strong>Scopul aplicației</strong><br>
                 Aplicația permite calculul termenelor pedepselor privative de libertate, al liberării condiționate,
@@ -284,7 +288,6 @@ function openInfoModal() {
                 <p><strong>Confidențialitate</strong><br>
                 Toate datele sunt stocate exclusiv local, în browserul utilizatorului (localStorage) și nu sunt transmise către servere externe.</p>
             </div>
-            <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
         </div>
     `;
     document.body.appendChild(overlay);
@@ -306,8 +309,14 @@ function openLegalModal() {
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'legal-title');
 
-    let html = '<div class="modal"><h4 id="legal-title">OMJ 2188/C/2022</h4>';
-    html += '<div style="max-height: 70vh; overflow-y: auto;">';
+    let html = `
+        <div class="modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h4 id="legal-title" style="margin:0;">OMJ 2188/C/2022</h4>
+                <button class="btn btn-outline btn-sm close-btn" onclick="this.closest('.modal-overlay').remove()" style="flex-shrink:0;">Închide</button>
+            </div>
+            <div style="max-height:70vh; overflow-y:auto;">
+    `;
 
     if (typeof legalArticles !== 'undefined' && legalArticles.length > 0) {
         legalArticles.forEach(article => {
@@ -321,8 +330,7 @@ function openLegalModal() {
         html += '<p style="font-size:0.85rem;color:var(--text-light);">Baza legală nu a fost încărcată. Verificați fișierul legal.js.</p>';
     }
 
-    html += '</div>';
-    html += '<button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button></div>';
+    html += `</div></div>`;
 
     overlay.innerHTML = html;
     document.body.appendChild(overlay);
