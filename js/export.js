@@ -107,7 +107,6 @@ function buildInputDataHTML(data) {
         html += '</div></div>';
     }
 
-    // Secțiunea pentru scăderea zilelor muncite
     if (data.workDaysInput !== '0' || data.workDaysResult) {
         html += '<div class="result-item"><div class="result-label">Zile muncite scăzute</div><div class="result-value">';
         html += `Zile introduse: ${data.workDaysInput}<br>Noua dată propozabilă: ${data.workDaysResult || '—'}`;
@@ -119,7 +118,73 @@ function buildInputDataHTML(data) {
 }
 
 /**
- * Copiază rezultatele în clipboard.
+ * Construiește textul complet pentru copiere.
+ * @returns {string} - text formatat
+ */
+function buildFullReportText() {
+    const data = getInputData();
+    let text = 'CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE\n\n';
+
+    // Date introduse
+    text += '==== DATE INTRODUSE ====\n';
+    text += `Sex: ${data.sex}\n`;
+    text += `Data nașterii: ${data.birthDate || '—'}\n`;
+    text += `Observații: ${data.observations || '—'}\n`;
+    text += `Articol LC: ${data.art || '—'}\n`;
+    text += `Detențiune pe viață: ${data.life ? 'Da' : 'Nu'}\n`;
+    text += `Durată: ${data.y} ani, ${data.m} luni, ${data.d} zile\n`;
+    text += `Data începerii: ${data.start || '—'}\n`;
+    text += `Data liberării condiționate: ${data.condRelease || '—'}\n`;
+
+    if (data.dedRows.length > 0) {
+        text += 'Perioade deduse:\n';
+        data.dedRows.forEach((r, i) => {
+            text += `  ${i + 1}. ${r.start || '—'} - ${r.end || '—'} (${r.days || '—'} zile)\n`;
+        });
+    }
+
+    if (data.manDed.length > 0) {
+        text += 'Recurs compensatoriu:\n';
+        data.manDed.forEach((v, i) => {
+            if (parseInt(v) > 0) text += `  ${i + 1}. ${v} zile\n`;
+        });
+    }
+
+    if (data.nonRows.length > 0) {
+        text += 'Perioade adăugate:\n';
+        data.nonRows.forEach((r, i) => {
+            text += `  ${i + 1}. ${r.type} (${r.start || '—'} - ${r.end || '—'}) ${r.days || '—'} zile\n`;
+        });
+    }
+
+    if (data.masuriRefDate || data.masuriDays !== '0') {
+        text += `Măsuri preventive: Ref: ${data.masuriRefDate || '—'}, Zile: ${data.masuriDays}, Rezultat: ${data.masuriResult || '—'}\n`;
+    }
+
+    if (data.workDaysInput !== '0' || data.workDaysResult) {
+        text += `Zile muncite scăzute: ${data.workDaysInput} zile -> Noua dată propozabilă: ${data.workDaysResult || '—'}\n`;
+    }
+
+    text += '\n==== REZULTATE ====\n';
+    const resultsContent = document.getElementById('resultsContent');
+    if (resultsContent) {
+        text += resultsContent.innerText.trim() + '\n';
+    }
+
+    // Pași de calcul
+    const stepsList = document.getElementById('stepsList');
+    if (stepsList && stepsList.children.length > 0) {
+        text += '\n==== PAȘII CALCULULUI ====\n';
+        stepsList.querySelectorAll('li').forEach(li => {
+            text += li.innerText + '\n';
+        });
+    }
+
+    return text;
+}
+
+/**
+ * Copiază rezultatele în clipboard, îmbunătățit.
  */
 function copyResults() {
     const content = document.getElementById('resultsContent');
@@ -127,8 +192,8 @@ function copyResults() {
         alert('Nu există rezultate de copiat. Apasă întâi „CALCULEAZĂ”.');
         return;
     }
-    const text = content.innerText.trim();
-    if (!text) {
+    const text = buildFullReportText();
+    if (!text.trim()) {
         alert('Nu există text de copiat.');
         return;
     }
@@ -162,7 +227,17 @@ function fallbackCopy(text) {
 }
 
 /**
- * Exportă datele introduse și rezultatele ca PDF (fereastră de tipărire),
+ * Construiește HTML-ul pașilor de calcul pentru export.
+ * @returns {string} - HTML
+ */
+function buildStepsHTML() {
+    const stepsList = document.getElementById('stepsList');
+    if (!stepsList || stepsList.children.length === 0) return '';
+    return `<div class="result-section"><h4>PAȘII CALCULULUI</h4><ol>${stepsList.innerHTML}</ol></div>`;
+}
+
+/**
+ * Exportă datele introduse, rezultatele și pașii de calcul ca PDF (fereastră de tipărire),
  * cu stiluri compacte pentru a încăpea pe o singură pagină.
  */
 function exportPDF() {
@@ -173,6 +248,7 @@ function exportPDF() {
     }
     const data = getInputData();
     const inputHTML = buildInputDataHTML(data);
+    const stepsHTML = buildStepsHTML();
 
     const printWindow = window.open('', '_blank', 'width=800,height=600');
     if (!printWindow) {
@@ -201,6 +277,8 @@ function exportPDF() {
                     .expired { color: #d32f2f; }
                     .soon { color: #e67e22; }
                     .fraction { font-size: 10px; }
+                    .steps-container ol { padding-left: 15px; font-size: 8px; }
+                    .steps-container li { margin-bottom: 3px; }
                     .footer { margin-top: 10px; text-align: center; font-size: 7px; color: #888; }
                     @media print {
                         body { -webkit-print-color-adjust: exact; }
@@ -211,6 +289,7 @@ function exportPDF() {
                 <h1>CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE</h1>
                 ${inputHTML}
                 ${content.innerHTML}
+                ${stepsHTML}
                 <div class="footer">CALCULATOR EVIDENȚĂ PEDEPSE | v1.1 | © Alin Talfeș</div>
                 <script>
                     window.onload = function() { window.print(); }
