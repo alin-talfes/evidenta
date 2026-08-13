@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator termene procedurale penale</title>
-    <link rel="stylesheet" href="css/style.css?v=16">
+    <link rel="stylesheet" href="css/style.css?v=19">
     <style>
         /* ===== Ajustări specifice termene.html ===== */
         .back-btn {
@@ -25,7 +25,6 @@
         .back-btn:hover {
             background: rgba(201, 162, 39, 0.1);
         }
-
         .legal-box {
             margin-top: 16px;
             padding: 12px;
@@ -41,7 +40,6 @@
             margin-bottom: 8px;
             font-size: 0.85rem;
         }
-
         .result {
             margin-top: 24px;
             padding: 24px 20px;
@@ -58,7 +56,6 @@
             letter-spacing: 1px;
             word-break: break-word;
         }
-
         .row {
             display: flex;
             gap: var(--gap-lg);
@@ -67,7 +64,6 @@
         .row > div {
             flex: 1;
         }
-
         /* Aerisire suplimentară */
         .card {
             padding: 28px 26px;
@@ -85,7 +81,6 @@
         .btn {
             margin-top: 10px;
         }
-
         @media (max-width: 480px) {
             .row {
                 flex-direction: column;
@@ -114,8 +109,6 @@
                 <option value="contestatie">Contestație – 3 zile</option>
                 <option value="apel">Apel – 10 zile</option>
                 <option value="recurs">Recurs – 30 zile</option>
-                <option value="arest_preventiv">Prelungire arest preventiv – 30 zile</option>
-                <option value="arest_domiciliu">Prelungire arest la domiciliu – 30 zile</option>
             </select>
 
             <div class="row">
@@ -158,14 +151,6 @@
                 <option value="preventive">Preventiv/Restrictiv (art. 271)</option>
             </select>
 
-            <label for="actTypeSelect">Tip act (pentru excepția RIL 3/2025)</label>
-            <select id="actTypeSelect">
-                <option value="">Fără</option>
-                <option value="rechizitoriu">Rechizitoriu</option>
-                <option value="prelungire_arest_preventiv">Prelungire arest preventiv</option>
-                <option value="prelungire_arest_la_domiciliu">Prelungire arest la domiciliu</option>
-            </select>
-
             <button class="btn btn-gold" onclick="calculateTerm()">Calculează termen</button>
             <div id="deadlineResult" class="result" style="display:none;"></div>
         </div>
@@ -180,7 +165,7 @@
             <p><strong>HP nr. 12/2020:</strong> Dacă actul de procedură care trebuie făcut într-un anumit termen este trimis prin e-mail sau fax, în ultima zi a termenului care se calculează pe zile, este socotit a fi făcut în termen, chiar dacă actul se înregistrează la organul judiciar după expirarea termenului.</p>
             <p><strong>RIL nr. 3/2025:</strong> Nu se consideră în termen sesizarea cu rechizitoriul prin care s-a dispus trimiterea în judecată a inculpatului față de care s-a dispus o măsură preventivă, sau cu propunerea de prelungire a duratei măsurii arestării preventive ori a arestului la domiciliu, formulată în ultima zi a termenului, calculat potrivit art. 269 alin. (1), (2) și (4).</p>
             <p><strong>Art. 271 Cod procedură penală:</strong> În calculul termenelor privind măsurile preventive sau orice măsuri restrictive de drepturi, ora sau ziua de la care începe și cea la care se sfârșește termenul intră în durata acestuia.</p>
-            <p><em>Termenele se calculează în mod implicit pe zile calendaristice. Opțiunea "Zile lucrătoare" poate fi folosită pentru termene specifice care impun excluderea weekend-urilor și a sărbătorilor legale, conform dispozițiilor speciale.</em></p>
+            <p><em>Pentru contestație, data rămânerii definitive nu poate fi luni sau vineri, indiferent de prelungirile pentru zile nelucrătoare.</em></p>
         </div>
     </div>
 
@@ -365,7 +350,18 @@
             return d;
         }
 
-        function calculateDeadline({ start, duration, unit, termType = 'general', calcMode = 'calendar', actType = null }) {
+        // ===== Regula specială pentru contestație: nu poate fi luni sau vineri =====
+        function adjustForContestatie(date) {
+            const day = date.getDay(); // 1=luni, 5=vineri
+            if (day === 1) {
+                return addWorkingDays(date, 1); // luni -> marți
+            } else if (day === 5) {
+                return addWorkingDays(date, 2); // vineri -> luni(interzis) -> marți
+            }
+            return date; // marți, miercuri, joi rămân
+        }
+
+        function calculateDeadline({ start, duration, unit, termType = 'general', calcMode = 'calendar' }) {
             if (!['hours', 'days', 'months', 'years'].includes(unit)) {
                 throw new Error('Unitate invalidă.');
             }
@@ -383,8 +379,7 @@
                     deadline: deadline,
                     effectiveDeadline: deadline,
                     rule: isPreventive ? 'art. 271' : 'art. 269',
-                    workingDayAdjustment: false,
-                    exception: null
+                    workingDayAdjustment: false
                 };
             }
 
@@ -411,26 +406,12 @@
                 workingDayAdjustment = true;
             }
 
-            const rilActTypes = ['rechizitoriu', 'prelungire_arest_preventiv', 'prelungire_arest_la_domiciliu'];
-            if (!isPreventive && calcMode === 'calendar' && unit === 'days' && rilActTypes.includes(actType)) {
-                const effectiveDeadline = previousWorkingDay(deadline);
-                return {
-                    rawDeadline,
-                    deadline,
-                    effectiveDeadline,
-                    rule: 'art. 269',
-                    workingDayAdjustment,
-                    exception: 'RIL 3/2025'
-                };
-            }
-
             return {
                 rawDeadline,
                 deadline,
                 effectiveDeadline: deadline,
                 rule: isPreventive ? 'art. 271' : 'art. 269',
-                workingDayAdjustment,
-                exception: null
+                workingDayAdjustment
             };
         }
 
@@ -444,43 +425,25 @@
                 duration: '',
                 unit: 'days',
                 calcMode: 'working',
-                termType: 'general',
-                actType: ''
+                termType: 'general'
             },
             contestatie: {
                 duration: 3,
                 unit: 'days',
                 calcMode: 'working',
-                termType: 'general',
-                actType: ''
+                termType: 'general'
             },
             apel: {
                 duration: 10,
                 unit: 'days',
                 calcMode: 'working',
-                termType: 'general',
-                actType: ''
+                termType: 'general'
             },
             recurs: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'working',
-                termType: 'general',
-                actType: ''
-            },
-            arest_preventiv: {
-                duration: 30,
-                unit: 'days',
-                calcMode: 'calendar',
-                termType: 'preventive',
-                actType: 'prelungire_arest_preventiv'
-            },
-            arest_domiciliu: {
-                duration: 30,
-                unit: 'days',
-                calcMode: 'calendar',
-                termType: 'preventive',
-                actType: 'prelungire_arest_la_domiciliu'
+                termType: 'general'
             }
         };
 
@@ -492,7 +455,6 @@
             document.getElementById('unitSelect').value = preset.unit;
             document.getElementById('calcModeSelect').value = preset.calcMode;
             document.getElementById('termTypeSelect').value = preset.termType;
-            document.getElementById('actTypeSelect').value = preset.actType;
         }
 
         // ===== Interfață =====
@@ -503,10 +465,7 @@
             const unit = document.getElementById('unitSelect').value;
             const calcMode = document.getElementById('calcModeSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
-            const actType = document.getElementById('actTypeSelect').value;
-
-            // Întotdeauna se adaugă 1 zi lucrătoare pentru data rămânerii definitive
-            const definitiveChecked = true;
+            const preset = document.getElementById('presetSelect').value;
 
             if (!startDateStr) {
                 alert('Completează data de început.');
@@ -524,21 +483,23 @@
             }
 
             try {
-                const res = calculateDeadline({ start, duration, unit, termType, calcMode, actType: actType || null });
+                const res = calculateDeadline({ start, duration, unit, termType, calcMode });
 
-                let definitiveDate = null;
-                if (definitiveChecked && unit === 'days') {
-                    definitiveDate = addWorkingDays(res.effectiveDeadline, 1);
+                let displayDate;
+                if (preset === 'contestatie') {
+                    displayDate = adjustForContestatie(res.effectiveDeadline);
+                } else {
+                    displayDate = res.effectiveDeadline;
                 }
 
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
+                const displayStr = unit === 'hours' ? formatRoDateTime(displayDate) : formatRoDate(displayDate);
 
-                if (definitiveDate) {
-                    resultDiv.innerHTML = `<div class="big-result">DATA ESTIMATĂ A RĂMÂNERII DEFINITIVE:<br>${formatRoDate(definitiveDate)}</div>`;
+                if (preset === 'contestatie') {
+                    resultDiv.innerHTML = `<div class="big-result">DATA ESTIMATĂ A RĂMÂNERII DEFINITIVE:<br>${displayStr}</div>`;
                 } else {
-                    const effectiveStr = unit === 'hours' ? formatRoDateTime(res.effectiveDeadline) : formatRoDate(res.effectiveDeadline);
-                    resultDiv.innerHTML = `<div class="big-result">TERMEN-LIMITĂ EFECTIV:<br>${effectiveStr}</div>`;
+                    resultDiv.innerHTML = `<div class="big-result">TERMEN-LIMITĂ EFECTIV:<br>${displayStr}</div>`;
                 }
             } catch (err) {
                 alert(err.message);
