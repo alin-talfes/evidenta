@@ -98,7 +98,7 @@ body {
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     margin-bottom: var(--gap-lg);
     background: rgba(22, 24, 32, 0.6);
     backdrop-filter: blur(8px);
@@ -244,6 +244,7 @@ body.light .top-bar {
     transition: all var(--transition-base);
     font-size: 1.2rem;
     padding: 0;
+    margin-left: 6px;
 }
 
 #themeToggle:hover {
@@ -272,7 +273,7 @@ body.light .top-bar {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all var(--transition-base);
+    transition: all 0.25s ease;
     text-transform: uppercase;
     will-change: transform;
     text-align: center;
@@ -340,7 +341,7 @@ body.light .header {
     margin-bottom: var(--gap-lg);
     border: var(--border-width) solid var(--border);
     border-left: 3px solid rgba(201, 162, 39, 0.5);
-    transition: border-color var(--transition-base), background 0.3s, box-shadow var(--transition-base);
+    transition: border-color var(--transition-base), background 0.3s, box-shadow 0.2s;
     contain: layout paint;
 }
 
