@@ -19,7 +19,6 @@
     --input-border: #3a4150;
     --input-placeholder: #8a92a6;
     --label-color: #c0c6d2;
-    /* Variabile unificate */
     --radius-sm: 10px;
     --radius-md: 14px;
     --radius-lg: 18px;
@@ -98,7 +97,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;                    /* spațiere uniformă */
+    gap: 10px;
     padding: 8px 12px;
     margin-bottom: var(--gap-lg);
     background: rgba(22, 24, 32, 0.6);
@@ -114,7 +113,7 @@ body.light .top-bar {
     background: rgba(255,255,255,0.8);
 }
 
-/* ========== BUTON HAMBURGER ========== */
+/* ========== HAMBURGER ========== */
 .hamburger {
     flex: 0 0 44px;
     width: 44px;
@@ -176,7 +175,6 @@ body.light .top-bar {
     outline: none;
 }
 
-/* SALVEAZA = primary */
 .btn-utility.primary {
     background: var(--gold);
     color: #0F1115;
@@ -190,7 +188,6 @@ body.light .top-bar {
     color: #0F1115;
 }
 
-/* INCARCA = outline gold */
 .btn-utility#loadBtn {
     background: transparent;
     border-color: var(--gold);
@@ -202,7 +199,6 @@ body.light .top-bar {
     border-color: var(--gold-light);
 }
 
-/* RESET = ghost */
 .btn-utility#resetBtn {
     background: transparent;
     border-color: transparent;
@@ -215,7 +211,6 @@ body.light .top-bar {
     color: var(--gold-light);
 }
 
-/* Badge spețe */
 .badge {
     position: absolute;
     top: -6px;
@@ -423,7 +418,7 @@ input[type="number"]:placeholder-shown {
     color: var(--input-placeholder);
 }
 
-/* ========== BUTON AZI ========== */
+/* ========== DATĂ + ORĂ ========== */
 .date-wrapper {
     display: flex;
     gap: 4px;
@@ -537,7 +532,6 @@ input[type="number"]:placeholder-shown {
     outline: none;
 }
 
-/* Butonul "+ Adaugă" cu outline mai gros */
 .btn-sm {
     padding: 8px 12px;
     font-size: 0.72rem;
@@ -759,7 +753,6 @@ small { color: var(--text-light); font-size: 0.72rem; }
     outline-offset: 2px;
 }
 
-/* Unificare sex toggle */
 .sex-toggle-wrapper {
     display: flex;
     align-items: center;
@@ -779,7 +772,6 @@ small { color: var(--text-light); font-size: 0.72rem; }
     font-weight: 700;
 }
 
-/* Label pentru detențiune pe viață */
 .life-label {
     font-size: 0.8rem;
     color: var(--label-color);
@@ -948,6 +940,101 @@ small { color: var(--text-light); font-size: 0.72rem; }
     color: var(--text-light);
 }
 
+/* ========== CLASE SPECIFICE PAGINILOR SECUNDARE ========== */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    padding: 10px 18px;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    border-radius: var(--radius-md);
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.back-btn:hover {
+    background: rgba(201, 162, 39, 0.1);
+}
+
+.legal-box {
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(201, 162, 39, 0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: 0.75rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.legal-box h4 {
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+
+.result-box {
+    margin-top: 24px;
+    padding: 24px 20px;
+    background: rgba(201, 162, 39, 0.05);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--gold);
+    text-align: center;
+}
+
+.result-box .big-result {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+    word-break: break-word;
+}
+
+.result-box .detail {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.penalty-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    background: rgba(201, 162, 39, 0.03);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.penalty-row > div {
+    flex: 1 1 80px;
+    min-width: 70px;
+}
+
+.penalty-row .btn-danger {
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+.row {
+    display: flex;
+    gap: var(--gap-lg);
+    margin-bottom: 4px;
+}
+
+.row > div {
+    flex: 1;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 480px) {
     .form-grid { grid-template-columns: 1fr; }
@@ -974,6 +1061,19 @@ small { color: var(--text-light); font-size: 0.72rem; }
         flex: 0 0 40px;
         width: 40px;
         height: 40px;
+    }
+    .row {
+        flex-direction: column;
+        gap: var(--gap-md);
+    }
+    .penalty-row {
+        flex-direction: column;
+    }
+    .penalty-row > div {
+        flex: 1 1 100%;
+    }
+    .result-box .big-result {
+        font-size: 1.4rem;
     }
 }
 
