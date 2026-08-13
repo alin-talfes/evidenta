@@ -4,75 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CALCULATOR PEDEPSE</title>
-    <link rel="stylesheet" href="css/style.css?v=9">
-    <style>
-        /* Stiluri pentru butonul hamburger */
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 4px;
-            width: 44px;
-            height: 44px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--input-radius);
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
-        }
-        .hamburger span {
-            display: block;
-            width: 22px;
-            height: 3px;
-            background: var(--gold-light);
-            border-radius: 3px;
-        }
-        .hamburger:hover {
-            background: rgba(201, 162, 39, 0.1);
-            border-color: var(--gold);
-        }
-        /* Butonul de temă */
-        #themeToggle {
-            flex: 0 0 auto;
-            min-width: 48px;
-            padding: 0 8px;
-            font-size: 1.2rem;
-            line-height: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--input-radius);
-            cursor: pointer;
-            margin-left: 4px;
-            transition: all 0.2s ease;
-        }
-        #themeToggle:hover {
-            background: rgba(201, 162, 39, 0.1);
-            border-color: var(--gold);
-        }
-        /* Ajustări pentru bara de sus */
-        .top-bar {
-            padding: 8px 12px;
-            gap: 8px;
-        }
-        .btn-utility {
-            padding: 10px 8px;
-            font-size: 0.75rem;
-            letter-spacing: 0.4px;
-            min-width: 0;
-        }
-        @media (max-width: 480px) {
-            .btn-utility {
-                font-size: 0.7rem;
-                padding: 10px 4px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
@@ -102,7 +34,6 @@
         </div>
 
         <main id="main-content">
-            <!-- Conținutul rămâne identic -->
             <div class="card" aria-labelledby="date-ppl-heading">
                 <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
                 <div class="form-grid">
@@ -216,6 +147,7 @@
                         <label for="masuriRefDate">Dată referință</label>
                         <div class="date-wrapper">
                             <input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            <button type="button" class="btn-today" data-target="masuriRefDate" onclick="setToday('masuriRefDate')">AZI</button>
                         </div>
                     </div>
                     <div>
@@ -256,13 +188,13 @@
         </main>
         <footer class="footer" role="contentinfo">CALCULATOR EVIDENȚĂ PEDEPSE | v1.5 | © Alin Talfeș</footer>
     </div>
-    <script src="js/utils.js?v=9"></script>
-    <script src="js/rules.js?v=9"></script>
-    <script src="js/legal.js?v=9"></script>
-    <script src="js/storage.js?v=9"></script>
-    <script src="js/export.js?v=9"></script>
-    <script src="js/ui.js?v=9"></script>
-    <script src="js/app.js?v=9"></script>
+    <script src="js/utils.js?v=11"></script>
+    <script src="js/rules.js?v=11"></script>
+    <script src="js/legal.js?v=11"></script>
+    <script src="js/storage.js?v=11"></script>
+    <script src="js/export.js?v=11"></script>
+    <script src="js/ui.js?v=11"></script>
+    <script src="js/app.js?v=11"></script>
     <script>
         // Suprascriem funcțiile de temă pentru a folosi emoji-uri
         (function() {
