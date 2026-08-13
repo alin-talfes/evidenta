@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CALCULATOR PEDEPSE</title>
-    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/style.css?v=8">
     <style>
-        /* Buton hamburger integrat în bara de acțiuni */
+        /* Stiluri pentru butonul hamburger */
         .hamburger {
             display: flex;
             flex-direction: column;
@@ -33,12 +33,33 @@
             background: rgba(201, 162, 39, 0.1);
             border-color: var(--gold);
         }
+        /* Butonul de temă */
+        #themeToggle {
+            flex: 0 0 auto;
+            min-width: 44px;
+            padding: 0 12px;
+            font-size: 1.2rem;
+            line-height: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--input-radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #themeToggle:hover {
+            background: rgba(201, 162, 39, 0.1);
+            border-color: var(--gold);
+        }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
     <div class="container">
-        <!-- Bara de acțiuni principale: hamburger + salvează/încarcă/reset -->
+        <!-- Bara de acțiuni principale: hamburger + salvează/încarcă/reset + temă -->
         <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
             <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('hidden')" aria-label="Meniu principal">
                 <span></span>
@@ -48,11 +69,11 @@
             <button class="btn-utility primary" id="saveBtn" onclick="saveCase()">SALVEAZA</button>
             <button class="btn-utility" id="loadBtn" onclick="openLoadModal()">INCARCA <span class="badge hidden" id="caseCountBadge">0</span></button>
             <button class="btn-utility" id="resetBtn" onclick="confirmReset()">RESET</button>
+            <button id="themeToggle" onclick="toggleTheme()" aria-label="Comută tema">☀️</button>
         </div>
 
         <!-- Meniul principal (ascuns inițial), afișat sub bara de acțiuni -->
         <div id="mainMenu" class="top-actions hidden">
-            <button class="btn-big" id="themeToggle" onclick="toggleTheme()">LUMINOS</button>
             <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFO</button>
             <a href="termene.html" class="btn-big">CALCUL TERMEN</a>
             <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188</button>
@@ -63,7 +84,7 @@
         </div>
 
         <main id="main-content">
-            <!-- Restul conținutului rămâne identic cu versiunea anterioară -->
+            <!-- Conținutul rămâne identic cu versiunea anterioară -->
             <div class="card" aria-labelledby="date-ppl-heading">
                 <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
                 <div class="form-grid">
@@ -217,12 +238,42 @@
         </main>
         <footer class="footer" role="contentinfo">CALCULATOR EVIDENȚĂ PEDEPSE | v1.5 | © Alin Talfeș</footer>
     </div>
-    <script src="js/utils.js?v=7"></script>
-    <script src="js/rules.js?v=7"></script>
-    <script src="js/legal.js?v=7"></script>
-    <script src="js/storage.js?v=7"></script>
-    <script src="js/export.js?v=7"></script>
-    <script src="js/ui.js?v=7"></script>
-    <script src="js/app.js?v=7"></script>
+    <script src="js/utils.js?v=8"></script>
+    <script src="js/rules.js?v=8"></script>
+    <script src="js/legal.js?v=8"></script>
+    <script src="js/storage.js?v=8"></script>
+    <script src="js/export.js?v=8"></script>
+    <script src="js/ui.js?v=8"></script>
+    <script src="js/app.js?v=8"></script>
+    <script>
+        // Suprascriem funcțiile de temă pentru a folosi emoji-uri
+        (function() {
+            function updateThemeButton() {
+                const btn = document.getElementById('themeToggle');
+                if (document.body.classList.contains('light')) {
+                    btn.innerHTML = '☀️';
+                } else {
+                    btn.innerHTML = '🌙';
+                }
+            }
+            window.applyTheme = function() {
+                const saved = localStorage.getItem('anpTheme');
+                if (saved === 'light') {
+                    document.body.classList.add('light');
+                } else {
+                    document.body.classList.remove('light');
+                }
+                updateThemeButton();
+            };
+            window.toggleTheme = function() {
+                document.body.classList.toggle('light');
+                const isLight = document.body.classList.contains('light');
+                localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
+                updateThemeButton();
+            };
+            // Actualizăm butonul imediat
+            updateThemeButton();
+        })();
+    </script>
 </body>
 </html>
