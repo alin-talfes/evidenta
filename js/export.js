@@ -13,7 +13,7 @@ function mapNonExecType(type) {
 }
 
 /**
- * Construiește textul narativ pentru copiere.
+ * Construiește textul narativ pentru copiere, respectând întocmai modelul cerut.
  * Folosește datele stocate în window.lastCalculation (setat în app.js).
  */
 function buildNarrativeText() {
@@ -58,7 +58,14 @@ function buildNarrativeText() {
             dedPeriodsDays += days;
             dedPeriods.push(`${fmtDate(s)}-${fmtDate(e)}`);
         });
-        const dedPeriodsDisplay = dedPeriods.length > 0 ? ` (perioada ${dedPeriods.join(', ')})` : '';
+
+        // Text pentru perioadele deduse (singular/plural)
+        let dedPeriodsDisplay = '';
+        if (dedPeriods.length === 1) {
+            dedPeriodsDisplay = ` (perioada ${dedPeriods[0]})`;
+        } else if (dedPeriods.length > 1) {
+            dedPeriodsDisplay = ` (perioadele ${dedPeriods.join(', ')})`;
+        }
 
         // Recurs compensatoriu separat
         const recursDays = calc.recursDays || 0;
@@ -108,7 +115,7 @@ function buildNarrativeText() {
         const fDateStr = fmtDate(calc.fDate);
         const fifth = calc.fifth;
 
-        // Construiește textul final
+        // Construiește textul final EXACT conform modelului
         return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr} este condamnată la pedeapsa inchisorii rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDateStr} și expiră în termen la data de ${realExpStr}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDateStr}, după executarea a ${tDays} zile. ${workText}. Termenul de reanalizare (1/5) este data de ${fDateStr}, după executarea a ${fifth} zile.`;
     } catch (e) {
         alert('Eroare la construirea textului: ' + e.message);
