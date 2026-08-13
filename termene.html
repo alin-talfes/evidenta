@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator termene procedurale penale</title>
     <style>
         :root {
@@ -89,7 +89,7 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
         }
-        button, .btn {
+        .btn {
             padding: 10px 18px;
             border-radius: var(--input-radius);
             font-weight: 600;
@@ -108,18 +108,16 @@
             text-decoration: none;
             letter-spacing: 0.5px;
         }
-        button:hover, .btn:hover {
+        .btn:hover {
             background: var(--gold-light);
             transform: translateY(-1px);
         }
         .btn-secondary {
             background: transparent;
             color: var(--gold-light);
-            border: 1.5px solid var(--gold);
         }
         .btn-secondary:hover {
             background: rgba(201, 162, 39, 0.1);
-            transform: translateY(-1px);
         }
         .result {
             margin-top: 12px;
@@ -138,7 +136,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            margin-top: 16px;
+            margin-bottom: 12px;
             padding: 10px 18px;
             background: transparent;
             border: 1.5px solid var(--gold);
@@ -166,6 +164,7 @@
 </head>
 <body>
     <div class="container">
+        <a href="index.html" class="back-btn">Înapoi la Calculator evidență pedepse</a>
         <div class="header">CALCULATOR TERMENE PROCEDURALE PENALE</div>
 
         <div class="card">
@@ -206,7 +205,7 @@
                 <option value="prelungire_arest_la_domiciliu">Prelungire arest la domiciliu</option>
             </select>
 
-            <button onclick="calculateTerm()">Calculează termen</button>
+            <button class="btn" onclick="calculateTerm()">Calculează termen</button>
             <div id="deadlineResult" class="result" style="display:none;"></div>
         </div>
 
@@ -237,15 +236,13 @@
                 Trimis prin e-mail/fax
             </label>
 
-            <button onclick="checkSubmission()">Verifică dacă este în termen</button>
+            <button class="btn" onclick="checkSubmission()">Verifică dacă este în termen</button>
             <div id="submissionResult" class="result" style="display:none;"></div>
         </div>
-
-        <a href="index.html" class="back-btn">Înapoi la Calculator evidență pedepse</a>
     </div>
 
     <script>
-        // ===== Funcții de parsing pentru formatul românesc =====
+        // ===== Parsare date românești =====
         function parseRoDate(str) {
             if (!str) return null;
             const parts = str.trim().split('.');
@@ -302,14 +299,12 @@
         ]);
 
         function parseDate(input) {
-            if (input instanceof Date) {
-                return new Date(input.getFullYear(), input.getMonth(), input.getDate());
-            }
+            if (input instanceof Date) return new Date(input.getFullYear(), input.getMonth(), input.getDate());
             if (typeof input === 'string') {
                 const [year, month, day] = input.split('-').map(Number);
                 return new Date(year, month - 1, day);
             }
-            throw new Error('Format dată invalid. Folosește YYYY-MM-DD sau Date.');
+            throw new Error('Format dată invalid.');
         }
 
         function formatDate(date) {
@@ -378,17 +373,13 @@
             if (!['hours', 'days', 'months', 'years'].includes(unit)) {
                 throw new Error('Unitate invalidă. Folosește "hours", "days", "months" sau "years".');
             }
-            if (duration <= 0) {
-                throw new Error('Durata trebuie să fie un număr pozitiv.');
-            }
+            if (duration <= 0) throw new Error('Durata trebuie să fie un număr pozitiv.');
 
             const isPreventive = termType === 'preventive' || termType === 'restrictive';
 
             if (unit === 'hours') {
                 const startDate = new Date(start);
-                if (isNaN(startDate.getTime())) {
-                    throw new Error('Data/ora de început invalidă.');
-                }
+                if (isNaN(startDate.getTime())) throw new Error('Data/ora de început invalidă.');
                 const deadline = new Date(startDate);
                 deadline.setHours(deadline.getHours() + duration);
                 return {
@@ -426,11 +417,14 @@
             let deadline = rawDeadline;
             let workingDayAdjustment = false;
 
-            if (!isPreventive && isNonWorkingDay(rawDeadline)) {
+            // Ajustare pentru zile nelucrătoare conform art. 269 alin. (3)
+            // Se aplică tuturor termenelor, inclusiv preventive și restrictive.
+            if (isNonWorkingDay(rawDeadline)) {
                 deadline = nextWorkingDay(rawDeadline);
                 workingDayAdjustment = true;
             }
 
+            // Excepția RIL 3/2025
             const rilActTypes = ['rechizitoriu', 'prelungire_arest_preventiv', 'prelungire_arest_la_domiciliu'];
             if (!isPreventive && unit === 'days' && rilActTypes.includes(actType)) {
                 const effectiveDeadline = previousWorkingDay(deadline);
@@ -467,13 +461,9 @@
             if (sentDay < deadlineDay) return true;
             if (sentDay > deadlineDay) return false;
 
-            if (sentByEmailOrFax && unit === 'days') {
-                return true;
-            }
+            if (sentByEmailOrFax && unit === 'days') return true;
 
-            if (!receivedDate) {
-                return true;
-            }
+            if (!receivedDate) return true;
 
             const received = new Date(receivedDate);
             const endOfDeadline = new Date(deadlineDay);
