@@ -203,6 +203,18 @@
 
         <div class="card">
             <h3>Calcul termen</h3>
+
+            <!-- NOU: Selector termen predefinit -->
+            <label for="presetSelect">Termen predefinit</label>
+            <select id="presetSelect" onchange="applyPreset(this.value)">
+                <option value="manual">Manual (completezi tu)</option>
+                <option value="contestatie">Contestație – 3 zile</option>
+                <option value="apel">Apel – 10 zile</option>
+                <option value="recurs">Recurs – 30 zile</option>
+                <option value="arest_preventiv">Prelungire arest preventiv – 30 zile</option>
+                <option value="arest_domiciliu">Prelungire arest la domiciliu – 30 zile</option>
+            </select>
+
             <div class="row">
                 <div>
                     <label for="startDateInput">Data început (zz.ll.aaaa)</label>
@@ -216,6 +228,7 @@
                     <input type="text" id="startTimeInput" class="time-masked" placeholder="hh:mm">
                 </div>
             </div>
+
             <label for="durationInput">Durată</label>
             <input type="number" id="durationInput" min="1" placeholder="ex: 3">
 
@@ -513,6 +526,63 @@
 
         function getHolidays() {
             return Array.from(HOLIDAYS_2026_2028).sort();
+        }
+
+        // ===== Termene predefinite =====
+        const predefinedTerms = {
+            manual: {
+                duration: '',
+                unit: 'days',
+                calcMode: 'calendar',
+                termType: 'general',
+                actType: ''
+            },
+            contestatie: {
+                duration: 3,
+                unit: 'days',
+                calcMode: 'calendar',
+                termType: 'general',
+                actType: ''
+            },
+            apel: {
+                duration: 10,
+                unit: 'days',
+                calcMode: 'calendar',
+                termType: 'general',
+                actType: ''
+            },
+            recurs: {
+                duration: 30,
+                unit: 'days',
+                calcMode: 'calendar',
+                termType: 'general',
+                actType: ''
+            },
+            arest_preventiv: {
+                duration: 30,
+                unit: 'days',
+                calcMode: 'calendar',
+                termType: 'preventive',
+                actType: 'prelungire_arest_preventiv'
+            },
+            arest_domiciliu: {
+                duration: 30,
+                unit: 'days',
+                calcMode: 'calendar',
+                termType: 'preventive',
+                actType: 'prelungire_arest_la_domiciliu'
+            }
+        };
+
+        function applyPreset(presetId) {
+            const preset = predefinedTerms[presetId];
+            if (!preset) return;
+
+            document.getElementById('durationInput').value = preset.duration;
+            document.getElementById('unitSelect').value = preset.unit;
+            document.getElementById('calcModeSelect').value = preset.calcMode;
+            document.getElementById('termTypeSelect').value = preset.termType;
+            document.getElementById('actTypeSelect').value = preset.actType;
         }
 
         // ===== Interfață =====
