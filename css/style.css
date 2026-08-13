@@ -19,7 +19,7 @@
     --input-border: #3a4150;
     --input-placeholder: #8a92a6;
     --label-color: #c0c6d2;
-    /* Noi variabile pentru unificare */
+    /* Variabile unificate */
     --radius-sm: 10px;
     --radius-md: 14px;
     --radius-lg: 18px;
@@ -96,39 +96,40 @@ body {
 /* ========== BARA PRINCIPALĂ ========== */
 .top-bar {
     display: flex;
-    gap: var(--gap-md);
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;                    /* spațiere uniformă */
+    padding: 8px 12px;
     margin-bottom: var(--gap-lg);
     background: rgba(22, 24, 32, 0.6);
     backdrop-filter: blur(8px);
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
     border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-md);
     position: sticky;
     top: 8px;
     z-index: 10;
-    align-items: center;
-    will-change: transform;
 }
 
 body.light .top-bar {
     background: rgba(255,255,255,0.8);
 }
 
-/* Buton hamburger */
+/* ========== BUTON HAMBURGER ========== */
 .hamburger {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     gap: 4px;
-    width: var(--btn-height);
-    height: var(--btn-height);
-    background: var(--card-bg);
+    background: transparent;
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-md);
     cursor: pointer;
-    flex-shrink: 0;
     transition: all var(--transition-base);
+    padding: 0;
 }
 
 .hamburger span {
@@ -144,32 +145,32 @@ body.light .top-bar {
     border-color: var(--gold);
 }
 
-/* Butoane utilitare */
+/* ========== BUTOANE UTILITARE ========== */
 .btn-utility {
-    flex: 1;
-    background: rgba(201, 162, 39, 0.05);
-    border: var(--border-width) solid var(--border);
-    color: var(--text-light);
-    border-radius: var(--radius-md);
-    padding: var(--btn-padding-y) var(--btn-padding-x);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    cursor: pointer;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all var(--transition-base);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
     white-space: nowrap;
+    background: transparent;
+    border: var(--border-width) solid var(--border);
+    color: var(--text-light);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    cursor: pointer;
     position: relative;
-    min-width: 0;
-    min-height: var(--btn-height);
 }
 
 .btn-utility:hover,
 .btn-utility:focus-visible {
-    background: rgba(201, 162, 39, 0.12);
+    background: rgba(201, 162, 39, 0.1);
     border-color: var(--gold);
     color: var(--gold-light);
     outline: none;
@@ -189,7 +190,7 @@ body.light .top-bar {
     color: #0F1115;
 }
 
-/* INCARCA = secondary outline */
+/* INCARCA = outline gold */
 .btn-utility#loadBtn {
     background: transparent;
     border-color: var(--gold);
@@ -214,7 +215,7 @@ body.light .top-bar {
     color: var(--gold-light);
 }
 
-/* Badge pentru numărul de spețe */
+/* Badge spețe */
 .badge {
     position: absolute;
     top: -6px;
@@ -232,22 +233,22 @@ body.light .top-bar {
     letter-spacing: 0;
 }
 
-/* Buton temă */
+/* ========== BUTON TEMĂ ========== */
 #themeToggle {
-    flex: 0 0 auto;
-    min-width: var(--btn-height);
-    height: var(--btn-height);
-    padding: 0 8px;
-    font-size: 1.2rem;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--card-bg);
+    background: transparent;
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-md);
+    color: var(--gold-light);
     cursor: pointer;
-    margin-left: 4px;
     transition: all var(--transition-base);
+    font-size: 1.2rem;
+    padding: 0;
 }
 
 #themeToggle:hover {
@@ -418,7 +419,6 @@ textarea::placeholder {
     opacity: 0.8;
 }
 
-/* Câmpuri numerice goale (valoarea 0) */
 input[type="number"]:placeholder-shown {
     color: var(--input-placeholder);
 }
@@ -957,14 +957,24 @@ small { color: var(--text-light); font-size: 0.72rem; }
         flex: 1 1 100%;
         max-width: 100%;
     }
+    .top-bar {
+        gap: 6px;
+        padding: 8px 10px;
+    }
     .btn-utility {
         font-size: 0.7rem;
-        padding: 10px 4px;
+        padding: 0 6px;
     }
-    .top-bar { gap: 6px; padding: 8px 10px; }
-    .btn-utility { padding: 10px 6px; }
-    #themeToggle { min-width: 40px; }
-    .hamburger { width: 40px; height: 40px; }
+    #themeToggle {
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+    }
+    .hamburger {
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+    }
 }
 
 /* ========== REDUCERE MIȘCARE ========== */
