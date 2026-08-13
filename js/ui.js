@@ -86,7 +86,7 @@ function addDedRow() {
         <div><label>Început</label><input type="text" class="ded-start date-masked" placeholder="zz.ll.aaaa"></div>
         <div><label>Sfârșit</label><input type="text" class="ded-end date-masked" placeholder="zz.ll.aaaa"></div>
         <div style="min-width:50px;"><label>Zile</label><input type="text" class="ded-days" readonly style="background:rgba(0,0,0,0.2);font-weight:600;" tabindex="-1"></div>
-        <button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button>
+        <button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">X</button>
     `;
     document.getElementById('deductionsContainer').appendChild(r);
     r.querySelector('.ded-start').addEventListener('input', () => updDed(r));
@@ -119,7 +119,7 @@ function addManDedRow() {
     r.setAttribute('role', 'listitem');
     r.innerHTML = `
         <div style="flex:2;"><label>Zile (Legea 169/2017)</label><input type="number" class="manual-days" value="0" min="0"></div>
-        <div style="flex:1;"><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button></div>
+        <div style="flex:1;"><button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">X</button></div>
     `;
     document.getElementById('manualDeductionsContainer').appendChild(r);
 }
@@ -140,7 +140,7 @@ function addNonExecRow() {
         <div><label>Data început</label><input type="text" class="ne-start date-masked" placeholder="zz.ll.aaaa"></div>
         <div><label>Data final</label><input type="text" class="ne-end date-masked" placeholder="zz.ll.aaaa"></div>
         <div style="min-width:50px;"><label>Zile</label><input type="text" class="ne-days" readonly style="background:rgba(255,0,0,0.1);font-weight:600;color:#ff6b6b;" tabindex="-1"></div>
-        <button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">✕</button>
+        <button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">X</button>
     `;
     document.getElementById('nonExecContainer').appendChild(r);
     r.querySelector('.ne-start').addEventListener('input', () => updNonExec(r));
@@ -218,11 +218,11 @@ function toggleSteps() {
     const btn = document.getElementById('toggleStepsBtn');
     if (container.classList.contains('hidden')) {
         container.classList.remove('hidden');
-        btn.innerHTML = '🧮 ASCUNDE PAȘII CALCULULUI';
+        btn.innerHTML = 'ASCUNDE PAȘII CALCULULUI';
         btn.setAttribute('aria-expanded', 'true');
     } else {
         container.classList.add('hidden');
-        btn.innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
+        btn.innerHTML = 'AFIȘEAZĂ PAȘII CALCULULUI';
         btn.setAttribute('aria-expanded', 'false');
     }
 }
@@ -241,7 +241,7 @@ function openInfoModal() {
     overlay.setAttribute('aria-labelledby', 'info-title');
     overlay.innerHTML = `
         <div class="modal">
-            <h4 id="info-title">📖 GHID DE UTILIZARE</h4>
+            <h4 id="info-title">GHID DE UTILIZARE</h4>
             <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
                 <p><strong>1. DATE GENERALE PPL</strong><br>
                 • <strong>Sex:</strong> alegeți Masculin/Feminin. Implicit este MASCULIN.<br>
@@ -280,7 +280,7 @@ function openInfoModal() {
                 • Exportați PDF sau copiați rezultatele.</p>
 
                 <hr style="border-color:var(--border);margin:12px 0;">
-                <p style="font-size:0.8rem;color:var(--text-light);"><strong>🔒 Confidențialitate și securitate</strong><br>
+                <p style="font-size:0.8rem;color:var(--text-light);"><strong>Confidențialitate și securitate</strong><br>
                 Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p>
             </div>
             <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
@@ -305,16 +305,20 @@ function openLegalModal() {
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'legal-title');
 
-    let html = '<div class="modal"><h4 id="legal-title">📚 BAZE LEGALE (OMJ 2188/C/2022)</h4>';
+    let html = '<div class="modal"><h4 id="legal-title">BAZA LEGALA (OMJ 2188/C/2022)</h4>';
     html += '<div style="max-height: 70vh; overflow-y: auto;">';
 
-    legalArticles.forEach(article => {
-        html += `<div style="margin-bottom:12px; padding:10px; background:rgba(201,162,39,0.05); border-left:3px solid var(--gold); border-radius:8px;">`;
-        html += `<strong style="color:var(--gold-light);">${article.titlu}</strong><br>`;
-        html += `<span style="font-size:0.8rem; color:var(--text-light);">${article.text.replace(/\n/g, '<br>')}</span>`;
-        html += `<br><em style="font-size:0.75rem; color:var(--text-light);">Aplicare: ${article.aplicare}</em>`;
-        html += `</div>`;
-    });
+    if (typeof legalArticles !== 'undefined' && legalArticles.length > 0) {
+        legalArticles.forEach(article => {
+            html += `<div style="margin-bottom:12px; padding:10px; background:rgba(201,162,39,0.05); border-left:3px solid var(--gold); border-radius:8px;">`;
+            html += `<strong style="color:var(--gold-light);">${article.titlu}</strong><br>`;
+            html += `<span style="font-size:0.8rem; color:var(--text-light);">${article.text.replace(/\n/g, '<br>')}</span>`;
+            html += `<br><em style="font-size:0.75rem; color:var(--text-light);">Aplicare: ${article.aplicare}</em>`;
+            html += `</div>`;
+        });
+    } else {
+        html += '<p style="font-size:0.85rem;color:var(--text-light);">Baza legală nu a fost încărcată. Verificați fișierul legal-articles.js.</p>';
+    }
 
     html += '</div>';
     html += '<button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button></div>';
@@ -354,8 +358,8 @@ function openLoadModal() {
         html += `<li role="option" tabindex="0">
             <span onclick="window.loadCaseByName('${safeName}')" role="button" tabindex="0">${name}</span>
             <div style="display:flex;gap:4px;">
-                <button onclick="window.renameCase('${safeName}')" aria-label="Redenumește speța ${name}" style="background:transparent;border:1px solid var(--primary);color:var(--gold-light);border-radius:8px;padding:6px 8px;cursor:pointer;font-size:0.7rem;">✏️</button>
-                <button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">🗑️</button>
+                <button onclick="window.renameCase('${safeName}')" aria-label="Redenumește speța ${name}" style="background:transparent;border:1px solid var(--primary);color:var(--gold-light);border-radius:8px;padding:6px 8px;cursor:pointer;font-size:0.7rem;">Edit</button>
+                <button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">X</button>
             </div>
         </li>`;
     });
