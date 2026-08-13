@@ -1,17 +1,11 @@
 // ========== INTERFAȚĂ UTILIZATOR (DOM) ==========
 
-// Variabila globală pentru sexul curent (M/F)
 let currentSex = 'M';
 
-// Referințe către elementele DOM pentru toggle-ul de sex
 const sexToggle = document.getElementById('sexToggle');
 const sexLabelM = document.getElementById('sexLabelM');
 const sexLabelF = document.getElementById('sexLabelF');
 
-/**
- * Actualizează interfața pentru selectarea sexului.
- * Setează variabila globală currentSex și evidențiază eticheta corespunzătoare.
- */
 function updateSexUI() {
     if (sexToggle.checked) {
         currentSex = 'M';
@@ -25,10 +19,6 @@ function updateSexUI() {
     updAgeTag();
 }
 
-/**
- * Aplică masca pentru câmpurile de dată (zz.ll.aaaa).
- * @param {Event} e - evenimentul input
- */
 function applyDateMask(e) {
     const input = e.target;
     let val = input.value.replace(/\D/g, '');
@@ -40,19 +30,11 @@ function applyDateMask(e) {
     input.value = formatted;
 }
 
-/**
- * Setează data de azi în câmpul specificat.
- * @param {string} inputId - id-ul input-ului
- */
 function setToday(inputId) {
     const input = document.getElementById(inputId);
     if (input) input.value = fmtDate(today());
 }
 
-/**
- * Actualizează eticheta de vârstă și categorie.
- * Afișează vârsta exactă și categoria (MINOR, TANAR, MAJOR, BATRAN).
- */
 function updAgeTag() {
     const b = document.getElementById('birthDate').value.trim();
     const tag = document.getElementById('ageTag');
@@ -74,10 +56,6 @@ function updAgeTag() {
     tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`;
 }
 
-/**
- * Adaugă un rând pentru perioadă dedusă.
- * Creează elemente cu clasele și atributele necesare.
- */
 function addDedRow() {
     const r = document.createElement('div');
     r.className = 'period-row deduction-row';
@@ -93,10 +71,6 @@ function addDedRow() {
     r.querySelector('.ded-end').addEventListener('input', () => updDed(r));
 }
 
-/**
- * Actualizează numărul de zile pentru un rând de deducere.
- * @param {HTMLElement} r - rândul perioadei
- */
 function updDed(r) {
     const s = r.querySelector('.ded-start').value.trim();
     const e = r.querySelector('.ded-end').value.trim();
@@ -110,9 +84,6 @@ function updDed(r) {
     }
 }
 
-/**
- * Adaugă un rând pentru recurs compensatoriu.
- */
 function addManDedRow() {
     const r = document.createElement('div');
     r.className = 'period-row';
@@ -124,9 +95,6 @@ function addManDedRow() {
     document.getElementById('manualDeductionsContainer').appendChild(r);
 }
 
-/**
- * Adaugă un rând pentru perioadă adăugată.
- */
 function addNonExecRow() {
     const r = document.createElement('div');
     r.className = 'period-row non-exec-row';
@@ -148,10 +116,6 @@ function addNonExecRow() {
     r.querySelector('.ne-type').addEventListener('change', () => updNonExec(r));
 }
 
-/**
- * Actualizează numărul de zile pentru un rând de perioadă adăugată.
- * @param {HTMLElement} r - rândul perioadei
- */
 function updNonExec(r) {
     const s = r.querySelector('.ne-start').value.trim();
     const e = r.querySelector('.ne-end').value.trim();
@@ -172,16 +136,10 @@ function updNonExec(r) {
     }
 }
 
-/**
- * Confirmă resetarea și apoi resetează toate câmpurile.
- */
 function confirmReset() {
     if (confirm('Sigur doriți să resetați toate câmpurile?')) resetAll();
 }
 
-/**
- * Resetează toate câmpurile formularului și rezultatele.
- */
 function resetAll() {
     currentSex = 'M';
     sexToggle.checked = true;
@@ -210,9 +168,6 @@ function resetAll() {
     calcMasuriPreventive();
 }
 
-/**
- * Afișează sau ascunde pașii de calcul.
- */
 function toggleSteps() {
     const container = document.getElementById('stepsContainer');
     const btn = document.getElementById('toggleStepsBtn');
@@ -227,9 +182,6 @@ function toggleSteps() {
     }
 }
 
-/**
- * Deschide modalul cu informații și ghid de utilizare detaliat.
- */
 function openInfoModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -292,10 +244,6 @@ function openInfoModal() {
     });
 }
 
-/**
- * Deschide modalul cu bazele legale (OMJ 2188/C/2022).
- * Butonul de închidere este fix în partea de jos, mereu accesibil.
- */
 function openLegalModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -307,8 +255,11 @@ function openLegalModal() {
     overlay.setAttribute('aria-labelledby', 'legal-title');
 
     let html = '<div class="modal" style="display:flex; flex-direction:column; max-height:80vh;">';
-    html += '<h4 id="legal-title" style="margin-bottom:8px;">BAZA LEGALA (OMJ 2188/C/2022)</h4>';
-    html += '<div style="flex:1; overflow-y:auto; max-height: calc(80vh - 100px);">';
+    html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">';
+    html += '<h4 id="legal-title" style="margin:0;">BAZA LEGALA (OMJ 2188/C/2022)</h4>';
+    html += '<button class="btn btn-outline btn-sm close-btn" onclick="this.closest(\'.modal-overlay\').remove()" style="flex-shrink:0;">Închide</button>';
+    html += '</div>';
+    html += '<div style="flex:1; overflow-y:auto;">';
 
     if (typeof legalArticles !== 'undefined' && legalArticles.length > 0) {
         legalArticles.forEach(article => {
@@ -323,9 +274,6 @@ function openLegalModal() {
     }
 
     html += '</div>';
-    html += '<div style="text-align:right; margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">';
-    html += '<button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button>';
-    html += '</div>';
     html += '</div>';
 
     overlay.innerHTML = html;
@@ -335,9 +283,6 @@ function openLegalModal() {
     });
 }
 
-/**
- * Deschide modalul de încărcare a spețelor salvate.
- */
 function openLoadModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -381,11 +326,6 @@ function openLoadModal() {
     }, 100);
 }
 
-/**
- * Formatează o dată cu avertisment vizual (expirat/curând).
- * @param {Date} date - data
- * @returns {string} - HTML cu data și avertisment
- */
 function formatDateWithWarning(date) {
     if (!date || isNaN(date)) return fmtDate(date);
     const t = today();
