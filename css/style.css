@@ -78,38 +78,36 @@ body {
 }
 
 /* ========== BUTOANE PRINCIPALE (SUS) ========== */
+/* Două coloane pe desktop, una pe mobil */
 .top-actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 12px;
 }
 
 .top-actions .btn-big {
-    flex: 1 1 calc(50% - 5px);
-    max-width: calc(50% - 5px);
-    min-width: 0; /* permite micșorarea sub conținut */
+    width: 100%;
+    max-width: none;
     padding: 12px 10px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.5px;
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    will-change: transform;
     text-align: center;
     text-decoration: none;
     box-sizing: border-box;
+    white-space: normal;
+    word-break: break-word;
     background: rgba(201, 162, 39, 0.08);
     border: 1px solid var(--border);
     color: var(--text-light);
     border-radius: var(--input-radius);
-    white-space: normal;
-    word-break: break-word;
+    transition: all 0.2s ease;
+    will-change: transform;
 }
 
 .top-actions .btn-big:hover,
@@ -121,9 +119,8 @@ body {
 }
 
 @media (max-width: 480px) {
-    .top-actions .btn-big {
-        flex: 1 1 100%;
-        max-width: 100%;
+    .top-actions {
+        grid-template-columns: 1fr;
     }
 }
 
