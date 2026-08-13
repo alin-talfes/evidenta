@@ -261,7 +261,7 @@
             </select>
 
             <label style="display:flex; align-items:center; gap:8px;">
-                <input type="checkbox" id="definitiveCheckbox" style="width:auto; margin-bottom:0;">
+                <input type="checkbox" id="definitiveCheckbox" style="width:auto; margin-bottom:0;" checked>
                 Adaugă 1 zi lucrătoare pentru data rămânerii definitive
             </label>
 
@@ -485,7 +485,6 @@
 
             if (unit === 'days') {
                 if (calcMode === 'working') {
-                    // Zile lucrătoare: se exclude ziua de început, se adaugă n zile lucrătoare
                     rawDeadline = addWorkingDays(startDate, duration);
                 } else {
                     rawDeadline = isPreventive ? addDays(startDate, duration - 1) : addDays(startDate, duration);
@@ -499,13 +498,11 @@
             let deadline = rawDeadline;
             let workingDayAdjustment = false;
 
-            // Ajustare la zi lucrătoare doar pentru termene generale pe zile calendaristice
             if (!isPreventive && calcMode === 'calendar' && isNonWorkingDay(rawDeadline)) {
                 deadline = nextWorkingDay(rawDeadline);
                 workingDayAdjustment = true;
             }
 
-            // Excepția RIL 3/2025 (doar pentru termene generale pe zile calendaristice)
             const rilActTypes = ['rechizitoriu', 'prelungire_arest_preventiv', 'prelungire_arest_la_domiciliu'];
             if (!isPreventive && calcMode === 'calendar' && unit === 'days' && rilActTypes.includes(actType)) {
                 const effectiveDeadline = previousWorkingDay(deadline);
@@ -541,7 +538,7 @@
                 calcMode: 'working',
                 termType: 'general',
                 actType: '',
-                definitive: false
+                definitive: true
             },
             contestatie: {
                 duration: 3,
