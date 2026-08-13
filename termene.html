@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator termene procedurale penale</title>
+    <style>
+        :root {
+            --bg: #12141A;
+            --card-bg: #161820;
+            --gold: #C9A227;
+            --gold-light: #D4AF37;
+            --text: #e6e6e6;
+            --text-light: #B0B5C0;
+            --border: #2a2a35;
+            --danger: #ff6b6b;
+            --warning: #ffa726;
+            --radius: 18px;
+            --input-radius: 14px;
+            --input-bg: #1b1f2a;
+            --input-border: #3a4150;
+            --label-color: #c0c6d2;
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        body {
+            background: var(--bg);
+            font-family: var(--font);
+            color: var(--text);
+            padding: 12px;
+            font-size: 16px;
+            line-height: 1.5;
+            max-width: 100vw;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 60%, #0d0d1a 100%);
+            border: 1px solid var(--border);
+            color: var(--gold-light);
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            padding: 20px 22px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            border-left: 3px solid rgba(201, 162, 39, 0.5);
+        }
+        .card h3 {
+            color: var(--gold-light);
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
+            padding-bottom: 10px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            color: var(--label-color);
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--input-border);
+            border-radius: var(--input-radius);
+            font-size: 0.9rem;
+            background: var(--input-bg);
+            color: var(--text);
+            font-family: var(--font-mono);
+            min-height: 44px;
+            margin-bottom: 12px;
+        }
+        input:focus, select:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
+        }
+        button {
+            padding: 10px 18px;
+            border-radius: var(--input-radius);
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            border: 1.5px solid var(--gold);
+            background: var(--gold);
+            color: #0F1115;
+            margin-top: 8px;
+            min-height: 42px;
+        }
+        button:hover {
+            background: var(--gold-light);
+        }
+        .result {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(201, 162, 39, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--gold);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            word-break: break-word;
+        }
+        .result strong {
+            color: var(--gold-light);
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 12px;
+            background: rgba(201, 162, 39, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: var(--input-radius);
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .back-link:hover {
+            background: rgba(201, 162, 39, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">CALCULATOR TERMENE PROCEDURALE PENALE</div>
+
+        <div class="card">
+            <h3>Calcul termen</h3>
+            <label for="startInput">Data și ora de început</label>
+            <input type="datetime-local" id="startInput" value="2026-01-05T09:00">
+
+            <label for="durationInput">Durată</label>
+            <input type="number" id="durationInput" value="10" min="1">
+
+            <label for="unitSelect">Unitate de măsură</label>
+            <select id="unitSelect">
+                <option value="days">zile</option>
+                <option value="hours">ore</option>
+                <option value="months">luni</option>
+                <option value="years">ani</option>
+            </select>
+
+            <label for="termTypeSelect">Tip termen</label>
+            <select id="termTypeSelect">
+                <option value="general">General (art. 269)</option>
+                <option value="preventive">Preventiv (art. 271)</option>
+                <option value="restrictive">Restrictiv (art. 271)</option>
+            </select>
+
+            <label for="actTypeSelect">Tip act (pentru excepția RIL 3/2025)</label>
+            <select id="actTypeSelect">
+                <option value="">Fără</option>
+                <option value="rechizitoriu">Rechizitoriu</option>
+                <option value="prelungire_arest_preventiv">Prelungire arest preventiv</option>
+                <option value="prelungire_arest_la_domiciliu">Prelungire arest la domiciliu</option>
+            </select>
+
+            <button onclick="calculateTerm()">Calculează termen</button>
+            <div id="deadlineResult" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="card">
+            <h3>Verificare depunere în termen</h3>
+            <label for="sentDateInput">Data și ora trimiterii</label>
+            <input type="datetime-local" id="sentDateInput">
+
+            <label for="receivedDateInput">Data și ora primirii (opțional)</label>
+            <input type="datetime-local" id="receivedDateInput">
+
+            <label style="display:flex; align-items:center;">
+                <input type="checkbox" id="emailFaxCheckbox" style="width:auto; margin-right:8px; margin-bottom:0;">
+                Trimis prin e-mail/fax
+            </label>
+
+            <button onclick="checkSubmission()">Verifică dacă este în termen</button>
+            <div id="submissionResult" class="result" style="display:none;"></div>
+        </div>
+
+        <a href="index.html" class="back-link">Înapoi la Calculator evidență pedepse</a>
+    </div>
+
+    <script>
+        // ===== Date sărbători legale 2026-2028 =====
+        const HOLIDAYS_2026_2028 = new Set([
+          // 2026
+          '2026-01-01', '2026-01-02', '2026-01-06', '2026-01-07', '2026-01-24',
+          '2026-04-10', '2026-04-12', '2026-04-13', '2026-05-01', '2026-05-31',
+          '2026-06-01', '2026-08-15', '2026-11-30', '2026-12-01', '2026-12-25',
+          '2026-12-26',
+          // 2027
+          '2027-01-01', '2027-01-02', '2027-01-06', '2027-01-07', '2027-01-24',
+          '2027-04-30', '2027-05-01', '2027-05-02', '2027-05-03', '2027-06-01',
+          '2027-06-20', '2027-06-21', '2027-08-15', '2027-11-30', '2027-12-01',
+          '2027-12-25', '2027-12-26',
+          // 2028
+          '2028-01-01', '2028-01-02', '2028-01-06', '2028-01-07', '2028-01-24',
+          '2028-04-14', '2028-04-16', '2028-04-17', '2028-05-01', '2028-06-01',
+          '2028-06-04', '2028-06-05', '2028-08-15', '2028-11-30', '2028-12-01',
+          '2028-12-25', '2028-12-26'
+        ]);
+
+        function parseDate(input) {
+            if (input instanceof Date) {
+                return new Date(input.getFullYear(), input.getMonth(), input.getDate());
+            }
+            if (typeof input === 'string') {
+                const [year, month, day] = input.split('-').map(Number);
+                return new Date(year, month - 1, day);
+            }
+            throw new Error('Format dată invalid. Folosește YYYY-MM-DD sau Date.');
+        }
+
+        function formatDate(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatDateTime(date) {
+            return `${formatDate(date)} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        }
+
+        function addDays(date, n) {
+            const d = new Date(date);
+            d.setDate(d.getDate() + n);
+            return d;
+        }
+
+        function addMonths(date, n) {
+            const d = new Date(date);
+            const day = d.getDate();
+            d.setDate(1);
+            d.setMonth(d.getMonth() + n);
+            const maxDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+            d.setDate(Math.min(day, maxDay));
+            return d;
+        }
+
+        function addYears(date, n) {
+            const d = new Date(date);
+            const day = d.getDate();
+            const month = d.getMonth();
+            d.setFullYear(d.getFullYear() + n);
+            const maxDay = new Date(d.getFullYear(), month + 1, 0).getDate();
+            d.setDate(Math.min(day, maxDay));
+            return d;
+        }
+
+        function isWeekend(date) {
+            const d = parseDate(date);
+            const day = d.getDay();
+            return day === 0 || day === 6;
+        }
+
+        function isHoliday(date) {
+            const key = typeof date === 'string' ? date : formatDate(date);
+            return HOLIDAYS_2026_2028.has(key);
+        }
+
+        function isNonWorkingDay(date) {
+            return isWeekend(date) || isHoliday(date);
+        }
+
+        function nextWorkingDay(date) {
+            let d = parseDate(date);
+            while (isNonWorkingDay(d)) {
+                d = addDays(d, 1);
+            }
+            return d;
+        }
+
+        function previousWorkingDay(date) {
+            let d = parseDate(date);
+            d = addDays(d, -1);
+            while (isNonWorkingDay(d)) {
+                d = addDays(d, -1);
+            }
+            return d;
+        }
+
+        function calculateDeadline({ start, duration, unit, termType = 'general', actType = null }) {
+            if (!['hours', 'days', 'months', 'years'].includes(unit)) {
+                throw new Error('Unitate invalidă. Folosește "hours", "days", "months" sau "years".');
+            }
+            if (duration <= 0) {
+                throw new Error('Durata trebuie să fie un număr pozitiv.');
+            }
+
+            const isPreventive = termType === 'preventive' || termType === 'restrictive';
+
+            if (unit === 'hours') {
+                const startDate = new Date(start);
+                if (isNaN(startDate.getTime())) {
+                    throw new Error('Data/ora de început invalidă.');
+                }
+                const deadline = new Date(startDate);
+                deadline.setHours(deadline.getHours() + duration);
+                return {
+                    deadline,
+                    effectiveDeadline: deadline,
+                    rule: isPreventive ? 'art. 271' : 'art. 269',
+                    workingDayAdjustment: false,
+                    exception: null
+                };
+            }
+
+            const startDate = parseDate(start);
+            let rawDeadline;
+
+            if (unit === 'days') {
+                if (isPreventive) {
+                    rawDeadline = addDays(startDate, duration - 1);
+                } else {
+                    rawDeadline = addDays(startDate, duration);
+                }
+            } else if (unit === 'months') {
+                if (isPreventive) {
+                    rawDeadline = addDays(addMonths(startDate, duration), -1);
+                } else {
+                    rawDeadline = addMonths(startDate, duration);
+                }
+            } else if (unit === 'years') {
+                if (isPreventive) {
+                    rawDeadline = addDays(addYears(startDate, duration), -1);
+                } else {
+                    rawDeadline = addYears(startDate, duration);
+                }
+            }
+
+            let deadline = rawDeadline;
+            let workingDayAdjustment = false;
+
+            if (!isPreventive && isNonWorkingDay(rawDeadline)) {
+                deadline = nextWorkingDay(rawDeadline);
+                workingDayAdjustment = true;
+            }
+
+            const rilActTypes = ['rechizitoriu', 'prelungire_arest_preventiv', 'prelungire_arest_la_domiciliu'];
+            if (!isPreventive && unit === 'days' && rilActTypes.includes(actType)) {
+                const effectiveDeadline = previousWorkingDay(deadline);
+                return {
+                    deadline,
+                    effectiveDeadline,
+                    rule: 'art. 269',
+                    workingDayAdjustment,
+                    exception: 'RIL 3/2025'
+                };
+            }
+
+            return {
+                deadline,
+                effectiveDeadline: deadline,
+                rule: isPreventive ? 'art. 271' : 'art. 269',
+                workingDayAdjustment,
+                exception: null
+            };
+        }
+
+        function isSubmissionInTerm({ start, duration, unit, termType = 'general', actType = null, sentDate, receivedDate = null, sentByEmailOrFax = false }) {
+            const result = calculateDeadline({ start, duration, unit, termType, actType });
+            const deadline = result.effectiveDeadline;
+
+            if (unit === 'hours') {
+                const sent = new Date(sentDate);
+                return sent <= deadline;
+            }
+
+            const sentDay = parseDate(sentDate);
+            const deadlineDay = parseDate(deadline);
+
+            if (sentDay < deadlineDay) return true;
+            if (sentDay > deadlineDay) return false;
+
+            if (sentByEmailOrFax && unit === 'days') {
+                return true;
+            }
+
+            if (!receivedDate) {
+                return true;
+            }
+
+            const received = new Date(receivedDate);
+            const endOfDeadline = new Date(deadlineDay);
+            endOfDeadline.setHours(23, 59, 59, 999);
+            return received <= endOfDeadline;
+        }
+
+        function getHolidays() {
+            return Array.from(HOLIDAYS_2026_2028).sort();
+        }
+
+        // ===== Interfață =====
+        function calculateTerm() {
+            const startValue = document.getElementById('startInput').value;
+            const duration = parseInt(document.getElementById('durationInput').value);
+            const unit = document.getElementById('unitSelect').value;
+            const termType = document.getElementById('termTypeSelect').value;
+            const actType = document.getElementById('actTypeSelect').value;
+
+            const start = new Date(startValue);
+            if (isNaN(start.getTime())) {
+                alert('Introdu o dată și oră de început validă.');
+                return;
+            }
+
+            try {
+                const res = calculateDeadline({ start, duration, unit, termType, actType: actType || null });
+                const resultDiv = document.getElementById('deadlineResult');
+                resultDiv.style.display = 'block';
+                const deadlineStr = unit === 'hours' ? formatDateTime(res.deadline) : formatDate(res.deadline);
+                const effectiveStr = unit === 'hours' ? formatDateTime(res.effectiveDeadline) : formatDate(res.effectiveDeadline);
+                resultDiv.innerHTML = `
+                    <strong>Regula aplicată:</strong> ${res.rule}<br>
+                    <strong>Termen-limită brut:</strong> ${deadlineStr}<br>
+                    <strong>Termen-limită efectiv:</strong> ${effectiveStr}<br>
+                    <strong>Ajustare zi lucrătoare:</strong> ${res.workingDayAdjustment ? 'Da' : 'Nu'}<br>
+                    <strong>Excepție:</strong> ${res.exception || 'Niciuna'}
+                `;
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        function checkSubmission() {
+            const startValue = document.getElementById('startInput').value;
+            const duration = parseInt(document.getElementById('durationInput').value);
+            const unit = document.getElementById('unitSelect').value;
+            const termType = document.getElementById('termTypeSelect').value;
+            const actType = document.getElementById('actTypeSelect').value;
+            const sentDateValue = document.getElementById('sentDateInput').value;
+            const receivedDateValue = document.getElementById('receivedDateInput').value;
+            const emailFax = document.getElementById('emailFaxCheckbox').checked;
+
+            if (!sentDateValue) {
+                alert('Introdu data și ora trimiterii.');
+                return;
+            }
+
+            const start = new Date(startValue);
+            const sent = new Date(sentDateValue);
+            const received = receivedDateValue ? new Date(receivedDateValue) : null;
+
+            if (isNaN(start.getTime()) || isNaN(sent.getTime()) || (receivedDateValue && isNaN(received.getTime()))) {
+                alert('Verifică datele introduse.');
+                return;
+            }
+
+            try {
+                const inTerm = isSubmissionInTerm({
+                    start,
+                    duration,
+                    unit,
+                    termType,
+                    actType: actType || null,
+                    sentDate: sent,
+                    receivedDate: received,
+                    sentByEmailOrFax: emailFax
+                });
+                const resultDiv = document.getElementById('submissionResult');
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>Rezultat:</strong> ${inTerm ? 'Depunerea este ÎN TERMEN.' : 'Depunerea este ÎN AFARA TERMENULUI.'}`;
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    </script>
+</body>
+</html>
