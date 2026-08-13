@@ -62,7 +62,7 @@ function getFifthInfo() {
 }
 
 /**
- * Mapează tipul perioadei adăugate la denumirea corectă.
+ * Traduce tipul perioadei adăugate.
  */
 function mapNonExecType(type) {
     switch (type) {
@@ -113,7 +113,7 @@ function buildNarrativeText() {
         const startDate = document.getElementById('startDate').value.trim();
         const realExp = getRealExpiryFromDOM();
 
-        // Perioade deduse
+        // Perioade deduse (fără recurs compensatoriu)
         const dedRows = Array.from(document.querySelectorAll('.deduction-row'));
         let dedPeriodsDays = 0;
         const dedPeriods = [];
@@ -189,7 +189,7 @@ function buildNarrativeText() {
         const fDate = fifthInfo.fDate;
 
         // Construiește textul final
-        return `În această speță, o persoană privată de libertate de sex ${sex}, născută la ${birthDate} este condamnată la pedeapsa rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDate} și expiră la data de ${realExp}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText}. Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDate}, după executarea a ${tDays} zile. ${workText}. Regimul de executare se va stabili/a fost stabilit la 1/5 din pedeapsă, adică data de ${fDate}, după executarea a ${fifth} zile.`;
+        return `În această speță, o persoană privată de libertate de sex ${sex}, născută la ${birthDate} este condamnată la pedeapsa rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDate} și expiră -în termen- la data de ${realExp}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText}. Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDate}, după executarea a ${tDays} zile. ${workText}. Termenul de reanalizare (1/5) este data de ${fDate}, după executarea a ${fifth} zile.`;
     } catch (e) {
         alert('Eroare la construirea textului: ' + e.message);
         return '';
