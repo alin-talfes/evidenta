@@ -49,6 +49,22 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
 }
 
 /**
+ * Actualizează data propozabilă scăzând zilele muncite introduse.
+ * Folosește window.lastProposedDate setat la calcul.
+ */
+function updateProposedDateWithWorkDays() {
+    const input = document.getElementById('workDaysInput');
+    const result = document.getElementById('workDaysResult');
+    if (!input || !result || !window.lastProposedDate) return;
+
+    const days = parseInt(input.value) || 0;
+    const newDate = new Date(window.lastProposedDate);
+    newDate.setDate(newDate.getDate() - days);
+
+    result.value = fmtDate(newDate);
+}
+
+/**
  * Calculează toate datele și afișează rezultatele.
  */
 function calculateAll() {
@@ -126,7 +142,7 @@ function calculateAll() {
 
     // Categoria de vârstă la expirare
     const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, currentSex, art);
-    steps.push(`La data începerii executării, deținutul avea categoria de vârstă: ${ageAtExpiry}.`);
+    steps.push(`La data expirării teoretice, deținutul are categoria de vârstă: ${ageAtExpiry}.`);
 
     // Fracții liberare condiționată
     const sentenceOver10 = life ? false : (y * 12 + m + d / 30) > 120;
@@ -158,6 +174,9 @@ function calculateAll() {
     let tDate = new Date(startDate);
     tDate.setDate(tDate.getDate() + tDays - 1);
     tDate.setDate(tDate.getDate() - ded + non);
+
+    // Salvează global data propozabilă pentru scăderea zilelor muncite
+    window.lastProposedDate = new Date(tDate);
 
     // 1/5 mandat
     const fifth = Math.floor(totalDays / 5);
@@ -269,6 +288,24 @@ function calculateAll() {
         </div>
     </div></div>`;
 
+    // Secțiunea nouă: scădere zile muncite din data propozabilă
+    html += `<div class="result-section">
+        <h4>SCĂDERE ZILE MUNCITE DIN DATA PROPOZABILĂ</h4>
+        <div class="form-grid">
+            <div>
+                <label for="workDaysInput">Zile muncite de scăzut</label>
+                <input type="number" id="workDaysInput" min="0" value="0">
+            </div>
+            <div>
+                <label>Noua dată propozabilă</label>
+                <input type="text" id="workDaysResult" readonly style="background:rgba(201,162,39,0.08);font-weight:600;" tabindex="-1">
+            </div>
+        </div>
+        <p style="margin-top:8px;font-size:0.75rem;color:var(--text-light);">
+            <em>Scăderea se face direct din data propozabilă (data se reduce cu zilele introduse).</em>
+        </p>
+    </div>`;
+
     html += `<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid">
         <div class="result-item"><div class="result-label">1/5 mandat</div>
             <div class="result-value">(fără deduceri: ${fifth}z / cu deduceri: ${daysBetween(startDate, fDate) + 1}z)</div>
@@ -290,6 +327,13 @@ function calculateAll() {
     document.getElementById('toggleStepsBtn').innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
     document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
     document.getElementById('resultsCard').classList.remove('hidden');
+
+    // Atașează evenimentul pentru scăderea zilelor muncite
+    const workInput = document.getElementById('workDaysInput');
+    if (workInput) {
+        workInput.addEventListener('input', updateProposedDateWithWorkDays);
+        updateProposedDateWithWorkDays(); // inițializare
+    }
 
     autoSave();
 }
