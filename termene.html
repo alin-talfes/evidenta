@@ -162,6 +162,21 @@
         .result strong { color: var(--gold-light); }
         .row { display: flex; gap: 12px; }
         .row > div { flex: 1; }
+        .legal-box {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(201, 162, 39, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .legal-box h4 {
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
         @media (max-width: 480px) {
             .row { flex-direction: column; }
         }
@@ -198,12 +213,6 @@
                 <option value="years">ani</option>
             </select>
 
-            <label for="calcModeSelect">Mod calcul</label>
-            <select id="calcModeSelect">
-                <option value="working">Zile lucrătoare</option>
-                <option value="calendar">Zile calendaristice</option>
-            </select>
-
             <label for="termTypeSelect">Tip termen</label>
             <select id="termTypeSelect">
                 <option value="general">General (art. 269)</option>
@@ -220,6 +229,19 @@
 
             <button class="btn" onclick="calculateTerm()">Calculează termen</button>
             <div id="deadlineResult" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="legal-box">
+            <h4>Baza legală</h4>
+            <p><strong>Art. 269 Cod procedură penală:</strong></p>
+            <p>(1) La calcularea termenelor procedurale se pornește de la ora, ziua, luna sau anul prevăzut în actul care a provocat curgerea termenului, în afară de cazul când legea dispune altfel.</p>
+            <p>(2) La calcularea termenelor pe ore sau pe zile nu se socotește ora sau ziua de la care începe să curgă termenul, nici ora sau ziua în care acesta se împlinește.</p>
+            <p>(3) Termenele socotite pe luni sau pe ani expiră, după caz, la sfârșitul zilei corespunzătoare a ultimei luni ori la sfârșitul zilei și lunii corespunzătoare din ultimul an. Dacă această zi cade într-o lună care nu are zi corespunzătoare, termenul expiră în ultima zi a acelei luni.</p>
+            <p>(4) Când ultima zi a unui termen cade într-o zi nelucrătoare, termenul expiră la sfârșitul primei zile lucrătoare care urmează.</p>
+            <p><strong>HP nr. 12/2020:</strong> Dacă actul de procedură care trebuie făcut într-un anumit termen este trimis prin e-mail sau fax, în ultima zi a termenului care se calculează pe zile, este socotit a fi făcut în termen, chiar dacă actul se înregistrează la organul judiciar după expirarea termenului.</p>
+            <p><strong>RIL nr. 3/2025:</strong> Nu se consideră în termen sesizarea cu rechizitoriul prin care s-a dispus trimiterea în judecată a inculpatului față de care s-a dispus o măsură preventivă, sau cu propunerea de prelungire a duratei măsurii arestării preventive ori a arestului la domiciliu, formulată în ultima zi a termenului, calculat potrivit art. 269 alin. (1), (2) și (4).</p>
+            <p><strong>Art. 271 Cod procedură penală:</strong> În calculul termenelor privind măsurile preventive sau orice măsuri restrictive de drepturi, ora sau ziua de la care începe și cea la care se sfârșește termenul intră în durata acestuia.</p>
+            <p><em>Termenele se calculează calendaristic, nu pe zile lucrătoare. Ajustarea la zi lucrătoare se aplică doar termenelor generale, conform art. 269 alin. (4).</em></p>
         </div>
     </div>
 
@@ -375,19 +397,7 @@
             return d;
         }
 
-        function addWorkingDays(start, n) {
-            let d = parseDate(start);
-            let count = 0;
-            while (count < n) {
-                d = addDays(d, 1);
-                if (!isNonWorkingDay(d)) {
-                    count++;
-                }
-            }
-            return d;
-        }
-
-        function calculateDeadline({ start, duration, unit, termType = 'general', calcMode = 'calendar', actType = null }) {
+        function calculateDeadline({ start, duration, unit, termType = 'general', actType = null }) {
             if (!['hours', 'days', 'months', 'years'].includes(unit)) {
                 throw new Error('Unitate invalidă.');
             }
@@ -414,12 +424,7 @@
             let rawDeadline;
 
             if (unit === 'days') {
-                if (calcMode === 'working') {
-                    // Zile lucrătoare: se exclude ziua de început, se adaugă n zile lucrătoare
-                    rawDeadline = addWorkingDays(startDate, duration);
-                } else {
-                    rawDeadline = isPreventive ? addDays(startDate, duration - 1) : addDays(startDate, duration);
-                }
+                rawDeadline = isPreventive ? addDays(startDate, duration - 1) : addDays(startDate, duration);
             } else if (unit === 'months') {
                 rawDeadline = isPreventive ? addDays(addMonths(startDate, duration), -1) : addMonths(startDate, duration);
             } else if (unit === 'years') {
@@ -429,15 +434,15 @@
             let deadline = rawDeadline;
             let workingDayAdjustment = false;
 
-            // Ajustare la zi lucrătoare doar pentru termene generale pe zile calendaristice
-            if (!isPreventive && calcMode === 'calendar' && isNonWorkingDay(rawDeadline)) {
+            // Ajustare zi nelucrătoare doar pentru termene generale (art. 269 alin. (4))
+            if (!isPreventive && isNonWorkingDay(rawDeadline)) {
                 deadline = nextWorkingDay(rawDeadline);
                 workingDayAdjustment = true;
             }
 
             // Excepția RIL 3/2025 (doar pentru termene generale pe zile calendaristice)
             const rilActTypes = ['rechizitoriu', 'prelungire_arest_preventiv', 'prelungire_arest_la_domiciliu'];
-            if (!isPreventive && calcMode === 'calendar' && unit === 'days' && rilActTypes.includes(actType)) {
+            if (!isPreventive && unit === 'days' && rilActTypes.includes(actType)) {
                 const effectiveDeadline = previousWorkingDay(deadline);
                 return {
                     rawDeadline,
@@ -469,7 +474,6 @@
             const startTimeStr = document.getElementById('startTimeInput').value.trim();
             const duration = parseInt(document.getElementById('durationInput').value);
             const unit = document.getElementById('unitSelect').value;
-            const calcMode = document.getElementById('calcModeSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
             const actType = document.getElementById('actTypeSelect').value;
 
@@ -489,7 +493,7 @@
             }
 
             try {
-                const res = calculateDeadline({ start, duration, unit, termType, calcMode, actType: actType || null });
+                const res = calculateDeadline({ start, duration, unit, termType, actType: actType || null });
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
                 const rawStr = unit === 'hours' ? formatRoDateTime(res.rawDeadline) : formatRoDate(res.rawDeadline);
@@ -499,7 +503,7 @@
                 html += `<strong>Termen-limită brut:</strong> ${rawStr}<br>`;
                 if (res.workingDayAdjustment) {
                     const adjustedStr = unit === 'hours' ? formatRoDateTime(res.deadline) : formatRoDate(res.deadline);
-                    html += `<strong>Termen-limită după ajustare weekend:</strong> ${adjustedStr}<br>`;
+                    html += `<strong>Termen-limită după ajustare zi nelucrătoare:</strong> ${adjustedStr}<br>`;
                 }
                 if (res.exception) {
                     html += `<strong>Termen-limită după excepția RIL 3/2025:</strong> ${effectiveStr}<br>`;
