@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Calculator contopiri</title>
+    <title>Calculator pedeapsă rezultantă</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-btn">Înapoi la Calculator pedepse</a>
         <div class="header">
-            <h1>CALCULATOR CONTOPIRI</h1>
+            <h1>CALCULATOR PEDEAPSĂ REZULTANTĂ</h1>
+            <p style="font-size:0.9rem; color:var(--text-light); margin-top:4px;">(contopiri, recidivă, rest)</p>
         </div>
 
         <div class="card">
@@ -89,16 +90,6 @@
             <p>(5) Dacă pe lângă pedepsele principale au fost stabilite una sau mai multe pedepse accesorii, se aplică dispozițiile alin. (1)-(3), pedeapsa accesorie rezultată executându-se până la executarea sau considerarea ca executată a pedepsei principale.</p>
             <p>(6) Măsurile de siguranță de natură diferită sau chiar de aceeași natură, dar cu un conținut diferit, luate în cazul infracțiunilor săvârșite, se cumulează.</p>
             <p>(7) Dacă s-au luat mai multe măsuri de siguranță de aceeași natură și cu același conținut, dar pe durate diferite, se aplică măsura de siguranță cu durata cea mai mare. Măsurile de siguranță luate conform art. 112 se cumulează.</p>
-
-            <h4>Decizii de admitere relevante</h4>
-            <p><strong>HP nr. 3/2015:</strong> În aplicarea art. 6 din Codul penal, stabilirea pedepsei în baza legii noi, în cazul pluralității de infracțiuni care, potrivit Codului penal din 1969, presupunea reținerea stării de recidivă postcondamnatorie cu revocarea suspendării condiționate, iar, potrivit Codului penal, condițiile recidivei postcondamnatorii cu privire la primul termen nu mai sunt întrunite, se determină conform art. 44 raportat la art. 39 din Codul penal, referitoare la pluralitatea intermediară.</p>
-            <p><strong>RIL nr. 7/2020:</strong> În interpretarea și aplicarea unitară a dispozițiilor art. 44 alin. (2) din Codul penal, în cazul pluralității intermediare de infracțiuni, în ipoteza în care primul și/sau al doilea termen al pluralității intermediare este format dintr-un concurs de infracțiuni, contopirea tuturor pedepselor stabilite se realizează, în cadrul unei operațiuni unice, potrivit dispozițiilor referitoare la concursul de infracțiuni.</p>
-            <p><strong>HP nr. 14/2019:</strong> Dispozițiile art. 43 alin. (2) din Codul penal presupun ca toate infracțiunile concurente să fie săvârșite după condamnarea definitivă neexecutată sau executată parțial, acestea nefiind aplicabile în ipoteza în care una dintre infracțiuni este în concurs și cu cea care constituie primul termen al recidivei.</p>
-            <p><strong>HP nr. 15/2014:</strong> În interpretarea art. 6 alin. (1) din Codul penal, pentru infracțiunea comisă în stare de recidivă postexecutorie judecată definitiv înainte de intrarea în vigoare a noului Cod penal, pedeapsa aplicată se compară cu maximul special prevăzut în legea nouă pentru infracțiunea săvârșită, luând în considerare dispozițiile art. 43 alin. (5) din Codul penal.</p>
-            <p><strong>HP nr. 22/2020:</strong> În cazul în care o infracțiune (A) este concurentă atât cu infracțiunea ce reprezintă primul termen (B), cât și cu infracțiunea ce reprezintă al doilea termen (C) al unei recidive postcondamnatorii, operațiunea de stabilire a pedepsei rezultante implică aplicarea regulilor concursului de infracțiuni între pedepsele stabilite pentru infracțiunile (A) și (B), rezultantei fiindu-i aplicate ulterior regulile recidivei postcondamnatorii prin raportare la pedeapsa stabilită pentru infracțiunea (C).</p>
-            <p><strong>RIL nr. 13/2023:</strong> Aplicarea art. 41 alin. (3) din Codul penal privind recidiva internațională, în situația existenței unei condamnări definitive dispuse de o instanță străină, se poate realiza numai în urma parcurgerii procedurii de recunoaștere a hotărârii străine de condamnare, exclusiv pe cale incidentală, prevăzută de art. 147 din Legea nr. 302/2004, republicată, cu modificările și completările ulterioare, iar nu pe baza mențiunilor existente în sistemul european al cazierului judiciar (comunicare prin ECRIS).</p>
-            <p><strong>RIL nr. 20/2020:</strong> În interpretarea art. 39 alin. (1) lit. c) din Codul penal, în caz de concurs de infracțiuni, în ipoteza în care suma corespunzătoare unei zile-amendă stabilită pentru infracțiunile concurente este diferită, pedeapsa rezultantă se determină astfel: – se cumulează pedeapsa amenzii celei mai grele cu sporul de o treime din totalul celorlalte amenzi stabilite; – se determină numărul de zile-amendă, prin cumularea numărului celui mai mare al zilelor-amendă stabilite pentru o infracțiune cu sporul de o treime din totalul zilelor-amendă corespunzătoare celorlalte amenzi; – se stabilește suma corespunzătoare unei zile-amendă, prin împărțirea cuantumului pedepsei rezultante a amenzii la numărul de zile-amendă rezultante.</p>
-            <p><strong>RIL nr. 11/2021:</strong> În interpretarea art. 37 din Codul penal, în ipoteza în care constată existența unei condamnări definitive pentru o infracțiune continuată, instanța învestită cu judecarea unor acțiuni sau inacțiuni care intră în conținutul constitutiv al aceleiași infracțiuni va proceda la recalcularea pedepsei ținând seama de infracțiunea săvârșită în întregul ei, va stabili o pedeapsă unică ce nu poate fi mai mică decât cea pronunțată anterior și va dispune anularea formelor de executare emise ca urmare a condamnării anterioare și emiterea unora noi în conformitate cu hotărârea pronunțată sau, după caz, va constata executată pedeapsa.</p>
         </div>
     </div>
 
@@ -186,6 +177,7 @@
                 const others = concursPenalties.filter(p => p !== maxPenalty);
                 const othersTotalDays = others.reduce((sum, p) => sum + p.totalDays, 0);
                 const bonusDays = Math.floor(othersTotalDays / 3);
+
                 concursResultDays = maxPenalty.totalDays + bonusDays;
 
                 details.push(`Pedeapsa cea mai grea (concurs): ${formatDuration(maxPenalty)}`);
