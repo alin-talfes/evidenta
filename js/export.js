@@ -62,8 +62,19 @@ function getFifthInfo() {
 }
 
 /**
+ * Mapează tipul perioadei adăugate la denumirea corectă.
+ */
+function mapNonExecType(type) {
+    switch (type) {
+        case 'escape': return 'Evadare';
+        case 'illness': return 'Boală';
+        case 'interruption': return 'Întrerupere';
+        default: return type;
+    }
+}
+
+/**
  * Construiește textul narativ pentru copiere.
- * @returns {string}
  */
 function buildNarrativeText() {
     try {
@@ -75,8 +86,10 @@ function buildNarrativeText() {
 
         // Sex
         const sex = currentSex === 'M' ? 'MASCULIN' : 'FEMININ';
+
         // Data nașterii
         const birthDate = document.getElementById('birthDate').value.trim();
+
         // Viață
         const life = document.getElementById('lifeSentence').checked;
 
@@ -100,9 +113,9 @@ function buildNarrativeText() {
         const startDate = document.getElementById('startDate').value.trim();
         const realExp = getRealExpiryFromDOM();
 
-        // Deduceri
+        // Perioade deduse
         const dedRows = Array.from(document.querySelectorAll('.deduction-row'));
-        let dedTotal = 0;
+        let dedPeriodsDays = 0;
         const dedPeriods = [];
         dedRows.forEach(r => {
             const st = r.querySelector('.ded-start')?.value.trim() || '';
@@ -111,14 +124,13 @@ function buildNarrativeText() {
             const eD = parseDate(en);
             if (sD && eD) {
                 const days = daysBetween(sD, eD) + 1;
-                dedTotal += days;
+                dedPeriodsDays += days;
                 dedPeriods.push(`${st}-${en}`);
             }
         });
 
-        // Recurs compensatoriu
+        // Recurs compensatoriu separat
         const recursDays = Array.from(document.querySelectorAll('.manual-days')).reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
-        dedTotal += recursDays;
 
         const dedPeriodsDisplay = dedPeriods.length > 0 ? ` (${dedPeriods.join(', ')})` : '';
 
@@ -137,7 +149,8 @@ function buildNarrativeText() {
                 let daysToAdd = diff;
                 if (type === 'interruption') daysToAdd = diff - 1;
                 nonTotal += daysToAdd;
-                nonPeriods.push(`${st}-${en} (${type})`);
+                const labelType = mapNonExecType(type);
+                nonPeriods.push(`${st}-${en} (${labelType})`);
             }
         });
         const nonPeriodsDisplay = nonPeriods.length > 0 ? ` (${nonPeriods.join(', ')})` : '';
@@ -176,7 +189,7 @@ function buildNarrativeText() {
         const fDate = fifthInfo.fDate;
 
         // Construiește textul final
-        return `În această speță, o persoană privată de libertate de sex ${sex}, născută la ${birthDate} este condamnată la pedeapsa rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDate} și expiră la data de ${realExp}, fiind deduse un număr de ${dedTotal} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText}. Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDate}, după executarea a ${tDays} zile. ${workText}. Regimul de executare se va stabili/a fost stabilit la 1/5 din pedeapsă, adică data de ${fDate}, după executarea a ${fifth} zile.`;
+        return `În această speță, o persoană privată de libertate de sex ${sex}, născută la ${birthDate} este condamnată la pedeapsa rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDate} și expiră la data de ${realExp}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText}. Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDate}, după executarea a ${tDays} zile. ${workText}. Regimul de executare se va stabili/a fost stabilit la 1/5 din pedeapsă, adică data de ${fDate}, după executarea a ${fifth} zile.`;
     } catch (e) {
         alert('Eroare la construirea textului: ' + e.message);
         return '';
