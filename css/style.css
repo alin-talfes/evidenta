@@ -1073,8 +1073,18 @@ small { color: var(--text-light); font-size: 0.72rem; }
     .period-row .btn-danger,
     .penalty-row .btn-danger {
         position: absolute;
-        top: 8px;
-        right: 8px;
+        top: 4px;
+        right: 4px;
+        width: 28px;
+        height: 28px;
+        min-height: 28px;
+        padding: 0;
+        font-size: 0.7rem;
+        line-height: 1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .result-box .big-result {
         font-size: 1.4rem;
