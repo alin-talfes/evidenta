@@ -1,7 +1,36 @@
 // ========== EXPORT / COPIERE / PDF ==========
 
 /**
- * Obține data expirării reale din rezultate.
+ * Obține datele de calcul din window.lastCalculation sau le extrage din DOM.
+ */
+function getCalculationData() {
+    if (window.lastCalculation) {
+        return window.lastCalculation;
+    }
+    // Fallback: extragem din DOM (mai puțin fiabil)
+    return {
+        life: document.getElementById('lifeSentence').checked,
+        sex: currentSex,
+        birthDate: parseDate(document.getElementById('birthDate').value.trim()),
+        startDate: parseDate(document.getElementById('startDate').value.trim()),
+        realExp: getRealExpiryFromDOM(),
+        ded: null,
+        non: null,
+        dedIntervals: null,
+        nonRowsData: null,
+        recursDays: null,
+        tDays: getProposableInfo().tDays,
+        tDate: parseDate(getProposableInfo().tDate),
+        articleInfo: null,
+        fifth: getFifthInfo().fifth,
+        fDate: parseDate(getFifthInfo().fDate),
+        workDaysInput: document.getElementById('workDaysInput')?.value || '0',
+        workDaysResult: document.getElementById('workDaysResult')?.value || ''
+    };
+}
+
+/**
+ * Obține data expirării reale din rezultate (fallback).
  */
 function getRealExpiryFromDOM() {
     const items = document.querySelectorAll('#resultsContent .result-item');
@@ -9,19 +38,17 @@ function getRealExpiryFromDOM() {
         const label = item.querySelector('.result-label')?.innerText || '';
         if (label.includes('Expirare REALĂ')) {
             const val = item.querySelector('.result-value')?.innerText || '';
-            return val.replace(/\(.*?\)/g, '').trim();
+            return parseDate(val.replace(/\(.*?\)/g, '').trim());
         }
     }
-    return '—';
+    return null;
 }
 
 /**
- * Obține data și numărul de zile pentru data propozabilă din rezultate.
+ * Obține data propozabilă din rezultate (fallback).
  */
 function getProposableInfo() {
     const items = document.querySelectorAll('#resultsContent .result-item');
-    let tDays = '';
-    let tDate = '';
     for (const item of items) {
         const label = item.querySelector('.result-label')?.innerText || '';
         if (label.includes('DATA PROPOZABILĂ')) {
@@ -29,22 +56,20 @@ function getProposableInfo() {
             if (values.length >= 2) {
                 const firstValue = values[0].innerText || '';
                 const match = firstValue.match(/fără deduceri:\s*(\d+)z/);
-                if (match) tDays = match[1];
-                tDate = values[1].innerText.replace(/\(.*?\)/g, '').trim();
+                const tDays = match ? match[1] : '';
+                const tDate = parseDate(values[1].innerText.replace(/\(.*?\)/g, '').trim());
+                return { tDays, tDate };
             }
-            break;
         }
     }
-    return { tDays, tDate };
+    return { tDays: '', tDate: null };
 }
 
 /**
- * Obține data și numărul de zile pentru 1/5 din rezultate.
+ * Obține data 1/5 din rezultate (fallback).
  */
 function getFifthInfo() {
     const items = document.querySelectorAll('#resultsContent .result-item');
-    let fifth = '';
-    let fDate = '';
     for (const item of items) {
         const label = item.querySelector('.result-label')?.innerText || '';
         if (label.includes('1/5 mandat')) {
@@ -52,13 +77,13 @@ function getFifthInfo() {
             if (values.length >= 2) {
                 const firstValue = values[0].innerText || '';
                 const match = firstValue.match(/fără deduceri:\s*(\d+)z/);
-                if (match) fifth = match[1];
-                fDate = values[1].innerText.replace(/\(.*?\)/g, '').trim();
+                const fifth = match ? match[1] : '';
+                const fDate = parseDate(values[1].innerText.replace(/\(.*?\)/g, '').trim());
+                return { fifth, fDate };
             }
-            break;
         }
     }
-    return { fifth, fDate };
+    return { fifth: '', fDate: null };
 }
 
 /**
@@ -78,30 +103,25 @@ function mapNonExecType(type) {
  */
 function buildNarrativeText() {
     try {
-        const resultsContent = document.getElementById('resultsContent');
-        if (!resultsContent || resultsContent.innerHTML.trim() === '') {
-            alert('Nu există rezultate. Apasă întâi „CALCULEAZĂ”.');
+        const calc = getCalculationData();
+        if (!calc) {
+            alert('Nu există rezultate de calcul. Apasă întâi „CALCULEAZĂ”.');
             return '';
         }
 
-        // Sex
-        const sex = currentSex === 'M' ? 'MASCULIN' : 'FEMININ';
-
-        // Data nașterii
-        const birthDate = document.getElementById('birthDate').value.trim();
-
-        // Viață
-        const life = document.getElementById('lifeSentence').checked;
+        const sex = calc.sex === 'M' ? 'MASCULIN' : 'FEMININ';
+        const birthDate = fmtDate(calc.birthDate);
+        const startDate = fmtDate(calc.startDate);
+        const realExp = fmtDate(calc.realExp);
 
         // Durata pedepsei
-        const y = parseInt(document.getElementById('durYears').value) || 0;
-        const m = parseInt(document.getElementById('durMonths').value) || 0;
-        const d = parseInt(document.getElementById('durDays').value) || 0;
-
         let sentence = '';
-        if (life) {
+        if (calc.life) {
             sentence = 'detențiunea pe viață';
         } else {
+            const y = parseInt(document.getElementById('durYears').value) || 0;
+            const m = parseInt(document.getElementById('durMonths').value) || 0;
+            const d = parseInt(document.getElementById('durDays').value) || 0;
             const parts = [];
             if (y > 0) parts.push(`${y} ani`);
             if (m > 0) parts.push(`${m} luni`);
@@ -109,54 +129,26 @@ function buildNarrativeText() {
             sentence = parts.join(', ') || '0 zile';
         }
 
-        // Data începerii
-        const startDate = document.getElementById('startDate').value.trim();
-        const realExp = getRealExpiryFromDOM();
-
-        // Perioade deduse (fără recurs compensatoriu)
-        const dedRows = Array.from(document.querySelectorAll('.deduction-row'));
+        // Deduceri (perioade)
+        const dedIntervals = calc.dedIntervals || [];
         let dedPeriodsDays = 0;
         const dedPeriods = [];
-        dedRows.forEach(r => {
-            const st = r.querySelector('.ded-start')?.value.trim() || '';
-            const en = r.querySelector('.ded-end')?.value.trim() || '';
-            const sD = parseDate(st);
-            const eD = parseDate(en);
-            if (sD && eD) {
-                const days = daysBetween(sD, eD) + 1;
-                dedPeriodsDays += days;
-                dedPeriods.push(`${st}-${en}`);
-            }
+        dedIntervals.forEach(([s, e]) => {
+            const days = daysBetween(s, e) + 1;
+            dedPeriodsDays += days;
+            dedPeriods.push(`${fmtDate(s)}-${fmtDate(e)}`);
         });
-
-        // Recurs compensatoriu separat
-        const recursDays = Array.from(document.querySelectorAll('.manual-days')).reduce((sum, inp) => sum + (parseInt(inp.value) || 0), 0);
-
         const dedPeriodsDisplay = dedPeriods.length > 0 ? ` (${dedPeriods.join(', ')})` : '';
 
-        // Perioade adăugate
-        const nonRows = Array.from(document.querySelectorAll('.non-exec-row'));
-        let nonTotal = 0;
-        const nonPeriods = [];
-        nonRows.forEach(r => {
-            const type = r.querySelector('.ne-type')?.value || '';
-            const st = r.querySelector('.ne-start')?.value.trim() || '';
-            const en = r.querySelector('.ne-end')?.value.trim() || '';
-            const sD = parseDate(st);
-            const eD = parseDate(en);
-            if (sD && eD) {
-                const diff = daysBetween(sD, eD);
-                let daysToAdd = diff;
-                if (type === 'interruption') daysToAdd = diff - 1;
-                nonTotal += daysToAdd;
-                const labelType = mapNonExecType(type);
-                nonPeriods.push(`${st}-${en} (${labelType})`);
-            }
-        });
-        const nonPeriodsDisplay = nonPeriods.length > 0 ? ` (${nonPeriods.join(', ')})` : '';
-
-        // Recurs text
+        // Recurs compensatoriu
+        const recursDays = calc.recursDays || 0;
         const recursText = recursDays > 0 ? `A beneficiat de un număr de ${recursDays} zile deduse ca urmare a recursului compensatoriu (Legea nr. 169/2017)` : 'Nu a beneficiat de prevederile Legii nr. 169/2017';
+
+        // Perioade adăugate
+        const nonRowsData = calc.nonRowsData || [];
+        const nonTotal = nonRowsData.reduce((sum, p) => sum + p.days, 0);
+        const nonPeriods = nonRowsData.map(p => `${p.start}-${p.end} (${mapNonExecType(p.type)})`);
+        const nonPeriodsDisplay = nonPeriods.length > 0 ? ` (${nonPeriods.join(', ')})` : '';
 
         // Articol
         const art = document.getElementById('liberationArticle').value;
@@ -172,23 +164,20 @@ function buildNarrativeText() {
         };
         const articleText = articleMap[art] || 'articolul aplicabil';
 
-        // Data propozabilă și fracția
-        const prop = getProposableInfo();
-        const tDays = prop.tDays;
-        const tDate = prop.tDate;
+        // Data propozabilă
+        const tDays = calc.tDays;
+        const tDate = fmtDate(calc.tDate);
 
         // Zile muncite
-        const workDaysInput = document.getElementById('workDaysInput')?.value || '0';
-        const workDaysResult = document.getElementById('workDaysResult')?.value || '';
+        const workDaysInput = calc.workDaysInput || '0';
+        const workDaysResult = calc.workDaysResult || '';
         const workDays = parseInt(workDaysInput) || 0;
         const workText = workDays > 0 ? `Din această dată, s-au scăzut un număr de ${workDays} zile ca urmare a muncii prestate, și data propozabilă a coborât la ${workDaysResult}` : 'Nu au fost scăzute zile ca urmare a muncii prestate';
 
         // 1/5
-        const fifthInfo = getFifthInfo();
-        const fifth = fifthInfo.fifth;
-        const fDate = fifthInfo.fDate;
+        const fifth = calc.fifth;
+        const fDate = fmtDate(calc.fDate);
 
-        // Construiește textul final
         return `În această speță, o persoană privată de libertate de sex ${sex}, născută la ${birthDate} este condamnată la pedeapsa rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDate} și expiră -în termen- la data de ${realExp}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText}. Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDate}, după executarea a ${tDays} zile. ${workText}. Termenul de reanalizare (1/5) este data de ${fDate}, după executarea a ${fifth} zile.`;
     } catch (e) {
         alert('Eroare la construirea textului: ' + e.message);
