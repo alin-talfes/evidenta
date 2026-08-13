@@ -3,89 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Calculator termene procedurale penale</title>
+    <title>Calculator termene procedurale</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Stiluri specifice doar acestei pagini */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            padding: 10px 18px;
-            background: transparent;
-            border: 1.5px solid var(--gold);
-            border-radius: var(--radius-md);
-            color: var(--gold-light);
-            text-decoration: none;
-            font-size: 0.82rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        .back-btn:hover {
-            background: rgba(201, 162, 39, 0.1);
-        }
-        .legal-box {
-            margin-top: 16px;
-            padding: 12px;
-            background: rgba(201, 162, 39, 0.03);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            font-size: 0.75rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-        .legal-box h4 {
-            color: var(--gold);
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-        .result-box {
-            margin-top: 24px;
-            padding: 24px 20px;
-            background: rgba(201, 162, 39, 0.05);
-            border-radius: var(--radius-md);
-            border-left: 4px solid var(--gold);
-            text-align: center;
-        }
-        .result-box .big-result {
-            font-family: var(--font-mono);
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--gold-light);
-            letter-spacing: 1px;
-            word-break: break-word;
-        }
-        .row {
-            display: flex;
-            gap: var(--gap-lg);
-            margin-bottom: 4px;
-        }
-        .row > div {
-            flex: 1;
-        }
-        @media (max-width: 480px) {
-            .row {
-                flex-direction: column;
-                gap: var(--gap-md);
-            }
-            .result-box .big-result {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-btn">Înapoi la Calculator pedepse</a>
         <div class="header">
-            <h1>CALCULATOR TERMENE PROCEDURALE PENALE</h1>
+            <h1>CALCULATOR TERMENE PROCEDURALE</h1>
         </div>
 
         <div class="card">
             <h3>Calcul termen</h3>
 
-            <!-- Selector termen predefinit -->
             <label for="presetSelect">Termen predefinit</label>
             <select id="presetSelect" onchange="applyPreset(this.value)">
                 <option value="manual">Manual (completezi tu)</option>
@@ -335,13 +265,13 @@
 
         // ===== Regula specială pentru contestație: nu poate fi luni sau vineri =====
         function adjustForContestatie(date) {
-            const day = date.getDay(); // 1=luni, 5=vineri
+            const day = date.getDay();
             if (day === 1) {
-                return addWorkingDays(date, 1); // luni -> marți
+                return addWorkingDays(date, 1);
             } else if (day === 5) {
-                return addWorkingDays(date, 2); // vineri -> luni(interzis) -> marți
+                return addWorkingDays(date, 2);
             }
-            return date; // marți, miercuri, joi rămân
+            return date;
         }
 
         function calculateDeadline({ start, duration, unit, termType = 'general', calcMode = 'calendar' }) {
