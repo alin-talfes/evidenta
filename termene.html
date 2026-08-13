@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator termene procedurale penale</title>
-    <link rel="stylesheet" href="css/style.css?v=19">
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        /* ===== Ajustări specifice termene.html ===== */
+        /* Stiluri specifice doar acestei pagini */
         .back-btn {
             display: inline-flex;
             align-items: center;
@@ -40,7 +40,7 @@
             margin-bottom: 8px;
             font-size: 0.85rem;
         }
-        .result {
+        .result-box {
             margin-top: 24px;
             padding: 24px 20px;
             background: rgba(201, 162, 39, 0.05);
@@ -48,7 +48,7 @@
             border-left: 4px solid var(--gold);
             text-align: center;
         }
-        .result .big-result {
+        .result-box .big-result {
             font-family: var(--font-mono);
             font-size: 1.8rem;
             font-weight: 800;
@@ -64,29 +64,12 @@
         .row > div {
             flex: 1;
         }
-        /* Aerisire suplimentară */
-        .card {
-            padding: 28px 26px;
-        }
-        .card h3 {
-            margin-bottom: 20px;
-        }
-        input,
-        select {
-            margin-bottom: 18px;
-        }
-        label {
-            margin-bottom: 8px;
-        }
-        .btn {
-            margin-top: 10px;
-        }
         @media (max-width: 480px) {
             .row {
                 flex-direction: column;
                 gap: var(--gap-md);
             }
-            .result .big-result {
+            .result-box .big-result {
                 font-size: 1.4rem;
             }
         }
@@ -152,7 +135,7 @@
             </select>
 
             <button class="btn btn-gold" onclick="calculateTerm()">Calculează termen</button>
-            <div id="deadlineResult" class="result" style="display:none;"></div>
+            <div id="deadlineResult" class="result-box" style="display:none;"></div>
         </div>
 
         <div class="legal-box">
