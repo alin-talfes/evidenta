@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CALCULATOR PEDEPSE</title>
-    <link rel="stylesheet" href="css/style.css?v=8">
+    <link rel="stylesheet" href="css/style.css?v=9">
     <style>
         /* Stiluri pentru butonul hamburger */
         .hamburger {
@@ -36,8 +36,8 @@
         /* Butonul de temă */
         #themeToggle {
             flex: 0 0 auto;
-            min-width: 44px;
-            padding: 0 12px;
+            min-width: 48px;
+            padding: 0 8px;
             font-size: 1.2rem;
             line-height: 44px;
             height: 44px;
@@ -48,11 +48,29 @@
             border: 1px solid var(--border);
             border-radius: var(--input-radius);
             cursor: pointer;
+            margin-left: 4px;
             transition: all 0.2s ease;
         }
         #themeToggle:hover {
             background: rgba(201, 162, 39, 0.1);
             border-color: var(--gold);
+        }
+        /* Ajustări pentru bara de sus */
+        .top-bar {
+            padding: 8px 12px;
+            gap: 8px;
+        }
+        .btn-utility {
+            padding: 10px 8px;
+            font-size: 0.75rem;
+            letter-spacing: 0.4px;
+            min-width: 0;
+        }
+        @media (max-width: 480px) {
+            .btn-utility {
+                font-size: 0.7rem;
+                padding: 10px 4px;
+            }
         }
     </style>
 </head>
@@ -84,7 +102,7 @@
         </div>
 
         <main id="main-content">
-            <!-- Conținutul rămâne identic cu versiunea anterioară -->
+            <!-- Conținutul rămâne identic -->
             <div class="card" aria-labelledby="date-ppl-heading">
                 <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
                 <div class="form-grid">
@@ -238,13 +256,13 @@
         </main>
         <footer class="footer" role="contentinfo">CALCULATOR EVIDENȚĂ PEDEPSE | v1.5 | © Alin Talfeș</footer>
     </div>
-    <script src="js/utils.js?v=8"></script>
-    <script src="js/rules.js?v=8"></script>
-    <script src="js/legal.js?v=8"></script>
-    <script src="js/storage.js?v=8"></script>
-    <script src="js/export.js?v=8"></script>
-    <script src="js/ui.js?v=8"></script>
-    <script src="js/app.js?v=8"></script>
+    <script src="js/utils.js?v=9"></script>
+    <script src="js/rules.js?v=9"></script>
+    <script src="js/legal.js?v=9"></script>
+    <script src="js/storage.js?v=9"></script>
+    <script src="js/export.js?v=9"></script>
+    <script src="js/ui.js?v=9"></script>
+    <script src="js/app.js?v=9"></script>
     <script>
         // Suprascriem funcțiile de temă pentru a folosi emoji-uri
         (function() {
@@ -271,7 +289,6 @@
                 localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
                 updateThemeButton();
             };
-            // Actualizăm butonul imediat
             updateThemeButton();
         })();
     </script>
