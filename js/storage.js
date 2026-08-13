@@ -7,10 +7,10 @@ function applyTheme() {
     const saved = localStorage.getItem('anpTheme');
     if (saved === 'light') {
         document.body.classList.add('light');
-        document.getElementById('themeToggle').innerHTML = '🌙 MOD DARK';
+        document.getElementById('themeToggle').innerHTML = 'MOD INTUNECAT';
     } else {
         document.body.classList.remove('light');
-        document.getElementById('themeToggle').innerHTML = '☀️ MOD LIGHT';
+        document.getElementById('themeToggle').innerHTML = 'MOD LUMINOS';
     }
 }
 
@@ -21,7 +21,7 @@ function toggleTheme() {
     document.body.classList.toggle('light');
     const isLight = document.body.classList.contains('light');
     localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
-    document.getElementById('themeToggle').innerHTML = isLight ? '🌙 MOD DARK' : '☀️ MOD LIGHT';
+    document.getElementById('themeToggle').innerHTML = isLight ? 'MOD INTUNECAT' : 'MOD LUMINOS';
 }
 
 /**
