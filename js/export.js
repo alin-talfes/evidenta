@@ -13,7 +13,7 @@ function mapNonExecType(type) {
 }
 
 /**
- * Construiește textul narativ pentru copiere, respectând întocmai modelul cerut.
+ * Construiește textul narativ pentru copiere, fără referire la zilele muncite.
  * Folosește datele stocate în window.lastCalculation (setat în app.js).
  */
 function buildNarrativeText() {
@@ -103,20 +103,12 @@ function buildNarrativeText() {
         const tDateStr = fmtDate(calc.tDate);
         const tDays = calc.tDays;
 
-        // Zile muncite
-        const workDaysInput = calc.workDaysInput || '0';
-        const workDaysResult = calc.workDaysResult || '';
-        const workDays = parseInt(workDaysInput) || 0;
-        const workText = workDays > 0
-            ? `Din această dată, s-au scăzut un număr de ${workDays} zile ca urmare a muncii prestate, și data propozabilă a coborât la ${workDaysResult}`
-            : 'Nu au fost scăzute zile ca urmare a muncii prestate';
-
         // Termenul de reanalizare 1/5
         const fDateStr = fmtDate(calc.fDate);
         const fifth = calc.fifth;
 
-        // Construiește textul final EXACT conform modelului
-        return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr} este condamnată la pedeapsa inchisorii rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDateStr} și expiră în termen la data de ${realExpStr}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDateStr}, după executarea a ${tDays} zile. ${workText}. Termenul de reanalizare (1/5) este data de ${fDateStr}, după executarea a ${fifth} zile.`;
+        // Construiește textul final EXACT conform modelului, fără zile muncite
+        return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr} este condamnată la pedeapsa inchisorii rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDateStr} și expiră în termen la data de ${realExpStr}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDateStr}, după executarea a ${tDays} zile. Termenul de reanalizare (1/5) este data de ${fDateStr}, după executarea a ${fifth} zile.`;
     } catch (e) {
         alert('Eroare la construirea textului: ' + e.message);
         return '';
@@ -281,7 +273,7 @@ function exportPDF() {
                     ${inputHTML}
                     ${resultsHTML}
                     ${stepsHTML}
-                    <div class="footer">CALCULATOR EVIDENȚĂ PEDEPSE | v1.7 | © Alin Talfeș</div>
+                    <div class="footer">Calculator termene pedepse privative de libertate | BETA 0.01 | © Alin Talfeș</div>
                     <script>
                         window.onload = function() { window.print(); }
                     <\/script>
