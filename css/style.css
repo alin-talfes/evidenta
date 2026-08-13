@@ -1,3 +1,8 @@
+/* ============================================================
+   CALCULATOR TERMENE PEDEPSE PRIVATIVE DE LIBERTATE
+   STILURI CONSOLIDATE – MOBILE-FIRST
+   ============================================================ */
+
 /* ========== VARIABILE ========== */
 :root {
     --bg: #12141A;
@@ -10,8 +15,9 @@
     --border: #2a2a35;
     --danger: #ff6b6b;
     --warning: #ffa726;
-    --radius: 18px;
-    --input-radius: 14px;
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
     --shadow: 0 2px 10px rgba(0,0,0,0.25);
     --font: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -19,14 +25,11 @@
     --input-border: #3a4150;
     --input-placeholder: #8a92a6;
     --label-color: #c0c6d2;
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 18px;
     --btn-height: 44px;
     --btn-padding-y: 12px;
     --btn-padding-x: 16px;
-    --card-padding-y: 24px;
-    --card-padding-x: 22px;
+    --card-padding-y: 16px;
+    --card-padding-x: 14px;
     --gap-sm: 8px;
     --gap-md: 12px;
     --gap-lg: 16px;
@@ -82,7 +85,6 @@ body {
     max-width: 100vw;
     line-height: 1.5;
     transition: background 0.3s, color 0.3s;
-    min-height: 0;
 }
 
 /* ========== LAYOUT ========== */
@@ -99,7 +101,7 @@ body {
     justify-content: flex-start;
     gap: 8px;
     padding: 8px 10px;
-    margin-bottom: var(--gap-lg);
+    margin-bottom: var(--gap-md);
     background: rgba(22, 24, 32, 0.6);
     backdrop-filter: blur(8px);
     border: var(--border-width) solid var(--border);
@@ -227,7 +229,6 @@ body.light .top-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    letter-spacing: 0;
 }
 
 /* ========== BUTON TEMĂ ========== */
@@ -313,7 +314,7 @@ body.light .top-bar {
     color: var(--gold-light);
     padding: 14px 16px;
     border-radius: var(--radius-lg);
-    margin-bottom: var(--gap-lg);
+    margin-bottom: var(--gap-md);
     text-align: center;
 }
 
@@ -340,11 +341,10 @@ body.light .header {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
     padding: var(--card-padding-y) var(--card-padding-x);
-    margin-bottom: var(--gap-lg);
+    margin-bottom: var(--gap-md);
     border: var(--border-width) solid var(--border);
     border-left: 3px solid rgba(201, 162, 39, 0.5);
     transition: border-color var(--transition-base), background 0.3s, box-shadow 0.2s;
-    contain: layout paint;
     height: auto;
 }
 
@@ -359,8 +359,8 @@ body.light .card:hover {
 .card h3 {
     font-size: 0.95rem;
     color: var(--gold-light);
-    margin-bottom: 14px;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
     border-bottom: 2px solid;
     border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
     display: flex;
@@ -374,7 +374,7 @@ body.light .card:hover {
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: var(--gap-lg);
+    gap: var(--gap-md);
 }
 
 label {
@@ -383,7 +383,7 @@ label {
     font-size: 0.66rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     color: var(--label-color);
 }
 
@@ -418,10 +418,6 @@ textarea::placeholder {
     opacity: 0.8;
 }
 
-input[type="number"]:placeholder-shown {
-    color: var(--input-placeholder);
-}
-
 /* ========== DATĂ + ORĂ ========== */
 .date-wrapper {
     display: flex;
@@ -448,13 +444,11 @@ input[type="number"]:placeholder-shown {
     display: flex;
     align-items: center;
     transition: all var(--transition-base);
-    letter-spacing: 0.5px;
 }
 
 .btn-today:hover {
     background: rgba(201, 162, 39, 0.1);
     border-color: var(--gold-light);
-    color: var(--gold-light);
 }
 
 /* ========== RÂNDURI PERIOADE / PENALITĂȚI ========== */
@@ -471,7 +465,6 @@ input[type="number"]:placeholder-shown {
     margin-bottom: var(--gap-sm);
     border: var(--border-width) solid var(--border);
     height: auto;
-    min-height: 0;
 }
 
 .period-row > div,
@@ -563,13 +556,13 @@ input[type="number"]:placeholder-shown {
 
 /* ========== REZULTATE ========== */
 .result-section {
-    margin-top: 20px;
+    margin-top: 16px;
 }
 
 .result-section h4 {
     color: var(--gold);
     font-size: 0.85rem;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border-bottom: 1px solid var(--border);
     padding-bottom: 6px;
 }
@@ -584,9 +577,8 @@ input[type="number"]:placeholder-shown {
 .result-item {
     background: rgba(201, 162, 39, 0.04);
     border-radius: var(--radius-sm);
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-left: 3px solid var(--primary);
-    contain: layout paint;
 }
 
 .result-item.important {
@@ -600,7 +592,7 @@ input[type="number"]:placeholder-shown {
     letter-spacing: 0.6px;
     color: var(--label-color);
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .result-value {
@@ -626,8 +618,8 @@ input[type="number"]:placeholder-shown {
 
 /* ========== BOXURI REZULTATE SPECIFICE ========== */
 .result-box {
-    margin-top: 24px;
-    padding: 24px 20px;
+    margin-top: 16px;
+    padding: 16px;
     background: rgba(201, 162, 39, 0.05);
     border-radius: var(--radius-md);
     border-left: 4px solid var(--gold);
@@ -644,10 +636,10 @@ input[type="number"]:placeholder-shown {
 }
 
 .result-box .detail {
-    margin-top: 10px;
-    font-size: 0.9rem;
+    margin-top: 8px;
+    font-size: 0.85rem;
     color: var(--text-light);
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 /* ========== CUTIE LEGALĂ ========== */
@@ -692,7 +684,7 @@ input[type="number"]:placeholder-shown {
 /* ========== ROW ========== */
 .row {
     display: flex;
-    gap: var(--gap-lg);
+    gap: var(--gap-md);
     margin-bottom: 4px;
 }
 
@@ -723,9 +715,9 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .error-message {
     background: rgba(255, 107, 107, 0.08);
     color: var(--danger);
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: var(--radius-sm);
-    margin-bottom: var(--gap-md);
+    margin-bottom: var(--gap-sm);
     font-size: 0.82rem;
     display: none;
     border: var(--border-width) solid rgba(255, 107, 107, 0.2);
@@ -738,7 +730,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
     gap: var(--gap-md);
     flex-wrap: wrap;
     justify-content: center;
-    margin: 20px 0;
+    margin: 16px 0;
 }
 
 .btn-row .btn { flex: 1 1 180px; }
@@ -746,11 +738,11 @@ small { color: var(--text-light); font-size: 0.72rem; }
 /* ========== FOOTER ========== */
 .footer {
     text-align: center;
-    padding: 16px 0;
+    padding: 14px 0;
     font-size: 0.65rem;
     color: var(--text-light);
     border-top: var(--border-width) solid var(--border);
-    margin-top: 24px;
+    margin-top: 20px;
     letter-spacing: 0.5px;
     opacity: 0.7;
 }
@@ -759,15 +751,15 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .steps-container {
     background: rgba(201, 162, 39, 0.03);
     border-radius: var(--radius-lg);
-    padding: 16px;
-    margin-top: 16px;
+    padding: 14px;
+    margin-top: 12px;
     font-size: 0.85rem;
     line-height: 1.7;
     border: var(--border-width) solid var(--border);
 }
 
 .steps-container h4 { color: var(--gold); margin-bottom: 8px; }
-.steps-container ol { padding-left: 24px; color: var(--text-light); }
+.steps-container ol { padding-left: 20px; color: var(--text-light); }
 .steps-container ol li { margin-bottom: 6px; }
 
 /* ========== ALERTE ========== */
@@ -775,8 +767,8 @@ small { color: var(--text-light); font-size: 0.72rem; }
     background: rgba(255, 167, 38, 0.06);
     border: var(--border-width) solid rgba(255, 167, 38, 0.3);
     border-radius: var(--radius-lg);
-    padding: 14px 18px;
-    margin-top: 16px;
+    padding: 12px 16px;
+    margin-top: 12px;
 }
 
 .alerts-container h4 {
@@ -853,7 +845,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .sex-toggle-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-top: 8px;
 }
 
@@ -894,12 +886,11 @@ small { color: var(--text-light); font-size: 0.72rem; }
     background: var(--card-bg);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    padding: 18px;
     max-width: 500px;
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
-    contain: layout paint;
 }
 
 .modal h4 { color: var(--gold); margin-bottom: 12px; }
@@ -938,7 +929,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .timeline {
     list-style: none;
     padding: 0;
-    margin: 16px 0 0 0;
+    margin: 12px 0 0 0;
     position: relative;
 }
 
@@ -955,7 +946,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .timeline li {
     position: relative;
     padding-left: 40px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     font-size: 0.85rem;
     color: var(--text-light);
 }
@@ -1019,7 +1010,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 }
 
 .help-text {
-    margin-top: 12px;
+    margin-top: 8px;
     font-size: 0.75rem;
     color: var(--text-light);
 }
@@ -1066,39 +1057,53 @@ small { color: var(--text-light); font-size: 0.72rem; }
     }
     .row {
         flex-direction: column;
-        gap: var(--gap-md);
+        gap: var(--gap-sm);
     }
     .penalty-row,
     .period-row {
         flex-direction: column;
-        padding: var(--gap-md);
-        gap: var(--gap-sm);
+        padding: 12px;
+        gap: 8px;
     }
     .penalty-row > div,
     .period-row > div {
         flex: 1 1 100%;
         min-width: 100%;
     }
+    .period-row .btn-danger,
+    .penalty-row .btn-danger {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+    }
     .result-box .big-result {
         font-size: 1.4rem;
     }
     .card {
-        padding: 16px 14px;
-        margin-bottom: var(--gap-md);
-    }
-    .top-actions .btn-big {
-        padding: 10px 12px;
-        font-size: 0.8rem;
+        padding: 12px 14px;
+        margin-bottom: 12px;
     }
     label {
-        font-size: 0.65rem;
-        margin-bottom: 6px;
+        font-size: 0.6rem;
+        margin-bottom: 4px;
     }
     select,
     input[type="number"],
     input[type="text"],
     textarea {
         min-height: 44px;
+    }
+    #deductionsContainer,
+    #manualDeductionsContainer,
+    #nonExecContainer {
+        margin-bottom: 4px;
+    }
+    #addDedBtn,
+    #addManDedBtn,
+    #addNonExecBtn {
+        margin-top: 4px;
+        margin-bottom: 0;
+        width: 100%;
     }
 }
 
