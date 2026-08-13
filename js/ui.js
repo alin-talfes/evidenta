@@ -293,6 +293,40 @@ function openInfoModal() {
 }
 
 /**
+ * Deschide modalul cu bazele legale (OMJ 2188/C/2022).
+ */
+function openLegalModal() {
+    const existingOverlay = document.querySelector('.modal-overlay');
+    if (existingOverlay) existingOverlay.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'legal-title');
+
+    let html = '<div class="modal"><h4 id="legal-title">📚 BAZE LEGALE (OMJ 2188/C/2022)</h4>';
+    html += '<div style="max-height: 70vh; overflow-y: auto;">';
+
+    legalArticles.forEach(article => {
+        html += `<div style="margin-bottom:12px; padding:10px; background:rgba(201,162,39,0.05); border-left:3px solid var(--gold); border-radius:8px;">`;
+        html += `<strong style="color:var(--gold-light);">${article.titlu}</strong><br>`;
+        html += `<span style="font-size:0.8rem; color:var(--text-light);">${article.text.replace(/\n/g, '<br>')}</span>`;
+        html += `<br><em style="font-size:0.75rem; color:var(--text-light);">Aplicare: ${article.aplicare}</em>`;
+        html += `</div>`;
+    });
+
+    html += '</div>';
+    html += '<button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()">Închide</button></div>';
+
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+/**
  * Deschide modalul de încărcare a spețelor salvate.
  */
 function openLoadModal() {
