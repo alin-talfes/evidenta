@@ -19,6 +19,22 @@
     --input-border: #3a4150;
     --input-placeholder: #8a92a6;
     --label-color: #c0c6d2;
+    /* Noi variabile pentru unificare */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --btn-height: 44px;
+    --btn-padding-y: 12px;
+    --btn-padding-x: 16px;
+    --card-padding-y: 24px;
+    --card-padding-x: 22px;
+    --gap-sm: 8px;
+    --gap-md: 12px;
+    --gap-lg: 16px;
+    --border-width: 1px;
+    --outline-width: 3px;
+    --transition-fast: 0.15s;
+    --transition-base: 0.2s;
 }
 
 body.light {
@@ -77,16 +93,16 @@ body {
     width: 100%;
 }
 
-/* ========== BARA PRINCIPALĂ (TOP BAR) ========== */
+/* ========== BARA PRINCIPALĂ ========== */
 .top-bar {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: var(--gap-md);
+    margin-bottom: var(--gap-lg);
     background: rgba(22, 24, 32, 0.6);
     backdrop-filter: blur(8px);
-    padding: 8px 12px;
-    border-radius: var(--input-radius);
-    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--border);
     position: sticky;
     top: 8px;
     z-index: 10;
@@ -98,13 +114,44 @@ body.light .top-bar {
     background: rgba(255,255,255,0.8);
 }
 
+/* Buton hamburger */
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: var(--btn-height);
+    height: var(--btn-height);
+    background: var(--card-bg);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all var(--transition-base);
+}
+
+.hamburger span {
+    display: block;
+    width: 22px;
+    height: 3px;
+    background: var(--gold-light);
+    border-radius: 3px;
+}
+
+.hamburger:hover {
+    background: rgba(201, 162, 39, 0.1);
+    border-color: var(--gold);
+}
+
+/* Butoane utilitare */
 .btn-utility {
     flex: 1;
     background: rgba(201, 162, 39, 0.05);
-    border: 1px solid var(--border);
+    border: var(--border-width) solid var(--border);
     color: var(--text-light);
-    border-radius: var(--input-radius);
-    padding: 10px 8px;
+    border-radius: var(--radius-md);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.4px;
@@ -113,10 +160,11 @@ body.light .top-bar {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
     white-space: nowrap;
     position: relative;
     min-width: 0;
+    min-height: var(--btn-height);
 }
 
 .btn-utility:hover,
@@ -127,10 +175,46 @@ body.light .top-bar {
     outline: none;
 }
 
+/* SALVEAZA = primary */
 .btn-utility.primary {
+    background: var(--gold);
+    color: #0F1115;
+    border-color: var(--gold);
+    font-weight: 700;
+}
+
+.btn-utility.primary:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+    color: #0F1115;
+}
+
+/* INCARCA = secondary outline */
+.btn-utility#loadBtn {
+    background: transparent;
+    border-color: var(--gold);
     color: var(--gold-light);
 }
 
+.btn-utility#loadBtn:hover {
+    background: rgba(201, 162, 39, 0.1);
+    border-color: var(--gold-light);
+}
+
+/* RESET = ghost */
+.btn-utility#resetBtn {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-light);
+}
+
+.btn-utility#resetBtn:hover {
+    background: rgba(201, 162, 39, 0.05);
+    border-color: var(--border);
+    color: var(--gold-light);
+}
+
+/* Badge pentru numărul de spețe */
 .badge {
     position: absolute;
     top: -6px;
@@ -148,53 +232,22 @@ body.light .top-bar {
     letter-spacing: 0;
 }
 
-/* ========== BUTON HAMBURGER ========== */
-.hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    width: 44px;
-    height: 44px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--input-radius);
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-}
-
-.hamburger span {
-    display: block;
-    width: 22px;
-    height: 3px;
-    background: var(--gold-light);
-    border-radius: 3px;
-}
-
-.hamburger:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold);
-}
-
-/* ========== BUTON TEMĂ ========== */
+/* Buton temă */
 #themeToggle {
     flex: 0 0 auto;
-    min-width: 48px;
+    min-width: var(--btn-height);
+    height: var(--btn-height);
     padding: 0 8px;
     font-size: 1.2rem;
-    line-height: 44px;
-    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--input-radius);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-md);
     cursor: pointer;
     margin-left: 4px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
 }
 
 #themeToggle:hover {
@@ -202,19 +255,19 @@ body.light .top-bar {
     border-color: var(--gold);
 }
 
-/* ========== MENIUL PRINCIPAL (TOP ACTIONS) ========== */
+/* ========== MENIUL PRINCIPAL ========== */
 .top-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: var(--gap-md);
+    margin-bottom: var(--gap-md);
 }
 
 .top-actions .btn-big {
-    flex: 1 1 calc(50% - 5px);
-    max-width: calc(50% - 5px);
+    flex: 1 1 calc(50% - 6px);
+    max-width: calc(50% - 6px);
     min-width: 0;
-    padding: 14px 16px;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.8px;
@@ -223,18 +276,19 @@ body.light .top-bar {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
     text-transform: uppercase;
     will-change: transform;
     text-align: center;
     text-decoration: none;
     box-sizing: border-box;
     background: rgba(201, 162, 39, 0.08);
-    border: 1px solid var(--border);
+    border: var(--border-width) solid var(--border);
     color: var(--text-light);
-    border-radius: var(--input-radius);
+    border-radius: var(--radius-md);
     white-space: normal;
     word-break: break-word;
+    min-height: var(--btn-height);
 }
 
 .top-actions .btn-big:hover,
@@ -243,16 +297,24 @@ body.light .top-bar {
     border-color: var(--gold);
     color: var(--gold-light);
     outline: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(201, 162, 39, 0.2);
+}
+
+.top-actions .btn-big:active {
+    transform: translateY(0);
+    box-shadow: none;
+    opacity: 0.9;
 }
 
 /* ========== HEADER ========== */
 .header {
     background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 60%, #0d0d1a 100%);
-    border: 1px solid var(--border);
+    border: var(--border-width) solid var(--border);
     color: var(--gold-light);
     padding: 14px 16px;
-    border-radius: var(--radius);
-    margin-bottom: 18px;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--gap-lg);
     text-align: center;
 }
 
@@ -276,14 +338,22 @@ body.light .header {
 /* ========== CARDURI ========== */
 .card {
     background: var(--card-bg);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
-    padding: 20px 22px;
-    margin-bottom: 16px;
-    border: 1px solid var(--border);
+    padding: var(--card-padding-y) var(--card-padding-x);
+    margin-bottom: var(--gap-lg);
+    border: var(--border-width) solid var(--border);
     border-left: 3px solid rgba(201, 162, 39, 0.5);
-    transition: border-color 0.2s, background 0.3s;
+    transition: border-color var(--transition-base), background 0.3s, box-shadow var(--transition-base);
     contain: layout paint;
+}
+
+.card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+body.light .card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .card h3 {
@@ -291,7 +361,7 @@ body.light .header {
     color: var(--gold-light);
     margin-bottom: 14px;
     padding-bottom: 10px;
-    border-bottom: 3px solid;
+    border-bottom: 2px solid;
     border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
     display: flex;
     align-items: center;
@@ -304,7 +374,7 @@ body.light .header {
 .form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 14px;
+    gap: var(--gap-lg);
 }
 
 label {
@@ -324,13 +394,13 @@ textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1.5px solid var(--input-border);
-    border-radius: var(--input-radius);
+    border-radius: var(--radius-md);
     font-size: 0.9rem;
     background: var(--input-bg);
     color: var(--text);
     font-family: var(--font-mono);
-    min-height: 44px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: var(--btn-height);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
     letter-spacing: 0.3px;
 }
 
@@ -338,15 +408,22 @@ select:focus,
 input:focus,
 textarea:focus {
     border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
+    box-shadow: 0 0 0 var(--outline-width) rgba(201, 162, 39, 0.1);
     outline: none;
 }
 
 input::placeholder,
 textarea::placeholder {
     color: var(--input-placeholder);
+    opacity: 0.8;
 }
 
+/* Câmpuri numerice goale (valoarea 0) */
+input[type="number"]:placeholder-shown {
+    color: var(--input-placeholder);
+}
+
+/* ========== BUTON AZI ========== */
 .date-wrapper {
     display: flex;
     gap: 4px;
@@ -359,38 +436,38 @@ textarea::placeholder {
 
 .btn-today {
     flex-shrink: 0;
-    background: rgba(201, 162, 39, 0.08);
+    background: transparent;
     border: 1.5px solid var(--gold);
     color: var(--gold-light);
-    border-radius: var(--input-radius);
-    padding: 0 10px;
-    font-size: 0.7rem;
+    border-radius: var(--radius-md);
+    padding: 0 8px;
+    font-size: 0.65rem;
     font-weight: 700;
     cursor: pointer;
-    height: 44px;
+    height: var(--btn-height);
     display: flex;
     align-items: center;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
     letter-spacing: 0.5px;
 }
 
 .btn-today:hover {
-    background: rgba(201, 162, 39, 0.2);
+    background: rgba(201, 162, 39, 0.1);
     border-color: var(--gold-light);
-    color: #fff;
+    color: var(--gold-light);
 }
 
 /* ========== RÂNDURI PERIOADE ========== */
 .period-row {
     display: flex;
-    gap: 10px;
+    gap: var(--gap-md);
     align-items: flex-end;
     background: rgba(201, 162, 39, 0.03);
-    padding: 12px;
-    border-radius: var(--input-radius);
-    margin-bottom: 10px;
+    padding: var(--gap-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--gap-sm);
     flex-wrap: wrap;
-    border: 1px solid var(--border);
+    border: var(--border-width) solid var(--border);
     contain: layout paint;
 }
 
@@ -401,19 +478,24 @@ textarea::placeholder {
 
 /* ========== BUTOANE GENERALE ========== */
 .btn {
-    padding: 10px 18px;
-    border-radius: var(--input-radius);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    border-radius: var(--radius-md);
     font-weight: 600;
     font-size: 0.82rem;
     cursor: pointer;
     border: none;
-    min-height: 42px;
+    min-height: var(--btn-height);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-base);
     letter-spacing: 0.4px;
+}
+
+.btn:active {
+    transform: scale(0.98);
+    opacity: 0.85;
 }
 
 .btn-outline {
@@ -455,10 +537,13 @@ textarea::placeholder {
     outline: none;
 }
 
+/* Butonul "+ Adaugă" cu outline mai gros */
 .btn-sm {
-    padding: 6px 12px;
+    padding: 8px 12px;
     font-size: 0.72rem;
-    min-height: 32px;
+    min-height: 36px;
+    border-width: 2px;
+    font-weight: 700;
 }
 
 /* ========== REZULTATE ========== */
@@ -477,13 +562,13 @@ textarea::placeholder {
 .result-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: var(--gap-md);
+    margin-bottom: var(--gap-md);
 }
 
 .result-item {
     background: rgba(201, 162, 39, 0.04);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 14px 16px;
     border-left: 3px solid var(--primary);
     contain: layout paint;
@@ -528,112 +613,77 @@ textarea::placeholder {
 .tag {
     display: inline-block;
     padding: 4px 12px;
-    border-radius: 14px;
+    border-radius: var(--radius-sm);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.3px;
 }
 
-.tag-minor {
-    background: rgba(255, 107, 107, 0.2);
-    color: #ff6b6b;
-}
-
-.tag-tanar {
-    background: rgba(201, 162, 39, 0.2);
-    color: var(--gold-light);
-}
-
-.tag-major {
-    background: rgba(201, 162, 39, 0.2);
-    color: var(--gold-light);
-}
-
-.tag-batran {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
-}
+.tag-minor { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+.tag-tanar { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
+.tag-major { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
+.tag-batran { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
 
 /* ========== UTILITĂȚI ========== */
-.hidden {
-    display: none !important;
-}
-
-small {
-    color: var(--text-light);
-    font-size: 0.72rem;
-}
-
-.fraction {
-    font-family: var(--font-mono);
-    font-size: 1.1em;
-}
+.hidden { display: none !important; }
+small { color: var(--text-light); font-size: 0.72rem; }
+.fraction { font-family: var(--font-mono); font-size: 1.1em; }
 
 .error-message {
     background: rgba(255, 107, 107, 0.08);
     color: var(--danger);
     padding: 12px 16px;
-    border-radius: 12px;
-    margin-bottom: 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--gap-md);
     font-size: 0.82rem;
     display: none;
-    border: 1px solid rgba(255, 107, 107, 0.2);
+    border: var(--border-width) solid rgba(255, 107, 107, 0.2);
 }
 
-.error-message.visible {
-    display: block;
-}
+.error-message.visible { display: block; }
 
 .btn-row {
     display: flex;
-    gap: 10px;
+    gap: var(--gap-md);
     flex-wrap: wrap;
     justify-content: center;
     margin: 20px 0;
 }
 
-.btn-row .btn {
-    flex: 1 1 180px;
-}
+.btn-row .btn { flex: 1 1 180px; }
 
+/* ========== FOOTER ========== */
 .footer {
     text-align: center;
     padding: 16px 0;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--text-light);
-    border-top: 1px solid var(--border);
+    border-top: var(--border-width) solid var(--border);
     margin-top: 24px;
     letter-spacing: 0.5px;
+    opacity: 0.7;
 }
 
+/* ========== PAȘI CALCUL ========== */
 .steps-container {
     background: rgba(201, 162, 39, 0.03);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     padding: 16px;
     margin-top: 16px;
     font-size: 0.85rem;
     line-height: 1.7;
-    border: 1px solid var(--border);
+    border: var(--border-width) solid var(--border);
 }
 
-.steps-container h4 {
-    color: var(--gold);
-    margin-bottom: 8px;
-}
+.steps-container h4 { color: var(--gold); margin-bottom: 8px; }
+.steps-container ol { padding-left: 24px; color: var(--text-light); }
+.steps-container ol li { margin-bottom: 6px; }
 
-.steps-container ol {
-    padding-left: 24px;
-    color: var(--text-light);
-}
-
-.steps-container ol li {
-    margin-bottom: 6px;
-}
-
+/* ========== ALERTE ========== */
 .alerts-container {
     background: rgba(255, 167, 38, 0.06);
-    border: 1px solid rgba(255, 167, 38, 0.3);
-    border-radius: var(--radius);
+    border: var(--border-width) solid rgba(255, 167, 38, 0.3);
+    border-radius: var(--radius-lg);
     padding: 14px 18px;
     margin-top: 16px;
 }
@@ -646,10 +696,7 @@ small {
     margin-bottom: 8px;
 }
 
-.alerts-container ul {
-    list-style: none;
-}
-
+.alerts-container ul { list-style: none; }
 .alerts-container ul li {
     padding: 6px 0;
     color: var(--text-light);
@@ -657,14 +704,11 @@ small {
     display: flex;
     align-items: center;
     gap: 8px;
-    border-bottom: 1px solid rgba(255, 167, 38, 0.1);
+    border-bottom: var(--border-width) solid rgba(255, 167, 38, 0.1);
 }
+.alerts-container ul li:last-child { border-bottom: none; }
 
-.alerts-container ul li:last-child {
-    border-bottom: none;
-}
-
-/* ========== TOGGLE SWITCH ========== */
+/* ========== TOGGLE ========== */
 .toggle-switch {
     position: relative;
     display: inline-flex;
@@ -685,7 +729,7 @@ small {
     height: 24px;
     background: var(--border);
     border-radius: 12px;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
     flex-shrink: 0;
 }
 
@@ -698,7 +742,7 @@ small {
     bottom: 3px;
     background: var(--text-light);
     border-radius: 50%;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
 }
 
 .toggle-switch input:checked + .toggle-slider {
@@ -711,10 +755,11 @@ small {
 }
 
 .toggle-switch input:focus-visible + .toggle-slider {
-    outline: 2px solid var(--gold-light);
+    outline: var(--outline-width) solid var(--gold-light);
     outline-offset: 2px;
 }
 
+/* Unificare sex toggle */
 .sex-toggle-wrapper {
     display: flex;
     align-items: center;
@@ -731,6 +776,14 @@ small {
 
 .sex-label.active {
     color: var(--gold-light);
+    font-weight: 700;
+}
+
+/* Label pentru detențiune pe viață */
+.life-label {
+    font-size: 0.8rem;
+    color: var(--label-color);
+    font-weight: 400;
 }
 
 /* ========== MODAL ========== */
@@ -750,8 +803,8 @@ small {
 
 .modal {
     background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
     padding: 20px;
     max-width: 500px;
     width: 90%;
@@ -760,61 +813,37 @@ small {
     contain: layout paint;
 }
 
-.modal h4 {
-    color: var(--gold);
-    margin-bottom: 12px;
-}
-
-.modal ul {
-    list-style: none;
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 12px;
-}
-
+.modal h4 { color: var(--gold); margin-bottom: 12px; }
+.modal ul { list-style: none; max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
 .modal li {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 12px;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     margin-bottom: 4px;
     background: rgba(201, 162, 39, 0.04);
-    border: 1px solid transparent;
-    transition: border-color 0.2s;
+    border: var(--border-width) solid transparent;
+    transition: border-color var(--transition-base);
 }
-
-.modal li:hover {
-    border-color: var(--gold);
-}
-
-.modal li span {
-    flex: 1;
-    color: var(--text);
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
+.modal li:hover { border-color: var(--gold); }
+.modal li span { flex: 1; color: var(--text); cursor: pointer; font-size: 0.9rem; }
 .modal li button {
     background: transparent;
-    border: 1px solid var(--danger);
+    border: var(--border-width) solid var(--danger);
     color: var(--danger);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 6px 10px;
     cursor: pointer;
     font-size: 0.7rem;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
 }
-
 .modal li button:hover,
 .modal li button:focus-visible {
     background: rgba(255, 107, 107, 0.1);
     outline: none;
 }
-
-.modal .close-btn {
-    margin-top: 8px;
-}
+.modal .close-btn { margin-top: 8px; }
 
 /* ========== TIMELINE ========== */
 .timeline {
@@ -865,28 +894,17 @@ small {
     margin-right: 8px;
 }
 
-.timeline li .tl-label {
-    color: var(--text-light);
-}
-
-.timeline li.passed .tl-date {
-    color: var(--danger);
-}
-
-.timeline li.passed .tl-label {
-    text-decoration: line-through;
-    color: #6A6F78;
-}
+.timeline li .tl-label { color: var(--text-light); }
+.timeline li.passed .tl-date { color: var(--danger); }
+.timeline li.passed .tl-label { text-decoration: line-through; color: #6A6F78; }
 
 /* ========== ACCESIBILITATE ========== */
 :focus-visible {
-    outline: 2px solid var(--gold-light);
+    outline: var(--outline-width) solid var(--gold-light);
     outline-offset: 2px;
 }
 
-[tabindex="-1"]:focus {
-    outline: none;
-}
+[tabindex="-1"]:focus { outline: none; }
 
 .skip-link {
     position: absolute;
@@ -898,22 +916,12 @@ small {
     z-index: 200;
 }
 
-.skip-link:focus {
-    top: 0;
-}
+.skip-link:focus { top: 0; }
 
 /* ========== UTILITĂȚI SUPLIMENTARE ========== */
-.mt-8 {
-    margin-top: 8px;
-}
-
-.mt-12 {
-    margin-top: 12px;
-}
-
-.mt-16 {
-    margin-top: 16px;
-}
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
 
 .age-tag {
     display: flex;
@@ -940,22 +948,11 @@ small {
     color: var(--text-light);
 }
 
-.life-label {
-    font-size: 0.8rem;
-    color: var(--label-color);
-}
-
 /* ========== RESPONSIVE ========== */
 @media (max-width: 480px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    .result-grid {
-        grid-template-columns: 1fr;
-    }
-    .header h1 {
-        font-size: 1.2rem;
-    }
+    .form-grid { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.2rem; }
     .top-actions .btn-big {
         flex: 1 1 100%;
         max-width: 100%;
@@ -964,6 +961,10 @@ small {
         font-size: 0.7rem;
         padding: 10px 4px;
     }
+    .top-bar { gap: 6px; padding: 8px 10px; }
+    .btn-utility { padding: 10px 6px; }
+    #themeToggle { min-width: 40px; }
+    .hamburger { width: 40px; height: 40px; }
 }
 
 /* ========== REDUCERE MIȘCARE ========== */
