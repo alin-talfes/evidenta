@@ -357,7 +357,11 @@ body.light .card:hover {
 }
 
 .card h3 {
-    font-size: 0.95rem;
+    /* mărit ușor și îngroșat suplimentar față de original (0.95rem/700)
+       pentru a-l separa mai clar, ca nivel de ierarhie, de .result-value (1.05rem/700)
+       și de label-urile de câmp (0.66rem/600) */
+    font-size: 1.02rem;
+    font-weight: 800;
     color: var(--gold-light);
     margin-bottom: 10px;
     padding-bottom: 8px;
@@ -366,8 +370,7 @@ body.light .card:hover {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
 }
 
 /* ========== FORMULARE ========== */
@@ -650,7 +653,10 @@ textarea::placeholder {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     font-size: 0.75rem;
-    color: var(--text-light);
+    /* text-light era prea șters pe fond aproape gol (0.03 opacitate);
+       folosim var(--text) atenuat cu opacity, nu var(--text-light), pentru contrast mai bun */
+    color: var(--text);
+    opacity: 0.85;
     line-height: 1.6;
 }
 
@@ -658,6 +664,7 @@ textarea::placeholder {
     color: var(--gold);
     margin-bottom: 8px;
     font-size: 0.85rem;
+    opacity: 1;
 }
 
 /* ========== BUTON ÎNAPOI ========== */
@@ -753,13 +760,25 @@ small { color: var(--text-light); font-size: 0.72rem; }
     border-radius: var(--radius-lg);
     padding: 14px;
     margin-top: 12px;
-    font-size: 0.85rem;
+    /* mutat pe font-mono: secțiunea explică formule (Math.floor etc.),
+       deci ar trebui să aibă aceeași identitate vizuală de "cod" ca .big-result */
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     line-height: 1.7;
     border: var(--border-width) solid var(--border);
 }
 
-.steps-container h4 { color: var(--gold); margin-bottom: 8px; }
-.steps-container ol { padding-left: 20px; color: var(--text-light); }
+.steps-container h4 {
+    font-family: var(--font);
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+.steps-container ol {
+    padding-left: 20px;
+    /* text mai puțin șters decât var(--text-light) simplu, pentru lizibilitate pe fond aproape gol */
+    color: var(--text);
+    opacity: 0.85;
+}
 .steps-container ol li { margin-bottom: 6px; }
 
 /* ========== ALERTE ========== */
