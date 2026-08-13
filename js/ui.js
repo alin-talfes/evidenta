@@ -1,13 +1,16 @@
 // ========== INTERFAȚĂ UTILIZATOR (DOM) ==========
 
+// Variabila globală pentru sexul curent (M/F)
 let currentSex = 'M';
 
+// Referințe către elementele DOM pentru toggle-ul de sex
 const sexToggle = document.getElementById('sexToggle');
 const sexLabelM = document.getElementById('sexLabelM');
 const sexLabelF = document.getElementById('sexLabelF');
 
 /**
  * Actualizează interfața pentru selectarea sexului.
+ * Setează variabila globală currentSex și evidențiază eticheta corespunzătoare.
  */
 function updateSexUI() {
     if (sexToggle.checked) {
@@ -48,6 +51,7 @@ function setToday(inputId) {
 
 /**
  * Actualizează eticheta de vârstă și categorie.
+ * Afișează vârsta exactă și categoria (MINOR, TANAR, MAJOR, BATRAN).
  */
 function updAgeTag() {
     const b = document.getElementById('birthDate').value.trim();
@@ -72,6 +76,7 @@ function updAgeTag() {
 
 /**
  * Adaugă un rând pentru perioadă dedusă.
+ * Creează elemente cu clasele și atributele necesare.
  */
 function addDedRow() {
     const r = document.createElement('div');
@@ -223,7 +228,7 @@ function toggleSteps() {
 }
 
 /**
- * Deschide modalul cu informații.
+ * Deschide modalul cu informații și ghid de utilizare detaliat.
  */
 function openInfoModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
@@ -236,16 +241,47 @@ function openInfoModal() {
     overlay.setAttribute('aria-labelledby', 'info-title');
     overlay.innerHTML = `
         <div class="modal">
-            <h4 id="info-title">📖 GHID DE COMPLETARE</h4>
+            <h4 id="info-title">📖 GHID DE UTILIZARE</h4>
             <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
-                <p><strong>1. DATE PPL</strong><br>• <strong>Sex:</strong> selectați Masculin/Feminin. Implicit este MASCULIN.<br>• <strong>Data nașterii:</strong> format zz.ll.aaaa.<br>• <strong>Observații:</strong> opțional.</p>
-                <p><strong>2. PEDEAPSA</strong><br>• <strong>Articol liberare condiționată:</strong> alegeți articolul corespunzător.<br>• <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>• <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei (fără limite).<br>• <strong>Data începerii:</strong> prima zi de executare. Butonul AZI completează automat.</p>
-                <p><strong>3. PERIOADE DEDUSE</strong><br>• Adăugați perioadele care se scad (arest preventiv, reținere etc.).<br>• Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).</p>
-                <p><strong>4. RECURS COMPENSATORIU</strong><br>• Introduceți direct numărul de zile deduse (Legea 169/2017).</p>
-                <p><strong>5. PERIOADE ADĂUGATE</strong><br>• Evadare/boală: zile = data_final − data_inițial (capete excluse).<br>• Întrerupere: zile = data_final − data_inițial − 1.</p>
-                <p><strong>6. REST RĂMAS</strong><br>• Opțional: data liberării condiționate.</p>
+                <p><strong>1. DATE GENERALE PPL</strong><br>
+                • <strong>Sex:</strong> alegeți Masculin/Feminin. Implicit este MASCULIN.<br>
+                • <strong>Data nașterii:</strong> format zz.ll.aaaa.<br>
+                • <strong>Observații:</strong> opțional, note pentru speță.</p>
+
+                <p><strong>2. DETALII PEDEAPSĂ PPL</strong><br>
+                • <strong>Articol liberare condiționată:</strong> selectați articolul corespunzător (NCP sau VCP).<br>
+                • <strong>Detențiune pe viață:</strong> bifați doar dacă este cazul.<br>
+                • <strong>Ani/Luni/Zile:</strong> durata totală a pedepsei.<br>
+                • <strong>Data începerii executării:</strong> prima zi de executare. Butonul AZI completează automat.</p>
+
+                <p><strong>3. PERIOADE DEDUSE</strong><br>
+                • Adăugați perioadele care se scad (arest preventiv, reținere, arest la domiciliu etc.).<br>
+                • Calcul: zile = data_sfârșit − data_început + 1 (capete incluse).<br>
+                • Dacă perioadele se suprapun, acestea sunt unificate automat.</p>
+
+                <p><strong>4. RECURS COMPENSATORIU (Legea 169/2017)</strong><br>
+                • Introduceți direct numărul de zile deduse, conform legii.</p>
+
+                <p><strong>5. PERIOADE ADĂUGATE</strong><br>
+                • <strong>Evadare/boală:</strong> zile = data_final − data_inițial (capete excluse).<br>
+                • <strong>Întrerupere:</strong> zile = data_final − data_inițial − 1.<br>
+                Aceste zile se adaugă la pedeapsă.</p>
+
+                <p><strong>6. CALCUL REST RĂMAS DE EXECUTAT</strong><br>
+                • Opțional: data liberării condiționate pentru calculul restului rămas.</p>
+
+                <p><strong>PRELUNGIRI MĂSURI PREVENTIVE</strong><br>
+                • Opțional: dată de referință și număr de zile.<br>
+                • Calcul: prima zi este chiar data de referință. Rezultatul este afișat live.</p>
+
+                <p><strong>REZULTATE</strong><br>
+                • După apăsarea „CALCULEAZĂ”, obțineți expirările, fracțiunile, datele corespunzătoare, pașii de calcul și cronologia termenelor.<br>
+                • Puteți scădea zile muncite din data propozabilă direct în rezultate.<br>
+                • Exportați PDF sau copiați rezultatele.</p>
+
                 <hr style="border-color:var(--border);margin:12px 0;">
-                <p style="font-size:0.8rem;color:var(--text-light);"><strong>🔒 Confidențialitate și securitate</strong><br>Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p>
+                <p style="font-size:0.8rem;color:var(--text-light);"><strong>🔒 Confidențialitate și securitate</strong><br>
+                Toate datele introduse sunt stocate exclusiv în browserul utilizatorului (localStorage) și nu sunt transmise către nicio bază de date externă sau server. Nu se operează date cu caracter personal. Acest calculator are rol strict informativ și nu înlocuiește evidența oficială.</p>
             </div>
             <button class="btn btn-outline close-btn" onclick="this.closest('.modal-overlay').remove()">Închide</button>
         </div>
