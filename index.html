@@ -3,50 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Calculator evidență pedepse</title>
-    <link rel="stylesheet" href="css/style.css?v=5">
+    <title>CALCULATOR PEDEPSE</title>
+    <link rel="stylesheet" href="css/style.css?v=6">
     <style>
-        /* Forțează aranjarea butoanelor principale pe două coloane */
-        .top-actions {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            gap: 10px !important;
-            margin-bottom: 12px !important;
+        /* Stiluri pentru butonul hamburger */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            width: 44px;
+            height: 44px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--input-radius);
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
         }
-        .top-actions .btn-big {
-            flex: 1 1 48% !important;
-            max-width: 48% !important;
-            min-width: 0 !important;
-            padding: 12px 10px !important;
-            white-space: normal !important;
-            word-break: break-word !important;
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 3px;
+            background: var(--gold-light);
+            border-radius: 3px;
         }
-        @media (max-width: 480px) {
-            .top-actions .btn-big {
-                flex: 1 1 100% !important;
-                max-width: 100% !important;
-            }
+        .hamburger:hover {
+            background: rgba(201, 162, 39, 0.1);
+            border-color: var(--gold);
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
     <div class="container">
-        <div class="top-actions">
+        <!-- Buton hamburger pentru meniul principal -->
+        <button class="hamburger" onclick="this.nextElementSibling.classList.toggle('hidden')" aria-label="Meniu principal">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Meniul principal (ascuns inițial) -->
+        <div id="mainMenu" class="top-actions hidden">
             <button class="btn-big" id="themeToggle" onclick="toggleTheme()">LUMINOS</button>
             <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFO</button>
             <a href="termene.html" class="btn-big">CALCUL TERMEN</a>
             <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188</button>
         </div>
+
         <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
             <button class="btn-utility primary" id="saveBtn" onclick="saveCase()">SALVEAZA</button>
             <button class="btn-utility" id="loadBtn" onclick="openLoadModal()">INCARCA <span class="badge hidden" id="caseCountBadge">0</span></button>
             <button class="btn-utility" id="resetBtn" onclick="confirmReset()">RESET</button>
         </div>
+
         <div class="header">
-            <h1 id="main-title">CALCULATOR EVIDENTA PEDEPSE</h1>
+            <h1 id="main-title">CALCULATOR PEDEPSE</h1>
         </div>
+
         <main id="main-content">
+            <!-- Conținutul rămâne neschimbat -->
             <div class="card" aria-labelledby="date-ppl-heading">
                 <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
                 <div class="form-grid">
@@ -200,12 +218,12 @@
         </main>
         <footer class="footer" role="contentinfo">CALCULATOR EVIDENȚĂ PEDEPSE | v1.5 | © Alin Talfeș</footer>
     </div>
-    <script src="js/utils.js?v=5"></script>
-    <script src="js/rules.js?v=5"></script>
-    <script src="js/legal.js?v=5"></script>
-    <script src="js/storage.js?v=5"></script>
-    <script src="js/export.js?v=5"></script>
-    <script src="js/ui.js?v=5"></script>
-    <script src="js/app.js?v=5"></script>
+    <script src="js/utils.js?v=6"></script>
+    <script src="js/rules.js?v=6"></script>
+    <script src="js/legal.js?v=6"></script>
+    <script src="js/storage.js?v=6"></script>
+    <script src="js/export.js?v=6"></script>
+    <script src="js/ui.js?v=6"></script>
+    <script src="js/app.js?v=6"></script>
 </body>
 </html>
