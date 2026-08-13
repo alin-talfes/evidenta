@@ -1,8 +1,8 @@
-
 // ========== GESTIONARE STOCARE LOCALĂ (localStorage) ==========
 
 /**
  * Aplică tema salvată la pornire.
+ * Denumirile butonului: MOD LUMINOS / MOD INTUNECAT, fără emoji.
  */
 function applyTheme() {
     const saved = localStorage.getItem('anpTheme');
@@ -17,6 +17,7 @@ function applyTheme() {
 
 /**
  * Comută tema și salvează preferința.
+ * Denumirile butonului: MOD LUMINOS / MOD INTUNECAT, fără emoji.
  */
 function toggleTheme() {
     document.body.classList.toggle('light');
