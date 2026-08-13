@@ -1,3 +1,4 @@
+
 // ========== GESTIONARE STOCARE LOCALĂ (localStorage) ==========
 
 /**
