@@ -55,12 +55,6 @@
         #themeToggle {
             margin-left: 6px;
         }
-
-        /* Îmbunătățire câmpuri invalide (adăugat prin JavaScript mai jos) */
-        .input-invalid {
-            border-color: var(--danger) !important;
-            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15) !important;
-        }
     </style>
 </head>
 <body>
@@ -82,8 +76,8 @@
         <!-- Meniul principal (ascuns inițial), afișat sub bara de acțiuni -->
         <div id="mainMenu" class="top-actions hidden">
             <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFO</button>
-            <a href="termene.html" class="btn-big">CALCUL TERMEN</a>
             <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188</button>
+            <a href="termene.html" class="btn-big">CALCUL TERMEN PROCEDURALE</a>
         </div>
 
         <div class="header">
