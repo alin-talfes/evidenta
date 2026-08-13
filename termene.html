@@ -204,7 +204,7 @@
         <div class="card">
             <h3>Calcul termen</h3>
 
-            <!-- NOU: Selector termen predefinit -->
+            <!-- Selector termen predefinit -->
             <label for="presetSelect">Termen predefinit</label>
             <select id="presetSelect" onchange="applyPreset(this.value)">
                 <option value="manual">Manual (completezi tu)</option>
@@ -242,8 +242,8 @@
 
             <label for="calcModeSelect">Mod calcul</label>
             <select id="calcModeSelect">
+                <option value="working" selected>Zile lucrătoare</option>
                 <option value="calendar">Zile calendaristice</option>
-                <option value="working">Zile lucrătoare</option>
             </select>
 
             <label for="termTypeSelect">Tip termen</label>
@@ -533,28 +533,28 @@
             manual: {
                 duration: '',
                 unit: 'days',
-                calcMode: 'calendar',
+                calcMode: 'working',
                 termType: 'general',
                 actType: ''
             },
             contestatie: {
                 duration: 3,
                 unit: 'days',
-                calcMode: 'calendar',
+                calcMode: 'working',
                 termType: 'general',
                 actType: ''
             },
             apel: {
                 duration: 10,
                 unit: 'days',
-                calcMode: 'calendar',
+                calcMode: 'working',
                 termType: 'general',
                 actType: ''
             },
             recurs: {
                 duration: 30,
                 unit: 'days',
-                calcMode: 'calendar',
+                calcMode: 'working',
                 termType: 'general',
                 actType: ''
             },
