@@ -317,7 +317,7 @@ function openLegalModal() {
 
     let html = '<div class="modal" style="display:flex; flex-direction:column; max-height:80vh;">';
     html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">';
-    html += '<h4 id="legal-title" style="margin:0;">BAZA LEGALA (OMJ 2188/C/2022)</h4>';
+    html += '<h4 id="legal-title" style="margin:0;">OMJ 2188</h4>';
     html += '<button class="btn btn-outline btn-sm close-btn" onclick="this.closest(\'.modal-overlay\').remove()" style="flex-shrink:0;">Închide</button>';
     html += '</div>';
     html += '<div style="flex:1; overflow-y:auto;">';
