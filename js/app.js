@@ -1,3 +1,47 @@
+// ========== GESTIONARE ERORI GLOBALE ==========
+
+/**
+ * Afișează un toast discret cu eroarea apărută.
+ * @param {string} message - mesajul de afișat
+ */
+function showGlobalError(message) {
+    let toast = document.getElementById('globalErrorToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalErrorToast';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.backgroundColor = 'var(--danger, #ff6b6b)';
+        toast.style.color = '#fff';
+        toast.style.padding = '12px 18px';
+        toast.style.borderRadius = '8px';
+        toast.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
+        toast.style.zIndex = '9999';
+        toast.style.fontSize = '0.85rem';
+        toast.style.maxWidth = '350px';
+        toast.style.wordBreak = 'break-word';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+
+window.onerror = function (msg, source, lineno, colno, error) {
+    console.error('Eroare globală:', msg, 'în', source, 'linia', lineno, 'coloana', colno);
+    showGlobalError('A apărut o eroare neașteptată. Încearcă din nou.');
+    return true;
+};
+
+window.addEventListener('unhandledrejection', function (event) {
+    console.error('Eroare promisiune nerezolvată:', event.reason);
+    showGlobalError('A apărut o eroare asincronă. Încearcă din nou.');
+    event.preventDefault();
+});
+
 // ========== APLICAȚIE PRINCIPALĂ ==========
 
 /**
