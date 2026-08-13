@@ -210,10 +210,10 @@ function calculateAll() {
 
     let alertsHtml = '';
     if (alerts.length > 0) {
-        alertsHtml = '<div class="alerts-container"><h4>⚠️ ALERTE – Termene apropiate</h4><ul>';
+        alertsHtml = '<div class="alerts-container"><h4>ALERTE – Termene apropiate</h4><ul>';
         alerts.forEach(a => {
             const found = alertDates.find(x => x.label === a.label);
-            alertsHtml += `<li>⚠️ ${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(found.date)})</li>`;
+            alertsHtml += `<li>${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(found.date)})</li>`;
         });
         alertsHtml += '</ul></div>';
     }
@@ -294,7 +294,7 @@ function calculateAll() {
         <div class="form-grid">
             <div>
                 <label for="workDaysInput">Zile muncite de scăzut</label>
-                <input type="number" id="workDaysInput" min="0" value="0">
+                <input type="number" id="workDaysInput" min="0" value="0" oninput="updateProposedDateWithWorkDays()">
             </div>
             <div>
                 <label>Noua dată propozabilă</label>
@@ -324,16 +324,12 @@ function calculateAll() {
     document.getElementById('resultsContent').innerHTML = html;
     document.getElementById('stepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
     document.getElementById('stepsContainer').classList.add('hidden');
-    document.getElementById('toggleStepsBtn').innerHTML = '🧮 AFIȘEAZĂ PAȘII CALCULULUI';
+    document.getElementById('toggleStepsBtn').innerHTML = 'AFIȘEAZĂ PAȘII CALCULULUI';
     document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
     document.getElementById('resultsCard').classList.remove('hidden');
 
-    // Atașează evenimentul pentru scăderea zilelor muncite
-    const workInput = document.getElementById('workDaysInput');
-    if (workInput) {
-        workInput.addEventListener('input', updateProposedDateWithWorkDays);
-        updateProposedDateWithWorkDays(); // inițializare
-    }
+    // Inițializare scădere zile muncite
+    updateProposedDateWithWorkDays();
 
     autoSave();
 }
@@ -370,50 +366,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Restaurare auto-save
     restoreAutoSave();
 
-    // Evenimente butoane
-    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-    document.getElementById('infoBtn').addEventListener('click', openInfoModal);
-    document.getElementById('legalBtn').addEventListener('click', openLegalModal);
-    document.getElementById('saveBtn').addEventListener('click', saveCase);
-    document.getElementById('loadBtn').addEventListener('click', openLoadModal);
-    document.getElementById('resetBtn').addEventListener('click', confirmReset);
-
-    document.getElementById('addDedBtn').addEventListener('click', addDedRow);
-    document.getElementById('addManDedBtn').addEventListener('click', addManDedRow);
-    document.getElementById('addNonExecBtn').addEventListener('click', addNonExecRow);
-
-    document.getElementById('calcBtn').addEventListener('click', calculateAll);
-    document.getElementById('copyResultsBtn').addEventListener('click', copyResults);
-    document.getElementById('exportPdfBtn').addEventListener('click', exportPDF);
-    document.getElementById('toggleStepsBtn').addEventListener('click', toggleSteps);
-
-    // Sex toggle
+    // Evenimente care nu sunt acoperite de onclick în HTML
     sexToggle.addEventListener('change', updateSexUI);
 
-    // Mascare dată
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('date-masked')) applyDateMask(e);
     });
 
-    // Butoane AZI
     document.querySelectorAll('.btn-today').forEach(btn => {
         btn.addEventListener('click', function() {
             setToday(this.dataset.target);
         });
     });
 
-    // Etichete vârstă
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
     document.getElementById('liberationArticle').addEventListener('change', updAgeTag);
-
-    // Viață toggle
     document.getElementById('lifeSentence').addEventListener('change', function() {
         document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked);
     });
 
-    // Măsuri preventive live
     document.getElementById('masuriRefDate').addEventListener('input', calcMasuriPreventive);
-    document.getElementById('masuriDays').addEventListener('input', calcMasuriPreventive);
+    // masuriDays are deja oninput în HTML
     calcMasuriPreventive();
 
     // Escape închide modalul
