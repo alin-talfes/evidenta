@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator termene procedurale penale</title>
-    <link rel="stylesheet" href="css/style.css?v=13">
+    <link rel="stylesheet" href="css/style.css?v=14">
     <style>
         /* Stiluri specifice termene.html */
         .back-btn {
@@ -70,7 +70,9 @@
 <body>
     <div class="container">
         <a href="index.html" class="back-btn">Înapoi la Calculator pedepse</a>
-        <div class="header">CALCULATOR TERMENE PROCEDURALE PENALE</div>
+        <div class="header">
+            <h1>CALCULATOR TERMENE PROCEDURALE PENALE</h1>
+        </div>
 
         <div class="card">
             <h3>Calcul termen</h3>
@@ -96,7 +98,10 @@
                 </div>
                 <div>
                     <label for="startTimeInput">Ora început (hh:mm)</label>
-                    <input type="text" id="startTimeInput" class="time-masked" placeholder="hh:mm">
+                    <div class="date-wrapper">
+                        <input type="text" id="startTimeInput" class="time-masked" placeholder="hh:mm">
+                        <button type="button" class="btn-today" onclick="setNow('startTimeInput')">ACUM</button>
+                    </div>
                 </div>
             </div>
 
@@ -227,6 +232,13 @@
         function setToday(inputId) {
             const input = document.getElementById(inputId);
             if (input) input.value = formatRoDate(new Date());
+        }
+        function setNow(inputId) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                const now = new Date();
+                input.value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            }
         }
 
         // ===== Sărbători legale 2026-2028 =====
