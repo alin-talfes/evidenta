@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator termene procedurale penale</title>
-    <link rel="stylesheet" href="css/style.css?v=14">
+    <link rel="stylesheet" href="css/style.css?v=16">
     <style>
-        /* Stiluri specifice termene.html */
+        /* ===== Ajustări specifice termene.html ===== */
         .back-btn {
             display: inline-flex;
             align-items: center;
@@ -25,6 +25,7 @@
         .back-btn:hover {
             background: rgba(201, 162, 39, 0.1);
         }
+
         .legal-box {
             margin-top: 16px;
             padding: 12px;
@@ -40,29 +41,58 @@
             margin-bottom: 8px;
             font-size: 0.85rem;
         }
+
         .result {
-            margin-top: 12px;
-            padding: 12px;
+            margin-top: 24px;
+            padding: 24px 20px;
             background: rgba(201, 162, 39, 0.05);
-            border-radius: var(--radius-sm);
-            border-left: 3px solid var(--gold);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--gold);
+            text-align: center;
+        }
+        .result .big-result {
             font-family: var(--font-mono);
-            font-size: 0.85rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--gold-light);
+            letter-spacing: 1px;
             word-break: break-word;
         }
-        .result strong {
-            color: var(--gold-light);
-        }
+
         .row {
             display: flex;
-            gap: var(--gap-md);
+            gap: var(--gap-lg);
+            margin-bottom: 4px;
         }
         .row > div {
             flex: 1;
         }
+
+        /* Aerisire suplimentară */
+        .card {
+            padding: 28px 26px;
+        }
+        .card h3 {
+            margin-bottom: 20px;
+        }
+        input,
+        select {
+            margin-bottom: 18px;
+        }
+        label {
+            margin-bottom: 8px;
+        }
+        .btn {
+            margin-top: 10px;
+        }
+
         @media (max-width: 480px) {
             .row {
                 flex-direction: column;
+                gap: var(--gap-md);
+            }
+            .result .big-result {
+                font-size: 1.4rem;
             }
         }
     </style>
@@ -135,13 +165,6 @@
                 <option value="prelungire_arest_preventiv">Prelungire arest preventiv</option>
                 <option value="prelungire_arest_la_domiciliu">Prelungire arest la domiciliu</option>
             </select>
-
-            <!-- Toggle switch pentru data rămânerii definitive -->
-            <label class="toggle-switch" style="margin-top:12px;">
-                <input type="checkbox" id="definitiveCheckbox" checked>
-                <span class="toggle-slider" aria-hidden="true"></span>
-                <span class="life-label">Adaugă 1 zi lucrătoare pentru data rămânerii definitive</span>
-            </label>
 
             <button class="btn btn-gold" onclick="calculateTerm()">Calculează termen</button>
             <div id="deadlineResult" class="result" style="display:none;"></div>
@@ -422,48 +445,42 @@
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: '',
-                definitive: true
+                actType: ''
             },
             contestatie: {
                 duration: 3,
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: '',
-                definitive: true
+                actType: ''
             },
             apel: {
                 duration: 10,
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: '',
-                definitive: true
+                actType: ''
             },
             recurs: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'working',
                 termType: 'general',
-                actType: '',
-                definitive: true
+                actType: ''
             },
             arest_preventiv: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'calendar',
                 termType: 'preventive',
-                actType: 'prelungire_arest_preventiv',
-                definitive: false
+                actType: 'prelungire_arest_preventiv'
             },
             arest_domiciliu: {
                 duration: 30,
                 unit: 'days',
                 calcMode: 'calendar',
                 termType: 'preventive',
-                actType: 'prelungire_arest_la_domiciliu',
-                definitive: false
+                actType: 'prelungire_arest_la_domiciliu'
             }
         };
 
@@ -476,7 +493,6 @@
             document.getElementById('calcModeSelect').value = preset.calcMode;
             document.getElementById('termTypeSelect').value = preset.termType;
             document.getElementById('actTypeSelect').value = preset.actType;
-            document.getElementById('definitiveCheckbox').checked = preset.definitive;
         }
 
         // ===== Interfață =====
@@ -488,7 +504,9 @@
             const calcMode = document.getElementById('calcModeSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
             const actType = document.getElementById('actTypeSelect').value;
-            const definitiveChecked = document.getElementById('definitiveCheckbox').checked;
+
+            // Întotdeauna se adaugă 1 zi lucrătoare pentru data rămânerii definitive
+            const definitiveChecked = true;
 
             if (!startDateStr) {
                 alert('Completează data de început.');
@@ -515,27 +533,13 @@
 
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
-                const rawStr = unit === 'hours' ? formatRoDateTime(res.rawDeadline) : formatRoDate(res.rawDeadline);
-                const effectiveStr = unit === 'hours' ? formatRoDateTime(res.effectiveDeadline) : formatRoDate(res.effectiveDeadline);
 
-                let html = `<strong>Regula aplicată:</strong> ${res.rule}<br>`;
-                html += `<strong>Termen-limită brut:</strong> ${rawStr}<br>`;
-                if (res.workingDayAdjustment) {
-                    const adjustedStr = unit === 'hours' ? formatRoDateTime(res.deadline) : formatRoDate(res.deadline);
-                    html += `<strong>Termen-limită după ajustare weekend:</strong> ${adjustedStr}<br>`;
-                }
-                if (res.exception) {
-                    html += `<strong>Termen-limită după excepția RIL 3/2025:</strong> ${effectiveStr}<br>`;
-                } else {
-                    html += `<strong>Termen-limită efectiv:</strong> ${effectiveStr}<br>`;
-                }
                 if (definitiveDate) {
-                    html += `<strong>Data rămânerii definitive:</strong> ${formatRoDate(definitiveDate)}<br>`;
+                    resultDiv.innerHTML = `<div class="big-result">DATA ESTIMATĂ A RĂMÂNERII DEFINITIVE:<br>${formatRoDate(definitiveDate)}</div>`;
+                } else {
+                    const effectiveStr = unit === 'hours' ? formatRoDateTime(res.effectiveDeadline) : formatRoDate(res.effectiveDeadline);
+                    resultDiv.innerHTML = `<div class="big-result">TERMEN-LIMITĂ EFECTIV:<br>${effectiveStr}</div>`;
                 }
-                html += `<strong>Ajustare zi lucrătoare:</strong> ${res.workingDayAdjustment ? 'Da' : 'Nu'}<br>`;
-                html += `<strong>Excepție:</strong> ${res.exception || 'Niciuna'}`;
-
-                resultDiv.innerHTML = html;
             } catch (err) {
                 alert(err.message);
             }
