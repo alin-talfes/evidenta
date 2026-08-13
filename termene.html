@@ -23,6 +23,7 @@
             --font: 'Inter', system-ui, -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: var(--bg);
             font-family: var(--font);
@@ -88,7 +89,7 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
         }
-        button {
+        button, .btn {
             padding: 10px 18px;
             border-radius: var(--input-radius);
             font-weight: 600;
@@ -99,9 +100,26 @@
             color: #0F1115;
             margin-top: 8px;
             min-height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            letter-spacing: 0.5px;
         }
-        button:hover {
+        button:hover, .btn:hover {
             background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--gold-light);
+            border: 1.5px solid var(--gold);
+        }
+        .btn-secondary:hover {
+            background: rgba(201, 162, 39, 0.1);
+            transform: translateY(-1px);
         }
         .result {
             margin-top: 12px;
@@ -116,19 +134,33 @@
         .result strong {
             color: var(--gold-light);
         }
-        .back-link {
-            display: inline-block;
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             margin-top: 16px;
-            padding: 8px 12px;
-            background: rgba(201, 162, 39, 0.1);
-            border: 1px solid var(--gold);
+            padding: 10px 18px;
+            background: transparent;
+            border: 1.5px solid var(--gold);
             border-radius: var(--input-radius);
             color: var(--gold-light);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
-        .back-link:hover {
-            background: rgba(201, 162, 39, 0.2);
+        .back-btn:hover {
+            background: rgba(201, 162, 39, 0.1);
+        }
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+        .row > div {
+            flex: 1;
+        }
+        @media (max-width: 480px) {
+            .row { flex-direction: column; }
         }
     </style>
 </head>
@@ -138,9 +170,16 @@
 
         <div class="card">
             <h3>Calcul termen</h3>
-            <label for="startInput">Data și ora de început</label>
-            <input type="datetime-local" id="startInput" value="2026-01-05T09:00">
-
+            <div class="row">
+                <div>
+                    <label for="startDateInput">Data început (zz.ll.aaaa)</label>
+                    <input type="text" id="startDateInput" placeholder="zz.ll.aaaa" value="05.01.2026">
+                </div>
+                <div>
+                    <label for="startTimeInput">Ora început (hh:mm)</label>
+                    <input type="text" id="startTimeInput" placeholder="hh:mm" value="09:00">
+                </div>
+            </div>
             <label for="durationInput">Durată</label>
             <input type="number" id="durationInput" value="10" min="1">
 
@@ -173,12 +212,26 @@
 
         <div class="card">
             <h3>Verificare depunere în termen</h3>
-            <label for="sentDateInput">Data și ora trimiterii</label>
-            <input type="datetime-local" id="sentDateInput">
-
-            <label for="receivedDateInput">Data și ora primirii (opțional)</label>
-            <input type="datetime-local" id="receivedDateInput">
-
+            <div class="row">
+                <div>
+                    <label for="sentDateInput">Data trimiterii (zz.ll.aaaa)</label>
+                    <input type="text" id="sentDateInput" placeholder="zz.ll.aaaa">
+                </div>
+                <div>
+                    <label for="sentTimeInput">Ora trimiterii (hh:mm)</label>
+                    <input type="text" id="sentTimeInput" placeholder="hh:mm" value="12:00">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label for="receivedDateInput">Data primirii (opțional)</label>
+                    <input type="text" id="receivedDateInput" placeholder="zz.ll.aaaa">
+                </div>
+                <div>
+                    <label for="receivedTimeInput">Ora primirii (opțional)</label>
+                    <input type="text" id="receivedTimeInput" placeholder="hh:mm">
+                </div>
+            </div>
             <label style="display:flex; align-items:center;">
                 <input type="checkbox" id="emailFaxCheckbox" style="width:auto; margin-right:8px; margin-bottom:0;">
                 Trimis prin e-mail/fax
@@ -188,11 +241,48 @@
             <div id="submissionResult" class="result" style="display:none;"></div>
         </div>
 
-        <a href="index.html" class="back-link">Înapoi la Calculator evidență pedepse</a>
+        <a href="index.html" class="back-btn">Înapoi la Calculator evidență pedepse</a>
     </div>
 
     <script>
-        // ===== Date sărbători legale 2026-2028 =====
+        // ===== Funcții de parsing pentru formatul românesc =====
+        function parseRoDate(str) {
+            if (!str) return null;
+            const parts = str.trim().split('.');
+            if (parts.length !== 3) return null;
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const year = parseInt(parts[2], 10);
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+            const d = new Date(year, month - 1, day);
+            if (d.getDate() !== day || d.getMonth() !== month - 1 || d.getFullYear() !== year) return null;
+            return d;
+        }
+        function parseRoTime(str) {
+            if (!str) return { hours: 9, minutes: 0 };
+            const parts = str.trim().split(':');
+            if (parts.length !== 2) return { hours: 9, minutes: 0 };
+            const hours = parseInt(parts[0], 10);
+            const minutes = parseInt(parts[1], 10);
+            if (isNaN(hours) || isNaN(minutes)) return { hours: 9, minutes: 0 };
+            return { hours, minutes };
+        }
+        function combineRoDateTime(dateStr, timeStr) {
+            const d = parseRoDate(dateStr);
+            if (!d) return null;
+            const { hours, minutes } = parseRoTime(timeStr);
+            d.setHours(hours, minutes, 0, 0);
+            return d;
+        }
+        function formatRoDate(date) {
+            if (!date || isNaN(date)) return '—';
+            return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+        }
+        function formatRoDateTime(date) {
+            return `${formatRoDate(date)} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        }
+
+        // ===== Sărbători legale 2026-2028 =====
         const HOLIDAYS_2026_2028 = new Set([
           // 2026
           '2026-01-01', '2026-01-02', '2026-01-06', '2026-01-07', '2026-01-24',
@@ -224,10 +314,6 @@
 
         function formatDate(date) {
             return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-        }
-
-        function formatDateTime(date) {
-            return `${formatDate(date)} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
         }
 
         function addDays(date, n) {
@@ -401,15 +487,16 @@
 
         // ===== Interfață =====
         function calculateTerm() {
-            const startValue = document.getElementById('startInput').value;
+            const startDateStr = document.getElementById('startDateInput').value.trim();
+            const startTimeStr = document.getElementById('startTimeInput').value.trim();
             const duration = parseInt(document.getElementById('durationInput').value);
             const unit = document.getElementById('unitSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
             const actType = document.getElementById('actTypeSelect').value;
 
-            const start = new Date(startValue);
-            if (isNaN(start.getTime())) {
-                alert('Introdu o dată și oră de început validă.');
+            const start = combineRoDateTime(startDateStr, startTimeStr);
+            if (!start) {
+                alert('Introdu o dată validă în format zz.ll.aaaa');
                 return;
             }
 
@@ -417,8 +504,8 @@
                 const res = calculateDeadline({ start, duration, unit, termType, actType: actType || null });
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
-                const deadlineStr = unit === 'hours' ? formatDateTime(res.deadline) : formatDate(res.deadline);
-                const effectiveStr = unit === 'hours' ? formatDateTime(res.effectiveDeadline) : formatDate(res.effectiveDeadline);
+                const deadlineStr = unit === 'hours' ? formatRoDateTime(res.deadline) : formatRoDate(res.deadline);
+                const effectiveStr = unit === 'hours' ? formatRoDateTime(res.effectiveDeadline) : formatRoDate(res.effectiveDeadline);
                 resultDiv.innerHTML = `
                     <strong>Regula aplicată:</strong> ${res.rule}<br>
                     <strong>Termen-limită brut:</strong> ${deadlineStr}<br>
@@ -432,25 +519,28 @@
         }
 
         function checkSubmission() {
-            const startValue = document.getElementById('startInput').value;
+            const startDateStr = document.getElementById('startDateInput').value.trim();
+            const startTimeStr = document.getElementById('startTimeInput').value.trim();
             const duration = parseInt(document.getElementById('durationInput').value);
             const unit = document.getElementById('unitSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
             const actType = document.getElementById('actTypeSelect').value;
-            const sentDateValue = document.getElementById('sentDateInput').value;
-            const receivedDateValue = document.getElementById('receivedDateInput').value;
+            const sentDateStr = document.getElementById('sentDateInput').value.trim();
+            const sentTimeStr = document.getElementById('sentTimeInput').value.trim();
+            const receivedDateStr = document.getElementById('receivedDateInput').value.trim();
+            const receivedTimeStr = document.getElementById('receivedTimeInput').value.trim();
             const emailFax = document.getElementById('emailFaxCheckbox').checked;
 
-            if (!sentDateValue) {
-                alert('Introdu data și ora trimiterii.');
+            if (!sentDateStr) {
+                alert('Introdu data trimiterii.');
                 return;
             }
 
-            const start = new Date(startValue);
-            const sent = new Date(sentDateValue);
-            const received = receivedDateValue ? new Date(receivedDateValue) : null;
+            const start = combineRoDateTime(startDateStr, startTimeStr);
+            const sent = combineRoDateTime(sentDateStr, sentTimeStr);
+            const received = receivedDateStr ? combineRoDateTime(receivedDateStr, receivedTimeStr || '12:00') : null;
 
-            if (isNaN(start.getTime()) || isNaN(sent.getTime()) || (receivedDateValue && isNaN(received.getTime()))) {
+            if (!start || !sent || (receivedDateStr && !received)) {
                 alert('Verifică datele introduse.');
                 return;
             }
