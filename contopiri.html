@@ -5,94 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Calculator contopiri</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* Stiluri specifice doar paginii de contopiri */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            padding: 10px 18px;
-            background: transparent;
-            border: 1.5px solid var(--gold);
-            border-radius: var(--radius-md);
-            color: var(--gold-light);
-            text-decoration: none;
-            font-size: 0.82rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-        .back-btn:hover {
-            background: rgba(201, 162, 39, 0.1);
-        }
-        .legal-box {
-            margin-top: 16px;
-            padding: 12px;
-            background: rgba(201, 162, 39, 0.03);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            font-size: 0.75rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-        .legal-box h4 {
-            color: var(--gold);
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-        .result-box {
-            margin-top: 24px;
-            padding: 24px 20px;
-            background: rgba(201, 162, 39, 0.05);
-            border-radius: var(--radius-md);
-            border-left: 4px solid var(--gold);
-            text-align: center;
-        }
-        .result-box .big-result {
-            font-family: var(--font-mono);
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--gold-light);
-            letter-spacing: 1px;
-            word-break: break-word;
-        }
-        .result-box .detail {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-        .penalty-row {
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-            background: rgba(201, 162, 39, 0.03);
-            padding: 12px;
-            border-radius: var(--radius-md);
-            margin-bottom: 10px;
-            border: 1px solid var(--border);
-            flex-wrap: wrap;
-        }
-        .penalty-row > div {
-            flex: 1 1 80px;
-            min-width: 70px;
-        }
-        .penalty-row .btn-danger {
-            flex: 0 0 auto;
-            align-self: center;
-        }
-        @media (max-width: 480px) {
-            .penalty-row {
-                flex-direction: column;
-            }
-            .penalty-row > div {
-                flex: 1 1 100%;
-            }
-            .result-box .big-result {
-                font-size: 1.4rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -110,8 +22,29 @@
         </div>
 
         <div class="legal-box">
-            <h4>Baza legală</h4>
-            <p><strong>Art. 39 Cod penal – Pedeapsa principală în caz de concurs de infracțiuni:</strong></p>
+            <h4>Baza legală și modul de calcul</h4>
+            <p><strong>Concurs de infracțiuni (calcul treime):</strong> Se aplică regula de la art. 39 alin. (1) lit. b) din Codul penal: se aplică pedeapsa cea mai grea, la care se adaugă un spor de o treime din totalul celorlalte pedepse stabilite.</p>
+            <p><strong>Recidivă postcondamnatorie (adaugare):</strong> Conform art. 43 alin. (1) și (2) din Codul penal, pedeapsa stabilită pentru noua infracțiune se adaugă integral la pedeapsa anterioară neexecutată sau la restul rămas neexecutat din aceasta.</p>
+            <p><strong>Revocare rest:</strong> Restul rămas neexecutat din pedeapsa anterioară se adaugă integral la pedeapsa rezultantă finală.</p>
+
+            <h4>Capitolul V – Unitatea și pluralitatea de infracțiuni</h4>
+            <p><strong>Art. 35 – Unitatea infracțiunii continuate și a celei complexe:</strong></p>
+            <p>(1) Infracțiunea este continuată când o persoană săvârșește la diferite intervale de timp, dar în realizarea aceleiași rezoluții, acțiuni sau inacțiuni care prezintă, fiecare în parte, conținutul aceleiași infracțiuni.</p>
+            <p>(2) Infracțiunea este complexă când în conținutul său intră, ca element constitutiv sau ca element circumstanțial agravant, o acțiune sau o inacțiune care constituie prin ea însăși o faptă prevăzută de legea penală.</p>
+
+            <p><strong>Art. 36 – Pedeapsa pentru infracțiunea continuată și infracțiunea complexă:</strong></p>
+            <p>(1) Infracțiunea continuată se sancționează cu pedeapsa prevăzută de lege pentru infracțiunea săvârșită, al cărei maxim se poate majora cu cel mult 3 ani în cazul pedepsei închisorii, respectiv cu cel mult o treime în cazul pedepsei amenzii.</p>
+            <p>(2) Infracțiunea complexă se sancționează cu pedeapsa prevăzută de lege pentru acea infracțiune.</p>
+            <p>(3) Infracțiunea complexă săvârșită cu intenție depășită, dacă s-a produs numai rezultatul mai grav al acțiunii secundare, se sancționează cu pedeapsa prevăzută de lege pentru infracțiunea complexă consumată.</p>
+
+            <p><strong>Art. 37 – Recalcularea pedepsei pentru infracțiunea continuată sau complexă:</strong></p>
+            <p>Dacă cel condamnat definitiv pentru o infracțiune continuată sau complexă este judecat ulterior și pentru alte acțiuni sau inacțiuni care intră în conținutul aceleiași infracțiuni, ținându-se seama de infracțiunea săvârșită în întregul ei, se stabilește o pedeapsă corespunzătoare, care nu poate fi mai ușoară decât cea pronunțată anterior.</p>
+
+            <p><strong>Art. 38 – Concursul de infracțiuni:</strong></p>
+            <p>(1) Există concurs real de infracțiuni când două sau mai multe infracțiuni au fost săvârșite de aceeași persoană, prin acțiuni sau inacțiuni distincte, înainte de a fi condamnată definitiv pentru vreuna din ele. Există concurs real de infracțiuni și atunci când una dintre infracțiuni a fost comisă pentru săvârșirea sau ascunderea altei infracțiuni.</p>
+            <p>(2) Există concurs formal de infracțiuni când o acțiune sau o inacțiune săvârșită de o persoană, din cauza împrejurărilor în care a avut loc sau a urmărilor pe care le-a produs, realizează conținutul mai multor infracțiuni.</p>
+
+            <p><strong>Art. 39 – Pedeapsa principală în caz de concurs de infracțiuni:</strong></p>
             <p>(1) În caz de concurs de infracțiuni, se stabilește pedeapsa pentru fiecare infracțiune în parte și se aplică pedeapsa, după cum urmează:</p>
             <p>a) când s-au stabilit o pedeapsă cu detențiune pe viață și una sau mai multe pedepse cu închisoare ori cu amendă, se aplică pedeapsa detențiunii pe viață;</p>
             <p>b) când s-au stabilit numai pedepse cu închisoare, se aplică pedeapsa cea mai grea, la care se adaugă un spor de o treime din totalul celorlalte pedepse stabilite;</p>
@@ -119,17 +52,43 @@
             <p>d) când s-au stabilit o pedeapsă cu închisoare și o pedeapsă cu amendă, se aplică pedeapsa închisorii, la care se adaugă în întregime pedeapsa amenzii;</p>
             <p>e) când s-au stabilit mai multe pedepse cu închisoare și mai multe pedepse cu amendă se aplică pedeapsa închisorii conform lit. b), la care se adaugă în întregime pedeapsa amenzii conform lit. c).</p>
             <p>(2) Atunci când s-au stabilit mai multe pedepse cu închisoarea, dacă prin adăugare la pedeapsa cea mai mare a sporului de o treime din totalul celorlalte pedepse cu închisoarea stabilite s-ar depăși cu 10 ani sau mai mult maximul general al pedepsei închisorii, iar pentru cel puțin una dintre infracțiunile concurente pedeapsa prevăzută de lege este închisoarea de 20 de ani sau mai mare, se poate aplica pedeapsa detențiunii pe viață.</p>
-            <p><strong>Art. 40 Cod penal – Contopirea pedepselor pentru infracțiuni concurente:</strong></p>
+
+            <p><strong>Art. 40 – Contopirea pedepselor pentru infracțiuni concurente:</strong></p>
             <p>(1) Dacă infractorul condamnat definitiv este judecat ulterior pentru o infracțiune concurentă, se aplică dispozițiile art. 39.</p>
             <p>(2) Dispozițiile art. 39 se aplică și în cazul în care, după ce o hotărâre de condamnare a rămas definitivă, se constată că cel condamnat mai suferise o condamnare definitivă pentru o infracțiune concurentă.</p>
             <p>(3) Dacă infractorul a executat integral sau parțial pedeapsa aplicată prin hotărârea anterioară, ceea ce s-a executat se scade din durata pedepsei aplicate pentru infracțiunile concurente.</p>
-            <p><strong>Art. 43 Cod penal – Pedeapsa în caz de recidivă:</strong></p>
+            <p>(4) Dispozițiile privitoare la aplicarea pedepsei în caz de concurs de infracțiuni se aplică și în cazul în care condamnarea la pedeapsa detențiunii pe viață a fost comutată sau înlocuită cu pedeapsa închisorii.</p>
+            <p>(5) În cazul contopirii pedepselor conform alin. (1)-(4) se ține seama și de pedeapsa aplicată printr-o hotărâre de condamnare pronunțată în străinătate, pentru o infracțiune concurentă, dacă hotărârea de condamnare a fost recunoscută potrivit legii.</p>
+
+            <p><strong>Art. 41 – Recidiva:</strong></p>
+            <p>(1) Există recidivă când, după rămânerea definitivă a unei hotărâri de condamnare la pedeapsa închisorii mai mare de un an și până la reabilitare sau împlinirea termenului de reabilitare, condamnatul săvârșește din nou o infracțiune cu intenție sau cu intenție depășită, pentru care legea prevede pedeapsa închisorii de un an sau mai mare.</p>
+            <p>(2) Există recidivă și în cazul în care una dintre pedepsele prevăzute în alin. (1) este detențiunea pe viață.</p>
+            <p>(3) Pentru stabilirea stării de recidivă se ține seama și de hotărârea de condamnare pronunțată în străinătate, pentru o faptă prevăzută și de legea penală română, dacă hotărârea de condamnare a fost recunoscută potrivit legii.</p>
+
+            <p><strong>Art. 42 – Condamnări care nu atrag starea de recidivă:</strong></p>
+            <p>La stabilirea stării de recidivă nu se ține seama de hotărârile de condamnare privitoare la: a) faptele care nu mai sunt prevăzute de legea penală; b) infracțiunile amnistiate; c) infracțiunile săvârșite din culpă.</p>
+
+            <p><strong>Art. 43 – Pedeapsa în caz de recidivă:</strong></p>
             <p>(1) Dacă înainte ca pedeapsa anterioară să fi fost executată sau considerată ca executată se săvârșește o nouă infracțiune în stare de recidivă, pedeapsa stabilită pentru aceasta se adaugă la pedeapsa anterioară neexecutată ori la restul rămas neexecutat din aceasta.</p>
             <p>(2) Când înainte ca pedeapsa anterioară să fi fost executată sau considerată ca executată sunt săvârșite mai multe infracțiuni concurente, dintre care cel puțin una se află în stare de recidivă, pedepsele stabilite se contopesc potrivit dispozițiilor referitoare la concursul de infracțiuni, iar pedeapsa rezultată se adaugă la pedeapsa anterioară neexecutată ori la restul rămas neexecutat din aceasta.</p>
-            <p><strong>Art. 44 Cod penal – Pluralitatea intermediară:</strong></p>
+            <p>(3) Dacă prin însumarea pedepselor în condițiile alin. (1) și alin. (2) s-ar depăși cu mai mult de 10 ani maximul general al pedepsei închisorii, iar pentru cel puțin una dintre infracțiunile săvârșite pedeapsa prevăzută de lege este închisoarea de 20 de ani sau mai mare, în locul pedepselor cu închisoarea se poate aplica pedeapsa detențiunii pe viață.</p>
+            <p>(4) Când pedeapsa anterioară sau pedeapsa stabilită pentru infracțiunea săvârșită în stare de recidivă este detențiunea pe viață, se va executa pedeapsa detențiunii pe viață.</p>
+            <p>(5) Dacă după ce pedeapsa anterioară a fost executată sau considerată ca executată se săvârșește o nouă infracțiune în stare de recidivă, limitele speciale ale pedepsei prevăzute de lege pentru noua infracțiune se majorează cu jumătate.</p>
+            <p>(6) Dacă după rămânerea definitivă a hotărârii de condamnare pentru noua infracțiune și mai înainte ca pedeapsa să fi fost executată sau considerată ca executată se descoperă că cel condamnat se află în stare de recidivă, instanța aplică dispozițiile alin. (1)-(5).</p>
+            <p>(7) Dispozițiile alin. (6) se aplică și în cazul în care condamnarea la pedeapsa detențiunii pe viață a fost comutată sau înlocuită cu pedeapsa închisorii.</p>
+
+            <p><strong>Art. 44 – Pluralitatea intermediară:</strong></p>
             <p>(1) Există pluralitate intermediară de infracțiuni când, după rămânerea definitivă a unei hotărâri de condamnare și până la data la care pedeapsa este executată sau considerată ca executată, condamnatul săvârșește din nou o infracțiune și nu sunt întrunite condițiile prevăzute de lege pentru starea de recidivă.</p>
             <p>(2) În caz de pluralitate intermediară, pedeapsa pentru noua infracțiune și pedeapsa anterioară se contopesc potrivit dispozițiilor de la concursul de infracțiuni.</p>
-            <p><em>Notă: Pentru calculul sporului, 1 an = 12 luni, 1 lună = 30 zile.</em></p>
+
+            <p><strong>Art. 45 – Pedepsele complementare, pedepsele accesorii și măsurile de siguranță în caz de pluralitate de infracțiuni:</strong></p>
+            <p>(1) Dacă pentru una dintre infracțiunile săvârșite s-a stabilit și o pedeapsă complementară, aceasta se aplică alături de pedeapsa principală.</p>
+            <p>(2) Când s-au stabilit mai multe pedepse complementare de natură diferită sau chiar de aceeași natură, dar cu un conținut diferit, acestea se aplică alături de pedeapsa principală.</p>
+            <p>(3) Dacă s-au stabilit mai multe pedepse complementare de aceeași natură și cu același conținut: a) în caz de concurs de infracțiuni sau de pluralitate intermediară se aplică cea mai grea dintre acestea; b) în caz de recidivă, partea neexecutată din pedeapsa complementară anterioară se adaugă la pedeapsa stabilită pentru noua infracțiune.</p>
+            <p>(4) În cazul condamnărilor succesive pentru infracțiuni concurente, partea din pedeapsa complementară executată până la data contopirii pedepselor principale se scade din durata pedepsei complementare aplicate pe lângă pedeapsa rezultată.</p>
+            <p>(5) Dacă pe lângă pedepsele principale au fost stabilite una sau mai multe pedepse accesorii, se aplică dispozițiile alin. (1)-(3), pedeapsa accesorie rezultată executându-se până la executarea sau considerarea ca executată a pedepsei principale.</p>
+            <p>(6) Măsurile de siguranță de natură diferită sau chiar de aceeași natură, dar cu un conținut diferit, luate în cazul infracțiunilor săvârșite, se cumulează.</p>
+            <p>(7) Dacă s-au luat mai multe măsuri de siguranță de aceeași natură și cu același conținut, dar pe durate diferite, se aplică măsura de siguranță cu durata cea mai mare. Măsurile de siguranță luate conform art. 112 se cumulează.</p>
         </div>
     </div>
 
@@ -175,8 +134,9 @@
                 <div><label>Luni</label><input type="number" class="penalty-months" value="0" min="0"></div>
                 <div><label>Zile</label><input type="number" class="penalty-days" value="0" min="0"></div>
                 <div><label>Tip</label><select class="penalty-type">
-                    <option value="concurs">Concurs</option>
-                    <option value="recidiva">Recidivă</option>
+                    <option value="concurs">Concurs de infracțiuni (calcul treime)</option>
+                    <option value="recidiva">Recidivă postcondamnatorie (adaugare)</option>
+                    <option value="revocare">Revocare rest</option>
                 </select></div>
                 <button class="btn btn-danger btn-sm" onclick="this.closest('.penalty-row').remove();" aria-label="Șterge rândul">X</button>
             `;
@@ -188,6 +148,7 @@
             const rows = document.querySelectorAll('.penalty-row');
             const concursPenalties = [];
             const recidivaPenalties = [];
+            const revocarePenalties = [];
 
             rows.forEach(row => {
                 const years = parseInt(row.querySelector('.penalty-years').value) || 0;
@@ -199,14 +160,16 @@
                 const totalDays = toDays(years, months, days);
                 const penalty = { years, months, days, totalDays };
 
-                if (type === 'recidiva') {
-                    recidivaPenalties.push(penalty);
-                } else {
+                if (type === 'concurs') {
                     concursPenalties.push(penalty);
+                } else if (type === 'recidiva') {
+                    recidivaPenalties.push(penalty);
+                } else if (type === 'revocare') {
+                    revocarePenalties.push(penalty);
                 }
             });
 
-            if (concursPenalties.length === 0 && recidivaPenalties.length === 0) {
+            if (concursPenalties.length === 0 && recidivaPenalties.length === 0 && revocarePenalties.length === 0) {
                 alert('Adaugă cel puțin o pedeapsă validă.');
                 return;
             }
@@ -215,7 +178,7 @@
             let details = [];
 
             if (concursPenalties.length > 0) {
-                // Pedeapsa cea mai grea (după total zile)
+                // Pedeapsa cea mai grea
                 const maxPenalty = concursPenalties.reduce((max, p) => p.totalDays > max.totalDays ? p : max, concursPenalties[0]);
                 const others = concursPenalties.filter(p => p !== maxPenalty);
                 const othersTotalDays = others.reduce((sum, p) => sum + p.totalDays, 0);
@@ -224,17 +187,22 @@
                 concursResultDays = maxPenalty.totalDays + bonusDays;
 
                 details.push(`Pedeapsa cea mai grea (concurs): ${formatDuration(maxPenalty)}`);
-                details.push(`Totalul celorlalte pedepse: ${othersTotalDays} zile`);
+                details.push(`Totalul celorlalte pedepse (concurs): ${othersTotalDays} zile`);
                 details.push(`Spor 1/3: ${bonusDays} zile (${formatDuration(fromDays(bonusDays))})`);
                 details.push(`Rezultanta concurs: ${formatDuration(fromDays(concursResultDays))}`);
             }
 
             const recidivaTotalDays = recidivaPenalties.reduce((sum, p) => sum + p.totalDays, 0);
             if (recidivaPenalties.length > 0) {
-                details.push(`Pedepse recidivă (adunate integral): ${recidivaPenalties.map(p => formatDuration(p)).join(' + ')}`);
+                details.push(`Pedepse recidivă (adăugate integral): ${recidivaPenalties.map(p => formatDuration(p)).join(' + ')}`);
             }
 
-            const finalDays = concursResultDays + recidivaTotalDays;
+            const revocareTotalDays = revocarePenalties.reduce((sum, p) => sum + p.totalDays, 0);
+            if (revocarePenalties.length > 0) {
+                details.push(`Revocare rest (adăugat integral): ${revocarePenalties.map(p => formatDuration(p)).join(' + ')}`);
+            }
+
+            const finalDays = concursResultDays + recidivaTotalDays + revocareTotalDays;
             const finalDuration = fromDays(finalDays);
 
             const resultDiv = document.getElementById('mergeResult');
