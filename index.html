@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="css/style.css?v=28">
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 </head>
+<script>
+fetch('./version.json')
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('app-version').textContent =
+      `Versiune ${data.version}`;
+  })
+  .catch(() => {
+    document.getElementById('app-version').textContent =
+      'Versiune indisponibilă';
+  });
+</script>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
     <div class="container">
@@ -193,7 +205,8 @@
                 </div>
             </div>
         </main>
-        <footer class="footer" role="contentinfo">BETA v0.163 | © Alin Talfeș</footer>
+    <footer class="footer" role="contentinfo">
+    <span id="app-version">Versiune...</span> | © Alin Talfeș</footer>
     </div>
     <script src="js/utils.js?v=28"></script>
     <script src="js/rules.js?v=28"></script>
