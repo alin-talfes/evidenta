@@ -1,0 +1,139 @@
+# Calculator Termene Pedepse Privative de Libertate
+
+**Versiune:** BETA v0.163  
+**Autor:** Alin Talfeș
+
+## Descriere
+
+Aplicație web destinată calculului termenelor de executare a pedepselor privative de libertate și a termenelor procedurale asociate, în conformitate cu legislația penală română.
+
+Proiectul integrează trei module principale:
+
+- **Calculator termene pedepse privative de libertate** – calculul expirării pedepsei, fracțiilor pentru liberare condiționată și termenelor de reanalizare.
+- **Calculator termene procedurale** – calculul termenelor pentru căi de atac, măsuri preventive și alte termene procedurale.
+- **Calculator pedeapsă rezultantă** – calculul contopirilor de pedepse, al recidivei postcondamnatorii și al revocării restului rămas neexecutat.
+
+---
+
+## Funcționalități
+
+### Executarea pedepselor
+
+- Calculul duratei pedepsei în ani, luni și zile
+- Determinarea datei de expirare teoretică
+- Determinarea datei de expirare reală
+- Evidențierea perioadelor executate și rămase
+- Calculul fracțiilor pentru liberare condiționată
+- Calculul termenului de reanalizare (1/5)
+- Cronologie completă a termenelor relevante
+
+### Deduceri și perioade speciale
+
+- Reținere
+- Arest preventiv
+- Arest la domiciliu
+- Măsuri preventive executate în alte cauze
+- Recurs compensatoriu (Legea nr. 169/2017)
+- Evadări
+- Întreruperi ale executării pedepsei
+- Perioade considerate neexecutate conform legii
+
+### Utilitare
+
+- Salvarea spețelor în browser
+- Încărcarea spețelor salvate
+- Copiere rapidă a rezultatelor
+- Export PDF
+- Temă Light / Dark
+- Interfață adaptată pentru desktop și dispozitive mobile
+
+---
+
+## Tehnologii utilizate
+
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- localStorage
+- Print API pentru export PDF
+
+---
+
+## Structura proiectului
+
+```text
+calculator-pedepse/
+│
+├── index.html
+├── termene.html
+├── contopiri.html
+│
+├── css/
+│   └── style.css
+│
+└── js/
+    ├── utils.js
+    ├── rules.js
+    ├── legal.js
+    ├── storage.js
+    ├── export.js
+    ├── ui.js
+    └── app.js
+```
+
+### Descriere fișiere
+
+| Fișier | Rol |
+|----------|----------|
+| utils.js | Funcții utilitare și operații cu date calendaristice |
+| rules.js | Reguli de calcul și algoritmi principali |
+| legal.js | Referințe și reguli juridice aplicabile |
+| storage.js | Gestionarea stocării locale |
+| export.js | Copiere și export rezultate |
+| ui.js | Interfață utilizator |
+| app.js | Inițializarea aplicației |
+
+---
+
+## Utilizare
+
+1. Descarcă sau clonează repository-ul.
+2. Deschide fișierul `index.html` într-un browser modern.
+3. Introdu datele cauzei.
+4. Apasă **Calculează**.
+5. Utilizează meniul aplicației pentru accesarea celorlalte module.
+
+Aplicația funcționează integral local și nu necesită instalare sau conexiune la server.
+
+---
+
+## Bază legală
+
+Calculele sunt fundamentate pe:
+
+- Codul penal
+- Codul de procedură penală
+- Legea nr. 254/2013
+- Ordinul ministrului justiției nr. 2188/C/2022
+- Legea nr. 169/2017
+- Hotărâri prealabile și recursuri în interesul legii relevante
+
+Utilizatorul are obligația de a verifica întotdeauna legislația în vigoare și particularitățile fiecărei cauze.
+
+---
+
+## Limitări
+
+- Aplicația are caracter informativ și orientativ.
+- Nu reprezintă evidență oficială a administrației penitenciare.
+- Nu înlocuiește verificarea juridică individuală a fiecărei spețe.
+- Datele sunt stocate exclusiv în browserul utilizatorului.
+- Nu sunt transmise informații către servere externe.
+
+---
+
+## Licență
+
+Copyright © 2026 Alin Talfeș
+
+Toate drepturile rezervate.
