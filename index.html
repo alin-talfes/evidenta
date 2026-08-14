@@ -36,12 +36,18 @@ fetch('./version.json')
             <button id="themeToggle" onclick="toggleTheme()" aria-label="Comută tema">☀️</button>
         </div>
 
+        <!-- Secțiunea ALTE CALCULATOARE - vizibilă sub bara principală -->
+        <div class="other-calculators" style="text-align:center; margin: 8px 0; font-size:0.9rem; color:var(--text-light);">
+            ALTE CALCULATOARE:
+            <a href="termene.html" style="color:var(--gold-light); font-weight:700; text-decoration:none;">TERMENE</a>
+            |
+            <a href="contopiri.html" style="color:var(--gold-light); font-weight:700; text-decoration:none;">CONTOPIRI</a>
+        </div>
+
         <!-- Meniul principal (ascuns inițial), afișat sub bara de acțiuni -->
         <div id="mainMenu" class="top-actions hidden">
             <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFORMAȚII</button>
             <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188/C/2022</button>
-            <a href="termene.html" class="btn-big">CALCUL TERMENE PROCEDURALE</a>
-            <a href="contopiri.html" class="btn-big">CALCULATOR PEDEAPSĂ REZULTANTĂ</a>
         </div>
 
         <div class="header">
