@@ -16,7 +16,7 @@
     --danger: #ff6b6b;
     --warning: #ffa726;
     --radius-sm: 10px;
-    --radius-md: 14px;
+    --radius-md: 12px;          /* micșorat de la 14px pentru consistență */
     --radius-lg: 18px;
     --shadow: 0 2px 10px rgba(0,0,0,0.25);
     --font: 'Inter', system-ui, -apple-system, sans-serif;
@@ -28,11 +28,11 @@
     --btn-height: 44px;
     --btn-padding-y: 12px;
     --btn-padding-x: 16px;
-    --card-padding-y: 16px;
-    --card-padding-x: 14px;
+    --card-padding-y: 20px;     /* mărit de la 16px */
+    --card-padding-x: 18px;     /* mărit de la 14px */
     --gap-sm: 8px;
     --gap-md: 12px;
-    --gap-lg: 16px;
+    --gap-lg: 20px;             /* mărit de la 16px pentru spațiere verticală */
     --border-width: 1px;
     --outline-width: 3px;
     --transition-fast: 0.15s;
@@ -341,7 +341,7 @@ body.light .header {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
     padding: var(--card-padding-y) var(--card-padding-x);
-    margin-bottom: var(--gap-md);
+    margin-bottom: var(--gap-lg);   /* mărit spațiu vertical */
     border: var(--border-width) solid var(--border);
     border-left: 3px solid rgba(201, 162, 39, 0.5);
     transition: border-color var(--transition-base), background 0.3s, box-shadow 0.2s;
@@ -357,15 +357,12 @@ body.light .card:hover {
 }
 
 .card h3 {
-    /* mărit ușor și îngroșat suplimentar față de original (0.95rem/700)
-       pentru a-l separa mai clar, ca nivel de ierarhie, de .result-value (1.05rem/700)
-       și de label-urile de câmp (0.66rem/600) */
-    font-size: 1.02rem;
+    font-size: 1.1rem;              /* mărit de la 1.02rem */
     font-weight: 800;
     color: var(--gold-light);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 2px solid;
+    border-bottom: 1px solid;       /* linie mai subțire */
     border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
     display: flex;
     align-items: center;
@@ -383,7 +380,7 @@ body.light .card:hover {
 label {
     display: block;
     font-weight: 600;
-    font-size: 0.66rem;
+    font-size: 0.68rem;            /* ușor mărit */
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 6px;
@@ -397,7 +394,7 @@ textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1.5px solid var(--input-border);
-    border-radius: var(--radius-md);
+    border-radius: 12px;           /* consistent */
     font-size: 0.9rem;
     background: var(--input-bg);
     color: var(--text);
@@ -581,7 +578,8 @@ textarea::placeholder {
     background: rgba(201, 162, 39, 0.04);
     border-radius: var(--radius-sm);
     padding: 12px 14px;
-    border-left: 3px solid var(--primary);
+    border-left: 4px solid var(--gold);      /* mai pronunțat */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);   /* umbră subtilă */
 }
 
 .result-item.important {
@@ -599,7 +597,7 @@ textarea::placeholder {
 }
 
 .result-value {
-    font-size: 1.05rem;
+    font-size: 1.15rem;            /* mărit */
     font-weight: 700;
     color: var(--gold-light);
     word-break: break-word;
@@ -612,7 +610,15 @@ textarea::placeholder {
 }
 
 .result-warning.expired {
-    color: var(--danger);
+    color: #e57373;                /* roșu mai soft */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.result-warning.expired::before {
+    content: '⚠';
+    font-size: 0.9rem;
 }
 
 .result-warning.soon {
@@ -653,8 +659,6 @@ textarea::placeholder {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     font-size: 0.75rem;
-    /* text-light era prea șters pe fond aproape gol (0.03 opacitate);
-       folosim var(--text) atenuat cu opacity, nu var(--text-light), pentru contrast mai bun */
     color: var(--text);
     opacity: 0.85;
     line-height: 1.6;
@@ -720,17 +724,26 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .fraction { font-family: var(--font-mono); font-size: 1.1em; }
 
 .error-message {
-    background: rgba(255, 107, 107, 0.08);
-    color: var(--danger);
+    background: rgba(229, 115, 115, 0.05);
+    color: #e57373;
     padding: 10px 14px;
     border-radius: var(--radius-sm);
     margin-bottom: var(--gap-sm);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     display: none;
-    border: var(--border-width) solid rgba(255, 107, 107, 0.2);
+    border: var(--border-width) solid rgba(229, 115, 115, 0.2);
+    align-items: center;
+    gap: 6px;
 }
 
-.error-message.visible { display: block; }
+.error-message.visible {
+    display: flex;
+}
+
+.error-message::before {
+    content: '⚠';
+    font-size: 0.9rem;
+}
 
 .btn-row {
     display: flex;
@@ -746,12 +759,12 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .footer {
     text-align: center;
     padding: 14px 0;
-    font-size: 0.65rem;
+    font-size: 0.6rem;            /* micșorat */
     color: var(--text-light);
     border-top: var(--border-width) solid var(--border);
     margin-top: 20px;
     letter-spacing: 0.5px;
-    opacity: 0.7;
+    opacity: 0.5;                 /* mai discret */
 }
 
 /* ========== PAȘI CALCUL ========== */
@@ -760,8 +773,6 @@ small { color: var(--text-light); font-size: 0.72rem; }
     border-radius: var(--radius-lg);
     padding: 14px;
     margin-top: 12px;
-    /* mutat pe font-mono: secțiunea explică formule (Math.floor etc.),
-       deci ar trebui să aibă aceeași identitate vizuală de "cod" ca .big-result */
     font-family: var(--font-mono);
     font-size: 0.8rem;
     line-height: 1.7;
@@ -775,7 +786,6 @@ small { color: var(--text-light); font-size: 0.72rem; }
 }
 .steps-container ol {
     padding-left: 20px;
-    /* text mai puțin șters decât var(--text-light) simplu, pentru lizibilitate pe fond aproape gol */
     color: var(--text);
     opacity: 0.85;
 }
@@ -827,10 +837,10 @@ small { color: var(--text-light); font-size: 0.72rem; }
 }
 
 .toggle-slider {
-    width: 42px;
-    height: 24px;
+    width: 48px;                 /* mărit de la 42px */
+    height: 28px;                /* mărit de la 24px */
     background: var(--border);
-    border-radius: 12px;
+    border-radius: 14px;
     transition: all var(--transition-base);
     flex-shrink: 0;
 }
@@ -838,8 +848,8 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .toggle-slider:before {
     content: "";
     position: absolute;
-    height: 18px;
-    width: 18px;
+    height: 22px;                /* ajustat */
+    width: 22px;
     left: 3px;
     bottom: 3px;
     background: var(--text-light);
@@ -849,10 +859,11 @@ small { color: var(--text-light); font-size: 0.72rem; }
 
 .toggle-switch input:checked + .toggle-slider {
     background: var(--gold);
+    box-shadow: 0 0 8px rgba(201, 162, 39, 0.5);   /* glow galben */
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
-    transform: translateX(18px);
+    transform: translateX(20px);   /* ajustat */
     background: #0F1115;
 }
 
@@ -958,7 +969,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
     left: 18px;
     top: 0;
     bottom: 0;
-    width: 2px;
+    width: 3px;                  /* mai groasă */
     background: var(--border);
 }
 
@@ -985,6 +996,10 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .timeline li.passed::before {
     background: var(--danger);
     border-color: var(--danger);
+}
+
+.timeline li.passed {
+    opacity: 0.65;               /* fade pe termenii expirați */
 }
 
 .timeline li .tl-date {
@@ -1047,8 +1062,28 @@ small { color: var(--text-light); font-size: 0.72rem; }
     color: var(--text-light);
 }
 
+/* ========== ANIMAȚIE FADE-IN PENTRU REZULTATE ========== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#resultsCard:not(.hidden) {
+    animation: fadeInUp 0.3s ease;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 480px) {
+    body {
+        font-size: 15px;          /* ajustat pentru mobile */
+    }
+
     .form-grid { grid-template-columns: 1fr; }
     .result-grid { grid-template-columns: 1fr; }
     .header h1 { font-size: 1.2rem; }
@@ -1063,6 +1098,11 @@ small { color: var(--text-light); font-size: 0.72rem; }
     .btn-utility {
         font-size: 0.7rem;
         padding: 0 6px;
+    }
+    /* Compactare buton principal pe mobile */
+    .btn-utility.primary {
+        flex: 0 1 auto;
+        padding: 0 12px;
     }
     #themeToggle {
         flex: 0 0 40px;
@@ -1109,11 +1149,11 @@ small { color: var(--text-light); font-size: 0.72rem; }
         font-size: 1.4rem;
     }
     .card {
-        padding: 12px 14px;
-        margin-bottom: 12px;
+        padding: 16px 14px;      /* ușor redus pe mobile, dar tot generos */
+        margin-bottom: 16px;
     }
     label {
-        font-size: 0.6rem;
+        font-size: 0.65rem;
         margin-bottom: 4px;
     }
     select,
