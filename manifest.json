@@ -1,0 +1,20 @@
+{
+  "name": "Calculator Termene Pedepse Privative de Libertate",
+  "short_name": "Calcul Pedepse",
+  "description": "Calculator pentru termene de executare a pedepselor privative de libertate, liberare condiționată, termene procedurale și pedeapsă rezultantă.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121212",
+  "theme_color": "#1f2937",
+  "lang": "ro",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
