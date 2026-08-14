@@ -1,6 +1,5 @@
 # Calculator Termene Pedepse Privative de Libertate
 
-**Versiune:** BETA v0.163  
 **Autor:** Alin Talfeș
 
 ## Descriere
@@ -9,11 +8,9 @@ Aplicație web destinată calculului termenelor de executare a pedepselor privat
 
 Proiectul integrează trei module principale:
 
-- **Calculator termene pedepse privative de libertate** – calculul expirării pedepsei, fracțiilor pentru liberare condiționată și termenelor de reanalizare.
-- **Calculator termene procedurale** – calculul termenelor pentru căi de atac, măsuri preventive și alte termene procedurale.
+- **Calculator termene pedepse privative de libertate** – calculul expirării pedepsei, al fracțiilor pentru liberare condiționată și al termenelor de reanalizare.
+- **Calculator termene procedurale** – calculul termenelor pentru căi de atac, măsuri preventive și alte termene prevăzute de lege.
 - **Calculator pedeapsă rezultantă** – calculul contopirilor de pedepse, al recidivei postcondamnatorii și al revocării restului rămas neexecutat.
-
----
 
 ## Funcționalități
 
@@ -22,7 +19,7 @@ Proiectul integrează trei module principale:
 - Calculul duratei pedepsei în ani, luni și zile
 - Determinarea datei de expirare teoretică
 - Determinarea datei de expirare reală
-- Evidențierea perioadelor executate și rămase
+- Calculul perioadelor executate și rămase
 - Calculul fracțiilor pentru liberare condiționată
 - Calculul termenului de reanalizare (1/5)
 - Cronologie completă a termenelor relevante
@@ -36,7 +33,7 @@ Proiectul integrează trei module principale:
 - Recurs compensatoriu (Legea nr. 169/2017)
 - Evadări
 - Întreruperi ale executării pedepsei
-- Perioade considerate neexecutate conform legii
+- Perioade considerate neexecutate conform dispozițiilor legale
 
 ### Utilitare
 
@@ -47,8 +44,6 @@ Proiectul integrează trei module principale:
 - Temă Light / Dark
 - Interfață adaptată pentru desktop și dispozitive mobile
 
----
-
 ## Tehnologii utilizate
 
 - HTML5
@@ -56,8 +51,6 @@ Proiectul integrează trei module principale:
 - JavaScript (ES6+)
 - localStorage
 - Print API pentru export PDF
-
----
 
 ## Structura proiectului
 
@@ -90,10 +83,8 @@ calculator-pedepse/
 | legal.js | Referințe și reguli juridice aplicabile |
 | storage.js | Gestionarea stocării locale |
 | export.js | Copiere și export rezultate |
-| ui.js | Interfață utilizator |
-| app.js | Inițializarea aplicației |
-
----
+| ui.js | Interfața utilizator |
+| app.js | Inițializarea aplicației și logica principală |
 
 ## Utilizare
 
@@ -105,22 +96,18 @@ calculator-pedepse/
 
 Aplicația funcționează integral local și nu necesită instalare sau conexiune la server.
 
----
-
 ## Bază legală
 
 Calculele sunt fundamentate pe:
 
 - Codul penal
 - Codul de procedură penală
-- Legea nr. 254/2013
+- Legea nr. 254/2013 privind executarea pedepselor și a măsurilor privative de libertate
 - Ordinul ministrului justiției nr. 2188/C/2022
 - Legea nr. 169/2017
 - Hotărâri prealabile și recursuri în interesul legii relevante
 
 Utilizatorul are obligația de a verifica întotdeauna legislația în vigoare și particularitățile fiecărei cauze.
-
----
 
 ## Limitări
 
@@ -130,10 +117,12 @@ Utilizatorul are obligația de a verifica întotdeauna legislația în vigoare �
 - Datele sunt stocate exclusiv în browserul utilizatorului.
 - Nu sunt transmise informații către servere externe.
 
----
+## Contribuții
+
+Sugestiile privind funcționalități noi, corectarea erorilor și îmbunătățirea algoritmilor de calcul sunt binevenite.
 
 ## Licență
 
-Copyright © 2026 Alin Talfeș
+Copyright © Alin Talfeș
 
 Toate drepturile rezervate.
