@@ -1,13 +1,14 @@
 {
-  "name": "Calculator Termene Pedepse Privative de Libertate",
-  "short_name": "Calcul Pedepse",
+  "name": "Evidență Mobile",
+  "short_name": "Evidență",
   "description": "Calculator pentru termene de executare a pedepselor privative de libertate, liberare condiționată, termene procedurale și pedeapsă rezultantă.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#121212",
-  "theme_color": "#1f2937",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0b1220",
+  "theme_color": "#0f172a",
   "lang": "ro",
   "icons": [
     {
