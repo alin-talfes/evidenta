@@ -1,1234 +1,269 @@
-/* ============================================================
-   CALCULATOR TERMENE PEDEPSE PRIVATIVE DE LIBERTATE
-   STILURI CONSOLIDATE – MOBILE-FIRST
-   ============================================================ */
-
-/* ========== VARIABILE ========== */
-:root {
-    --bg: #12141A;
-    --card-bg: #161820;
-    --primary: #C9A227;
-    --gold: #C9A227;
-    --gold-light: #D4AF37;
-    --text: #e6e6e6;
-    --text-light: #B0B5C0;
-    --border: #2a2a35;
-    --danger: #ff6b6b;
-    --warning: #ffa726;
-    --radius-sm: 10px;
-    --radius-md: 12px;          /* micșorat de la 14px pentru consistență */
-    --radius-lg: 18px;
-    --shadow: 0 2px 10px rgba(0,0,0,0.25);
-    --font: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-    --input-bg: #1b1f2a;
-    --input-border: #3a4150;
-    --input-placeholder: #8a92a6;
-    --label-color: #c0c6d2;
-    --btn-height: 44px;
-    --btn-padding-y: 12px;
-    --btn-padding-x: 16px;
-    --card-padding-y: 20px;     /* mărit de la 16px */
-    --card-padding-x: 18px;     /* mărit de la 14px */
-    --gap-sm: 8px;
-    --gap-md: 12px;
-    --gap-lg: 20px;             /* mărit de la 16px pentru spațiere verticală */
-    --border-width: 1px;
-    --outline-width: 3px;
-    --transition-fast: 0.15s;
-    --transition-base: 0.2s;
-}
-
-body.light {
-    --bg: #f5f5f5;
-    --card-bg: #ffffff;
-    --primary: #b8941f;
-    --gold: #b8941f;
-    --gold-light: #c9a227;
-    --text: #1a1a1a;
-    --text-light: #555;
-    --border: #ddd;
-    --danger: #d32f2f;
-    --warning: #e67e22;
-    --shadow: 0 2px 8px rgba(0,0,0,0.1);
-    --input-bg: #ffffff;
-    --input-border: #b0b5c0;
-    --input-placeholder: #6a6f78;
-    --label-color: #4a4f58;
-}
-
-/* ========== RESET ========== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    touch-action: manipulation;
-    -webkit-text-size-adjust: 100%;
-    overflow-x: hidden;
-    width: 100%;
-    overscroll-behavior: contain;
-    text-rendering: optimizeLegibility;
-    font-synthesis: none;
-}
-
-body {
-    background: var(--bg);
-    font-family: var(--font);
-    color: var(--text);
-    padding: 12px;
-    font-size: 16px;
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
-    line-height: 1.5;
-    transition: background 0.3s, color 0.3s;
-}
-
-/* ========== LAYOUT ========== */
-.container {
-    max-width: 960px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* ========== BARA PRINCIPALĂ ========== */
-.top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 8px 10px;
-    margin-bottom: var(--gap-md);
-    background: rgba(22, 24, 32, 0.6);
-    backdrop-filter: blur(8px);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-md);
-    position: sticky;
-    top: 8px;
-    z-index: 10;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-body.light .top-bar {
-    background: rgba(255,255,255,0.8);
-}
-
-/* ========== HAMBURGER ========== */
-.hamburger {
-    flex: 0 0 44px;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    background: transparent;
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    padding: 0;
-}
-
-.hamburger span {
-    display: block;
-    width: 22px;
-    height: 3px;
-    background: var(--gold-light);
-    border-radius: 3px;
-}
-
-.hamburger:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold);
-}
-
-/* ========== BUTOANE UTILITARE ========== */
-.btn-utility {
-    flex: 1 1 0;
-    min-width: 0;
-    height: 44px;
-    padding: 0 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    white-space: nowrap;
-    background: transparent;
-    border: var(--border-width) solid var(--border);
-    color: var(--text-light);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-base);
-    cursor: pointer;
-    position: relative;
-}
-
-.btn-utility:hover,
-.btn-utility:focus-visible {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold);
-    color: var(--gold-light);
-    outline: none;
-}
-
-.btn-utility.primary {
-    background: var(--gold);
-    color: #0F1115;
-    border-color: var(--gold);
-    font-weight: 700;
-}
-
-.btn-utility.primary:hover {
-    background: var(--gold-light);
-    border-color: var(--gold-light);
-    color: #0F1115;
-}
-
-.btn-utility#loadBtn {
-    background: transparent;
-    border-color: var(--gold);
-    color: var(--gold-light);
-}
-
-.btn-utility#loadBtn:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold-light);
-}
-
-.btn-utility#resetBtn {
-    background: transparent;
-    border-color: transparent;
-    color: var(--text-light);
-}
-
-.btn-utility#resetBtn:hover {
-    background: rgba(201, 162, 39, 0.05);
-    border-color: var(--border);
-    color: var(--gold-light);
-}
-
-.badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: var(--gold);
-    color: #0F1115;
-    font-size: 0.65rem;
-    font-weight: 700;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ========== BUTON TEMĂ ========== */
-#themeToggle {
-    flex: 0 0 44px;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-md);
-    color: var(--gold-light);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    font-size: 1.2rem;
-    padding: 0;
-    margin-left: 6px;
-}
-
-#themeToggle:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold);
-}
-
-/* ========== MENIUL PRINCIPAL ========== */
-.top-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap-md);
-    margin-bottom: var(--gap-md);
-}
-
-.top-actions .btn-big {
-    flex: 1 1 calc(50% - 6px);
-    max-width: calc(50% - 6px);
-    min-width: 0;
-    padding: var(--btn-padding-y) var(--btn-padding-x);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-    text-transform: uppercase;
-    will-change: transform;
-    text-align: center;
-    text-decoration: none;
-    box-sizing: border-box;
-    background: rgba(201, 162, 39, 0.08);
-    border: var(--border-width) solid var(--border);
-    color: var(--text-light);
-    border-radius: var(--radius-md);
-    white-space: normal;
-    word-break: break-word;
-    min-height: var(--btn-height);
-}
-
-.top-actions .btn-big:hover,
-.top-actions .btn-big:focus-visible {
-    background: rgba(201, 162, 39, 0.15);
-    border-color: var(--gold);
-    color: var(--gold-light);
-    outline: none;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(201, 162, 39, 0.2);
-}
-
-.top-actions .btn-big:active {
-    transform: translateY(0);
-    box-shadow: none;
-    opacity: 0.9;
-}
-
-/* ========== HEADER ========== */
-.header {
-    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 60%, #0d0d1a 100%);
-    border: var(--border-width) solid var(--border);
-    color: var(--gold-light);
-    padding: 14px 16px;
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--gap-md);
-    text-align: center;
-}
-
-body.light .header {
-    background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 60%, #f0f0f0 100%);
-    color: #1a1a1a;
-    border-color: #ccc;
-}
-
-.header h1 {
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    line-height: 1.2;
-}
-
-/* ========== CARDURI ========== */
-.card {
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-    padding: var(--card-padding-y) var(--card-padding-x);
-    margin-bottom: var(--gap-lg);   /* mărit spațiu vertical */
-    border: var(--border-width) solid var(--border);
-    border-left: 3px solid rgba(201, 162, 39, 0.5);
-    transition: border-color var(--transition-base), background 0.3s, box-shadow 0.2s;
-    height: auto;
-}
-
-.card:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-body.light .card:hover {
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.card h3 {
-    font-size: 1.1rem;              /* mărit de la 1.02rem */
-    font-weight: 800;
-    color: var(--gold-light);
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid;       /* linie mai subțire */
-    border-image: linear-gradient(to right, var(--gold), rgba(201, 162, 39, 0.05)) 1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    letter-spacing: 0.4px;
-}
-
-/* ========== FORMULARE ========== */
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: var(--gap-md);
-}
-
-label {
-    display: block;
-    font-weight: 600;
-    font-size: 0.68rem;            /* ușor mărit */
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    color: var(--label-color);
-}
-
-select,
-input[type="number"],
-input[type="text"],
-textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1.5px solid var(--input-border);
-    border-radius: 12px;           /* consistent */
-    font-size: 0.9rem;
-    background: var(--input-bg);
-    color: var(--text);
-    font-family: var(--font-mono);
-    min-height: var(--btn-height);
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
-    letter-spacing: 0.3px;
-}
-
-select:focus,
-input:focus,
-textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 var(--outline-width) rgba(201, 162, 39, 0.1);
-    outline: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-    color: var(--input-placeholder);
-    opacity: 0.8;
-}
-
-/* ========== DATĂ + ORĂ ========== */
-.date-wrapper {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-}
-
-.date-wrapper input {
-    flex: 1;
-    min-width: 0;
-}
-
-.btn-today {
-    flex-shrink: 0;
-    background: transparent;
-    border: 1.5px solid var(--gold);
-    color: var(--gold-light);
-    border-radius: var(--radius-md);
-    padding: 0 8px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    cursor: pointer;
-    height: var(--btn-height);
-    display: flex;
-    align-items: center;
-    transition: all var(--transition-base);
-}
-
-.btn-today:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold-light);
-}
-
-/* ========== RÂNDURI PERIOADE / PENALITĂȚI ========== */
-.period-row,
-.penalty-row {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap-sm);
-    align-items: flex-end;
-    background: rgba(201, 162, 39, 0.03);
-    padding: var(--gap-md);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--gap-sm);
-    border: var(--border-width) solid var(--border);
-    height: auto;
-}
-
-.period-row > div,
-.penalty-row > div {
-    flex: 1 1 80px;
-    min-width: 70px;
-}
-
-.penalty-row .btn-danger,
-.period-row .btn-danger {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    flex: 0 0 auto;
-    align-self: flex-start;
-    padding: 4px 8px;
-    min-height: 32px;
-    font-size: 0.7rem;
-}
-
-/* ========== BUTOANE GENERALE ========== */
-.btn {
-    padding: var(--btn-padding-y) var(--btn-padding-x);
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 0.82rem;
-    cursor: pointer;
-    border: none;
-    min-height: var(--btn-height);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: all var(--transition-base);
-    letter-spacing: 0.4px;
-}
-
-.btn:active {
-    transform: scale(0.98);
-    opacity: 0.85;
-}
-
-.btn-outline {
-    background: transparent;
-    color: var(--gold-light);
-    border: 1.5px solid var(--gold);
-}
-
-.btn-outline:hover,
-.btn-outline:focus-visible {
-    background: rgba(201, 162, 39, 0.1);
-    transform: translateY(-1px);
-    outline: none;
-}
-
-.btn-gold {
-    background: var(--gold);
-    color: #0F1115;
-    font-weight: 700;
-}
-
-.btn-gold:hover,
-.btn-gold:focus-visible {
-    background: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
-    outline: none;
-}
-
-.btn-danger {
-    background: transparent;
-    color: var(--danger);
-    border: 1.5px solid var(--danger);
-}
-
-.btn-danger:hover,
-.btn-danger:focus-visible {
-    background: rgba(255, 107, 107, 0.1);
-    outline: none;
-}
-
-.btn-sm {
-    padding: 8px 12px;
-    font-size: 0.72rem;
-    min-height: 36px;
-    border-width: 2px;
-    font-weight: 700;
-}
-
-/* ========== REZULTATE ========== */
-.result-section {
-    margin-top: 16px;
-}
-
-.result-section h4 {
-    color: var(--gold);
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 6px;
-}
-
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--gap-md);
-    margin-bottom: var(--gap-md);
-}
-
-.result-item {
-    background: rgba(201, 162, 39, 0.04);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    border-left: 4px solid var(--gold);      /* mai pronunțat */
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);   /* umbră subtilă */
-}
-
-.result-item.important {
-    border-left-color: var(--gold);
-    background: rgba(201, 162, 39, 0.08);
-}
-
-.result-label {
-    font-size: 0.64rem;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--label-color);
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.result-value {
-    font-size: 1.15rem;            /* mărit */
-    font-weight: 700;
-    color: var(--gold-light);
-    word-break: break-word;
-}
-
-.result-warning {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-top: 4px;
-}
-
-.result-warning.expired {
-    color: #e57373;                /* roșu mai soft */
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.result-warning.expired::before {
-    content: '⚠';
-    font-size: 0.9rem;
-}
-
-.result-warning.soon {
-    color: var(--warning);
-}
-
-/* ========== BOXURI REZULTATE SPECIFICE ========== */
-.result-box {
-    margin-top: 16px;
-    padding: 16px;
-    background: rgba(201, 162, 39, 0.05);
-    border-radius: var(--radius-md);
-    border-left: 4px solid var(--gold);
-    text-align: center;
-}
-
-.result-box .big-result {
-    font-family: var(--font-mono);
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: var(--gold-light);
-    letter-spacing: 1px;
-    word-break: break-word;
-}
-
-.result-box .detail {
-    margin-top: 8px;
-    font-size: 0.85rem;
-    color: var(--text-light);
-    line-height: 1.5;
-}
-
-/* ========== CUTIE LEGALĂ ========== */
-.legal-box {
-    margin-top: 16px;
-    padding: 12px;
-    background: rgba(201, 162, 39, 0.03);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    font-size: 0.75rem;
-    color: var(--text);
-    opacity: 0.85;
-    line-height: 1.6;
-}
-
-.legal-box h4 {
-    color: var(--gold);
-    margin-bottom: 8px;
-    font-size: 0.85rem;
-    opacity: 1;
-}
-
-/* ========== BUTON ÎNAPOI ========== */
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    padding: 10px 18px;
-    background: transparent;
-    border: 1.5px solid var(--gold);
-    border-radius: var(--radius-md);
-    color: var(--gold-light);
-    text-decoration: none;
-    font-size: 0.82rem;
-    font-weight: 600;
-    transition: all var(--transition-base);
-}
-
-.back-btn:hover {
-    background: rgba(201, 162, 39, 0.1);
-}
-
-/* ========== ROW ========== */
-.row {
-    display: flex;
-    gap: var(--gap-md);
-    margin-bottom: 4px;
-}
-
-.row > div {
-    flex: 1;
-}
-
-/* ========== ETICHETE VÂRSTĂ ========== */
-.tag {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-}
-
-.tag-minor { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
-.tag-tanar { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
-.tag-major { background: rgba(201, 162, 39, 0.2); color: var(--gold-light); }
-.tag-batran { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-
-/* ========== UTILITĂȚI ========== */
-.hidden { display: none !important; }
-small { color: var(--text-light); font-size: 0.72rem; }
-.fraction { font-family: var(--font-mono); font-size: 1.1em; }
-
-.error-message {
-    background: rgba(229, 115, 115, 0.05);
-    color: #e57373;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    margin-bottom: var(--gap-sm);
-    font-size: 0.78rem;
-    display: none;
-    border: var(--border-width) solid rgba(229, 115, 115, 0.2);
-    align-items: center;
-    gap: 6px;
-}
-
-.error-message.visible {
-    display: flex;
-}
-
-.error-message::before {
-    content: '⚠';
-    font-size: 0.9rem;
-}
-
-.btn-row {
-    display: flex;
-    gap: var(--gap-md);
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 16px 0;
-}
-
-.btn-row .btn { flex: 1 1 180px; }
-
-/* ========== FOOTER ========== */
-.footer {
-    text-align: center;
-    padding: 14px 0;
-    font-size: 0.6rem;            /* micșorat */
-    color: var(--text-light);
-    border-top: var(--border-width) solid var(--border);
-    margin-top: 20px;
-    letter-spacing: 0.5px;
-    opacity: 0.5;                 /* mai discret */
-}
-
-/* ========== PAȘI CALCUL ========== */
-.steps-container {
-    background: rgba(201, 162, 39, 0.03);
-    border-radius: var(--radius-lg);
-    padding: 14px;
-    margin-top: 12px;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    line-height: 1.7;
-    border: var(--border-width) solid var(--border);
-}
-
-.steps-container h4 {
-    font-family: var(--font);
-    color: var(--gold);
-    margin-bottom: 8px;
-}
-.steps-container ol {
-    padding-left: 20px;
-    color: var(--text);
-    opacity: 0.85;
-}
-.steps-container ol li { margin-bottom: 6px; }
-
-/* ========== ALERTE ========== */
-.alerts-container {
-    background: rgba(255, 167, 38, 0.06);
-    border: var(--border-width) solid rgba(255, 167, 38, 0.3);
-    border-radius: var(--radius-lg);
-    padding: 12px 16px;
-    margin-top: 12px;
-}
-
-.alerts-container h4 {
-    color: var(--warning);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.alerts-container ul { list-style: none; }
-.alerts-container ul li {
-    padding: 6px 0;
-    color: var(--text-light);
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: var(--border-width) solid rgba(255, 167, 38, 0.1);
-}
-.alerts-container ul li:last-child { border-bottom: none; }
-
-/* ========== TOGGLE ========== */
-.toggle-switch {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
-.toggle-switch input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    width: 48px;                 /* mărit de la 42px */
-    height: 28px;                /* mărit de la 24px */
-    background: var(--border);
-    border-radius: 14px;
-    transition: all var(--transition-base);
-    flex-shrink: 0;
-}
-
-.toggle-slider:before {
-    content: "";
-    position: absolute;
-    height: 22px;                /* ajustat */
-    width: 22px;
-    left: 3px;
-    bottom: 3px;
-    background: var(--text-light);
-    border-radius: 50%;
-    transition: all var(--transition-base);
-}
-
-.toggle-switch input:checked + .toggle-slider {
-    background: var(--gold);
-    box-shadow: 0 0 8px rgba(201, 162, 39, 0.5);   /* glow galben */
-}
-
-.toggle-switch input:checked + .toggle-slider:before {
-    transform: translateX(20px);   /* ajustat */
-    background: #0F1115;
-}
-
-.toggle-switch input:focus-visible + .toggle-slider {
-    outline: var(--outline-width) solid var(--gold-light);
-    outline-offset: 2px;
-}
-
-.sex-toggle-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-.sex-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--label-color);
-    text-transform: uppercase;
-}
-
-.sex-label.active {
-    color: var(--gold-light);
-    font-weight: 700;
-}
-
-.life-label {
-    font-size: 0.8rem;
-    color: var(--label-color);
-    font-weight: 400;
-}
-
-/* ========== MODAL ========== */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-}
-
-.modal {
-    background: var(--card-bg);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 18px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.modal h4 { color: var(--gold); margin-bottom: 12px; }
-.modal ul { list-style: none; max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
-.modal li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    border-radius: var(--radius-sm);
-    margin-bottom: 4px;
-    background: rgba(201, 162, 39, 0.04);
-    border: var(--border-width) solid transparent;
-    transition: border-color var(--transition-base);
-}
-.modal li:hover { border-color: var(--gold); }
-.modal li span { flex: 1; color: var(--text); cursor: pointer; font-size: 0.9rem; }
-.modal li button {
-    background: transparent;
-    border: var(--border-width) solid var(--danger);
-    color: var(--danger);
-    border-radius: var(--radius-sm);
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    transition: all var(--transition-base);
-}
-.modal li button:hover,
-.modal li button:focus-visible {
-    background: rgba(255, 107, 107, 0.1);
-    outline: none;
-}
-.modal .close-btn { margin-top: 8px; }
-
-/* ========== TIMELINE ========== */
-.timeline {
-    list-style: none;
-    padding: 0;
-    margin: 12px 0 0 0;
-    position: relative;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 18px;
-    top: 0;
-    bottom: 0;
-    width: 3px;                  /* mai groasă */
-    background: var(--border);
-}
-
-.timeline li {
-    position: relative;
-    padding-left: 40px;
-    margin-bottom: 10px;
-    font-size: 0.85rem;
-    color: var(--text-light);
-}
-
-.timeline li::before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 4px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--card-bg);
-    border: 2px solid var(--gold);
-}
-
-.timeline li.passed::before {
-    background: var(--danger);
-    border-color: var(--danger);
-}
-
-.timeline li.passed {
-    opacity: 0.65;               /* fade pe termenii expirați */
-}
-
-.timeline li .tl-date {
-    font-weight: 600;
-    color: var(--gold-light);
-    margin-right: 8px;
-}
-
-.timeline li .tl-label { color: var(--text-light); }
-.timeline li.passed .tl-date { color: var(--danger); }
-.timeline li.passed .tl-label { text-decoration: line-through; color: #6A6F78; }
-
-/* ========== ACCESIBILITATE ========== */
-:focus-visible {
-    outline: var(--outline-width) solid var(--gold-light);
-    outline-offset: 2px;
-}
-
-[tabindex="-1"]:focus { outline: none; }
-
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--gold);
-    color: #0F1115;
-    padding: 8px;
-    z-index: 200;
-}
-
-.skip-link:focus { top: 0; }
-
-/* ========== UTILITĂȚI SUPLIMENTARE ========== */
-.mt-8 { margin-top: 8px; }
-.mt-12 { margin-top: 12px; }
-.mt-16 { margin-top: 16px; }
-
-.age-tag {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-}
-
-.help-text {
-    margin-top: 8px;
-    font-size: 0.75rem;
-    color: var(--text-light);
-}
-
-.result-input {
-    background: rgba(201,162,39,0.1);
-    border-color: var(--gold);
-    font-weight: 600;
-    color: var(--text);
-}
-
-.footnote {
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: var(--text-light);
-}
-
-/* ========== ANIMAȚIE FADE-IN PENTRU REZULTATE ========== */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#resultsCard:not(.hidden) {
-    animation: fadeInUp 0.3s ease;
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 480px) {
-    body {
-        font-size: 15px;          /* ajustat pentru mobile */
-    }
-
-    .form-grid { grid-template-columns: 1fr; }
-    .result-grid { grid-template-columns: 1fr; }
-    .header h1 { font-size: 1.2rem; }
-    .top-actions .btn-big {
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-    .top-bar {
-        gap: 6px;
-        padding: 8px 10px;
-    }
-    .btn-utility {
-        font-size: 0.7rem;
-        padding: 0 6px;
-    }
-    /* Compactare buton principal pe mobile */
-    .btn-utility.primary {
-        flex: 0 1 auto;
-        padding: 0 12px;
-    }
-    #themeToggle {
-        flex: 0 0 40px;
-        width: 40px;
-        height: 40px;
-    }
-    .hamburger {
-        flex: 0 0 40px;
-        width: 40px;
-        height: 40px;
-    }
-    .row {
-        flex-direction: column;
-        gap: var(--gap-sm);
-    }
-    .penalty-row,
-    .period-row {
-        flex-direction: column;
-        padding: 12px;
-        gap: 8px;
-    }
-    .penalty-row > div,
-    .period-row > div {
-        flex: 1 1 100%;
-        min-width: 100%;
-    }
-    .period-row .btn-danger,
-    .penalty-row .btn-danger {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        width: 28px;
-        height: 28px;
-        min-height: 28px;
-        padding: 0;
-        font-size: 0.7rem;
-        line-height: 1;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .result-box .big-result {
-        font-size: 1.4rem;
-    }
-    .card {
-        padding: 16px 14px;      /* ușor redus pe mobile, dar tot generos */
-        margin-bottom: 16px;
-    }
-    label {
-        font-size: 0.65rem;
-        margin-bottom: 4px;
-    }
-    select,
-    input[type="number"],
-    input[type="text"],
-    textarea {
-        min-height: 44px;
-    }
-    #deductionsContainer,
-    #manualDeductionsContainer,
-    #nonExecContainer {
-        margin-bottom: 4px;
-    }
-    #addDedBtn,
-    #addManDedBtn,
-    #addNonExecBtn {
-        margin-top: 4px;
-        margin-bottom: 0;
-        width: 100%;
-    }
-
-    /* Contopiri: Ani + Luni + Zile pe aceeași linie */
-    .penalty-row {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
-        padding: 12px 32px 12px 12px;
-    }
-    .penalty-row > div:nth-child(-n+3) {
-        flex: 1 1 30%;
-        min-width: 0;
-        margin-bottom: 0;
-    }
-    .penalty-row > div:nth-child(4) {
-        flex: 1 1 100%;
-        min-width: 0;
-        margin-top: 4px;
-    }
-    .penalty-row label {
-        font-size: 0.6rem;
-        margin-bottom: 2px;
-        letter-spacing: 0.6px;
-    }
-    .penalty-row input,
-    .penalty-row select {
-        min-height: 40px;
-        padding: 6px 8px;
-        font-size: 0.8rem;
-    }
-}
-
-/* ========== REDUCERE MIȘCARE ========== */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-    }
-    .btn-big,
-    .btn-utility,
-    .btn,
-    .btn-outline,
-    .btn-gold,
-    .btn-danger,
-    .btn-today,
-    .btn-sm {
-        transition: none !important;
-        transform: none !important;
-    }
-    .top-bar,
-    .modal-overlay {
-        backdrop-filter: none !important;
-    }
-}
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CALCULATOR TERMENE PEDEPSE PRIVATIVE DE LIBERTATE</title>
+    <link rel="stylesheet" href="css/style.css?v=28">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f2937">
+</head>
+<script>
+fetch('./version.json')
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('app-version').textContent =
+      `Versiune ${data.version}`;
+  })
+  .catch(() => {
+    document.getElementById('app-version').textContent =
+      'Versiune indisponibilă';
+  });
+</script>
+<body>
+    <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
+    <div class="container">
+        <!-- Bara de acțiuni principale: hamburger + salvează/încarcă/reset + temă -->
+        <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
+            <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('hidden')" aria-label="Meniu principal">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button class="btn-utility primary" id="saveBtn" onclick="saveCase()">SALVEAZĂ</button>
+            <button class="btn-utility" id="loadBtn" onclick="openLoadModal()">ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
+            <button class="btn-utility" id="resetBtn" onclick="confirmReset()">RESET</button>
+            <button id="themeToggle" onclick="toggleTheme()" aria-label="Comută tema">☀️</button>
+        </div>
+
+        <!-- Secțiunea ALTE CALCULATOARE - stilizată identic cu bara de acțiuni -->
+        <div class="top-bar other-calculators" style="justify-content: center; gap: 8px;">
+            <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold);">ALTE CALCULATOARE:</span>
+            <a href="termene.html" class="btn-utility" style="text-decoration: none;">TERMENE</a>
+            <a href="contopiri.html" class="btn-utility" style="text-decoration: none;">CONTOPIRI</a>
+        </div>
+
+        <!-- Secțiunea ALTE PROIECTE PERSONALE - text sus, butoane dedesubt -->
+        <div class="top-bar other-calculators" style="flex-direction: column; align-items: center; gap: 8px; padding: 8px 12px;">
+            <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold);">ALTE PROIECTE PERSONALE:</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+                <a href="https://alintalfes-glitch.github.io/descriere-semnalmente/" target="_blank" rel="noopener noreferrer" class="btn-utility" style="text-decoration: none;">TRĂSĂTURI</a>
+                <a href="https://alintalfes-glitch.github.io/fingerprint/" target="_blank" rel="noopener noreferrer" class="btn-utility" style="text-decoration: none;">AMPRENTE</a>
+                <a href="https://alintalfes-glitch.github.io/afaceri-judiciare/" target="_blank" rel="noopener noreferrer" class="btn-utility" style="text-decoration: none;">TRANSFER</a>
+            </div>
+        </div>
+
+        <!-- Meniul principal (ascuns inițial), afișat sub bara de acțiuni -->
+        <div id="mainMenu" class="top-actions hidden">
+            <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFORMAȚII</button>
+            <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188/C/2022</button>
+        </div>
+
+        <div class="header">
+            <h1 id="main-title">CALCULATOR TERMENE PEDEPSE PRIVATIVE DE LIBERTATE</h1>
+            <p style="font-size:0.85rem; color:var(--text-light); margin-top:8px; line-height:1.6; max-width:600px; margin-left:auto; margin-right:auto;">
+                Aplicația este destinată calculului termenelor pedepselor privative de libertate și al liberării condiționate.
+                Sub bara principală de acțiuni aveți acces direct la
+                <span style="color:var(--gold-light); font-weight:700;">calculatorul de termene procedurale</span> și
+                <span style="color:var(--gold-light); font-weight:700;">calculatorul de pedeapsă rezultantă (contopiri)</span>.
+            </p>
+        </div>
+
+        <main id="main-content">
+            <div class="card" aria-labelledby="date-ppl-heading">
+                <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
+                <div class="form-grid">
+                    <div>
+                        <label>Sex</label>
+                        <div class="sex-toggle-wrapper">
+                            <span class="sex-label" id="sexLabelF">FEMININ</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="sexToggle" checked>
+                                <span class="toggle-slider" aria-hidden="true"></span>
+                            </label>
+                            <span class="sex-label active" id="sexLabelM">MASCULIN</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="birthDate">Data nașterii</label>
+                        <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa">
+                    </div>
+                    <div id="ageTag" class="age-tag" aria-live="polite"></div>
+                </div>
+                <div class="mt-12">
+                    <label for="observations">OBSERVAȚII (OPȚIONAL)</label>
+                    <textarea id="observations" rows="2" placeholder=""></textarea>
+                </div>
+            </div>
+
+            <div class="card" aria-labelledby="sentence-heading">
+                <h3 id="sentence-heading">DETALII PEDEAPSĂ PPL</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="liberationArticle">Articol liberare condiționată</label>
+                        <select id="liberationArticle" aria-required="true">
+                            <option value="">—</option>
+                            <option value="NCP100">NCP art. 100</option>
+                            <option value="NCP99">NCP art. 99 (viață)</option>
+                            <option value="NCP124">NCP art. 124</option>
+                            <option value="NCP125">NCP art. 125</option>
+                            <option value="VCP59">VCP art. 59</option>
+                            <option value="VCP591">VCP art. 59¹</option>
+                            <option value="VCP602">VCP art. 60 alin. 2</option>
+                            <option value="VCP603">VCP art. 60 alin. 3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="lifeSentence">Detențiune pe viață</label>
+                        <label class="toggle-switch" style="margin-top:8px;">
+                            <input type="checkbox" id="lifeSentence">
+                            <span class="toggle-slider" aria-hidden="true"></span>
+                            <span class="life-label">Bifați dacă este cazul</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="sentenceDuration" class="form-grid mt-8">
+                    <div>
+                        <label for="durYears">Ani</label>
+                        <input type="number" id="durYears" value="0" min="0">
+                    </div>
+                    <div>
+                        <label for="durMonths">Luni</label>
+                        <input type="number" id="durMonths" value="0" min="0">
+                    </div>
+                    <div>
+                        <label for="durDays">Zile</label>
+                        <input type="number" id="durDays" value="0" min="0">
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <label for="startDate">Data începerii executării pedepsei</label>
+                    <div class="date-wrapper">
+                        <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa">
+                        <button type="button" class="btn-today" data-target="startDate" onclick="setToday('startDate')">AZI</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" aria-labelledby="deductions-heading">
+                <h3 id="deductions-heading">PERIOADE DEDUSE</h3>
+                <div id="deductionsContainer" role="list" aria-label="Listă perioade deduse"></div>
+                <button class="btn btn-outline btn-sm" id="addDedBtn" onclick="addDedRow()">+ Adaugă</button>
+            </div>
+
+            <div class="card" aria-labelledby="recurs-heading">
+                <h3 id="recurs-heading">ZILE RECURS COMPENSATORIU (L. 169/2017)</h3>
+                <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
+                <button class="btn btn-outline btn-sm" id="addManDedBtn" onclick="addManDedRow()">+ Adaugă</button>
+            </div>
+
+            <div class="card" aria-labelledby="nonExec-heading">
+                <h3 id="nonExec-heading">PERIOADE ADĂUGATE</h3>
+                <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
+                <button class="btn btn-outline btn-sm" id="addNonExecBtn" onclick="addNonExecRow()">+ Adaugă</button>
+            </div>
+
+            <div class="card" id="restCard" aria-labelledby="rest-heading">
+                <h3 id="rest-heading">CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="conditionalReleaseDate">Data liberării condiționate</label>
+                        <div class="date-wrapper">
+                            <input type="text" id="conditionalReleaseDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            <button type="button" class="btn-today" data-target="conditionalReleaseDate" onclick="setToday('conditionalReleaseDate')">AZI</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" aria-labelledby="masuri-preventive-heading">
+                <h3 id="masuri-preventive-heading">PRELUNGIRI MĂSURI PREVENTIVE (OPȚIONAL)</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="masuriRefDate">Dată referință</label>
+                        <div class="date-wrapper">
+                            <input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            <button type="button" class="btn-today" data-target="masuriRefDate" onclick="setToday('masuriRefDate')">AZI</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="masuriDays">Adaugă zile</label>
+                        <input type="number" id="masuriDays" value="0" min="0" oninput="calcMasuriPreventive()">
+                    </div>
+                    <div>
+                        <label>Rezultat</label>
+                        <input type="text" id="masuriResult" readonly class="result-input" tabindex="-1">
+                    </div>
+                </div>
+                <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
+                <p class="help-text" style="margin-top: 4px; font-style: italic;">Rezultatul se actualizează automat, fără a fi necesară apăsarea butonului CALCULEAZĂ.</p>
+            </div>
+
+            <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
+
+            <div class="btn-row">
+                <button class="btn btn-gold" id="calcBtn" onclick="calculateAll()">CALCULEAZĂ</button>
+                <button class="btn btn-outline" id="copyResultsBtn" onclick="copyResults()">COPIAZĂ REZULTATELE</button>
+                <button class="btn btn-outline" id="exportPdfBtn" onclick="exportPDF()">EXPORTĂ PDF</button>
+            </div>
+
+            <div class="card hidden" id="resultsCard" aria-labelledby="results-heading">
+                <h3 id="results-heading">REZULTATE</h3>
+                <div id="resultsContent"></div>
+                <div id="alertsContainer" class="alerts-container hidden" role="alert" aria-live="polite"></div>
+                <div id="timelineContainer" class="hidden mt-16">
+                    <h4 style="color:var(--gold);" id="timeline-heading">CRONOLOGIE TERMENE</h4>
+                    <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
+                </div>
+                <button class="btn btn-outline btn-sm mt-12" id="toggleStepsBtn" onclick="toggleSteps()" aria-expanded="false" aria-controls="stepsContainer">AFIȘEAZĂ PAȘII CALCULULUI</button>
+                <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
+                    <h4 id="steps-heading">PAȘII CALCULULUI</h4>
+                    <ol id="stepsList"></ol>
+                    <p class="footnote">Notă: Math.floor(x) = partea întreagă inferioară (rotunjire în jos, în defavoarea condamnatului).</p>
+                </div>
+            </div>
+        </main>
+    <footer class="footer" role="contentinfo">
+        <span id="app-version">Versiune...</span> | © 
+        <a href="https://wa.me/alin.talfes" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Alin Talfeș</a>
+        <br>
+        <span style="font-size: 0.9em; opacity: 0.8;">Toate datele sunt stocate exclusiv local, în browserul utilizatorului (localStorage) și nu sunt transmise către servere externe.</span>
+    </footer>
+    </div>
+    <script src="js/utils.js?v=28"></script>
+    <script src="js/rules.js?v=28"></script>
+    <script src="js/legal.js?v=28"></script>
+    <script src="js/storage.js?v=28"></script>
+    <script src="js/export.js?v=28"></script>
+    <script src="js/ui.js?v=28"></script>
+    <script src="js/app.js?v=28"></script>
+    <script>
+        // Suprascriem funcțiile de temă pentru a folosi emoji-uri
+        (function() {
+            function updateThemeButton() {
+                const btn = document.getElementById('themeToggle');
+                if (document.body.classList.contains('light')) {
+                    btn.innerHTML = '☀️';
+                } else {
+                    btn.innerHTML = '🌙';
+                }
+            }
+            window.applyTheme = function() {
+                const saved = localStorage.getItem('anpTheme');
+                if (saved === 'light') {
+                    document.body.classList.add('light');
+                } else {
+                    document.body.classList.remove('light');
+                }
+                updateThemeButton();
+            };
+            window.toggleTheme = function() {
+                document.body.classList.toggle('light');
+                const isLight = document.body.classList.contains('light');
+                localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
+                updateThemeButton();
+            };
+            updateThemeButton();
+        })();
+    </script>
+</body>
+</html>
