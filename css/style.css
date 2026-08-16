@@ -5,13 +5,13 @@
 
 /* ========== VARIABILE ========== */
 :root {
-    --bg: #181A22;                /* schimbat pentru contrast blând */
+    --bg: #181A22;                 /* fundal dark mai blând */
     --card-bg: #161820;
-    --primary: #D4A843;           /* auriu mai cald */
+    --primary: #D4A843;            /* auriu cald */
     --gold: #D4A843;
     --gold-light: #E0B84C;
     --text: #e6e6e6;
-    --text-light: #D0D5E0;        /* contrast mai bun */
+    --text-light: #D0D5E0;         /* contrast îmbunătățit */
     --border: #2a2a35;
     --danger: #ff6b6b;
     --warning: #ffa726;
@@ -28,11 +28,11 @@
     --btn-height: 44px;
     --btn-padding-y: 12px;
     --btn-padding-x: 16px;
-    --card-padding-y: 24px;       /* mărit de la 20px */
-    --card-padding-x: 22px;       /* mărit de la 18px */
+    --card-padding-y: 24px;        /* mai aerisit */
+    --card-padding-x: 22px;
     --gap-sm: 8px;
     --gap-md: 12px;
-    --gap-lg: 28px;               /* mărit de la 20px */
+    --gap-lg: 28px;                /* spațiere verticală clară */
     --border-width: 1px;
     --outline-width: 3px;
     --transition-fast: 0.15s;
@@ -41,7 +41,7 @@
 }
 
 body.light {
-    --bg: #f8f9fa;               /* fundal mai odihnitor */
+    --bg: #f8f9fa;                 /* fundal light odihnitor */
     --card-bg: #ffffff;
     --primary: #D4A843;
     --gold: #D4A843;
@@ -74,12 +74,11 @@ html {
     overscroll-behavior: contain;
     text-rendering: optimizeLegibility;
     font-synthesis: none;
-    /* Scrollbar styling global */
+    /* scrollbar global */
     scrollbar-width: thin;
     scrollbar-color: var(--gold) var(--border);
 }
 
-/* Pentru browserele WebKit */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -97,6 +96,7 @@ body {
     font-family: var(--font);
     color: var(--text);
     padding: 12px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)); /* safe area mobil */
     font-size: 16px;
     overflow-x: hidden;
     width: 100%;
@@ -110,17 +110,16 @@ body {
     max-width: 960px;
     margin: 0 auto;
     width: 100%;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* ========== BARA PRINCIPALĂ ========== */
 .top-bar {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 12px 16px;           /* mărit */
-    margin-bottom: var(--gap-md);
-    background: rgba(22, 24, 32, 0.6);
+    gap: 10px;                    /* spațiu egal între elemente */
+    padding: 10px 12px;
+    background: rgba(22, 24, 32, 0.7);
     backdrop-filter: blur(8px);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-md);
@@ -129,29 +128,47 @@ body {
     z-index: 10;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    box-shadow: var(--shadow-topbar);   /* umbră mai pronunțată */
+    box-shadow: var(--shadow-topbar);
 }
 
 body.light .top-bar {
     background: rgba(255,255,255,0.8);
 }
 
-/* ========== HAMBURGER ========== */
-.hamburger {
+/* Toate elementele interactive din bară au aceeași formă */
+.hamburger,
+.btn-utility,
+#themeToggle {
     flex: 0 0 44px;
     width: 44px;
     height: 44px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    border: 1.5px solid var(--border);
     background: transparent;
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-md);
-    cursor: pointer;
+    border-radius: 12px;
+    color: var(--text-light);
     transition: all var(--transition-base);
     padding: 0;
+    gap: 6px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Butoanele cu text pot crește în lățime */
+.btn-utility {
+    flex: 1 1 auto;
+    min-width: 44px;
+    padding: 0 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.hamburger {
+    flex-direction: column;
+    gap: 4px;
 }
 
 .hamburger span {
@@ -163,51 +180,37 @@ body.light .top-bar {
     transition: all var(--transition-base);
 }
 
-.hamburger:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold);
-}
-
-/* Animație hamburger -> cruce când este activat */
+/* Animatie hamburger -> cruce */
 .hamburger[aria-expanded="true"] span:nth-child(1),
 .hamburger.open span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
-
 .hamburger[aria-expanded="true"] span:nth-child(2),
 .hamburger.open span:nth-child(2) {
     opacity: 0;
 }
-
 .hamburger[aria-expanded="true"] span:nth-child(3),
 .hamburger.open span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ========== BUTOANE UTILITARE ========== */
-.btn-utility {
-    flex: 1 1 0;
-    min-width: 0;
-    height: 44px;
-    padding: 0 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 0.85rem;           /* mărit de la 0.75rem */
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    white-space: nowrap;
-    background: transparent;
-    border: var(--border-width) solid var(--border);
-    color: var(--text-light);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-base);
-    cursor: pointer;
-    position: relative;
+/* Accente pentru acțiuni principale */
+.btn-utility.primary {
+    border-color: var(--gold);
+    color: var(--gold-light);
 }
 
-/* Iconițe pentru butoane utilitare */
+.btn-utility#loadBtn {
+    border-color: var(--gold);
+    color: var(--gold-light);
+}
+
+.btn-utility#resetBtn {
+    border-color: var(--border);
+    color: var(--text-light);
+}
+
+/* Iconițe pentru butoane utilitare (adaugă emoji) */
 .btn-utility.primary::before {
     content: "💾";
     margin-right: 4px;
@@ -223,57 +226,23 @@ body.light .top-bar {
     margin-right: 4px;
 }
 
+/* Hover uniform */
+.hamburger:hover,
 .btn-utility:hover,
-.btn-utility:focus-visible {
+#themeToggle:hover {
     background: rgba(201, 162, 39, 0.1);
     border-color: var(--gold);
     color: var(--gold-light);
-    outline: none;
 }
 
-.btn-utility.primary {
-    background: var(--gold);
-    color: #0F1115;
-    border-color: var(--gold);
-    font-weight: 700;
-}
-
-.btn-utility.primary:hover {
-    background: var(--gold-light);
-    border-color: var(--gold-light);
-    color: #0F1115;
-}
-
-.btn-utility#loadBtn {
-    background: transparent;
-    border-color: var(--gold);
-    color: var(--gold-light);
-}
-
-.btn-utility#loadBtn:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold-light);
-}
-
-.btn-utility#resetBtn {
-    background: transparent;
-    border-color: transparent;
-    color: var(--text-light);
-}
-
-.btn-utility#resetBtn:hover {
-    background: rgba(201, 162, 39, 0.05);
-    border-color: var(--border);
-    color: var(--gold-light);
-}
-
+/* Badge poziționat corect */
 .badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
+    top: -8px;
+    right: -8px;
     background: var(--gold);
     color: #0F1115;
-    font-size: 0.75rem;          /* mărit de la 0.65rem */
+    font-size: 0.7rem;
     font-weight: 700;
     width: 20px;
     height: 20px;
@@ -281,34 +250,18 @@ body.light .top-bar {
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid var(--card-bg);  /* separă vizual de buton */
 }
 
 /* ========== BUTON TEMĂ ========== */
 #themeToggle {
-    flex: 0 0 48px;               /* mărit de la 44px */
+    flex: 0 0 48px;
     width: 48px;
     height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-md);
-    color: var(--gold-light);
-    cursor: pointer;
-    transition: all var(--transition-base);
     font-size: 1.2rem;
-    padding: 0;
     margin-left: 6px;
-    position: relative;           /* pentru tooltip */
 }
 
-#themeToggle:hover {
-    background: rgba(201, 162, 39, 0.1);
-    border-color: var(--gold);
-}
-
-/* Tooltip pe hover */
 #themeToggle::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -370,13 +323,18 @@ body.light .top-bar {
     min-height: var(--btn-height);
 }
 
+/* Ascunde butoanele goale (placeholder) */
+.top-actions .btn-big:empty {
+    display: none;
+}
+
 .top-actions .btn-big:hover,
 .top-actions .btn-big:focus-visible {
     background: rgba(201, 162, 39, 0.15);
     border-color: var(--gold);
     color: var(--gold-light);
     outline: none;
-    box-shadow: 0 6px 20px rgba(201, 162, 39, 0.3);   /* umbră mai pronunțată */
+    box-shadow: 0 6px 20px rgba(201, 162, 39, 0.3);
 }
 
 .top-actions .btn-big:active {
@@ -402,7 +360,7 @@ body.light .header {
 }
 
 .header h1 {
-    font-size: 1.8rem;            /* mărit de la 1.4rem */
+    font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: 1.5px;
     display: flex;
@@ -412,12 +370,22 @@ body.light .header {
     line-height: 1.2;
 }
 
-/* Subtitluri în antet */
 .header p,
 .header .subtitle {
-    font-size: 0.9rem;            /* mărit de la 0.8rem */
+    font-size: 0.9rem;
     color: var(--text-light);
     margin-top: 6px;
+}
+
+/* Evidențiere subtilă, nu prea multe cuvinte galbene */
+.highlight,
+mark {
+    background: none;
+    color: var(--gold-light);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--gold);
+    text-underline-offset: 3px;
 }
 
 /* ========== CARDURI ========== */
@@ -425,8 +393,8 @@ body.light .header {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
-    padding: var(--card-padding-y) var(--card-padding-x);  /* 24px 22px */
-    margin-bottom: var(--gap-lg);   /* 28px */
+    padding: var(--card-padding-y) var(--card-padding-x);
+    margin-bottom: var(--gap-lg);
     border: var(--border-width) solid var(--border);
     border-left: 3px solid rgba(201, 162, 39, 0.5);
     transition: border-color var(--transition-base), background 0.3s, box-shadow 0.2s;
@@ -458,18 +426,18 @@ body.light .card:hover {
 /* ========== FORMULARE ========== */
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));  /* mărit de la 140px */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--gap-md);
 }
 
 label {
     display: block;
     font-weight: 600;
-    font-size: 0.8rem;            /* mărit de la 0.68rem */
+    font-size: 0.8rem;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
     color: var(--label-color);
-    /* eliminați text-transform: uppercase */
+    /* fără text-transform: uppercase */
 }
 
 select,
@@ -477,10 +445,10 @@ input[type="number"],
 input[type="text"],
 textarea {
     width: 100%;
-    padding: 12px 16px;           /* mărit de la 10px 12px */
+    padding: 12px 16px;
     border: 1.5px solid var(--input-border);
     border-radius: 12px;
-    font-size: 0.95rem;           /* mărit de la 0.9rem */
+    font-size: 0.95rem;
     background: var(--input-bg);
     color: var(--text);
     font-family: var(--font-mono);
@@ -490,7 +458,7 @@ textarea {
 }
 
 select {
-    font-size: 1rem;              /* select mai mare */
+    font-size: 1rem;
 }
 
 select:focus,
@@ -505,6 +473,52 @@ input::placeholder,
 textarea::placeholder {
     color: var(--input-placeholder);
     opacity: 0.8;
+}
+
+/* ========== SEGMENTED CONTROL (pentru sex) ========== */
+.segmented-control {
+    display: flex;
+    width: 100%;
+    max-width: 280px;
+    margin-top: 8px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.segmented-control input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.segmented-control label {
+    flex: 1;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-light);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.segmented-control label:first-of-type {
+    border-right: 1px solid var(--border);
+}
+
+.segmented-control input:checked + label {
+    background: var(--gold);
+    color: #0F1115;
+    font-weight: 700;
+    border-color: var(--gold);
+}
+
+.segmented-control input:focus-visible + label {
+    outline: var(--outline-width) solid var(--gold-light);
+    outline-offset: -2px;
 }
 
 /* ========== DATĂ + ORĂ ========== */
@@ -526,7 +540,7 @@ textarea::placeholder {
     color: var(--gold-light);
     border-radius: var(--radius-md);
     padding: 0 12px;
-    font-size: 0.8rem;            /* mărit de la 0.65rem */
+    font-size: 0.8rem;
     font-weight: 700;
     cursor: pointer;
     height: var(--btn-height);
@@ -685,7 +699,7 @@ textarea::placeholder {
 }
 
 .result-value {
-    font-size: 1.4rem;           /* mărit de la 1.15rem */
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--gold-light);
     word-break: break-word;
@@ -822,6 +836,11 @@ textarea::placeholder {
 small { color: var(--text-light); font-size: 0.72rem; }
 .fraction { font-family: var(--font-mono); font-size: 1.1em; }
 
+/* Ascunde elementele goale (placeholder) */
+.placeholder:empty {
+    display: none;
+}
+
 .error-message {
     background: rgba(229, 115, 115, 0.05);
     color: #e57373;
@@ -852,7 +871,9 @@ small { color: var(--text-light); font-size: 0.72rem; }
     margin: 16px 0;
 }
 
-.btn-row .btn { flex: 1 1 180px; }
+.btn-row .btn {
+    flex: 1 1 180px;
+}
 
 /* ========== FOOTER ========== */
 .footer {
@@ -883,12 +904,16 @@ small { color: var(--text-light); font-size: 0.72rem; }
     color: var(--gold);
     margin-bottom: 8px;
 }
+
 .steps-container ol {
     padding-left: 20px;
     color: var(--text);
     opacity: 0.85;
 }
-.steps-container ol li { margin-bottom: 6px; }
+
+.steps-container ol li {
+    margin-bottom: 6px;
+}
 
 /* ========== ALERTE ========== */
 .alerts-container {
@@ -907,7 +932,10 @@ small { color: var(--text-light); font-size: 0.72rem; }
     margin-bottom: 8px;
 }
 
-.alerts-container ul { list-style: none; }
+.alerts-container ul {
+    list-style: none;
+}
+
 .alerts-container ul li {
     padding: 6px 0;
     color: var(--text-light);
@@ -917,9 +945,12 @@ small { color: var(--text-light); font-size: 0.72rem; }
     gap: 8px;
     border-bottom: var(--border-width) solid rgba(255, 167, 38, 0.1);
 }
-.alerts-container ul li:last-child { border-bottom: none; }
 
-/* ========== TOGGLE ========== */
+.alerts-container ul li:last-child {
+    border-bottom: none;
+}
+
+/* ========== TOGGLE (păstrat pentru eventuale alte utilizări) ========== */
 .toggle-switch {
     position: relative;
     display: inline-flex;
@@ -936,8 +967,8 @@ small { color: var(--text-light); font-size: 0.72rem; }
 }
 
 .toggle-slider {
-    width: 56px;                 /* mărit de la 48px */
-    height: 32px;                /* mărit de la 28px */
+    width: 56px;
+    height: 32px;
     background: var(--border);
     border-radius: 16px;
     transition: all var(--transition-base);
@@ -947,7 +978,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .toggle-slider:before {
     content: "";
     position: absolute;
-    height: 26px;                /* ajustat */
+    height: 26px;
     width: 26px;
     left: 3px;
     bottom: 3px;
@@ -962,7 +993,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 }
 
 .toggle-switch input:checked + .toggle-slider:before {
-    transform: translateX(24px);   /* ajustat pentru lățime nouă */
+    transform: translateX(24px);
     background: #0F1115;
 }
 
@@ -1021,8 +1052,18 @@ small { color: var(--text-light); font-size: 0.72rem; }
     overflow-y: auto;
 }
 
-.modal h4 { color: var(--gold); margin-bottom: 12px; }
-.modal ul { list-style: none; max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
+.modal h4 {
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.modal ul {
+    list-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
 .modal li {
     display: flex;
     align-items: center;
@@ -1034,8 +1075,18 @@ small { color: var(--text-light); font-size: 0.72rem; }
     border: var(--border-width) solid transparent;
     transition: border-color var(--transition-base);
 }
-.modal li:hover { border-color: var(--gold); }
-.modal li span { flex: 1; color: var(--text); cursor: pointer; font-size: 0.9rem; }
+
+.modal li:hover {
+    border-color: var(--gold);
+}
+
+.modal li span {
+    flex: 1;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
 .modal li button {
     background: transparent;
     border: var(--border-width) solid var(--danger);
@@ -1046,12 +1097,16 @@ small { color: var(--text-light); font-size: 0.72rem; }
     font-size: 0.7rem;
     transition: all var(--transition-base);
 }
+
 .modal li button:hover,
 .modal li button:focus-visible {
     background: rgba(255, 107, 107, 0.1);
     outline: none;
 }
-.modal .close-btn { margin-top: 8px; }
+
+.modal .close-btn {
+    margin-top: 8px;
+}
 
 /* ========== TIMELINE ========== */
 .timeline {
@@ -1074,7 +1129,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
 .timeline li {
     position: relative;
     padding-left: 40px;
-    margin-bottom: 16px;         /* mărit de la 10px */
+    margin-bottom: 16px;
     font-size: 0.85rem;
     color: var(--text-light);
 }
@@ -1106,17 +1161,28 @@ small { color: var(--text-light); font-size: 0.72rem; }
     margin-right: 8px;
 }
 
-.timeline li .tl-label { color: var(--text-light); }
-.timeline li.passed .tl-date { color: var(--danger); }
-.timeline li.passed .tl-label { text-decoration: line-through; color: #6A6F78; }
+.timeline li .tl-label {
+    color: var(--text-light);
+}
+
+.timeline li.passed .tl-date {
+    color: var(--danger);
+}
+
+.timeline li.passed .tl-label {
+    text-decoration: line-through;
+    color: #6A6F78;
+}
 
 /* ========== ACCESIBILITATE ========== */
 :focus-visible {
     outline: var(--outline-width) solid var(--gold-light);
-    outline-offset: 3px;          /* mărit de la 2px */
+    outline-offset: 3px;
 }
 
-[tabindex="-1"]:focus { outline: none; }
+[tabindex="-1"]:focus {
+    outline: none;
+}
 
 .skip-link {
     position: absolute;
@@ -1128,7 +1194,9 @@ small { color: var(--text-light); font-size: 0.72rem; }
     z-index: 200;
 }
 
-.skip-link:focus { top: 0; }
+.skip-link:focus {
+    top: 0;
+}
 
 /* ========== UTILITĂȚI SUPLIMENTARE ========== */
 .mt-8 { margin-top: 8px; }
@@ -1176,7 +1244,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
     animation: fadeInUp 0.3s ease;
 }
 
-/* ========== ANIMAȚIE PULS (opțional, poate fi folosită la încărcare) ========== */
+/* ========== ANIMAȚIE PULS (opțional, pentru încărcare) ========== */
 @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(201,162,39,0.4); }
     70% { box-shadow: 0 0 0 10px rgba(201,162,39,0); }
@@ -1191,10 +1259,10 @@ small { color: var(--text-light); font-size: 0.72rem; }
 /* Tabletă mică */
 @media (max-width: 700px) {
     .form-grid {
-        grid-template-columns: 1fr;   /* toate câmpurile pe o coloană */
+        grid-template-columns: 1fr;
     }
     .btn-utility {
-        font-size: 0.7rem;            /* butoane mai mici */
+        font-size: 0.7rem;
         padding: 0 6px;
     }
     .top-bar {
@@ -1208,9 +1276,15 @@ small { color: var(--text-light); font-size: 0.72rem; }
         font-size: 15px;
     }
 
-    .form-grid { grid-template-columns: 1fr; }
-    .result-grid { grid-template-columns: 1fr; }
-    .header h1 { font-size: 1.4rem; }   /* mărit de la 1.2rem */
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+    .header h1 {
+        font-size: 1.4rem;
+    }
     .top-actions .btn-big {
         flex: 1 1 100%;
         max-width: 100%;
@@ -1220,13 +1294,13 @@ small { color: var(--text-light); font-size: 0.72rem; }
         padding: 8px 10px;
     }
     .btn-utility {
-        font-size: 0;               /* ascunde textul */
+        font-size: 0;               /* ascunde textul pe mobil */
         padding: 0 8px;
         justify-content: center;
     }
     .btn-utility::before {
         font-size: 1.2rem;
-        margin-right: 0;           /* doar iconița vizibilă */
+        margin-right: 0;            /* doar iconița */
     }
     .btn-utility.primary {
         flex: 0 1 auto;
@@ -1288,7 +1362,7 @@ small { color: var(--text-light); font-size: 0.72rem; }
     input[type="number"],
     input[type="text"],
     textarea {
-        min-height: 48px;          /* target tactil mai mare */
+        min-height: 48px;           /* target tactil mai mare */
     }
     #deductionsContainer,
     #manualDeductionsContainer,
