@@ -5,13 +5,13 @@
 
 /* ========== VARIABILE ========== */
 :root {
-    --bg: #181A22;                 /* fundal dark mai blând */
+    --bg: #181A22;
     --card-bg: #161820;
-    --primary: #D4A843;            /* auriu cald */
+    --primary: #D4A843;
     --gold: #D4A843;
     --gold-light: #E0B84C;
     --text: #e6e6e6;
-    --text-light: #D0D5E0;         /* contrast îmbunătățit */
+    --text-light: #D0D5E0;
     --border: #2a2a35;
     --danger: #ff6b6b;
     --warning: #ffa726;
@@ -28,11 +28,11 @@
     --btn-height: 44px;
     --btn-padding-y: 12px;
     --btn-padding-x: 16px;
-    --card-padding-y: 24px;        /* mai aerisit */
+    --card-padding-y: 24px;
     --card-padding-x: 22px;
     --gap-sm: 8px;
     --gap-md: 12px;
-    --gap-lg: 28px;                /* spațiere verticală clară */
+    --gap-lg: 28px;
     --border-width: 1px;
     --outline-width: 3px;
     --transition-fast: 0.15s;
@@ -41,7 +41,7 @@
 }
 
 body.light {
-    --bg: #f8f9fa;                 /* fundal light odihnitor */
+    --bg: #f8f9fa;
     --card-bg: #ffffff;
     --primary: #D4A843;
     --gold: #D4A843;
@@ -74,7 +74,6 @@ html {
     overscroll-behavior: contain;
     text-rendering: optimizeLegibility;
     font-synthesis: none;
-    /* scrollbar global */
     scrollbar-width: thin;
     scrollbar-color: var(--gold) var(--border);
 }
@@ -96,7 +95,7 @@ body {
     font-family: var(--font);
     color: var(--text);
     padding: 12px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom)); /* safe area mobil */
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
     font-size: 16px;
     overflow-x: hidden;
     width: 100%;
@@ -117,7 +116,7 @@ body {
 .top-bar {
     display: flex;
     align-items: center;
-    gap: 10px;                    /* spațiu egal între elemente */
+    gap: 10px;
     padding: 10px 12px;
     background: rgba(22, 24, 32, 0.7);
     backdrop-filter: blur(8px);
@@ -156,9 +155,9 @@ body.light .top-bar {
     position: relative;
 }
 
-/* Butoanele cu text pot crește în lățime */
+/* Butoanele cu text pot crește în lățime, dar simetric */
 .btn-utility {
-    flex: 1 1 auto;
+    flex: 1 1 0;                  /* <-- egale ca lățime */
     min-width: 44px;
     padding: 0 12px;
     font-size: 0.8rem;
@@ -180,7 +179,7 @@ body.light .top-bar {
     transition: all var(--transition-base);
 }
 
-/* Animatie hamburger -> cruce */
+/* Animație hamburger -> cruce */
 .hamburger[aria-expanded="true"] span:nth-child(1),
 .hamburger.open span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
@@ -210,17 +209,15 @@ body.light .top-bar {
     color: var(--text-light);
 }
 
-/* Iconițe pentru butoane utilitare (adaugă emoji) */
+/* Iconițe pentru butoane utilitare */
 .btn-utility.primary::before {
     content: "💾";
     margin-right: 4px;
 }
-
 .btn-utility#loadBtn::before {
     content: "📂";
     margin-right: 4px;
 }
-
 .btn-utility#resetBtn::before {
     content: "🔄";
     margin-right: 4px;
@@ -250,7 +247,7 @@ body.light .top-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--card-bg);  /* separă vizual de buton */
+    border: 2px solid var(--card-bg);
 }
 
 /* ========== BUTON TEMĂ ========== */
@@ -316,17 +313,14 @@ body.light .top-bar {
     box-sizing: border-box;
     background: rgba(201, 162, 39, 0.08);
     border: var(--border-width) solid var(--border);
-    color: var(--text-light);
+    color: var(--text);              /* <-- text mereu lizibil */
     border-radius: var(--radius-md);
     white-space: normal;
     word-break: break-word;
     min-height: var(--btn-height);
 }
 
-/* Ascunde butoanele goale (placeholder) */
-.top-actions .btn-big:empty {
-    display: none;
-}
+/* Am eliminat regula care ascundea elementele goale */
 
 .top-actions .btn-big:hover,
 .top-actions .btn-big:focus-visible {
@@ -377,7 +371,6 @@ body.light .header {
     margin-top: 6px;
 }
 
-/* Evidențiere subtilă, nu prea multe cuvinte galbene */
 .highlight,
 mark {
     background: none;
@@ -437,7 +430,6 @@ label {
     letter-spacing: 0.5px;
     margin-bottom: 6px;
     color: var(--label-color);
-    /* fără text-transform: uppercase */
 }
 
 select,
@@ -836,10 +828,7 @@ textarea::placeholder {
 small { color: var(--text-light); font-size: 0.72rem; }
 .fraction { font-family: var(--font-mono); font-size: 1.1em; }
 
-/* Ascunde elementele goale (placeholder) */
-.placeholder:empty {
-    display: none;
-}
+/* Am eliminat și regula .placeholder:empty { display: none; } pentru a nu ascunde nimic */
 
 .error-message {
     background: rgba(229, 115, 115, 0.05);
@@ -1297,15 +1286,13 @@ small { color: var(--text-light); font-size: 0.72rem; }
         font-size: 0;               /* ascunde textul pe mobil */
         padding: 0 8px;
         justify-content: center;
+        flex: 1 1 0;                 /* păstrează lățimi egale */
     }
     .btn-utility::before {
         font-size: 1.2rem;
         margin-right: 0;            /* doar iconița */
     }
-    .btn-utility.primary {
-        flex: 0 1 auto;
-        padding: 0 12px;
-    }
+    /* Am eliminat regula specială pentru .btn-utility.primary */
     #themeToggle {
         flex: 0 0 40px;
         width: 40px;
