@@ -1,4 +1,14 @@
-// ========== EXPORT / COPIERE / PDF ==========
+// ========== EXPORT / COPIERE / PAGINĂ REZULTATE ==========
+
+/**
+ * Escapează text pentru inserare sigură în HTML (previne XSS din câmpuri libere
+ * precum Observații, tip perioadă etc.).
+ */
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+}
 
 /**
  * Traduce tipul perioadei adăugate.
@@ -15,6 +25,12 @@ function mapNonExecType(type) {
 /**
  * Construiește textul narativ pentru copiere, fără referire la zilele muncite.
  * Folosește datele stocate în window.lastCalculation (setat în app.js).
+ *
+ * Notă: pentru a evita neconcordanța între durata afișată în text și durata
+ * curentă din formular (dacă utilizatorul o modifică după calcul, fără să
+ * apese din nou „CALCULEAZĂ”), se preferă calc.duration dacă există în
+ * window.lastCalculation. Ideal, app.js ar trebui să seteze:
+ *   calc.duration = { y, m, d } la momentul calculului.
  */
 function buildNarrativeText() {
     try {
@@ -35,13 +51,15 @@ function buildNarrativeText() {
         if (calc.life) {
             sentence = 'detențiunea pe viață';
         } else {
-            const y = parseInt(document.getElementById('durYears').value) || 0;
-            const m = parseInt(document.getElementById('durMonths').value) || 0;
-            const d = parseInt(document.getElementById('durDays').value) || 0;
+            const src = calc.duration || {
+                y: parseInt(document.getElementById('durYears').value) || 0,
+                m: parseInt(document.getElementById('durMonths').value) || 0,
+                d: parseInt(document.getElementById('durDays').value) || 0
+            };
             const parts = [];
-            if (y > 0) parts.push(`${y} ani`);
-            if (m > 0) parts.push(`${m} luni`);
-            if (d > 0) parts.push(`${d} zile`);
+            if (src.y > 0) parts.push(`${src.y} ani`);
+            if (src.m > 0) parts.push(`${src.m} luni`);
+            if (src.d > 0) parts.push(`${src.d} zile`);
             sentence = parts.join(', ') || '0 zile';
         }
 
@@ -151,9 +169,25 @@ function fallbackCopy(text) {
 }
 
 /**
- * Colectează datele introduse pentru export PDF.
+ * Colectează datele introduse pentru pagina de rezultate.
+ * Rândurile complet goale (fără dată de început/sfârșit) sunt eliminate.
  */
 function getInputData() {
+    const dedRows = Array.from(document.querySelectorAll('.deduction-row'))
+        .map(r => ({
+            start: r.querySelector('.ded-start')?.value.trim() || '',
+            end: r.querySelector('.ded-end')?.value.trim() || ''
+        }))
+        .filter(r => r.start || r.end);
+
+    const nonRows = Array.from(document.querySelectorAll('.non-exec-row'))
+        .map(r => ({
+            type: r.querySelector('.ne-type')?.value || '',
+            start: r.querySelector('.ne-start')?.value.trim() || '',
+            end: r.querySelector('.ne-end')?.value.trim() || ''
+        }))
+        .filter(r => r.start || r.end);
+
     return {
         sex: currentSex === 'M' ? 'Masculin' : 'Feminin',
         birthDate: document.getElementById('birthDate').value.trim(),
@@ -165,46 +199,40 @@ function getInputData() {
         d: document.getElementById('durDays').value,
         start: document.getElementById('startDate').value.trim(),
         condRelease: document.getElementById('conditionalReleaseDate').value.trim(),
-        dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({
-            start: r.querySelector('.ded-start')?.value.trim() || '',
-            end: r.querySelector('.ded-end')?.value.trim() || ''
-        })),
+        dedRows,
         manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
-        nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({
-            type: r.querySelector('.ne-type')?.value || '',
-            start: r.querySelector('.ne-start')?.value.trim() || '',
-            end: r.querySelector('.ne-end')?.value.trim() || ''
-        }))
+        nonRows
     };
 }
 
 /**
- * Construiește HTML pentru datele introduse.
+ * Construiește HTML pentru datele introduse. Toate valorile provenite din
+ * câmpuri libere (observații, date etc.) sunt escapate înainte de inserare.
  */
 function buildInputDataHTML(data) {
     let html = '<div class="result-section"><h4>DATE INTRODUSE</h4><div class="result-grid">';
-    html += `<div class="result-item"><div class="result-label">Sex</div><div class="result-value">${data.sex}</div></div>`;
-    html += `<div class="result-item"><div class="result-label">Data nașterii</div><div class="result-value">${data.birthDate || '—'}</div></div>`;
-    html += `<div class="result-item"><div class="result-label">Observații</div><div class="result-value">${data.observations || '—'}</div></div>`;
-    html += `<div class="result-item"><div class="result-label">Articol LC</div><div class="result-value">${data.art || '—'}</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Sex</div><div class="result-value">${escapeHtml(data.sex)}</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Data nașterii</div><div class="result-value">${escapeHtml(data.birthDate) || '—'}</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Observații</div><div class="result-value">${escapeHtml(data.observations) || '—'}</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Articol LC</div><div class="result-value">${escapeHtml(data.art) || '—'}</div></div>`;
     html += `<div class="result-item"><div class="result-label">Detențiune pe viață</div><div class="result-value">${data.life ? 'Da' : 'Nu'}</div></div>`;
-    html += `<div class="result-item"><div class="result-label">Durată</div><div class="result-value">${data.y} ani, ${data.m} luni, ${data.d} zile</div></div>`;
-    html += `<div class="result-item"><div class="result-label">Data începerii</div><div class="result-value">${data.start || '—'}</div></div>`;
-    html += `<div class="result-item"><div class="result-label">Data liberării condiționate</div><div class="result-value">${data.condRelease || '—'}</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Durată</div><div class="result-value">${escapeHtml(String(data.y))} ani, ${escapeHtml(String(data.m))} luni, ${escapeHtml(String(data.d))} zile</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Data începerii</div><div class="result-value">${escapeHtml(data.start) || '—'}</div></div>`;
+    html += `<div class="result-item"><div class="result-label">Data liberării condiționate</div><div class="result-value">${escapeHtml(data.condRelease) || '—'}</div></div>`;
 
     if (data.dedRows.length > 0) {
         html += '<div class="result-item" style="grid-column:span 2;"><div class="result-label">Perioade deduse</div><div class="result-value">';
-        data.dedRows.forEach((r, i) => html += `${i + 1}. ${r.start} - ${r.end}<br>`);
+        data.dedRows.forEach((r, i) => html += `${i + 1}. ${escapeHtml(r.start)} - ${escapeHtml(r.end)}<br>`);
         html += '</div></div>';
     }
     if (data.manDed.length > 0) {
         html += '<div class="result-item"><div class="result-label">Recurs compensatoriu</div><div class="result-value">';
-        data.manDed.forEach((v, i) => { if (parseInt(v) > 0) html += `${i + 1}. ${v} zile<br>`; });
+        data.manDed.forEach((v, i) => { if (parseInt(v) > 0) html += `${i + 1}. ${escapeHtml(String(v))} zile<br>`; });
         html += '</div></div>';
     }
     if (data.nonRows.length > 0) {
         html += '<div class="result-item" style="grid-column:span 2;"><div class="result-label">Perioade adăugate</div><div class="result-value">';
-        data.nonRows.forEach((r, i) => html += `${i + 1}. ${r.type} (${r.start} - ${r.end})<br>`);
+        data.nonRows.forEach((r, i) => html += `${i + 1}. ${escapeHtml(mapNonExecType(r.type))} (${escapeHtml(r.start)} - ${escapeHtml(r.end)})<br>`);
         html += '</div></div>';
     }
 
@@ -222,67 +250,98 @@ function buildStepsHTML() {
 }
 
 /**
- * Exportă PDF cu date și rezultate.
+ * Construiește documentul HTML complet al paginii de rezultate.
+ */
+function buildResultsPageHTML() {
+    const content = document.getElementById('resultsContent');
+    if (!content || content.innerHTML.trim() === '') {
+        alert('Nu există rezultate pentru export. Apasă întâi „CALCULEAZĂ”.');
+        return null;
+    }
+
+    const data = getInputData();
+    const inputHTML = buildInputDataHTML(data);
+
+    const contentClone = content.cloneNode(true);
+    contentClone.querySelectorAll('input').forEach(input => {
+        input.setAttribute('value', input.value);
+    });
+    const resultsHTML = contentClone.innerHTML;
+
+    const stepsHTML = buildStepsHTML();
+
+    return `<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <meta charset="UTF-8">
+        <title>Calculator Evidență Pedepse - Rezultate</title>
+        <style>
+            @page { size: A4; margin: 10mm; }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { font-family: Arial, sans-serif; margin: 16px; font-size: 13px; line-height: 1.4; color: #222; }
+            h1 { text-align: center; font-size: 18px; margin-bottom: 16px; }
+            .result-section { margin-bottom: 14px; }
+            .result-section h4 { font-size: 13px; margin-bottom: 6px; letter-spacing: 0.03em; }
+            .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; }
+            .result-item { border: 1px solid #ddd; border-radius: 4px; padding: 6px 8px; break-inside: avoid; }
+            .result-label { font-size: 10px; text-transform: uppercase; color: #666; margin-bottom: 2px; }
+            .result-value { font-size: 13px; font-weight: bold; color: #111; }
+            .fraction { font-size: 14px; }
+            .toolbar { text-align: center; margin-bottom: 16px; }
+            .toolbar button {
+                font-size: 13px; padding: 8px 16px; margin: 0 4px; cursor: pointer;
+                border: 1px solid #888; border-radius: 4px; background: #f2f2f2;
+            }
+            .toolbar button:hover { background: #e2e2e2; }
+            .footer { margin-top: 16px; text-align: center; font-size: 10px; color: #888; }
+            @media print { .toolbar { display: none; } }
+        </style>
+    </head>
+    <body>
+        <div class="toolbar">
+            <button onclick="window.print()">Printează / Salvează ca PDF</button>
+            <button onclick="window.close()">Închide</button>
+        </div>
+        <h1>CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE</h1>
+        ${inputHTML}
+        ${resultsHTML}
+        ${stepsHTML}
+        <div class="footer">Calculator termene pedepse privative de libertate | BETA 0.01 | © Alin Talfeș</div>
+    </body>
+</html>`;
+}
+
+/**
+ * Deschide rezultatele într-o pagină nouă (tab nou), folosind un Blob URL.
+ * Nu se folosește document.write/popup — funcționează pe hosting static
+ * (ex: GitHub Pages), fără server și fără dependență de politici de popup
+ * care blochează scrierea în ferestre goale.
+ *
+ * De acolo, utilizatorul poate folosi butonul „Printează / Salvează ca PDF”
+ * din pagină (dialogul de print al browserului) dacă are nevoie de PDF.
  */
 function exportPDF() {
     try {
-        const content = document.getElementById('resultsContent');
-        if (!content || content.innerHTML.trim() === '') {
-            alert('Nu există rezultate pentru export. Apasă întâi „CALCULEAZĂ”.');
-            return;
-        }
+        const html = buildResultsPageHTML();
+        if (!html) return;
 
-        const data = getInputData();
-        const inputHTML = buildInputDataHTML(data);
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
 
-        const contentClone = content.cloneNode(true);
-        contentClone.querySelectorAll('input').forEach(input => {
-            input.setAttribute('value', input.value);
-        });
-        const resultsHTML = contentClone.innerHTML;
+        // Navigare printr-un link "virtual" clicked de utilizator (evită
+        // blocarea popup-urilor, deoarece e declanșat sincron din click).
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-        const stepsHTML = buildStepsHTML();
-
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
-        if (!printWindow) {
-            alert('Fereastra pop-up a fost blocată. Permite pop-up-urile.');
-            return;
-        }
-
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Calculator Evidență Pedepse - Rezultate</title>
-                    <style>
-                        @page { size: A4; margin: 5mm; }
-                        * { box-sizing: border-box; margin: 0; padding: 0; }
-                        body { font-family: Arial, sans-serif; margin: 0; font-size: 9px; line-height: 1.3; }
-                        h1 { text-align: center; font-size: 14px; margin-bottom: 8px; }
-                        .result-section { margin-bottom: 8px; }
-                        .result-section h4 { font-size: 10px; margin-bottom: 4px; }
-                        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; }
-                        .result-item { border: 1px solid #ddd; border-radius: 4px; padding: 4px 6px; break-inside: avoid; }
-                        .result-label { font-size: 7px; text-transform: uppercase; color: #666; margin-bottom: 2px; }
-                        .result-value { font-size: 9px; font-weight: bold; color: #111; }
-                        .fraction { font-size: 10px; }
-                        .footer { margin-top: 10px; text-align: center; font-size: 7px; color: #888; }
-                    </style>
-                </head>
-                <body>
-                    <h1>CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE</h1>
-                    ${inputHTML}
-                    ${resultsHTML}
-                    ${stepsHTML}
-                    <div class="footer">Calculator termene pedepse privative de libertate | BETA 0.01 | © Alin Talfeș</div>
-                    <script>
-                        window.onload = function() { window.print(); }
-                    <\/script>
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
+        // Eliberează memoria alocată pentru Blob după ce pagina a avut timp
+        // să se încarce în noul tab.
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
     } catch (e) {
-        alert('Eroare la export PDF: ' + e.message);
+        alert('Eroare la deschiderea paginii de rezultate: ' + e.message);
     }
 }
