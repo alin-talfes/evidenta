@@ -334,35 +334,55 @@ function buildResultsPageHTML() {
 }
 
 /**
- * Deschide rezultatele într-o pagină nouă (tab nou), folosind un Blob URL.
- * Nu se folosește document.write/popup — funcționează pe hosting static
- * (ex: GitHub Pages), fără server și fără dependență de politici de popup
- * care blochează scrierea în ferestre goale.
+ * Deschide rezultatele într-o pagină nouă (tab nou).
  *
- * De acolo, utilizatorul poate folosi butonul „Printează / Salvează ca PDF”
- * din pagină (dialogul de print al browserului) dacă are nevoie de PDF.
+ * Notă tehnică: NU se folosește un Blob URL deschis via <a target="_blank">.
+ * Chrome deschide adesea tab-urile noi într-un proces de renderare separat
+ * de cel care a creat Blob-ul, iar acesta rămâne inaccesibil în noul context
+ * — tab-ul apare gol, fără eroare vizibilă. E o limitare specifică Chrome,
+ * nu are legătură cu găzduirea pe GitHub Pages (care e oricum statică).
+ *
+ * În schimb: window.open('', '_blank') se apelează SINCRON, direct din
+ * click-ul utilizatorului (păstrează "user activation", deci nu e blocat de
+ * popup blocker), iar conținutul se scrie cu document.write în fereastra
+ * respectivă — funcționează identic pe orice hosting static, GitHub Pages
+ * inclusiv, fără server.
+ *
+ * Dacă totuși fereastra e blocată (ex: alt blocker de extensie), se oferă
+ * un fallback: descărcarea rezultatelor ca fișier .html, pe care
+ * utilizatorul îl poate deschide manual.
  */
 function exportPDF() {
+    let html;
     try {
-        const html = buildResultsPageHTML();
+        html = buildResultsPageHTML();
         if (!html) return;
+    } catch (e) {
+        alert('Eroare la construirea paginii de rezultate: ' + e.message);
+        return;
+    }
 
+    const resultWindow = window.open('', '_blank');
+    if (resultWindow) {
+        resultWindow.document.open();
+        resultWindow.document.write(html);
+        resultWindow.document.close();
+        resultWindow.focus();
+        return;
+    }
+
+    // Fallback: fereastra a fost blocată — descarcă rezultatele ca fișier HTML.
+    try {
         const blob = new Blob([html], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
-
-        // Navigare printr-un link "virtual" clicked de utilizator (evită
-        // blocarea popup-urilor, deoarece e declanșat sincron din click).
         const link = document.createElement('a');
         link.href = url;
-        link.target = '_blank';
-        link.rel = 'noopener';
+        link.download = 'rezultate-calculator-pedepse.html';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        // Eliberează memoria alocată pentru Blob după ce pagina a avut timp
-        // să se încarce în noul tab.
         setTimeout(() => URL.revokeObjectURL(url), 30000);
+        alert('Fereastra nouă a fost blocată de browser. Am descărcat rezultatele ca fișier HTML — deschide-l din Descărcări.');
     } catch (e) {
         alert('Eroare la deschiderea paginii de rezultate: ' + e.message);
     }
