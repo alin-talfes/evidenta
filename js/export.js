@@ -206,6 +206,24 @@ function getInputData() {
 }
 
 /**
+ * Elimină blocul de Observații pe care app.js îl inserează la începutul
+ * #resultsContent (înaintea oricărei .result-section), pentru a evita
+ * dublarea lui în pagina de export — Observațiile rămân doar în secțiunea
+ * "DATE INTRODUSE" construită de buildInputDataHTML.
+ */
+function removeObservationsBlock(contentClone) {
+    const firstChild = contentClone.firstElementChild;
+    if (
+        firstChild &&
+        firstChild.classList.contains('result-item') &&
+        !firstChild.classList.contains('result-section') &&
+        firstChild.querySelector('.result-label')?.textContent.trim() === 'Observații'
+    ) {
+        firstChild.remove();
+    }
+}
+
+/**
  * Construiește HTML pentru datele introduse. Toate valorile provenite din
  * câmpuri libere (observații, date etc.) sunt escapate înainte de inserare.
  */
@@ -266,6 +284,10 @@ function buildResultsPageHTML() {
     contentClone.querySelectorAll('input').forEach(input => {
         input.setAttribute('value', input.value);
     });
+    // Observațiile sunt deja afișate în secțiunea "DATE INTRODUSE" (inputHTML,
+    // mai jos); app.js le inserează și la începutul #resultsContent, deci le
+    // eliminăm din clonă aici ca să nu apară duplicat în pagina de export.
+    removeObservationsBlock(contentClone);
     const resultsHTML = contentClone.innerHTML;
 
     const stepsHTML = buildStepsHTML();
