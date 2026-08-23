@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSTRUMENT DE AJUTOR PENTRU LUCRAREA DE TRANSFER – SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+        <!-- ========== BARĂ DE SUS ========== -->
+        <div class="top-bar">
+            <a href="https://alintalfes-glitch.github.io/calcul-pedeapsa/" target="_blank" class="top-link">Înapoi la aplicația de calcul pedepse</a>
+            <a href="rules.html" class="top-link">Vezi regulile</a>
+        </div>
+
+        <!-- ========== HEADER ========== -->
+        <header class="header">
+            <div class="header-inner">
+                <h1>INSTRUMENT DE AJUTOR PENTRU LUCRAREA DE TRANSFER</h1>
+                <div class="subtitle">SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)</div>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" aria-label="Schimbă tema">🌙</button>
+            </div>
+        </header>
+
+        <!-- ========== CARD PRINCIPAL ========== -->
+        <div class="card">
+            <h3>Criterii de căutare</h3>
+
+            <form id="transferForm" autocomplete="off">
+                <div class="form-grid">
+
+                    <!-- Mod de căutare (toggle 3 butoane) -->
+                    <div class="form-group full">
+                        <label>Mod de căutare</label>
+                        <div class="toggle-group" id="toggleGroup">
+                            <button type="button" class="toggle-btn active" data-mode="judiciar">Afaceri judiciare</button>
+                            <button type="button" class="toggle-btn" data-mode="custodieArestati">Custodie A.P.</button>
+                            <button type="button" class="toggle-btn" data-mode="executare">Executare pedeapsă</button>
+                        </div>
+                        <div class="hint hint-warning" id="modeHint">
+                            <span id="modeAdvice">Modul „Afaceri judiciare” – transfer temporar pentru prezentare la organele judiciare.</span>
+                        </div>
+                    </div>
+
+                    <!-- Județul -->
+                    <div class="form-group full">
+                        <label for="judet"><span id="judetLabel">Județul organului judiciar care îl citează</span></label>
+                        <select id="judet">
+                            <option value="">— Selectează —</option>
+                        </select>
+                    </div>
+
+                    <!-- Sex -->
+                    <div class="form-group">
+                        <label>Sex</label>
+                        <div class="radio-group" id="sexGroup">
+                            <label class="radio-btn">
+                                <input type="radio" name="sex" value="masculin" checked>
+                                <span>Masculin</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="sex" value="feminin">
+                                <span>Feminin</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Vârstă -->
+                    <div class="form-group">
+                        <label>Vârstă</label>
+                        <div class="radio-group" id="varstaGroup">
+                            <label class="radio-btn">
+                                <input type="radio" name="varsta" value="minor">
+                                <span>Minor (14–18 ani)</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="varsta" value="tanar">
+                                <span>Tânăr (18–21 ani)</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="varsta" value="major" checked>
+                                <span>Major (peste 21 ani)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Regim de executare – vizibil doar în modurile judiciar și executare -->
+                    <div class="form-group full" id="regimGroup">
+                        <label>Regim de executare / situație juridică</label>
+                        <div class="radio-group" id="regimGroupRadio">
+                            <label class="radio-btn" id="regimArestat">
+                                <input type="radio" name="regim" value="arestat" checked>
+                                <span>Arestat preventiv</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="regim" value="deschis">
+                                <span>Deschis</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="regim" value="semideschis">
+                                <span>Semideschis</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="regim" value="inchis">
+                                <span>Închis</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="regim" value="maxima">
+                                <span>Maximă siguranță</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="regim" value="masura_educativa_penitenciar">
+                                <span>Măsură educativă în penitenciar</span>
+                            </label>
+                            <label class="radio-btn">
+                                <input type="radio" name="regim" value="educativ">
+                                <span>Internat în centru educativ / detenție</span>
+                            </label>
+                        </div>
+                        <div class="hint" id="regimHint" style="display: none;">
+                            <span>În modul „Custodie A.P.”, regimul este automat „arestat”.</span>
+                        </div>
+                    </div>
+
+                    <!-- Risc pentru siguranță – doar în modul judiciar -->
+                    <div class="form-group full" id="riscGroup" style="display:flex;">
+                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                            <input type="checkbox" id="riscCheckbox" style="width:18px; height:18px; cursor:pointer;">
+                            <span style="font-weight:600;">Persoană care prezintă risc pentru siguranța penitenciarului</span>
+                        </label>
+                        <div class="hint">Această opțiune este disponibilă doar în modul „Afaceri judiciare”.</div>
+                    </div>
+
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" id="cautaBtn">Caută destinația</button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn">Resetează</button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- ========== CARD REZULTATE ========== -->
+        <div class="card" id="resultsCard" style="border-left-color: var(--gold);">
+            <h3>Rezultat</h3>
+            <div id="resultArea">
+                <div class="empty-state">
+                    <p>Completează criteriile și apasă „Caută destinația”.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== LISTA INSTANȚELOR ========== -->
+        <div class="card" id="instanteCard" style="border-left-color: var(--gold);">
+            <details>
+                <summary style="font-weight:700; font-size:1rem; color:var(--gold-light); cursor:pointer; padding:4px 0;">Lista instanțelor</summary>
+                <div style="font-size:0.75rem; color:var(--text-light); line-height:1.8; margin-top:12px; max-height:400px; overflow-y:auto; padding-right:8px;">
+                    <strong>Curtea de Apel ALBA IULIA</strong><br>
+                    ALBA<br> Tribunalul ALBA<br> Judecătoria AIUD<br> Judecătoria ALBA IULIA<br> Judecătoria BLAJ<br> Judecătoria CÂMPENI<br> Judecătoria SEBEȘ<br>
+                    HUNEDOARA<br> Tribunalul HUNEDOARA<br> Judecătoria BRAD<br> Judecătoria DEVA<br> Judecătoria HAȚEG<br> Judecătoria HUNEDOARA<br> Judecătoria ORAȘTIE<br> Judecătoria PETROȘANI<br>
+                    SIBIU<br> Tribunalul SIBIU<br> Judecătoria AGNITA<br> Judecătoria MEDIAȘ<br> Judecătoria SALIȘTE<br> Judecătoria SIBIU<br> Judecătoria AVRIG<br>
+                    <br>
+                    <strong>Curtea de Apel BACĂU</strong><br>
+                    BACĂU<br> Tribunalul BACĂU<br> Judecătoria BACĂU<br> Judecătoria BUHUȘI<br> Judecătoria MOINEȘTI<br> Judecătoria ONEȘTI<br> Judecătoria PODU TURCULUI<br>
+                    NEAMȚ<br> Tribunalul NEAMȚ<br> Judecătoria BICAZ<br> Judecătoria PIATRA-NEAMT<br> Judecătoria ROMAN<br> Judecătoria TÂRGU NEAMȚ<br>
+                    <br>
+                    <strong>Curtea de Apel BRAȘOV</strong><br>
+                    BRAȘOV<br> Tribunalul BRAȘOV<br> Tribunalul pentru minori și familie BRAȘOV<br> Judecătoria BRAȘOV<br> Judecătoria FĂGĂRAȘ<br> Judecătoria RUPEA<br> Judecătoria ZĂRNEȘTI<br>
+                    COVASNA<br> Tribunalul COVASNA<br> Judecătoria ÎNTORSURA BUZĂULUI<br> Judecătoria SFÂNTU GHEORGHE<br> Judecătoria TÂRGU SECUIESC<br>
+                    <br>
+                    <strong>Curtea de Apel BUCUREȘTI</strong><br>
+                    BUCUREȘTI<br> Curtea Militara de Apel BUCUREȘTI<br> Tribunalul BUCUREȘTI<br> Tribunalul Militar BUCUREȘTI<br> Tribunalul Militar Teritorial BUCUREȘTI<br>
+                    Judecătoria SECTORUL 1 BUCUREȘTI<br> Judecătoria SECTORUL 2 BUCUREȘTI<br> Judecătoria SECTORUL 3 BUCUREȘTI<br> Judecătoria SECTORUL 4 BUCUREȘTI<br> Judecătoria SECTORUL 5 BUCUREȘTI<br> Judecătoria SECTORUL 6 BUCUREȘTI<br>
+                    CĂLĂRAȘI<br> Tribunalul CĂLĂRAȘI<br> Judecătoria CĂLĂRAȘI<br> Judecătoria LEHLIU-GARA<br> Judecătoria OLTENIȚA<br>
+                    IALOMIȚA<br> Tribunalul IALOMIȚA<br> Judecătoria FETEȘTI<br> Judecătoria SLOBOZIA<br> Judecătoria URZICENI<br>
+                    GIURGIU<br> Tribunalul GIURGIU<br> Judecătoria BOLINTIN VALE<br> Judecătoria GIURGIU<br>
+                    ILFOV<br> Tribunalul ILFOV<br> Judecătoria BUFTEA<br> Judecătoria CORNETU<br>
+                    TELEORMAN<br> Tribunalul TELEORMAN<br> Judecătoria ROȘIORI DE VEDE<br> Judecătoria TURNU MĂGURELE<br> Judecătoria VIDELE<br> Judecătoria ZIMNICEA<br> Judecătoria ALEXANDRIA<br>
+                    <br>
+                    <strong>Curtea de Apel CLUJ</strong><br>
+                    BISTRIȚA NĂSĂUD<br> Tribunalul BISTRIȚA NĂSĂUD<br> Judecătoria BECLEAN<br> Judecătoria BISTRIȚA<br> Judecătoria NĂSĂUD<br>
+                    CLUJ<br> Tribunalul CLUJ<br> Tribunalul Militar CLUJ-NAPOCA<br> Tribunalul Specializat CLUJ<br> Judecătoria CLUJ-NAPOCA<br> Judecătoria DEJ<br> Judecătoria GHERLA<br> Judecătoria HUEDIN<br> Judecătoria TURDA<br>
+                    MARAMUREȘ<br> Tribunalul MARAMUREȘ<br> Judecătoria BAIA MARE<br> Judecătoria DRAGOMIREȘTI<br> Judecătoria SIGHETU MARMAȚIEI<br> Judecătoria TÂRGU LAPUȘ<br> Judecătoria VIȘEU DE SUS<br>
+                    SĂLAJ<br> Tribunalul SĂLAJ<br> Judecătoria ȘIMLEUL SILVANIEI<br> Judecătoria ZALĂU<br> Judecătoria JIBOU<br>
+                    <br>
+                    <strong>Curtea de Apel CONSTANȚA</strong><br>
+                    CONSTANȚA<br> Tribunalul CONSTANȚA<br> Judecătoria CONSTANȚA<br> Judecătoria MANGALIA<br> Judecătoria MEDGIDIA<br> Judecătoria HÂRȘOVA<br>
+                    TULCEA<br> Tribunalul TULCEA<br> Judecătoria BABADAG<br> Judecătoria MACIN<br> Judecătoria TULCEA<br>
+                    <br>
+                    <strong>Curtea de Apel CRAIOVA</strong><br>
+                    DOLJ<br> Tribunalul DOLJ<br> Judecătoria BĂILEȘTI<br> Judecătoria CALAFAT<br> Judecătoria CRAIOVA<br> Judecătoria FILIAȘI<br> Judecătoria SEGARCEA<br>
+                    GORJ<br> Tribunalul GORJ<br> Judecătoria MOTRU<br> Judecătoria NOVACI<br> Judecătoria TÂRGU-CĂRBUNEȘTI<br> Judecătoria TÂRGU JIU<br>
+                    MEHEDINȚI<br> Tribunalul MEHEDINȚI<br> Judecătoria BAIA DE ARAMĂ<br> Judecătoria DROBETA-TURNU SEVERIN<br> Judecătoria ORȘOVA<br> Judecătoria STREHAIA<br> Judecătoria VÂNJU MARE<br>
+                    OLT<br> Tribunalul OLT<br> Judecătoria BALȘ<br> Judecătoria CARACAL<br> Judecătoria CORABIA<br> Judecătoria SLATINA<br>
+                    <br>
+                    <strong>Curtea de Apel GALAȚI</strong><br>
+                    BRĂILA<br> Tribunalul BRĂILA<br> Judecătoria BRĂILA<br> Judecătoria FĂUREI<br> Judecătoria ÎNSURĂȚEI<br>
+                    GALAȚI<br> Tribunalul GALAȚI<br> Judecătoria GALAȚI<br> Judecătoria TÂRGU BUJOR<br> Judecătoria TECUCI<br> Judecătoria LIEȘTI<br>
+                    VRANCEA<br> Tribunalul VRANCEA<br> Judecătoria ADJUD<br> Judecătoria FOCȘANI<br> Judecătoria PANCIU<br>
+                    <br>
+                    <strong>Curtea de Apel IAȘI</strong><br>
+                    IAȘI<br> Tribunalul IAȘI<br> Tribunalul Militar IAȘI<br> Judecătoria PAȘCANI<br> Judecătoria HÂRLĂU<br> Judecătoria IAȘI<br> Judecătoria RĂDUCĂNENI<br>
+                    VASLUI<br> Tribunalul VASLUI<br> Judecătoria BÂRLAD<br> Judecătoria HUȘI<br> Judecătoria VASLUI<br>
+                    <br>
+                    <strong>Curtea de Apel ORADEA</strong><br>
+                    BIHOR<br> Tribunalul BIHOR<br> Judecătoria ALESD<br> Judecătoria BEIUȘ<br> Judecătoria MARGHITA<br> Judecătoria ORADEA<br> Judecătoria SALONTA<br>
+                    SATU MARE<br> Tribunalul SATU MARE<br> Judecătoria CAREI<br> Judecătoria NEGREȘTI-OAȘ<br> Judecătoria SATU MARE<br>
+                    <br>
+                    <strong>Curtea de Apel PITEȘTI</strong><br>
+                    ARGEȘ<br> Tribunalul ARGEȘ<br> Tribunalul Specializat ARGEȘ<br> Judecătoria CĂMPULUNG<br> Judecătoria COSTEȘTI<br> Judecătoria CURTEA DE ARGEȘ<br> Judecătoria PITEȘTI<br> Judecătoria TOPOLOVENI<br>
+                    VÂLCEA<br> Tribunalul VÂLCEA<br> Judecătoria BĂLCEȘTI<br> Judecătoria BREZOI<br> Judecătoria DRĂGĂȘANI<br> Judecătoria HOREZU<br> Judecătoria RÂMNICU VALCEA<br>
+                    <br>
+                    <strong>Curtea de Apel PLOIEȘTI</strong><br>
+                    BUZĂU<br> Tribunalul BUZĂU<br> Judecătoria BUZĂU<br> Judecătoria PĂTÂRLAGELE<br> Judecătoria POGOANELE<br> Judecătoria RÂMNICU SARAT<br>
+                    PRAHOVA<br> Tribunalul PRAHOVA<br> Judecătoria CÂMPINA<br> Judecătoria MIZIL<br> Judecătoria PLOIEȘTI<br> Judecătoria SINAIA<br> Judecătoria VĂLENII DE MUNTE<br>
+                    DÂMBOVIȚA<br> Tribunalul DÂMBOVIȚA<br> Judecătoria GĂEȘTI<br> Judecătoria MORENI<br> Judecătoria PUCIOASA<br> Judecătoria RĂCARI<br> Judecătoria TÂRGOVIȘTE<br>
+                    <br>
+                    <strong>Curtea de Apel SUCEAVA</strong><br>
+                    BOTOȘANI<br> Tribunalul BOTOȘANI<br> Judecătoria BOTOȘANI<br> Judecătoria Darabani<br> Judecătoria DOROHOI<br> Judecătoria SĂVENI<br>
+                    SUCEAVA<br> Tribunalul SUCEAVA<br> Judecătoria CÂMPULUNG MOLDOVENESC<br> Judecătoria FĂLTICENI<br> Judecătoria GURA HUMORULUI<br> Judecătoria RĂDĂUȚI<br> Judecătoria SUCEAVA<br> Judecătoria VATRA DORNEI<br>
+                    <br>
+                    <strong>Curtea de Apel TÂRGU MUREȘ</strong><br>
+                    HARGHITA<br> Tribunalul HARGHITA<br> Judecătoria GHEORGHENI<br> Judecătoria MIERCUREA CIUC<br> Judecătoria ODORHEIU SECUIESC<br> Judecătoria TOPLIȚA<br>
+                    MUREȘ<br> Tribunalul MUREȘ<br> Tribunalul Specializat MUREȘ<br> Judecătoria LUDUȘ<br> Judecătoria REGHIN<br> Judecătoria SIGHIȘOARA<br> Judecătoria TÂRGU MUREȘ<br> Judecătoria TÂRNAVENI<br>
+                    <br>
+                    <strong>Curtea de Apel TIMIȘOARA</strong><br>
+                    ARAD<br> Tribunalul ARAD<br> Judecătoria CHIȘINEU CRIȘ<br> Judecătoria GURA HONȚ<br> Judecătoria INEU<br> Judecătoria LIPOVA<br> Judecătoria ARAD<br>
+                    CARAȘ SEVERIN<br> Tribunalul CARAȘ SEVERIN<br> Judecătoria CARANSEBEȘ<br> Judecătoria MOLDOVA-NOUĂ<br> Judecătoria ORAVIȚA<br> Judecătoria REȘITA<br>
+                    TIMIȘ<br> Tribunalul Militar TIMIȘOARA<br> Tribunalul TIMIȘ<br> Judecătoria FĂGET<br> Judecătoria DETA<br> Judecătoria LUGOJ<br> Judecătoria SÂNNICOLAUL MARE<br> Judecătoria TIMIȘOARA
+                </div>
+            </details>
+        </div>
+
+        <!-- ========== FOOTER ========== -->
+        <footer class="footer">
+            <p>
+                &copy; 2026 <a href="https://wa.me/alin.talfes" target="_blank" rel="noopener noreferrer" style="color:var(--gold-light); text-decoration:none; font-weight:600;">Alin Talfeș</a>
+                &nbsp;|&nbsp; Toate drepturile rezervate.
+                <br>
+                <span id="versionDisplay">Versiune: încărcare...</span>
+            </p>
+            <p style="margin-top:4px; font-size:0.65rem; opacity:0.7;">
+                <strong>Atenție:</strong> Această aplicație are scop informativ. 
+                Verificați întotdeauna baza legală actualizată înainte de a lua decizii. 
+                Nu vă bazați exclusiv pe acest instrument.
+            </p>
+        </footer>
+
+    </div>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="rules.js"></script>
+    <script>
+        (function() {
+            // ============================================================
+            // 0. ÎNCĂRCARE VERSIUNE DIN version.json
+            // ============================================================
+            const versionDisplay = document.getElementById('versionDisplay');
+            fetch('version.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('version.json not found');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.version) {
+                        versionDisplay.textContent = 'Versiune: ' + data.version;
+                    } else {
+                        versionDisplay.textContent = 'Versiune: necunoscută';
+                    }
+                })
+                .catch(() => {
+                    versionDisplay.textContent = 'Versiune: neîncărcată';
+                });
+
+            // ============================================================
+            // 1. LISTA JUDEȚELOR – ORDINE ALFABETICĂ, FĂRĂ GRUPARE
+            // ============================================================
+            const allJudete = [];
+            for (const [grupa, judete] of Object.entries(JUDETE_GRUPATE)) {
+                judete.forEach(j => allJudete.push(j));
+            }
+            allJudete.sort();
+
+            const judetSelect = document.getElementById('judet');
+
+            function populateJudete() {
+                judetSelect.innerHTML = '<option value="">— Selectează —</option>';
+                allJudete.forEach(j => {
+                    const opt = document.createElement('option');
+                    opt.value = j;
+                    opt.textContent = j;
+                    judetSelect.appendChild(opt);
+                });
+                const currentVal = judetSelect.dataset.selected || '';
+                if (currentVal) {
+                    const options = judetSelect.querySelectorAll('option');
+                    for (let opt of options) {
+                        if (opt.value === currentVal) {
+                            opt.selected = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            judetSelect.addEventListener('change', function() {
+                judetSelect.dataset.selected = this.value;
+            });
+
+            populateJudete();
+
+            // ============================================================
+            // 2. TOGGLE MOD – 3 moduri: judiciar, custodieArestati, executare
+            // ============================================================
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            const judetLabel = document.getElementById('judetLabel');
+            const riscGroup = document.getElementById('riscGroup');
+            const riscCheckbox = document.getElementById('riscCheckbox');
+            const modeAdvice = document.getElementById('modeAdvice');
+            const regimGroup = document.getElementById('regimGroup');
+            const regimHint = document.getElementById('regimHint');
+            const regimArestat = document.getElementById('regimArestat');
+            let currentMode = 'judiciar';
+
+            function setMode(mode) {
+                currentMode = mode;
+                toggleBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.mode === mode);
+                });
+
+                // Resetăm checkbox-ul de risc la schimbarea modului
+                riscCheckbox.checked = false;
+
+                if (mode === 'judiciar') {
+                    judetLabel.textContent = 'Județul organului judiciar care îl citează';
+                    riscGroup.style.display = 'flex';
+                    regimGroup.style.display = 'block';
+                    regimHint.style.display = 'none';
+                    regimArestat.style.display = '';
+                    modeAdvice.textContent = 'Modul „Afaceri judiciare” – transfer temporar pentru prezentare la organele judiciare.';
+                } else if (mode === 'custodieArestati') {
+                    judetLabel.textContent = 'Județul instanței / organului judiciar';
+                    riscGroup.style.display = 'none';
+                    regimGroup.style.display = 'none';
+                    regimHint.style.display = 'none';
+                    regimArestat.style.display = '';
+                    modeAdvice.textContent = 'Modul „Custodie A.P.” – unități cu secții de arestare preventivă în custodie permanentă.';
+                } else { // executare
+                    judetLabel.textContent = 'Județul de domiciliu';
+                    riscGroup.style.display = 'none';
+                    regimGroup.style.display = 'block';
+                    regimHint.style.display = 'none';
+                    // ascundem opțiunea arestat preventiv
+                    regimArestat.style.display = 'none';
+                    // dacă este selectat arestat, trecem la deschis
+                    const radioArestat = document.querySelector('input[name="regim"][value="arestat"]');
+                    if (radioArestat && radioArestat.checked) {
+                        const radioDeschis = document.querySelector('input[name="regim"][value="deschis"]');
+                        if (radioDeschis) radioDeschis.checked = true;
+                    }
+                    modeAdvice.textContent = 'Modul „Executare pedeapsă” – unități de custodie permanentă pentru condamnați.';
+                }
+            }
+
+            toggleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setMode(this.dataset.mode);
+                });
+            });
+
+            // Setăm modul implicit: judiciar
+            setMode('judiciar');
+
+            // ============================================================
+            // 3. FUNCȚII AJUTĂTOARE PENTRU RADIO
+            // ============================================================
+            function getSelectedRadioValue(name) {
+                const radios = document.querySelectorAll('input[name="' + name + '"]');
+                for (let r of radios) {
+                    if (r.checked) return r.value;
+                }
+                return null;
+            }
+
+            function setRadioValue(name, value) {
+                const radios = document.querySelectorAll('input[name="' + name + '"]');
+                for (let r of radios) {
+                    r.checked = (r.value === value);
+                }
+            }
+
+            // ============================================================
+            // 4. LOGICA DE CĂUTARE (folosește rules.js)
+            // ============================================================
+            const cautaBtn = document.getElementById('cautaBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const resultArea = document.getElementById('resultArea');
+
+            function findDestination() {
+                const sex = getSelectedRadioValue('sex') || 'masculin';
+                const varsta = getSelectedRadioValue('varsta') || 'major';
+                const judet = document.getElementById('judet').value;
+
+                if (!judet) {
+                    resultArea.innerHTML = `
+                        <div class="result-card error">
+                            <div class="result-title">Eroare</div>
+                            <div class="result-sub">Selectați un județ pentru a continua.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let matches = [];
+
+                if (currentMode === 'judiciar') {
+                    const regim = getSelectedRadioValue('regim') || 'arestat';
+                    const risc = riscCheckbox.checked;
+                    const useRisc = (regim !== 'educativ' && regim !== 'masura_educativa_penitenciar' && risc);
+                    matches = gasesteUnitati(sex, varsta, regim, judet, 'judiciar', useRisc);
+                } else if (currentMode === 'custodieArestati') {
+                    matches = gasesteUnitati(sex, varsta, null, judet, 'custodieArestati', false);
+                } else { // executare
+                    const regim = getSelectedRadioValue('regim') || 'deschis';
+                    matches = gasesteUnitati(sex, varsta, regim, judet, 'executare', false);
+                }
+
+                if (matches.length === 0) {
+                    let extraMsg = '';
+                    if (currentMode === 'custodieArestati') {
+                        extraMsg = ' Nu există unități cu secții de arestare preventivă pentru județul selectat.';
+                    }
+                    resultArea.innerHTML = `
+                        <div class="result-card error">
+                            <div class="result-title">Nicio unitate găsită</div>
+                            <div class="result-sub">
+                                Nu există o unitate care să corespundă criteriilor:
+                                <strong>${sex}</strong>, vârstă <strong>${varsta}</strong>, județ <strong>${judet}</strong>, mod <strong>${currentMode === 'judiciar' ? 'Afaceri judiciare' : currentMode === 'custodieArestati' ? 'Custodie A.P.' : 'Executare pedeapsă'}</strong>.
+                                ${extraMsg}
+                            </div>
+                            <div class="result-detail">Verificați corectitudinea datelor sau consultați Anexa 1 a Deciziei 360/2020.</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sortare: pentru executare, prioritizăm unitățile care nu sunt doar pentru muncă
+                if (currentMode === 'executare') {
+                    matches.sort((a, b) => {
+                        if (a.esteMunca && !b.esteMunca) return 1;
+                        if (!a.esteMunca && b.esteMunca) return -1;
+                        const aHas = a.judeteDeservite.includes(judet);
+                        const bHas = b.judeteDeservite.includes(judet);
+                        if (aHas && !bHas) return -1;
+                        if (!aHas && bHas) return 1;
+                        return 0;
+                    });
+                } else {
+                    // Pentru judiciar și arestat, sortare după judeteDeservite
+                    matches.sort((a, b) => {
+                        const aHas = a.judeteDeservite.includes(judet);
+                        const bHas = b.judeteDeservite.includes(judet);
+                        if (aHas && !bHas) return -1;
+                        if (!aHas && bHas) return 1;
+                        return 0;
+                    });
+                }
+
+                let html = `
+                    <div class="result-card success">
+                        <div class="result-title">Unități recomandate</div>
+                        <div class="match-list">
+                `;
+
+                matches.forEach((m, idx) => {
+                    const isBest = idx === 0;
+                    const reason = isBest ? 'Cea mai bună potrivire' : 'Alternativă';
+                    const tag = isBest ? 'Recomandat' : 'Posibil';
+                    let extra = '';
+                    if (m.isRisc) {
+                        extra = ' (acceptă risc pentru siguranță)';
+                    }
+                    if (m.esteMunca) {
+                        extra += ' (regim deschis pentru muncă)';
+                    }
+                    if (m.isCustodie) {
+                        extra += ' (secție de arestare preventivă)';
+                    }
+                    html += `
+                        <div class="match-item ${isBest ? 'best' : ''}">
+                            <span class="primary">${m.unitate.nume}${extra}</span>
+                            <span class="reason">${reason}</span>
+                            <span class="tag">${tag}</span>
+                        </div>
+                    `;
+                });
+
+                let note = '';
+                if (currentMode === 'custodieArestati') {
+                    note = ' Atenție: Sunt afișate doar unitățile care au secții de arestare preventivă în custodie permanentă pentru județul selectat.';
+                } else if (currentMode === 'executare') {
+                    const areMunca = matches.some(m => m.esteMunca);
+                    if (areMunca) {
+                        note = ' Unitățile marcate cu „regim deschis pentru muncă” sunt destinate în principal persoanelor selectate pentru activități lucrative, constituind o alternativă secundară.';
+                    }
+                }
+
+                html += `
+                        </div>
+                        <div class="result-sub mt-2">
+                            <strong>Potrivire:</strong> Unitățile de mai sus sunt selectate pe baza criteriilor: <strong>${sex}</strong>, vârstă <strong>${varsta}</strong>, județ <strong>${judet}</strong>, mod <strong>${currentMode === 'judiciar' ? 'Afaceri judiciare' : currentMode === 'custodieArestati' ? 'Custodie A.P.' : 'Executare pedeapsă'}</strong>.
+                            ${matches.length > 1 ? ' Cea mai bună potrivire este evidențiată.' : ''}
+                            ${note}
+                        </div>
+                        <div class="result-detail">
+                            <span>Județ: <strong>${judet}</strong></span>
+                            <span>Sex: ${sex}</span>
+                            <span>Vârstă: ${varsta}</span>
+                            <span>Mod: ${currentMode === 'judiciar' ? 'Afaceri judiciare' : currentMode === 'custodieArestati' ? 'Custodie A.P.' : 'Executare pedeapsă'}</span>
+                        </div>
+                    </div>
+                `;
+
+                resultArea.innerHTML = html;
+            }
+
+            // ============================================================
+            // 5. EVENT LISTENERS
+            // ============================================================
+            cautaBtn.addEventListener('click', findDestination);
+
+            resetBtn.addEventListener('click', function() {
+                document.getElementById('judet').value = '';
+                setRadioValue('sex', 'masculin');
+                setRadioValue('varsta', 'major');
+                setRadioValue('regim', 'arestat');
+                setMode('judiciar');
+                riscCheckbox.checked = false;
+                resultArea.innerHTML = `
+                    <div class="empty-state">
+                        <p>Completează criteriile și apasă „Caută destinația”.</p>
+                    </div>
+                `;
+            });
+
+            document.querySelectorAll('select, input').forEach(el => {
+                el.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        findDestination();
+                    }
+                });
+            });
+
+            // ============================================================
+            // 6. LIGHT / DARK TOGGLE
+            // ============================================================
+            const themeToggle = document.getElementById('themeToggle');
+
+            function toggleTheme() {
+                document.body.classList.toggle('light');
+                const isLight = document.body.classList.contains('light');
+                themeToggle.textContent = isLight ? '☀' : '🌙';
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            }
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light');
+                themeToggle.textContent = '☀';
+            } else {
+                themeToggle.textContent = '🌙';
+            }
+
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // ============================================================
+            // 7. MESAJ INIȚIAL
+            // ============================================================
+            console.log('Aplicația de transfer – Decizia 360/2020 – încărcată cu succes.');
+            console.log('Județe disponibile: ' + allJudete.length);
+
+        })();
+    </script>
+</body>
+</html>
