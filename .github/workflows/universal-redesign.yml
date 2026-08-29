@@ -18,368 +18,45 @@ jobs:
           fetch-depth: 0
 
       - name: Apply universal design system
-        shell: python
+        shell: bash
         run: |
+          set -euo pipefail
+          python - <<'PY'
           from pathlib import Path
           import re
-
           css = Path('css/style.css')
           text = css.read_text(encoding='utf-8')
-
           marker = '/* ===== UNIVERSAL NAVY / WHITE DESIGN SYSTEM ===== */'
           if marker in text:
               text = text.split(marker)[0].rstrip() + '\n'
-
-          overrides = r'''
-/* ===== UNIVERSAL NAVY / WHITE DESIGN SYSTEM ===== */
-/* Single visual language for every module. Presentation only. */
-:root {
-    color-scheme: dark;
-    --bg: #061426 !important;
-    --bg-elevated: #081a30 !important;
-    --card-bg: #0a1d33 !important;
-    --surface-2: #0d2440 !important;
-    --surface-3: #112c4d !important;
-    --primary: #ffffff !important;
-    --accent: #ffffff !important;
-    --accent-strong: #ffffff !important;
-    --accent-soft: rgba(255, 255, 255, .08) !important;
-    --gold: #ffffff !important;
-    --gold-light: #ffffff !important;
-    --text: #ffffff !important;
-    --text-light: rgba(255, 255, 255, .78) !important;
-    --muted: rgba(255, 255, 255, .60) !important;
-    --border: rgba(255, 255, 255, .15) !important;
-    --border-strong: rgba(255, 255, 255, .30) !important;
-    --danger: #ffffff !important;
-    --warning: #ffffff !important;
-    --success: #ffffff !important;
-    --info: #ffffff !important;
-    --input-bg: #081a30 !important;
-    --input-border: rgba(255, 255, 255, .24) !important;
-    --input-placeholder: rgba(255, 255, 255, .48) !important;
-    --label-color: #ffffff !important;
-    --font: 'IBM Plex Sans', 'Aptos', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
-    --font-mono: 'IBM Plex Sans', 'Aptos', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
-    --shadow: 0 14px 34px rgba(0, 0, 0, .24) !important;
-    --shadow-soft: 0 6px 20px rgba(0, 0, 0, .18) !important;
-}
-
-body.light {
-    color-scheme: light;
-    --bg: #ffffff !important;
-    --bg-elevated: #ffffff !important;
-    --card-bg: #ffffff !important;
-    --surface-2: #ffffff !important;
-    --surface-3: #ffffff !important;
-    --primary: #0b2a4a !important;
-    --accent: #0b2a4a !important;
-    --accent-strong: #0b2a4a !important;
-    --accent-soft: rgba(11, 42, 74, .07) !important;
-    --gold: #0b2a4a !important;
-    --gold-light: #0b2a4a !important;
-    --text: #000000 !important;
-    --text-light: #000000 !important;
-    --muted: #0b2a4a !important;
-    --border: rgba(11, 42, 74, .22) !important;
-    --border-strong: #0b2a4a !important;
-    --danger: #0b2a4a !important;
-    --warning: #0b2a4a !important;
-    --success: #0b2a4a !important;
-    --info: #0b2a4a !important;
-    --input-bg: #ffffff !important;
-    --input-border: rgba(11, 42, 74, .35) !important;
-    --input-placeholder: rgba(0, 0, 0, .48) !important;
-    --label-color: #000000 !important;
-    --shadow: 0 12px 30px rgba(11, 42, 74, .10) !important;
-    --shadow-soft: 0 4px 16px rgba(11, 42, 74, .08) !important;
-}
-
-html, body, button, input, select, textarea, table, th, td {
-    font-family: var(--font) !important;
-}
-
-body {
-    color: #ffffff !important;
-    background: #061426 !important;
-}
-body.light {
-    color: #000000 !important;
-    background: #ffffff !important;
-}
-
-/* Universal typography */
-h1, h2, h3, h4, h5, h6,
-.header h1, .header-inner h1,
-.card h3, .legal-box h4, .result-title,
-.app-nav__brand {
-    font-family: var(--font) !important;
-    font-weight: 700 !important;
-    color: var(--text) !important;
-    letter-spacing: .02em !important;
-}
-h1, .header h1, .header-inner h1 {
-    font-size: clamp(1.25rem, 2.3vw, 1.72rem) !important;
-    line-height: 1.2 !important;
-}
-h2 { font-size: 1.25rem !important; }
-h3, .card h3 { font-size: 1rem !important; }
-h4, .legal-box h4 { font-size: .92rem !important; }
-p, li, td, th, label, span, div, a { color: inherit; }
-
-/* Remove decorative multicolour backgrounds */
-.header,
-body.light .header,
-.card,
-body.light .card,
-.top-bar,
-body.light .top-bar,
-.app-nav,
-body.light .app-nav,
-.legal-box,
-.result-box,
-.result-card,
-.anexa-box,
-.empty-state,
-.modal,
-.steps-container {
-    background-image: none !important;
-}
-.header {
-    background: var(--surface-2) !important;
-    border: 1px solid var(--border-strong) !important;
-}
-body.light .header {
-    background: #ffffff !important;
-    border: 1px solid #0b2a4a !important;
-}
-.header::before, .card::before { background: var(--accent) !important; }
-body.light .header::before, body.light .card::before { background: #0b2a4a !important; }
-
-.card, .legal-box, .result-box, .result-card, .anexa-box, .modal, .steps-container {
-    color: var(--text) !important;
-    background: var(--card-bg) !important;
-    border-color: var(--border) !important;
-}
-body.light .card,
-body.light .legal-box,
-body.light .result-box,
-body.light .result-card,
-body.light .anexa-box,
-body.light .modal,
-body.light .steps-container {
-    color: #000000 !important;
-    background: #ffffff !important;
-    border-color: rgba(11, 42, 74, .28) !important;
-}
-.card h3, .legal-box h4 { color: var(--text) !important; border-color: var(--border) !important; }
-body.light .card h3, body.light .legal-box h4 { color: #0b2a4a !important; border-color: rgba(11,42,74,.22) !important; }
-
-/* One button system */
-button,
-.btn,
-.btn-primary,
-.btn-secondary,
-.btn-gold,
-.btn-outline,
-.btn-danger,
-.btn-utility,
-.btn-big,
-.btn-today,
-.filter-clear,
-.toggle-btn {
-    min-height: 42px !important;
-    padding: 9px 14px !important;
-    font-family: var(--font) !important;
-    font-size: .78rem !important;
-    font-weight: 700 !important;
-    line-height: 1.15 !important;
-    letter-spacing: .035em !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;
-    background: #0b2a4a !important;
-    border: 1px solid #0b2a4a !important;
-    border-radius: 9px !important;
-    box-shadow: none !important;
-}
-body:not(.light) button,
-body:not(.light) .btn,
-body:not(.light) .btn-primary,
-body:not(.light) .btn-secondary,
-body:not(.light) .btn-gold,
-body:not(.light) .btn-outline,
-body:not(.light) .btn-danger,
-body:not(.light) .btn-utility,
-body:not(.light) .btn-big,
-body:not(.light) .btn-today,
-body:not(.light) .filter-clear,
-body:not(.light) .toggle-btn {
-    color: #ffffff !important;
-    background: #0d2440 !important;
-    border-color: rgba(255,255,255,.30) !important;
-}
-button:hover, .btn:hover, .btn-utility:hover, .btn-big:hover, .btn-today:hover, .filter-clear:hover, .toggle-btn:hover {
-    transform: none !important;
-    filter: none !important;
-    box-shadow: inset 0 0 0 999px rgba(255,255,255,.08) !important;
-}
-body.light button:hover,
-body.light .btn:hover,
-body.light .btn-utility:hover,
-body.light .btn-big:hover,
-body.light .btn-today:hover,
-body.light .filter-clear:hover,
-body.light .toggle-btn:hover {
-    box-shadow: inset 0 0 0 999px rgba(255,255,255,.12) !important;
-}
-
-/* Navigation uses the same visual language */
-.app-nav { background: var(--card-bg) !important; border-color: var(--border) !important; }
-body.light .app-nav { background: #ffffff !important; border-color: rgba(11,42,74,.25) !important; }
-.app-nav__brand { color: var(--text) !important; }
-body.light .app-nav__brand { color: #0b2a4a !important; }
-.app-nav__link { color: var(--text) !important; }
-body.light .app-nav__link { color: #000000 !important; }
-.app-nav__link[aria-current='page'] {
-    color: #061426 !important;
-    background: #ffffff !important;
-    border-color: #ffffff !important;
-}
-body.light .app-nav__link[aria-current='page'] {
-    color: #ffffff !important;
-    background: #0b2a4a !important;
-    border-color: #0b2a4a !important;
-}
-
-/* Inputs and controls */
-label { color: var(--text) !important; font-weight: 700 !important; }
-body.light label { color: #000000 !important; }
-select,
-input[type='number'], input[type='text'], input[type='search'], input[type='time'], input[type='date'],
-textarea {
-    color: var(--text) !important;
-    background: var(--input-bg) !important;
-    border-color: var(--input-border) !important;
-    font-family: var(--font) !important;
-}
-body.light select,
-body.light input[type='number'], body.light input[type='text'], body.light input[type='search'], body.light input[type='time'], body.light input[type='date'],
-body.light textarea {
-    color: #000000 !important;
-    background: #ffffff !important;
-}
-select:focus, input:focus, textarea:focus {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 3px var(--accent-soft) !important;
-}
-body.light select:focus, body.light input:focus, body.light textarea:focus {
-    border-color: #0b2a4a !important;
-    box-shadow: 0 0 0 3px rgba(11,42,74,.10) !important;
-}
-
-/* Monochrome status system: no red, green, cyan or amber */
-.error-message,
-.alert,
-.alerts-container,
-.result-card.error,
-.result-card.success,
-.hint,
-.hint-warning,
-.result-warning,
-.tag,
-.badge,
-.judet-tag,
-.regim-tag,
-.reason,
-.match-item .tag {
-    color: var(--text) !important;
-    background: var(--surface-2) !important;
-    border-color: var(--border-strong) !important;
-}
-body.light .error-message,
-body.light .alert,
-body.light .alerts-container,
-body.light .result-card.error,
-body.light .result-card.success,
-body.light .hint,
-body.light .hint-warning,
-body.light .result-warning,
-body.light .tag,
-body.light .badge,
-body.light .judet-tag,
-body.light .regim-tag,
-body.light .reason,
-body.light .match-item .tag {
-    color: #000000 !important;
-    background: #ffffff !important;
-    border-color: #0b2a4a !important;
-}
-
-/* Tables */
-.rules-table, table { color: var(--text) !important; border-color: var(--border) !important; }
-th { color: var(--text) !important; background: var(--surface-2) !important; border-color: var(--border) !important; }
-td { color: var(--text) !important; background: var(--card-bg) !important; border-color: var(--border) !important; }
-body.light th { color: #ffffff !important; background: #0b2a4a !important; border-color: #0b2a4a !important; }
-body.light td { color: #000000 !important; background: #ffffff !important; border-color: rgba(11,42,74,.22) !important; }
-
-/* Theme button follows the universal button system */
-#themeToggle {
-    color: #ffffff !important;
-    background: #0b2a4a !important;
-    border-color: #0b2a4a !important;
-}
-body:not(.light) #themeToggle {
-    color: #ffffff !important;
-    background: #0d2440 !important;
-    border-color: rgba(255,255,255,.30) !important;
-}
-
-/* Keep auxiliary text strictly black/white */
-.help-text, .hint, .subtitle, .footer, .footnote, small, .detail, .result-sub, .result-detail {
-    color: var(--text-light) !important;
-}
-body.light .help-text,
-body.light .hint,
-body.light .subtitle,
-body.light .footer,
-body.light .footnote,
-body.light small,
-body.light .detail,
-body.light .result-sub,
-body.light .result-detail {
-    color: #000000 !important;
-}
-'''
+          overrides = Path('.github/universal-overrides.txt').read_text(encoding='utf-8')
           css.write_text(text.rstrip() + '\n\n' + overrides.strip() + '\n', encoding='utf-8')
-
-          # Cache-bust the single shared stylesheet consistently on all pages.
           pages = [Path('index.html'), Path('termene.html'), Path('contopiri.html'), Path('transfer/index.html'), Path('transfer/rules.html')]
           for p in pages:
               s = p.read_text(encoding='utf-8')
               s = re.sub(r'(css/style\.css\?v=)\d+', r'\g<1>33', s)
               p.write_text(s, encoding='utf-8')
+          PY
 
       - name: Verify design scope
         shell: bash
         run: |
           set -euo pipefail
           test "$(find . -type f -name '*.css' -not -path './.git/*' | wc -l)" -eq 1
-          test -f css/style.css
           grep -q 'UNIVERSAL NAVY / WHITE DESIGN SYSTEM' css/style.css
           for f in index.html termene.html contopiri.html; do grep -q 'css/style.css?v=33' "$f"; done
           for f in transfer/index.html transfer/rules.html; do grep -q '../css/style.css?v=33' "$f"; done
           ! grep -Rni --include='*.html' '<style' .
-          # Existing business/calculation/transfer JS must remain untouched.
           if git diff --name-only | grep -E '^js/(app|rules|legal|storage|export|ui|utils)\.js$|^transfer/rules\.js$'; then
             echo 'Unexpected business logic JavaScript modification.' >&2
             exit 1
           fi
 
-      - name: Commit redesign and remove workflow
+      - name: Commit redesign and cleanup
         shell: bash
         run: |
           set -euo pipefail
-          rm -f .github/workflows/universal-redesign.yml
+          rm -f .github/universal-overrides.txt .github/workflows/universal-redesign.yml
           rmdir .github/workflows 2>/dev/null || true
           rmdir .github 2>/dev/null || true
           git config user.name 'github-actions[bot]'
