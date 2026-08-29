@@ -22,7 +22,7 @@ jobs:
         run: |
           npm run check:syntax
           npm test
-      - name: Commit
+      - name: Commit transfer-only changes
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
