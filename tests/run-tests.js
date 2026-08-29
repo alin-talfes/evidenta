@@ -12,7 +12,13 @@ let calc=C.calculate({concurs:[{totalDays:360,years:1,months:0,days:0},{totalDay
 let tr=load('transfer/rules.js',';globalThis.__u=UNITATI;globalThis.__g=gasesteUnitati;'); assert(tr.__u.length>=39); assert.equal(new Set(tr.__u.map(x=>x.id)).size,tr.__u.length); assert(Array.isArray(tr.__g('masculin','major','inchis','Hunedoara','executare',false)));
 for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/^\s*<!DOCTYPE html>/i.test(h),f+' missing doctype'); assert(!/user-scalable=no/i.test(h),f+' disables zoom'); const inline=[...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/gi)]; assert.equal(inline.length,0,f+' contains inline script'); }
 const storage=fs.readFileSync('js/storage.js','utf8'); assert(!/function\s+(applyTheme|toggleTheme)\s*\(/.test(storage),'duplicate theme functions');
-const css=fs.readFileSync('css/style.css','utf8'); assert(!/fonts\.googleapis\.com/.test(css),'external font import'); assert.equal((css.match(/\/\* ===== UNIVERSAL COMPONENT NORMALIZATION ===== \*\//g)||[]).length,1);
+const css=fs.readFileSync('css/style.css','utf8');
+assert(!/fonts\.googleapis\.com/.test(css),'external font import');
+assert(!/UNIVERSAL COMPONENT NORMALIZATION/.test(css),'legacy normalization layer remains');
+assert(css.includes('--bg: #0b1220;'),'dark palette missing');
+assert(css.includes('--accent: #4f8cff;'),'accent palette missing');
+assert(css.includes('body.light'),'light theme missing');
+assert(!/#59e1c2|#ff8b99|#c7a8ff|#98600b|#b33248/i.test(css),'legacy hard-coded palette remains');
 
 // Calibrare liberare condiționată: art. 99, schimbare la 60 ani, plafoane și suprapuneri.
 let lr=load('js/utils.js',';'+fs.readFileSync('js/rules.js','utf8')+';globalThis.__schedule=calculateLiberationSchedule;globalThis.__over=findIntervalOverlaps;globalThis.__non=sumNonExecutedPeriods;');
@@ -26,7 +32,6 @@ let already60=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalD
 let over10=lr.__schedule({life:false,art:'NCP100',sentenceOver10:true,totalDays:9000,birthDate:new Date(1970,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2050,0,1),dedDays:0,nonExecDays:0}); assert(over10.mDays<=7305); assert(over10.tDays<=7305);
 let ov=[[new Date(2026,0,1),new Date(2026,0,10)],[new Date(2026,0,5),new Date(2026,0,15)]]; assert.equal(lr.__over(ov).length,1); assert.equal(lr.sumIntervals?lr.sumIntervals(ov):15,15);
 let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),10);
-
 
 // Integritate UI pentru detențiunea pe viață: art. 99 este unic și zilele muncite nu se afișează pentru viață.
 const appSource=fs.readFileSync('js/app.js','utf8');
