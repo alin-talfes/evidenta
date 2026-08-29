@@ -1,6 +1,6 @@
 // ============================================================
 // REGULI DE TRANSFER – DECIZIA 360/2020
-// rules.js – conține datele complete din Anexa 1, 3, 5
+// rules.js – sursa operațională pentru profilarea din Decizia 360/2020, forma consolidată 30.03.2026
 // ============================================================
 
 const UNITATI = [];
@@ -372,7 +372,7 @@ UNITATI.push({
     },
     custodieArestati: {
         masculin: {
-            minor: ['Ilfov', 'București'],
+            minor: [],
             tanar: ['Ilfov', 'București'],
             major: ['Ilfov', 'București']
         },
@@ -863,7 +863,7 @@ UNITATI.push({
     },
     custodieArestati: {
         masculin: {
-            minor: ['Giurgiu', 'Teleorman'],
+            minor: [],
             tanar: ['Giurgiu', 'Teleorman'],
             major: ['Giurgiu', 'Teleorman']
         },
@@ -1838,3 +1838,17 @@ function gasesteUnitati(sex, varsta, regim, judet, mode, risc = false) {
 
     return [];
 }
+
+
+// ============================================================
+// METADATE DE CONFORMITATE – DECIZIA 360/2020
+// Forma consolidată utilizată: 30.03.2026 (inclusiv Ordinul ANP nr. 105/2026).
+// IMPORTANT: custodieArestati reprezintă profilarea pentru custodie permanentă A.P.
+// și NU arondarea distinctă pentru primirea inițială de la organele de poliție (Anexa 3).
+// ============================================================
+const TRANSFER_PROFILE_META = Object.freeze({
+    act: 'Decizia directorului general ANP nr. 360/2020',
+    consolidatedAt: '30.03.2026',
+    latestAmendment: 'Ordinul ANP nr. 105/2026',
+    annexes: Object.freeze({ profile: 1, sections: 2, policeReception: 3, provisionalRegime: 4, educationalMeasures: 5, transit: 6, forensic: 7, severeMentalDisorders: 8 })
+});

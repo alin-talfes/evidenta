@@ -103,3 +103,17 @@ assert(exportSource.includes('PROPOZABILĂ DUPĂ ZILE MUNCITE'),'copy output mis
 assert(!/cleanOutput\s*=\s*content\.innerText/.test(exportSource),'copy still copies full visible results');
 const appAfter=fs.readFileSync('js/app.js','utf8'); assert(/\bmDays,\s*\n\s*tDays,/.test(appAfter),'calculation snapshot missing mDays');
 const cssAfter=fs.readFileSync('css/style.css','utf8'); assert(cssAfter.includes('#loadBtn { position: relative; overflow: visible; }'),'saved-case badge is not anchored to load button');
+
+
+// Transfer profile compliance – consolidated Decision 360/2020 at 30.03.2026.
+const transferRulesSourceCompliance=fs.readFileSync('transfer/rules.js','utf8');
+const transferIndexSourceCompliance=fs.readFileSync('transfer/index.html','utf8');
+const transferRulesPageCompliance=fs.readFileSync('transfer/rules.html','utf8');
+assert(transferRulesSourceCompliance.includes("consolidatedAt: '30.03.2026'"),'transfer legal baseline metadata missing');
+assert(transferRulesSourceCompliance.includes("latestAmendment: 'Ordinul ANP nr. 105/2026'"),'latest profile amendment metadata missing');
+for (const annex of [1,2,3,4,5,6,7,8]) assert(transferRulesPageCompliance.includes(`Anexa ${annex} –`),`rules page missing Annex ${annex}`);
+assert(transferIndexSourceCompliance.includes('Custodie A.P. permanentă'),'AP permanent-custody semantics not explicit');
+const rahovaBlock=transferRulesSourceCompliance.slice(transferRulesSourceCompliance.indexOf('// ---------- 9. Penitenciarul București-Rahova ----------'),transferRulesSourceCompliance.indexOf('// ---------- 10.'));
+const giurgiuBlock=transferRulesSourceCompliance.slice(transferRulesSourceCompliance.indexOf('// ---------- 20. Penitenciarul Giurgiu ----------'),transferRulesSourceCompliance.indexOf('// ---------- 21.'));
+assert(/custodieArestati:[\s\S]*?masculin:[\s\S]*?minor: \[\]/.test(rahovaBlock),'Rahova incorrectly profiles male minors as permanent AP custody');
+assert(/custodieArestati:[\s\S]*?masculin:[\s\S]*?minor: \[\]/.test(giurgiuBlock),'Giurgiu incorrectly profiles male minors as permanent AP custody');

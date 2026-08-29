@@ -71,7 +71,7 @@
                     regimGroup.style.display = 'none';
                     regimHint.style.display = 'none';
                     regimArestat.style.display = '';
-                    modeAdvice.textContent = 'Modul „Custodie A.P.” – unități cu secții de arestare preventivă în custodie permanentă.';
+                    modeAdvice.textContent = 'Modul „Custodie A.P. permanentă” – profilare Anexa 1. Nu reprezintă primirea inițială de la poliție din Anexa 3.';
                 } else { // executare
                     judetLabel.textContent = 'Județul de domiciliu';
                     riscGroup.style.display = 'none';
@@ -155,7 +155,7 @@
                 if (matches.length === 0) {
                     let extraMsg = '';
                     if (currentMode === 'custodieArestati') {
-                        extraMsg = ' Nu există unități cu secții de arestare preventivă pentru județul selectat.';
+                        extraMsg = ' Nu există unități profilate în Anexa 1 pentru custodie permanentă A.P. potrivit criteriilor selectate.';
                     }
                     resultArea.innerHTML = `
                         <div class="result-card error">
@@ -224,7 +224,7 @@
 
                 let note = '';
                 if (currentMode === 'custodieArestati') {
-                    note = ' Atenție: Sunt afișate doar unitățile care au secții de arestare preventivă în custodie permanentă pentru județul selectat.';
+                    note = ' Atenție: sunt afișate exclusiv destinațiile de custodie permanentă A.P. din profilarea Anexei 1; primirea de la poliție se verifică distinct potrivit Anexei 3.';
                 } else if (currentMode === 'executare') {
                     const areMunca = matches.some(m => m.esteMunca);
                     if (areMunca) {
@@ -281,7 +281,7 @@
             // ============================================================
             // 7. MESAJ INIȚIAL
             // ============================================================
-            console.log('Aplicația de transfer – Decizia 360/2020 – încărcată cu succes.');
+            console.log('Aplicația de transfer – Decizia 360/2020, formă consolidată 30.03.2026 – încărcată cu succes.');
             console.log('Județe disponibile: ' + allJudete.length);
 
         })();
