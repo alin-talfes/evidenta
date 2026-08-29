@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INSTRUMENT DE AJUTOR PENTRU LUCRAREA DE TRANSFER – SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=30">
+    <link rel="stylesheet" href="../css/app-shell.css?v=1">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
 <body>
     <div class="container">
 
         <!-- ========== BARĂ DE SUS ========== -->
-        <div class="top-bar">
-            <a href="https://alin-talfes.github.io/evidenta/" target="_blank" class="top-link">Înapoi la aplicația de calcul pedepse</a>
-            <a href="rules.html" class="top-link">Vezi regulile</a>
-        </div>
+        <nav class="app-nav" aria-label="Modulele aplicației">
+            <span class="app-nav__brand">Evidență PPL</span>
+            <a class="app-nav__link" href="../">Pedepse</a>
+            <a class="app-nav__link" href="../termene.html">Termene</a>
+            <a class="app-nav__link" href="../contopiri.html">Contopiri</a>
+            <a class="app-nav__link" href="./" aria-current="page">Transfer</a>
+            <a class="app-nav__link" href="rules.html">Reguli transfer</a>
+        </nav>
 
         <!-- ========== HEADER ========== -->
         <header class="header">
@@ -239,7 +245,7 @@
         <!-- ========== FOOTER ========== -->
         <footer class="footer">
             <p>
-                &copy; 2026 <a href="https://wa.me/alin.talfes" target="_blank" rel="noopener noreferrer" style="color:var(--gold-light); text-decoration:none; font-weight:600;">Alin Talfeș</a>
+                &copy; 2026 <a href="https://github.com/alin-talfes" target="_blank" rel="noopener noreferrer" style="color:var(--gold-light); text-decoration:none; font-weight:600;">Alin Talfeș</a>
                 &nbsp;|&nbsp; Toate drepturile rezervate.
                 <br>
                 <span id="versionDisplay">Versiune: încărcare...</span>
@@ -261,7 +267,7 @@
             // 0. ÎNCĂRCARE VERSIUNE DIN version.json
             // ============================================================
             const versionDisplay = document.getElementById('versionDisplay');
-            fetch('version.json')
+            fetch('../version.json')
                 .then(response => {
                     if (!response.ok) throw new Error('version.json not found');
                     return response.json();

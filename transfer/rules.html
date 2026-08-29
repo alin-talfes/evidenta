@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Regulile de transfer – Decizia 360/2020</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=30" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <style>
         /* ============================================================
            STILURI SUPLIMENTARE SPECIFICE PAGINII rules.html
@@ -560,16 +561,21 @@
             line-height: 1.8;
         }
     </style>
+    <link rel="stylesheet" href="../css/app-shell.css?v=1" />
 </head>
 <body>
 
 <div class="container">
 
     <!-- ========== BARĂ DE SUS ========== -->
-    <div class="top-bar">
-        <a href="index.html" class="top-link">← Înapoi la instrument</a>
-        <a href="https://alintalfes-glitch.github.io/calcul-pedeapsa/" target="_blank" class="top-link">Calcul pedepse</a>
-    </div>
+    <nav class="app-nav" aria-label="Modulele aplicației">
+        <span class="app-nav__brand">Evidență PPL</span>
+        <a class="app-nav__link" href="../">Pedepse</a>
+        <a class="app-nav__link" href="../termene.html">Termene</a>
+        <a class="app-nav__link" href="../contopiri.html">Contopiri</a>
+        <a class="app-nav__link" href="./">Transfer</a>
+        <a class="app-nav__link" href="rules.html" aria-current="page">Reguli transfer</a>
+    </nav>
 
     <!-- ========== HEADER ========== -->
     <header class="header">
@@ -665,7 +671,7 @@
     <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <p>
-            &copy; 2026 <a href="https://wa.me/alin.talfes" target="_blank" rel="noopener noreferrer" style="color:var(--gold-light); text-decoration:none; font-weight:600;">Alin Talfeș</a>
+            &copy; 2026 <a href="https://github.com/alin-talfes" target="_blank" rel="noopener noreferrer" style="color:var(--gold-light); text-decoration:none; font-weight:600;">Alin Talfeș</a>
             &nbsp;|&nbsp; Toate drepturile rezervate.
             <br />
             <span id="versionDisplay" style="font-size:0.7rem; opacity:0.6;">Versiune: încărcare...</span>
@@ -687,7 +693,7 @@
         // 0. ÎNCĂRCARE VERSIUNE DIN version.json
         // ============================================================
         const versionDisplay = document.getElementById('versionDisplay');
-        fetch('version.json')
+        fetch('../version.json')
             .then(response => {
                 if (!response.ok) throw new Error('version.json not found');
                 return response.json();

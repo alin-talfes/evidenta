@@ -1,0 +1,106 @@
+/* Shared application shell. Presentation only: no calculator behaviour lives here. */
+:root {
+    --shell-accent-soft: rgba(201, 162, 39, 0.12);
+    --shell-surface: rgba(22, 24, 32, 0.82);
+}
+
+body.light {
+    --shell-accent-soft: rgba(184, 148, 31, 0.10);
+    --shell-surface: rgba(255, 255, 255, 0.88);
+}
+
+.app-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 12px;
+    padding: 7px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    background: var(--shell-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.app-nav__brand {
+    flex: 0 0 auto;
+    padding: 0 10px;
+    color: var(--gold-light);
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.app-nav__link {
+    min-height: 38px;
+    padding: 0 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: var(--text-light);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .025em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s, background .2s;
+}
+
+.app-nav__link:hover,
+.app-nav__link:focus-visible {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: var(--shell-accent-soft);
+    outline: none;
+}
+
+.app-nav__link[aria-current="page"] {
+    color: #101116;
+    border-color: var(--gold);
+    background: var(--gold);
+}
+
+.app-nav__link--external::after {
+    content: "↗";
+    margin-left: 5px;
+    font-size: .7rem;
+}
+
+.page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.header {
+    overflow: hidden;
+    position: relative;
+}
+
+.header::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--gold);
+}
+
+@media (max-width: 640px) {
+    .app-nav { padding: 6px; }
+    .app-nav__brand { display: none; }
+    .app-nav__link { min-height: 40px; padding-inline: 10px; }
+}
+
+@media print {
+    .app-nav, .page-actions { display: none !important; }
+}
