@@ -47,7 +47,7 @@ let vcpFemale=lr.__schedule({life:false,art:'VCP591',sentenceOver10:false,totalD
 assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFemale.articleInfo.includes('VCP art. 59¹'));
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
-for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=40/.test(h),f+' stale css cache version'); }
+for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=41/.test(h),f+' stale css cache version'); }
 
 // Footer/versionare: toate paginile folosesc același version.js, iar numărul există numai în version.json.
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
@@ -74,7 +74,6 @@ assert(!transferApp.includes('versionDisplay'),'Transfer app must use centralize
 assert(!transferRulesPage.includes('versionDisplay'),'Transfer rules page must use centralized version.js only');
 assert(transferApp.includes('Potrivire prioritară după criteriile tehnice'));
 assert(fs.readFileSync('js/theme.js','utf8').includes("'#0b1220'"),'theme-color must match palette');
-assert(fs.readFileSync('js/export.js','utf8').includes('EVIDENȚĂ PPL — REZUMAT'));
 assert(fs.readFileSync('js/export.js','utf8').includes('DATE INTRODUSE'));
 assert(fs.readFileSync('js/app.js','utf8').includes('Reanalizare 6 ani și 6 luni'));
 assert(fs.readFileSync('js/app.js','utf8').includes('ALTE DATE ȘI EXPLICAȚII LC'));
@@ -94,3 +93,13 @@ assert(fs.readFileSync('js/termene.js','utf8').includes("Number(document.getElem
 let escape9=lr.__non([{type:'escape',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(escape9,9);
 let illness9=lr.__non([{type:'illness',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(illness9,9);
 let interruption8=lr.__non([{type:'interruption',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(interruption8,8);
+
+const exportSource=fs.readFileSync('js/export.js','utf8');
+assert(exportSource.includes('DATE INTRODUSE'),'PDF input section disappeared');
+assert(exportSource.includes('ZILE LEGEA 169/2017'),'copy input missing Law 169 days');
+assert(exportSource.includes('zile fără deduceri'),'copy output missing raw fraction days');
+assert(exportSource.includes('EXPIRARE REALĂ'),'copy output missing real expiry');
+assert(exportSource.includes('PROPOZABILĂ DUPĂ ZILE MUNCITE'),'copy output missing work-day result');
+assert(!/cleanOutput\s*=\s*content\.innerText/.test(exportSource),'copy still copies full visible results');
+const appAfter=fs.readFileSync('js/app.js','utf8'); assert(/\bmDays,\s*\n\s*tDays,/.test(appAfter),'calculation snapshot missing mDays');
+const cssAfter=fs.readFileSync('css/style.css','utf8'); assert(cssAfter.includes('#loadBtn { position: relative; overflow: visible; }'),'saved-case badge is not anchored to load button');

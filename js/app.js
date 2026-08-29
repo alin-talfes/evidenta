@@ -467,6 +467,7 @@ function calculateAll() {
         dedIntervals, // array de [Date, Date]
         nonRowsData, // array de { type, start, end, days }
         recursDays: ded - sumIntervals(dedIntervals), // zile recurs compensatoriu separate
+        mDays,
         tDays,
         tDate,
         mR,

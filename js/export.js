@@ -15,22 +15,48 @@ function buildNarrativeText() {
         alert('Nu există rezultate de calcul. Apasă întâi „CALCULEAZĂ”.');
         return '';
     }
+
     const input = calc.inputData || {};
-    const duration = calc.life ? 'detențiune pe viață' : `${calc.duration?.y || 0} ani, ${calc.duration?.m || 0} luni, ${calc.duration?.d || 0} zile`;
-    const dedPeriods = (calc.dedIntervals || []).map(([a,b]) => `${fmtDate(a)}–${fmtDate(b)}`).join('; ') || '—';
-    const nonPeriods = (calc.nonRowsData || []).map(p => `${mapNonExecType(p.type)} ${p.start}–${p.end}`).join('; ') || '—';
-    const lc = calc.lcDetails || { article: calc.articleInfo || calc.art || '—', age: '—', minimum: '—', proposed: '—' };
-    return [
-        'EVIDENȚĂ PPL — REZUMAT',
-        `INPUT | Sex: ${calc.sex === 'M' ? 'Masculin' : 'Feminin'} | Naștere: ${fmtDate(calc.birthDate)} | Pedeapsă: ${duration} | Start: ${fmtDate(calc.startDate)}`,
-        `INPUT | Articol LC: ${lc.article}${lc.sentenceBand ? ` · ${lc.sentenceBand}` : ''} | Deduceri: ${calc.ded} zile (${dedPeriods}) | Recurs compensatoriu: ${calc.recursDays || 0} zile | Adăugate: ${calc.non} zile (${nonPeriods})`,
-        input.observations ? `INPUT | Observații: ${input.observations}` : null,
-        `OUTPUT | Expirare teoretică: ${calc.theorExp ? fmtDate(calc.theorExp) : '—'} | Expirare reală: ${calc.realExp ? fmtDate(calc.realExp) : '—'}`,
-        `OUTPUT | Minim LC: ${fmtDate(calc.mDate)} | Propozabilă: ${fmtDate(calc.tDate)}${calc.workDaysResult ? ` | După zile muncite: ${calc.workDaysResult}` : ''}`,
-        `OUTPUT | ${calc.reanalysisLabel || 'Reanalizare'}: ${calc.fDate ? fmtDate(calc.fDate) : '—'}`,
-        `REGULĂ LC | ${lc.age}`,
-        `REGULĂ LC | Minim: ${lc.minimum} | Propozabilă: ${lc.proposed}`
-    ].filter(Boolean).join('\n');
+    const dedPeriodDays = Array.isArray(calc.dedIntervals) ? sumIntervals(calc.dedIntervals) : 0;
+    const dedPeriods = Array.isArray(calc.dedIntervals) && calc.dedIntervals.length
+        ? calc.dedIntervals.map(([a, b]) => `${fmtDate(a)}–${fmtDate(b)}`).join('; ')
+        : '—';
+    const recursDays = Number(calc.recursDays || 0);
+    const nonPeriods = Array.isArray(calc.nonRowsData) && calc.nonRowsData.length
+        ? calc.nonRowsData.map(p => `${mapNonExecType(p.type)} ${p.start}–${p.end}`).join('; ')
+        : '—';
+    const duration = calc.life
+        ? 'Detențiune pe viață'
+        : `${calc.duration?.y || 0} ani, ${calc.duration?.m || 0} luni, ${calc.duration?.d || 0} zile`;
+
+    const fractionText = (ratio) => {
+        if (!Number.isFinite(ratio)) return '—';
+        const known = [[1/100,'1/100'],[1/4,'1/4'],[1/3,'1/3'],[1/2,'1/2'],[2/3,'2/3'],[3/4,'3/4']];
+        const found = known.find(([value]) => Math.abs(value - ratio) < 1e-9);
+        return found ? found[1] : String(ratio);
+    };
+
+    const inputLines = [
+        'INPUT',
+        `DATA NAȘTERII: ${input.birthDate || fmtDate(calc.birthDate) || '—'}`,
+        `ARTICOL LIBERARE: ${calc.art || input.art || '—'}`,
+        `DATA ÎNCEPERII PEDEPSEI: ${input.start || fmtDate(calc.startDate) || '—'}`,
+        `PERIOADA: ${duration}`,
+        `ZILE DEDUSE: ${dedPeriodDays} zile | PERIOADE: ${dedPeriods}`,
+        `ZILE LEGEA 169/2017: ${recursDays} zile`,
+        `ZILE ADĂUGATE: ${calc.non || 0} zile | PERIOADE: ${nonPeriods}`
+    ];
+
+    const outputLines = [
+        'OUTPUT',
+        `EXPIRARE REALĂ: ${calc.realExp ? fmtDate(calc.realExp) : '—'}`,
+        `FRACȚIE MINIMĂ: ${calc.life ? 'prag 20 ani' : fractionText(calc.mR)} = ${calc.mDays ?? '—'} zile fără deduceri | DATA: ${calc.mDate ? fmtDate(calc.mDate) : '—'}`,
+        `FRACȚIE PROPOZABILĂ: ${calc.life ? 'prag 20 ani' : fractionText(calc.tR)} = ${calc.tDays ?? '—'} zile fără deduceri | DATA: ${calc.tDate ? fmtDate(calc.tDate) : '—'}`,
+        `PROPOZABILĂ DUPĂ ZILE MUNCITE: ${calc.life ? '—' : (calc.workDaysResult || fmtDate(calc.tDate) || '—')}${calc.life ? '' : ` | ZILE MUNCITE APLICATE: ${calc.workDaysApplied || 0}`}`,
+        `1/5: ${calc.life ? '—' : `${calc.fifth ?? '—'} zile fără deduceri | DATA: ${calc.fDate ? fmtDate(calc.fDate) : '—'}`}`
+    ];
+
+    return inputLines.join('\n') + '\n\n' + outputLines.join('\n');
 }
 
 function fallbackCopy(text) {

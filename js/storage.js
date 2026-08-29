@@ -21,10 +21,12 @@ function updateCaseBadge() {
     const badge = document.getElementById('caseCountBadge');
     if (!badge) return;
     if (count > 0) {
-        badge.textContent = count;
+        badge.textContent = count > 999 ? '999+' : String(count);
+        badge.setAttribute('aria-label', `${count} spețe salvate`);
         badge.classList.remove('hidden');
     } else {
         badge.classList.add('hidden');
+        badge.removeAttribute('aria-label');
     }
 }
 
