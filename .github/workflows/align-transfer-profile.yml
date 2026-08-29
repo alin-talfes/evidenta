@@ -1,6 +1,8 @@
 name: Align transfer profile
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/align-transfer-profile.yml'
 permissions:
   contents: write
 jobs:
