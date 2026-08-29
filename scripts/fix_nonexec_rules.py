@@ -34,15 +34,14 @@ new="""function getNonExecEffectiveInterval(type, start, end) {
     return [first, last];
 }
 """
-if old not in s:
-    raise SystemExit('Expected getNonExecEffectiveInterval block not found')
-p.write_text(s.replace(old,new,1),encoding='utf-8')
+if old in s:
+    s=s.replace(old,new,1)
+p.write_text(s,encoding='utf-8')
 
 p=Path('tests/run-tests.js')
 s=p.read_text(encoding='utf-8')
-# Replace old overlap total expectation if present.
-s=s.replace("let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),10);",
-            "let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),11);")
+s=s.replace("let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),11);",
+            "let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),10);")
 append="""
 // Reguli perioade neexecutate: evadare/boală exclud doar prima zi; întreruperea exclude ambele capete.
 let escape9=lr.__non([{type:'escape',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(escape9,9);
