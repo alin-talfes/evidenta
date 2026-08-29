@@ -1,0 +1,26 @@
+name: Polish UI assets
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/polish_ui_assets.py
+      - .github/workflows/polish-ui-assets.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: python3 scripts/polish_ui_assets.py
+      - run: |
+          npm run check:syntax
+          npm test
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add css/style.css index.html termene.html contopiri.html transfer/index.html transfer/rules.html
+          git commit -m "Align Transfer theme control"
+          git push origin main
