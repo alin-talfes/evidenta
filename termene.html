@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Calculator termene procedurale</title>
-    <link rel="stylesheet" href="css/style.css?v=34">
+    <link rel="stylesheet" href="css/style.css?v=35">
     <script src="js/theme.js?v=34" defer></script>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 </head>
@@ -20,10 +20,12 @@
         <div class="page-actions"><button class="btn btn-outline" onclick="openInfoModal()">INFORMAȚII</button><button id="themeToggle" aria-label="Activează tema luminoasă">🌙</button></div>
         <div class="header">
             <h1>CALCULATOR TERMENE PROCEDURALE</h1>
+            <p class="module-intro">Determină termenul-limită conform regulilor de calcul pentru termene procedurale și măsuri restrictive.</p>
         </div>
 
         <div class="card">
             <h3>Calcul termen</h3>
+            <p class="section-help">Alege un termen predefinit sau completează manual durata și tipul termenului.</p>
 
             <label for="presetSelect">Termen predefinit</label>
             <select id="presetSelect" onchange="applyPreset(this.value)">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Calculator pedeapsă rezultantă</title>
-    <link rel="stylesheet" href="css/style.css?v=34">
+    <link rel="stylesheet" href="css/style.css?v=35">
     <script src="js/theme.js?v=34" defer></script>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 </head>
@@ -20,11 +20,12 @@
         <div class="page-actions"><button class="btn btn-outline" onclick="openInfoModal()">INFORMAȚII</button><button id="themeToggle" aria-label="Activează tema luminoasă">🌙</button></div>
         <div class="header">
             <h1>CALCULATOR PEDEAPSĂ REZULTANTĂ</h1>
-            <p style="font-size:0.9rem; color:var(--text-light); margin-top:4px;">(contopiri, recidivă, rest)</p>
+            <p class="module-intro">Calculează pedeapsa rezultantă pentru concurs, recidivă și resturi de pedeapsă, cu explicația rezultatului.</p>
         </div>
 
         <div class="card">
             <h3>Adaugă pedepse</h3>
+            <p class="section-help">Adaugă fiecare pedeapsă și selectează tipul juridic. Rezultatul este calculat și explicat mai jos.</p>
             <div id="penaltyRowsContainer"></div>
             <button class="btn btn-outline btn-sm" onclick="addPenaltyRow()">+ Adaugă pedeapsă</button>
             <button class="btn btn-gold" onclick="calculateMergedPenalties()">CALCULEAZĂ</button>
