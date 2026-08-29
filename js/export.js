@@ -51,7 +51,7 @@ function buildNarrativeText() {
 
         // Data începerii și expirarea reală
         const startDateStr = fmtDate(calc.startDate);
-        const realExpStr = fmtDate(calc.realExp);
+        const realExpStr = calc.realExp ? fmtDate(calc.realExp) : null;
 
         // Perioade deduse (fără recursul compensatoriu)
         const dedIntervals = calc.dedIntervals || [];
@@ -75,7 +75,7 @@ function buildNarrativeText() {
 
         // Perioade adăugate
         const nonRowsData = calc.nonRowsData || [];
-        const nonTotal = nonRowsData.reduce((sum, p) => sum + p.days, 0);
+        const nonTotal = Number.isSafeInteger(calc.non) ? calc.non : nonRowsData.reduce((sum, p) => sum + p.days, 0);
         const nonPeriods = nonRowsData.map(p => `${p.start}-${p.end} (${mapNonExecType(p.type)})`);
         const nonPeriodsDisplay = nonPeriods.length > 0 ? ` (${nonPeriods.join(', ')})` : '';
 
@@ -107,10 +107,12 @@ function buildNarrativeText() {
         const tDays = calc.tDays;
 
         // Termenul de reanalizare 1/5
-        const fDateStr = fmtDate(calc.fDate);
+        const fDateStr = calc.fDate ? fmtDate(calc.fDate) : null;
         const fifth = calc.fifth;
 
-        // Construiește textul final EXACT conform modelului, fără zile muncite
+        if (calc.life) {
+            return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr}, execută pedeapsa detențiunii pe viață începând cu data de ${startDateStr}. Detențiunea pe viață nu are dată de expirare. Au fost deduse ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, pragul efectiv de 20 ani / 7.305 zile pentru liberarea condiționată se împlinește la data de ${tDateStr}.`;
+        }
         return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr} este condamnată la pedeapsa inchisorii rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDateStr} și expiră în termen la data de ${realExpStr}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDateStr}, după executarea a ${tDays} zile. Termenul de reanalizare (1/5) este data de ${fDateStr}, după executarea a ${fifth} zile.`;
     } catch (e) {
         alert('Eroare la construirea textului: ' + e.message);

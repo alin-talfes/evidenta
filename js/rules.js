@@ -132,3 +132,120 @@ function sumIntervals(intervals) {
     }
     return total;
 }
+
+
+// ========== CALIBRARE OPERAȚIONALĂ LC 2026 ==========
+// Tabel operațional furnizat: plafon 20 ani = 7.305 zile; schimbarea fracțiilor NCP art. 100 se produce la împlinirea efectivă a vârstei de 60 ani.
+const LC_TWENTY_YEAR_CAP_DAYS = 7305;
+
+function thresholdDate(startDate, thresholdDays, dedDays = 0, nonExecDays = 0) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + Math.max(0, thresholdDays) - 1 - dedDays + nonExecDays);
+    return d;
+}
+
+function sixtiethBirthday(birthDate) {
+    const d = new Date(birthDate);
+    const month = d.getMonth(), day = d.getDate();
+    d.setDate(1);
+    d.setFullYear(d.getFullYear() + 60);
+    d.setMonth(month);
+    d.setDate(Math.min(day, new Date(d.getFullYear(), month + 1, 0).getDate()));
+    return d;
+}
+
+function cappedFractionDays(totalDays, ratio, cap = Infinity) {
+    return Math.min(Math.floor(totalDays * ratio), cap);
+}
+
+function resolveAgeTransitionThreshold(startDate, birthday60, youngDays, elderDays, dedDays, nonExecDays) {
+    const youngDate = thresholdDate(startDate, youngDays, dedDays, nonExecDays);
+    const elderDate = thresholdDate(startDate, elderDays, dedDays, nonExecDays);
+    if (startDate >= birthday60) return { date: elderDate, days: elderDays, usedElderlyRule: true, transitionApplied: false };
+    if (youngDate < birthday60) return { date: youngDate, days: youngDays, usedElderlyRule: false, transitionApplied: false };
+    return {
+        date: elderDate < birthday60 ? new Date(birthday60) : elderDate,
+        days: elderDays,
+        usedElderlyRule: true,
+        transitionApplied: true
+    };
+}
+
+function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, birthDate, startDate, currentSex, theorExp, dedDays = 0, nonExecDays = 0 }) {
+    if (life) {
+        const date = thresholdDate(startDate, LC_TWENTY_YEAR_CAP_DAYS, dedDays, nonExecDays);
+        return {
+            mR: 1/2, tR: 1/2,
+            mDays: LC_TWENTY_YEAR_CAP_DAYS, tDays: LC_TWENTY_YEAR_CAP_DAYS,
+            mDate: date, tDate: new Date(date),
+            pM: LC_TWENTY_YEAR_CAP_DAYS, pT: LC_TWENTY_YEAR_CAP_DAYS,
+            articleInfo: 'NCP art. 99 (detențiune pe viață — prag efectiv 20 ani / 7.305 zile)',
+            lifeThreshold: true, ageTransitionApplied: false
+        };
+    }
+
+    if (art === 'NCP100') {
+        const youngMR = sentenceOver10 ? 2/3 : 1/2;
+        const youngTR = sentenceOver10 ? 3/4 : 2/3;
+        const elderMR = sentenceOver10 ? 1/2 : 1/3;
+        const elderTR = sentenceOver10 ? 2/3 : 1/2;
+        const cap = sentenceOver10 ? LC_TWENTY_YEAR_CAP_DAYS : Infinity;
+        const birthday60 = sixtiethBirthday(birthDate);
+        const m = resolveAgeTransitionThreshold(startDate, birthday60,
+            cappedFractionDays(totalDays, youngMR, cap), cappedFractionDays(totalDays, elderMR, cap), dedDays, nonExecDays);
+        const t = resolveAgeTransitionThreshold(startDate, birthday60,
+            cappedFractionDays(totalDays, youngTR, cap), cappedFractionDays(totalDays, elderTR, cap), dedDays, nonExecDays);
+        const usedElder = m.usedElderlyRule || t.usedElderlyRule;
+        return {
+            mR: m.usedElderlyRule ? elderMR : youngMR,
+            tR: t.usedElderlyRule ? elderTR : youngTR,
+            mDays: m.days, tDays: t.days, mDate: m.date, tDate: t.date,
+            pM: cap, pT: cap,
+            birthday60,
+            ageTransitionApplied: m.transitionApplied || t.transitionApplied,
+            articleInfo: `NCP art. 100 (${usedElder ? 'fracții 60+ aplicate de la data împlinirii vârstei' : 'fracții sub 60 ani'}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`
+        };
+    }
+
+    const referenceDate = theorExp || startDate;
+    const ageCategory = getAgeCategoryAtDate(birthDate, referenceDate, currentSex, art);
+    const fractions = getLiberationFractions(false, art, ageCategory, sentenceOver10, totalDays, birthDate, theorExp);
+    if (fractions.error) return fractions;
+    const mDays = cappedFractionDays(totalDays, fractions.mR, fractions.pM);
+    const tDays = cappedFractionDays(totalDays, fractions.tR, fractions.pT);
+    return {
+        ...fractions, mDays, tDays,
+        mDate: thresholdDate(startDate, mDays, dedDays, nonExecDays),
+        tDate: thresholdDate(startDate, tDays, dedDays, nonExecDays),
+        ageTransitionApplied: false
+    };
+}
+
+function findIntervalOverlaps(intervals) {
+    const overlaps = [];
+    for (let i = 0; i < intervals.length; i++) {
+        for (let j = i + 1; j < intervals.length; j++) {
+            const [a1, a2] = intervals[i], [b1, b2] = intervals[j];
+            if (a1 <= b2 && b1 <= a2) overlaps.push([i, j]);
+        }
+    }
+    return overlaps;
+}
+
+function getNonExecEffectiveInterval(type, start, end) {
+    const first = new Date(start), last = new Date(end);
+    if (type === 'escape' || type === 'interruption') {
+        first.setDate(first.getDate() + 1);
+        last.setDate(last.getDate() - 1);
+    } else {
+        // Păstrează comportamentul existent pentru boală: ziua inițială nu se adaugă, ziua finală se include.
+        first.setDate(first.getDate() + 1);
+    }
+    if (last < first) return null;
+    return [first, last];
+}
+
+function sumNonExecutedPeriods(rows) {
+    const effective = rows.map(r => getNonExecEffectiveInterval(r.type, r.start, r.end)).filter(Boolean);
+    return sumIntervals(effective);
+}

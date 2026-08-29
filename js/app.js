@@ -92,6 +92,12 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
         }
     });
 
+
+    document.querySelectorAll('.manual-days').forEach((input, i) => {
+        const value = Number(input.value || 0);
+        if (!Number.isSafeInteger(value) || value < 0) err.push(`Recurs compensatoriu ${i + 1}: introduceți un număr întreg pozitiv sau zero.`);
+    });
+
     return err;
 }
 
@@ -150,15 +156,11 @@ function calculateAll() {
     }
 
     const steps = [];
-    let totalDays, theorExp;
+    let totalDays, theorExp = null;
 
     if (life) {
-        const d20 = new Date(startDate);
-        d20.setFullYear(d20.getFullYear() + 20);
-        d20.setDate(d20.getDate() - 1);
-        totalDays = daysBetween(startDate, d20) + 1;
-        theorExp = d20;
-        steps.push(`Pedepsa este detențiune pe viață. Se folosește plafonul de 20 ani (${totalDays} zile).`);
+        totalDays = LC_TWENTY_YEAR_CAP_DAYS;
+        steps.push(`Detențiune pe viață: nu există expirare teoretică a pedepsei. Pentru liberarea condiționată se aplică direct pragul efectiv de 20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile.`);
     } else {
         theorExp = addCalendarSafe(startDate, y, m, d);
         theorExp.setDate(theorExp.getDate() - 1);
@@ -177,10 +179,11 @@ function calculateAll() {
         if (sD && eD) dedIntervals.push([sD, eD]);
     });
 
+    const dedOverlapInfo = findIntervalOverlaps(dedIntervals);
     let ded = sumIntervals(dedIntervals);
     document.querySelectorAll('.manual-days').forEach(i => {
-        const v = parseInt(i.value);
-        if (!isNaN(v) && v > 0) ded += v;
+        const v = Number(i.value || 0);
+        if (Number.isSafeInteger(v) && v > 0) ded += v;
     });
 
     if (ded > totalDays) {
@@ -190,72 +193,56 @@ function calculateAll() {
     }
     steps.push(`Perioadele deduse însumează ${ded} zile (după unificarea suprapunerilor).`);
 
-    // Perioade adăugate
-    let non = 0;
-    const nonRowsData = []; // pentru export
+    // Perioade adăugate; suprapunerile sunt acceptate, semnalate și numărate o singură dată.
+    const nonRawRows = [];
+    const nonRowsData = [];
     document.querySelectorAll('.non-exec-row').forEach(r => {
         const type = r.querySelector('.ne-type').value;
         const sD = parseDate(r.querySelector('.ne-start').value.trim());
         const eD = parseDate(r.querySelector('.ne-end').value.trim());
         if (sD && eD) {
-            const diff = daysBetween(sD, eD);
-            let daysToAdd = diff;
-            if (type === 'interruption') daysToAdd = diff - 1;
-            non += daysToAdd;
+            nonRawRows.push({ type, start: sD, end: eD });
+            const effective = getNonExecEffectiveInterval(type, sD, eD);
+            const daysToAdd = effective ? daysBetween(effective[0], effective[1]) + 1 : 0;
             nonRowsData.push({ type, start: fmtDate(sD), end: fmtDate(eD), days: daysToAdd });
         }
     });
-    steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile.`);
+    const nonOverlapInfo = findIntervalOverlaps(nonRawRows.map(r => [r.start, r.end]));
+    const non = sumNonExecutedPeriods(nonRawRows);
+    steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile după eliminarea dublării zilelor suprapuse.`);
 
-    // Expirare reală
-    let realExp = new Date(theorExp);
-    realExp.setDate(realExp.getDate() - ded + non);
-    steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
+    // Expirare reală există numai pentru pedepsele determinate.
+    let realExp = null;
+    if (!life) {
+        realExp = new Date(theorExp);
+        realExp.setDate(realExp.getDate() - ded + non);
+        steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
+    }
 
-    // Categoria de vârstă la expirare
-    const ageAtExpiry = getAgeCategoryAtDate(birthDate, theorExp, currentSex, art);
-    steps.push(`La data expirării teoretice, deținutul are categoria de vârstă: ${ageAtExpiry}.`);
-
-    // Fracții liberare condiționată
     const sentenceOver10 = life ? false : (y * 12 + m + d / 30) > 120;
-    const fracResult = getLiberationFractions(life, art, ageAtExpiry, sentenceOver10, totalDays, birthDate, theorExp);
-
-    if (fracResult.error) {
-        errC.innerHTML = '• ' + fracResult.error;
+    const schedule = calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, birthDate, startDate, currentSex, theorExp, dedDays: ded, nonExecDays: non });
+    if (schedule.error) {
+        errC.innerHTML = '• ' + schedule.error;
         errC.classList.add('visible');
         return;
     }
-
-    const { mR, tR, pM, pT, articleInfo } = fracResult;
+    const { mR, tR, mDays, tDays, mDate, tDate, articleInfo } = schedule;
     steps.push(`Articolul aplicabil: ${articleInfo}.`);
-    steps.push(`Fracția minimă obligatorie: ${fracStr(mR)}. Fracția totală/propozabilă: ${fracStr(tR)}.`);
-
-    let mDays = Math.floor(totalDays * mR);
-    let tDays = Math.floor(totalDays * tR);
-    if (mDays > pM) mDays = pM;
-    if (tDays > pT) tDays = pT;
-
-    steps.push(`Fracția minimă: Math.floor(${totalDays} × ${fracStr(mR)}) = ${mDays} zile (din mandatul total). Math.floor rotunjește în jos (în defavoarea condamnatului).`);
-    steps.push(`Fracția totală: Math.floor(${totalDays} × ${fracStr(tR)}) = ${tDays} zile (din mandatul total).`);
-
-    // Date fracții
-    let mDate = new Date(startDate);
-    mDate.setDate(mDate.getDate() + mDays - 1);
-    mDate.setDate(mDate.getDate() - ded + non);
-
-    let tDate = new Date(startDate);
-    tDate.setDate(tDate.getDate() + tDays - 1);
-    tDate.setDate(tDate.getDate() - ded + non);
+    if (life) {
+        steps.push(`Pragul minim și data propozabilă coincid la ${LC_TWENTY_YEAR_CAP_DAYS} zile efective; zilele muncite nu reduc acest prag.`);
+    } else {
+        steps.push(`Fracția minimă: ${fracStr(mR)} = ${mDays} zile. Fracția totală/propozabilă: ${fracStr(tR)} = ${tDays} zile.`);
+        if (schedule.ageTransitionApplied) steps.push(`La împlinirea vârstei de 60 ani fracțiile se schimbă; noua fracție produce efecte cel mai devreme din chiar ziua împlinirii vârstei.`);
+    }
 
     // Salvează global data propozabilă pentru scăderea zilelor muncite
     window.lastProposedDate = new Date(tDate);
     window.lastMinimumDate = new Date(mDate);
 
-    // 1/5 mandat
-    const fifth = Math.floor(totalDays / 5);
-    let fDate = new Date(startDate);
-    fDate.setDate(fDate.getDate() + fifth - 1);
-    fDate.setDate(fDate.getDate() - ded + non);
+    // 1/5 se calculează numai pentru un mandat cu durată determinată.
+    const fifth = life ? null : Math.floor(totalDays / 5);
+    let fDate = null;
+    if (!life) fDate = thresholdDate(startDate, fifth, ded, non);
 
     // Zile executate și rest
     const elapsedEnd = realExp && today() > realExp ? realExp : today();
@@ -309,10 +296,11 @@ function calculateAll() {
         const condDate = parseDate(condReleaseStr2);
         if (condDate) timelineItems.push({ label: 'Data liberării condiționate', date: condDate });
     }
-    timelineItems.sort((a, b) => a.date - b.date);
+    const validTimelineItems = timelineItems.filter(item => item.date instanceof Date && !isNaN(item.date));
+    validTimelineItems.sort((a, b) => a.date - b.date);
 
     let timelineHtml = '';
-    timelineItems.forEach(item => {
+    validTimelineItems.forEach(item => {
         const diff = daysBetween(t, item.date);
         const passed = diff < 0;
         timelineHtml += `<li class="${passed ? 'passed' : ''}"><span class="tl-date">${fmtDate(item.date)}</span> <span class="tl-label">${item.label}</span></li>`;
@@ -340,27 +328,41 @@ function calculateAll() {
     let html = '';
     if (nume) html += `<div class="result-item observations-result"><div class="result-label">Observații</div><div class="result-value">${escapeHtml(nume)}</div></div>`;
 
-    html += `<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">
-        <div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>
-        <div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div>
-        <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
-        <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value">${non} zile</div></div>
-        <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
-        <div class="result-item"><div class="result-label">Rest rămas</div><div class="result-value">${remaining} zile</div></div>
-    </div></div>`;
+    html += life
+        ? `<div class="result-section"><h4>DETALII PEDEAPSĂ</h4><div class="result-grid">
+            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. Prag LC: 20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile.</div></div>
+            <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
+            <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value">${non} zile</div></div>
+            <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
+        </div></div>`
+        : `<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">
+            <div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>
+            <div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div>
+            <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
+            <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value">${non} zile</div></div>
+            <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
+            <div class="result-item"><div class="result-label">Rest rămas</div><div class="result-value">${remaining} zile</div></div>
+        </div></div>`;
 
     html += `<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">
         <div class="result-item">
             <div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div>
-            <div class="result-value"><span class="fraction">${fracStr(mR)}</span> → (fără deduceri: ${mDays}z / după deduceri și perioade adăugate: ${daysBetween(startDate, mDate) + 1}z)</div>
+            <div class="result-value">${life ? `Prag efectiv 20 ani / ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div>
         </div>
         <div class="result-item">
             <div class="result-label">DATA PROPOZABILĂ</div>
-            <div class="result-value"><span class="fraction">${fracStr(tR)}</span> → (fără deduceri: ${tDays}z / după deduceri și perioade adăugate: ${daysBetween(startDate, tDate) + 1}z)</div>
+            <div class="result-value">${life ? `Prag efectiv 20 ani / ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div>
         </div>
     </div></div>`;
+
+    if (dedOverlapInfo.length || nonOverlapInfo.length) {
+        html += `<div class="result-section overlap-notice"><h4>INFORMARE SUPRAPUNERI</h4>
+            ${dedOverlapInfo.length ? `<p>Există ${dedOverlapInfo.length} suprapunere(i) între perioadele deduse. Zilele comune au fost numărate o singură dată.</p>` : ''}
+            ${nonOverlapInfo.length ? `<p>Există ${nonOverlapInfo.length} suprapunere(i) între perioadele adăugate. Zilele comune au fost numărate o singură dată.</p>` : ''}
+        </div>`;
+    }
 
     // Secțiunea nouă: scădere zile muncite din data propozabilă
     html += `<div class="result-section">
@@ -378,7 +380,7 @@ function calculateAll() {
         <p id="workDaysNote" class="help-text"><em>Zilele câștigate reduc data propozabilă, fără a putea coborî sub fracția minimă obligatorie.</em></p>
     </div>`;
 
-    html += `<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid">
+    if (!life) html += `<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid">
         <div class="result-item"><div class="result-label">1/5 mandat</div>
             <div class="result-value">(fără deduceri: ${fifth}z / după deduceri și perioade adăugate: ${daysBetween(startDate, fDate) + 1}z)</div>
             <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div>
@@ -387,7 +389,7 @@ function calculateAll() {
 
     html += `<div class="result-section"><h4>ALTE DATE</h4><div class="result-grid">
         <div class="result-item"><div class="result-label">Articol LC</div><div class="result-value">${articleInfo}</div></div>
-        <div class="result-item"><div class="result-label">Mandat total</div><div class="result-value">${totalDays} zile</div></div>
+        <div class="result-item"><div class="result-label">${life ? 'Prag LC' : 'Mandat total'}</div><div class="result-value">${life ? `20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
         <div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div></div>
     </div></div>`;
 

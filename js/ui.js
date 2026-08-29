@@ -187,8 +187,8 @@ function updNonExec(r) {
         const a = parseDate(s);
         const b = parseDate(e);
         if (a && b && b > a) {
-            const diff = daysBetween(a, b);
-            f.value = (typ === 'interruption') ? diff - 1 : diff;
+            const effective = getNonExecEffectiveInterval(typ, a, b);
+            f.value = effective ? daysBetween(effective[0], effective[1]) + 1 : 0;
         } else {
             f.value = 'Eroare';
         }

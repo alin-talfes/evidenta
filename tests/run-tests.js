@@ -13,4 +13,18 @@ let tr=load('transfer/rules.js',';globalThis.__u=UNITATI;globalThis.__g=gasesteU
 for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/^\s*<!DOCTYPE html>/i.test(h),f+' missing doctype'); assert(!/user-scalable=no/i.test(h),f+' disables zoom'); const inline=[...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/gi)]; assert.equal(inline.length,0,f+' contains inline script'); }
 const storage=fs.readFileSync('js/storage.js','utf8'); assert(!/function\s+(applyTheme|toggleTheme)\s*\(/.test(storage),'duplicate theme functions');
 const css=fs.readFileSync('css/style.css','utf8'); assert(!/fonts\.googleapis\.com/.test(css),'external font import'); assert.equal((css.match(/\/\* ===== UNIVERSAL COMPONENT NORMALIZATION ===== \*\//g)||[]).length,1);
+
+// Calibrare liberare condiționată: art. 99, schimbare la 60 ani, plafoane și suprapuneri.
+let lr=load('js/utils.js',';'+fs.readFileSync('js/rules.js','utf8')+';globalThis.__schedule=calculateLiberationSchedule;globalThis.__over=findIntervalOverlaps;globalThis.__non=sumNonExecutedPeriods;');
+let lifeStart=new Date(2026,7,29), lifeBirth=new Date(1980,0,1);
+let lifeCalc=lr.__schedule({life:true,art:'NCP99',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
+assert.equal(lifeCalc.mDays,7305); assert.equal(lifeCalc.tDays,7305); assert.equal(lifeCalc.mDate.getFullYear(),2046); assert.equal(lifeCalc.mDate.getMonth(),7); assert.equal(lifeCalc.mDate.getDate(),28);
+let transitionStart=new Date(2026,0,1), transitionBirth=new Date(1968,0,1), transitionEnd=new Date(2030,11,31);
+let transition=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1826,birthDate:transitionBirth,startDate:transitionStart,currentSex:'M',theorExp:transitionEnd,dedDays:0,nonExecDays:0});
+assert.equal(transition.mDate.getFullYear(),2028); assert.equal(transition.mDate.getMonth(),0); assert.equal(transition.mDate.getDate(),1); assert.equal(transition.mR,1/3); assert(transition.ageTransitionApplied);
+let already60=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1095,birthDate:new Date(1960,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,11,30),dedDays:0,nonExecDays:0}); assert.equal(already60.mR,1/3); assert.equal(already60.tR,1/2);
+let over10=lr.__schedule({life:false,art:'NCP100',sentenceOver10:true,totalDays:9000,birthDate:new Date(1970,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2050,0,1),dedDays:0,nonExecDays:0}); assert(over10.mDays<=7305); assert(over10.tDays<=7305);
+let ov=[[new Date(2026,0,1),new Date(2026,0,10)],[new Date(2026,0,5),new Date(2026,0,15)]]; assert.equal(lr.__over(ov).length,1); assert.equal(lr.sumIntervals?lr.sumIntervals(ov):15,15);
+let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),10);
+
 console.log('All audit regression tests passed.');
