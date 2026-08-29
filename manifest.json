@@ -1,15 +1,17 @@
 {
-  "name": "Evidență Mobile",
-  "short_name": "Evidență",
-  "description": "Calculator pentru termene de executare a pedepselor privative de libertate, liberare condiționată, termene procedurale și pedeapsă rezultantă.",
+  "id": "./",
+  "name": "Evidență PPL",
+  "short_name": "Evidență PPL",
+  "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.",
+  "lang": "ro-RO",
+  "dir": "ltr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "orientation": "any",
   "background_color": "#0b1220",
-  "theme_color": "#0f172a",
-  "lang": "ro",
+  "theme_color": "#0b1220",
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
       "src": "favicon-ev.svg",
