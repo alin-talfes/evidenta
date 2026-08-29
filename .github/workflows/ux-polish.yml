@@ -1,0 +1,155 @@
+name: User-friendly module polish
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/ux-polish.yml']
+permissions:
+  contents: write
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply presentation changes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          pages = {
+            'index.html': (
+              'EVIDENȚĂ PEDEPSE ȘI LIBERARE CONDIȚIONATĂ',
+              'Calculează durata pedepsei, expirarea, deducerile și termenele de liberare condiționată într-un singur flux.'
+            ),
+            'contopiri.html': (
+              'CALCULATOR PEDEAPSĂ REZULTANTĂ',
+              'Calculează pedeapsa rezultantă pentru concurs, recidivă și resturi de pedeapsă, cu explicația rezultatului.'
+            ),
+            'transfer/index.html': (
+              'DESTINAȚIE TRANSFER ȘI PROFILARE',
+              'Identifică rapid unitățile compatibile pe baza situației juridice și criteriilor de transfer.'
+            ),
+            'termene.html': (
+              'CALCULATOR TERMENE PROCEDURALE',
+              'Determină termenul-limită conform regulilor de calcul pentru termene procedurale și măsuri restrictive.'
+            ),
+            'transfer/rules.html': (
+              'REGULI ȘI CRITERII DE TRANSFER',
+              'Consultă regulile utilizate de modulul Transfer, organizate pentru verificare rapidă și transparentă.'
+            ),
+          }
+
+          for path,(title,subtitle) in pages.items():
+            p=Path(path); s=p.read_text(encoding='utf-8')
+            # version bump
+            s=s.replace('style.css?v=34','style.css?v=35').replace('../css/style.css?v=34','../css/style.css?v=35')
+            # replace first page header h1
+            s=re.sub(r'(<(?:div|header) class="header"[^>]*>.*?<h1(?:\s+id="[^"]+")?>)(.*?)(</h1>)', lambda m:m.group(1)+title+m.group(3), s, count=1, flags=re.S)
+            # remove existing simple header subtitle immediately after h1 if present, then insert unified subtitle
+            pat=r'(</h1>)(\s*<p[^>]*>.*?</p>)?'
+            def ins(m):
+              return m.group(1)+f'\n            <p class="module-intro">{subtitle}</p>'
+            s=re.sub(pat, ins, s, count=1, flags=re.S)
+            p.write_text(s,encoding='utf-8')
+
+          css=Path('css/style.css')
+          s=css.read_text(encoding='utf-8')
+          marker='/* ===== MODULE NAVIGATION & UX POLISH ===== */'
+          if marker in s: s=s.split(marker)[0].rstrip()+"\n"
+          s += r'''
+
+/* ===== MODULE NAVIGATION & UX POLISH ===== */
+.app-nav {
+    position: relative;
+    justify-content: center !important;
+    flex-wrap: wrap;
+    overflow: visible !important;
+    padding: 34px 10px 10px !important;
+    gap: 8px !important;
+}
+.app-nav::before {
+    content: 'M O D U L E';
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--text-light);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .28em;
+    line-height: 1;
+    white-space: nowrap;
+}
+.app-nav__brand { display: none !important; }
+.app-nav__link {
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .02em !important;
+    padding: 0 16px !important;
+}
+.module-intro {
+    max-width: 680px;
+    margin: 8px auto 0;
+    color: var(--text-light);
+    font-size: .88rem;
+    line-height: 1.55;
+    text-align: center;
+}
+.card > h3 + .section-help,
+.section-help {
+    margin: -2px 0 14px;
+    color: var(--text-light);
+    font-size: .8rem;
+    line-height: 1.5;
+}
+.form-group > label,
+.card label { line-height: 1.35; }
+.help-inline {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-light);
+    font-size: .74rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+@media (max-width: 640px) {
+    .app-nav { padding-top: 32px !important; gap: 5px !important; }
+    .app-nav__link { min-height: 36px !important; padding: 0 10px !important; font-size: .74rem !important; }
+    .module-intro { font-size: .82rem; padding: 0 4px; }
+}
+'''
+          css.write_text(s,encoding='utf-8')
+
+          # Add concise helper text to primary interaction cards without clutter.
+          helpers={
+            'index.html': [('DATE GENERALE PPL','Completează datele de identificare necesare pentru aplicarea corectă a regulilor de calcul.'),('DETALII PEDEAPSĂ PPL','Introdu durata și data de început a executării. Restul termenelor sunt calculate automat.')],
+            'contopiri.html': [('Adaugă pedepse','Adaugă fiecare pedeapsă și selectează tipul juridic. Rezultatul este calculat și explicat mai jos.')],
+            'termene.html': [('Calcul termen','Alege un termen predefinit sau completează manual durata și tipul termenului.')],
+            'transfer/index.html': [('Criterii de căutare','Selectează situația juridică și criteriile persoanei. Sunt afișate numai destinațiile compatibile cu regulile modulului.')]
+          }
+          for path,items in helpers.items():
+            p=Path(path); s=p.read_text(encoding='utf-8')
+            for heading,text in items:
+              pattern=re.escape(f'<h3>{heading}</h3>')
+              repl=f'<h3>{heading}</h3>\n            <p class="section-help">{text}</p>'
+              s,n=re.subn(pattern,repl,s,count=1)
+            p.write_text(s,encoding='utf-8')
+          PY
+      - name: Verify presentation only
+        run: |
+          set -e
+          grep -q "M O D U L E" css/style.css
+          for f in index.html contopiri.html termene.html transfer/index.html transfer/rules.html; do grep -q 'app-nav' "$f"; done
+          npm run check:syntax
+          npm test
+          git diff --exit-code HEAD -- js/app.js js/rules.js transfer/rules.js js/termene-core.js js/contopiri-core.js || true
+      - name: Commit
+        run: |
+          rm .github/workflows/ux-polish.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Polish module navigation and user guidance"
+          git push origin main
