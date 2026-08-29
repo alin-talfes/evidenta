@@ -144,14 +144,22 @@ function thresholdDate(startDate, thresholdDays, dedDays = 0, nonExecDays = 0) {
     return d;
 }
 
-function sixtiethBirthday(birthDate) {
+function ageThresholdBirthday(birthDate, years) {
     const d = new Date(birthDate);
     const month = d.getMonth(), day = d.getDate();
     d.setDate(1);
-    d.setFullYear(d.getFullYear() + 60);
+    d.setFullYear(d.getFullYear() + years);
     d.setMonth(month);
     d.setDate(Math.min(day, new Date(d.getFullYear(), month + 1, 0).getDate()));
     return d;
+}
+
+function sixtiethBirthday(birthDate) {
+    return ageThresholdBirthday(birthDate, 60);
+}
+
+function vcpElderlyBirthday(birthDate, currentSex) {
+    return ageThresholdBirthday(birthDate, currentSex === 'F' ? 55 : 60);
 }
 
 function cappedFractionDays(totalDays, ratio, cap = Infinity) {
@@ -204,6 +212,32 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
             birthday60,
             ageTransitionApplied: m.transitionApplied || t.transitionApplied,
             articleInfo: `NCP art. 100 (${usedElder ? 'fracții 60+ aplicate de la data împlinirii vârstei' : 'fracții sub 60 ani'}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`
+        };
+    }
+
+    if (art === 'VCP59' || art === 'VCP591') {
+        const is59 = art === 'VCP59';
+        const youngMR = is59 ? (sentenceOver10 ? 2/3 : 1/2) : (sentenceOver10 ? 1/2 : 1/3);
+        const youngTR = is59 ? (sentenceOver10 ? 3/4 : 2/3) : (sentenceOver10 ? 2/3 : 1/2);
+        // Condițiile favorabile de vârstă din VCP: corespondent art. 60 alin. (2) pentru art. 59,
+        // respectiv art. 60 alin. (3) pentru art. 59¹. Articolul selectat rămâne neschimbat pe mandat.
+        const elderMR = 1/100;
+        const elderTR = is59 ? (sentenceOver10 ? 1/2 : 1/3) : (sentenceOver10 ? 1/3 : 1/4);
+        const birthday = vcpElderlyBirthday(birthDate, currentSex);
+        const m = resolveAgeTransitionThreshold(startDate, birthday,
+            cappedFractionDays(totalDays, youngMR), cappedFractionDays(totalDays, elderMR), dedDays, nonExecDays);
+        const t = resolveAgeTransitionThreshold(startDate, birthday,
+            cappedFractionDays(totalDays, youngTR), cappedFractionDays(totalDays, elderTR), dedDays, nonExecDays);
+        const usedElder = m.usedElderlyRule || t.usedElderlyRule;
+        const articleLabel = is59 ? 'VCP art. 59' : 'VCP art. 59¹';
+        return {
+            mR: m.usedElderlyRule ? elderMR : youngMR,
+            tR: t.usedElderlyRule ? elderTR : youngTR,
+            mDays: m.days, tDays: t.days, mDate: m.date, tDate: t.date,
+            pM: Infinity, pT: Infinity,
+            elderlyBirthday: birthday,
+            ageTransitionApplied: m.transitionApplied || t.transitionApplied,
+            articleInfo: `${articleLabel} (${usedElder ? 'condiții VCP pentru pragul de vârstă aplicate de la data împlinirii' : 'condiții VCP înainte de pragul de vârstă'}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`
         };
     }
 
