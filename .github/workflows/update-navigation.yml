@@ -2,9 +2,10 @@ name: Update application navigation
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
-      - '.github/workflows/update-navigation.yml'
+      - .github/workflows/update-navigation.yml
 
 permissions:
   contents: write
@@ -16,96 +17,69 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Update navigation
-        shell: python
         run: |
+          python3 <<'PY'
           from pathlib import Path
           import re
 
-          files = [
-              Path('index.html'),
-              Path('contopiri.html'),
-              Path('termene.html'),
-              Path('transfer/index.html'),
-              Path('transfer/rules.html'),
-          ]
+          files = [Path('index.html'), Path('contopiri.html'), Path('termene.html'), Path('transfer/index.html'), Path('transfer/rules.html')]
+          current_map = {
+              'index.html': 'Pedepse',
+              'contopiri.html': 'Contopiri',
+              'termene.html': 'Termene',
+              'transfer/index.html': 'Transfer',
+          }
 
           for path in files:
               text = path.read_text(encoding='utf-8')
-              if path.parts[0] == 'transfer':
-                  links = [
-                      ('../', 'Pedepse'),
-                      ('../contopiri.html', 'Contopiri'),
-                      ('./', 'Transfer'),
-                      ('../termene.html', 'Termene'),
-                  ]
+              if path.as_posix().startswith('transfer/'):
+                  links = [('../', 'Pedepse'), ('../contopiri.html', 'Contopiri'), ('./', 'Transfer'), ('../termene.html', 'Termene')]
               else:
-                  links = [
-                      ('./', 'Pedepse'),
-                      ('contopiri.html', 'Contopiri'),
-                      ('transfer/', 'Transfer'),
-                      ('termene.html', 'Termene'),
-                  ]
+                  links = [('./', 'Pedepse'), ('contopiri.html', 'Contopiri'), ('transfer/', 'Transfer'), ('termene.html', 'Termene')]
 
-              current = {
-                  'index.html': 'Pedepse',
-                  'contopiri.html': 'Contopiri',
-                  'termene.html': 'Termene',
-                  'transfer/index.html': 'Transfer',
-              }.get(path.as_posix())
-
-              nav_lines = ['        <nav class="app-nav" aria-label="Modulele aplicației">',
-                           '            <span class="app-nav__brand">Evidență PPL</span>']
+              lines = ['        <nav class="app-nav" aria-label="Modulele aplicației">', '            <span class="app-nav__brand">Evidență PPL</span>']
+              current = current_map.get(path.as_posix())
               for href, label in links:
-                  current_attr = ' aria-current="page"' if current == label else ''
-                  nav_lines.append(f'            <a class="app-nav__link" href="{href}"{current_attr}>{label}</a>')
-              nav_lines.append('        </nav>')
-              new_nav = '\n'.join(nav_lines)
+                  attr = ' aria-current="page"' if label == current else ''
+                  lines.append(f'            <a class="app-nav__link" href="{href}"{attr}>{label}</a>')
+              lines.append('        </nav>')
+              nav = '\n'.join(lines)
 
-              text, count = re.subn(
-                  r'\s*<nav class="app-nav" aria-label="Modulele aplicației">.*?</nav>',
-                  '\n' + new_nav,
-                  text,
-                  count=1,
-                  flags=re.S,
-              )
-              if count != 1:
-                  raise SystemExit(f'Could not replace nav in {path}')
+              text, n = re.subn(r'\s*<nav class="app-nav" aria-label="Modulele aplicației">.*?</nav>', '\n' + nav, text, count=1, flags=re.S)
+              if n != 1:
+                  raise RuntimeError(f'Navigation not found in {path}')
 
-              if path.as_posix() == 'transfer/index.html':
+              if path.as_posix() == 'transfer/index.html' and 'href="rules.html">REGULI TRANSFER</a>' not in text:
                   marker = '        <!-- ========== CARD PRINCIPAL ========== -->'
-                  block = '''        <div class="page-actions transfer-page-actions">
-            <a class="btn btn-outline" href="rules.html">REGULI TRANSFER</a>
-        </div>
-
-'''
-                  if 'href="rules.html">REGULI TRANSFER</a>' not in text:
-                      if marker not in text:
-                          raise SystemExit('Transfer insertion marker missing')
-                      text = text.replace(marker, block + marker, 1)
+                  block = '        <div class="page-actions transfer-page-actions">\n            <a class="btn btn-outline" href="rules.html">REGULI TRANSFER</a>\n        </div>\n\n'
+                  if marker not in text:
+                      raise RuntimeError('Transfer insertion marker missing')
+                  text = text.replace(marker, block + marker, 1)
 
               path.write_text(text, encoding='utf-8')
-
+          PY
       - name: Verify navigation
-        shell: bash
         run: |
           set -euo pipefail
-          for f in index.html contopiri.html termene.html transfer/index.html transfer/rules.html; do
-            grep -q '>Pedepse</a>' "$f"
-            grep -q '>Contopiri</a>' "$f"
-            grep -q '>Transfer</a>' "$f"
-            grep -q '>Termene</a>' "$f"
-            if grep -A8 '<nav class="app-nav"' "$f" | grep -q '>Reguli transfer</a>'; then
-              echo "Reguli transfer still present in main nav: $f"
-              exit 1
-            fi
-          done
-          grep -q 'href="rules.html">REGULI TRANSFER</a>' transfer/index.html
-          git diff --exit-code -- js/ transfer/rules.js || { echo 'JS changed unexpectedly'; exit 1; }
+          python3 <<'PY'
+          from pathlib import Path
+          import re
 
+          for f in ['index.html','contopiri.html','termene.html','transfer/index.html','transfer/rules.html']:
+              text = Path(f).read_text(encoding='utf-8')
+              nav = re.search(r'<nav class="app-nav".*?</nav>', text, re.S)
+              if not nav:
+                  raise SystemExit(f'Missing nav in {f}')
+              labels = re.findall(r'>(Pedepse|Contopiri|Transfer|Termene|Reguli transfer)</a>', nav.group(0))
+              if labels != ['Pedepse','Contopiri','Transfer','Termene']:
+                  raise SystemExit(f'Wrong nav in {f}: {labels}')
+          transfer = Path('transfer/index.html').read_text(encoding='utf-8')
+          if 'href="rules.html">REGULI TRANSFER</a>' not in transfer:
+              raise SystemExit('Transfer rules link missing from transfer page')
+          PY
+          git diff --exit-code -- js/ transfer/rules.js
       - name: Commit navigation update
-        shell: bash
         run: |
           set -euo pipefail
           rm .github/workflows/update-navigation.yml
