@@ -49,4 +49,21 @@ let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDay
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=38/.test(h),f+' stale css cache version'); }
 
+
+// Footer/versionare: toate paginile folosesc același version.js, iar numărul există numai în version.json.
+const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
+assert.equal(versionData.version,'0.168');
+const versionSource=fs.readFileSync('js/version.js','utf8');
+assert(versionSource.includes("new URL('../version.json', scriptUrl)"));
+assert(versionSource.includes('© Alin Talfeș'));
+assert(versionSource.includes('Toate datele sunt stocate exclusiv local'));
+for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){
+  const h=fs.readFileSync(f,'utf8');
+  const expected=f.startsWith('transfer/')?'../js/version.js?v=38':'js/version.js?v=38';
+  assert(h.includes(`src="${expected}"`),f+' missing centralized version.js');
+  assert(!/Versiune\s+0\.168/.test(h),f+' hardcodes application version');
+  assert(!/<footer\b/i.test(h),f+' contains duplicated static footer');
+}
+assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
+
 console.log('All audit regression tests passed.');
