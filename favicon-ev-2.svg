@@ -11,9 +11,8 @@
   </defs>
   <rect x="28" y="28" width="456" height="456" rx="112" fill="url(#bg)"/>
   <rect x="49" y="49" width="414" height="414" rx="93" fill="none" stroke="url(#ring)" stroke-width="14"/>
-  <g fill="#f4f7fb" aria-hidden="true">
+  <g fill="#f4f7fb" aria-hidden="true" transform="translate(-48 0)">
     <path d="M126 150h132v44h-82v40h72v42h-72v42h84v44H126V150Z"/>
     <path d="M270 150h52l54 148 54-148h52l-81 212h-50L270 150Z"/>
   </g>
-  <circle cx="418" cy="101" r="14" fill="#2dd4bf"/>
 </svg>
