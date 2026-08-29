@@ -1,0 +1,29 @@
+name: Unified footer
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/unify_footer.py
+      - .github/workflows/unify-footer.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Apply footer patch
+        run: python3 scripts/unify_footer.py
+      - name: Verify
+        run: |
+          npm run check:syntax
+          npm test
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html termene.html contopiri.html transfer/index.html transfer/rules.html js/version.js tests/run-tests.js
+          git commit -m "Unify application footer and version source"
+          git push origin main
