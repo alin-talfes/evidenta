@@ -17,6 +17,8 @@
     --accent-strong: #7aa7ff;
     --accent-soft: rgba(79, 140, 255, .13);
     --secondary: #2dd4bf;
+    --gold: var(--accent);
+    --gold-light: var(--accent-strong);
     --secondary-soft: rgba(45, 212, 191, .12);
     --danger: #f87171;
     --danger-soft: rgba(248, 113, 113, .12);
@@ -513,3 +515,6 @@ small { color: var(--text-light); font-size: .72rem; }
 .result-note { margin-top: 6px; color: var(--text-light); font-size: .75rem; line-height: 1.45; font-weight: 500; }
 .result-value-small { font-size: .82rem; line-height: 1.48; font-weight: 620; }
 .transfer-page-actions { margin-bottom: 10px; }
+
+.result-explanation { display:block; margin-top:5px; color:var(--text-light); font-size:.72rem; font-weight:500; line-height:1.45; }
+.transfer-page-actions { margin-top:0; margin-bottom:12px; }

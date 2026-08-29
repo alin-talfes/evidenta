@@ -50,24 +50,7 @@ function buildNarrativeText() {
 /**
  * Copiază textul narativ în clipboard.
  */
-function copyResults() {
-    const text = buildNarrativeText();
-    if (!text) return;
 
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Rezultatul a fost copiat în clipboard.');
-        }).catch(() => {
-            fallbackCopy(text);
-        });
-    } else {
-        fallbackCopy(text);
-    }
-}
-
-/**
- * Metodă de rezervă pentru copiere.
- */
 function fallbackCopy(text) {
     const textarea = document.createElement('textarea');
     textarea.value = text;
@@ -271,4 +254,15 @@ function exportPDF() {
     } catch (e) {
         alert('Eroare la deschiderea paginii de rezultate: ' + e.message);
     }
+}
+
+
+function copyResults() {
+    const content = document.getElementById('resultsContent');
+    if (!content || !content.innerText.trim()) { alert('Nu există rezultate. Apasă întâi „CALCULEAZĂ”.'); return; }
+    const d = getInputData();
+    const duration = d.life ? 'detențiune pe viață' : `${d.y || 0}a ${d.m || 0}l ${d.d || 0}z`;
+    const cleanOutput = content.innerText.replace(/\n{3,}/g, '\n\n').trim();
+    const text = `EVIDENȚĂ PPL — REZUMAT\nINPUT: ${d.sex}; n. ${d.birthDate || '—'}; ${duration}; început ${d.start || '—'}; art. ${d.art || '—'}; deduceri ${d.dedRows.length}; perioade adăugate ${d.nonRows.length}.\n\nOUTPUT:\n${cleanOutput}`;
+    navigator.clipboard.writeText(text).then(() => alert('Rezumatul input/output a fost copiat.')).catch(() => alert('Nu s-a putut copia automat rezultatul.'));
 }

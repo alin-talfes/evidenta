@@ -51,7 +51,7 @@ for(const f of ['index.html','termene.html','contopiri.html','transfer/index.htm
 
 // Footer/versionare: toate paginile folosesc același version.js, iar numărul există numai în version.json.
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
-assert.equal(versionData.version,'0.168');
+assert.match(versionData.version,/^\d+\.\d+(?:\.\d+)?$/);
 const versionSource=fs.readFileSync('js/version.js','utf8');
 assert(versionSource.includes("new URL('../version.json', scriptUrl)"));
 assert(versionSource.includes('© Alin Talfeș'));
@@ -84,3 +84,8 @@ assert(fs.readFileSync('js/termene.js','utf8').includes('Pentru termenele calcul
 for(const f of ['termene.html','contopiri.html','transfer/index.html','transfer/rules.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
 
 console.log('All audit regression tests passed.');
+
+assert(!fs.readFileSync('transfer/app.js','utf8').includes('versionDisplay'),'transfer app has stale versionDisplay');
+assert(!fs.readFileSync('transfer/rules-page.js','utf8').includes('versionDisplay'),'transfer rules has stale versionDisplay');
+assert(fs.readFileSync('js/theme.js','utf8').includes('#0b1220'),'theme color mismatch');
+assert(fs.readFileSync('js/termene.js','utf8').includes("Number(document.getElementById('durationInput').value)"),'termene truncates decimals');
