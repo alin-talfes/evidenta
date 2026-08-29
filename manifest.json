@@ -1,7 +1,7 @@
 {
   "id": "./",
   "name": "Evidență PPL",
-  "short_name": "Evidență PPL",
+  "short_name": "Evidență",
   "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.",
   "lang": "ro-RO",
   "dir": "ltr",
@@ -11,13 +11,38 @@
   "orientation": "any",
   "background_color": "#0b1220",
   "theme_color": "#0b1220",
-  "categories": ["productivity", "utilities"],
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "favicon-ev.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Pedepse",
+      "short_name": "Pedepse",
+      "url": "./"
+    },
+    {
+      "name": "Contopiri",
+      "short_name": "Contopiri",
+      "url": "./contopiri.html"
+    },
+    {
+      "name": "Transfer",
+      "short_name": "Transfer",
+      "url": "./transfer/"
+    },
+    {
+      "name": "Termene",
+      "short_name": "Termene",
+      "url": "./termene.html"
     }
   ]
 }

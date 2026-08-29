@@ -492,3 +492,28 @@ small { color: var(--text-light); font-size: .72rem; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Transfer module action alignment */
+.transfer-page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
+.transfer-page-actions #themeToggle {
+    margin-left: auto;
+}
+.transfer-page-actions--theme-only {
+    justify-content: flex-end;
+}
+.transfer-page-actions--theme-only #themeToggle {
+    margin-left: 0;
+}
+@media (max-width: 600px) {
+    .transfer-page-actions {
+        justify-content: space-between;
+    }
+    .transfer-page-actions--theme-only {
+        justify-content: flex-end;
+    }
+}
