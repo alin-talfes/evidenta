@@ -72,7 +72,13 @@ manifest = {
 }
 Path('manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
-# 4. Integrity assertions.
+# 4. Keep regression test aligned with the new CSS release asset version.
+tests = Path('tests/run-tests.js')
+s = tests.read_text(encoding='utf-8')
+s = s.replace("assert(/style\\.css\\?v=38/.test(h),f+' stale css cache version')", "assert(/style\\.css\\?v=39/.test(h),f+' stale css cache version')")
+tests.write_text(s, encoding='utf-8')
+
+# 5. Integrity assertions.
 for p in pages:
     s = p.read_text(encoding='utf-8')
     assert 'style.css?v=39' in s, f'stale CSS version in {p}'
