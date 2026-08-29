@@ -47,8 +47,7 @@ let vcpFemale=lr.__schedule({life:false,art:'VCP591',sentenceOver10:false,totalD
 assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFemale.articleInfo.includes('VCP art. 59¹'));
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
-for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=38/.test(h),f+' stale css cache version'); }
-
+for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=39/.test(h),f+' stale css cache version'); }
 
 // Footer/versionare: toate paginile folosesc același version.js, iar numărul există numai în version.json.
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
