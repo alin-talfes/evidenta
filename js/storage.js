@@ -1,32 +1,6 @@
 // ========== GESTIONARE STOCARE LOCALĂ (localStorage) ==========
 
 /**
- * Aplică tema salvată la pornire.
- * Denumirile butonului: LUMINOS / INTUNECAT, fără emoji.
- */
-function applyTheme() {
-    const saved = localStorage.getItem('anpTheme');
-    if (saved === 'light') {
-        document.body.classList.add('light');
-        document.getElementById('themeToggle').innerHTML = 'INTUNECAT';
-    } else {
-        document.body.classList.remove('light');
-        document.getElementById('themeToggle').innerHTML = 'LUMINOS';
-    }
-}
-
-/**
- * Comută tema și salvează preferința.
- * Denumirile butonului: LUMINOS / INTUNECAT, fără emoji.
- */
-function toggleTheme() {
-    document.body.classList.toggle('light');
-    const isLight = document.body.classList.contains('light');
-    localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
-    document.getElementById('themeToggle').innerHTML = isLight ? 'INTUNECAT' : 'LUMINOS';
-}
-
-/**
  * Citește spețele salvate din localStorage.
  * @returns {Object} - obiect cu spețele
  */

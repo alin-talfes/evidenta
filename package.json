@@ -1,0 +1,8 @@
+{
+  "name": "evidenta-ppl",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run-tests.js",
+    "check:syntax": "find js transfer -name \"*.js\" -print0 | xargs -0 -n1 node --check"
+  }
+}

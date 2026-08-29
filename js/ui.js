@@ -1,3 +1,30 @@
+
+let modalReturnFocus = null;
+function closeModal(overlay) {
+    if (!overlay) return;
+    overlay.remove();
+    if (modalReturnFocus && typeof modalReturnFocus.focus === 'function') modalReturnFocus.focus();
+    modalReturnFocus = null;
+}
+function mountAccessibleModal(overlay) {
+    modalReturnFocus = document.activeElement;
+    document.body.appendChild(overlay);
+    const getFocusable = () => Array.from(overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')).filter(el => !el.disabled && el.offsetParent !== null);
+    const focusable = getFocusable();
+    (focusable[0] || overlay).focus?.();
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(overlay); });
+    overlay.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { e.preventDefault(); closeModal(overlay); return; }
+        if (e.key !== 'Tab') return;
+        const items = getFocusable();
+        if (!items.length) { e.preventDefault(); return; }
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    overlay.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', () => closeModal(overlay)));
+}
+
 // ========== INTERFAȚĂ UTILIZATOR (DOM) ==========
 
 // Variabila globală pentru sexul curent (M/F)
@@ -255,7 +282,7 @@ function openInfoModal() {
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <h4 id="info-title" style="margin:0;">INFORMAȚII ȘI GHID DE UTILIZARE</h4>
-                <button class="btn btn-outline btn-sm close-btn" onclick="this.closest('.modal-overlay').remove()" style="flex-shrink:0;">Închide</button>
+                <button class="btn btn-outline btn-sm close-btn"  style="flex-shrink:0;">Închide</button>
             </div>
             <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
                 <p><strong>Scopul aplicației</strong><br>
@@ -290,10 +317,7 @@ function openInfoModal() {
             </div>
         </div>
     `;
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) overlay.remove();
-    });
+    mountAccessibleModal(overlay);
 }
 
 /**
@@ -313,7 +337,7 @@ function openLegalModal() {
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <h4 id="legal-title" style="margin:0;">OMJ 2188/C/2022</h4>
-                <button class="btn btn-outline btn-sm close-btn" onclick="this.closest('.modal-overlay').remove()" style="flex-shrink:0;">Închide</button>
+                <button class="btn btn-outline btn-sm close-btn"  style="flex-shrink:0;">Închide</button>
             </div>
             <div style="max-height:70vh; overflow-y:auto;">
     `;
@@ -333,10 +357,7 @@ function openLegalModal() {
     html += `</div></div>`;
 
     overlay.innerHTML = html;
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) overlay.remove();
-    });
+    mountAccessibleModal(overlay);
 }
 
 /**
@@ -344,41 +365,34 @@ function openLegalModal() {
  */
 function openLoadModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
-    if (existingOverlay) existingOverlay.remove();
-
+    if (existingOverlay) closeModal(existingOverlay);
     const cases = getCases();
     const names = Object.keys(cases);
-    if (names.length === 0) {
-        alert('Nicio speță salvată.');
-        return;
-    }
+    if (names.length === 0) { alert('Nicio speță salvată.'); return; }
 
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.setAttribute('role', 'dialog');
     overlay.setAttribute('aria-modal', 'true');
     overlay.setAttribute('aria-labelledby', 'modal-title');
+    overlay.tabIndex = -1;
 
-    let html = '<div class="modal"><h4 id="modal-title">Selectează sau șterge o speță</h4>';
-    html += '<p style="font-size:0.8rem;color:var(--text-light);margin-bottom:8px;">Click pe speță pentru a o încărca.</p>';
-    html += '<ul role="listbox">';
+    const modal = document.createElement('div'); modal.className = 'modal';
+    const title = document.createElement('h4'); title.id = 'modal-title'; title.textContent = 'Selectează sau șterge o speță'; modal.appendChild(title);
+    const help = document.createElement('p'); help.className = 'help-text'; help.textContent = 'Selectează speța pentru a o încărca.'; modal.appendChild(help);
+    const list = document.createElement('ul'); list.setAttribute('role', 'list');
     names.forEach(name => {
-        const safeName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        html += `<li role="option" tabindex="0">
-            <span onclick="window.loadCaseByName('${safeName}')" role="button" tabindex="0">${name}</span>
-            <div style="display:flex;gap:4px;">
-                <button onclick="window.renameCase('${safeName}')" aria-label="Redenumește speța ${name}" style="background:transparent;border:1px solid var(--primary);color:var(--gold-light);border-radius:8px;padding:6px 8px;cursor:pointer;font-size:0.7rem;">Edit</button>
-                <button onclick="window.deleteCase('${safeName}')" aria-label="Șterge speța ${name}">X</button>
-            </div>
-        </li>`;
+        const li = document.createElement('li'); li.className = 'saved-case-row';
+        const load = document.createElement('button'); load.type = 'button'; load.className = 'saved-case-name'; load.textContent = name; load.addEventListener('click', () => window.loadCaseByName(name));
+        const actions = document.createElement('div'); actions.className = 'saved-case-actions';
+        const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'btn btn-outline btn-sm'; edit.textContent = 'Edit'; edit.setAttribute('aria-label', `Redenumește speța ${name}`); edit.addEventListener('click', () => window.renameCase(name));
+        const del = document.createElement('button'); del.type = 'button'; del.className = 'btn btn-danger btn-sm'; del.textContent = 'X'; del.setAttribute('aria-label', `Șterge speța ${name}`); del.addEventListener('click', () => window.deleteCase(name));
+        actions.append(edit, del); li.append(load, actions); list.appendChild(li);
     });
-    html += '</ul><button class="btn btn-outline close-btn" onclick="this.closest(\'.modal-overlay\').remove()" aria-label="Închide fereastra">Închide</button></div>';
-
-    overlay.innerHTML = html;
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) overlay.remove();
-    });
+    modal.appendChild(list);
+    const close = document.createElement('button'); close.type = 'button'; close.className = 'btn btn-outline close-btn'; close.textContent = 'Închide'; modal.appendChild(close);
+    overlay.appendChild(modal);
+    mountAccessibleModal(overlay);
 }
 
 /**

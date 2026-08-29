@@ -1726,7 +1726,7 @@ function gasesteUnitati(sex, varsta, regim, judet, mode, risc = false) {
                     judeteList = u.educativJudeteFeminin;
                 }
                 if (Array.isArray(judeteList) && (judeteList.includes(judet) || judeteList.includes('toate'))) {
-                    matches.push({ unitate: u, regimJudete: judeteList, judeteDeservite: u.judeteDeservite || [] });
+                    matches.push({ unitate: u, regimJudete: judeteList, judeteDeservite: u.judeteDeservite || [], isCustodie: true });
                 }
             }
             if (u.detentie) {

@@ -11,6 +11,9 @@
         button.textContent = isLight ? '☀️' : '🌙';
         button.setAttribute('aria-label', isLight ? 'Activează tema întunecată' : 'Activează tema luminoasă');
         button.setAttribute('title', isLight ? 'Temă întunecată' : 'Temă luminoasă');
+        let meta = document.querySelector('meta[name="theme-color"]');
+        if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
+        meta.content = isLight ? '#ffffff' : '#061426';
     }
 
     function applyTheme() {

@@ -1,0 +1,363 @@
+(function() {
+        // ============================================================
+        // 0. ÎNCĂRCARE VERSIUNE DIN version.json
+        // ============================================================
+        const versionDisplay = document.getElementById('versionDisplay');
+        fetch('../version.json')
+            .then(response => {
+                if (!response.ok) throw new Error('version.json not found');
+                return response.json();
+            })
+            .then(data => {
+                if (data.version) {
+                    versionDisplay.textContent = 'Versiune: ' + data.version;
+                } else {
+                    versionDisplay.textContent = 'Versiune: necunoscută';
+                }
+            })
+            .catch(() => {
+                versionDisplay.textContent = 'Versiune: neîncărcată';
+            });
+
+        // ============================================================
+        // 1. ANEXA 1 – Profilarea unităților
+        // ============================================================
+        const anexa1Body = document.getElementById('anexa1Body');
+        const unitatiRelevante = UNITATI.filter(u => !u.spital && !u.educativ && !u.detentie);
+
+        unitatiRelevante.forEach(u => {
+            const tr = document.createElement('tr');
+
+            // Nume unitate
+            const tdNume = document.createElement('td');
+            tdNume.setAttribute('data-label', 'Unitate');
+            tdNume.innerHTML = `<span class="unitate-nume">${u.nume}</span>`;
+            tr.appendChild(tdNume);
+
+            // Județe deservite
+            const tdJudete = document.createElement('td');
+            tdJudete.setAttribute('data-label', 'Județe deservite');
+            const judeteList = document.createElement('div');
+            judeteList.className = 'judete-list';
+            if (u.judeteDeservite && u.judeteDeservite.length > 0) {
+                u.judeteDeservite.forEach(j => {
+                    const span = document.createElement('span');
+                    span.className = 'judet-tag';
+                    span.textContent = j;
+                    judeteList.appendChild(span);
+                });
+            } else {
+                judeteList.textContent = '—';
+            }
+            tdJudete.appendChild(judeteList);
+            tr.appendChild(tdJudete);
+
+            // Regimuri de custodie (masculin / major)
+            const tdRegim = document.createElement('td');
+            tdRegim.setAttribute('data-label', 'Regimuri');
+            const regimDiv = document.createElement('div');
+            regimDiv.className = 'regim-wrapper';
+            regimDiv.style.display = 'flex';
+            regimDiv.style.flexWrap = 'wrap';
+            regimDiv.style.gap = '4px 8px';
+
+            const regimuri = u.custodie?.masculin?.major || {};
+            const regimMap = {
+                'deschis': 'Deschis',
+                'semideschis': 'Semideschis',
+                'inchis': 'Închis',
+                'maxima': 'Maximă siguranță',
+                'masura_educativa_penitenciar': 'Măsură educativă'
+            };
+            const regimClasa = {
+                'deschis': 'deschis',
+                'semideschis': 'semideschis',
+                'inchis': 'inchis',
+                'maxima': 'maxima',
+                'masura_educativa_penitenciar': 'educativ'
+            };
+
+            let hasRegim = false;
+            for (const [key, label] of Object.entries(regimMap)) {
+                const judete = regimuri[key];
+                if (judete && Array.isArray(judete) && judete.length > 0) {
+                    hasRegim = true;
+                    const span = document.createElement('span');
+                    span.className = `regim-tag ${regimClasa[key] || ''}`;
+                    let judeteStr = judete.includes('toate') ? 'toate' : judete.includes('toate_munca') ? 'toate (muncă)' : judete.join(', ');
+                    span.textContent = `${label}: ${judeteStr}`;
+                    regimDiv.appendChild(span);
+                }
+            }
+
+            if (!hasRegim) {
+                const span = document.createElement('span');
+                span.textContent = '—';
+                span.style.color = 'var(--text-light)';
+                regimDiv.appendChild(span);
+            }
+
+            tdRegim.appendChild(regimDiv);
+            tr.appendChild(tdRegim);
+
+            anexa1Body.appendChild(tr);
+        });
+
+        // ============================================================
+        // 2. ANEXA 3 – Arondarea pentru primirea de la poliție
+        // ============================================================
+        const anexa3Body = document.getElementById('anexa3Body');
+
+        const anexa3Data = [
+            { unitate: 'Penitenciarul Aiud', organ: 'IPJ Alba, IPJ Sibiu', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Arad', organ: 'IPJ Arad, IPJ Timiș, IPJ Caraș-Severin', categorii: 'Toate, excepție minori arestați și măsuri educative; pentru IPJ Timiș/Caraș-Severin: doar femei' },
+            { unitate: 'Penitenciarul Bacău', organ: 'IPJ Bacău, IPJ Neamț', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Baia Mare', organ: 'IPJ Maramureș', categorii: 'Toate, excepție femei, minori arestați, măsuri educative' },
+            { unitate: 'Penitenciarul Bistrița', organ: 'IPJ Bistrița-Năsăud', categorii: 'Toate, excepție femei, minori arestați, măsuri educative' },
+            { unitate: 'Penitenciarul Botoșani', organ: 'IPJ Botoșani, IPJ Suceava', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Brăila', organ: '—', categorii: '—' },
+            { unitate: 'Penitenciarul București-Jilava', organ: '—', categorii: '—' },
+            { unitate: 'Penitenciarul București-Rahova', organ: 'DGPMB, IPJ Ilfov', categorii: 'Toate, excepție feminin' },
+            { unitate: 'Penitenciarul Codlea', organ: 'IPJ Brașov, IPJ Covasna', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Constanța-Poarta Albă', organ: 'IPJ Constanța, IPJ Călărași, IPJ Ialomița', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Craiova', organ: 'IPJ Dolj, IPJ Olt', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Craiova-Pelendava', organ: '—', categorii: '—' },
+            { unitate: 'Penitenciarul Deva', organ: 'IPJ Hunedoara', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Drobeta-Turnu Severin', organ: 'IPJ Mehedinți', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Focșani', organ: 'IPJ Vrancea, IPJ Buzău', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Găești', organ: '—', categorii: '—' },
+            { unitate: 'Penitenciarul Galați', organ: 'IPJ Galați, IPJ Brăila', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Gherla', organ: 'IPJ Cluj, IPJ Maramureș, IPJ Bistrița-Năsăud', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Giurgiu', organ: 'IPJ Teleorman, IPJ Giurgiu', categorii: 'Toate, excepție femei măsuri educative' },
+            { unitate: 'Penitenciarul Iași', organ: 'IPJ Iași', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Mărgineni', organ: 'IPJ Dâmbovița, IPJ Prahova', categorii: 'Toate, excepție femei, minori arestați, măsuri educative' },
+            { unitate: 'Penitenciarul Miercurea-Ciuc', organ: 'IPJ Harghita', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Mioveni', organ: 'IPJ Argeș, IPJ Vâlcea', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Oradea', organ: 'IPJ Bihor', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Ploiești', organ: '—', categorii: '—' },
+            { unitate: 'Penitenciarul Ploiești-Târgșorul Nou', organ: 'IPJ Prahova, IPJ Dâmbovița, IPJ Ilfov, DGPMB', categorii: 'Femei toate, excepție minore arestate și măsuri educative' },
+            { unitate: 'Penitenciarul Satu Mare', organ: 'IPJ Satu Mare, IPJ Sălaj', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Slobozia', organ: 'IPJ Ialomița, IPJ Călărași', categorii: 'Toate, excepție femei, minori arestați, măsuri educative' },
+            { unitate: 'S.N.P.A.P. Târgu Ocna', organ: '—', categorii: '—' },
+            { unitate: 'Penitenciarul Târgu Jiu', organ: 'IPJ Gorj, IPJ Vâlcea', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Târgu Mureș', organ: 'IPJ Mureș', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Timișoara', organ: 'IPJ Timiș, IPJ Caraș-Severin', categorii: 'Toate, excepție femei, minori arestați, măsuri educative' },
+            { unitate: 'Penitenciarul Tulcea', organ: 'IPJ Tulcea', categorii: 'Toate, excepție minori arestați și măsuri educative' },
+            { unitate: 'Penitenciarul Vaslui', organ: 'IPJ Vaslui', categorii: 'Toate, excepție minori arestați și măsuri educative' }
+        ];
+
+        anexa3Data.forEach(item => {
+            const tr = document.createElement('tr');
+            const tdUnitate = document.createElement('td');
+            tdUnitate.setAttribute('data-label', 'Unitatea');
+            tdUnitate.textContent = item.unitate;
+            tr.appendChild(tdUnitate);
+            const tdOrgan = document.createElement('td');
+            tdOrgan.setAttribute('data-label', 'Organul de poliție');
+            tdOrgan.textContent = item.organ;
+            tr.appendChild(tdOrgan);
+            const tdCategorii = document.createElement('td');
+            tdCategorii.setAttribute('data-label', 'Categorii primite');
+            tdCategorii.textContent = item.categorii;
+            tr.appendChild(tdCategorii);
+            anexa3Body.appendChild(tr);
+        });
+
+        // ============================================================
+        // 3. ANEXA 5 – Măsuri educative în penitenciar
+        // ============================================================
+        const anexa5Container = document.getElementById('anexa5Container');
+
+        const anexa5Data = [];
+        UNITATI.forEach(u => {
+            const custodie = u.custodie;
+            if (!custodie) return;
+            ['masculin', 'feminin'].forEach(sex => {
+                ['minor', 'tanar', 'major'].forEach(varsta => {
+                    const regimuri = custodie[sex]?.[varsta];
+                    if (regimuri && regimuri.masura_educativa_penitenciar && regimuri.masura_educativa_penitenciar.length > 0) {
+                        anexa5Data.push({
+                            unitate: u.nume,
+                            sex: sex,
+                            varsta: varsta,
+                            judete: regimuri.masura_educativa_penitenciar
+                        });
+                    }
+                });
+            });
+        });
+
+        if (anexa5Data.length > 0) {
+            let html5 = `
+                <table class="rules-table" id="anexa5Table">
+                    <thead>
+                        <tr><th>Unitatea</th><th>Sex</th><th>Vârstă</th><th>Județe</th></tr>
+                    </thead>
+                    <tbody id="anexa5Body">
+            `;
+            anexa5Data.forEach(item => {
+                const judeteStr = item.judete.includes('toate') ? 'toate județele' : item.judete.join(', ');
+                html5 += `
+                    <tr>
+                        <td data-label="Unitatea"><span class="unitate-nume">${item.unitate}</span></td>
+                        <td data-label="Sex">${item.sex}</td>
+                        <td data-label="Vârstă">${item.varsta}</td>
+                        <td data-label="Județe">${judeteStr}</td>
+                    </tr>
+                `;
+            });
+            html5 += `</tbody></table>`;
+            anexa5Container.innerHTML = html5;
+        } else {
+            anexa5Container.innerHTML = `<p style="color:var(--text-light);">Nu există date pentru Anexa 5.</p>`;
+        }
+
+        // ============================================================
+        // 4. ANEXA 6 – Tranzitul între unități
+        // ============================================================
+        const anexa6Container = document.getElementById('anexa6Container');
+        const anexa6Data = [
+            { unitate: 'Penitenciarul Mărgineni', tip: 'Cazare persoane de sex masculin, pentru transfer între unitățile de pe rutele Moldova și Ardeal' },
+            { unitate: 'Penitenciarul Slobozia', tip: 'Cazare persoane de sex masculin, pentru transfer între unitățile de pe rutele Moldova și Dobrogea' },
+            { unitate: 'Penitenciarul Focșani', tip: 'Unitate de joncțiune, unde se realizează transbordarea persoanelor între mijloacele de transport auto, care efectuează cursele normale de transfer pe ruta Moldova' },
+            { unitate: 'Penitenciarul Aiud', tip: 'Cazare persoane toate categoriile, pentru transfer între unitățile de pe rutele Ardeal și Banat' },
+            { unitate: 'Centrul de Detenție Craiova', tip: 'Unitate de joncțiune, unde se realizează transbordarea persoanelor între mijloacele de transport auto, care efectuează cursele normale de transfer pe ruta Banat' },
+            { unitate: 'Penitenciarul București Rahova', tip: 'Cazare persoane de sex masculin pentru transfer între unitățile de pe rutele Moldova, Ardeal, Banat și Dobrogea' },
+            { unitate: 'Penitenciarul București Jilava', tip: 'Cazare persoane de sex masculin pentru transfer între unitățile de pe rutele Moldova, Ardeal, Banat și Dobrogea' },
+            { unitate: 'Penitenciarul Spital București Jilava', tip: 'Cazare persoane indiferent de sex și vârstă, vulnerabile din punct de vedere medical și social; persoane de sex feminin, toate categoriile' }
+        ];
+
+        let html6 = `<table class="rules-table" id="anexa6Table"><thead><tr><th>Unitatea</th><th>Tipul activității</th></tr></thead><tbody id="anexa6Body">`;
+        anexa6Data.forEach(item => {
+            html6 += `<tr><td data-label="Unitatea"><span class="unitate-nume">${item.unitate}</span></td><td data-label="Tip activitate">${item.tip}</td></tr>`;
+        });
+        html6 += `</tbody></table>`;
+        anexa6Container.innerHTML = html6;
+
+        // ============================================================
+        // 5. ANEXA 7 – Expertize medico-legale
+        // ============================================================
+        const anexa7Container = document.getElementById('anexa7Container');
+        const anexa7Data = [
+            { centru: 'Constanța', unitate: 'Penitenciarul-Spital Constanța-Poarta Albă', categorii: 'Persoane de sex masculin și feminin – toate regimurile' },
+            { centru: 'Giurgiu', unitate: 'Penitenciarul Giurgiu', categorii: 'Persoane de sex masculin și feminin – arestați, maximă siguranță, închis' },
+            { centru: 'București', unitate: 'Penitenciarul-Spital Mioveni', categorii: 'Persoane de sex feminin (ocazional pentru expertize psihiatrice) – toate regimurile' },
+            { centru: 'București', unitate: 'Penitenciarul-Spital București-Jilava', categorii: 'Persoane de sex masculin și feminin – toate regimurile' },
+            { centru: 'București', unitate: 'Penitenciarul-Spital București-Rahova', categorii: 'Persoane de sex masculin și feminin – toate regimurile' },
+            { centru: 'București', unitate: 'Penitenciarul București-Rahova', categorii: 'Persoane de sex masculin – regim închis, arestați' },
+            { centru: 'București', unitate: 'Penitenciarul București-Jilava', categorii: 'Persoane de sex masculin – regim deschis, semideschis' },
+            { centru: 'Iași', unitate: 'Penitenciarul Iași', categorii: 'Persoane de sex masculin – arestați, maximă, închis, deschis; feminin – toate regimurile' },
+            { centru: 'Iași', unitate: 'Penitenciarul Botoșani', categorii: 'Persoane de sex masculin și feminin – regim semideschis' },
+            { centru: 'Târgu Mureș', unitate: 'Penitenciarul Aiud', categorii: 'Persoane de sex masculin – arestați, maximă, închis; feminin – toate regimurile' },
+            { centru: 'Târgu Mureș', unitate: 'Penitenciarul Târgu Mureș', categorii: 'Persoane de sex masculin – regim deschis, semideschis' },
+            { centru: 'Timișoara', unitate: 'Penitenciarul Arad', categorii: 'Persoane de sex masculin – arestați, maximă, închis; feminin – toate regimurile' },
+            { centru: 'Timișoara', unitate: 'Penitenciarul Timișoara', categorii: 'Persoane de sex masculin – regim deschis, semideschis' },
+            { centru: 'Cluj Napoca', unitate: 'Penitenciarul-Spital Dej', categorii: 'Persoane de sex masculin – toate regimurile' },
+            { centru: 'Cluj Napoca', unitate: 'Penitenciarul Gherla', categorii: 'Persoane de sex feminin – toate regimurile' },
+            { centru: 'Craiova', unitate: 'Penitenciarul Craiova', categorii: 'Persoane de sex masculin – arestați, maximă, închis; feminin – toate regimurile' },
+            { centru: 'Craiova', unitate: 'Penitenciarul Craiova-Pelendava', categorii: 'Persoane de sex masculin – regim deschis, semideschis' }
+        ];
+
+        let html7 = `<table class="rules-table" id="anexa7Table"><thead><tr><th>Centrul</th><th>Unitatea penitenciară</th><th>Categorii de persoane</th></tr></thead><tbody id="anexa7Body">`;
+        anexa7Data.forEach(item => {
+            html7 += `<tr><td data-label="Centru"><strong>${item.centru}</strong></td><td data-label="Unitate"><span class="unitate-nume">${item.unitate}</span></td><td data-label="Categorii">${item.categorii}</td></tr>`;
+        });
+        html7 += `</tbody></table>`;
+        anexa7Container.innerHTML = html7;
+
+        // ============================================================
+        // 6. ANEXA 8 – Tulburări psihice grave
+        // ============================================================
+        const anexa8Container = document.getElementById('anexa8Container');
+        const anexa8Data = [
+            { unitate: 'Penitenciarul Craiova', regim: 'Închis și maximă siguranță', judete: 'Arad, Sălaj, Satu Mare, Bihor, Timiș, Caraș-Severin, Maramureș, Cluj, Bistrița-Năsăud, Mureș, Sibiu, Hunedoara, Alba, Gorj, Vâlcea, Mehedinți, Dolj, Olt' },
+            { unitate: 'Penitenciarul Baia Mare', regim: 'Deschis și semideschis', judete: 'Arad, Sălaj, Satu Mare, Bihor, Timiș, Caraș-Severin, Maramureș, Cluj, Bistrița-Năsăud, Mureș, Sibiu, Hunedoara, Alba, Gorj, Vâlcea, Mehedinți, Dolj, Olt' },
+            { unitate: 'Penitenciarul Galați', regim: 'Închis și maximă siguranță', judete: 'Argeș, Prahova, Teleorman, Brașov, Harghita, Suceava, Botoșani, Neamț, Iași, Bacău, Vaslui, Vrancea, Covasna, Galați, Dâmbovița, Giurgiu, București, Ilfov, Buzău, Brăila, Ialomița, Călărași, Constanța, Tulcea' },
+            { unitate: 'Penitenciarul Botoșani', regim: 'Deschis și semideschis', judete: 'Argeș, Prahova, Teleorman, Brașov, Harghita, Suceava, Botoșani, Neamț, Iași, Bacău, Vaslui, Vrancea, Covasna, Galați, Dâmbovița, Giurgiu, București, Ilfov, Buzău, Brăila, Ialomița, Călărași, Constanța, Tulcea' }
+        ];
+
+        let html8 = `<table class="rules-table" id="anexa8Table"><thead><tr><th>Unitatea</th><th>Regimul de executare</th><th>Județe arondate</th></tr></thead><tbody id="anexa8Body">`;
+        anexa8Data.forEach(item => {
+            html8 += `<tr><td data-label="Unitatea"><span class="unitate-nume">${item.unitate}</span></td><td data-label="Regim">${item.regim}</td><td data-label="Județe"><div class="judete-list">${item.judete.split(', ').map(j => `<span class="judet-tag">${j}</span>`).join('')}</div></td></tr>`;
+        });
+        html8 += `</tbody></table>`;
+        anexa8Container.innerHTML = html8;
+
+        // ============================================================
+        // 7. FILTRARE GLOBALĂ
+        // ============================================================
+        const filterInput = document.getElementById('filterInput');
+        const filterClear = document.getElementById('filterClear');
+        const filterStats = document.getElementById('filterStats');
+
+        function getFilterableText(row) {
+            let text = '';
+            row.querySelectorAll('td').forEach(td => {
+                text += td.textContent + ' ';
+            });
+            return text.toLowerCase();
+        }
+
+        function countVisibleRows() {
+            const allTables = document.querySelectorAll('.rules-table');
+            let visible = 0;
+            let total = 0;
+            allTables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                total += rows.length;
+                rows.forEach(row => {
+                    if (row.style.display !== 'none') visible++;
+                });
+            });
+            return { visible, total };
+        }
+
+        function updateStats() {
+            const stats = countVisibleRows();
+            filterStats.innerHTML = `${stats.visible} afișate / <strong>${stats.total}</strong> total`;
+        }
+
+        function filterTables() {
+            const filterText = filterInput.value.toLowerCase().trim();
+            const allTables = document.querySelectorAll('.rules-table');
+            let hasVisible = false;
+
+            allTables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const rowText = getFilterableText(row);
+                    if (filterText === '' || rowText.includes(filterText)) {
+                        row.style.display = '';
+                        hasVisible = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            const cards = document.querySelectorAll('.card[id$="Card"]');
+            cards.forEach(card => {
+                const tables = card.querySelectorAll('.rules-table');
+                let cardHasVisible = false;
+                tables.forEach(table => {
+                    const rows = table.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        if (row.style.display !== 'none') cardHasVisible = true;
+                    });
+                });
+                card.style.display = cardHasVisible ? '' : 'none';
+            });
+
+            updateStats();
+        }
+
+        filterInput.addEventListener('input', filterTables);
+
+        filterClear.addEventListener('click', function() {
+            filterInput.value = '';
+            filterTables();
+            filterInput.focus();
+        });
+
+        setTimeout(updateStats, 100);
+    })();

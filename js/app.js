@@ -60,6 +60,9 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
     if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.');
     if (!startDate) err.push('Data începerii este invalidă sau incompletă.');
     if (!life && !art) err.push('Selectați articolul de liberare condiționată.');
+    for (const [label, value] of [['Ani', y], ['Luni', m], ['Zile', d]]) {
+        if (!Number.isSafeInteger(value) || value < 0) err.push(`${label}: introduceți un număr întreg pozitiv sau zero.`);
+    }
     if (!life && y === 0 && m === 0 && d === 0) err.push('Introduceți durata pedepsei.');
     if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.');
 
@@ -99,13 +102,29 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
 function updateProposedDateWithWorkDays() {
     const input = document.getElementById('workDaysInput');
     const result = document.getElementById('workDaysResult');
-    if (!input || !result || !window.lastProposedDate) return;
+    const note = document.getElementById('workDaysNote');
+    if (!input || !result || !window.lastProposedDate || !window.lastMinimumDate) return;
 
-    const days = parseInt(input.value) || 0;
+    const requested = Number(input.value || 0);
+    const safeRequested = Number.isSafeInteger(requested) && requested >= 0 ? requested : 0;
+    const maxReduction = Math.max(0, daysBetween(window.lastMinimumDate, window.lastProposedDate));
+    const applied = Math.min(safeRequested, maxReduction);
     const newDate = new Date(window.lastProposedDate);
-    newDate.setDate(newDate.getDate() - days);
-
+    newDate.setDate(newDate.getDate() - applied);
     result.value = fmtDate(newDate);
+
+    if (note) {
+        note.textContent = safeRequested > maxReduction
+  ? `Au fost aplicate maximum ${maxReduction} zile; fracția minimă obligatorie (${fmtDate(window.lastMinimumDate)}) nu poate fi depășită.`
+  : `Se pot scădea cel mult ${maxReduction} zile până la fracția minimă obligatorie.`;
+    }
+    input.setCustomValidity(Number.isSafeInteger(requested) && requested >= 0 ? '' : 'Introduceți un număr întreg pozitiv sau zero.');
+
+    if (window.lastCalculation) {
+        window.lastCalculation.workDaysRequested = safeRequested;
+        window.lastCalculation.workDaysApplied = applied;
+        window.lastCalculation.workDaysResult = result.value;
+    }
 }
 
 /**
@@ -119,9 +138,9 @@ function calculateAll() {
     const startDate = parseDate(document.getElementById('startDate').value.trim());
     const life = document.getElementById('lifeSentence').checked;
     const art = document.getElementById('liberationArticle').value;
-    const y = parseInt(document.getElementById('durYears').value) || 0;
-    const m = parseInt(document.getElementById('durMonths').value) || 0;
-    const d = parseInt(document.getElementById('durDays').value) || 0;
+    const y = Number(document.getElementById('durYears').value || 0);
+    const m = Number(document.getElementById('durMonths').value || 0);
+    const d = Number(document.getElementById('durDays').value || 0);
 
     const err = validateInputs(birthDate, startDate, life, art, y, m, d);
     if (err.length > 0) {
@@ -230,6 +249,7 @@ function calculateAll() {
 
     // Salvează global data propozabilă pentru scăderea zilelor muncite
     window.lastProposedDate = new Date(tDate);
+    window.lastMinimumDate = new Date(mDate);
 
     // 1/5 mandat
     const fifth = Math.floor(totalDays / 5);
@@ -238,7 +258,8 @@ function calculateAll() {
     fDate.setDate(fDate.getDate() - ded + non);
 
     // Zile executate și rest
-    const executedDays = Math.max(0, daysBetween(startDate, today()) + 1);
+    const elapsedEnd = realExp && today() > realExp ? realExp : today();
+    const calendarDaysSinceStart = elapsedEnd >= startDate ? Math.max(0, daysBetween(startDate, elapsedEnd) + 1) : 0;
     const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
 
     // Carantină
@@ -317,26 +338,26 @@ function calculateAll() {
     // Construire HTML rezultate
     const nume = document.getElementById('observations').value.trim();
     let html = '';
-    if (nume) html += `<div class="result-item" style="margin-bottom:8px;"><div class="result-label">Observații</div><div class="result-value">${nume}</div></div>`;
+    if (nume) html += `<div class="result-item observations-result"><div class="result-label">Observații</div><div class="result-value">${escapeHtml(nume)}</div></div>`;
 
     html += `<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">
         <div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>
         <div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div>
         <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
-        <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value" style="color:#ff6b6b;">${non} zile</div></div>
-        <div class="result-item"><div class="result-label">Zile executate efectiv</div><div class="result-value">${executedDays} zile</div></div>
+        <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value">${non} zile</div></div>
+        <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
         <div class="result-item"><div class="result-label">Rest rămas</div><div class="result-value">${remaining} zile</div></div>
     </div></div>`;
 
     html += `<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">
         <div class="result-item">
             <div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div>
-            <div class="result-value"><span class="fraction">${fracStr(mR)}</span> → (fără deduceri: ${mDays}z / cu deduceri: ${daysBetween(startDate, mDate) + 1}z)</div>
+            <div class="result-value"><span class="fraction">${fracStr(mR)}</span> → (fără deduceri: ${mDays}z / după deduceri și perioade adăugate: ${daysBetween(startDate, mDate) + 1}z)</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div>
         </div>
         <div class="result-item">
             <div class="result-label">DATA PROPOZABILĂ</div>
-            <div class="result-value"><span class="fraction">${fracStr(tR)}</span> → (fără deduceri: ${tDays}z / cu deduceri: ${daysBetween(startDate, tDate) + 1}z)</div>
+            <div class="result-value"><span class="fraction">${fracStr(tR)}</span> → (fără deduceri: ${tDays}z / după deduceri și perioade adăugate: ${daysBetween(startDate, tDate) + 1}z)</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div>
         </div>
     </div></div>`;
@@ -347,21 +368,19 @@ function calculateAll() {
         <div class="form-grid">
             <div>
                 <label for="workDaysInput">Zile muncite de scăzut</label>
-                <input type="number" id="workDaysInput" min="0" value="0" oninput="updateProposedDateWithWorkDays()">
+                <input type="number" id="workDaysInput" min="0" step="1" value="0" oninput="updateProposedDateWithWorkDays()">
             </div>
             <div>
                 <label>Noua dată propozabilă</label>
-                <input type="text" id="workDaysResult" readonly style="background:rgba(201,162,39,0.08);font-weight:600;" tabindex="-1">
+                <input type="text" id="workDaysResult" readonly class="result-input" tabindex="-1">
             </div>
         </div>
-        <p style="margin-top:8px;font-size:0.75rem;color:var(--text-light);">
-            <em>Scăderea se face direct din data propozabilă (data se reduce cu zilele introduse).</em>
-        </p>
+        <p id="workDaysNote" class="help-text"><em>Zilele câștigate reduc data propozabilă, fără a putea coborî sub fracția minimă obligatorie.</em></p>
     </div>`;
 
     html += `<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid">
         <div class="result-item"><div class="result-label">1/5 mandat</div>
-            <div class="result-value">(fără deduceri: ${fifth}z / cu deduceri: ${daysBetween(startDate, fDate) + 1}z)</div>
+            <div class="result-value">(fără deduceri: ${fifth}z / după deduceri și perioade adăugate: ${daysBetween(startDate, fDate) + 1}z)</div>
             <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div>
         </div>
     </div></div>`;
@@ -404,6 +423,20 @@ function calculateAll() {
         articleInfo,
         fifth,
         fDate,
+        mDate,
+        duration: { y, m, d },
+        art,
+        inputData: {
+            sex: currentSex === 'M' ? 'Masculin' : 'Feminin',
+            birthDate: document.getElementById('birthDate').value.trim(),
+            observations: document.getElementById('observations').value.trim(),
+            life, art, y: String(y), m: String(m), d: String(d),
+            start: document.getElementById('startDate').value.trim(),
+            condRelease: document.getElementById('conditionalReleaseDate').value.trim(),
+            dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({ start: r.querySelector('.ded-start')?.value.trim() || '', end: r.querySelector('.ded-end')?.value.trim() || '' })).filter(r => r.start || r.end),
+            manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
+            nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({ type: r.querySelector('.ne-type')?.value || '', start: r.querySelector('.ne-start')?.value.trim() || '', end: r.querySelector('.ne-end')?.value.trim() || '' })).filter(r => r.start || r.end)
+        },
         workDaysInput: document.getElementById('workDaysInput')?.value || '0',
         workDaysResult: document.getElementById('workDaysResult')?.value || ''
     };
@@ -450,11 +483,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('date-masked')) applyDateMask(e);
     });
 
-    document.querySelectorAll('.btn-today').forEach(btn => {
-        btn.addEventListener('click', function() {
-            setToday(this.dataset.target);
-        });
-    });
 
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
     document.getElementById('liberationArticle').addEventListener('change', updAgeTag);
@@ -470,9 +498,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const overlay = document.querySelector('.modal-overlay');
-            if (overlay) overlay.remove();
+            if (overlay) (typeof closeModal === 'function' ? closeModal(overlay) : overlay.remove());
         }
     });
+
+
+    let autoSaveTimer;
+    const scheduleAutoSave = () => {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(autoSave, 250);
+    };
+    document.addEventListener('input', scheduleAutoSave);
+    document.addEventListener('change', scheduleAutoSave);
 
     // Avertisment la părăsirea paginii
     window.addEventListener('beforeunload', function(e) {

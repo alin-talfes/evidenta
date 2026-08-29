@@ -65,9 +65,14 @@ function daysBetween(a, b) {
  */
 function addCalendarSafe(date, years, months, days) {
     const d = new Date(date);
-    d.setFullYear(d.getFullYear() + years);
-    d.setMonth(d.getMonth() + months);
-    d.setDate(d.getDate() + days);
+    if (isNaN(d)) return new Date(NaN);
+    const originalDay = d.getDate();
+    d.setDate(1);
+    d.setFullYear(d.getFullYear() + Number(years || 0));
+    d.setMonth(d.getMonth() + Number(months || 0));
+    const maxDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    d.setDate(Math.min(originalDay, maxDay));
+    d.setDate(d.getDate() + Number(days || 0));
     return d;
 }
 
@@ -107,4 +112,15 @@ function fracStr(r) {
     if (r === 1/4) return '¼';
     if (r === 1/100) return '1/100';
     return r.toString();
+}
+
+
+/** Escapează text pentru inserare sigură în HTML. */
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }

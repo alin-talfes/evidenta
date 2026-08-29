@@ -1,16 +1,6 @@
 // ========== EXPORT / COPIERE / PAGINĂ REZULTATE ==========
 
 /**
- * Escapează text pentru inserare sigură în HTML (previne XSS din câmpuri libere
- * precum Observații, tip perioadă etc.).
- */
-function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str ?? '';
-    return div.innerHTML;
-}
-
-/**
  * Traduce tipul perioadei adăugate.
  */
 function mapNonExecType(type) {
@@ -51,11 +41,7 @@ function buildNarrativeText() {
         if (calc.life) {
             sentence = 'detențiunea pe viață';
         } else {
-            const src = calc.duration || {
-                y: parseInt(document.getElementById('durYears').value) || 0,
-                m: parseInt(document.getElementById('durMonths').value) || 0,
-                d: parseInt(document.getElementById('durDays').value) || 0
-            };
+            const src = calc.duration || { y: 0, m: 0, d: 0 };
             const parts = [];
             if (src.y > 0) parts.push(`${src.y} ani`);
             if (src.m > 0) parts.push(`${src.m} luni`);
@@ -69,11 +55,10 @@ function buildNarrativeText() {
 
         // Perioade deduse (fără recursul compensatoriu)
         const dedIntervals = calc.dedIntervals || [];
-        let dedPeriodsDays = 0;
+        const dedPeriodsDays = sumIntervals(dedIntervals);
         const dedPeriods = [];
         dedIntervals.forEach(([s, e]) => {
             const days = daysBetween(s, e) + 1;
-            dedPeriodsDays += days;
             dedPeriods.push(`${fmtDate(s)}-${fmtDate(e)}`);
         });
 
@@ -104,7 +89,7 @@ function buildNarrativeText() {
         }
 
         // Articol
-        const art = document.getElementById('liberationArticle').value;
+        const art = calc.art || '';
         const articleMap = {
             NCP100: 'art. 100 din Codul penal',
             NCP99: 'art. 99 din Codul penal',
@@ -173,6 +158,7 @@ function fallbackCopy(text) {
  * Rândurile complet goale (fără dată de început/sfârșit) sunt eliminate.
  */
 function getInputData() {
+    if (window.lastCalculation?.inputData) return JSON.parse(JSON.stringify(window.lastCalculation.inputData));
     const dedRows = Array.from(document.querySelectorAll('.deduction-row'))
         .map(r => ({
             start: r.querySelector('.ded-start')?.value.trim() || '',
