@@ -1,0 +1,193 @@
+name: Unify dark light theme state
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/unify-theme.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  unify-theme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create shared theme controller and migrate pages
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          theme_js = r'''// Shared dark/light theme controller for the entire Evidenta PPL application.
+          (function () {
+              'use strict';
+
+              const THEME_STORAGE_KEY = 'anpTheme';
+
+              function updateThemeButton() {
+                  const button = document.getElementById('themeToggle');
+                  if (!button) return;
+                  const isLight = document.body.classList.contains('light');
+                  button.textContent = isLight ? '☀️' : '🌙';
+                  button.setAttribute('aria-label', isLight ? 'Activează tema întunecată' : 'Activează tema luminoasă');
+                  button.setAttribute('title', isLight ? 'Temă întunecată' : 'Temă luminoasă');
+              }
+
+              function applyTheme() {
+                  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+                  document.body.classList.toggle('light', savedTheme === 'light');
+                  updateThemeButton();
+              }
+
+              function toggleTheme() {
+                  const isLight = !document.body.classList.contains('light');
+                  document.body.classList.toggle('light', isLight);
+                  localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
+                  updateThemeButton();
+              }
+
+              function initTheme() {
+                  applyTheme();
+                  const button = document.getElementById('themeToggle');
+                  if (button && !button.hasAttribute('onclick')) {
+                      button.addEventListener('click', toggleTheme);
+                  }
+              }
+
+              window.applyTheme = applyTheme;
+              window.toggleTheme = toggleTheme;
+              window.EVIDENTA_THEME_STORAGE_KEY = THEME_STORAGE_KEY;
+
+              if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', initTheme, { once: true });
+              } else {
+                  initTheme();
+              }
+          })();
+          '''
+          Path('js/theme.js').write_text('\n'.join(line[10:] if line.startswith('          ') else line for line in theme_js.splitlines()) + '\n', encoding='utf-8')
+
+          pages = {
+              'index.html': 'js/theme.js?v=33',
+              'termene.html': 'js/theme.js?v=33',
+              'contopiri.html': 'js/theme.js?v=33',
+              'transfer/index.html': '../js/theme.js?v=33',
+              'transfer/rules.html': '../js/theme.js?v=33',
+          }
+
+          for filename, theme_src in pages.items():
+              p = Path(filename)
+              text = p.read_text(encoding='utf-8')
+              if theme_src not in text:
+                  text = re.sub(
+                      r'(<link rel="stylesheet" href="(?:\.\./)?css/style\.css\?v=32" ?/?>)',
+                      r'\1\n    <script src="' + theme_src + r'" defer></script>',
+                      text,
+                      count=1,
+                  )
+              p.write_text(text, encoding='utf-8')
+
+          # Add identical theme toggle controls to pages that did not expose one.
+          for filename in ('termene.html', 'contopiri.html'):
+              p = Path(filename)
+              text = p.read_text(encoding='utf-8')
+              old = '<div class="page-actions"><button class="btn btn-outline" onclick="openInfoModal()">INFORMAȚII</button></div>'
+              new = '<div class="page-actions"><button class="btn btn-outline" onclick="openInfoModal()">INFORMAȚII</button><button id="themeToggle" aria-label="Activează tema luminoasă">🌙</button></div>'
+              if old not in text:
+                  raise SystemExit(f'Expected page-actions marker missing in {filename}')
+              text = text.replace(old, new, 1)
+              p.write_text(text, encoding='utf-8')
+
+          # Remove page-specific theme override from index.html.
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          text, count = re.subn(
+              r'\n\s*<script>\s*// Suprascriem funcțiile de temă pentru a folosi emoji-uri.*?</script>\s*(?=</body>)',
+              '\n', text, count=1, flags=re.S
+          )
+          if count != 1:
+              raise SystemExit(f'Index theme override removal count: {count}')
+          p.write_text(text, encoding='utf-8')
+
+          # Remove apply-only duplicated theme IIFE from termene/contopiri.
+          for filename in ('termene.html', 'contopiri.html'):
+              p = Path(filename)
+              text = p.read_text(encoding='utf-8')
+              text, count = re.subn(
+                  r'\n\s*// ===== Aplicare temă din localStorage =====\s*\n\s*\(function\(\) \{\s*\n\s*const saved = localStorage\.getItem\(\'anpTheme\'\);\s*\n\s*if \(saved === \'light\'\) \{\s*\n\s*document\.body\.classList\.add\(\'light\'\);\s*\n\s*\} else \{\s*\n\s*document\.body\.classList\.remove\(\'light\'\);\s*\n\s*\}\s*\n\s*\}\)\(\);\s*\n',
+                  '\n', text, count=1
+              )
+              if count != 1:
+                  raise SystemExit(f'{filename} duplicate theme removal count: {count}')
+              p.write_text(text, encoding='utf-8')
+
+          # Remove transfer-specific theme implementations that used localStorage["theme"].
+          for filename, section_num in (('transfer/index.html', '6'), ('transfer/rules.html', '8')):
+              p = Path(filename)
+              text = p.read_text(encoding='utf-8')
+              pattern = (
+                  r'\n\s*// ============================================================\s*\n'
+                  r'\s*// ' + section_num + r'\. LIGHT / DARK TOGGLE\s*\n'
+                  r'\s*// ============================================================\s*\n'
+                  r'.*?themeToggle\.addEventListener\(\'click\', toggleTheme\);\s*\n'
+              )
+              text, count = re.subn(pattern, '\n', text, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f'{filename} transfer theme removal count: {count}')
+              p.write_text(text, encoding='utf-8')
+
+      - name: Verify shared theme behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f js/theme.js
+          grep -q "const THEME_STORAGE_KEY = 'anpTheme'" js/theme.js
+          grep -q "localStorage.setItem(THEME_STORAGE_KEY" js/theme.js
+          grep -q "localStorage.getItem(THEME_STORAGE_KEY" js/theme.js
+
+          for page in index.html termene.html contopiri.html; do
+            grep -q 'js/theme.js?v=33' "$page"
+          done
+          for page in transfer/index.html transfer/rules.html; do
+            grep -q '../js/theme.js?v=33' "$page"
+          done
+
+          # Every page exposes the same theme toggle control.
+          for page in index.html termene.html contopiri.html transfer/index.html transfer/rules.html; do
+            test "$(grep -o 'id="themeToggle"' "$page" | wc -l)" -eq 1
+          done
+
+          # No page may retain the old storage key or its own theme persistence implementation.
+          ! grep -Rni --include='*.html' "localStorage.getItem('theme')" .
+          ! grep -Rni --include='*.html' "localStorage.setItem('theme'" .
+          ! grep -Rni --include='*.html' "localStorage.getItem('anpTheme')" .
+          ! grep -Rni --include='*.html' "localStorage.setItem('anpTheme'" .
+
+          # Calculation/transfer rule JS files must remain unchanged; only new js/theme.js is allowed.
+          changed_js="$(git diff --name-only -- '*.js' | grep -v '^js/theme.js$' || true)"
+          if [ -n "$changed_js" ]; then
+            echo "Unexpected existing JavaScript modifications:" >&2
+            echo "$changed_js" >&2
+            exit 1
+          fi
+
+      - name: Commit migration and remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/unify-theme.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'Unify theme state across application pages'
+          git push
