@@ -27,4 +27,12 @@ let over10=lr.__schedule({life:false,art:'NCP100',sentenceOver10:true,totalDays:
 let ov=[[new Date(2026,0,1),new Date(2026,0,10)],[new Date(2026,0,5),new Date(2026,0,15)]]; assert.equal(lr.__over(ov).length,1); assert.equal(lr.sumIntervals?lr.sumIntervals(ov):15,15);
 let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}]; assert.equal(lr.__non(nonRows),10);
 
+
+// Integritate UI pentru detențiunea pe viață: art. 99 este unic și zilele muncite nu se afișează pentru viață.
+const appSource=fs.readFileSync('js/app.js','utf8');
+assert(appSource.includes("life && art !== 'NCP99'"));
+assert(appSource.includes("!life && art === 'NCP99'"));
+assert(appSource.includes('if (!life) html += `<div class="result-section">'));
+assert(appSource.includes("article.value = 'NCP99'")); assert(appSource.includes('article.disabled = true'));
+
 console.log('All audit regression tests passed.');

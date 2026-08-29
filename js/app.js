@@ -60,6 +60,8 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
     if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.');
     if (!startDate) err.push('Data începerii este invalidă sau incompletă.');
     if (!life && !art) err.push('Selectați articolul de liberare condiționată.');
+    if (life && art !== 'NCP99') err.push('Pentru detențiunea pe viață se aplică NCP art. 99.');
+    if (!life && art === 'NCP99') err.push('NCP art. 99 se utilizează numai pentru detențiunea pe viață.');
     for (const [label, value] of [['Ani', y], ['Luni', m], ['Zile', d]]) {
         if (!Number.isSafeInteger(value) || value < 0) err.push(`${label}: introduceți un număr întreg pozitiv sau zero.`);
     }
@@ -364,8 +366,8 @@ function calculateAll() {
         </div>`;
     }
 
-    // Secțiunea nouă: scădere zile muncite din data propozabilă
-    html += `<div class="result-section">
+    // Zilele muncite pot reduce numai fracția propozabilă a pedepselor determinate.
+    if (!life) html += `<div class="result-section">
         <h4>SCĂDERE ZILE MUNCITE DIN DATA PROPOZABILĂ</h4>
         <div class="form-grid">
             <div>
@@ -402,8 +404,8 @@ function calculateAll() {
     document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
     document.getElementById('resultsCard').classList.remove('hidden');
 
-    // Inițializare scădere zile muncite
-    updateProposedDateWithWorkDays();
+    // Inițializare scădere zile muncite doar pentru pedepsele determinate.
+    if (!life) updateProposedDateWithWorkDays();
 
     // ===== SALVARE GLOBALĂ PENTRU EXPORT =====
     window.lastCalculation = {
@@ -490,6 +492,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('liberationArticle').addEventListener('change', updAgeTag);
     document.getElementById('lifeSentence').addEventListener('change', function() {
         document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked);
+        const article = document.getElementById('liberationArticle');
+        if (this.checked) {
+            article.value = 'NCP99';
+            article.disabled = true;
+        } else {
+            article.disabled = false;
+            if (article.value === 'NCP99') article.value = '';
+        }
+        updAgeTag();
     });
 
     document.getElementById('masuriRefDate').addEventListener('input', calcMasuriPreventive);
