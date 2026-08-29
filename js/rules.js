@@ -270,13 +270,19 @@ function findIntervalOverlaps(intervals) {
 
 function getNonExecEffectiveInterval(type, start, end) {
     const first = new Date(start), last = new Date(end);
-    if (type === 'escape' || type === 'interruption') {
+
+    if (type === 'interruption') {
+        // Întreruperea executării: nu se adaugă nici ziua plecării, nici ziua revenirii.
         first.setDate(first.getDate() + 1);
         last.setDate(last.getDate() - 1);
+    } else if (type === 'escape' || type === 'illness') {
+        // Evadare / boală provocată voit: ziua inițială nu este executată,
+        // iar ziua prinderii / externării se consideră executată.
+        first.setDate(first.getDate() + 1);
     } else {
-        // Păstrează comportamentul existent pentru boală: ziua inițială nu se adaugă, ziua finală se include.
         first.setDate(first.getDate() + 1);
     }
+
     if (last < first) return null;
     return [first, last];
 }

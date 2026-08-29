@@ -89,3 +89,8 @@ assert(!fs.readFileSync('transfer/app.js','utf8').includes('versionDisplay'),'tr
 assert(!fs.readFileSync('transfer/rules-page.js','utf8').includes('versionDisplay'),'transfer rules has stale versionDisplay');
 assert(fs.readFileSync('js/theme.js','utf8').includes('#0b1220'),'theme color mismatch');
 assert(fs.readFileSync('js/termene.js','utf8').includes("Number(document.getElementById('durationInput').value)"),'termene truncates decimals');
+
+// Reguli perioade neexecutate: evadare/boală exclud doar prima zi; întreruperea exclude ambele capete.
+let escape9=lr.__non([{type:'escape',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(escape9,9);
+let illness9=lr.__non([{type:'illness',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(illness9,9);
+let interruption8=lr.__non([{type:'interruption',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(interruption8,8);
