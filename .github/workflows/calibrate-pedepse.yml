@@ -5,6 +5,7 @@ name: Calibrate sentence calculator
     branches: [main]
     paths:
       - 'tools/calibrate-pedepse.py'
+      - '.github/workflows/calibrate-pedepse.yml'
 
 permissions:
   contents: write
