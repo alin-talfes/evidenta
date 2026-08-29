@@ -1,5 +1,4 @@
 from pathlib import Path
-import re
 
 # CSS: anchor saved-case badge to LOAD button and size correctly for multiple digits.
 p=Path('css/style.css'); s=p.read_text(encoding='utf-8')
@@ -82,8 +81,9 @@ p.write_text(s,encoding='utf-8')
 for f in ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']:
     p=Path(f); x=p.read_text(encoding='utf-8').replace('style.css?v=40','style.css?v=41'); p.write_text(x,encoding='utf-8')
 
-# Tests: keep PDF checks and add strict copy contract checks.
+# Tests: retire the old narrative heading and assert the new strict copy contract.
 p=Path('tests/run-tests.js'); s=p.read_text(encoding='utf-8').replace('style\\.css\\?v=40','style\\.css\\?v=41')
+s=s.replace("assert(fs.readFileSync('js/export.js','utf8').includes('EVIDENȚĂ PPL — REZUMAT'));\n", '')
 extra=r'''
 const exportSource=fs.readFileSync('js/export.js','utf8');
 assert(exportSource.includes('DATE INTRODUSE'),'PDF input section disappeared');
