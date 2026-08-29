@@ -1,0 +1,29 @@
+name: Align transfer profile
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  align:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply transfer-only compliance changes
+        run: python scripts/align_transfer_profile.py
+      - name: Verify Pedepse calculation files were not modified
+        run: |
+          git diff --exit-code -- js/rules.js js/app.js js/ui.js js/utils.js index.html || (echo 'Pedepse files changed unexpectedly' && exit 1)
+      - name: Syntax and regression tests
+        run: |
+          npm run check:syntax
+          npm test
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add transfer tests/run-tests.js
+          git commit -m 'Align Transfer module with consolidated profiling decision' || exit 0
+          git push
