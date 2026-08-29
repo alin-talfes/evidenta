@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CALCULATOR TERMENE PEDEPSE PRIVATIVE DE LIBERTATE</title>
     <link rel="stylesheet" href="css/style.css?v=32">
+    <script src="js/theme.js?v=33" defer></script>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
     <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f2937">
 </head>
@@ -226,34 +227,5 @@ fetch('./version.json')
     <script src="js/export.js?v=28"></script>
     <script src="js/ui.js?v=28"></script>
     <script src="js/app.js?v=28"></script>
-    <script>
-        // Suprascriem funcțiile de temă pentru a folosi emoji-uri
-        (function() {
-            function updateThemeButton() {
-                const btn = document.getElementById('themeToggle');
-                if (document.body.classList.contains('light')) {
-                    btn.innerHTML = '☀️';
-                } else {
-                    btn.innerHTML = '🌙';
-                }
-            }
-            window.applyTheme = function() {
-                const saved = localStorage.getItem('anpTheme');
-                if (saved === 'light') {
-                    document.body.classList.add('light');
-                } else {
-                    document.body.classList.remove('light');
-                }
-                updateThemeButton();
-            };
-            window.toggleTheme = function() {
-                document.body.classList.toggle('light');
-                const isLight = document.body.classList.contains('light');
-                localStorage.setItem('anpTheme', isLight ? 'light' : 'dark');
-                updateThemeButton();
-            };
-            updateThemeButton();
-        })();
-    </script>
 </body>
 </html>

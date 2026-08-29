@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Regulile de transfer – Decizia 360/2020</title>
     <link rel="stylesheet" href="../css/style.css?v=32" />
+    <script src="../js/theme.js?v=33" defer></script>
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 </head>
 <body>
@@ -494,29 +495,6 @@
         });
 
         setTimeout(updateStats, 100);
-
-        // ============================================================
-        // 8. LIGHT / DARK TOGGLE
-        // ============================================================
-        const themeToggle = document.getElementById('themeToggle');
-
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            const isLight = document.body.classList.contains('light');
-            themeToggle.textContent = isLight ? '☀' : '🌙';
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        }
-
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light');
-            themeToggle.textContent = '☀';
-        } else {
-            themeToggle.textContent = '🌙';
-        }
-
-        themeToggle.addEventListener('click', toggleTheme);
-
     })();
 </script>
 
