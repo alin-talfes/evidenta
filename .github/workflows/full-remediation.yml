@@ -1,0 +1,26 @@
+name: Full remediation
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/full_remediation.py
+      - .github/workflows/full-remediation.yml
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: python3 scripts/full_remediation.py
+      - run: |
+          npm run check:syntax
+          npm test
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md favicon-ev-2.svg css/style.css index.html termene.html contopiri.html transfer/index.html transfer/rules.html transfer/app.js transfer/rules-page.js js/theme.js js/rules.js js/app.js js/storage.js js/export.js js/contopiri.js js/termene.js tests/run-tests.js
+          git commit -m "Apply full application remediation"
+          git push origin main
