@@ -23,101 +23,28 @@ function mapNonExecType(type) {
  *   calc.duration = { y, m, d } la momentul calculului.
  */
 function buildNarrativeText() {
-    try {
-        const calc = window.lastCalculation;
-        if (!calc) {
-            alert('Nu există rezultate de calcul. Apasă întâi „CALCULEAZĂ”.');
-            return '';
-        }
-
-        // Sex
-        const sexText = calc.sex === 'M' ? 'MASCULIN' : 'FEMININ';
-
-        // Data nașterii
-        const birthDateStr = fmtDate(calc.birthDate);
-
-        // Durata pedepsei
-        let sentence = '';
-        if (calc.life) {
-            sentence = 'detențiunea pe viață';
-        } else {
-            const src = calc.duration || { y: 0, m: 0, d: 0 };
-            const parts = [];
-            if (src.y > 0) parts.push(`${src.y} ani`);
-            if (src.m > 0) parts.push(`${src.m} luni`);
-            if (src.d > 0) parts.push(`${src.d} zile`);
-            sentence = parts.join(', ') || '0 zile';
-        }
-
-        // Data începerii și expirarea reală
-        const startDateStr = fmtDate(calc.startDate);
-        const realExpStr = calc.realExp ? fmtDate(calc.realExp) : null;
-
-        // Perioade deduse (fără recursul compensatoriu)
-        const dedIntervals = calc.dedIntervals || [];
-        const dedPeriodsDays = sumIntervals(dedIntervals);
-        const dedPeriods = [];
-        dedIntervals.forEach(([s, e]) => {
-            const days = daysBetween(s, e) + 1;
-            dedPeriods.push(`${fmtDate(s)}-${fmtDate(e)}`);
-        });
-
-        // Text pentru perioadele deduse (singular/plural)
-        let dedPeriodsDisplay = '';
-        if (dedPeriods.length === 1) {
-            dedPeriodsDisplay = ` (perioada ${dedPeriods[0]})`;
-        } else if (dedPeriods.length > 1) {
-            dedPeriodsDisplay = ` (perioadele ${dedPeriods.join(', ')})`;
-        }
-
-        // Recurs compensatoriu separat
-        const recursDays = calc.recursDays || 0;
-
-        // Perioade adăugate
-        const nonRowsData = calc.nonRowsData || [];
-        const nonTotal = Number.isSafeInteger(calc.non) ? calc.non : nonRowsData.reduce((sum, p) => sum + p.days, 0);
-        const nonPeriods = nonRowsData.map(p => `${p.start}-${p.end} (${mapNonExecType(p.type)})`);
-        const nonPeriodsDisplay = nonPeriods.length > 0 ? ` (${nonPeriods.join(', ')})` : '';
-
-        // Recurs text
-        let recursText;
-        if (recursDays > 0) {
-            const totalDedDays = dedPeriodsDays + recursDays;
-            recursText = `A beneficiat de un număr de ${recursDays} zile deduse ca urmare a recursului compensatoriu (Legea nr. 169/2017), totalizand in ${totalDedDays} de zile deduse.`;
-        } else {
-            recursText = 'Nu a beneficiat de prevederile Legii nr. 169/2017.';
-        }
-
-        // Articol
-        const art = calc.art || '';
-        const articleMap = {
-            NCP100: 'art. 100 din Codul penal',
-            NCP99: 'art. 99 din Codul penal',
-            NCP124: 'art. 124 din Codul penal',
-            NCP125: 'art. 125 din Codul penal',
-            VCP59: 'art. 59 din Codul penal',
-            VCP591: 'art. 59¹ din Codul penal',
-            VCP602: 'art. 60 alin. 2 din Codul penal',
-            VCP603: 'art. 60 alin. 3 din Codul penal'
-        };
-        const articleText = articleMap[art] || 'articolul aplicabil';
-
-        // Fracția propozabilă
-        const tDateStr = fmtDate(calc.tDate);
-        const tDays = calc.tDays;
-
-        // Termenul de reanalizare 1/5
-        const fDateStr = calc.fDate ? fmtDate(calc.fDate) : null;
-        const fifth = calc.fifth;
-
-        if (calc.life) {
-            return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr}, execută pedeapsa detențiunii pe viață începând cu data de ${startDateStr}. Detențiunea pe viață nu are dată de expirare. Au fost deduse ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, pragul efectiv de 20 ani / 7.305 zile pentru liberarea condiționată se împlinește la data de ${tDateStr}.`;
-        }
-        return `În această speță, o persoană privată de libertate de sex ${sexText}, născută la ${birthDateStr} este condamnată la pedeapsa inchisorii rezultantă de ${sentence}. Pedeapsa închisorii începe la data de ${startDateStr} și expiră în termen la data de ${realExpStr}, fiind deduse un număr de ${dedPeriodsDays} zile${dedPeriodsDisplay} și adăugate un număr de ${nonTotal} zile${nonPeriodsDisplay}. ${recursText} Conform ${articleText}, fracția propozabilă se împlinește la data de ${tDateStr}, după executarea a ${tDays} zile. Termenul de reanalizare (1/5) este data de ${fDateStr}, după executarea a ${fifth} zile.`;
-    } catch (e) {
-        alert('Eroare la construirea textului: ' + e.message);
+    const calc = window.lastCalculation;
+    if (!calc) {
+        alert('Nu există rezultate de calcul. Apasă întâi „CALCULEAZĂ”.');
         return '';
     }
+    const input = calc.inputData || {};
+    const duration = calc.life ? 'detențiune pe viață' : `${calc.duration?.y || 0} ani, ${calc.duration?.m || 0} luni, ${calc.duration?.d || 0} zile`;
+    const dedPeriods = (calc.dedIntervals || []).map(([a,b]) => `${fmtDate(a)}–${fmtDate(b)}`).join('; ') || '—';
+    const nonPeriods = (calc.nonRowsData || []).map(p => `${mapNonExecType(p.type)} ${p.start}–${p.end}`).join('; ') || '—';
+    const lc = calc.lcDetails || { article: calc.articleInfo || calc.art || '—', age: '—', minimum: '—', proposed: '—' };
+    const lines = [
+        'EVIDENȚĂ PPL — REZUMAT',
+        `INPUT | Sex: ${calc.sex === 'M' ? 'Masculin' : 'Feminin'} | Naștere: ${fmtDate(calc.birthDate)} | Pedeapsă: ${duration} | Start: ${fmtDate(calc.startDate)}`,
+        `INPUT | Articol LC: ${lc.article} | Deduceri: ${calc.ded} zile (${dedPeriods}) | Recurs compensatoriu: ${calc.recursDays || 0} zile | Adăugate: ${calc.non} zile (${nonPeriods})`,
+        input.observations ? `INPUT | Observații: ${input.observations}` : null,
+        `OUTPUT | Expirare teoretică: ${calc.theorExp ? fmtDate(calc.theorExp) : '—'} | Expirare reală: ${calc.realExp ? fmtDate(calc.realExp) : '—'}`,
+        `OUTPUT | Minim LC: ${fmtDate(calc.mDate)} | Propozabilă: ${fmtDate(calc.tDate)}${calc.workDaysResult ? ` | După zile muncite: ${calc.workDaysResult}` : ''}`,
+        `OUTPUT | ${calc.reanalysisLabel || 'Reanalizare'}: ${calc.fDate ? fmtDate(calc.fDate) : '—'}`,
+        `REGULĂ LC | ${lc.article} | ${lc.sentenceBand || ''} | ${lc.age}`,
+        `REGULĂ LC | Minim: ${lc.minimum} | Propozabilă: ${lc.proposed}`
+    ].filter(Boolean);
+    return lines.join('\n');
 }
 
 /**
@@ -259,66 +186,36 @@ function buildStepsHTML() {
  * Construiește documentul HTML complet al paginii de rezultate.
  */
 function buildResultsPageHTML() {
-    const content = document.getElementById('resultsContent');
-    if (!content || content.innerHTML.trim() === '') {
+    const calc = window.lastCalculation;
+    if (!calc) {
         alert('Nu există rezultate pentru export. Apasă întâi „CALCULEAZĂ”.');
         return null;
     }
-
-    const data = getInputData();
-    const inputHTML = buildInputDataHTML(data);
-
-    const contentClone = content.cloneNode(true);
-    contentClone.querySelectorAll('input').forEach(input => {
-        input.setAttribute('value', input.value);
-    });
-    // Observațiile sunt deja afișate în secțiunea "DATE INTRODUSE" (inputHTML,
-    // mai jos); app.js le inserează și la începutul #resultsContent, deci le
-    // eliminăm din clonă aici ca să nu apară duplicat în pagina de export.
-    removeObservationsBlock(contentClone);
-    const resultsHTML = contentClone.innerHTML;
-
-    const stepsHTML = buildStepsHTML();
-
-    return `<!DOCTYPE html>
-<html lang="ro">
-    <head>
-        <meta charset="UTF-8">
-        <title>Calculator Evidență Pedepse - Rezultate</title>
-        <style>
-            @page { size: A4; margin: 10mm; }
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { font-family: Arial, sans-serif; margin: 16px; font-size: 13px; line-height: 1.4; color: #222; }
-            h1 { text-align: center; font-size: 18px; margin-bottom: 16px; }
-            .result-section { margin-bottom: 14px; }
-            .result-section h4 { font-size: 13px; margin-bottom: 6px; letter-spacing: 0.03em; }
-            .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; }
-            .result-item { border: 1px solid #ddd; border-radius: 4px; padding: 6px 8px; break-inside: avoid; }
-            .result-label { font-size: 10px; text-transform: uppercase; color: #666; margin-bottom: 2px; }
-            .result-value { font-size: 13px; font-weight: bold; color: #111; }
-            .fraction { font-size: 14px; }
-            .toolbar { text-align: center; margin-bottom: 16px; }
-            .toolbar button {
-                font-size: 13px; padding: 8px 16px; margin: 0 4px; cursor: pointer;
-                border: 1px solid #888; border-radius: 4px; background: #f2f2f2;
-            }
-            .toolbar button:hover { background: #e2e2e2; }
-            .footer { margin-top: 16px; text-align: center; font-size: 10px; color: #888; }
-            @media print { .toolbar { display: none; } }
-        </style>
-    </head>
-    <body>
-        <div class="toolbar">
-            <button onclick="window.print()">Printează / Salvează ca PDF</button>
-            <button onclick="window.close()">Închide</button>
-        </div>
-        <h1>CALCULATOR EVIDENȚĂ PEDEPSE - REZULTATE</h1>
-        ${inputHTML}
-        ${resultsHTML}
-        ${stepsHTML}
-        <div class="footer">Calculator termene pedepse privative de libertate | BETA 0.01 | © Alin Talfeș</div>
-    </body>
-</html>`;
+    const input = calc.inputData || getInputData();
+    const lc = calc.lcDetails || { article: calc.articleInfo || calc.art || '—', sentenceBand: '', age: '—', minimum: '—', proposed: '—' };
+    const duration = calc.life ? 'Detențiune pe viață' : `${calc.duration?.y || 0} ani, ${calc.duration?.m || 0} luni, ${calc.duration?.d || 0} zile`;
+    const ded = (calc.dedIntervals || []).map(([a,b]) => `${fmtDate(a)}–${fmtDate(b)}`).join('; ') || '—';
+    const non = (calc.nonRowsData || []).map(p => `${mapNonExecType(p.type)} ${p.start}–${p.end}`).join('; ') || '—';
+    const row = (label, value, cls='') => `<div class="item ${cls}"><span>${escapeHtml(label)}</span><strong>${escapeHtml(String(value ?? '—'))}</strong></div>`;
+    const inputHtml = [
+        row('Sex', calc.sex === 'M' ? 'Masculin' : 'Feminin'), row('Data nașterii', fmtDate(calc.birthDate)),
+        row('Pedeapsă', duration, 'wide'), row('Început executare', fmtDate(calc.startDate)),
+        row('Articol LC', lc.article + (lc.sentenceBand ? ` · ${lc.sentenceBand}` : '')),
+        row('Perioade deduse', `${calc.ded} zile · ${ded}`, 'wide'),
+        row('Recurs compensatoriu', `${calc.recursDays || 0} zile`), row('Perioade adăugate', `${calc.non} zile · ${non}`, 'wide'),
+        input.observations ? row('Observații', input.observations, 'wide') : ''
+    ].join('');
+    const outputHtml = [
+        row('Expirare teoretică', calc.theorExp ? fmtDate(calc.theorExp) : '—'), row('Expirare reală', calc.realExp ? fmtDate(calc.realExp) : '—', 'em'),
+        row('Fracție minimă / prag', `${fmtDate(calc.mDate)} · ${lc.minimum}`, 'wide'),
+        row('Data propozabilă', `${fmtDate(calc.tDate)} · ${lc.proposed}`, 'wide'),
+        calc.workDaysResult ? row('Propozabilă după zile muncite', `${calc.workDaysResult} (${calc.workDaysApplied || 0} zile aplicate)`, 'wide') : '',
+        row(calc.reanalysisLabel || 'Reanalizare', calc.fDate ? fmtDate(calc.fDate) : '—'),
+        row('Condiție vârstă LC', lc.age, 'wide')
+    ].join('');
+    return `<!DOCTYPE html><html lang="ro"><head><meta charset="UTF-8"><title>Evidență PPL — rezultat</title><style>
+        @page{size:A4 portrait;margin:7mm}*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#172033;margin:0;font-size:8.8pt;line-height:1.25}h1{font-size:14pt;text-align:center;margin:0 0 5mm}h2{font-size:9.5pt;margin:3mm 0 1.5mm;border-bottom:1px solid #b7c5d6;padding-bottom:1mm}.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm}.item{border:1px solid #d5dfeb;border-radius:2mm;padding:1.7mm 2mm;break-inside:avoid}.item.wide{grid-column:1/-1}.item.em{border-width:1.5px;border-color:#2563eb}.item span{display:block;text-transform:uppercase;font-size:6.8pt;color:#5b6b7f;font-weight:700;letter-spacing:.03em;margin-bottom:.5mm}.item strong{font-size:8.5pt}.note{margin-top:2mm;padding:1.8mm 2mm;background:#f3f6fa;border-radius:2mm;font-size:7.4pt}.toolbar{text-align:center;margin-bottom:4mm}.toolbar button{padding:2mm 4mm;margin:0 1mm}.footer{text-align:center;margin-top:3mm;font-size:6.8pt;color:#6f8094}@media print{.toolbar{display:none}body{font-size:8.3pt}h1{margin-bottom:3mm}}
+    </style></head><body><div class="toolbar"><button onclick="window.print()">Printează / Salvează PDF</button><button onclick="window.close()">Închide</button></div><h1>EVIDENȚĂ PEDEPSE ȘI LIBERARE CONDIȚIONATĂ</h1><h2>DATE INTRODUSE</h2><div class="grid">${inputHtml}</div><h2>REZULTATE</h2><div class="grid">${outputHtml}</div><div class="note"><strong>Regulă LC:</strong> ${escapeHtml(lc.article)} · ${escapeHtml(lc.sentenceBand || '')}<br>${escapeHtml(lc.age)}<br><strong>Minim:</strong> ${escapeHtml(lc.minimum)}<br><strong>Propozabilă:</strong> ${escapeHtml(lc.proposed)}</div><div class="footer">Date generate local în browser · © Alin Talfeș</div></body></html>`;
 }
 
 /**

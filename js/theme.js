@@ -13,7 +13,7 @@
         button.setAttribute('title', isLight ? 'Temă întunecată' : 'Temă luminoasă');
         let meta = document.querySelector('meta[name="theme-color"]');
         if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
-        meta.content = isLight ? '#ffffff' : '#061426';
+        meta.content = isLight ? '#ffffff' : '#0b1220';
     }
 
     function applyTheme() {

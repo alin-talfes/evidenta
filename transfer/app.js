@@ -1,25 +1,5 @@
 (function() {
             // ============================================================
-            // 0. ÎNCĂRCARE VERSIUNE DIN version.json
-            // ============================================================
-            const versionDisplay = document.getElementById('versionDisplay');
-            fetch('../version.json')
-                .then(response => {
-                    if (!response.ok) throw new Error('version.json not found');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.version) {
-                        versionDisplay.textContent = 'Versiune: ' + data.version;
-                    } else {
-                        versionDisplay.textContent = 'Versiune: necunoscută';
-                    }
-                })
-                .catch(() => {
-                    versionDisplay.textContent = 'Versiune: neîncărcată';
-                });
-
-            // ============================================================
             // 1. LISTA JUDEȚELOR – ORDINE ALFABETICĂ, FĂRĂ GRUPARE
             // ============================================================
             const allJudete = [];
@@ -221,8 +201,8 @@
 
                 matches.forEach((m, idx) => {
                     const isBest = idx === 0;
-                    const reason = isBest ? 'Cea mai bună potrivire' : 'Alternativă';
-                    const tag = isBest ? 'Recomandat' : 'Posibil';
+                    const reason = isBest ? 'Potrivire prioritară după criteriile tehnice' : 'Alternativă compatibilă';
+                    const tag = isBest ? 'Prioritar' : 'Compatibil';
                     let extra = '';
                     if (m.isRisc) {
                         extra = ' (acceptă risc pentru siguranță)';
@@ -256,7 +236,7 @@
                         </div>
                         <div class="result-sub mt-2">
                             <strong>Potrivire:</strong> Unitățile de mai sus sunt selectate pe baza criteriilor: <strong>${sex}</strong>, vârstă <strong>${varsta}</strong>, județ <strong>${judet}</strong>, mod <strong>${currentMode === 'judiciar' ? 'Afaceri judiciare' : currentMode === 'custodieArestati' ? 'Custodie A.P.' : 'Executare pedeapsă'}</strong>.
-                            ${matches.length > 1 ? ' Cea mai bună potrivire este evidențiată.' : ''}
+                            ${matches.length > 1 ? ' Prima potrivire după criteriile tehnice de sortare este evidențiată; aceasta nu reprezintă o prioritate juridică autonomă.' : ''}
                             ${note}
                         </div>
                         <div class="result-detail">

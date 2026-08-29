@@ -135,6 +135,40 @@ function updateProposedDateWithWorkDays() {
     }
 }
 
+
+function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
+    const labels = {
+        NCP100: 'NCP art. 100', NCP99: 'NCP art. 99', NCP124: 'NCP art. 124', NCP125: 'NCP art. 125',
+        VCP59: 'VCP art. 59', VCP591: 'VCP art. 59¹', VCP602: 'VCP art. 60 alin. (2)', VCP603: 'VCP art. 60 alin. (3)'
+    };
+    if (life) return {
+        article: 'NCP art. 99', sentenceBand: 'Detențiune pe viață',
+        age: 'Condiția de vârstă este verificată potrivit art. 99; pragul temporal utilizat de aplicație este executarea efectivă a 20 de ani (7.305 zile).',
+        minimum: `Prag efectiv: ${schedule.mDays} zile. Zilele muncite nu reduc acest prag.`,
+        proposed: `Data de împlinire a pragului: ${fmtDate(schedule.tDate)}.`
+    };
+    const threshold = schedule.ageThresholdYears;
+    let age;
+    if (art === 'NCP100') {
+        age = schedule.ageRegime === 'elderly'
+            ? 'Se aplică fracțiile pentru persoana care a împlinit 60 de ani. Regimul favorabil produce efecte cel mai devreme din ziua împlinirii vârstei.'
+            : 'Se aplică fracțiile pentru persoana sub 60 de ani. Dacă împlinește 60 de ani înainte de termen, motorul recalculează de la data aniversării.';
+    } else if (art === 'VCP59' || art === 'VCP591') {
+        age = schedule.ageRegime === 'elderly'
+            ? `Articolul VCP rămâne neschimbat; sunt aplicate condițiile aferente pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}) de la data împlinirii acestuia.`
+            : `Articolul VCP rămâne neschimbat; sunt aplicate condițiile anterioare pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}).`;
+    } else {
+        age = `Categoria de vârstă este determinată la data de referință prevăzută de motorul articolului ${labels[art] || art}.`;
+    }
+    return {
+        article: labels[art] || art,
+        sentenceBand: sentenceOver10 ? '>10 ani' : '≤10 ani',
+        age,
+        minimum: `${fracStr(schedule.mR)} → ${schedule.mDays} zile. Fracția minimă este limita efectivă și nu poate fi redusă prin zile muncite.`,
+        proposed: `${fracStr(schedule.tR)} → ${schedule.tDays} zile. Zilele considerate executate pot reduce data propozabilă numai până la fracția minimă.`
+    };
+}
+
 /**
  * Calculează toate datele și afișează rezultatele.
  */
@@ -229,22 +263,32 @@ function calculateAll() {
         return;
     }
     const { mR, tR, mDays, tDays, mDate, tDate, articleInfo } = schedule;
+    const lcDetails = buildLcDetails({ life, art, schedule, sentenceOver10, sex: currentSex });
     steps.push(`Articolul aplicabil: ${articleInfo}.`);
     if (life) {
         steps.push(`Pragul minim și data propozabilă coincid la ${LC_TWENTY_YEAR_CAP_DAYS} zile efective; zilele muncite nu reduc acest prag.`);
     } else {
         steps.push(`Fracția minimă: ${fracStr(mR)} = ${mDays} zile. Fracția totală/propozabilă: ${fracStr(tR)} = ${tDays} zile.`);
-        if (schedule.ageTransitionApplied) steps.push(`La împlinirea vârstei de 60 ani fracțiile se schimbă; noua fracție produce efecte cel mai devreme din chiar ziua împlinirii vârstei.`);
+        if (schedule.ageTransitionApplied) steps.push(`La împlinirea pragului de vârstă de ${schedule.ageThresholdYears || 60} ani condițiile se schimbă; noile condiții produc efecte cel mai devreme din chiar ziua împlinirii pragului.`);
     }
 
     // Salvează global data propozabilă pentru scăderea zilelor muncite
     window.lastProposedDate = new Date(tDate);
     window.lastMinimumDate = new Date(mDate);
 
-    // 1/5 se calculează numai pentru un mandat cu durată determinată.
+    // Reanalizare regim: 1/5 pentru pedeapsa determinată; 6 ani și 6 luni pentru detențiunea pe viață.
     const fifth = life ? null : Math.floor(totalDays / 5);
     let fDate = null;
-    if (!life) fDate = thresholdDate(startDate, fifth, ded, non);
+    let reanalysisLabel = 'Reanalizare 1/5';
+    if (!life) {
+        fDate = thresholdDate(startDate, fifth, ded, non);
+    } else {
+        const baseReanalysis = addCalendarSafe(startDate, 6, 6, 0);
+        baseReanalysis.setDate(baseReanalysis.getDate() - 1);
+        fDate = new Date(baseReanalysis);
+        fDate.setDate(fDate.getDate() - ded + non);
+        reanalysisLabel = 'Reanalizare 6 ani și 6 luni';
+    }
 
     // Zile executate și rest
     const elapsedEnd = realExp && today() > realExp ? realExp : today();
@@ -259,7 +303,7 @@ function calculateAll() {
     const alertDates = [
         { label: 'Fracție minimă obligatorie', date: mDate },
         { label: 'Data propusă (totală)', date: tDate },
-        { label: 'Termen 1/5', date: fDate },
+        { label: reanalysisLabel, date: fDate },
         { label: 'Expirare reală', date: realExp },
         { label: 'Carantină expiră', date: quarantineEnd }
     ];
@@ -287,7 +331,7 @@ function calculateAll() {
     const timelineItems = [
         { label: 'Început executare', date: startDate },
         { label: 'Carantină expiră', date: quarantineEnd },
-        { label: '1/5 mandat', date: fDate },
+        { label: reanalysisLabel, date: fDate },
         { label: 'Fracție minimă obligatorie', date: mDate },
         { label: 'Data propusă (totală)', date: tDate },
         { label: 'Expirare teoretică', date: theorExp },
@@ -381,17 +425,20 @@ function calculateAll() {
         </div>
         <p id="workDaysNote" class="help-text"><em>Zilele câștigate reduc data propozabilă, fără a putea coborî sub fracția minimă obligatorie.</em></p>
     </div>`;
-
-    if (!life) html += `<div class="result-section"><h4>REANALIZARE 1/5</h4><div class="result-grid">
-        <div class="result-item"><div class="result-label">1/5 mandat</div>
-            <div class="result-value">(fără deduceri: ${fifth}z / după deduceri și perioade adăugate: ${daysBetween(startDate, fDate) + 1}z)</div>
+    html += `<div class="result-section"><h4>REANALIZARE REGIM</h4><div class="result-grid">
+        <div class="result-item"><div class="result-label">${reanalysisLabel}</div>
+            <div class="result-value">${life ? 'Prag temporal: 6 ani și 6 luni de la începerea executării, ajustat cu perioadele deduse/adăugate.' : `(fără deduceri: ${fifth}z / după deduceri și perioade adăugate: ${daysBetween(startDate, fDate) + 1}z)`}</div>
             <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div>
         </div>
     </div></div>`;
 
-    html += `<div class="result-section"><h4>ALTE DATE</h4><div class="result-grid">
-        <div class="result-item"><div class="result-label">Articol LC</div><div class="result-value">${articleInfo}</div></div>
+    html += `<div class="result-section"><h4>ALTE DATE ȘI EXPLICAȚII LC</h4><div class="result-grid">
+        <div class="result-item important"><div class="result-label">Articol LC</div><div class="result-value">${lcDetails.article}</div><div class="result-note">${lcDetails.sentenceBand}</div></div>
+        <div class="result-item"><div class="result-label">Condiția de vârstă aplicată</div><div class="result-value result-value-small">${lcDetails.age}</div></div>
+        <div class="result-item"><div class="result-label">Fracția / pragul minim</div><div class="result-value result-value-small">${lcDetails.minimum}</div></div>
+        <div class="result-item"><div class="result-label">Fracția / data propozabilă</div><div class="result-value result-value-small">${lcDetails.proposed}</div></div>
         <div class="result-item"><div class="result-label">${life ? 'Prag LC' : 'Mandat total'}</div><div class="result-value">${life ? `20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
+        <div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>
         <div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div></div>
     </div></div>`;
 
@@ -425,6 +472,8 @@ function calculateAll() {
         mR,
         tR,
         articleInfo,
+        lcDetails,
+        reanalysisLabel,
         fifth,
         fDate,
         mDate,

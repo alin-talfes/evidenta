@@ -47,7 +47,7 @@ let vcpFemale=lr.__schedule({life:false,art:'VCP591',sentenceOver10:false,totalD
 assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFemale.articleInfo.includes('VCP art. 59¹'));
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
-for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=39/.test(h),f+' stale css cache version'); }
+for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=40/.test(h),f+' stale css cache version'); }
 
 // Footer/versionare: toate paginile folosesc același version.js, iar numărul există numai în version.json.
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
@@ -64,5 +64,23 @@ for(const f of ['index.html','termene.html','contopiri.html','transfer/index.htm
   assert(!/<footer\b/i.test(h),f+' contains duplicated static footer');
 }
 assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
+
+
+
+// Remediere audit 2026-08: Transfer, theme, export, reanalizare, validări.
+const transferApp=fs.readFileSync('transfer/app.js','utf8');
+const transferRulesPage=fs.readFileSync('transfer/rules-page.js','utf8');
+assert(!transferApp.includes('versionDisplay'),'Transfer app must use centralized version.js only');
+assert(!transferRulesPage.includes('versionDisplay'),'Transfer rules page must use centralized version.js only');
+assert(transferApp.includes('Potrivire prioritară după criteriile tehnice'));
+assert(fs.readFileSync('js/theme.js','utf8').includes("'#0b1220'"),'theme-color must match palette');
+assert(fs.readFileSync('js/export.js','utf8').includes('EVIDENȚĂ PPL — REZUMAT'));
+assert(fs.readFileSync('js/export.js','utf8').includes('DATE INTRODUSE'));
+assert(fs.readFileSync('js/app.js','utf8').includes('Reanalizare 6 ani și 6 luni'));
+assert(fs.readFileSync('js/app.js','utf8').includes('ALTE DATE ȘI EXPLICAȚII LC'));
+assert(fs.readFileSync('js/contopiri.js','utf8').includes('hasInvalidRow'));
+assert(fs.readFileSync('js/termene.js','utf8').includes('Number.isSafeInteger(duration)'));
+assert(fs.readFileSync('js/termene.js','utf8').includes('Pentru termenele calculate pe ore'));
+for(const f of ['termene.html','contopiri.html','transfer/index.html','transfer/rules.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
 
 console.log('All audit regression tests passed.');

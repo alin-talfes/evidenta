@@ -1,26 +1,6 @@
 (function() {
-        // ============================================================
-        // 0. ÎNCĂRCARE VERSIUNE DIN version.json
-        // ============================================================
-        const versionDisplay = document.getElementById('versionDisplay');
-        fetch('../version.json')
-            .then(response => {
-                if (!response.ok) throw new Error('version.json not found');
-                return response.json();
-            })
-            .then(data => {
-                if (data.version) {
-                    versionDisplay.textContent = 'Versiune: ' + data.version;
-                } else {
-                    versionDisplay.textContent = 'Versiune: necunoscută';
-                }
-            })
-            .catch(() => {
-                versionDisplay.textContent = 'Versiune: neîncărcată';
-            });
-
-        // ============================================================
-        // 1. ANEXA 1 – Profilarea unităților
+            // ============================================================
+            // 1. ANEXA 1 – Profilarea unităților
         // ============================================================
         const anexa1Body = document.getElementById('anexa1Body');
         const unitatiRelevante = UNITATI.filter(u => !u.spital && !u.educativ && !u.detentie);

@@ -188,7 +188,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
             mDate: date, tDate: new Date(date),
             pM: LC_TWENTY_YEAR_CAP_DAYS, pT: LC_TWENTY_YEAR_CAP_DAYS,
             articleInfo: 'NCP art. 99 (detențiune pe viață — prag efectiv 20 ani / 7.305 zile)',
-            lifeThreshold: true, ageTransitionApplied: false
+            lifeThreshold: true, ageTransitionApplied: false, ageRegime: 'life', ageThresholdYears: null
         };
     }
 
@@ -210,6 +210,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
             mDays: m.days, tDays: t.days, mDate: m.date, tDate: t.date,
             pM: cap, pT: cap,
             birthday60,
+            ageRegime: usedElder ? 'elderly' : 'young', ageThresholdYears: 60,
             ageTransitionApplied: m.transitionApplied || t.transitionApplied,
             articleInfo: `NCP art. 100 (${usedElder ? 'fracții 60+ aplicate de la data împlinirii vârstei' : 'fracții sub 60 ani'}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`
         };
@@ -236,6 +237,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
             mDays: m.days, tDays: t.days, mDate: m.date, tDate: t.date,
             pM: Infinity, pT: Infinity,
             elderlyBirthday: birthday,
+            ageRegime: usedElder ? 'elderly' : 'young', ageThresholdYears: currentSex === 'F' ? 55 : 60,
             ageTransitionApplied: m.transitionApplied || t.transitionApplied,
             articleInfo: `${articleLabel} (${usedElder ? 'condiții VCP pentru pragul de vârstă aplicate de la data împlinirii' : 'condiții VCP înainte de pragul de vârstă'}) ${sentenceOver10 ? '>10 ani' : '≤10 ani'}`
         };

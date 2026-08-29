@@ -508,3 +508,8 @@ small { color: var(--text-light); font-size: .72rem; }
     .transfer-page-actions { justify-content: space-between; }
     .transfer-page-actions--theme-only { justify-content: flex-end; }
 }
+
+/* Detailed calculation explanations */
+.result-note { margin-top: 6px; color: var(--text-light); font-size: .75rem; line-height: 1.45; font-weight: 500; }
+.result-value-small { font-size: .82rem; line-height: 1.48; font-weight: 620; }
+.transfer-page-actions { margin-bottom: 10px; }

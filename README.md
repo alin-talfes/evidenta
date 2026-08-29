@@ -6,11 +6,12 @@
 
 Aplicație web destinată calculului termenelor de executare a pedepselor privative de libertate și a termenelor procedurale asociate, în conformitate cu legislația penală română.
 
-Proiectul integrează trei module principale:
+Proiectul integrează patru module principale:
 
 - **Calculator termene pedepse privative de libertate** – calculul expirării pedepsei, al fracțiilor pentru liberare condiționată și al termenelor de reanalizare.
 - **Calculator termene procedurale** – calculul termenelor pentru căi de atac, măsuri preventive și alte termene prevăzute de lege.
-- **Calculator pedeapsă rezultantă** – calculul contopirilor de pedepse, al recidivei postcondamnatorii și al revocării restului rămas neexecutat.
+- **Calculator pedeapsă rezultantă** – instrument aritmetic pentru cuantumuri deja calificate juridic de utilizator.
+- **Transfer și profilare** – filtrare a unităților compatibile pe baza regulilor și anexelor configurate pentru Decizia nr. 360/2020.
 
 ## Funcționalități
 
@@ -89,7 +90,7 @@ calculator-pedepse/
 ## Utilizare
 
 1. Descarcă sau clonează repository-ul.
-2. Deschide fișierul `index.html` într-un browser modern.
+2. Servește directorul prin HTTP/HTTPS (de exemplu GitHub Pages sau un server static local) și deschide pagina principală. `version.json` este încărcat prin `fetch`, deci deschiderea directă prin `file://` nu oferă experiența completă.
 3. Introdu datele cauzei.
 4. Apasă **Calculează**.
 5. Utilizează meniul aplicației pentru accesarea celorlalte module.

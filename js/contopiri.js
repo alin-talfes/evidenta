@@ -26,11 +26,12 @@ const { toDays, fromDays, formatDuration, calculate } = ContopiriCore;
             const recidivaPenalties = [];
             const revocarePenalties = [];
 
+            let hasInvalidRow = false;
             rows.forEach(row => {
                 const years = Number(row.querySelector('.penalty-years').value || 0);
                 const months = Number(row.querySelector('.penalty-months').value || 0);
                 const days = Number(row.querySelector('.penalty-days').value || 0);
-                if (![years, months, days].every(v => Number.isSafeInteger(v) && v >= 0)) { alert('Duratele trebuie să fie numere întregi pozitive sau zero.'); return; }
+                if (![years, months, days].every(v => Number.isSafeInteger(v) && v >= 0)) { hasInvalidRow = true; return; }
                 const type = row.querySelector('.penalty-type').value;
                 if (years === 0 && months === 0 && days === 0) return;
 
@@ -41,6 +42,8 @@ const { toDays, fromDays, formatDuration, calculate } = ContopiriCore;
                 else if (type === 'recidiva') recidivaPenalties.push(penalty);
                 else if (type === 'revocare') revocarePenalties.push(penalty);
             });
+
+            if (hasInvalidRow) { alert('Duratele trebuie să fie numere întregi pozitive sau zero. Calculul a fost oprit.'); return; }
 
             if (concursPenalties.length === 0 && recidivaPenalties.length === 0 && revocarePenalties.length === 0) {
                 alert('Adaugă cel puțin o pedeapsă validă.');

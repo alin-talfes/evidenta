@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INSTRUMENT DE AJUTOR PENTRU LUCRAREA DE TRANSFER – SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)</title>
-    <link rel="stylesheet" href="../css/style.css?v=39">
+    <link rel="stylesheet" href="../css/style.css?v=40">
     <script src="../js/theme.js?v=34" defer></script>
     <script src="../js/version.js?v=38" defer></script>
     <link rel="icon" href="../favicon-ev-2.svg" sizes="any" type="image/svg+xml">
     <link rel="mask-icon" href="../favicon-ev-2.svg" color="#4f8cff">
+    <link rel="manifest" href="../manifest.json">
     <meta name="description" content="Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.">
     <meta property="og:title" content="INSTRUMENT DE AJUTOR PENTRU LUCRAREA DE TRANSFER – SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)">
     <meta property="og:description" content="Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.">
@@ -26,6 +27,11 @@
             <a class="app-nav__link" href="../termene.html">Termene</a>
         </nav>
 
+        <div class="page-actions transfer-page-actions">
+            <a class="btn btn-outline" href="rules.html">REGULI TRANSFER</a>
+            <button id="themeToggle" aria-label="Schimbă tema">🌙</button>
+        </div>
+
         <!-- ========== HEADER ========== -->
         <header class="header">
             <div class="header-inner">
@@ -34,11 +40,6 @@
                 <div class="subtitle">SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)</div>
             </div>
         </header>
-
-        <div class="page-actions transfer-page-actions">
-            <a class="btn btn-outline" href="rules.html">REGULI TRANSFER</a>
-            <button id="themeToggle" aria-label="Schimbă tema">🌙</button>
-        </div>
 
         <!-- ========== CARD PRINCIPAL ========== -->
         <div class="card">
@@ -161,7 +162,7 @@
         </div>
 
         <!-- ========== CARD REZULTATE ========== -->
-        <div class="card" id="resultsCard" style="border-left-color: var(--gold);">
+        <div class="card" id="resultsCard" style="border-left-color: var(--accent);">
             <h3>Rezultat</h3>
             <div id="resultArea">
                 <div class="empty-state">
@@ -171,9 +172,9 @@
         </div>
 
         <!-- ========== LISTA INSTANȚELOR ========== -->
-        <div class="card" id="instanteCard" style="border-left-color: var(--gold);">
+        <div class="card" id="instanteCard" style="border-left-color: var(--accent);">
             <details>
-                <summary style="font-weight:700; font-size:1rem; color:var(--gold-light); cursor:pointer; padding:4px 0;">Lista instanțelor</summary>
+                <summary style="font-weight:700; font-size:1rem; color:var(--accent-strong); cursor:pointer; padding:4px 0;">Lista instanțelor</summary>
                 <div style="font-size:0.75rem; color:var(--text-light); line-height:1.8; margin-top:12px; max-height:400px; overflow-y:auto; padding-right:8px;">
                     <strong>Curtea de Apel ALBA IULIA</strong><br>
                     ALBA<br> Tribunalul ALBA<br> Judecătoria AIUD<br> Judecătoria ALBA IULIA<br> Judecătoria BLAJ<br> Judecătoria CÂMPENI<br> Judecătoria SEBEȘ<br>

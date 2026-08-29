@@ -109,7 +109,7 @@
         function calculateTerm() {
             const startDateStr = document.getElementById('startDateInput').value.trim();
             const startTimeStr = document.getElementById('startTimeInput').value.trim();
-            const duration = parseInt(document.getElementById('durationInput').value);
+            const duration = Number(document.getElementById('durationInput').value);
             const unit = document.getElementById('unitSelect').value;
             const termType = document.getElementById('termTypeSelect').value;
             const preset = document.getElementById('presetSelect').value;
@@ -118,11 +118,12 @@
                 alert('Completează data de început.');
                 return;
             }
-            if (isNaN(duration) || duration <= 0) {
+            if (!Number.isSafeInteger(duration) || duration <= 0) {
                 alert('Introdu o durată validă.');
                 return;
             }
 
+            if (unit === 'hours' && !startTimeStr) { alert('Pentru termenele calculate pe ore, completează ora de început.'); return; }
             const start = combineRoDateTime(startDateStr, startTimeStr || '00:00');
             if (!start) {
                 alert('Data de început este invalidă.');
@@ -137,12 +138,7 @@
                 const resultDiv = document.getElementById('deadlineResult');
                 resultDiv.style.display = 'block';
                 const displayStr = unit === 'hours' ? formatRoDateTime(displayDate) : formatRoDate(displayDate);
-
-                if (preset === 'contestatie') {
-                    resultDiv.innerHTML = `<div class="big-result">DATA ESTIMATĂ A RĂMÂNERII DEFINITIVE:<br>${displayStr}</div>`;
-                } else {
-                    resultDiv.innerHTML = `<div class="big-result">TERMEN-LIMITĂ EFECTIV:<br>${displayStr}</div>`;
-                }
+                resultDiv.innerHTML = `<div class="big-result">TERMEN-LIMITĂ EFECTIV:<br>${displayStr}</div>`;
             } catch (err) {
                 alert(err.message);
             }

@@ -50,6 +50,8 @@ function saveCase() {
         d: document.getElementById('durDays').value,
         start: document.getElementById('startDate').value,
         condRelease: document.getElementById('conditionalReleaseDate').value,
+        masuriRefDate: document.getElementById('masuriRefDate')?.value || '',
+        masuriDays: document.getElementById('masuriDays')?.value || '0',
         dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({
             start: r.querySelector('.ded-start')?.value || '',
             end: r.querySelector('.ded-end')?.value || ''
@@ -93,6 +95,10 @@ window.loadCaseByName = function(name) {
     document.getElementById('durDays').value = d.d || 0;
     document.getElementById('startDate').value = d.start || '';
     document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
+    if (document.getElementById('masuriRefDate')) document.getElementById('masuriRefDate').value = d.masuriRefDate || '';
+    if (document.getElementById('masuriDays')) document.getElementById('masuriDays').value = d.masuriDays || 0;
+    const articleSelect = document.getElementById('liberationArticle');
+    if (articleSelect) articleSelect.disabled = Boolean(d.life);
 
     document.getElementById('deductionsContainer').innerHTML = '';
     (d.dedRows || []).forEach(r => {
@@ -220,6 +226,10 @@ function restoreAutoSave() {
         document.getElementById('durDays').value = d.d || 0;
         document.getElementById('startDate').value = d.start || '';
         document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
+        if (document.getElementById('masuriRefDate')) document.getElementById('masuriRefDate').value = d.masuriRefDate || '';
+        if (document.getElementById('masuriDays')) document.getElementById('masuriDays').value = d.masuriDays || 0;
+        const articleSelect = document.getElementById('liberationArticle');
+        if (articleSelect) articleSelect.disabled = Boolean(d.life);
 
         document.getElementById('deductionsContainer').innerHTML = '';
         (d.dedRows || []).forEach(r => {
