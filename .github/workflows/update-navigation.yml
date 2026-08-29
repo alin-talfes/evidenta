@@ -1,0 +1,116 @@
+name: Update application navigation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-navigation.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update navigation
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          files = [
+              Path('index.html'),
+              Path('contopiri.html'),
+              Path('termene.html'),
+              Path('transfer/index.html'),
+              Path('transfer/rules.html'),
+          ]
+
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              if path.parts[0] == 'transfer':
+                  links = [
+                      ('../', 'Pedepse'),
+                      ('../contopiri.html', 'Contopiri'),
+                      ('./', 'Transfer'),
+                      ('../termene.html', 'Termene'),
+                  ]
+              else:
+                  links = [
+                      ('./', 'Pedepse'),
+                      ('contopiri.html', 'Contopiri'),
+                      ('transfer/', 'Transfer'),
+                      ('termene.html', 'Termene'),
+                  ]
+
+              current = {
+                  'index.html': 'Pedepse',
+                  'contopiri.html': 'Contopiri',
+                  'termene.html': 'Termene',
+                  'transfer/index.html': 'Transfer',
+              }.get(path.as_posix())
+
+              nav_lines = ['        <nav class="app-nav" aria-label="Modulele aplicației">',
+                           '            <span class="app-nav__brand">Evidență PPL</span>']
+              for href, label in links:
+                  current_attr = ' aria-current="page"' if current == label else ''
+                  nav_lines.append(f'            <a class="app-nav__link" href="{href}"{current_attr}>{label}</a>')
+              nav_lines.append('        </nav>')
+              new_nav = '\n'.join(nav_lines)
+
+              text, count = re.subn(
+                  r'\s*<nav class="app-nav" aria-label="Modulele aplicației">.*?</nav>',
+                  '\n' + new_nav,
+                  text,
+                  count=1,
+                  flags=re.S,
+              )
+              if count != 1:
+                  raise SystemExit(f'Could not replace nav in {path}')
+
+              if path.as_posix() == 'transfer/index.html':
+                  marker = '        <!-- ========== CARD PRINCIPAL ========== -->'
+                  block = '''        <div class="page-actions transfer-page-actions">
+            <a class="btn btn-outline" href="rules.html">REGULI TRANSFER</a>
+        </div>
+
+'''
+                  if 'href="rules.html">REGULI TRANSFER</a>' not in text:
+                      if marker not in text:
+                          raise SystemExit('Transfer insertion marker missing')
+                      text = text.replace(marker, block + marker, 1)
+
+              path.write_text(text, encoding='utf-8')
+
+      - name: Verify navigation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in index.html contopiri.html termene.html transfer/index.html transfer/rules.html; do
+            grep -q '>Pedepse</a>' "$f"
+            grep -q '>Contopiri</a>' "$f"
+            grep -q '>Transfer</a>' "$f"
+            grep -q '>Termene</a>' "$f"
+            if grep -A8 '<nav class="app-nav"' "$f" | grep -q '>Reguli transfer</a>'; then
+              echo "Reguli transfer still present in main nav: $f"
+              exit 1
+            fi
+          done
+          grep -q 'href="rules.html">REGULI TRANSFER</a>' transfer/index.html
+          git diff --exit-code -- js/ transfer/rules.js || { echo 'JS changed unexpectedly'; exit 1; }
+
+      - name: Commit navigation update
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/update-navigation.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html contopiri.html termene.html transfer/index.html transfer/rules.html .github/workflows/update-navigation.yml
+          git commit -m "Reorder primary navigation and move transfer rules link"
+          git push origin main
