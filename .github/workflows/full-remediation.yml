@@ -14,7 +14,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: python3 scripts/full_remediation.py
+      - run: |
+          sed -i "s/read('termene.js')/read('js\/termene.js')/" scripts/full_remediation.py
+          sed -i "s/write('termene.js', s)/write('js\/termene.js', s)/" scripts/full_remediation.py
+          python3 scripts/full_remediation.py
       - run: |
           npm run check:syntax
           npm test
