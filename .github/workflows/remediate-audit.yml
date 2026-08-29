@@ -1,0 +1,22 @@
+name: Remediate audit findings
+on:
+  push:
+    branches: [main]
+    paths: [scripts/remediate_audit.py, .github/workflows/remediate-audit.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - run: python3 scripts/remediate_audit.py
+      - run: npm run check:syntax
+      - run: npm test
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add favicon-ev-2.svg transfer/index.html transfer/rules.html transfer/app.js transfer/rules-page.js js/theme.js js/termene.js js/contopiri.js js/storage.js js/app.js js/export.js css/style.css index.html termene.html contopiri.html tests/run-tests.js
+          git commit -m "Remediate audit findings and improve result exports"
+          git push origin main
