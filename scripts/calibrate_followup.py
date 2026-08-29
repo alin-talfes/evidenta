@@ -21,9 +21,6 @@ new="""    // Inițializare scădere zile muncite doar pentru pedepsele determin
     if (!life) updateProposedDateWithWorkDays();"""
 assert old in s
 s=s.replace(old,new,1)
-p.write_text(s,encoding='utf-8')
-
-p=Path('js/ui.js'); s=p.read_text(encoding='utf-8')
 old="""    document.getElementById('lifeSentence').addEventListener('change', function() {
         document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked);
     });"""
@@ -47,11 +44,11 @@ p=Path('tests/run-tests.js'); s=p.read_text(encoding='utf-8')
 marker="console.log('All audit regression tests passed.');"
 add="""
 // Integritate UI pentru detențiunea pe viață: art. 99 este unic și zilele muncite nu se afișează pentru viață.
-const appSource=fs.readFileSync('js/app.js','utf8'), uiSource=fs.readFileSync('js/ui.js','utf8');
+const appSource=fs.readFileSync('js/app.js','utf8');
 assert(appSource.includes("life && art !== 'NCP99'"));
 assert(appSource.includes("!life && art === 'NCP99'"));
 assert(appSource.includes('if (!life) html += `<div class="result-section">'));
-assert(uiSource.includes("article.value = 'NCP99'")); assert(uiSource.includes('article.disabled = true'));
+assert(appSource.includes("article.value = 'NCP99'")); assert(appSource.includes('article.disabled = true'));
 
 """
 assert marker in s
