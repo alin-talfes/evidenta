@@ -1,4 +1,4 @@
-const CACHE = "evidenta-training-v95";
+const CACHE = "evidenta-training-v96";
 const GENERATED_CACHE = "evidenta-training-generated-v7";
 
 const CORE_ASSETS = [
