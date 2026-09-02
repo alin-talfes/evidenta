@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Semnalmente calibration record",
+  "type": "object",
+  "required": ["caseId", "reference", "prediction"],
+  "properties": {
+    "caseId": { "type": "string", "minLength": 1, "description": "Identificator pseudonimizat; nu folosi nume/CNP/număr matricol." },
+    "engineVersion": { "type": "string" },
+    "reference": { "$ref": "#/$defs/traits" },
+    "prediction": { "$ref": "#/$defs/traits" },
+    "features": {
+      "type": "object",
+      "description": "Metrici numerice derivate din analiza automată, fără imagini sau landmark-uri. Folosite numai pentru calibrarea exploratorie a pragurilor.",
+      "properties": {
+        "frunte": { "type": "number" },
+        "nasProfil": { "type": "number" },
+        "nasLatime": { "type": "number" },
+        "ochiMarime": { "type": "number" },
+        "guraColturi": { "type": "number" },
+        "guraMarime": { "type": "number" },
+        "barbie": { "type": "number" },
+        "calvitie": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "ratings": {
+      "type": "array",
+      "minItems": 2,
+      "description": "Evaluări independente opționale pentru acord inter-evaluatori. Referința finală/adjudicată rămâne în `reference`.",
+      "items": { "$ref": "#/$defs/rating" }
+    },
+    "quality": { "type": ["object", "null"], "additionalProperties": true },
+    "referenceMeta": {
+      "type": "object",
+      "properties": {
+        "blindedToPrediction": { "type": "boolean", "description": "True dacă referința a fost stabilită fără vizualizarea predicției automate." },
+        "enteredAt": { "type": "string", "format": "date-time" },
+        "method": { "type": "string" },
+        "reviewers": { "type": "integer", "minimum": 1 },
+        "adjudicated": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "rating": {
+      "type": "object",
+      "required": ["raterId", "labels"],
+      "properties": {
+        "raterId": { "type": "string", "minLength": 1, "description": "Cod pseudonimizat al evaluatorului, de exemplu R1/R2." },
+        "labels": { "$ref": "#/$defs/traits" },
+        "blindedToPrediction": { "type": "boolean" },
+        "enteredAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": true
+    },
+    "traits": {
+      "type": "object",
+      "properties": {
+        "frunte": { "type": "string" },
+        "nasProfil": { "type": "string" },
+        "nasLatime": { "type": "string" },
+        "ochiCuloare": { "type": "string" },
+        "ochiMarime": { "type": "string" },
+        "guraColturi": { "type": "string" },
+        "guraMarime": { "type": "string" },
+        "barbie": { "type": "string" },
+        "tipFata": { "type": "string" },
+        "parCuloare": { "type": "string" },
+        "parTextura": { "type": "string" },
+        "calvitie": { "type": "string" },
+        "spranceneForma": { "type": "string" },
+        "spranceneDensitate": { "type": "string" },
+        "barba": { "type": "string" },
+        "mustata": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.advanced-diagnostics { align-items: start; }
+.threshold-panel { margin-top: 18px; }
+.proposal-status { display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 3px 7px; font-size: .62rem; font-weight: 850; white-space: nowrap; }
+.proposal-candidate { color: var(--warning); border-color: color-mix(in srgb, var(--warning) 35%, var(--border)); background: color-mix(in srgb, var(--warning) 9%, transparent); }
+.proposal-stable { color: var(--success); border-color: color-mix(in srgb, var(--success) 35%, var(--border)); background: var(--success-soft); }
+.proposal-insufficient { color: var(--text-muted); background: var(--surface-2); }
+.threshold-panel .benchmark-table td:nth-child(3), .threshold-panel .benchmark-table td:nth-child(4) { font-variant-numeric: tabular-nums; }
+.advanced-diagnostics code { color: var(--accent); }
+@media (max-width: 720px) { .threshold-panel .benchmark-table { min-width: 840px; } }
