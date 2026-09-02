@@ -145,6 +145,9 @@
 
   function synthesisResultMarkup(item,comparison){
     const band=synthesisBand(comparison.score);
+    const differenceMarkup=comparison.score<100
+      ? `<p class="first-difference"><strong>Primul punct de abatere:</strong> textul legal continuă cu „${escapeHtml(comparison.firstExpected)}”, iar răspunsul tău are „${escapeHtml(comparison.firstWritten)}”.</p>`
+      : `<p class="first-difference"><strong>Potrivire integrală la nivel de cuvinte.</strong></p>`;
     return `<section class="synthesis-result ${band.key}" aria-live="polite">
       <div class="fidelity-score"><span>Fidelitate lexicală</span><strong>${comparison.score}%</strong><small>${band.label}</small></div>
       <div class="fidelity-metrics">
@@ -152,7 +155,7 @@
         <div><span>Omise / nealiniate</span><b>${comparison.missing}</b></div>
         <div><span>În plus / nealiniate</span><b>${comparison.extra}</b></div>
       </div>
-      ${comparison.score<100?`<p class="first-difference"><strong>Primul punct de abatere:</strong> textul legal continuă cu „${escapeHtml(comparison.firstExpected)}”, iar răspunsul tău are „${escapeHtml(comparison.firstWritten)}”.</p>`:"<p class="first-difference"><strong>Potrivire integrală la nivel de cuvinte.</strong></p>"}
+      ${differenceMarkup}
       <div class="exact-law-text"><div><p class="eyebrow">TEXTUL DE CONTROL</p><h3>${escapeHtml(item.heading)}</h3></div><pre>${escapeHtml(item.text)}</pre><small>Sursă de control: ${escapeHtml(item.actTitle)} · ${escapeHtml(item.articleNumber)}. Numărul articolului este afișat doar ca reper de verificare.</small></div>
     </section>`;
   }
