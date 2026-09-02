@@ -12,34 +12,6 @@ const laws=[
 {id:"cod",short:"Cod deontologic",title:"OMJ nr. 2794/C/2004 — Codul deontologic",scope:"Anexa nr. 1: art. 2, 6 și 11.",url:"https://legislatie.just.ro/Public/DetaliiDocument/56992",weight:2}
 ];
 
-const studyCards=[
-{law:"l254",ref:"Titlul III",title:"Organizarea executării",text:"Legea-cadru stabilește autoritățile implicate, locurile de deținere și garanțiile aplicabile executării pedepselor privative de libertate."},
-{law:"l254",ref:"Art. 43",title:"Primirea persoanelor condamnate",text:"Studiază documentele care însoțesc primirea, verificările obligatorii și măsurile imediate ce trebuie realizate."},
-{law:"l254",ref:"Art. 45",title:"Transferarea",text:"Corelează temeiurile și competența transferării cu procedura detaliată din regulament și din instrucțiunile de evidență."},
-{law:"l254",ref:"Art. 53",title:"Punerea în libertate",text:"Reține temeiurile, momentul liberării, verificările situației juridice și documentele eliberate persoanei."},
-{law:"l254",ref:"Cap. VIII",title:"Liberarea condiționată",text:"Separă procedura penitenciară de condițiile de drept substanțial prevăzute de art. 99 și 100 Cod penal."},
-{law:"cp",ref:"Art. 53–54",title:"Categoriile pedepselor",text:"Distinge pedepsele principale de pedeapsa accesorie și pedepsele complementare aplicabile persoanei fizice."},
-{law:"cp",ref:"Cap. IV",title:"Calculul duratei pedepselor",text:"Durata se calculează potrivit unităților legale de timp; timpul reținerii, arestării și alte perioade se compută în condițiile legii."},
-{law:"cp",ref:"Art. 99–100",title:"Liberarea condiționată",text:"Condițiile diferă între detențiunea pe viață și închisoare. Verifică fracția, regimul, obligațiile civile și convingerea instanței."},
-{law:"cp",ref:"Art. 186",title:"Calculul timpului",text:"Reține înțelesul legal al zilei, săptămânii, lunii și anului atunci când termenele au relevanță penală."},
-{law:"cpp",ref:"Art. 208",title:"Verificarea măsurilor preventive",text:"Identifică instanța competentă, momentele verificării și consecințele constatării legalității sau nelegalității măsurii."},
-{law:"cpp",ref:"Art. 238–239",title:"Arestarea preventivă",text:"Separă condițiile generale de durata maximă în cursul judecății și de verificarea periodică a măsurii."},
-{law:"cpp",ref:"Art. 269",title:"Calculul termenelor procedurale",text:"Termenele procedurale au reguli proprii de calcul; nu le confunda cu modul de calcul al duratei pedepsei."},
-{law:"cpp",ref:"Art. 555–558",title:"Punerea în executare",text:"Studiază emiterea și trimiterea mandatului, comunicările și autoritățile responsabile de executarea pedepselor principale."},
-{law:"cpp",ref:"Art. 598",title:"Contestația la executare",text:"Identifică limitativ cazurile, instanța competentă și diferența față de rejudecarea fondului cauzei."},
-{law:"hg157",ref:"Art. 50–52",title:"Regimul provizoriu",text:"Detașează regimul arestatului preventiv în altă cauză de aplicarea provizorie a regimului după condamnare."},
-{law:"hg157",ref:"Art. 88–93",title:"Stabilirea și schimbarea regimului",text:"Urmărește fluxul: analiză, propunere/hotărâre, comunicare, plângere și punerea în aplicare a regimului."},
-{law:"hg157",ref:"Art. 97, 108, 116",title:"Primire, transfer, liberare",text:"Cele trei momente operaționale majore trebuie corelate cu evidența documentelor și verificarea situației juridice."},
-{law:"omj2188",ref:"Integral",title:"Controlul legalității deținerii",text:"Activitatea de evidență urmărește existența și continuitatea unui temei legal valabil pentru fiecare perioadă de privare de libertate."},
-{law:"omj2188",ref:"Integral",title:"Dosarul individual",text:"Grupează documentele după funcția lor: primire, situație juridică, regim, transfer, comunicări și punere în libertate."},
-{law:"omj2188",ref:"Integral",title:"Exactitatea datelor",text:"Orice neconcordanță între acte trebuie clarificată prin autoritatea emitentă; evidența nu poate corecta arbitrar un titlu judiciar."},
-{law:"omj2188",ref:"Integral",title:"Comunicarea actelor",text:"Studiază primirea, înregistrarea, înmânarea, dovada comunicării și restituirea documentelor către organul judiciar."},
-{law:"l145",ref:"Art. 7–10",title:"Corpurile și gradele profesionale",text:"Reține structura carierei polițiștilor de penitenciare și raportul dintre corp, categorie și grad profesional."},
-{law:"l145",ref:"Art. 119–121",title:"Obligații, interdicții și conflict de interese",text:"Art. 119 reglementează obligațiile, art. 120 interdicțiile, iar art. 121 conflictul de interese. Răspunderea disciplinară este reglementată distinct, începând cu art. 139."},
-{law:"cod",ref:"Art. 2",title:"Principii de conduită",text:"Supunerea față de lege, respectarea drepturilor, egalitatea șanselor, responsabilitatea, imparțialitatea, eficacitatea și eficiența."},
-{law:"cod",ref:"Art. 6 și 11",title:"Conduită profesională",text:"Leagă exigențele deontologice de exercitarea imparțială a atribuțiilor și de protejarea prestigiului instituției."}
-];
-
 let __saved={};try{__saved=JSON.parse(localStorage.getItem("evidenta-training")||"{}")||{}}catch{}
 const __savedQuestionIds=[...new Set([...(Array.isArray(__saved.correctIds)?__saved.correctIds:[]),...(Array.isArray(__saved.mistakes)?__saved.mistakes:[]),...Object.keys(__saved.questionStats||{})].map(String))];
 const __baseQuestions=[
