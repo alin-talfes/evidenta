@@ -1,4 +1,4 @@
-name: CI
+name: Monorepo CI
 
 on:
   push:
@@ -9,7 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  evidenta:
+    name: Evidență
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,4 +18,33 @@ jobs:
         with:
           node-version: '22'
       - run: npm run check:syntax
+      - run: npm test
+
+  training:
+    name: Training
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: training
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save postcss
+      - run: node scripts/audit-css.mjs
+      - name: Verifică sintaxa JavaScript
+        run: find . -type f \( -name "*.js" -o -name "*.mjs" \) -not -path "./node_modules/*" -print0 | xargs -0 -n1 node --check
+
+  semnalmente:
+    name: Semnalmente
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: semnalmente
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - run: npm test

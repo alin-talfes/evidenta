@@ -1,129 +1,65 @@
-# Calculator Termene Pedepse Privative de Libertate
+# Evidență — suită de instrumente
 
-**Autor:** Alin Talfeș
+Aplicație web statică pentru activități de evidență, calcule juridice, pregătire profesională și descriere asistată a semnalmentelor. Toate modulele sunt publicate prin GitHub Pages din același repository.
 
-## Descriere
+## Module publice
 
-Aplicație web destinată calculului termenelor de executare a pedepselor privative de libertate și a termenelor procedurale asociate, în conformitate cu legislația penală română.
+| Modul | Rol | Adresă |
+|---|---|---|
+| Evidență pedepse | Expirare, deduceri, fracții și liberare condiționată | [Deschide](https://alin-talfes.github.io/evidenta/) |
+| Contopiri | Calcul aritmetic pentru pedepse rezultante | [Deschide](https://alin-talfes.github.io/evidenta/contopiri.html) |
+| Transfer și profilare | Filtrarea unităților și regulile de transfer | [Deschide](https://alin-talfes.github.io/evidenta/transfer/) |
+| Termene procedurale | Calculul termenelor procedurale | [Deschide](https://alin-talfes.github.io/evidenta/termene.html) |
+| Training ofițer evidență | Grile, sinteze, spețe de calcul și interviu | [Deschide](https://alin-talfes.github.io/evidenta/training/) |
+| Semnalmente | Fișă descriptivă facială asistată și verificabilă | [Deschide](https://alin-talfes.github.io/evidenta/semnalmente/) |
 
-Proiectul integrează patru module principale:
+Ruta `/descriere-semnalmente/` este păstrată în acest repository numai ca redirecționare de compatibilitate către `/semnalmente/`.
 
-- **Calculator termene pedepse privative de libertate** – calculul expirării pedepsei, al fracțiilor pentru liberare condiționată și al termenelor de reanalizare.
-- **Calculator termene procedurale** – calculul termenelor pentru căi de atac, măsuri preventive și alte termene prevăzute de lege.
-- **Calculator pedeapsă rezultantă** – instrument aritmetic pentru cuantumuri deja calificate juridic de utilizator.
-- **Transfer și profilare** – filtrare a unităților compatibile pe baza regulilor și anexelor configurate pentru Decizia nr. 360/2020.
-
-## Funcționalități
-
-### Executarea pedepselor
-
-- Calculul duratei pedepsei în ani, luni și zile
-- Determinarea datei de expirare teoretică
-- Determinarea datei de expirare reală
-- Calculul perioadelor executate și rămase
-- Calculul fracțiilor pentru liberare condiționată
-- Calculul termenului de reanalizare (1/5)
-- Cronologie completă a termenelor relevante
-
-### Deduceri și perioade speciale
-
-- Reținere
-- Arest preventiv
-- Arest la domiciliu
-- Măsuri preventive executate în alte cauze
-- Recurs compensatoriu (Legea nr. 169/2017)
-- Evadări
-- Întreruperi ale executării pedepsei
-- Perioade considerate neexecutate conform dispozițiilor legale
-
-### Utilitare
-
-- Salvarea spețelor în browser
-- Încărcarea spețelor salvate
-- Copiere rapidă a rezultatelor
-- Export PDF
-- Temă Light / Dark
-- Interfață adaptată pentru desktop și dispozitive mobile
-
-## Tehnologii utilizate
-
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- localStorage
-- Print API pentru export PDF
-
-## Structura proiectului
+## Structură
 
 ```text
-calculator-pedepse/
-│
+evidenta/
 ├── index.html
-├── termene.html
 ├── contopiri.html
-│
+├── termene.html
 ├── css/
-│   └── style.css
-│
-└── js/
-    ├── utils.js
-    ├── rules.js
-    ├── legal.js
-    ├── storage.js
-    ├── export.js
-    ├── ui.js
-    └── app.js
+├── js/
+├── transfer/
+├── training/
+├── semnalmente/
+├── descriere-semnalmente/   # redirect de compatibilitate
+├── tests/
+└── .github/workflows/
 ```
 
-### Descriere fișiere
+## Dezvoltare și verificare
 
-| Fișier | Rol |
-|----------|----------|
-| utils.js | Funcții utilitare și operații cu date calendaristice |
-| rules.js | Reguli de calcul și algoritmi principali |
-| legal.js | Referințe și reguli juridice aplicabile |
-| storage.js | Gestionarea stocării locale |
-| export.js | Copiere și export rezultate |
-| ui.js | Interfața utilizator |
-| app.js | Inițializarea aplicației și logica principală |
+Repository-ul folosește un CI adaptat structurii monorepo:
 
-## Utilizare
+- testele și verificarea sintactică pentru aplicația principală;
+- audit CSS și verificări JavaScript pentru `training`;
+- testele unitare pentru `semnalmente`.
 
-1. Descarcă sau clonează repository-ul.
-2. Servește directorul prin HTTP/HTTPS (de exemplu GitHub Pages sau un server static local) și deschide pagina principală. `version.json` este încărcat prin `fetch`, deci deschiderea directă prin `file://` nu oferă experiența completă.
-3. Introdu datele cauzei.
-4. Apasă **Calculează**.
-5. Utilizează meniul aplicației pentru accesarea celorlalte module.
+Rulează local:
 
-Aplicația funcționează integral local și nu necesită instalare sau conexiune la server.
+```bash
+npm test
+npm run check:syntax
+cd semnalmente && npm test
+cd ../training && npm install --no-save postcss && node scripts/audit-css.mjs
+```
 
-## Bază legală
+## Principii de utilizare
 
-Calculele sunt fundamentate pe:
+- Datele aplicațiilor sunt stocate local în browser, dacă modulul nu precizează altfel.
+- Instrumentele juridice au caracter orientativ și nu înlocuiesc verificarea actelor normative în forma în vigoare.
+- Rezultatele modulului Semnalmente sunt euristice, nu identificare biometrică sau expertiză criminalistică.
+- Fotografiile analizate de Semnalmente nu sunt trimise către un backend propriu; biblioteca și modelul MediaPipe sunt descărcate din surse externe.
 
-- Codul penal
-- Codul de procedură penală
-- Legea nr. 254/2013 privind executarea pedepselor și a măsurilor privative de libertate
-- Ordinul ministrului justiției nr. 2188/C/2022
-- Legea nr. 169/2017
-- Hotărâri prealabile și recursuri în interesul legii relevante
+## Arhivarea proiectelor vechi
 
-Utilizatorul are obligația de a verifica întotdeauna legislația în vigoare și particularitățile fiecărei cauze.
-
-## Limitări
-
-- Aplicația are caracter informativ și orientativ.
-- Nu reprezintă evidență oficială a administrației penitenciare.
-- Nu înlocuiește verificarea juridică individuală a fiecărei spețe.
-- Datele sunt stocate exclusiv în browserul utilizatorului.
-- Nu sunt transmise informații către servere externe.
-
-## Contribuții
-
-Sugestiile privind funcționalități noi, corectarea erorilor și îmbunătățirea algoritmilor de calcul sunt binevenite.
+Repository-urile independente `training` și `descriere-semnalmente` sunt păstrate privat și arhivate exclusiv ca backup istoric. Versiunile active sunt cele din acest monorepo.
 
 ## Licență
 
-Copyright © Alin Talfeș
-
-Toate drepturile rezervate.
+Copyright © Alin Talfeș. Toate drepturile rezervate.

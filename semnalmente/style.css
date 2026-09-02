@@ -258,3 +258,11 @@ footer strong { color: var(--text-secondary); }
     .results-grid { grid-template-columns: repeat(2, 1fr); }
     .result-card { break-inside: avoid; }
 }
+
+
+/* Navigare comună a monorepo-ului */
+.suite-nav{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:6px}
+.suite-nav a{min-height:34px;padding:7px 10px;display:inline-flex;align-items:center;color:var(--text-muted);border:1px solid var(--border);border-radius:9px;text-decoration:none;font-size:.78rem;font-weight:700}
+.suite-nav a:hover,.suite-nav a:focus-visible{color:var(--text);border-color:var(--accent);background:var(--surface-raised)}
+.suite-nav a[aria-current="page"]{color:#fff;background:var(--accent);border-color:var(--accent)}
+@media(max-width:760px){.header-actions{align-items:flex-end}.suite-nav{justify-content:flex-end}.suite-nav a{font-size:.72rem;padding:6px 8px}}

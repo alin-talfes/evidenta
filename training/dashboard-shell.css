@@ -85,3 +85,9 @@
   .legal-article .legal-lines.legal-lines-alinea{gap:13px;margin-top:13px!important}
   .legal-article .legal-intro.legal-alinea.subsection{margin-top:15px}
 }
+
+
+/* Navigare între aplicațiile monorepo-ului */
+.suite-links{display:grid;grid-template-columns:1fr;gap:6px;margin:12px 8px}
+.suite-links a{display:flex;align-items:center;min-height:38px;padding:8px 12px;color:var(--muted);border:1px solid var(--border);border-radius:10px;text-decoration:none;font-size:.82rem;font-weight:700}
+.suite-links a:hover,.suite-links a:focus-visible{color:var(--text);background:var(--surface-2);border-color:var(--accent)}
