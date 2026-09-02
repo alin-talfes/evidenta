@@ -1,0 +1,6 @@
+.quiz-quality-audit{display:grid;gap:3px;margin:14px 0;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--surface) 95%,var(--cyan) 5%)}
+.quiz-quality-audit strong{font-size:13px;color:var(--text)}
+.quiz-quality-audit span{font-size:12px;line-height:1.45;color:var(--muted)}
+.quiz-quality-audit small{font-size:11px;line-height:1.4;color:var(--muted)}
+.dark .quiz-quality-audit{background:var(--surface)}
+@media(max-width:767px){.quiz-quality-audit{margin:12px 0;padding:10px 11px}.quiz-quality-audit span{font-size:11px}}

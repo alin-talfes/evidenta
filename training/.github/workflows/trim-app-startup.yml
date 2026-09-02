@@ -1,0 +1,50 @@
+name: Trim app startup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/trim-app-startup.mjs'
+      - '.github/workflows/trim-app-startup.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  trim:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Trim startup render path
+        run: node scripts/trim-app-startup.mjs
+
+      - name: Enable runtime performance layer
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const file='index.html';
+          let html=fs.readFileSync(file,'utf8');
+          if(!html.includes('href="runtime-performance.css"')){
+            html=html.replace('<link rel="stylesheet" href="mobile-polish.css">','<link rel="stylesheet" href="mobile-polish.css">\n  <link rel="stylesheet" href="runtime-performance.css">');
+          }
+          if(!html.includes('src="runtime-performance.js"')){
+            html=html.replace('<script src="app.js"></script>','<script src="app.js"></script>\n  <script src="runtime-performance.js"></script>');
+          }
+          fs.writeFileSync(file,html);
+          NODE
+
+      - name: Commit optimized bootstrap if changed
+        run: |
+          if git diff --quiet -- app.js index.html; then
+            echo 'Bootstrap already optimized.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app.js index.html
+          git commit -m 'Enable lightweight runtime performance layer'
+          git push

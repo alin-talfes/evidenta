@@ -1,0 +1,87 @@
+/* Critical dashboard styles.
+   The exam path is present in the initial HTML shell, so it must not depend on
+   exam-training.css, which is loaded lazily only for training workspaces. */
+
+#dashboard .exam-path{margin:0 0 18px}
+#dashboard .exam-path-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:0 0 12px}
+#dashboard .exam-path-head>div{min-width:0}
+#dashboard .exam-path-head h2{margin:2px 0 0;color:var(--navy);font-size:22px;line-height:1.3}
+#dashboard .exam-path-head>p{max-width:650px;margin:0;color:var(--muted);line-height:1.5}
+#dashboard .exam-path-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#dashboard .exam-path-card{min-width:0;display:flex;flex-direction:column;gap:10px;padding:17px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow);overflow:hidden}
+#dashboard .exam-path-card>span{font-size:10px;font-weight:850;letter-spacing:.12em;color:var(--cyan)}
+#dashboard .exam-path-card h3{margin:0;color:var(--navy);font-size:18px;line-height:1.35}
+#dashboard .exam-path-card>p{flex:1;margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+#dashboard .exam-path-card footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:11px;border-top:1px solid var(--line)}
+#dashboard .exam-path-card footer small{min-width:0;color:var(--muted);font-weight:750}
+#dashboard .exam-path-card footer small::before{content:"Progres: ";font-weight:650}
+#dashboard .exam-path-card footer button{flex:none;white-space:nowrap}
+.dark #dashboard .exam-path-card{background:var(--surface);border-color:var(--line)}
+
+@media(max-width:900px){
+  #dashboard .exam-path-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:767px){
+  #dashboard .exam-path{margin:0 0 16px;scroll-margin-top:calc(72px + env(safe-area-inset-top))}
+  #dashboard .exam-path-head{align-items:stretch;flex-direction:column;gap:7px;margin-bottom:10px}
+  #dashboard .exam-path-head h2{font-size:20px;line-height:1.3;text-wrap:balance}
+  #dashboard .exam-path-head>p{font-size:14px;line-height:1.55}
+  #dashboard .exam-path-grid{gap:10px}
+  #dashboard .exam-path-card{padding:16px;border-radius:14px;box-shadow:none}
+  #dashboard .exam-path-card h3{font-size:18px}
+  #dashboard .exam-path-card>p{font-size:14px;line-height:1.55}
+  #dashboard .exam-path-card footer{display:grid;grid-template-columns:1fr;align-items:stretch;gap:8px;padding-top:12px}
+  #dashboard .exam-path-card footer small{font-size:11px}
+  #dashboard .exam-path-card footer button{width:100%;min-height:46px;white-space:normal}
+}
+
+@media(max-width:360px){
+  #dashboard .exam-path-head h2{font-size:19px}
+  #dashboard .exam-path-card{padding:14px}
+}
+
+/* Legal reading hierarchy.
+   Numbered paragraphs are peers and must share the same visual axis. Lettered
+   points remain subordinate and may keep a small indentation. Classes are
+   assigned by bootstrap.js from the actual legal marker at the start of text. */
+.legal-article .legal-intro.legal-alinea{
+  margin:14px 0 0;
+  padding:0;
+  background:transparent;
+  color:var(--text);
+  font-weight:400;
+  line-height:1.65;
+}
+.legal-article .legal-intro.legal-alinea.subsection{margin-top:16px}
+.legal-article .legal-lines.legal-lines-alinea{
+  display:grid;
+  gap:14px;
+  margin:14px 0 0!important;
+  padding:0!important;
+  list-style:none;
+}
+.legal-article .legal-lines.legal-lines-alinea>li{
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border-radius:0!important;
+  color:var(--text);
+  font-weight:400;
+  line-height:1.65;
+}
+.legal-article .legal-lines.legal-lines-lettered{
+  margin:12px 0 4px;
+  padding-left:1.35rem;
+}
+.legal-article .legal-lines.legal-lines-lettered>li{
+  padding-left:.2rem;
+  line-height:1.65;
+}
+
+@media(max-width:767px){
+  .legal-article .legal-intro.legal-alinea,
+  .legal-article .legal-lines.legal-lines-alinea>li{font-size:15px;line-height:1.65}
+  .legal-article .legal-lines.legal-lines-alinea{gap:13px;margin-top:13px!important}
+  .legal-article .legal-intro.legal-alinea.subsection{margin-top:15px}
+}

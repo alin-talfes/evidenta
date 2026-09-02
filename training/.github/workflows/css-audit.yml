@@ -1,0 +1,36 @@
+name: CSS integrity audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.css'
+      - 'index.html'
+      - 'fast-loader.js'
+      - 'scripts/build-mobile-css.mjs'
+      - 'scripts/audit-css.mjs'
+      - '.github/workflows/css-audit.yml'
+  pull_request:
+    paths:
+      - '**/*.css'
+      - 'index.html'
+      - 'fast-loader.js'
+      - 'scripts/build-mobile-css.mjs'
+      - 'scripts/audit-css.mjs'
+      - '.github/workflows/css-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install CSS parser
+        run: npm install --no-save postcss
+      - name: Validate all CSS and loading paths
+        run: node scripts/audit-css.mjs
+      - name: Validate loader syntax
+        run: node --check fast-loader.js

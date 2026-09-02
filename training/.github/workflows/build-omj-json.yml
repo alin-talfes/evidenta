@@ -1,0 +1,41 @@
+name: Build OMJ JSON
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'omj2188-data/**'
+      - 'scripts/build-omj-json.mjs'
+      - 'scripts/build-omj-chunks.mjs'
+      - '.github/workflows/build-omj-json.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build OMJ JSON
+        run: node scripts/build-omj-json.mjs
+      - name: Build OMJ chunks
+        run: node scripts/build-omj-chunks.mjs
+      - name: Validate generated corpus
+        run: |
+          node -e "const d=require('./generated/omj2188-data.json'); if(d.actId!=='omj2188'||d.articles.length!==217) process.exit(1)"
+          node -e "const d=require('./generated/omj2188/index.json'); if(d.actId!=='omj2188'||d.totalArticles!==217||!d.chunks.length) process.exit(1)"
+      - name: Commit generated files if changed
+        run: |
+          if [ -z "$(git status --porcelain -- generated/omj2188-data.json generated/omj2188/)" ]; then
+            echo 'OMJ datasets already current.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add generated/omj2188-data.json generated/omj2188/
+          git commit -m 'Build chunked OMJ dataset'
+          git push

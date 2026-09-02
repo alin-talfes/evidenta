@@ -1,0 +1,33 @@
+name: Enable paint-first bootstrap
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/enable-paint-first.mjs'
+      - '.github/workflows/enable-paint-first.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch index startup scripts
+        run: node scripts/enable-paint-first.mjs
+      - name: Commit index if changed
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'index.html already uses paint-first bootstrap.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Enable paint-first application loading'
+          git push

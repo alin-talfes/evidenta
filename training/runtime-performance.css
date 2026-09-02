@@ -1,0 +1,49 @@
+/* Runtime performance overrides for mobile Safari. */
+.view[data-loading="true"]::after{
+  content:"Se încarcă modulul…";
+  display:block;
+  width:max-content;
+  max-width:100%;
+  margin:14px auto;
+  padding:7px 11px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--surface);
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+  pointer-events:none;
+}
+.view[data-load-error="true"]::after{
+  content:"Încărcarea a eșuat. Reapasă categoria pentru reîncercare.";
+  color:var(--danger);
+}
+
+/* Long study lists can contain large legal answers. Let the browser skip layout
+   and paint for cards that are still far below the viewport. */
+.interview-list > *,
+.legislation-content > *,
+.official-list > *,
+.study-grid > *,
+.exam-training-list > *,
+.mistakes-list > *,
+.bibliography-list > *,
+.module-list > *{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 180px;
+}
+
+@media (max-width:767px){
+  html{scroll-behavior:auto!important}
+  .mobile-nav,.quiz-top{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    background:var(--surface)!important;
+  }
+  .mobile-nav{box-shadow:0 -2px 8px rgba(16,35,63,.06)!important}
+  .topbar{box-shadow:0 2px 8px rgba(8,20,36,.08)!important}
+  .learning-hero,.stat-card,.panel,.question-card,.focus-panel{box-shadow:none!important}
+  .mobile-more-sheet{transition:transform .12s ease,opacity .12s ease!important}
+  .mobile-more-overlay{transition:opacity .12s ease!important}
+  .progress i{transition:none!important}
+}

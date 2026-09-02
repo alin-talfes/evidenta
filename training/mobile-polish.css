@@ -1,0 +1,116 @@
+/* Phase 3: accessibility, visual polish and PWA-oriented mobile refinements. Loaded last in the mobile cascade. */
+.skip-link{position:fixed;left:12px;top:calc(8px + env(safe-area-inset-top));z-index:200;transform:translateY(-180%);padding:10px 14px;border-radius:9px;background:#fff;color:#10233f;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.skip-link:focus{transform:none}
+
+@media (max-width:767px){
+  html{color-scheme:light}
+  .dark{color-scheme:dark}
+  button,a,input,select,textarea{touch-action:manipulation}
+  button{-webkit-tap-highlight-color:rgba(25,182,201,.14)}
+
+  .topbar{box-shadow:0 4px 18px rgba(8,20,36,.12)}
+  .brand{min-width:0}
+  .brand>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .brand-mark{box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)}
+  .icon-btn{display:grid;place-items:center;font-size:20px}
+
+  .learning-hero{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+  .learning-hero>div{min-width:0}
+  .learning-hero .hero-action{margin-top:2px}
+  .stats-grid{align-items:stretch}
+  .stat-card{display:flex;flex-direction:column;justify-content:center}
+  .stat-card .progress{width:100%}
+  .focus-panel{box-shadow:0 14px 30px rgba(16,35,63,.16)}
+
+  .page-heading>*,.panel-head>*,.law-card>*,.official-set>*,.interview-card>*,.legal-act>header>*{min-width:0}
+  .official-meta span,.scenario-category,.scenario-difficulty{max-width:100%;overflow-wrap:anywhere}
+  .quiz-top{gap:10px;align-items:center}
+  .quiz-top>span{min-width:0}
+  .quiz-top>span:last-child{text-align:right}
+
+  .mobile-nav-btn{isolation:isolate;user-select:none;-webkit-user-select:none}
+  .mobile-nav-btn::before{content:"";position:absolute;top:1px;left:50%;width:22px;height:3px;border-radius:99px;background:transparent;transform:translateX(-50%)}
+  .mobile-nav-btn.active::before{background:var(--cyan)}
+  .mobile-nav-icon{display:grid;place-items:center;width:24px;height:24px}
+  .mobile-nav-icon svg{width:22px;height:22px;display:block;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .mobile-nav-label{max-width:100%;overflow:hidden;text-overflow:ellipsis;font-weight:760;letter-spacing:.005em}
+  .mobile-more-icon svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .mobile-more-item{transition:border-color .15s ease,background-color .15s ease,transform .15s ease}
+  .mobile-more-item:active{transform:scale(.985)}
+  .mobile-more-item>span:last-child{min-width:0;overflow-wrap:anywhere}
+  .mobile-nav-badge{font-variant-numeric:tabular-nums;font-weight:850;box-shadow:0 0 0 2px var(--surface)}
+  .mobile-more-sheet{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+
+  .filters input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--muted) 82%,transparent);opacity:1}
+  .filters input:focus,.filters select:focus,.setup-options select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(25,182,201,.13);outline:0}
+  .answer:focus-visible,.primary:focus-visible,.secondary:focus-visible,.text-btn:focus-visible,.card-toggle:focus-visible{outline:3px solid color-mix(in srgb,var(--cyan) 72%,#fff);outline-offset:2px}
+  h1,h2{text-wrap:balance}
+  #interview-draft,.draft-label textarea{scroll-margin-bottom:calc(var(--mobile-nav-height) + 24px + env(safe-area-inset-bottom))}
+
+  .dark .learning-hero,.dark .stat-card,.dark .panel,.dark .study-card,.dark .law-card,.dark .legal-act,.dark .legal-article,.dark .official-set,.dark .question-card,.dark .mistake-item,.dark .interview-profile,.dark .interview-card,.dark .interview-workspace,.dark .interview-simulation-panel,.dark .written-card,.dark .written-head{background:var(--surface);border-color:var(--line);color:var(--text)}
+  .dark .question-card h2,.dark .study-card h2,.dark .law-card h2,.dark .official-set h2,.dark .interview-card h2,.dark .interview-workspace h2,.dark .legal-act h2,.dark .legal-article h3{color:var(--navy)}
+  .dark .answer{background:#132234;border-color:#2b4055;color:var(--text)}
+  .dark .answer:hover{background:#173044;border-color:#4f8e99}
+  .dark .answer.correct{background:#173a30;border-color:#2c8d68}
+  .dark .answer.wrong{background:#43242a;border-color:#a65058}
+  .dark .explanation{background:#17313b;color:#dce7ee;border-left-color:#45cad8}
+  .dark .notice{background:#17333a;color:#bcd8de}
+  .dark .notice.warning{background:#3a301d;color:#ead4a2}
+  .dark .legal-audit.valabil{background:rgba(22,134,92,.16)}
+  .dark .legal-audit.adaptare{background:rgba(211,149,34,.16)}
+  .dark .pressure-box{background:#202c3d;border-color:#34485e}
+  .dark .red-flags{background:#40272d;border-color:#6c3d46}
+  .dark .written-solution,.dark .challenge-answer{background:#1d3534;color:var(--text)}
+  .dark .mobile-more-sheet{box-shadow:0 24px 70px rgba(0,0,0,.48)}
+  .dark .mobile-nav{box-shadow:0 -8px 28px rgba(0,0,0,.28)}
+
+  .empty{min-height:0}
+  .empty h2{font-size:18px;line-height:1.35}
+  .source-verified{line-height:1.4}
+}
+
+@media (max-width:360px){
+  .learning-hero{padding:14px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-card>span{min-height:0}
+  .stat-card small{display:none}
+  .focus-number{font-size:43px}
+}
+
+@media (max-width:340px){
+  .brand small{display:none}
+  .brand>span:last-child{font-size:11px}
+  .page-heading h1{font-size:24px}
+  .stats-grid{gap:6px}
+  .stat-card{padding:10px 9px}
+  .stat-card strong{font-size:20px}
+  .mobile-nav-btn .mobile-nav-label{font-size:8.5px}
+}
+
+@media (hover:none) and (pointer:coarse){
+  .primary:hover{filter:none;transform:none}
+  .secondary:hover{background:transparent}
+  .study-card:hover,.law-card:hover{transform:none;box-shadow:none}
+  .study-card:not(.learned) .card-toggle:hover{border-color:var(--line);color:var(--muted)}
+  .score-scale button:not(.active):hover{border-color:var(--line)}
+  .answer:not(.correct):not(.wrong):hover{border-color:var(--line);background:var(--surface)}
+  .dark .answer:not(.correct):not(.wrong):hover{background:#132234;border-color:#2b4055}
+}
+
+@media (prefers-contrast:more){
+  .mobile-nav,.mobile-more-sheet,.study-card,.question-card,.legal-article,.interview-card{border-width:2px}
+  .mobile-nav-btn.active,.mobile-more-item.active{outline:2px solid currentColor;outline-offset:-2px}
+  .primary,.secondary,.answer{font-weight:850}
+}
+
+@supports (content-visibility:auto){
+  @media (max-width:767px){
+    .study-card,.legal-article,.official-set,.interview-card,.mistake-item{content-visibility:auto;contain-intrinsic-size:auto 240px}
+  }
+}
+
+@supports not (background:color-mix(in srgb,#fff 90%,transparent)){
+  @media (max-width:767px){
+    .mobile-nav,.quiz-top,.simulation-bar{background:var(--surface)}
+  }
+}

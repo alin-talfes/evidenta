@@ -1,0 +1,40 @@
+name: Remove mobile simulation autoload
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/remove-mobile-sim-autoload.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove hidden simulation autoload
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const path='mobile-nav.js';
+          let s=fs.readFileSync(path,'utf8');
+          const marker='\n\n(()=>{\n  if(document.querySelector(\'script[data-full-written-exam]\'))return;';
+          const i=s.indexOf(marker);
+          if(i<0){console.log('Autoload block already absent.');process.exit(0)}
+          s=s.slice(0,i).trimEnd()+'\n';
+          fs.writeFileSync(path,s);
+          console.log('Removed hidden full written exam autoload from mobile-nav.js');
+          NODE
+      - name: Commit fix
+        run: |
+          if git diff --quiet -- mobile-nav.js; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mobile-nav.js
+          git commit -m 'Remove hidden mobile simulation autoload'
+          git push

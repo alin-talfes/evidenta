@@ -1,0 +1,119 @@
+/* Phase 2: mobile study workflow refinements. Loaded after mobile.css. */
+
+@media (max-width:767px){
+  /* Study cards: avoid absolute footer collisions on long legal content. */
+  .study-card{padding:17px!important}
+  .study-card footer{position:static;margin-top:16px;padding-top:11px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+  .study-card footer>span{font-size:10px;line-height:1.35}
+  .study-card .card-toggle{min-height:44px;padding:8px 10px}
+
+  /* Legislation: reading-first layout with comfortable legal-text rhythm. */
+  #legislation .notice{font-size:13px;line-height:1.55}
+  .legislation-content{display:grid;gap:14px}
+  .legal-act{overflow:hidden;border-radius:13px}
+  #legislation .legal-act>header{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+  #legislation .legal-act>header h2{font-size:18px;line-height:1.35;overflow-wrap:anywhere}
+  .legal-act-actions{width:100%;display:grid;grid-template-columns:1fr;gap:8px;align-items:stretch}
+  .legal-act-actions .integration-status,.legal-act-actions .official-link{width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal}
+  .legal-article{scroll-margin-top:calc(70px + env(safe-area-inset-top));padding:16px}
+  .legal-article-head{display:flex;flex-direction:column;align-items:stretch;gap:11px}
+  .legal-article-head>div{min-width:0}
+  .legal-article-head h3{font-size:16px;line-height:1.4;overflow-wrap:anywhere}
+  .legal-article-head .card-toggle{width:100%;min-height:44px}
+  .legal-intro{font-size:15px;line-height:1.65}
+  .legal-intro.subsection{margin-top:18px}
+  .legal-lines{padding-left:1.35rem;margin:12px 0 4px}
+  .legal-lines li{padding-left:.2rem;margin:0 0 10px;line-height:1.65}
+  .legal-placeholder{padding:17px;line-height:1.6}
+
+  /* Official written exercises: one-column composition and larger drafting surface. */
+  .written-workspace{margin-top:18px}
+  .written-head{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+  .written-head .text-btn{width:100%;min-height:44px}
+  .written-grid{grid-template-columns:1fr!important;gap:12px}
+  .written-card{padding:16px}
+  .written-card-top{gap:8px;flex-wrap:wrap}
+  .draft-label textarea{min-height:180px;line-height:1.55;resize:vertical}
+  .written-card>[data-reveal]{width:100%;min-height:46px;margin-top:10px}
+  .written-solution{margin-top:12px;padding:14px;line-height:1.6}
+  .written-solution ul{padding-left:1.25rem}
+  .written-solution li{margin-bottom:7px}
+
+  /* Quiz: keep the next action in thumb reach only after an answer is selected. */
+  #quiz-run>.progress{height:7px;margin:0 0 11px}
+  #quiz-run .question-actions{position:sticky;bottom:calc(var(--mobile-nav-height) + 8px + env(safe-area-inset-bottom));z-index:12;margin:16px -6px -6px;padding:8px 6px 6px;background:linear-gradient(to top,var(--surface) 76%,transparent)}
+  #quiz-run .question-actions .primary:not(.hidden){box-shadow:0 8px 24px rgba(25,182,201,.25)}
+  .explanation{padding:13px 14px;line-height:1.55;border-radius:8px}
+  .explanation small{display:inline-block;margin-top:5px}
+  #exam-area .question-actions{position:sticky;bottom:calc(var(--mobile-nav-height) + 8px + env(safe-area-inset-bottom));z-index:12;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:8px;margin:16px -6px -6px;padding:8px 6px 6px;background:linear-gradient(to top,var(--surface) 76%,transparent)}
+  #exam-area .question-actions>*{min-width:0;white-space:normal}
+
+  /* Interview overview: concise cards and obvious primary action. */
+  .interview-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .interview-summary>div{min-width:0;padding:11px 7px;text-align:center}
+  .interview-summary strong{font-size:22px}
+  .interview-summary span{font-size:9px;line-height:1.25}
+  .interview-profile{padding:16px;border-radius:14px}
+  .interview-list{grid-template-columns:1fr!important;gap:11px}
+  .interview-card{padding:16px;border-radius:13px}
+  .interview-card h2{font-size:17px;line-height:1.4}
+  .interview-card>p{font-size:13px;line-height:1.55}
+  .interview-card footer{display:grid;grid-template-columns:1fr;align-items:stretch;gap:8px}
+  .interview-card footer .secondary{width:100%;min-height:46px}
+  .competency-tags{gap:6px}
+  .competency-tags span{font-size:10px}
+
+  /* Interview workspace: convert desktop workspace to a linear, one-hand workflow. */
+  .interview-workspace{scroll-margin-top:calc(68px + env(safe-area-inset-top));margin-top:14px}
+  .interview-workspace-head{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+  .interview-workspace-head h2{font-size:20px;line-height:1.35}
+  .interview-workspace-head>.secondary{width:100%;min-height:44px}
+  .scenario-brief,.interview-answer,.interview-rubric{padding:16px}
+  .scenario-brief>p,.pressure-box p{font-size:14px;line-height:1.6}
+  .pressure-box{padding:13px}
+  .answer-head{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+  .answer-head small{line-height:1.45}
+  .timer-button{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px}
+  #interview-draft{min-height:220px;line-height:1.55;resize:vertical}
+  .interview-actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .interview-actions>button{width:100%;min-height:48px}
+  .interview-actions>span{font-size:11px;line-height:1.4}
+  .rubric-grid{grid-template-columns:1fr!important;gap:12px}
+  .rubric-grid ol,.rubric-grid ul,.red-flags ul{padding-left:1.25rem}
+  .rubric-grid li,.red-flags li{margin-bottom:8px;line-height:1.55}
+  .ideal-grid{grid-template-columns:1fr!important}
+  .ideal-step{padding:14px}
+  .ideal-step p{line-height:1.6}
+  .challenge-toggle{width:100%;min-height:44px}
+  .self-score{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch}
+  .self-score>span{grid-column:1/-1}
+  .self-score button{min-height:44px}
+
+  /* Simulation: timer remains visible while working a long scenario. */
+  .interview-simulation-panel{padding:16px}
+  .simulation-bar{position:sticky;top:calc(58px + env(safe-area-inset-top));z-index:9;margin:-16px -16px 10px;padding:12px 16px;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .simulation-clock strong{font-size:25px}
+  .simulation-status{line-height:1.45}
+
+  /* Empty and notice states should not waste vertical space on phones. */
+  .empty{padding:28px 16px}
+  .notice{padding:12px 13px}
+}
+
+@media (max-width:420px){
+  .study-card footer{grid-template-columns:1fr}
+  .study-card footer .card-toggle{width:100%}
+  .interview-summary{gap:5px}
+  .interview-summary>div{padding:10px 5px}
+  #exam-area .question-actions{grid-template-columns:1fr}
+  .self-score{grid-template-columns:1fr}
+  .self-score>span{grid-column:auto}
+}
+
+@media (orientation:landscape) and (max-height:520px) and (max-width:950px){
+  :root{--mobile-nav-height:58px}
+  .mobile-nav-btn{min-height:48px}
+  .mobile-nav-btn .mobile-nav-icon{font-size:17px}
+  .mobile-more-sheet{max-height:74vh}
+  main{padding-top:14px}
+}

@@ -1,0 +1,29 @@
+.omj-synthesis-panel{margin-top:18px}
+.omj-synthesis-panel>header{margin-bottom:12px}
+.omj-synthesis-panel>header h2{margin:2px 0 5px;color:var(--navy)}
+.omj-synthesis-panel>header p:not(.eyebrow){margin:0;color:var(--muted);line-height:1.55;max-width:850px}
+.omj-filter-note{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin:0 0 12px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--muted);font-size:12px;line-height:1.5}
+.omj-filter-note strong{color:var(--navy);white-space:nowrap}
+.omj-drill-card .exam-drill-meta span{font-weight:800}
+.omj-drill-card h2{overflow-wrap:anywhere}
+.omj-more{display:block;margin:14px auto 0;min-height:44px}
+.omj-more[hidden]{display:none}
+.omj-load-error{margin-top:12px}
+.dark .omj-filter-note{background:var(--bg);border-color:var(--line)}
+.dark .omj-filter-note strong,.dark .omj-synthesis-panel>header h2{color:var(--navy)}
+
+/* When the integral OMJ corpus is selected, suppress the base synthesis list so the UI does not show a false empty state. */
+@supports selector(:has(*)){
+  #synthesis:has(#synthesis-act option[value="omj2188"]:checked) #synthesis-summary,
+  #synthesis:has(#synthesis-act option[value="omj2188"]:checked) #synthesis-list,
+  #synthesis:has(#synthesis-act option[value="omj2188"]:checked) #synthesis-workspace,
+  #synthesis:has(#synthesis-act option[value="omj2188"]:checked) .official-synthesis-panel:not(.omj-synthesis-panel){display:none}
+}
+
+@media (max-width:767px){
+  .omj-synthesis-panel{margin-top:14px}
+  .omj-filter-note{flex-direction:column;gap:5px;padding:11px 12px}
+  .omj-filter-note strong{white-space:normal}
+  .omj-more{width:100%;min-height:48px}
+  .omj-drill-card h2{font-size:17px}
+}
