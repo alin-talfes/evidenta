@@ -28,7 +28,7 @@
   const baseShowView=typeof showView==="function"?showView:null;
   if(baseShowView){showView=function(id){const result=baseShowView(id);if(id==="dashboard"){if(modulesDirty)renderModules?.();renderStats?.()}if(id==="mistakes"&&mistakesDirty)renderMistakes?.();return result}}
 
-  const searchRenderers={"card-search":()=>{try{renderCards?.()}catch{}},"legislation-search":()=>{try{renderLegislation?.()}catch{}},"interview-search":()=>{try{renderInterview?.()}catch{}}};
+  const searchRenderers={"legislation-search":()=>{try{renderLegislation?.()}catch{}},"interview-search":()=>{try{renderInterview?.()}catch{}}};
   Object.entries(searchRenderers).forEach(([id,render])=>{const input=document.getElementById(id);if(!input)return;const run=debounce(render,160);input.addEventListener("input",event=>{event.stopImmediatePropagation();run()},{capture:true})});
 
   document.addEventListener("input",event=>{

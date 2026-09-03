@@ -116,7 +116,6 @@
       if(id==="official"){await Promise.all([heavy("official"),script("generated/controllers/official.js")]);return}
       if(id==="interview"){await Promise.all([heavy("interview"),script("generated/controllers/interview.js")]);return}
       if(id==="legislation"){await Promise.all([heavy("legislation"),script("generated/controllers/legislation.js?v=3")]);await script("legislation-virtual.js?v=2");return}
-      if(id==="learn")return;
     })();
     viewPromises.set(id,promise);try{return await promise}catch(error){viewPromises.delete(id);throw error}
   }
@@ -128,7 +127,6 @@
       else if(id==="official")renderOfficial?.();
       else if(id==="mistakes")renderMistakes?.();
       else if(id==="quiz")renderStats?.();
-      else if(id==="learn")renderCards?.();
       window.TRAINING_WINDOWING?.applyForView(id);
       document.dispatchEvent(new CustomEvent("training:view-ready",{detail:{id}}));
     }catch(error){console.error("Refresh modul:",error)}
@@ -148,7 +146,7 @@
   function schedulePrewarm(){if("serviceWorker" in navigator)return;idle(()=>prewarmView("quiz"),1200)}
 
   const rawShowView=typeof showView==="function"?showView:null;
-  const lazyViews=new Set(["quiz","mistakes","synthesis","calculations","exam","official","interview","legislation","learn"]);
+  const lazyViews=new Set(["quiz","mistakes","synthesis","calculations","exam","official","interview","legislation"]);
   if(rawShowView){showView=function(id){rawShowView(id);if(!lazyViews.has(id))return;prewarmView(id).catch(()=>{});const host=document.getElementById(id);if(host&&!viewPromises.has(id))host.dataset.loading="true";ensureView(id).then(()=>{if(host){delete host.dataset.loading;delete host.dataset.loadError}refreshLoadedView(id)}).catch(error=>{console.error("Lazy module:",error);if(host){delete host.dataset.loading;host.dataset.loadError="true"}try{toast("Modulul nu s-a putut încărca. Apasă din nou pentru reîncercare.")}catch{}})}}
 
   document.addEventListener("pointerdown",event=>{const target=event.target.closest?.(".nav-item,[data-go]");const id=target?.dataset?.view||target?.dataset?.go;if(id)prewarmView(id).catch(()=>{})},{capture:true,passive:true});

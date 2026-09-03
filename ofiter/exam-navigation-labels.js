@@ -37,7 +37,6 @@
   const clearDeferred=id=>{const node=document.getElementById(id);if(node)delete node.dataset.fastBootDeferred};
   function ensureCoreView(id){
     if(id==="bibliography"&&!rendered.has(id)){renderBibliography?.();rendered.add(id);clearDeferred("bibliography-list")}
-    if(id==="learn"&&!rendered.has(id)){renderCards?.();rendered.add(id);clearDeferred("study-cards")}
     if(id==="official"&&!rendered.has(id)){renderOfficial?.();rendered.add(id);clearDeferred("official-sets")}
     if(id==="legislation"&&deferred("legislation-content")){renderLegislation?.();clearDeferred("legislation-content")}
     if(id==="interview"&&(deferred("interview-list")||deferred("interview-summary"))){renderInterview?.();clearDeferred("interview-list");clearDeferred("interview-summary");clearDeferred("interview-profile")}
