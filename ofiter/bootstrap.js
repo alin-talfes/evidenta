@@ -76,7 +76,11 @@
 
   async function prepareServiceWorker(){
     if(!('serviceWorker' in navigator))return;
-    try{await navigator.serviceWorker.register('./sw.js');await navigator.serviceWorker.ready}catch(error){console.warn('Service worker:',error)}
+    try{
+      const registration=await navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'});
+      await registration.update();
+      await navigator.serviceWorker.ready;
+    }catch(error){console.warn('Service worker:',error)}
   }
 
   observeLegalReading();
