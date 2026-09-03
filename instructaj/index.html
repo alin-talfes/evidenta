@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="Moduri de lucru explicate practic pentru activitatea de evidență, pe baza OMJ nr. 2188/C/2022 și a Codurilor penal și de procedură penală.">
+  <title>Instructaj — moduri de lucru Evidență PPL</title>
+  <link rel="icon" href="../favicon-ev-2.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <script src="data.js?v=1" defer></script>
+  <script src="app.js?v=1" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#continut">Sari la conținut</a>
+  <header class="site-header">
+    <nav class="app-nav" aria-label="Modulele aplicației">
+      <a class="brand" href="../">Evidență PPL</a>
+      <a href="../">Pedepse</a>
+      <a href="../contopiri.html">Contopiri</a>
+      <a href="../transfer/">Transfer</a>
+      <a href="../termene.html">Termene</a>
+      <a href="../training/">Training</a>
+      <a href="./" aria-current="page">Instructaj</a>
+      <a href="../semnalmente/">Semnalmente</a>
+    </nav>
+  </header>
+
+  <main id="continut">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Ghid operațional · verificat la 03.09.2026</p>
+        <h1>Moduri de lucru pentru evidență</h1>
+        <p class="lead">Pașii esențiali din OMJ nr. 2.188/C/2022, explicați pentru un lucrător fără experiență juridică. Selectează o procedură și urmează ordinea controalelor.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="button primary" href="#proceduri">Deschide procedurile</a>
+        <button class="button secondary" id="reset-progress" type="button">Resetează bifările</button>
+      </div>
+    </section>
+
+    <section class="notice" aria-labelledby="regula-heading">
+      <div class="notice-icon" aria-hidden="true">!</div>
+      <div>
+        <h2 id="regula-heading">Regula de siguranță juridică</h2>
+        <p>Ghidul explică fluxul, dar nu înlocuiește actul de deținere, hotărârea, procedurile interne sau verificarea șefului structurii. La neconcordanțe nu „corecta” prin presupunere: păstrează actul astfel cum a fost emis, consemnează problema și solicită lămuriri organului judiciar competent.</p>
+      </div>
+    </section>
+
+    <section class="legal-strip" aria-label="Surse oficiale">
+      <div>
+        <span class="label">Sursa principală</span>
+        <strong>OMJ nr. 2.188/C/2022 · Instrucțiuni, art. 1–232</strong>
+      </div>
+      <div class="source-links">
+        <a href="https://legislatie.just.ro/Public/DetaliiDocumentAfis/255745" target="_blank" rel="noopener">Instrucțiuni ↗</a>
+        <a href="https://legislatie.just.ro/Public/DetaliiDocument/109855" target="_blank" rel="noopener">Cod penal ↗</a>
+        <a href="https://legislatie.just.ro/Public/DetaliiDocument/120611" target="_blank" rel="noopener">Cod procedură penală ↗</a>
+      </div>
+    </section>
+
+    <section class="workspace" id="proceduri">
+      <aside class="sidebar" aria-label="Filtre proceduri">
+        <label for="search">Caută o situație</label>
+        <input id="search" type="search" placeholder="ex.: mandat, liberare, citație" autocomplete="off">
+        <fieldset>
+          <legend>Categorie</legend>
+          <div id="category-filters" class="filters"></div>
+        </fieldset>
+        <p class="result-count" id="result-count" aria-live="polite"></p>
+      </aside>
+
+      <div class="content-column">
+        <div class="list" id="workflow-list" aria-label="Lista modurilor de lucru"></div>
+        <article id="workflow-detail" class="detail" tabindex="-1" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="code-guide" aria-labelledby="coduri-heading">
+      <div class="section-heading">
+        <p class="eyebrow">Conexiuni legislative</p>
+        <h2 id="coduri-heading">Ce înseamnă trimiterile la Coduri</h2>
+        <p>Aceste articole nu sunt reproduse integral. Explicația indică rolul lor în flux; textul aplicabil se verifică întotdeauna în forma consolidată oficială.</p>
+      </div>
+      <div id="code-references" class="reference-grid"></div>
+    </section>
+
+    <section class="method" aria-labelledby="metoda-heading">
+      <h2 id="metoda-heading">Cum folosești corect o fișă</h2>
+      <ol>
+        <li><strong>Identifică situația juridică reală</strong>, nu doar denumirea documentului primit.</li>
+        <li><strong>Verifică actul și identitatea</strong> înainte de orice operare în aplicație.</li>
+        <li><strong>Lucrează în ordinea din fișă</strong> și bifează doar operațiunile efectiv realizate.</li>
+        <li><strong>Aplică dublul control</strong> acolo unde Instrucțiunile cer semnare, contrasemnare sau verificare ierarhică.</li>
+        <li><strong>Înregistrează aceeași situație coerent</strong> în documentarul penal, aplicație și registrele operative.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Instrument de instruire. Conținutul explicativ este distinct de textul normativ și nu reprezintă un aviz juridic.</p>
+  </footer>
+</body>
+</html>
