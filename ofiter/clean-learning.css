@@ -1,0 +1,43 @@
+/* Interfață de studiu concentrată pe conținut, fără elemente de gamificare. */
+.dashboard-bibliography {
+  margin-top: 20px;
+}
+
+.module {
+  grid-template-columns: 42px minmax(0, 1fr);
+}
+
+.exam-path-card footer {
+  justify-content: flex-start;
+}
+
+.exam-path-card footer .secondary {
+  width: 100%;
+}
+
+.score-ring {
+  width: auto;
+  height: auto;
+  margin: 0 0 12px;
+  background: none;
+  border-radius: 0;
+}
+
+.score-ring::before {
+  display: none;
+}
+
+.score-ring b {
+  font-size: 38px;
+}
+
+.omj-session-position {
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+@media (max-width: 720px) {
+  .dashboard-bibliography { margin-top: 14px; }
+}

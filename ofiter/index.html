@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="generated/mobile-bundle.css">
   <link rel="stylesheet" href="dashboard-shell.css">
   <link rel="stylesheet" href="access-gate.css">
+  <link rel="stylesheet" href="clean-learning.css">
   <script src="access-gate.js"></script>
 </head>
 <body>
@@ -65,24 +66,15 @@
     <main id="main" tabindex="-1">
       <section id="dashboard" class="view active-view">
         <div class="page-heading learning-hero"><div><p class="eyebrow">SPAȚIUL TĂU DE ÎNVĂȚARE</p><h1>Pregătire pentru ofițer evidență</h1><p>Pregătirea este organizată după structura probei scrise, cu module auxiliare pentru legislație și interviu.</p></div><button class="primary hero-action" data-start-adaptive>Continuă cu grilele →</button></div>
-        <div class="stats-grid">
-          <article class="stat-card stat-progress"><span>Progres general</span><strong id="progress-value">0%</strong><div class="progress"><i id="progress-bar"></i></div></article>
-          <article class="stat-card stat-correct"><span>Răspunsuri corecte</span><strong id="correct-value">0</strong><small id="answered-value">din 0 întrebări</small></article>
-          <article class="stat-card stat-streak"><span>Serie curentă</span><strong id="streak-value">0 zile</strong><small>Activitate consecutivă</small></article>
-          <article class="stat-card accent stat-review"><span>De repetat astăzi</span><strong id="review-value">0</strong><small>Întrebări greșite</small></article>
-        </div>
         <section class="exam-path" aria-labelledby="exam-path-title">
           <div class="exam-path-head"><div><p class="eyebrow">PROBA SCRISĂ</p><h2 id="exam-path-title">Cele trei părți pe care trebuie să le stăpânești</h2></div><p>Numerele articolelor rămân repere de verificare, nu obiect de memorare sau testare.</p></div>
           <div class="exam-path-grid">
-            <article class="exam-path-card"><span>PARTEA I</span><h3>Grile de conținut</h3><p>Reguli, condiții, excepții și aplicarea textului legal. Fără întrebări despre numărul articolului.</p><footer><small id="exam-quiz-progress">—</small><button class="secondary" data-go="quiz">Antrenează grilele</button></footer></article>
-            <article class="exam-path-card"><span>PARTEA II</span><h3>Sinteză literală</h3><p>Reproducere cât mai fidelă, în ordinea textului legal, cu evaluator lexical și text de control.</p><footer><small id="exam-synthesis-progress">—</small><button class="secondary" data-go="synthesis">Exersează sinteza</button></footer></article>
-            <article class="exam-path-card"><span>PARTEA III</span><h3>Spețe de calcul</h3><p>Rezolvare etapizată pe spețe oficiale, cu operații intermediare, barem și autoevaluare.</p><footer><small id="exam-calculation-progress">—</small><button class="secondary" data-go="calculations">Lucrează calculele</button></footer></article>
+            <article class="exam-path-card"><span>PARTEA I</span><h3>Grile de conținut</h3><p>Reguli, condiții, excepții și aplicarea textului legal. Fără întrebări despre numărul articolului.</p><footer><button class="secondary" data-go="quiz">Antrenează grilele</button></footer></article>
+            <article class="exam-path-card"><span>PARTEA II</span><h3>Sinteză literală</h3><p>Reproducere cât mai fidelă, în ordinea textului legal, cu evaluator lexical și text de control.</p><footer><button class="secondary" data-go="synthesis">Exersează sinteza</button></footer></article>
+            <article class="exam-path-card"><span>PARTEA III</span><h3>Spețe de calcul</h3><p>Rezolvare etapizată pe spețe oficiale, cu operații intermediare, barem și autoevaluare.</p><footer><button class="secondary" data-go="calculations">Lucrează calculele</button></footer></article>
           </div>
         </section>
-        <div class="dashboard-grid">
-          <section class="panel"><div class="panel-head"><div><p class="eyebrow">PLAN DE STUDIU</p><h2>Bibliografia concursului</h2></div><button class="text-btn" data-go="bibliography">Vezi integral →</button></div><div id="module-list" class="module-list"></div></section>
-          <aside class="panel focus-panel"><p class="eyebrow">SESIUNEA ZILEI</p><div class="focus-number">20<span>min</span></div><h2>Recapitulare activă</h2><p>10 grile de conținut prioritizate după greșeli, întrebări neparcurse și acuratețea anterioară.</p><button class="primary full" data-start-adaptive>Începe sesiunea adaptivă</button><div class="accuracy"><span>Acuratețe curentă</span><b id="accuracy-value">—</b></div></aside>
-        </div>
+        <section class="panel dashboard-bibliography"><div class="panel-head"><div><p class="eyebrow">MATERIA DE STUDIU</p><h2>Bibliografia concursului</h2></div><button class="text-btn" data-go="bibliography">Vezi integral →</button></div><div id="module-list" class="module-list"></div></section>
       </section>
 
       <section id="quiz" class="view"><div class="page-heading compact"><div><p class="eyebrow">PARTEA I — GRILE</p><h1>Grile de antrenament</h1><p>Întrebări despre conținutul juridic și aplicarea regulilor, nu despre memorarea numerelor articolelor.</p></div></div><div id="quiz-setup" class="quiz-setup panel"><h2>Alege sesiunea</h2><div class="setup-options"><label>Act normativ<select id="quiz-module"><option value="all">Toată bibliografia</option></select></label><label>Număr de întrebări<select id="quiz-size"><option>5</option><option selected>10</option><option>15</option><option>20</option><option>30</option></select></label></div><div class="setup-actions"><button id="adaptive-start" class="primary">Sesiune adaptivă</button><button id="quiz-start" class="secondary">Test aleatoriu</button></div><p class="setup-help">Sesiunea adaptivă prioritizează grilele greșite, neparcurse sau cu acuratețe scăzută. Întrebările de tip „la ce articol se află X?” sunt excluse din pregătire.</p></div><div id="quiz-run" class="quiz-run hidden"></div></section>
