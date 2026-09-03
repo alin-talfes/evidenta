@@ -1,8 +1,12 @@
 import fs from "node:fs";
+import path from "node:path";
 import vm from "node:vm";
 import assert from "node:assert/strict";
+import { fileURLToPath } from "node:url";
 
-const source = fs.readFileSync(new URL("./data.js", import.meta.url), "utf8");
+const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+const repoDir = path.dirname(moduleDir);
+const source = fs.readFileSync(path.join(moduleDir, "data.js"), "utf8");
 const context = { window: {} };
 vm.runInNewContext(source, context);
 const data = context.window.INSTRUCTAJ_DATA;
@@ -11,14 +15,68 @@ assert.ok(data, "Setul de date trebuie să existe");
 assert.equal(data.verifiedAt, "03.09.2026");
 assert.equal(data.workflows.length, 23, "Sunt necesare toate cele 23 de fișe operaționale");
 assert.equal(new Set(data.workflows.map(item => item.id)).size, data.workflows.length, "ID-urile trebuie să fie unice");
+
+const requiredSources = { omj: "255745", l254: "269415", hg157: "269789", cp: "109855", cpp: "120609" };
+assert.deepEqual([...data.sources.map(item => item.id)].sort(), Object.keys(requiredSources).sort(), "Trebuie publicate toate cele cinci surse normative");
+for (const item of data.sources) {
+  assert.equal(item.verifiedAt, data.verifiedAt, `Data verificării pentru ${item.id}`);
+  assert.ok(item.url.startsWith("https://legislatie.just.ro/"), `Sursă oficială pentru ${item.id}`);
+  assert.ok(item.url.includes(requiredSources[item.id]), `Document oficial corect pentru ${item.id}`);
+}
+
 for (const workflow of data.workflows) {
   assert.ok(data.categories.includes(workflow.category), `Categorie validă pentru ${workflow.id}`);
-  assert.ok(workflow.legal.some(item => item.includes("OMJ 2188/C/2022")), `Temei OMJ pentru ${workflow.id}`);
+  assert.ok(workflow.legal.some(item => item.includes("OMJ nr. 2.188/C/2022")), `Temei OMJ pentru ${workflow.id}`);
   assert.ok(workflow.steps.length >= 5, `Minimum 5 pași pentru ${workflow.id}`);
   assert.ok(workflow.checks.length >= 3, `Minimum 3 verificări pentru ${workflow.id}`);
   assert.ok(workflow.pitfalls.length >= 2, `Minimum 2 erori frecvente pentru ${workflow.id}`);
+  assert.ok(workflow.responsible.length > 20, `Responsabil explicat pentru ${workflow.id}`);
+  assert.ok(workflow.documents.length >= 3, `Documente necesare pentru ${workflow.id}`);
+  assert.ok(workflow.deadline.length > 15, `Moment-limită pentru ${workflow.id}`);
+  assert.ok(workflow.result.length > 20, `Rezultat verificabil pentru ${workflow.id}`);
+  assert.ok(workflow.legalRules.length >= 1, `Regula legală separată pentru ${workflow.id}`);
+  assert.ok(workflow.stop.length > 20, `Condiție de oprire pentru ${workflow.id}`);
+  assert.ok(workflow.practice.length > 15, `Recomandare practică separată pentru ${workflow.id}`);
 }
-const html = fs.readFileSync(new URL("./index.html", import.meta.url), "utf8");
-for (const file of ["styles.css", "data.js", "app.js"]) assert.ok(html.includes(file), `${file} este încărcat`);
-for (const url of ["255745", "109855", "120611"]) assert.ok(html.includes(url), `Sursa oficială ${url} este publicată`);
-console.log("Instructaj: structură și conținut validate.");
+
+const mustContain = {
+  "primire-condamnat": ["Legea nr. 254/2013: art. 43", "HG nr. 157/2016: art. 97"],
+  "liberare-conditionata": ["Legea nr. 254/2013: art. 95–97", "HG nr. 157/2016: art. 204–207", "CPP: art. 587"],
+  "stabilire-regim": ["Legea nr. 254/2013: art. 30–39", "HG nr. 157/2016:"],
+  "schimbare-regim": ["Legea nr. 254/2013: art. 32 și 40–42", "HG nr. 157/2016: art. 91–93"],
+  "transfer-anp": ["Legea nr. 254/2013: art. 45", "HG nr. 157/2016: art. 108"],
+  "punere-libertate": ["Legea nr. 254/2013: art. 53", "HG nr. 157/2016: art. 116"],
+  "intrerupere": ["CPP: art. 592–594"],
+  "primire-arest-preventiv": ["Legea nr. 254/2013: art. 115 și 120–123", "CPP: art. 230"],
+  "primire-minor": ["Legea nr. 254/2013: art. 135–136 și 156", "CPP: art. 514–515"],
+  "comisie-minor": ["CPP: art. 516–517", "HG nr. 157/2016: art. 337"],
+  "schimbari-minor": ["CPP: art. 346 alin. (3) și 516–519", "HG nr. 157/2016: art. 301, 304 și 337–340"],
+  "dosar-consultare": ["Legea nr. 254/2013: art. 60", "HG nr. 157/2016: art. 127"]
+};
+for (const [id, refs] of Object.entries(mustContain)) {
+  const legal = data.workflows.find(item => item.id === id).legal.join(" | ");
+  for (const ref of refs) assert.ok(legal.includes(ref), `${id} trebuie să includă ${ref}`);
+}
+
+assert.ok(data.glossary.length >= 7, "Glosar pentru termenii juridici indispensabili");
+const html = fs.readFileSync(path.join(moduleDir, "index.html"), "utf8");
+for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]) assert.ok(html.includes(file), `${file} este încărcat`);
+for (const documentId of Object.values(requiredSources)) assert.ok(html.includes(documentId), `Sursa oficială ${documentId} este publicată`);
+assert.ok(!html.includes("120611"), "Legătura CPP veche nu trebuie păstrată");
+
+const linkExtensions = new Set([".html", ".htm", ".md", ".js", ".json", ".xml"]);
+const forbiddenLink = /(?:href|src|content\s*=|location\.(?:href|replace)|Response\.redirect)[^\n>]*(?:\/ofiter\/?|\.\.\/ofiter\/|evidenta\/ofiter)/i;
+function inspectPublicFiles(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === ".git" || entry.name === "ofiter" || entry.name === "node_modules") continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) inspectPublicFiles(full);
+    else if (linkExtensions.has(path.extname(entry.name))) {
+      assert.ok(!forbiddenLink.test(fs.readFileSync(full, "utf8")), `Nu este permis un link spre /ofiter în ${path.relative(repoDir, full)}`);
+    }
+  }
+}
+inspectPublicFiles(repoDir);
+assert.ok(!fs.existsSync(path.join(repoDir, "training", "index.html")), "Ruta veche /training nu trebuie să redirecționeze spre /ofiter");
+
+console.log("Instructaj: structură, surse, conținut juridic și izolare /ofiter validate.");

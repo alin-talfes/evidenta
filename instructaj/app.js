@@ -7,6 +7,7 @@
   const filters = document.getElementById("category-filters");
   const count = document.getElementById("result-count");
   const refs = document.getElementById("code-references");
+  const glossary = document.getElementById("glossary");
   const storageKey = "evidenta-instructaj-progress-v1";
   let category = "Toate";
   let selected = null;
@@ -21,7 +22,7 @@
   }
   function filtered() {
     const q = search.value.trim().toLocaleLowerCase("ro");
-    return data.workflows.filter(w => (category === "Toate" || w.category === category) && (!q || [w.title,w.summary,w.category,...w.legal,...w.steps].join(" ").toLocaleLowerCase("ro").includes(q)));
+    return data.workflows.filter(w => (category === "Toate" || w.category === category) && (!q || [w.title,w.summary,w.category,...w.legal,...w.steps,w.responsible,w.deadline,w.result,w.stop,w.practice,...w.documents,...w.legalRules].join(" ").toLocaleLowerCase("ro").includes(q)));
   }
   function renderFilters() {
     filters.innerHTML = ["Toate", ...data.categories].map(name => `<button type="button" class="filter${category===name?" active":""}" data-category="${esc(name)}">${esc(name)}</button>`).join("");
@@ -46,8 +47,16 @@
     detail.innerHTML = `<div class="detail-head"><div><span class="badge">${esc(w.category)}</span><h2>${esc(w.title)}</h2><p>${esc(w.summary)}</p></div><button class="close-detail" type="button" aria-label="Închide fișa">×</button></div>
       <div class="legal-box"><span>Temei principal</span>${w.legal.map(x=>`<strong>${esc(x)}</strong>`).join("")}</div>
       <div class="trigger"><strong>Când folosești fișa:</strong> ${esc(w.trigger)}</div>
+      <div class="operational-grid">
+        <section><h3>Cine răspunde</h3><p>${esc(w.responsible)}</p></section>
+        <section><h3>Când trebuie făcut</h3><p>${esc(w.deadline)}</p></section>
+        <section><h3>Documente necesare</h3><ul>${w.documents.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>
+        <section><h3>Rezultatul corect</h3><p>${esc(w.result)}</p></section>
+      </div>
+      <section class="mandatory-panel"><h3>Ce este obligatoriu potrivit legii</h3><ul>${w.legalRules.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>
       <section><h3>Pașii de lucru</h3><ol class="steps">${w.steps.map((step,i)=>`<li><label><input type="checkbox" data-step="${i}" ${state[i]?"checked":""}><span><b>Pasul ${i+1}</b>${esc(step)}</span></label></li>`).join("")}</ol></section>
       <div class="two-columns"><section class="check-panel"><h3>Control înainte de finalizare</h3><ul>${w.checks.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section><section class="warning-panel"><h3>Erori frecvente</h3><ul>${w.pitfalls.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section></div>
+      <div class="two-columns"><section class="stop-panel"><h3>Când oprești și ceri lămuriri</h3><p>${esc(w.stop)}</p></section><section class="practice-panel"><h3>Recomandare practică</h3><p>${esc(w.practice)}</p></section></div>
       ${w.codeNote?`<section class="code-note"><h3>Legătura cu Codul penal/procedural</h3><p>${esc(w.codeNote)}</p></section>`:""}
       <p class="source-note">Explicație practică elaborată pe baza articolelor indicate. Pentru decizia concretă se citește textul integral și forma consolidată oficială.</p>`;
     renderList();
@@ -55,6 +64,9 @@
   }
   function renderReferences() {
     refs.innerHTML = data.codeReferences.map(r => `<article><span>${esc(r.code)}</span><h3>${esc(r.articles)}</h3><p>${esc(r.role)}</p></article>`).join("");
+  }
+  function renderGlossary() {
+    glossary.innerHTML = data.glossary.map(item => `<article><h3>${esc(item.term)}</h3><p>${esc(item.meaning)}</p></article>`).join("");
   }
 
   filters.addEventListener("click", e => {
@@ -84,7 +96,7 @@
     }
   });
 
-  renderFilters(); renderList(); renderReferences();
+  renderFilters(); renderList(); renderReferences(); renderGlossary();
   const hash = decodeURIComponent(location.hash.slice(1));
   if (data.workflows.some(w => w.id === hash)) renderDetail(hash, false);
 })();
