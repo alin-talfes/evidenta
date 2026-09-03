@@ -1,5 +1,5 @@
-const CACHE = "evidenta-ofiter-v104";
-const GENERATED_CACHE = "evidenta-ofiter-generated-v8";
+const CACHE = "evidenta-ofiter-v105";
+const GENERATED_CACHE = "evidenta-ofiter-generated-v10";
 
 const CORE_ASSETS = [
   "./","./index.html","./styles.css","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./clean-learning.css","./access-gate.js",
