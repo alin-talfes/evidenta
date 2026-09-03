@@ -33,6 +33,7 @@ jobs:
           node-version: '22'
       - run: npm install --no-save postcss
       - run: node scripts/audit-css.mjs
+      - run: node scripts/audit-clean-learning.mjs
       - name: Verifică sintaxa JavaScript
         run: find . -type f \( -name "*.js" -o -name "*.mjs" \) -not -path "./node_modules/*" -print0 | xargs -0 -n1 node --check
 

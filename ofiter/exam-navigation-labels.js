@@ -26,16 +26,12 @@
       ensureStyle("quiz-quality.css");ensureStyle("scenario-questions.css");
       return loadScript("quiz-quality.js",!!window.QUIZ_QUALITY_VERSION)
         .then(()=>loadScript("quiz-quality-safety.js",!!window.QUIZ_QUALITY_SAFETY_VERSION))
-        .then(()=>loadScript("scenario-questions.js",!!window.OPERATIONAL_SCENARIO_VERSION))
-        .then(()=>loadScript("scenario-progress.js",!!window.SCENARIO_PROGRESS_VERSION));
+        .then(()=>loadScript("scenario-questions.js",!!window.OPERATIONAL_SCENARIO_VERSION));
     });
     return quizEnhancementsPromise;
   }
   window.TRAINING_ENSURE_QUIZ_READY=loadQuizEnhancements;
   const loadScenarioExamIntegration=()=>loadQuizEnhancements().then(()=>loadScript("scenario-exam-integration.js",!!window.SCENARIO_EXAM_INTEGRATION));
-  function loadDashboardPlan(){ensureStyle("dashboard-study-plan.css");return loadScript("dashboard-study-plan.js",!!window.DASHBOARD_STUDY_PLAN_VERSION)}
-  function scheduleDashboardPlan(){const run=()=>loadDashboardPlan();if("requestIdleCallback" in window)requestIdleCallback(run,{timeout:1800});else setTimeout(run,900)}
-
   const rendered=new Set(["dashboard"]);
   const deferred=id=>document.getElementById(id)?.dataset.fastBootDeferred==="true";
   const clearDeferred=id=>{const node=document.getElementById(id);if(node)delete node.dataset.fastBootDeferred};
@@ -72,6 +68,6 @@
   const adaptiveStart=document.getElementById("adaptive-start");if(adaptiveStart)adaptiveStart.onclick=async()=>{await loadQuizEnhancements();startAdaptiveQuiz?.()};
   const examStart=document.getElementById("exam-start");if(examStart)examStart.onclick=async()=>{await loadQuizEnhancements();startQuiz?.(null,true)};
 
-  applyLabels();requestAnimationFrame(applyLabels);scheduleDashboardPlan();
+  applyLabels();requestAnimationFrame(applyLabels);
   setTimeout(()=>{const active=document.querySelector('.sidebar .nav-item.active')?.dataset.view||document.querySelector('.view.active-view')?.id||"dashboard";ensureView(active).catch(()=>{})},0);
 })();

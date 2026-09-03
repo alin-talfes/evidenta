@@ -239,8 +239,7 @@
   }
 
   function progressMarkup(){
-    const pct=session.length?Math.round((index/session.length)*100):0;
-    return `<div class="omj-session-progress"><div><span>Fragment ${Math.min(index+1,session.length)} din ${session.length}</span><b>${pct}%</b></div><div class="progress"><i style="width:${pct}%"></i></div></div>`;
+    return `<div class="omj-session-position">Fragment ${Math.min(index+1,session.length)} din ${session.length}</div>`;
   }
 
   function renderItem(){
