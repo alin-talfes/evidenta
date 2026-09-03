@@ -1,4 +1,4 @@
-const CACHE = "evidenta-ofiter-v102";
+const CACHE = "evidenta-ofiter-v103";
 const GENERATED_CACHE = "evidenta-ofiter-generated-v8";
 
 const CORE_ASSETS = [
@@ -16,7 +16,18 @@ self.addEventListener("fetch",event=>{
   const request=event.request;if(request.method!=="GET")return;
   const url=new URL(request.url);if(url.origin!==self.location.origin)return;
   if(request.mode==="navigate"){
-    event.respondWith(caches.match("./index.html").then(cached=>{const network=fetch(request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put("./index.html",copy)).catch(()=>{})}return response}).catch(()=>null);return cached||network}));return;
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(request,{cache:"no-store"});
+        if(response.ok){
+          const copy=response.clone();
+          await caches.open(CACHE).then(cache=>cache.put("./index.html",copy)).catch(()=>{});
+        }
+        return response;
+      }catch{
+        return await caches.match("./index.html")||Response.error();
+      }
+    })());return;
   }
   if(url.pathname.includes("/generated/")&&url.pathname.endsWith(".json")){
     event.respondWith(caches.open(GENERATED_CACHE).then(async cache=>{const cached=await cache.match(request);const update=fetch(request).then(response=>{if(response.ok)cache.put(request,response.clone()).catch(()=>{});return response}).catch(()=>null);return cached||update}));return;
