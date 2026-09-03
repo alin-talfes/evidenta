@@ -1,8 +1,8 @@
-const CACHE = "evidenta-ofiter-v99";
+const CACHE = "evidenta-ofiter-v100";
 const GENERATED_CACHE = "evidenta-ofiter-generated-v8";
 
 const CORE_ASSETS = [
-  "./","./index.html","./styles.css","./generated/mobile-bundle.css","./dashboard-shell.css",
+  "./","./index.html","./styles.css","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./access-gate.js",
   "./data-core.js","./bootstrap.js","./persistence-layer.js","./generated/runtime-bundle.js",
   "./generated/controllers/interview.js","./generated/controllers/legislation.js","./generated/controllers/official.js",
   "./heavy-data-loader.js","./legislation-virtual.js","./scenario-questions.js","./scenario-questions.css",
