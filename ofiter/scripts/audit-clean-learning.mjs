@@ -29,7 +29,7 @@ for (const id of forbiddenDashboardIds) {
 }
 
 if (!html.includes('href="clean-learning.css"')) throw new Error("Lipsește stratul CSS pentru interfața simplificată.");
-for (const asset of ['styles.css?v=2', 'data-core.js?v=2', 'bootstrap.js?v=2']) {
+for (const asset of ['styles.css?v=2', 'data-core.js?v=2', 'bootstrap.js?v=3']) {
   if (!html.includes(asset)) throw new Error(`Resursa critică nu are versiune pentru invalidarea cache-ului: ${asset}`);
 }
 const moduleViews = ["quiz", "synthesis", "calculations", "mistakes", "exam", "legislation", "official", "interview"];
@@ -48,7 +48,11 @@ const sw = read("sw.js");
 if (!sw.includes('fetch(request,{cache:"no-store"})')) throw new Error("Navigarea trebuie să folosească rețeaua înaintea cache-ului, pentru a evita dashboarduri vechi.");
 const bootstrap = read("bootstrap.js");
 if (!bootstrap.includes("updateViaCache:'none'")) throw new Error("Actualizarea service worker-ului poate fi blocată de cache.");
-if (!bootstrap.includes('generated/runtime-bundle.js?v=2')) throw new Error("Pachetul principal trebuie încărcat cu versiune explicită.");
+if (!bootstrap.includes('generated/runtime-bundle.js?v=3')) throw new Error("Pachetul principal trebuie încărcat cu versiune explicită.");
+const removedStudyModuleSources = [html, read("mobile-nav.js"), read("fast-loader.js"), runtime].join("\n");
+for (const marker of ['data-view="learn"', 'data-go="learn"', 'id="learn"', 'view:"learn"', 'label:"Fișe"', 'label:"Fi\\u0219e"']) {
+  if (removedStudyModuleSources.includes(marker)) throw new Error(`Traseu rezidual către modulul Fișe: ${marker}`);
+}
 const coreData = read("data-core.js");
 const officialUrls = [...coreData.matchAll(/url:"(https:\/\/legislatie\.just\.ro\/Public\/DetaliiDocument(?:Afis)?\/\d+)"/g)].map(match => match[1]);
 if (officialUrls.length !== 7) throw new Error("Fiecare dintre cele 7 acte trebuie să aibă link oficial către Portalul Legislativ.");

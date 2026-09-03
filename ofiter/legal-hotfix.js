@@ -23,7 +23,7 @@
 
   /* Fast boot: suppress only large hidden lists that have a safe lazy re-render path. */
   const deferredIds=new Set([
-    "bibliography-list","study-cards","legislation-content","official-sets","official-written",
+    "bibliography-list","legislation-content","official-sets","official-written",
     "interview-summary","interview-profile","interview-list","interview-workspace","interview-simulation-panel",
     "mistakes-list","synthesis-list"
   ]);

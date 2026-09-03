@@ -3,7 +3,6 @@
   const states=new WeakMap();
   const CONFIG={
     interview:{selector:"#interview-list",batch:16},
-    learn:{selector:"#study-cards",batch:18},
     mistakes:{selector:"#mistakes-list",batch:20},
     bibliography:{selector:"#bibliography-list",batch:16},
     official:{selector:"#official-sets",batch:12},
@@ -25,7 +24,7 @@
     update();host.appendChild(button);
   }
   function applyForView(id){const config=CONFIG[id];if(!config)return;requestAnimationFrame(()=>applyHost(document.querySelector(config.selector),config.batch))}
-  const filterMap={"interview-search":"interview","interview-category":"interview","interview-difficulty":"interview","card-search":"learn","card-filter":"learn","card-status":"learn","synthesis-search":"synthesis","synthesis-act":"synthesis","synthesis-length":"synthesis","synthesis-status":"synthesis"};
+  const filterMap={"interview-search":"interview","interview-category":"interview","interview-difficulty":"interview","synthesis-search":"synthesis","synthesis-act":"synthesis","synthesis-length":"synthesis","synthesis-status":"synthesis"};
   document.addEventListener("input",event=>{const id=filterMap[event.target?.id];if(id)setTimeout(()=>applyForView(id),190)},false);
   document.addEventListener("change",event=>{const id=filterMap[event.target?.id];if(id)setTimeout(()=>applyForView(id),0)},false);
   document.addEventListener("click",event=>{if(event.target.closest?.("[data-card],[data-interview-result],[data-written-score]")){const active=document.querySelector(".view.active-view")?.id;if(active)setTimeout(()=>applyForView(active),0)}},false);

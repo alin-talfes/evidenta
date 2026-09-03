@@ -1,7 +1,6 @@
 (()=>{
   const ICONS={
     dashboard:'<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9 20v-6h6v6"/>',
-    learn:'<path d="M4 5.5A3.5 3.5 0 0 1 7.5 4H12v16H7.5A3.5 3.5 0 0 0 4 23z"/><path d="M20 5.5A3.5 3.5 0 0 0 16.5 4H12v16h4.5A3.5 3.5 0 0 1 20 23z"/>',
     quiz:'<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.2 2.2 4.8-5"/>',
     synthesis:'<path d="M5 6h14"/><path d="M5 10h14"/><path d="M5 14h10"/><path d="M5 18h8"/>',
     calculations:'<path d="M18 5H7l5 7-5 7h11"/>',
@@ -19,7 +18,6 @@
     {view:"calculations",label:"Calcule"}
   ];
   const MORE=[
-    {view:"learn",label:"Fișe"},
     {view:"legislation",label:"Legislație și bibliografie"},
     {view:"official",label:"Subiecte ANP"},
     {view:"interview",label:"Interviu"},
