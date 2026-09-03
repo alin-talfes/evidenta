@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ro">
+<html lang="ro" class="auth-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -16,12 +16,30 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="generated/mobile-bundle.css">
   <link rel="stylesheet" href="dashboard-shell.css">
+  <link rel="stylesheet" href="access-gate.css">
+  <script src="access-gate.js"></script>
 </head>
 <body>
+  <section id="access-gate" class="access-gate" aria-labelledby="access-title">
+    <form id="access-form" class="access-card" novalidate>
+      <div class="access-brand" aria-hidden="true">E</div>
+      <p class="access-eyebrow">ACCES RESTRICȚIONAT</p>
+      <h1 id="access-title">Modul Ofițer</h1>
+      <p class="access-description">Introdu codul de acces pentru a continua către spațiul de pregătire.</p>
+      <label for="access-code">Cod de acces</label>
+      <div class="access-field">
+        <input id="access-code" name="access-code" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="current-password" required aria-describedby="access-message">
+        <button id="access-toggle" type="button" aria-label="Arată codul" aria-pressed="false">Arată</button>
+      </div>
+      <p id="access-message" class="access-message" role="status" aria-live="polite"></p>
+      <button id="access-submit" class="access-submit" type="submit">Intră în modul</button>
+      <small>Sesiunea rămâne activă numai în această filă.</small>
+    </form>
+  </section>
   <a class="skip-link" href="#main">Sari la conținut</a>
   <header class="topbar">
     <a class="brand" href="#dashboard" aria-label="Pagina principală"><span class="brand-mark">E</span><span>EVIDENȚĂ<small>CENTRU DE ÎNVĂȚARE</small></span></a>
-    <div class="top-actions"><span id="legal-date" class="legal-date"></span><button id="theme-btn" class="icon-btn" aria-label="Schimbă tema">◐</button></div>
+    <div class="top-actions"><span id="legal-date" class="legal-date"></span><button id="access-logout" class="access-logout" type="button">Ieșire</button><button id="theme-btn" class="icon-btn" aria-label="Schimbă tema">◐</button></div>
   </header>
 
   <div class="app-shell">
