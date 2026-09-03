@@ -29,19 +29,29 @@ for (const id of forbiddenDashboardIds) {
 }
 
 if (!html.includes('href="clean-learning.css"')) throw new Error("Lipsește stratul CSS pentru interfața simplificată.");
-const moduleViews = ["quiz", "synthesis", "calculations", "mistakes", "exam", "bibliography", "legislation", "official", "interview"];
+const moduleViews = ["quiz", "synthesis", "calculations", "mistakes", "exam", "legislation", "official", "interview"];
 for (const view of moduleViews) {
   if (!html.includes(`class="learning-module-card" type="button" data-go="${view}"`)) throw new Error(`Modul absent din dashboard: ${view}`);
   if (!html.includes(`id="${view}" class="view`)) throw new Error(`Ecran absent pentru modulul: ${view}`);
   if (!html.includes(`class="nav-item" data-view="${view}"`)) throw new Error(`Navigare laterală absentă pentru modulul: ${view}`);
 }
-if ((html.match(/class="learning-module-card"/g) || []).length !== 9) throw new Error("Dashboardul trebuie să afișeze exact 9 module de învățare.");
+if ((html.match(/class="learning-module-card"/g) || []).length !== 8) throw new Error("Dashboardul trebuie să afișeze exact 8 module, cu bibliografia inclusă în Legislație.");
+if (html.includes('data-view="bibliography"') || html.includes('data-go="bibliography"') || html.includes('id="bibliography"')) throw new Error("Modulul Bibliografie nu a fost eliminat sau redirecționat spre Legislație.");
+if (!html.includes("Deschide forma oficială consolidată")) throw new Error("Instrucțiunea pentru accesarea formei oficiale lipsește din Legislație.");
 for (const asset of ["clean-learning.css", "bootstrap.js", "access-gate.js", "generated/runtime-bundle.js"]) {
   if (!fs.existsSync(path.join(root, asset))) throw new Error(`Resursă obligatorie absentă: ${asset}`);
 }
 const sw = read("sw.js");
 if (!sw.includes('fetch(request,{cache:"no-store"})')) throw new Error("Navigarea trebuie să folosească rețeaua înaintea cache-ului, pentru a evita dashboarduri vechi.");
 if (!read("bootstrap.js").includes("updateViaCache:'none'")) throw new Error("Actualizarea service worker-ului poate fi blocată de cache.");
+const coreData = read("data-core.js");
+const officialUrls = [...coreData.matchAll(/url:"(https:\/\/legislatie\.just\.ro\/Public\/DetaliiDocument(?:Afis)?\/\d+)"/g)].map(match => match[1]);
+if (officialUrls.length !== 7) throw new Error("Fiecare dintre cele 7 acte trebuie să aibă link oficial către Portalul Legislativ.");
+if (!officialUrls.includes("https://legislatie.just.ro/Public/DetaliiDocumentAfis/255745")) throw new Error("Linkul OMJ nr. 2188/C/2022 trebuie să deschidă Instrucțiunile oficiale.");
+const legislationController = read("generated/controllers/legislation.js");
+for (const marker of ["DELIMITARE DIN BIBLIOGRAFIE", "legal-scope", "Deschide forma oficial\\u0103 consolidat\\u0103"]) {
+  if (!legislationController.includes(marker)) throw new Error(`Informație absentă din modulul combinat: ${marker}`);
+}
 if (html.includes('class="stats-grid"')) throw new Error("Cardurile de progres general sunt încă prezente.");
 if (html.includes('class="panel focus-panel"')) throw new Error("Panoul de gamificare al sesiunii este încă prezent.");
 if (app.includes('class="module-progress"') || runtime.includes('class="module-progress"')) throw new Error("Barele de progres ale bibliografiei sunt încă generate.");
