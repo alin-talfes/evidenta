@@ -10,8 +10,7 @@ Aplicație web statică pentru activități de evidență, calcule juridice, pre
 | Contopiri | Calcul aritmetic pentru pedepse rezultante | [Deschide](https://alin-talfes.github.io/evidenta/contopiri.html) |
 | Transfer și profilare | Filtrarea unităților și regulile de transfer | [Deschide](https://alin-talfes.github.io/evidenta/transfer/) |
 | Termene procedurale | Calculul termenelor procedurale | [Deschide](https://alin-talfes.github.io/evidenta/termene.html) |
-| Ofițer evidență | Grile, sinteze, spețe de calcul și interviu | [Deschide](https://alin-talfes.github.io/evidenta/ofiter/) |
-| Instructaj evidență | 23 de moduri de lucru explicate pe baza OMJ nr. 2.188/C/2022 și a Codurilor penal/procedural | [Deschide](https://alin-talfes.github.io/evidenta/instructaj/) |
+| Instructaj evidență | 23 de moduri de lucru explicate pe baza OMJ nr. 2.188/C/2022, Legii nr. 254/2013, HG nr. 157/2016 și a Codurilor penal/procedural | [Deschide](https://alin-talfes.github.io/evidenta/instructaj/) |
 | Semnalmente | Fișă descriptivă facială asistată și verificabilă | [Deschide](https://alin-talfes.github.io/evidenta/semnalmente/) |
 
 Ruta `/descriere-semnalmente/` este păstrată în acest repository numai ca redirecționare de compatibilitate către `/semnalmente/`.
@@ -26,7 +25,6 @@ evidenta/
 ├── css/
 ├── js/
 ├── transfer/
-├── ofiter/
 ├── instructaj/
 ├── semnalmente/
 ├── descriere-semnalmente/   # redirect de compatibilitate
@@ -39,7 +37,6 @@ evidenta/
 Repository-ul folosește un CI adaptat structurii monorepo:
 
 - testele și verificarea sintactică pentru aplicația principală;
-- audit CSS și verificări JavaScript pentru `ofiter`;
 - testele unitare pentru `semnalmente`.
 
 Rulează local:
@@ -48,7 +45,6 @@ Rulează local:
 npm test
 npm run check:syntax
 cd semnalmente && npm test
-cd ../ofiter && npm install --no-save postcss && node scripts/audit-css.mjs
 ```
 
 ## Principii de utilizare
@@ -60,7 +56,7 @@ cd ../ofiter && npm install --no-save postcss && node scripts/audit-css.mjs
 
 ## Arhivarea proiectelor vechi
 
-Repository-urile independente istorice sunt păstrate privat și arhivate exclusiv ca backup. Versiunile active sunt cele din acest monorepo.
+Repository-urile independente istorice sunt păstrate privat și arhivate exclusiv ca backup. Versiunile publice active sunt cele enumerate mai sus.
 
 ## Licență
 

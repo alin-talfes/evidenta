@@ -1,0 +1,49 @@
+.operational-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem;
+  margin: 1rem 0;
+}
+
+.operational-grid section,
+.mandatory-panel,
+.stop-panel,
+.practice-panel {
+  border: 1px solid var(--line);
+  border-radius: .9rem;
+  padding: 1rem;
+  background: #0d1625;
+}
+
+.operational-grid h3,
+.mandatory-panel h3,
+.stop-panel h3,
+.practice-panel h3 {
+  font-size: 1rem;
+  margin: 0 0 .45rem;
+}
+
+.operational-grid p,
+.stop-panel p,
+.practice-panel p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.operational-grid ul,
+.mandatory-panel ul {
+  margin: .25rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.mandatory-panel {
+  border-left: 4px solid var(--gold);
+  margin: 1rem 0;
+}
+
+.stop-panel { border-top: 3px solid var(--danger); }
+.practice-panel { border-top: 3px solid var(--accent); }
+
+@media (max-width: 850px) {
+  .operational-grid { grid-template-columns: 1fr; }
+}
