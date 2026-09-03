@@ -20,12 +20,12 @@ jobs:
       - run: npm run check:syntax
       - run: npm test
 
-  training:
-    name: Training
+  ofiter:
+    name: Ofițer
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: training
+        working-directory: ofiter
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

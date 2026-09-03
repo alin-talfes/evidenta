@@ -2,91 +2,14 @@
 <html lang="ro">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#10233f">
-  <meta name="color-scheme" content="light dark">
-  <meta name="description" content="Aplicație de studiu pentru concursul de ofițer evidență din poliția penitenciară.">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <title>Evidență — Training ofițer</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="generated/mobile-bundle.css">
-  <link rel="stylesheet" href="dashboard-shell.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta http-equiv="refresh" content="0; url=../ofiter/">
+  <link rel="canonical" href="https://alin-talfes.github.io/evidenta/ofiter/">
+  <title>Modul mutat — Evidență Ofițer</title>
 </head>
 <body>
-  <a class="skip-link" href="#main">Sari la conținut</a>
-  <header class="topbar">
-    <a class="brand" href="#dashboard" aria-label="Pagina principală"><span class="brand-mark">E</span><span>EVIDENȚĂ<small>CENTRU DE ÎNVĂȚARE</small></span></a>
-    <div class="top-actions"><span id="legal-date" class="legal-date"></span><button id="theme-btn" class="icon-btn" aria-label="Schimbă tema">◐</button></div>
-  </header>
-
-  <div class="app-shell">
-    <nav class="sidebar" aria-label="Navigare principală">
-      <button class="nav-item active" data-view="dashboard">▦ <span>Tablou de bord</span></button>
-      <button class="nav-item" data-view="quiz">✓ <span>Partea I · Grile</span></button>
-      <button class="nav-item" data-view="synthesis">≡ <span>Partea II · Sinteză</span></button>
-      <button class="nav-item" data-view="calculations">∑ <span>Partea III · Calcule</span></button>
-      <button class="nav-item" data-view="mistakes">↻ <span>Repetare</span><b id="mistake-count">0</b></button>
-      <button class="nav-item" data-view="exam">◷ <span>Simulări</span></button>
-      <button class="nav-item" data-view="bibliography">▤ <span>Bibliografie</span></button>
-      <button class="nav-item" data-view="legislation">§ <span>Legislație</span></button>
-      <button class="nav-item" data-view="official">★ <span>Subiecte ANP</span></button>
-      <button class="nav-item" data-view="interview">◎ <span>Interviu</span></button>
-      <div class="suite-links" aria-label="Navigare între aplicații">
-        <a href="../">Evidență PPL</a>
-        <a href="../instructaj/">Instructaj</a>
-        <a href="../semnalmente/">Semnalmente</a>
-      </div>
-      <div class="sidebar-note"><strong>Proba scrisă</strong><p>I. grile de conținut · II. sinteză fidelă textului legal · III. spețe de calcul.</p></div>
-    </nav>
-
-    <main id="main" tabindex="-1">
-      <section id="dashboard" class="view active-view">
-        <div class="page-heading learning-hero"><div><p class="eyebrow">SPAȚIUL TĂU DE ÎNVĂȚARE</p><h1>Pregătire pentru ofițer evidență</h1><p>Pregătirea este organizată după structura probei scrise, cu module auxiliare pentru legislație și interviu.</p></div><button class="primary hero-action" data-start-adaptive>Continuă cu grilele →</button></div>
-        <div class="stats-grid">
-          <article class="stat-card stat-progress"><span>Progres general</span><strong id="progress-value">0%</strong><div class="progress"><i id="progress-bar"></i></div></article>
-          <article class="stat-card stat-correct"><span>Răspunsuri corecte</span><strong id="correct-value">0</strong><small id="answered-value">din 0 întrebări</small></article>
-          <article class="stat-card stat-streak"><span>Serie curentă</span><strong id="streak-value">0 zile</strong><small>Activitate consecutivă</small></article>
-          <article class="stat-card accent stat-review"><span>De repetat astăzi</span><strong id="review-value">0</strong><small>Întrebări greșite</small></article>
-        </div>
-        <section class="exam-path" aria-labelledby="exam-path-title">
-          <div class="exam-path-head"><div><p class="eyebrow">PROBA SCRISĂ</p><h2 id="exam-path-title">Cele trei părți pe care trebuie să le stăpânești</h2></div><p>Numerele articolelor rămân repere de verificare, nu obiect de memorare sau testare.</p></div>
-          <div class="exam-path-grid">
-            <article class="exam-path-card"><span>PARTEA I</span><h3>Grile de conținut</h3><p>Reguli, condiții, excepții și aplicarea textului legal. Fără întrebări despre numărul articolului.</p><footer><small id="exam-quiz-progress">—</small><button class="secondary" data-go="quiz">Antrenează grilele</button></footer></article>
-            <article class="exam-path-card"><span>PARTEA II</span><h3>Sinteză literală</h3><p>Reproducere cât mai fidelă, în ordinea textului legal, cu evaluator lexical și text de control.</p><footer><small id="exam-synthesis-progress">—</small><button class="secondary" data-go="synthesis">Exersează sinteza</button></footer></article>
-            <article class="exam-path-card"><span>PARTEA III</span><h3>Spețe de calcul</h3><p>Rezolvare etapizată pe spețe oficiale, cu operații intermediare, barem și autoevaluare.</p><footer><small id="exam-calculation-progress">—</small><button class="secondary" data-go="calculations">Lucrează calculele</button></footer></article>
-          </div>
-        </section>
-        <div class="dashboard-grid">
-          <section class="panel"><div class="panel-head"><div><p class="eyebrow">PLAN DE STUDIU</p><h2>Bibliografia concursului</h2></div><button class="text-btn" data-go="bibliography">Vezi integral →</button></div><div id="module-list" class="module-list"></div></section>
-          <aside class="panel focus-panel"><p class="eyebrow">SESIUNEA ZILEI</p><div class="focus-number">20<span>min</span></div><h2>Recapitulare activă</h2><p>10 grile de conținut prioritizate după greșeli, întrebări neparcurse și acuratețea anterioară.</p><button class="primary full" data-start-adaptive>Începe sesiunea adaptivă</button><div class="accuracy"><span>Acuratețe curentă</span><b id="accuracy-value">—</b></div></aside>
-        </div>
-      </section>
-
-      <section id="quiz" class="view"><div class="page-heading compact"><div><p class="eyebrow">PARTEA I — GRILE</p><h1>Grile de antrenament</h1><p>Întrebări despre conținutul juridic și aplicarea regulilor, nu despre memorarea numerelor articolelor.</p></div></div><div id="quiz-setup" class="quiz-setup panel"><h2>Alege sesiunea</h2><div class="setup-options"><label>Act normativ<select id="quiz-module"><option value="all">Toată bibliografia</option></select></label><label>Număr de întrebări<select id="quiz-size"><option>5</option><option selected>10</option><option>15</option><option>20</option><option>30</option></select></label></div><div class="setup-actions"><button id="adaptive-start" class="primary">Sesiune adaptivă</button><button id="quiz-start" class="secondary">Test aleatoriu</button></div><p class="setup-help">Sesiunea adaptivă prioritizează grilele greșite, neparcurse sau cu acuratețe scăzută. Întrebările de tip „la ce articol se află X?” sunt excluse din pregătire.</p></div><div id="quiz-run" class="quiz-run hidden"></div></section>
-
-      <section id="synthesis" class="view"><div class="page-heading compact"><div><p class="eyebrow">PARTEA II — SINTEZĂ</p><h1>Reproducere fidelă din lege</h1><p>Exersează textul juridic integrat în aplicație și compară răspunsul cu formularea de control.</p></div></div><div class="notice"><strong>Obiectiv:</strong> să poți reda conținutul cuvânt cu cuvânt și în ordine. Numărul articolului nu intră în evaluarea exercițiului; este afișat doar ulterior ca reper de sursă.</div><div id="synthesis-summary" class="exam-training-summary" aria-live="polite"></div><div class="filters"><input id="synthesis-search" type="search" placeholder="Caută după temă sau act…" aria-label="Caută exerciții de sinteză"><select id="synthesis-act" aria-label="Filtrează sinteza după act"><option value="all">Toate actele</option></select><select id="synthesis-length" aria-label="Filtrează după lungimea textului"><option value="all">Orice lungime</option><option value="short">Scurt · până la 70 cuvinte</option><option value="medium">Mediu · 71–180 cuvinte</option><option value="long">Lung · peste 180 cuvinte</option></select><select id="synthesis-status" aria-label="Filtrează după rezultat"><option value="all">Toate stările</option><option value="new">Nelucrate</option><option value="review">De repetat</option><option value="close">Aproape</option><option value="mastered">Stăpânite ≥95%</option></select></div><div id="synthesis-list" class="exam-training-list"></div><section id="synthesis-workspace" class="exam-workspace hidden" aria-live="polite"></section><section class="official-synthesis-panel"><header><p class="eyebrow">CE S-A CERUT OFICIAL</p><h2>Teme de răspuns deschis din concursurile ANP</h2><p>Acestea confirmă tipul de enumerări și sinteze cerute. Pentru evaluatorul literal sunt folosite numai textele juridice integrate complet în aplicație.</p></header><div id="synthesis-official-topics" class="official-topic-grid"></div></section></section>
-
-      <section id="calculations" class="view"><div class="page-heading compact"><div><p class="eyebrow">PARTEA III — SPEȚE DE CALCUL</p><h1>Calcul și aplicare practică</h1><p>Lucrează separat operațiile, rezultatele intermediare și datele finale, apoi compară cu baremul oficial.</p></div></div><div class="notice warning"><strong>Important:</strong> unele spețe transcrise păstrează rezultatele din baremul oficial, dar pentru refacerea integrală pot fi necesare toate datele calendaristice din PDF-ul ANP. Linkul către documentul oficial este disponibil în workspace.</div><div id="calculation-summary" class="exam-training-summary" aria-live="polite"></div><div id="calculation-list" class="exam-training-list"></div><section id="calculation-workspace" class="exam-workspace hidden" aria-live="polite"></section></section>
-
-      <section id="mistakes" class="view"><div class="page-heading compact"><div><p class="eyebrow">REPETIȚIE SPAȚIATĂ</p><h1>De repetat astăzi</h1><p>Întrebările revin automat: rapid după o greșeală și la intervale tot mai mari după răspunsuri corecte.</p></div><button id="mistakes-start" class="primary">Începe repetarea</button></div><div class="notice learning-notice"><strong>Cum funcționează:</strong> răspuns corect → 1, 3, 7, 14, 30 și 60 de zile; răspuns greșit → revenire în 10 minute.</div><div id="mistakes-list" class="mistakes-list"></div></section>
-
-      <section id="exam" class="view"><div class="page-heading compact"><div><p class="eyebrow">SIMULĂRI</p><h1>Simulări de examen</h1><p>Alege între simularea rapidă a Părții I și o simulare completă cu grile, sinteză și speță de calcul.</p></div></div><div id="exam-area" class="panel exam-intro"><div class="exam-icon">◷</div><h2>Simulare rapidă — Partea I</h2><p>Ai 30 de minute pentru 20 de grile de conținut. Poți naviga între întrebări înainte de predare.</p><button id="exam-start" class="primary">Pornește simularea de grile</button></div></section>
-
-      <section id="bibliography" class="view"><div class="page-heading compact"><div><p class="eyebrow">MATERIA OFICIALĂ</p><h1>Bibliografie</h1><p>Delimitarea din anunț, cu acces direct la forma consolidată oficială.</p></div></div><div class="notice">Textele oficiale au prioritate. Aplicația este un instrument de studiu, nu o republicare oficială a legislației.</div><div id="bibliography-list" class="bibliography-list"></div></section>
-
-      <section id="legislation" class="view"><div class="page-heading compact"><div><p class="eyebrow">TEXT OFICIAL SELECTAT</p><h1>Legislația din bibliografie</h1><p>Textul cerut la concurs, pentru înțelegere și memorarea fidelă a formulărilor relevante.</p></div></div><div class="notice"><strong>Sursa juridică:</strong> Portalul Legislativ. Pentru fiecare act este păstrat și linkul către forma consolidată oficială.</div><div class="filters"><input id="legislation-search" type="search" placeholder="Caută termen sau expresie din lege…" aria-label="Caută în legislație"><select id="legislation-act" aria-label="Filtrează legislația după act"><option value="all">Toate actele</option></select></div><div id="legislation-content" class="legislation-content"></div></section>
-
-      <section id="official" class="view"><div class="page-heading compact"><div><p class="eyebrow">SURSE OFICIALE ANP</p><h1>Subiecte din concursuri</h1><p>Bareme verificate în anunțurile ANP, cu eratele și soluțiile contestațiilor aplicate.</p></div></div><div class="notice warning"><strong>Regulă de utilizare:</strong> baremul arată răspunsul acceptat la data concursului; eticheta juridică arată dacă soluția poate fi învățată în forma actuală. OMJ nr. 432/C/2010 este abrogat și nu se memorează pentru concursul viitor.</div><div id="official-sets" class="official-list"></div><section id="official-written" class="written-workspace hidden" aria-live="polite"></section></section>
-
-      <section id="interview" class="view"><div class="page-heading compact"><div><p class="eyebrow">ANTRENAMENT COMPORTAMENTAL ȘI MANAGERIAL</p><h1>Spețe pentru interviu</h1><p>Situații dificile întâlnite ca ofițer evidență și ca înlocuitor al șefului serviciului.</p></div></div><div class="notice interview-method"><strong>Metoda D–V–C–A:</strong> formulează mai întâi <b>Decizia</b>, apoi <b>Verificarea legală</b>, <b>Comunicarea</b> și <b>Asumarea/controlul</b>. Comisia urmărește atât soluția, cât și felul în care gestionezi presiunea.<small>Răspunsurile ideale sunt modele de antrenament întemeiate pe bibliografie, nu bareme oficiale ANP.</small></div><div id="interview-simulation-launcher" class="simulation-launcher"><div><p class="eyebrow">MOD EXAMEN</p><h2>Simulare completă de comisie</h2><p>Trei spețe selectate controlat, 15 minute, evaluare separată și raport final.</p></div><button id="interview-simulation-start" class="primary" type="button">Pornește simularea</button></div><section id="interview-simulation-panel" class="interview-simulation-panel hidden" aria-live="polite"></section><div id="interview-summary" class="interview-summary" aria-live="polite"></div><section id="interview-profile" class="interview-profile" aria-live="polite"></section><div class="filters interview-filters"><input id="interview-search" type="search" placeholder="Caută după situație sau competență…" aria-label="Caută spețe"><select id="interview-category" aria-label="Filtrează după categorie"><option value="all">Toate categoriile</option></select><select id="interview-difficulty" aria-label="Filtrează după dificultate"><option value="all">Toate nivelurile</option><option value="mediu">Mediu</option><option value="ridicat">Ridicat</option><option value="critic">Critic</option></select></div><div id="interview-list" class="interview-list"></div><section id="interview-workspace" class="interview-workspace hidden" aria-live="polite"></section></section>
-    </main>
-  </div>
-  <div id="toast" role="status" aria-live="polite"></div>
-  <script src="data-core.js"></script>
-  <script src="bootstrap.js"></script>
+  <p>Modulul a fost mutat la <a href="../ofiter/">Evidență — Ofițer</a>.</p>
+  <script src="redirect.js"></script>
 </body>
 </html>
