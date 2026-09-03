@@ -62,7 +62,7 @@ for(const file of cssFiles){
 const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const fastLoader=fs.readFileSync(path.join(root,'fast-loader.js'),'utf8');
 const buildMobile=fs.readFileSync(path.join(root,'scripts/build-mobile-css.mjs'),'utf8');
-const direct=new Set([...index.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css)["'][^>]*>/gi)].map(m=>m[1]));
+const direct=new Set([...index.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*href=["']([^"']+\.css(?:\?[^"']*)?)["'][^>]*>/gi)].map(m=>m[1].split(/[?#]/,1)[0]));
 const lazy=new Set([...fastLoader.matchAll(/\bstyle\(\s*["']([^"']+\.css)["']\s*\)/g)].map(m=>m[1]));
 const sourceBlock=buildMobile.match(/const\s+sources\s*=\s*\[([^\]]+)\]/s)?.[1]||'';
 const bundled=new Set([...sourceBlock.matchAll(/["']([^"']+\.css)["']/g)].map(m=>m[1]));
