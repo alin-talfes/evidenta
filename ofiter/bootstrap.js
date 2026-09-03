@@ -36,6 +36,7 @@
   }
 
   function visualView(id){
+    if(id==='bibliography')id='legislation';
     if(!id||!document.getElementById(id))return;
     pendingView=id;
     $$('.view').forEach(view=>view.classList.toggle('active-view',view.id===id));
@@ -99,7 +100,7 @@
   },true);
 
   window.addEventListener('hashchange',()=>{if(document.documentElement.dataset.appReady==='true')return;const id=decodeURIComponent(location.hash.replace(/^#/,''));if(id)visualView(id)});
-  const initial=(()=>{try{return decodeURIComponent(location.hash.replace(/^#/,''))}catch{return ''}})();
+  const initial=(()=>{try{const value=decodeURIComponent(location.hash.replace(/^#/,''));return value==='bibliography'?'legislation':value}catch{return ''}})();
   if(initial&&initial!=='dashboard'&&document.getElementById(initial)){visualView(initial);ensureApp().catch(()=>{})}
   else{
     const schedule=()=>{if(document.documentElement.dataset.appReady==='true'||bootPromise)return;if('requestIdleCallback' in window)requestIdleCallback(()=>ensureApp().catch(()=>{}),{timeout:700});else setTimeout(()=>ensureApp().catch(()=>{}),220)};

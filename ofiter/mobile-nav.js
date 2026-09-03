@@ -6,7 +6,6 @@
     synthesis:'<path d="M5 6h14"/><path d="M5 10h14"/><path d="M5 14h10"/><path d="M5 18h8"/>',
     calculations:'<path d="M18 5H7l5 7-5 7h11"/>',
     interview:'<circle cx="8" cy="7" r="3.5"/><path d="M2.5 20a5.5 5.5 0 0 1 11 0"/><path d="M15 6.5h6v6h-2.5L15 16z"/>',
-    bibliography:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 20a3 3 0 0 1 3-3h8"/>',
     legislation:'<path d="M12 3v17"/><path d="M7 6h10"/><path d="M5 9 2 15h6z"/><path d="m19 9-3 6h6z"/><path d="M8 21h8"/>',
     official:'<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
     mistakes:'<path d="M20 7v5h-5"/><path d="M19 12a7 7 0 1 0-2 5"/>',
@@ -21,8 +20,7 @@
   ];
   const MORE=[
     {view:"learn",label:"Fișe"},
-    {view:"bibliography",label:"Bibliografie"},
-    {view:"legislation",label:"Legislație"},
+    {view:"legislation",label:"Legislație și bibliografie"},
     {view:"official",label:"Subiecte ANP"},
     {view:"interview",label:"Interviu"},
     {view:"mistakes",label:"Repetare"},

@@ -1,4 +1,4 @@
-const CACHE = "evidenta-ofiter-v103";
+const CACHE = "evidenta-ofiter-v104";
 const GENERATED_CACHE = "evidenta-ofiter-generated-v8";
 
 const CORE_ASSETS = [
