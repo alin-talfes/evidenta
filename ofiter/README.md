@@ -1,4 +1,4 @@
-# Evidență — Training ofițer
+# Evidență — Ofițer
 
 Aplicație web statică pentru pregătirea concursului de trecere a agenților în corpul ofițerilor, specialitatea evidență.
 
