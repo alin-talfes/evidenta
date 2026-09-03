@@ -66,12 +66,18 @@
     <main id="main" tabindex="-1">
       <section id="dashboard" class="view active-view">
         <div class="page-heading learning-hero"><div><p class="eyebrow">SPAȚIUL TĂU DE ÎNVĂȚARE</p><h1>Pregătire pentru ofițer evidență</h1><p>Pregătirea este organizată după structura probei scrise, cu module auxiliare pentru legislație și interviu.</p></div><button class="primary hero-action" data-start-adaptive>Continuă cu grilele →</button></div>
-        <section class="exam-path" aria-labelledby="exam-path-title">
-          <div class="exam-path-head"><div><p class="eyebrow">PROBA SCRISĂ</p><h2 id="exam-path-title">Cele trei părți pe care trebuie să le stăpânești</h2></div><p>Numerele articolelor rămân repere de verificare, nu obiect de memorare sau testare.</p></div>
-          <div class="exam-path-grid">
-            <article class="exam-path-card"><span>PARTEA I</span><h3>Grile de conținut</h3><p>Reguli, condiții, excepții și aplicarea textului legal. Fără întrebări despre numărul articolului.</p><footer><button class="secondary" data-go="quiz">Antrenează grilele</button></footer></article>
-            <article class="exam-path-card"><span>PARTEA II</span><h3>Sinteză literală</h3><p>Reproducere cât mai fidelă, în ordinea textului legal, cu evaluator lexical și text de control.</p><footer><button class="secondary" data-go="synthesis">Exersează sinteza</button></footer></article>
-            <article class="exam-path-card"><span>PARTEA III</span><h3>Spețe de calcul</h3><p>Rezolvare etapizată pe spețe oficiale, cu operații intermediare, barem și autoevaluare.</p><footer><button class="secondary" data-go="calculations">Lucrează calculele</button></footer></article>
+        <section class="learning-modules" aria-labelledby="learning-modules-title">
+          <div class="learning-modules-head"><p class="eyebrow">MODULE DE ÎNVĂȚARE</p><h2 id="learning-modules-title">Alege ce vrei să lucrezi</h2></div>
+          <div class="learning-modules-grid">
+            <button class="learning-module-card" type="button" data-go="quiz"><span>I</span><strong>Grile</strong><small>Întrebări de conținut și aplicare</small></button>
+            <button class="learning-module-card" type="button" data-go="synthesis"><span>II</span><strong>Sinteză</strong><small>Reproducerea fidelă a textului legal</small></button>
+            <button class="learning-module-card" type="button" data-go="calculations"><span>III</span><strong>Calcule</strong><small>Spețe și operații juridice</small></button>
+            <button class="learning-module-card" type="button" data-go="mistakes"><span>↻</span><strong>Repetare</strong><small>Întrebările care trebuie reluate</small></button>
+            <button class="learning-module-card" type="button" data-go="exam"><span>◷</span><strong>Simulări</strong><small>Antrenament în condiții de examen</small></button>
+            <button class="learning-module-card" type="button" data-go="bibliography"><span>▤</span><strong>Bibliografie</strong><small>Actele și articolele pentru concurs</small></button>
+            <button class="learning-module-card" type="button" data-go="legislation"><span>§</span><strong>Legislație</strong><small>Textele normative integrate</small></button>
+            <button class="learning-module-card" type="button" data-go="official"><span>★</span><strong>Subiecte ANP</strong><small>Subiecte și bareme oficiale</small></button>
+            <button class="learning-module-card" type="button" data-go="interview"><span>◎</span><strong>Interviu</strong><small>Spețe și răspunsuri de antrenament</small></button>
           </div>
         </section>
         <section class="panel dashboard-bibliography"><div class="panel-head"><div><p class="eyebrow">MATERIA DE STUDIU</p><h2>Bibliografia concursului</h2></div><button class="text-btn" data-go="bibliography">Vezi integral →</button></div><div id="module-list" class="module-list"></div></section>
