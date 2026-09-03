@@ -49,9 +49,10 @@ const officialUrls = [...coreData.matchAll(/url:"(https:\/\/legislatie\.just\.ro
 if (officialUrls.length !== 7) throw new Error("Fiecare dintre cele 7 acte trebuie să aibă link oficial către Portalul Legislativ.");
 if (!officialUrls.includes("https://legislatie.just.ro/Public/DetaliiDocumentAfis/255745")) throw new Error("Linkul OMJ nr. 2188/C/2022 trebuie să deschidă Instrucțiunile oficiale.");
 const legislationController = read("generated/controllers/legislation.js");
-for (const marker of ["DELIMITARE DIN BIBLIOGRAFIE", "legal-scope", "Deschide forma oficial\\u0103 consolidat\\u0103"]) {
+for (const marker of ["DELIMITARE DIN BIBLIOGRAFIE", "legal-scope", "Deschide forma oficial\\u0103 consolidat\\u0103", "catalog=laws.map", "laws.forEach"]) {
   if (!legislationController.includes(marker)) throw new Error(`Informație absentă din modulul combinat: ${marker}`);
 }
+if (!legislationController.includes('law.id==="omj2188"?"sinteza"')) throw new Error("OMJ nr. 2188/C/2022 nu este inclus explicit în catalogul Legislație.");
 if (html.includes('class="stats-grid"')) throw new Error("Cardurile de progres general sunt încă prezente.");
 if (html.includes('class="panel focus-panel"')) throw new Error("Panoul de gamificare al sesiunii este încă prezent.");
 if (app.includes('class="module-progress"') || runtime.includes('class="module-progress"')) throw new Error("Barele de progres ale bibliografiei sunt încă generate.");

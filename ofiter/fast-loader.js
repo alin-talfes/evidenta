@@ -115,7 +115,7 @@
       if(id==="exam"){await ensureQuizBase();ensureExamShell();return}
       if(id==="official"){await Promise.all([heavy("official"),script("generated/controllers/official.js")]);return}
       if(id==="interview"){await Promise.all([heavy("interview"),script("generated/controllers/interview.js")]);return}
-      if(id==="legislation"){await Promise.all([heavy("legislation"),script("generated/controllers/legislation.js")]);await script("legislation-virtual.js");return}
+      if(id==="legislation"){await Promise.all([heavy("legislation"),script("generated/controllers/legislation.js?v=3")]);await script("legislation-virtual.js");return}
       if(id==="learn")return;
     })();
     viewPromises.set(id,promise);try{return await promise}catch(error){viewPromises.delete(id);throw error}
@@ -138,7 +138,7 @@
     quiz:["scenario-questions.css","scenario-questions.js"],mistakes:["scenario-questions.css","scenario-questions.js"],
     official:["heavy-data-loader.js","generated/official-data.json","generated/controllers/official.js"],
     interview:["heavy-data-loader.js","generated/interview-data.json","generated/controllers/interview.js"],
-    legislation:["heavy-data-loader.js","generated/legislation-data.json","generated/controllers/legislation.js","legislation-virtual.js"],
+    legislation:["heavy-data-loader.js","generated/legislation-data.json","generated/controllers/legislation.js?v=3","legislation-virtual.js"],
     calculations:["heavy-data-loader.js","generated/official-data.json","calculation-engine.css","calculation-engine.js","calculation-age-cases.js"],
     synthesis:["heavy-data-loader.js","generated/legislation-data.json","generated/official-data.json","functional-fixes.js","exam-training.css","exam-training.js","omj2188-training.css","omj2188-session.css","omj2188-data.js","omj2188-training.js","synthesis-session.js","generated/omj2188/index.json"],
     exam:["scenario-questions.css","scenario-questions.js"]
