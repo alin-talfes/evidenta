@@ -20,6 +20,7 @@
     function ensureSharedStyles() {
         ensureStylesheet('../css/design-system.css?v=4', 'data-evidenta-design-system');
         ensureStylesheet('../css/unified-shell.css?v=1', 'data-evidenta-unified-shell');
+        ensureStylesheet('../css/visual-audit.css?v=1', 'data-evidenta-visual-audit');
     }
 
     function validTheme(value) {
@@ -133,6 +134,7 @@
 
         const context = pageContext();
         document.body.classList.add('ev-unified');
+        document.body.dataset.evPage = context.page || context.navKey || 'evidenta';
 
         const shell = document.createElement('header');
         shell.className = 'ev-shell';
