@@ -270,6 +270,65 @@ body:not(:has(.section-hub)) .method {
   display: none !important;
 }
 
+/*
+ * Navigare unificată:
+ * - hub-ul .section-hub este singurul meniu principal de alegere a categoriei;
+ * - Glosarul nu mai este categorie separată și se afișează împreună cu Fundamentele juridice.
+ */
+.course-nav,
+.hero-panel .hero-actions,
+.section-hub-card[data-view="glosar"] {
+  display: none !important;
+}
+
+.section-hub-card[data-view="fundamente"] strong {
+  font-size: 0;
+}
+.section-hub-card[data-view="fundamente"] strong::after {
+  content: "Fundamente juridice și glosar";
+  font-size: 1rem;
+}
+.section-hub-card[data-view="fundamente"] small {
+  font-size: 0;
+}
+.section-hub-card[data-view="fundamente"] small::after {
+  content: "Sentință, definitivare, MEPI, citație, deduceri, liberare și termenii esențiali de lucru.";
+  font-size: .8rem;
+}
+
+/* Glosarul este parte a categoriei Fundamente, inclusiv pentru vechiul link direct #glosar-heading. */
+#fundamente:not([hidden]) ~ .learning-section[aria-labelledby="glosar-heading"][hidden],
+body:has(.learning-section[aria-labelledby="glosar-heading"]:not([hidden])) #fundamente[hidden] {
+  display: block !important;
+}
+
+body:has(#fundamente:not([hidden])) .learning-section[aria-labelledby="glosar-heading"],
+body:has(.learning-section[aria-labelledby="glosar-heading"]:not([hidden])) .learning-section[aria-labelledby="glosar-heading"] {
+  display: block !important;
+}
+
+body:has(.learning-section[aria-labelledby="glosar-heading"]:not([hidden])) .legal-strip[hidden] {
+  display: flex !important;
+}
+
+.learning-section[aria-labelledby="glosar-heading"] > .category-viewbar {
+  display: none !important;
+}
+
+.learning-section[aria-labelledby="glosar-heading"] {
+  margin-top: -1rem;
+  padding-top: 0;
+}
+
+.learning-section[aria-labelledby="glosar-heading"] .section-number {
+  display: none;
+}
+
+.learning-section[aria-labelledby="glosar-heading"] .section-heading {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
 @media (max-width: 850px) {
   .operational-grid { grid-template-columns: 1fr; }
 }
