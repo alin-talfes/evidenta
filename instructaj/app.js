@@ -1,17 +1,18 @@
 (function () {
   "use strict";
 
-  if (!window.__OMJ2188_SUPPLEMENT_READY__) {
+  if (!window.__INSTRUCTAJ_ENRICHED__) {
     import("./omj2188-completari.js")
+      .then(() => import("./verificare-dosar-transfer.js"))
       .then(() => {
-        window.__OMJ2188_SUPPLEMENT_READY__ = true;
+        window.__INSTRUCTAJ_ENRICHED__ = true;
         const script = document.createElement("script");
-        script.src = "./app.js?omj2188=ready";
+        script.src = "./app.js?instructaj=ready";
         script.async = false;
         document.head.appendChild(script);
       })
       .catch(error => {
-        console.error("Nu s-au putut încărca completările OMJ nr. 2.188/C/2022.", error);
+        console.error("Nu s-au putut încărca completările modulului Instructaj.", error);
       });
     return;
   }
