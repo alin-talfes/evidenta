@@ -1,41 +1,53 @@
 (() => {
+    'use strict';
+
+    if (window.__EVIDENTA_VERSION_FOOTER__) return;
+    window.__EVIDENTA_VERSION_FOOTER__ = true;
+
     const scriptUrl = document.currentScript?.src || new URL('js/version.js', document.baseURI).href;
     const versionUrl = new URL('../version.json', scriptUrl).href;
 
     function renderFooter(versionText) {
-        const container = document.querySelector('.container') || document.body;
-        let footer = document.querySelector('footer.footer');
-        if (!footer) {
-            footer = document.createElement('footer');
-            footer.className = 'footer';
-            footer.setAttribute('role', 'contentinfo');
-            container.appendChild(footer);
-        }
+        document.querySelectorAll('footer').forEach(footer => footer.remove());
 
-        footer.replaceChildren();
-        const firstLine = document.createElement('div');
+        const footer = document.createElement('footer');
+        footer.className = 'ev-footer';
+        footer.dataset.evidentaFooter = 'true';
+        footer.setAttribute('role', 'contentinfo');
+
+        const inner = document.createElement('div');
+        inner.className = 'ev-footer__inner';
+
         const version = document.createElement('span');
-        version.id = 'app-version';
-        version.textContent = versionText;
-        firstLine.append(version, document.createTextNode(' | © Alin Talfeș'));
+        version.className = 'ev-footer__version';
+        version.textContent = `Versiune ${versionText}`;
 
-        const privacy = document.createElement('div');
-        privacy.className = 'footer-privacy';
-        privacy.textContent = 'Toate datele sunt stocate exclusiv local, în browserul utilizatorului (localStorage) și nu sunt transmise către servere externe.';
+        const copyright = document.createElement('span');
+        copyright.className = 'ev-footer__copyright';
+        copyright.textContent = '© Alin Talfeș';
 
-        footer.append(firstLine, privacy);
+        inner.append(version, copyright);
+        footer.appendChild(inner);
+        document.body.appendChild(footer);
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    async function initFooter() {
         try {
             const response = await fetch(versionUrl, { cache: 'no-store' });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
-            if (!data || typeof data.version !== 'string' || !data.version.trim()) throw new Error('Versiune invalidă');
-            renderFooter(`Versiune ${data.version.trim()}`);
+            const version = typeof data?.version === 'string' ? data.version.trim() : '';
+            if (!version) throw new Error('Versiune invalidă');
+            renderFooter(version);
         } catch (error) {
             console.error('Nu s-a putut încărca version.json:', error);
-            renderFooter('Versiune indisponibilă');
+            renderFooter('—');
         }
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFooter, { once: true });
+    } else {
+        initFooter();
+    }
 })();
