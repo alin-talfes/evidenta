@@ -60,10 +60,23 @@ for (const [id, refs] of Object.entries(mustContain)) {
 }
 
 assert.ok(data.glossary.length >= 7, "Glosar pentru termenii juridici indispensabili");
+
 const html = fs.readFileSync(path.join(moduleDir, "index.html"), "utf8");
-for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]) assert.ok(html.includes(file), `${file} este încărcat`);
-for (const documentId of Object.values(canonicalPageSources)) assert.ok(html.includes(documentId), `Pagina trebuie să publice sursa canonică oficială ${documentId}`);
-for (const staleDocumentId of ["269415", "269789", "120611"]) assert.ok(!html.includes(staleDocumentId), `Pagina nu trebuie să păstreze linkul vechi/intermediar ${staleDocumentId}`);
+const app = fs.readFileSync(path.join(moduleDir, "app.js"), "utf8");
+const styles = fs.readFileSync(path.join(moduleDir, "styles.css"), "utf8");
+
+for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]) {
+  assert.ok(html.includes(file), `${file} este încărcat`);
+}
+assert.ok(html.includes("styles.css?v=3"), "Versiunea nouă de CSS trebuie invalidată în cache");
+assert.ok(html.includes("app.js?v=3"), "Versiunea nouă de JS trebuie invalidată în cache");
+
+for (const documentId of Object.values(canonicalPageSources)) {
+  assert.ok(html.includes(documentId), `Pagina trebuie să publice sursa canonică oficială ${documentId}`);
+}
+for (const staleDocumentId of ["269415", "269789", "120611"]) {
+  assert.ok(!html.includes(staleDocumentId), `Pagina nu trebuie să păstreze linkul vechi/intermediar ${staleDocumentId}`);
+}
 assert.ok(html.includes("forma consolidată la zi"), "Pagina trebuie să indice explicit că trimiterile sunt către forma consolidată la zi");
 
 assert.ok(html.includes('id="fundamente"'), "Pagina principală trebuie să conțină secțiunea de fundamente juridice");
@@ -76,9 +89,43 @@ for (const term of [
   "Liberarea la termen",
   "Liberarea condiționată",
   "Legea nr. 169/2017"
-]) assert.ok(html.includes(term), `Fundamentele juridice trebuie să includă: ${term}`);
+]) {
+  assert.ok(html.includes(term), `Fundamentele juridice trebuie să includă: ${term}`);
+}
 for (const historicalDocumentId of ["191305", "221138"]) {
   assert.ok(html.includes(historicalDocumentId), `Sursa istorică oficială ${historicalDocumentId} trebuie publicată`);
+}
+
+/* Regresii juridice rezultate din auditul din 04.09.2026. */
+for (const legalCorrection of [
+  "sentința poate deveni definitivă direct",
+  "Contestația există numai acolo unde legea o prevede expres",
+  "art. 259 alin. (7) CPP",
+  "pentru aceeași infracțiune",
+  "art. 100 alin. (3)–(4)",
+  "minim de pedeapsă efectiv executată",
+  "fostul art. 55¹ alin. (1), (3) și (8)",
+  "orice altă dată stabilită de organul judiciar competent"
+]) {
+  assert.ok(html.includes(legalCorrection), `Corecția juridică trebuie păstrată: ${legalCorrection}`);
+}
+
+/* UI de learning: progres, traseu, carduri și responsive. */
+for (const selectorOrMarker of [
+  'id="learning-progress"',
+  'class="course-nav"',
+  'class="section-number"',
+  'class="learning-callout"',
+  'class="fraction-grid"',
+  'class="learning-checklist"'
+]) {
+  assert.ok(html.includes(selectorOrMarker), `UI learning trebuie să includă ${selectorOrMarker}`);
+}
+for (const jsFeature of ["renderLearningProgress", "card-progress", "detail-progress", "completedWorkflows"]) {
+  assert.ok(app.includes(jsFeature), `Aplicația trebuie să includă funcția UI ${jsFeature}`);
+}
+for (const cssFeature of [".course-nav", ".learning-progress", ".workflow-card.completed", ".fraction-grid", "@media (max-width: 650px)", "prefers-reduced-motion"]) {
+  assert.ok(styles.includes(cssFeature), `CSS learning trebuie să includă ${cssFeature}`);
 }
 
 const linkExtensions = new Set([".html", ".htm", ".md", ".js", ".json", ".xml"]);
@@ -96,4 +143,4 @@ function inspectPublicFiles(dir) {
 inspectPublicFiles(repoDir);
 assert.ok(!fs.existsSync(path.join(repoDir, "training", "index.html")), "Ruta veche /training nu trebuie să redirecționeze spre /ofiter");
 
-console.log("Instructaj: structură, surse canonice, conținut juridic și izolare /ofiter validate.");
+console.log("Instructaj: structură, corecții juridice, UI learning, surse canonice și izolare /ofiter validate.");
