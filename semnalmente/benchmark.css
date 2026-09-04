@@ -1,4 +1,4 @@
-@import url("../css/design-system.css?v=1");
+@import url("../css/design-system.css?v=2");
 
 .benchmark-shell { padding-bottom: 28px; }
 .benchmark-back { text-decoration: none; color: var(--accent); font-size: 1.25rem; }
