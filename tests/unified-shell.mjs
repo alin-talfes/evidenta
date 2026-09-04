@@ -9,6 +9,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const theme = read('js/theme.js');
 const shell = read('css/unified-shell.css');
+const audit = read('css/visual-audit.css');
 
 for (const marker of [
   'buildUniversalShell',
@@ -17,7 +18,8 @@ for (const marker of [
   'ev-shell__nav',
   'ev-shell__module',
   'evidenta-theme-toggle',
-  'unified-shell.css'
+  'unified-shell.css',
+  'visual-audit.css'
 ]) {
   assert.ok(theme.includes(marker), `Controllerul universal trebuie să conțină ${marker}`);
 }
@@ -45,6 +47,18 @@ for (const marker of [
   assert.ok(shell.includes(marker), `Shell CSS trebuie să normalizeze ${marker}`);
 }
 
+for (const marker of [
+  'body.ev-unified > .topbar',
+  'max-width: var(--ev-shell-max)',
+  'padding: 24px var(--ev-shell-pad) 40px',
+  '.focus-panel',
+  '.section-hub',
+  '.rules-table',
+  '@media (max-width: 760px)'
+]) {
+  assert.ok(audit.includes(marker), `Auditul vizual trebuie să conțină corecția ${marker}`);
+}
+
 assert.ok(shell.includes('display: none !important'), 'Antetele și meniurile globale vechi trebuie neutralizate vizual');
 assert.ok(shell.includes('@media (max-width: 680px)'), 'Shell-ul universal trebuie să aibă tratament mobil');
 
@@ -61,4 +75,4 @@ for (const [name, source] of Object.entries(loaders)) {
   assert.ok(source.includes('theme.js'), `${name} trebuie să încarce controllerul comun theme.js`);
 }
 
-console.log('Unified shell: meniu, antet, temă și structură vizuală comună verificate.');
+console.log('Unified shell: meniu, antet, temă și audit vizual comun verificate.');
