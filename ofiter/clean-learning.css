@@ -1,3 +1,5 @@
+@import url("../css/design-system.css?v=1");
+
 /* Interfață de studiu concentrată pe conținut, fără elemente de gamificare. */
 .dashboard-bibliography {
   margin-top: 20px;
@@ -59,8 +61,8 @@
 }
 
 .learning-module-card:hover {
-  border-color: #b9b2ef;
-  background: var(--violet-soft);
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
   transform: translateY(-1px);
 }
 
