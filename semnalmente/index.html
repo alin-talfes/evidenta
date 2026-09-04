@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#0b1220">
-    <meta name="description" content="Instrument local pentru generarea asistată a unei fișe descriptive de semnalmente faciale, cu MediaPipe Face Landmarker.">
+    <meta name="description" content="Analiză facială asistată pentru generarea unei fișe descriptive de semnalmente.">
     <title>Semnalmente — analiză facială asistată</title>
     <link rel="stylesheet" href="style.css">
     <script type="importmap">
@@ -20,26 +20,6 @@
     <a class="skip-link" href="#main-content">Sari la conținut</a>
 
     <div class="app-shell">
-        <header class="topbar">
-            <div class="brand-block">
-                <div class="brand-mark" aria-hidden="true">S</div>
-                <div>
-                    <p class="eyebrow">INSTRUMENT DE DESCRIERE</p>
-                    <h1>Semnalmente</h1>
-                    <p class="subtitle">Analiză facială asistată pentru generarea unei fișe descriptive.</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <nav class="suite-nav" aria-label="Navigare între aplicații">
-                    <a href="../">Evidență PPL</a>
-                    <a href="../instructaj/">Instructaj</a>
-                    <a href="./" aria-current="page">Semnalmente</a>
-                </nav>
-                <span class="status-chip"><span class="status-dot" aria-hidden="true"></span> Procesare în browser</span>
-                <button type="button" class="icon-btn" id="btn-theme" aria-label="Schimbă tema" title="Schimbă tema">◐</button>
-            </div>
-        </header>
-
         <main id="main-content">
             <section class="notice-panel" aria-labelledby="privacy-title">
                 <div class="notice-icon" aria-hidden="true">⌁</div>
@@ -60,11 +40,10 @@
             <section class="panel upload-panel" aria-labelledby="upload-heading">
                 <div class="section-heading">
                     <div>
-                        <p class="section-kicker">PASUL 1</p>
                         <h2 id="upload-heading">Fotografii pentru analiză</h2>
-                        <p>Folosește imagini clare, bine luminate, fără filtre. Pentru fotografia frontală, privește direct spre cameră și evită înclinarea capului.</p>
+                        <p>Folosește imagini clare, bine luminate, fără filtre și cu fața neobturată. Pentru fotografia frontală, privește direct spre cameră și evită înclinarea capului.</p>
                     </div>
-                    <div class="quality-legend" aria-label="Recomandări calitate">
+                    <div class="quality-legend" aria-label="Cerințe fișier">
                         <span>JPG / PNG / WEBP</span>
                         <span>max. 15 MB</span>
                         <span>min. recomandat 720 px</span>
@@ -91,7 +70,7 @@
                             <span class="upload-type optional">RECOMANDAT</span>
                             <div class="upload-symbol" aria-hidden="true">＋</div>
                             <span class="label">Fotografie din profil</span>
-                            <span class="hint" id="profil-help">Necesara pentru forma profilului nazal; pavilionul urechii se verifică manual</span>
+                            <span class="hint" id="profil-help">Necesară pentru forma profilului nazal; pavilionul urechii se verifică manual</span>
                         </div>
                         <label for="file-profil" class="sr-only">Încarcă fotografia din profil</label>
                         <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" id="file-profil">
@@ -100,20 +79,11 @@
                         <button type="button" class="remove-btn" id="remove-profil" title="Elimină fotografia" aria-label="Elimină fotografia din profil">×</button>
                     </div>
                 </div>
-
-                <div class="quality-checklist" aria-label="Checklist fotografie">
-                    <span>✓ lumină uniformă</span>
-                    <span>✓ față neobturată</span>
-                    <span>✓ fără filtre</span>
-                    <span>✓ rezoluție suficientă</span>
-                </div>
             </section>
 
             <section class="analysis-panel" aria-labelledby="analysis-heading">
                 <div>
-                    <p class="section-kicker">PASUL 2</p>
                     <h2 id="analysis-heading">Rulează analiza</h2>
-                    <p>Motorul v2 folosește landmark-uri MediaPipe, distanțe corectate pentru raportul imaginii, verificări de orientare și clasificatoare mai prudente pentru caracteristicile cu incertitudine ridicată.</p>
                 </div>
                 <button class="btn btn-primary btn-analyze" id="btn-analyze" disabled>
                     <span class="spinner" id="analyze-spinner" style="display:none;"></span>
@@ -126,9 +96,7 @@
             <section class="results-section" id="results-section" aria-labelledby="results-heading">
                 <div class="section-heading results-heading-row">
                     <div>
-                        <p class="section-kicker">PASUL 3</p>
                         <h2 id="results-heading">Fișa de semnalmente</h2>
-                        <p>Verifică fiecare rezultat și cardul de calitate. Motorul evită intenționat clasificările pentru care fotografia sau reperele disponibile nu susțin o concluzie suficient de robustă.</p>
                     </div>
                     <div class="compact-actions">
                         <button class="btn btn-ghost" id="btn-copy-report" type="button">Copiază fișa</button>
@@ -146,9 +114,8 @@
             <section class="saved-list panel" id="saved-list" aria-labelledby="saved-heading">
                 <div class="section-heading saved-heading-row">
                     <div>
-                        <p class="section-kicker">ARHIVĂ LOCALĂ</p>
                         <h2 id="saved-heading">Fișe salvate</h2>
-                        <p><span id="saved-count">0</span> fișe păstrate exclusiv în acest browser.</p>
+                        <p><span id="saved-count">0</span> fișe salvate în acest browser.</p>
                     </div>
                     <div class="compact-actions">
                         <input type="file" id="import-json" accept="application/json,.json" class="sr-only">
@@ -160,36 +127,11 @@
                 <div id="saved-items"></div>
             </section>
         </main>
-
-        <footer>
-            <div>
-                <strong>Semnalmente</strong>
-                <span>© <span id="current-year"></span> Alin Talfeș</span>
-            </div>
-            <div class="footer-links">
-                <a href="https://github.com/alin-talfes/evidenta/tree/main/semnalmente" target="_blank" rel="noopener noreferrer">Cod sursă</a>
-                <span>Versiune <strong id="app-version">…</strong></span>
-            </div>
-        </footer>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script defer src="enhancements.js"></script>
     <script type="module" src="engine-v2.js"></script>
-    <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-        fetch('version.json', { cache: 'no-store' })
-            .then(response => {
-                if (!response.ok) throw new Error('Nu s-a putut citi version.json');
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('app-version').textContent = data.version || 'nedefinit';
-            })
-            .catch(() => {
-                document.getElementById('app-version').textContent = 'nedisponibil';
-            });
-    </script>
 </body>
 </html>
