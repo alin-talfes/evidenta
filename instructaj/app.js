@@ -1,6 +1,21 @@
 (function () {
   "use strict";
 
+  if (!window.__OMJ2188_SUPPLEMENT_READY__) {
+    import("./omj2188-completari.js")
+      .then(() => {
+        window.__OMJ2188_SUPPLEMENT_READY__ = true;
+        const script = document.createElement("script");
+        script.src = "./app.js?omj2188=ready";
+        script.async = false;
+        document.head.appendChild(script);
+      })
+      .catch(error => {
+        console.error("Nu s-au putut încărca completările OMJ nr. 2.188/C/2022.", error);
+      });
+    return;
+  }
+
   const data = window.INSTRUCTAJ_DATA;
   const list = document.getElementById("workflow-list");
   const detail = document.getElementById("workflow-detail");
