@@ -13,7 +13,6 @@ body {
   line-height: 1.55;
 }
 
-/* Ascunde antetele globale vechi. Conținutul funcțional rămâne intact. */
 body > .container > .app-nav,
 body > .container > .header,
 body > .container > header.header,
@@ -39,7 +38,8 @@ body > .app-shell .suite-links {
 }
 
 .ev-shell__bar,
-.ev-shell__module {
+.ev-shell__module,
+.ev-footer__inner {
   width: min(100%, var(--ev-shell-max));
   margin: 0 auto;
   padding-inline: var(--ev-shell-pad);
@@ -79,7 +79,6 @@ body > .app-shell .suite-links {
 
 .ev-shell__brand-copy {
   min-width: 0;
-  display: grid;
   line-height: 1.1;
 }
 
@@ -88,15 +87,6 @@ body > .app-shell .suite-links {
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .02em;
-}
-
-.ev-shell__brand-copy small {
-  margin-top: 3px;
-  color: var(--ev-muted);
-  font-size: 10px;
-  font-weight: 750;
-  letter-spacing: .08em;
-  text-transform: uppercase;
 }
 
 .ev-shell__nav {
@@ -169,27 +159,14 @@ body > .app-shell .suite-links {
 }
 
 .ev-shell__module {
-  min-height: 118px;
+  min-height: 82px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 18px;
+  padding-bottom: 18px;
   border-top: 1px solid color-mix(in srgb, var(--ev-border) 70%, transparent);
-}
-
-.ev-shell__module-copy {
-  max-width: 820px;
-}
-
-.ev-shell__kicker {
-  margin: 0 0 6px;
-  color: var(--ev-accent-strong);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: .13em;
-  text-transform: uppercase;
 }
 
 .ev-shell__module h1 {
@@ -200,16 +177,8 @@ body > .app-shell .suite-links {
   letter-spacing: -.025em;
 }
 
-.ev-shell__module p:last-child {
-  margin: 8px 0 0;
-  color: var(--ev-text-secondary);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
 .ev-shell__badge {
   flex: 0 0 auto;
-  align-self: center;
   padding: 6px 10px;
   border: 1px solid var(--ev-border);
   border-radius: 999px;
@@ -221,7 +190,6 @@ body > .app-shell .suite-links {
   text-transform: uppercase;
 }
 
-/* Lățimi și ritm comune pentru toate zonele principale. */
 body > .container,
 body > main,
 body > .app-shell,
@@ -237,7 +205,6 @@ body > .app-shell > main {
   padding-right: var(--ev-shell-pad) !important;
 }
 
-/* Ofițer: păstrează navigarea funcțională, dar o transformă într-un submeniu comun. */
 body > .app-shell {
   display: block !important;
   min-height: 0 !important;
@@ -284,7 +251,6 @@ body > .app-shell > .sidebar .sidebar-note,
 body > .app-shell > .sidebar .suite-links { display: none !important; }
 body > .app-shell > main { width: 100% !important; max-width: none !important; }
 
-/* Un singur limbaj pentru controalele secundare. */
 .top-bar,
 .page-actions,
 .workflow,
@@ -345,7 +311,6 @@ textarea,
   font-family: var(--ev-font) !important;
 }
 
-/* Elimină contrastele cromatice istorice dintre module. */
 .btn-gold,
 .primary,
 .btn-primary,
@@ -368,15 +333,40 @@ textarea,
   border-color: var(--ev-border-strong) !important;
 }
 
-/* Meniurile vechi de temă devin invizibile; controlul universal rămâne singurul vizibil. */
 #themeToggle,
 #theme-btn,
 #btn-theme {
   display: none !important;
 }
 
-/* Excepție: dacă elementul a fost mutat în shell, logout rămâne vizibil. */
 .ev-shell__actions #access-logout { display: inline-flex !important; }
+
+.ev-footer {
+  width: 100%;
+  margin-top: 32px;
+  border-top: 1px solid var(--ev-border) !important;
+  background: var(--ev-bg) !important;
+  color: var(--ev-muted) !important;
+  box-shadow: none !important;
+}
+
+.ev-footer__inner {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.ev-footer__version::after {
+  content: '·';
+  margin-left: 10px;
+  color: var(--ev-border-strong);
+}
 
 @media (max-width: 1040px) {
   .ev-shell__bar {
@@ -399,24 +389,22 @@ textarea,
 
 @media (max-width: 680px) {
   :root { --ev-shell-pad: 14px; }
-  .ev-shell__brand-copy small { display: none; }
   .ev-shell__bar { min-height: 58px; }
   .ev-shell__nav a { min-height: 36px; padding-inline: 9px; font-size: 12px; }
   .ev-shell__module {
     min-height: 0;
-    align-items: flex-start;
-    flex-direction: column;
     gap: 10px;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
   .ev-shell__module h1 { font-size: 26px; }
-  .ev-shell__module p:last-child { font-size: 13px; }
-  .ev-shell__badge { align-self: flex-start; }
+  .ev-shell__badge { align-self: center; }
   body > .app-shell > .sidebar { padding-inline: var(--ev-shell-pad) !important; }
   body > .app-shell > .sidebar .nav-item { font-size: 11px !important; }
+  .ev-footer__inner { min-height: 58px; font-size: 11px; }
 }
 
 @media print {
-  .ev-shell { display: none !important; }
+  .ev-shell,
+  .ev-footer { display: none !important; }
 }
