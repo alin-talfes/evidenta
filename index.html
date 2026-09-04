@@ -6,28 +6,19 @@
     <title>Evidență pedepse și liberare condiționată</title>
     <link rel="stylesheet" href="css/style.css?v=41">
     <script src="js/theme.js?v=36" defer></script>
-    <script src="js/version.js?v=38" defer></script>
+    <script src="js/version.js?v=39" defer></script>
     <link rel="icon" href="./favicon-ev-2.svg" sizes="any" type="image/svg+xml">
     <link rel="mask-icon" href="./favicon-ev-2.svg" color="#4f8cff">
-    <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b1220">
-    <meta name="description" content="Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1220">
+    <meta name="description" content="Calculul pedepsei, deducerilor, expirării și liberării condiționate.">
     <meta property="og:title" content="Evidență pedepse și liberare condiționată">
-    <meta property="og:description" content="Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.">
+    <meta property="og:description" content="Calculul pedepsei, deducerilor, expirării și liberării condiționate.">
     <meta property="og:type" content="website">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
     <div class="container">
-        <nav class="app-nav" aria-label="Modulele aplicației">
-            <span class="app-nav__brand">Evidență PPL</span>
-            <a class="app-nav__link" href="./" aria-current="page">Pedepse</a>
-            <a class="app-nav__link" href="contopiri.html">Contopiri</a>
-            <a class="app-nav__link" href="transfer/">Transfer</a>
-            <a class="app-nav__link" href="termene.html">Termene</a>
-            <a class="app-nav__link" href="instructaj/">Instructaj</a>
-            <a class="app-nav__link" href="semnalmente/">Semnalmente</a>
-        </nav>
-        <!-- Bara de acțiuni principale: hamburger + salvează/încarcă/reset + temă -->
         <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
             <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('hidden')" aria-label="Meniu principal">
                 <span></span>
@@ -37,16 +28,10 @@
             <button class="btn-utility primary" id="saveBtn" onclick="saveCase()">SALVEAZĂ</button>
             <button class="btn-utility" id="loadBtn" onclick="openLoadModal()">ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
             <button class="btn-utility" id="resetBtn" onclick="confirmReset()">RESET</button>
-            <button id="themeToggle" onclick="toggleTheme()" aria-label="Comută tema">☀️</button>
         </div>
         <div id="mainMenu" class="top-actions hidden">
             <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFORMAȚII</button>
             <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188/C/2022</button>
-        </div>
-
-        <div class="header">
-            <h1 id="main-title">EVIDENȚĂ PEDEPSE ȘI LIBERARE CONDIȚIONATĂ</h1>
-            <p class="module-intro">Calculează durata pedepsei, expirarea, deducerile și termenele de liberare condiționată într-un singur flux.</p>
         </div>
 
         <main id="main-content">
@@ -159,7 +144,6 @@
                     <div><label>Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
                 </div>
                 <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
-                <p class="help-text" style="margin-top: 4px; font-style: italic;">Rezultatul se actualizează automat, fără a fi necesară apăsarea butonului CALCULEAZĂ.</p>
             </div>
 
             <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
@@ -186,7 +170,7 @@
                 </div>
             </div>
         </main>
-</div>
+    </div>
     <script src="js/utils.js?v=36"></script>
     <script src="js/rules.js?v=36"></script>
     <script src="js/legal.js?v=36"></script>
