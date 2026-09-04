@@ -1,0 +1,272 @@
+/*
+ * EVIDENȚĂ PPL — Design System comun
+ * Acest fișier normalizează aspectul tuturor modulelor fără a conține logică de business.
+ */
+:root {
+  color-scheme: dark;
+  --ev-bg: #0b1220;
+  --ev-bg-elevated: #0f1929;
+  --ev-surface: #142033;
+  --ev-surface-2: #1a2940;
+  --ev-surface-3: #21334d;
+  --ev-text: #f4f7fb;
+  --ev-text-secondary: #c7d2e1;
+  --ev-muted: #94a5bb;
+  --ev-accent: #4f8cff;
+  --ev-accent-strong: #7aa7ff;
+  --ev-accent-soft: rgba(79, 140, 255, .13);
+  --ev-secondary: #2dd4bf;
+  --ev-success: #34d399;
+  --ev-success-soft: rgba(52, 211, 153, .12);
+  --ev-warning: #fbbf24;
+  --ev-warning-soft: rgba(251, 191, 36, .12);
+  --ev-danger: #f87171;
+  --ev-danger-soft: rgba(248, 113, 113, .12);
+  --ev-border: #293a53;
+  --ev-border-strong: #405674;
+  --ev-input-bg: #0f1b2d;
+  --ev-radius-sm: 8px;
+  --ev-radius-md: 12px;
+  --ev-radius-lg: 16px;
+  --ev-shadow: 0 18px 48px rgba(0, 0, 0, .28);
+  --ev-shadow-soft: 0 8px 24px rgba(0, 0, 0, .18);
+  --ev-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ev-control-height: 44px;
+
+  /* Aliasuri pentru modulele existente. */
+  --bg: var(--ev-bg);
+  --bg-elevated: var(--ev-bg-elevated);
+  --surface: var(--ev-surface);
+  --card-bg: var(--ev-surface);
+  --surface-2: var(--ev-surface-2);
+  --surface-3: var(--ev-surface-3);
+  --text: var(--ev-text);
+  --text-light: var(--ev-text-secondary);
+  --text-secondary: var(--ev-text-secondary);
+  --text-muted: var(--ev-muted);
+  --muted: var(--ev-muted);
+  --primary: var(--ev-accent);
+  --accent: var(--ev-accent);
+  --accent-strong: var(--ev-accent-strong);
+  --accent-soft: var(--ev-accent-soft);
+  --secondary: var(--ev-secondary);
+  --success: var(--ev-success);
+  --success-soft: var(--ev-success-soft);
+  --ok: var(--ev-success);
+  --warning: var(--ev-warning);
+  --warning-soft: var(--ev-warning-soft);
+  --danger: var(--ev-danger);
+  --error: var(--ev-danger);
+  --danger-soft: var(--ev-danger-soft);
+  --error-soft: var(--ev-danger-soft);
+  --border: var(--ev-border);
+  --line: var(--ev-border);
+  --border-strong: var(--ev-border-strong);
+  --line-strong: var(--ev-border-strong);
+  --input-bg: var(--ev-input-bg);
+  --input-border: var(--ev-border-strong);
+  --radius-sm: var(--ev-radius-sm);
+  --radius-md: var(--ev-radius-md);
+  --radius-lg: var(--ev-radius-lg);
+  --shadow: var(--ev-shadow);
+  --shadow-soft: var(--ev-shadow-soft);
+  --font: var(--ev-font);
+  --navy: var(--ev-text);
+  --violet: var(--ev-accent);
+  --violet-soft: var(--ev-accent-soft);
+}
+
+body.light,
+html[data-theme="light"],
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ev-bg: #f3f6fa;
+  --ev-bg-elevated: #eaf0f7;
+  --ev-surface: #ffffff;
+  --ev-surface-2: #f3f6fa;
+  --ev-surface-3: #e8eef6;
+  --ev-text: #172033;
+  --ev-text-secondary: #4f6075;
+  --ev-muted: #6f8094;
+  --ev-accent: #2563eb;
+  --ev-accent-strong: #1d4ed8;
+  --ev-accent-soft: rgba(37, 99, 235, .09);
+  --ev-secondary: #0f766e;
+  --ev-success: #047857;
+  --ev-success-soft: rgba(4, 120, 87, .09);
+  --ev-warning: #9a6700;
+  --ev-warning-soft: rgba(154, 103, 0, .09);
+  --ev-danger: #c24141;
+  --ev-danger-soft: rgba(194, 65, 65, .08);
+  --ev-border: #d5dfeb;
+  --ev-border-strong: #aebed1;
+  --ev-input-bg: #ffffff;
+  --ev-shadow: 0 16px 38px rgba(31, 48, 72, .12);
+  --ev-shadow-soft: 0 6px 18px rgba(31, 48, 72, .08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
+body {
+  color: var(--ev-text);
+  background:
+    radial-gradient(circle at 8% -5%, rgba(79, 140, 255, .12), transparent 28rem),
+    radial-gradient(circle at 95% 8%, rgba(45, 212, 191, .05), transparent 24rem),
+    var(--ev-bg);
+  font-family: var(--ev-font);
+  line-height: 1.55;
+}
+body.light,
+html[data-theme="light"] body { background: linear-gradient(180deg, #f8fafc 0, var(--ev-bg) 22rem); }
+button, input, select, textarea, table { font: inherit; }
+a { color: var(--ev-accent-strong); }
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--ev-accent) 72%, white 28%);
+  outline-offset: 2px;
+}
+
+/* Suprafețe comune */
+:where(.card, .panel, .detail, .notice-panel, .legal-strip, .mandatory-panel, .check-panel, .warning-panel, .stop-panel, .practice-panel, .code-note) {
+  color: var(--ev-text);
+  background: var(--ev-surface);
+  border-color: var(--ev-border);
+  border-radius: var(--ev-radius-lg);
+  box-shadow: var(--ev-shadow-soft);
+}
+
+:where(.card, .panel, .detail) {
+  border-style: solid;
+  border-width: 1px;
+}
+
+:where(.eyebrow, .section-kicker, .panel-label) {
+  color: var(--ev-accent-strong);
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+:where(.subtitle, .lead, .section-help, .setup-help, .source-note, .hint, .help-text, .section-copy) {
+  color: var(--ev-text-secondary);
+}
+
+/* Navigație */
+:where(.app-nav, .topbar) {
+  border-color: var(--ev-border);
+  background: color-mix(in srgb, var(--ev-surface) 94%, transparent);
+  box-shadow: var(--ev-shadow-soft);
+  backdrop-filter: blur(14px);
+}
+
+:where(.app-nav a, .app-nav__link, .suite-nav a, .suite-links a) {
+  color: var(--ev-text-secondary);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+
+:where(.app-nav a, .app-nav__link, .suite-nav a, .suite-links a):hover,
+:where(.app-nav a, .app-nav__link, .suite-nav a, .suite-links a):focus-visible {
+  color: var(--ev-text);
+  background: var(--ev-accent-soft);
+}
+
+:where(.app-nav a, .app-nav__link, .suite-nav a, .suite-links a)[aria-current="page"] {
+  color: #fff;
+  background: var(--ev-accent);
+}
+
+:where(.brand-mark, .hub-index, .step-number, .learning-module-card > span, .workflow-step > span) {
+  background: var(--ev-accent-soft);
+  color: var(--ev-accent-strong);
+}
+
+/* Butoane */
+:where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout) {
+  border-radius: 10px;
+  font-weight: 760;
+  transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+}
+
+:where(.btn, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-logout) {
+  color: var(--ev-text);
+  background: var(--ev-surface-2);
+  border-color: var(--ev-border-strong);
+}
+
+:where(.btn-primary, .primary, .access-submit) {
+  color: #fff;
+  background: var(--ev-accent);
+  border-color: var(--ev-accent);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--ev-accent) 22%, transparent);
+}
+
+:where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout):hover {
+  border-color: var(--ev-accent);
+  transform: translateY(-1px);
+}
+
+:where(.btn-danger, .btn-danger-ghost) { color: var(--ev-danger); }
+:where(.btn-success) { color: #fff; background: var(--ev-success); border-color: var(--ev-success); }
+
+/* Formulare */
+:where(input[type="text"], input[type="search"], input[type="number"], input[type="date"], input[type="time"], input[type="password"], select, textarea) {
+  min-height: var(--ev-control-height);
+  color: var(--ev-text);
+  background: var(--ev-input-bg);
+  border: 1px solid var(--ev-border-strong);
+  border-radius: 10px;
+}
+
+:where(input, select, textarea)::placeholder { color: var(--ev-muted); opacity: 1; }
+:where(input, select, textarea):focus {
+  border-color: var(--ev-accent);
+  box-shadow: 0 0 0 3px var(--ev-accent-soft);
+  outline: none;
+}
+
+label { color: var(--ev-text-secondary); }
+
+/* Tabele și liste de date */
+:where(table) { color: var(--ev-text); }
+:where(th) {
+  color: var(--ev-muted);
+  background: var(--ev-surface-2);
+}
+:where(td, th) { border-color: var(--ev-border); }
+
+/* Mesaje și stări */
+:where(.notice, .notice-panel, .learning-callout, .status-chip) {
+  border-color: var(--ev-border);
+  background: color-mix(in srgb, var(--ev-surface) 90%, var(--ev-accent) 10%);
+}
+:where(.warning, .hint-warning) { color: var(--ev-warning); }
+:where(.error) { color: var(--ev-danger); }
+:where(.success) { color: var(--ev-success); }
+
+/* Elemente expandabile */
+details {
+  border-color: var(--ev-border);
+  background: var(--ev-surface);
+}
+summary { color: var(--ev-text); }
+
+/* Scrolling și selecție */
+::selection { background: var(--ev-accent); color: #fff; }
+* { scrollbar-color: var(--ev-border-strong) transparent; scrollbar-width: thin; }
+
+@media (max-width: 720px) {
+  body { font-size: 15px; }
+  :where(.btn, .primary, .secondary, .icon-btn, .filter, .toggle-btn, .access-submit) { min-height: 44px; }
+  :where(.card, .panel, .detail) { border-radius: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
