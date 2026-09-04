@@ -1,6 +1,17 @@
 (() => {
     'use strict';
 
+    function ensureDesignSystem() {
+        if (document.querySelector('link[data-evidenta-design-system]')) return;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '../css/design-system.css?v=1';
+        link.dataset.evidentaDesignSystem = 'true';
+        document.head.appendChild(link);
+    }
+
+    ensureDesignSystem();
+
     const MAX_FILE_BYTES = 15 * 1024 * 1024;
     const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);
     const THEME_KEY = 'descriere-semnalmente-theme';
