@@ -1,4 +1,4 @@
-@import url("../css/design-system.css?v=1");
+@import url("../css/design-system.css?v=2");
 
 /* Interfață de studiu concentrată pe conținut, fără elemente de gamificare. */
 .dashboard-bibliography {
@@ -11,7 +11,7 @@
 
 .learning-modules-head h2 {
   margin: 0;
-  color: var(--navy);
+  color: var(--text);
   font-size: 22px;
 }
 
@@ -42,15 +42,15 @@
   width: 42px;
   height: 42px;
   border-radius: 11px;
-  background: var(--violet-soft);
-  color: var(--violet);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
   font-size: 17px;
   font-weight: 850;
 }
 
 .learning-module-card strong {
   align-self: end;
-  color: var(--navy);
+  color: var(--text);
   font-size: 15px;
 }
 
