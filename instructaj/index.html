@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b1220">
   <meta name="description" content="Moduri de lucru pentru evidența persoanelor private de libertate, explicate practic pe baza legislației consolidate în vigoare.">
-  <title>Instructaj — moduri de lucru Evidență PPL</title>
+  <title>Instructaj — Evidență PPL</title>
   <link rel="icon" href="../favicon-ev-2.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=2">
-  <link rel="stylesheet" href="audit-enhancements.css?v=2">
-  <script src="data.js?v=2" defer></script>
-  <script src="app.js?v=2" defer></script>
+  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="audit-enhancements.css?v=3">
+  <script src="data.js?v=3" defer></script>
+  <script src="app.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#continut">Sari la conținut</a>
+
   <header class="site-header">
     <nav class="app-nav" aria-label="Modulele aplicației">
-      <a class="brand" href="../">Evidență PPL</a>
+      <a class="brand" href="../"><span class="brand-mark" aria-hidden="true">EV</span><span>Evidență PPL</span></a>
       <a href="../">Pedepse</a>
       <a href="../contopiri.html">Contopiri</a>
       <a href="../transfer/">Transfer</a>
@@ -28,29 +29,49 @@
 
   <main id="continut">
     <section class="hero">
-      <div>
-        <p class="eyebrow">Ghid operațional · verificat la 04.09.2026</p>
-        <h1>Moduri de lucru pentru evidență</h1>
-        <p class="lead">Noțiunile juridice de bază și pașii esențiali din OMJ nr. 2.188/C/2022, Legea nr. 254/2013, Regulamentul aprobat prin HG nr. 157/2016 și Codurile penal și de procedură penală, explicați pentru un lucrător fără experiență juridică.</p>
+      <div class="hero-copy">
+        <p class="eyebrow">Learning path · verificat juridic la 04.09.2026</p>
+        <h1>Învață evidența <span>pas cu pas</span></h1>
+        <p class="lead">Noțiunile juridice de bază și modurile de lucru sunt organizate ca un traseu de învățare: întâi înțelegi actele și regulile, apoi exersezi procedurile operaționale.</p>
+
+        <nav class="course-nav" aria-label="Traseu de învățare">
+          <a href="#fundamente"><span>01</span>Bazele juridice</a>
+          <a href="#proceduri"><span>02</span>Proceduri</a>
+          <a href="#coduri-heading"><span>03</span>Coduri</a>
+          <a href="#glosar-heading"><span>04</span>Glosar</a>
+        </nav>
       </div>
-      <div class="hero-actions">
-        <a class="button primary" href="#fundamente">Începe cu bazele</a>
-        <a class="button secondary" href="#proceduri">Deschide procedurile</a>
-        <button class="button secondary" id="reset-progress" type="button">Resetează bifările</button>
+
+      <div class="hero-panel">
+        <div class="hero-panel-head">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Progres local</span>
+        </div>
+        <div id="learning-progress" class="learning-progress" aria-live="polite">
+          <strong>0%</strong>
+          <span>Pașii bifați sunt salvați pe acest dispozitiv.</span>
+          <div class="progress-track" aria-hidden="true"><i style="width:0%"></i></div>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#fundamente">Începe cu bazele</a>
+          <a class="button secondary" href="#proceduri">Mergi la proceduri</a>
+          <button class="button ghost" id="reset-progress" type="button">Resetează progresul</button>
+        </div>
       </div>
     </section>
 
     <section class="notice" aria-labelledby="regula-heading">
       <div class="notice-icon" aria-hidden="true">!</div>
       <div>
-        <h2 id="regula-heading">Regula de siguranță juridică</h2>
-        <p>Ghidul explică fluxul, dar nu înlocuiește actul de deținere, hotărârea, procedurile interne sau verificarea șefului structurii. La neconcordanțe nu „corecta” prin presupunere: păstrează actul astfel cum a fost emis, consemnează problema și solicită lămuriri organului judiciar competent.</p>
+        <p class="notice-kicker">Regulă de siguranță</p>
+        <h2 id="regula-heading">Nu transforma o neclaritate într-o operațiune.</h2>
+        <p>Ghidul explică fluxul, dar nu înlocuiește actul de deținere, hotărârea, procedurile interne sau verificarea șefului structurii. Dacă actele se contrazic, nu „corecta” prin presupunere: consemnează neconcordanța și solicită lămuriri organului judiciar competent.</p>
       </div>
     </section>
 
     <section class="legal-strip" aria-label="Surse oficiale">
       <div>
-        <span class="label">Baza legală verificată</span>
+        <span class="label">Baza legală</span>
         <strong>Pagini canonice oficiale · forma consolidată la zi</strong>
       </div>
       <div class="source-links">
@@ -58,26 +79,34 @@
         <a href="https://legislatie.just.ro/Public/DetaliiDocumentAfis/150699" target="_blank" rel="noopener">Legea 254 ↗</a>
         <a href="https://legislatie.just.ro/Public/DetaliiDocument/177386" target="_blank" rel="noopener">HG 157 ↗</a>
         <a href="https://legislatie.just.ro/Public/DetaliiDocument/109855" target="_blank" rel="noopener">Cod penal ↗</a>
-        <a href="https://legislatie.just.ro/Public/DetaliiDocument/120609" target="_blank" rel="noopener">Cod procedură penală ↗</a>
+        <a href="https://legislatie.just.ro/Public/DetaliiDocument/120609" target="_blank" rel="noopener">CPP ↗</a>
         <a href="https://legislatie.just.ro/Public/DetaliiDocument/191305" target="_blank" rel="noopener">Legea 169/2017 ↗</a>
         <a href="https://legislatie.just.ro/Public/DetaliiDocument/221138" target="_blank" rel="noopener">Legea 240/2019 ↗</a>
       </div>
     </section>
 
-    <section class="basics-guide" id="fundamente" aria-labelledby="fundamente-heading">
+    <section class="basics-guide learning-section" id="fundamente" aria-labelledby="fundamente-heading">
       <div class="section-heading">
-        <p class="eyebrow">Fundamente juridice · actualizate la 04.09.2026</p>
-        <h2 id="fundamente-heading">De la citație la liberare: traseul juridic explicat simplu</h2>
-        <p>În evidență trebuie separate trei lucruri: <strong>ce a decis instanța</strong>, <strong>când a devenit executorie soluția</strong> și <strong>ce document permite executarea efectivă</strong>. Denumirile seamănă, dar au funcții juridice diferite.</p>
+        <div class="section-number" aria-hidden="true">01</div>
+        <div>
+          <p class="eyebrow">Fundamente juridice</p>
+          <h2 id="fundamente-heading">De la citație la liberare</h2>
+          <p>Separă permanent trei întrebări: <strong>ce a decis instanța?</strong>, <strong>când a devenit executorie soluția?</strong> și <strong>ce act justifică executarea concretă?</strong></p>
+        </div>
       </div>
 
       <div class="legal-flow" aria-label="Traseul simplificat al unei condamnări">
         <div><span>1</span><strong>Citație</strong><small>cheamă persoana la organul judiciar</small></div>
         <div><span>2</span><strong>Sentință</strong><small>hotărârea primei instanțe</small></div>
-        <div><span>3</span><strong>Apel / contestație</strong><small>calea de atac, dacă legea o permite</small></div>
-        <div><span>4</span><strong>Decizie / definitivare</strong><small>stabilește soluția finală în calea de atac</small></div>
-        <div><span>5</span><strong>MEPI</strong><small>pune în executare închisoarea</small></div>
-        <div><span>6</span><strong>Executare și liberare</strong><small>calcul, termene și actul de punere în libertate</small></div>
+        <div><span>3</span><strong>Definitivare sau cale de atac</strong><small>sentința poate deveni definitivă direct ori după calea de atac prevăzută de lege</small></div>
+        <div><span>4</span><strong>Hotărârea în calea de atac</strong><small>dacă legea permite și calea a fost exercitată</small></div>
+        <div><span>5</span><strong>MEPI</strong><small>pune în executare închisoarea sau detențiunea pe viață</small></div>
+        <div><span>6</span><strong>Executare și liberare</strong><small>calcul, termene și actul care justifică punerea în libertate</small></div>
+      </div>
+
+      <div class="learning-callout">
+        <span class="learning-callout-icon" aria-hidden="true">i</span>
+        <p><strong>Ideea-cheie:</strong> o sentință nu trebuie obligatoriu „să treacă prin apel”. Ea poate rămâne definitivă chiar la prima instanță, în cazurile prevăzute de art. 551 CPP. Contestația există numai acolo unde legea o prevede expres.</p>
       </div>
 
       <div class="basics-grid">
@@ -87,10 +116,10 @@
             <p><strong>Hotărâre judecătorească</strong> este noțiunea generală. Codul de procedură penală, art. 370, folosește trei denumiri principale:</p>
             <ul>
               <li><strong>Sentința</strong> este, ca regulă, hotărârea prin care prima instanță soluționează cauza sau se dezînvestește fără a o soluționa. O condamnare pronunțată în primă instanță apare, de regulă, într-o sentință penală.</li>
-              <li><strong>Decizia</strong> este, ca regulă, hotărârea prin care instanța soluționează apelul, recursul în casație ori alte situații prevăzute de lege. Dacă apelul schimbă condamnarea, ceea ce se execută rezultă din sentință astfel cum a fost modificată/desființată prin decizie.</li>
+              <li><strong>Decizia</strong> este, ca regulă, hotărârea prin care instanța soluționează apelul, recursul în casație ori alte situații prevăzute de lege. Dacă apelul modifică soluția, executarea se stabilește din ansamblul hotărârilor definitive relevante, nu prin citirea izolată a sentinței.</li>
               <li><strong>Încheierea</strong> este denumirea celorlalte hotărâri pronunțate în cursul judecății, dacă legea nu le numește sentințe sau decizii.</li>
             </ul>
-            <p><strong>Important:</strong> „sentință” nu înseamnă automat „definitivă”. Sentința descrie tipul hotărârii; caracterul definitiv este o stare juridică dobândită la momentul stabilit de lege.</p>
+            <p class="key-point"><strong>Reține:</strong> „sentință” descrie tipul hotărârii; „definitivă” descrie starea juridică dobândită la momentul stabilit de lege.</p>
             <p class="legal-reference">Bază legală: Codul de procedură penală, art. 370.</p>
           </div>
         </details>
@@ -98,16 +127,16 @@
         <details class="basic-card" open>
           <summary>Când rămâne definitivă o sentință penală?</summary>
           <div class="basic-content">
-            <p>Pentru hotărârea primei instanțe, art. 551 CPP stabilește patru situații de bază:</p>
+            <p>Pentru hotărârea primei instanțe, art. 551 CPP stabilește situațiile de bază:</p>
             <ol>
               <li><strong>La pronunțare</strong>, dacă hotărârea nu este supusă apelului sau contestației.</li>
               <li><strong>La expirarea termenului</strong> de apel/contestație, dacă nimeni nu a declarat calea de atac în termen sau dacă aceasta a fost retrasă înăuntrul termenului.</li>
               <li><strong>La retragerea apelului/contestației</strong>, dacă retragerea are loc după expirarea termenului de declarare.</li>
               <li><strong>La pronunțarea hotărârii care respinge apelul/contestația.</strong></li>
             </ol>
-            <p>Dacă apelul este <strong>admis</strong> și procesul se termină în fața instanței de apel, <strong>decizia instanței de apel rămâne definitivă la pronunțare</strong>, potrivit art. 552 CPP. Pentru apel, termenul general este de 10 zile dacă legea nu prevede altfel; termenele contestațiilor depind de procedura concretă.</p>
-            <p><strong>Definitiv</strong> înseamnă, ca regulă, că hotărârea devine executorie și dobândește autoritate de lucru judecat. Pot exista căi extraordinare de atac după definitivare, dar efectul lor asupra executării se verifică separat; simpla lor existență nu anulează mandatul și nu justifică oprirea executării.</p>
-            <p class="legal-reference">Bază legală: CPP art. 410, 550–552.</p>
+            <p>Dacă apelul este <strong>admis</strong> și procesul ia sfârșit în fața instanței de apel, decizia rămâne definitivă la pronunțare. În mod corespunzător, dacă o contestație este admisă și procesul ia sfârșit în fața instanței care o judecă, hotărârea pronunțată în contestație rămâne definitivă la pronunțare.</p>
+            <p><strong>Regula:</strong> hotărârile penale devin executorii când rămân definitive, cu excepțiile în care legea prevede că o hotărâre nedefinitivă este executorie. Căile extraordinare de atac se analizează separat; simpla lor exercitare nu înlătură automat caracterul executoriu al hotărârii.</p>
+            <p class="legal-reference">Bază legală: CPP art. 425¹, 550–552; pentru termenul general al apelului, art. 410.</p>
           </div>
         </details>
 
@@ -115,8 +144,9 @@
           <summary>Ce este mandatul de executare a pedepsei închisorii (MEPI)?</summary>
           <div class="basic-content">
             <p><strong>MEPI este actul prin care pedeapsa închisorii sau detențiunea pe viață este pusă în executare.</strong> Nu este o nouă condamnare și nu înlocuiește hotărârea judecătorească.</p>
-            <p>Potrivit art. 555 CPP, mandatul este emis de judecătorul delegat cu executarea, în legătură cu rămânerea definitivă a hotărârii, și trebuie să indice, între altele, persoana condamnată, hotărârea executată, pedeapsa, textul de lege și perioadele preventive deduse.</p>
-            <p>În activitatea de evidență, hotărârea și mandatul se citesc împreună: <strong>hotărârea spune ce a decis instanța, iar mandatul transmite dispoziția de executare.</strong> Dacă datele nu se potrivesc, lucrătorul nu „repară” actul din proprie inițiativă, ci solicită lămurirea organului judiciar competent.</p>
+            <p>Potrivit art. 555 alin. (1) CPP, judecătorul delegat cu executarea emite mandatul <strong>în ziua rămânerii definitive a hotărârii la instanța de fond</strong> sau, dacă hotărârea a rămas definitivă la instanța ierarhic superioară, <strong>în ziua primirii extrasului prevăzut de art. 553 alin. (3)</strong>.</p>
+            <p>Mandatul cuprinde datele necesare executării, inclusiv persoana condamnată, hotărârea executată, pedeapsa aplicată, textul de lege și timpul reținerii, arestării preventive ori arestului la domiciliu care se scade din durata pedepsei, atunci când este cazul.</p>
+            <p class="key-point"><strong>În evidență:</strong> hotărârea explică soluția, iar mandatul transmite dispoziția de executare. Dacă nu concordă, lucrătorul nu modifică actele din proprie inițiativă.</p>
             <p class="legal-reference">Bază legală: CPP art. 553–556, în special art. 555.</p>
           </div>
         </details>
@@ -124,20 +154,21 @@
         <details class="basic-card">
           <summary>Ce este o citație?</summary>
           <div class="basic-content">
-            <p><strong>Citația este actul procedural prin care o persoană este chemată să se prezinte în fața organului de urmărire penală sau a instanței.</strong> Ea indică organul judiciar, dosarul, calitatea persoanei, data, ora și locul prezentării, precum și celelalte mențiuni prevăzute de lege.</p>
-            <p>Citația <strong>nu este mandat de executare, nu condamnă și nu schimbă singură situația juridică a deținutului</strong>. În penitenciar, primirea unei citații declanșează operațiunile necesare pentru prezentare, videoconferință ori comunicare, potrivit dispoziției organului judiciar și procedurii aplicabile.</p>
-            <p>Comunicarea trebuie dovedită potrivit regulilor legale; faptul că persoana este deja încarcerată nu transformă citația într-un act de deținere.</p>
-            <p class="legal-reference">Bază legală: CPP art. 257–261, în special art. 257–258.</p>
+            <p><strong>Citația este actul procedural prin care o persoană este chemată să se prezinte în fața organului de urmărire penală sau a instanței.</strong> Ea cuprinde mențiunile prevăzute de lege privind organul judiciar, dosarul, calitatea persoanei, data, ora și locul prezentării.</p>
+            <p>Pentru persoanele private de libertate, art. 259 alin. (7) CPP stabilește regula specială: <strong>citarea se face la locul de deținere, prin administrația acestuia.</strong></p>
+            <p>Citația <strong>nu este act de deținere, nu condamnă și nu modifică singură situația juridică</strong>. Administrația locului de deținere îndeplinește procedura de citare și asigură participarea persoanei potrivit actului sau dispoziției organului judiciar și normelor aplicabile.</p>
+            <p class="legal-reference">Bază legală: CPP art. 257–261, în special art. 257–259.</p>
           </div>
         </details>
 
         <details class="basic-card">
           <summary>Zile deduse, zile considerate executate și „zile adăugate”</summary>
           <div class="basic-content">
-            <p><strong>Zilele deduse</strong> sunt perioade care se scad din pedeapsa de executat deoarece legea sau hotărârea le consideră deja executate. Exemplul principal este timpul petrecut în măsuri preventive privative de libertate: reținere, arest preventiv sau arest la domiciliu, în condițiile art. 72 Cod penal. Pot exista și perioade executate în străinătate, în condițiile art. 73 Cod penal.</p>
-            <p><strong>Zilele considerate executate prin muncă/școlarizare/formare</strong> sunt o categorie diferită. Art. 96 din Legea nr. 254/2013 le folosește în vederea liberării condiționate. Ele ajută la atingerea fracției cerute de lege, dar nu trebuie confundate cu zilele preventive deduse din durata pedepsei.</p>
-            <p><strong>„Zile adăugate” nu este o instituție juridică autonomă definită de Codul penal.</strong> Într-un instrument de calcul, eticheta poate reprezenta perioade în care pedeapsa nu s-a executat și care împing expirarea efectivă mai târziu — de exemplu o întrerupere a executării — ori efectul unui nou act judiciar. Orice astfel de adăugare trebuie să aibă un temei documentat; nu se introduce administrativ doar pentru a „potrivi” o dată.</p>
-            <p><strong>Regula de calcul:</strong> ziua începerii și ziua încetării executării intră în durata pedepsei. Calculul trebuie reconstruit din actele de deținere, deduceri și perioadele efectiv executate, nu din diferența aproximativă dintre două date.</p>
+            <p><strong>Zilele/perioadele deduse</strong> sunt perioade de privare de libertate care, potrivit legii și hotărârii, se compută sau se scad din pedeapsa ce urmează a fi executată. Exemplul principal îl reprezintă reținerea, arestarea preventivă și arestul la domiciliu, în condițiile art. 72 Cod penal.</p>
+            <p>Art. 73 Cod penal privește o situație distinctă și limitată: pentru infracțiunile săvârșite în condițiile art. 8–11 Cod penal, durata pedepsei și a măsurilor preventive privative de libertate executate în afara țării <strong>pentru aceeași infracțiune</strong> se scade din pedeapsa aplicată în România.</p>
+            <p><strong>Zilele considerate executate prin muncă, instruire școlară sau formare profesională</strong> reprezintă o categorie diferită, reglementată de art. 96 din Legea nr. 254/2013 în vederea liberării condiționate. Ele nu se confundă cu perioadele preventive deduse.</p>
+            <p><strong>„Zile adăugate” este exclusiv o denumire tehnică a calculatorului.</strong> Poate reprezenta perioade neexecutate care deplasează data expirării — de exemplu o întrerupere a executării — și nu constituie o instituție juridică distinctă. Orice perioadă introdusă trebuie justificată prin actul care a produs neexecutarea.</p>
+            <p><strong>Regula de calcul:</strong> ziua în care începe executarea și ziua în care încetează se socotesc în durata pedepsei. Calculul se reconstruiește din acte și cronologie, nu din diferențe aproximative între două date.</p>
             <p class="legal-reference">Bază legală: Cod penal art. 71–73; Legea nr. 254/2013 art. 96; CPP art. 592–594 pentru întreruperea executării.</p>
           </div>
         </details>
@@ -146,8 +177,9 @@
           <summary>Liberarea la termen</summary>
           <div class="basic-content">
             <p><strong>„Liberare la termen” este o expresie practică</strong> pentru punerea în libertate la expirarea integrală a duratei pedepsei. Nu este același lucru cu liberarea condiționată.</p>
-            <p>Art. 53 alin. (1) din Legea nr. 254/2013 cere punerea în libertate <strong>de îndată la expirarea duratei pedepsei închisorii</strong>, dacă persoana nu este legal reținută sau deținută în baza unui alt titlu. Aici nu există o evaluare discreționară privind conduita: dacă pedeapsa a expirat și nu există alt temei de deținere, persoana trebuie pusă în libertate.</p>
-            <p>De aceea, data de expirare este un termen critic de legalitate a deținerii și trebuie verificată din timp și în dublu control.</p>
+            <p>Art. 53 alin. (1) din Legea nr. 254/2013 prevede punerea în libertate <strong>de îndată la expirarea duratei pedepsei închisorii</strong>, dacă persoana nu este legal reținută sau deținută în baza unui alt temei.</p>
+            <p>Același articol reglementează și punerea în libertate la data rămânerii definitive a hotărârii de liberare condiționată ori la orice altă dată stabilită de organele judiciare competente, în cazurile prevăzute de lege.</p>
+            <p class="key-point"><strong>Reține:</strong> expirarea pedepsei este un termen critic de legalitate a deținerii; conduita persoanei nu poate prelungi executarea după expirarea titlului.</p>
             <p class="legal-reference">Bază legală: Legea nr. 254/2013 art. 53 alin. (1); Cod penal art. 71.</p>
           </div>
         </details>
@@ -155,10 +187,17 @@
         <details class="basic-card">
           <summary>Liberarea condiționată</summary>
           <div class="basic-content">
-            <p><strong>Liberarea condiționată permite ieșirea înainte de executarea integrală a pedepsei, dar nu este automată.</strong> Îndeplinirea fracției creează posibilitatea analizării, nu un drept la liberare în acea zi.</p>
-            <p>Pentru pedeapsa închisorii, art. 100 Cod penal cere, în esență, executarea fracției legale, executarea în regim semideschis sau deschis, îndeplinirea obligațiilor civile ori dovada imposibilității și convingerea instanței că persoana s-a îndreptat și se poate reintegra. Pentru persoanele care au împlinit 60 de ani există fracții speciale. Zilele considerate executate prin muncă pot conta la fracție, dar legea impune și un minim de executare efectivă.</p>
-            <p>Comisia pentru liberare condiționată analizează situația și poate formula propunerea, însă <strong>instanța este cea care acordă liberarea condiționată</strong>. Punerea efectivă în libertate se face la data rămânerii definitive a hotărârii care o dispune.</p>
-            <p>Intervalul dintre liberarea condiționată și împlinirea duratei pedepsei este termen de supraveghere. Dacă sunt incidente regulile unui Cod penal anterior sau alte dispoziții tranzitorii, fracția nu se presupune: se verifică legea aplicabilă persoanei concrete.</p>
+            <p><strong>Liberarea condiționată permite ieșirea înainte de executarea integrală a pedepsei, dar nu este automată.</strong> Împlinirea fracției permite analiza; nu creează, singură, un drept la punerea în libertate în acea zi.</p>
+            <div class="fraction-grid" aria-label="Fracțiile generale prevăzute de Codul penal">
+              <div><span>≤ 10 ani</span><strong>2/3</strong><small>fracția generală</small></div>
+              <div><span>&gt; 10 ani</span><strong>3/4</strong><small>fără a depăși 20 ani</small></div>
+              <div><span>60+ · ≤ 10 ani</span><strong>1/2</strong><small>fracția specială</small></div>
+              <div><span>60+ · &gt; 10 ani</span><strong>2/3</strong><small>fracția specială</small></div>
+            </div>
+            <p>Art. 100 Cod penal cere și executarea pedepsei în regim semideschis sau deschis, îndeplinirea obligațiilor civile stabilite prin hotărârea de condamnare — în afară de cazul în care se dovedește că persoana nu a avut nicio posibilitate să le îndeplinească — și convingerea instanței că persoana s-a îndreptat și se poate reintegra în societate.</p>
+            <p>Dacă la calculul fracției se valorifică partea considerată executată potrivit legii, art. 100 alin. (3)–(4) impune și un <strong>minim de pedeapsă efectiv executată</strong>: în regimul general, cel puțin 1/2 pentru pedepse de cel mult 10 ani și cel puțin 2/3 pentru pedepse mai mari de 10 ani; pentru persoana care a împlinit 60 de ani, cel puțin 1/3, respectiv 1/2.</p>
+            <p>Comisia analizează situația și formulează propunerea, însă <strong>instanța acordă liberarea condiționată</strong>. Punerea în libertate se face la data rămânerii definitive a hotărârii care o dispune.</p>
+            <p>Intervalul dintre data liberării condiționate și data împlinirii duratei pedepsei constituie termen de supraveghere. Dacă sunt incidente dispoziții tranzitorii sau o lege penală anterioară, fracția se stabilește după legea aplicabilă persoanei concrete.</p>
             <p class="legal-reference">Bază legală: Cod penal art. 100–106; Legea nr. 254/2013 art. 95–97; CPP art. 587.</p>
           </div>
         </details>
@@ -166,80 +205,106 @@
         <details class="basic-card">
           <summary>Ce a fost Legea nr. 169/2017 („recursul compensatoriu”)?</summary>
           <div class="basic-content">
-            <p>Denumirea de <strong>„recurs compensatoriu”</strong> a fost una uzuală. Juridic, Legea nr. 169/2017 a introdus în Legea nr. 254/2013, prin art. 55<sup>1</sup>, o <strong>măsură compensatorie pentru executarea în condiții necorespunzătoare de detenție</strong>.</p>
-            <p>Regula de bază era: pentru fiecare <strong>30 de zile</strong> executate în condiții necorespunzătoare se considerau executate suplimentar <strong>6 zile</strong>. Legea a prevăzut calcularea perioadei eligibile începând cu <strong>24 iulie 2012</strong> și a enumerat criterii precum spațiul de cazare, accesul la aer liber, lumină/ventilație, temperatură, intimitatea toaletei și existența infiltrațiilor ori mucegaiului.</p>
-            <p><strong>Regula nu mai produce zile noi pentru detenția ulterioară abrogării.</strong> Art. 55<sup>1</sup> a fost abrogat prin Legea nr. 240/2019, care a intrat în vigoare la 23 decembrie 2019. Totuși, art. III din Legea nr. 240/2019 a păstrat aplicarea mecanismului, pentru categoriile de persoane indicate de lege, cu privire la perioada istorică dintre 24 iulie 2012 și intrarea în vigoare a legii de abrogare.</p>
-            <p>În evidență, aceste zile istorice nu se confundă nici cu <strong>zilele deduse</strong> pentru arest preventiv, nici cu <strong>zilele considerate executate prin muncă</strong>. Dacă apar într-un dosar vechi sau într-un calcul care produce efecte și astăzi, trebuie urmărit actul și calculul concret care justifică numărul lor.</p>
-            <p class="legal-reference">Bază legală istorică: Legea nr. 169/2017, art. I pct. 3 (fostul art. 55¹ din Legea nr. 254/2013); Legea nr. 240/2019 art. II pct. 2 și art. III.</p>
+            <p>Denumirea de <strong>„recurs compensatoriu”</strong> a fost una uzuală. Juridic, Legea nr. 169/2017 a introdus în Legea nr. 254/2013, prin fostul art. 55<sup>1</sup>, o măsură compensatorie pentru executarea în condiții necorespunzătoare de detenție.</p>
+            <p>Regula de bază era: pentru fiecare <strong>30 de zile</strong> executate în condiții necorespunzătoare se considerau executate suplimentar <strong>6 zile</strong>. Pentru aplicarea mecanismului, legea a stabilit luarea în calcul a perioadei începând cu <strong>24 iulie 2012</strong>.</p>
+            <p><strong>Mecanismul nu mai generează zile pentru detenția ulterioară abrogării.</strong> Art. 55<sup>1</sup> a fost abrogat prin Legea nr. 240/2019, intrată în vigoare la 23 decembrie 2019. Art. III din Legea nr. 240/2019 păstrează însă aplicarea regulii tranzitorii, pentru categoriile prevăzute de lege, cu privire la perioada istorică relevantă.</p>
+            <p>Aceste zile istorice nu se confundă nici cu perioadele preventive deduse, nici cu zilele considerate executate prin muncă. Într-un dosar în care produc efecte, numărul lor trebuie să rezulte din evidența și calculul documentat.</p>
+            <p class="legal-reference">Bază legală istorică: Legea nr. 169/2017 art. I pct. 3 — fostul art. 55¹ alin. (1), (3) și (8) din Legea nr. 254/2013; Legea nr. 240/2019 art. II pct. 2 și art. III.</p>
           </div>
         </details>
 
         <details class="basic-card">
           <summary>Cum citești un dosar fără să confunzi actele</summary>
           <div class="basic-content">
-            <ol>
-              <li><strong>Identifică ultima situație judiciară:</strong> sentință, eventual apel/contestație și decizia pronunțată.</li>
+            <ol class="learning-checklist">
+              <li><strong>Identifică ultima situație judiciară:</strong> sentința și, dacă există, hotărârea pronunțată în calea de atac.</li>
               <li><strong>Stabilește exact momentul definitivării</strong> și verifică dacă hotărârea este executorie.</li>
               <li><strong>Verifică MEPI-ul</strong> și concordanța lui cu hotărârea: persoană, dosar, pedeapsă, deduceri, instanță.</li>
               <li><strong>Reconstituie cronologia executării:</strong> început, deduceri, eventuale întreruperi/perioade neexecutate și acte ulterioare.</li>
-              <li><strong>Separă datele:</strong> expirarea integrală a pedepsei, data la care se împlinește fracția pentru liberare condiționată și eventualele termene procedurale.</li>
-              <li><strong>Nu transforma neclaritatea în calcul.</strong> Dacă actele se contrazic, consemnează neconcordanța și solicită lămurirea instanței/organului judiciar competent.</li>
+              <li><strong>Separă datele:</strong> expirarea integrală, data împlinirii fracției pentru liberare condiționată și termenele procedurale.</li>
+              <li><strong>Oprește-te la neconcordanțe.</strong> Nu transforma neclaritatea într-un calcul; solicită lămuriri organului judiciar competent.</li>
             </ol>
-            <p class="basic-rule"><strong>Formula mentală:</strong> hotărârea stabilește pedeapsa → definitivarea o face, de regulă, executorie → MEPI o pune în executare → evidența urmărește legalitatea și cronologia → instanța dispune modificările judiciare și liberarea condiționată → administrația pune în libertate la termen sau în baza actului judiciar definitiv.</p>
+            <p class="basic-rule"><strong>Formula mentală:</strong> hotărârea stabilește pedeapsa → definitivarea o face, de regulă, executorie → MEPI pune pedeapsa în executare → evidența urmărește legalitatea și cronologia → instanța dispune modificările judiciare și liberarea condiționată → administrația pune persoana în libertate la expirarea pedepsei, la data rămânerii definitive a hotărârii de liberare condiționată ori la orice altă dată stabilită de organul judiciar competent, în cazurile prevăzute de lege.</p>
           </div>
         </details>
       </div>
     </section>
 
-    <section class="workspace" id="proceduri">
-      <aside class="sidebar" aria-label="Filtre proceduri">
-        <label for="search">Caută o situație</label>
-        <input id="search" type="search" placeholder="ex.: mandat, liberare, citație" autocomplete="off">
-        <fieldset>
-          <legend>Categorie</legend>
-          <div id="category-filters" class="filters"></div>
-        </fieldset>
-        <p class="result-count" id="result-count" aria-live="polite"></p>
-      </aside>
+    <section class="learning-section procedures-section" id="proceduri" aria-labelledby="proceduri-heading">
+      <div class="section-heading">
+        <div class="section-number" aria-hidden="true">02</div>
+        <div>
+          <p class="eyebrow">Aplică noțiunile</p>
+          <h2 id="proceduri-heading">Biblioteca de proceduri</h2>
+          <p>Alege o situație, parcurge pașii în ordine și bifează doar operațiunile efectiv realizate. Progresul rămâne salvat local.</p>
+        </div>
+      </div>
 
-      <div class="content-column">
-        <div class="list" id="workflow-list" aria-label="Lista modurilor de lucru"></div>
-        <article id="workflow-detail" class="detail" tabindex="-1" aria-live="polite"></article>
+      <div class="workspace">
+        <aside class="sidebar" aria-label="Filtre proceduri">
+          <div class="sidebar-head">
+            <span class="sidebar-icon" aria-hidden="true">⌕</span>
+            <div><strong>Găsește o procedură</strong><small>Caută după situație sau act</small></div>
+          </div>
+          <label for="search">Căutare</label>
+          <input id="search" type="search" placeholder="ex.: mandat, liberare, citație" autocomplete="off">
+          <fieldset>
+            <legend>Categorie</legend>
+            <div id="category-filters" class="filters"></div>
+          </fieldset>
+          <p class="result-count" id="result-count" aria-live="polite"></p>
+        </aside>
+
+        <div class="content-column">
+          <div class="list" id="workflow-list" aria-label="Lista modurilor de lucru"></div>
+          <article id="workflow-detail" class="detail" tabindex="-1" aria-live="polite"></article>
+        </div>
       </div>
     </section>
 
-    <section class="code-guide" aria-labelledby="coduri-heading">
+    <section class="code-guide learning-section" aria-labelledby="coduri-heading">
       <div class="section-heading">
-        <p class="eyebrow">Conexiuni legislative</p>
-        <h2 id="coduri-heading">Ce înseamnă trimiterile la Coduri</h2>
-        <p>Aceste articole nu sunt reproduse integral. Explicația indică rolul lor în flux; textul aplicabil se verifică întotdeauna în forma consolidată oficială.</p>
+        <div class="section-number" aria-hidden="true">03</div>
+        <div>
+          <p class="eyebrow">Conexiuni legislative</p>
+          <h2 id="coduri-heading">Ce înseamnă trimiterile la Coduri</h2>
+          <p>Explicația indică rolul normei în flux. Pentru operațiunea concretă se verifică textul integral în forma consolidată oficială.</p>
+        </div>
       </div>
       <div id="code-references" class="reference-grid"></div>
     </section>
 
-    <section class="code-guide" aria-labelledby="glosar-heading">
+    <section class="code-guide learning-section" aria-labelledby="glosar-heading">
       <div class="section-heading">
-        <p class="eyebrow">Fără jargon inutil</p>
-        <h2 id="glosar-heading">Termeni explicați simplu</h2>
-        <p>Folosește explicațiile pentru orientare; în actele și comunicările oficiale păstrează termenii ceruți de lege.</p>
+        <div class="section-number" aria-hidden="true">04</div>
+        <div>
+          <p class="eyebrow">Fără jargon inutil</p>
+          <h2 id="glosar-heading">Glosar de lucru</h2>
+          <p>Învață sensul practic, dar păstrează terminologia juridică exactă în actele și comunicările oficiale.</p>
+        </div>
       </div>
-      <div id="glossary" class="reference-grid"></div>
+      <div id="glossary" class="reference-grid glossary-grid"></div>
     </section>
 
     <section class="method" aria-labelledby="metoda-heading">
-      <h2 id="metoda-heading">Cum folosești corect o fișă</h2>
-      <ol>
-        <li><strong>Identifică situația juridică reală</strong>, nu doar denumirea documentului primit.</li>
-        <li><strong>Verifică actul și identitatea</strong> înainte de orice operare în aplicație.</li>
-        <li><strong>Lucrează în ordinea din fișă</strong> și bifează doar operațiunile efectiv realizate.</li>
-        <li><strong>Aplică dublul control</strong> acolo unde Instrucțiunile cer semnare, contrasemnare sau verificare ierarhică.</li>
-        <li><strong>Înregistrează aceeași situație coerent</strong> în documentarul penal, aplicație și registrele operative.</li>
-      </ol>
+      <div class="method-card">
+        <div>
+          <p class="eyebrow">Metoda de lucru</p>
+          <h2 id="metoda-heading">5 reguli înainte să închizi o lucrare</h2>
+        </div>
+        <ol>
+          <li><strong>Identifică situația juridică reală</strong>, nu doar denumirea documentului primit.</li>
+          <li><strong>Verifică actul și identitatea</strong> înainte de orice operare în aplicație.</li>
+          <li><strong>Lucrează în ordinea din fișă</strong> și bifează doar operațiunile efectiv realizate.</li>
+          <li><strong>Aplică dublul control</strong> acolo unde normele cer verificare, semnare sau contrasemnare.</li>
+          <li><strong>Păstrează coerența evidențelor</strong> între documentarul penal, aplicație și registrele operative.</li>
+        </ol>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>Instrument de instruire. Conținutul explicativ este distinct de textul normativ și nu reprezintă un aviz juridic.</p>
+    <p>Instrument de instruire. Conținutul explicativ este distinct de textul normativ și nu înlocuiește actele de deținere, hotărârile ori procedurile interne.</p>
   </footer>
 </body>
 </html>
