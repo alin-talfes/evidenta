@@ -72,7 +72,7 @@ for (const marker of [
 for (const marker of [
   '__EVIDENTA_VERSION_FOOTER__',
   'document.querySelectorAll(\'footer\').forEach',
-  'data.evidentaFooter',
+  'footer.dataset.evidentaFooter',
   'Versiune ${versionText}',
   '© Alin Talfeș'
 ]) {
