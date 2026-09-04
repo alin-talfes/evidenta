@@ -258,6 +258,9 @@ body.ev-unified .section-hub {
   margin: 0 0 20px !important;
   padding: 0 !important;
 }
+body.ev-unified .section-hub-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
 body.ev-unified .learning-section {
   padding-top: 24px !important;
 }
@@ -293,6 +296,32 @@ body.ev-unified .legal-box {
 }
 body.ev-unified .legal-box > :first-child { margin-top: 0 !important; }
 body.ev-unified .legal-box > :last-child { margin-bottom: 0 !important; }
+body.ev-unified[data-ev-page="contopiri.html"] .legal-box,
+body.ev-unified[data-ev-page="termene.html"] .legal-box {
+  max-height: min(48vh, 460px);
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+body.ev-unified[data-ev-page="contopiri.html"] .legal-box h4,
+body.ev-unified[data-ev-page="termene.html"] .legal-box h4 {
+  position: sticky;
+  top: -18px;
+  z-index: 2;
+  margin: -18px -20px 14px !important;
+  padding: 14px 20px;
+  color: var(--ev-text) !important;
+  background: var(--ev-surface);
+  border-bottom: 1px solid var(--ev-border);
+}
+
+/* Footer-ele Semnalmente/Benchmark folosesc același gutter ca main. */
+body.ev-unified > .app-shell > footer,
+body.ev-unified > footer {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 var(--ev-shell-pad) 30px !important;
+  color: var(--ev-muted) !important;
+}
 
 /* Responsive comun. */
 @media (max-width: 760px) {
@@ -328,6 +357,12 @@ body.ev-unified .legal-box > :last-child { margin-bottom: 0 !important; }
     scrollbar-width: none;
   }
   body.ev-unified .workflow::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 680px) {
+  body.ev-unified .section-hub-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 @media (max-width: 520px) {
