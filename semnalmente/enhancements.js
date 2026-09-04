@@ -5,7 +5,7 @@
         if (document.querySelector('link[data-evidenta-design-system]')) return;
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '../css/design-system.css?v=1';
+        link.href = '../css/design-system.css?v=2';
         link.dataset.evidentaDesignSystem = 'true';
         document.head.appendChild(link);
     }
