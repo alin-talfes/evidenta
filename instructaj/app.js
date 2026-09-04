@@ -17,6 +17,9 @@
   }
 
   const data = window.INSTRUCTAJ_DATA;
+  const officialOmjLink = document.querySelector('.source-links a[href*="255630"]');
+  if (officialOmjLink) officialOmjLink.href = "https://legislatie.just.ro/Public/DetaliiDocumentAfis/255745";
+
   const list = document.getElementById("workflow-list");
   const detail = document.getElementById("workflow-detail");
   const search = document.getElementById("search");
