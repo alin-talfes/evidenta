@@ -64,12 +64,11 @@ assert.ok(data.glossary.length >= 7, "Glosar pentru termenii juridici indispensa
 const html = fs.readFileSync(path.join(moduleDir, "index.html"), "utf8");
 const app = fs.readFileSync(path.join(moduleDir, "app.js"), "utf8");
 const styles = fs.readFileSync(path.join(moduleDir, "styles.css"), "utf8");
+const enhancements = fs.readFileSync(path.join(moduleDir, "audit-enhancements.css"), "utf8");
 
 for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]) {
   assert.ok(html.includes(file), `${file} este încărcat`);
 }
-assert.ok(html.includes("styles.css?v=3"), "Versiunea nouă de CSS trebuie invalidată în cache");
-assert.ok(html.includes("app.js?v=3"), "Versiunea nouă de JS trebuie invalidată în cache");
 
 for (const documentId of Object.values(canonicalPageSources)) {
   assert.ok(html.includes(documentId), `Pagina trebuie să publice sursa canonică oficială ${documentId}`);
@@ -110,23 +109,20 @@ for (const legalCorrection of [
   assert.ok(html.includes(legalCorrection), `Corecția juridică trebuie păstrată: ${legalCorrection}`);
 }
 
-/* UI de learning: progres, traseu, carduri și responsive. */
-for (const selectorOrMarker of [
-  'id="learning-progress"',
-  'class="course-nav"',
-  'class="section-number"',
-  'class="learning-callout"',
-  'class="fraction-grid"',
-  'class="learning-checklist"'
-]) {
-  assert.ok(html.includes(selectorOrMarker), `UI learning trebuie să includă ${selectorOrMarker}`);
+/* UI learning fără checklist și fără progres. */
+for (const jsFeature of ["normalizeLearningUi", "study-steps", "step-number", "Material de studiu · fără bifare", "Deschide fișa"]) {
+  assert.ok(app.includes(jsFeature), `Aplicația trebuie să includă prezentarea statică de studiu: ${jsFeature}`);
 }
-for (const jsFeature of ["renderLearningProgress", "card-progress", "detail-progress", "completedWorkflows"]) {
-  assert.ok(app.includes(jsFeature), `Aplicația trebuie să includă funcția UI ${jsFeature}`);
+for (const forbiddenJs of ["localStorage", "renderLearningProgress", "card-progress", "detail-progress", "data-step", "type=\"checkbox\""]) {
+  assert.ok(!app.includes(forbiddenJs), `JS nu trebuie să păstreze logică de checklist/progres: ${forbiddenJs}`);
 }
-for (const cssFeature of [".course-nav", ".learning-progress", ".workflow-card.completed", ".fraction-grid", "@media (max-width: 650px)", "prefers-reduced-motion"]) {
+for (const cssFeature of [".course-nav", ".fraction-grid", "@media (max-width: 650px)", "prefers-reduced-motion"]) {
   assert.ok(styles.includes(cssFeature), `CSS learning trebuie să includă ${cssFeature}`);
 }
+for (const enhancement of ["#learning-progress", "#reset-progress", ".study-guide", ".study-sequence", ".study-steps"]) {
+  assert.ok(enhancements.includes(enhancement), `Stratul CSS fără checklist trebuie să includă ${enhancement}`);
+}
+assert.ok(enhancements.includes("display: none !important"), "UI-ul vechi de progres trebuie ascuns înainte de inițializarea JS");
 
 const linkExtensions = new Set([".html", ".htm", ".md", ".js", ".json", ".xml"]);
 const forbiddenLink = /(?:href|src|content\s*=|location\.(?:href|replace)|Response\.redirect)[^\n>]*(?:\/ofiter\/?|\.\.\/ofiter\/|evidenta\/ofiter)/i;
@@ -143,4 +139,4 @@ function inspectPublicFiles(dir) {
 inspectPublicFiles(repoDir);
 assert.ok(!fs.existsSync(path.join(repoDir, "training", "index.html")), "Ruta veche /training nu trebuie să redirecționeze spre /ofiter");
 
-console.log("Instructaj: structură, corecții juridice, UI learning, surse canonice și izolare /ofiter validate.");
+console.log("Instructaj: conținut juridic, UI learning fără checklist/progres, surse canonice și izolare /ofiter validate.");
