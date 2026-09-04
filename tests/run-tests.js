@@ -2,15 +2,13 @@ const fs=require('fs'),vm=require('vm'),assert=require('assert');
 function load(path,extra=''){ const ctx={console,Date,Math,Number,String,Array,Object,Set,JSON,globalThis:null}; ctx.globalThis=ctx; vm.createContext(ctx); vm.runInContext(fs.readFileSync(path,'utf8')+'\n'+extra,ctx,{filename:path}); return ctx; }
 let u=load('js/utils.js',';globalThis.__add=addCalendarSafe;globalThis.__days=daysBetween;');
 assert.equal(u.__add(new Date(2025,0,31),0,1,0).getDate(),28); assert.equal(u.__add(new Date(2024,1,29),1,0,0).getDate(),28);
-let t=load('js/termene-core.js'); const T=t.TermeneCore;
-assert.equal(T.orthodoxEasterSunday(2026).toISOString().slice(0,10),'2026-04-12'); assert(T.getRomanianPublicHolidays(2031).has('2031-12-25'));
-let d=T.calculateDeadline({start:new Date(2014,3,15),duration:3,unit:'days',termType:'general'}); assert.equal(d.effectiveDeadline.getFullYear(),2014); assert.equal(d.effectiveDeadline.getMonth(),3); assert.equal(d.effectiveDeadline.getDate(),22);
-let free=T.calculateDeadline({start:new Date(2026,5,8),duration:3,unit:'days',termType:'general'}); assert.equal(free.effectiveDeadline.getDate(),12);
-let p=T.calculateDeadline({start:new Date(2026,0,10),duration:3,unit:'days',termType:'preventive'}); assert.equal(p.effectiveDeadline.getDate(),12);
 let c=load('js/contopiri-core.js'); const C=c.ContopiriCore; assert.equal(C.toDays(1,0,0),360); assert.deepEqual(JSON.parse(JSON.stringify(C.fromDays(390))),{years:1,months:1,days:0});
 let calc=C.calculate({concurs:[{totalDays:360,years:1,months:0,days:0},{totalDays:180,years:0,months:6,days:0}],recidiva:[],revocare:[{totalDays:30,years:0,months:1,days:0}]}); assert.equal(calc.finalDays,450); assert.deepEqual(JSON.parse(JSON.stringify(calc.finalDuration)),{years:1,months:3,days:0});
 let tr=load('transfer/rules.js',';globalThis.__u=UNITATI;globalThis.__g=gasesteUnitati;'); assert(tr.__u.length>=39); assert.equal(new Set(tr.__u.map(x=>x.id)).size,tr.__u.length); assert(Array.isArray(tr.__g('masculin','major','inchis','Hunedoara','executare',false)));
-for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/^\s*<!DOCTYPE html>/i.test(h),f+' missing doctype'); assert(!/user-scalable=no/i.test(h),f+' disables zoom'); const inline=[...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/gi)]; assert.equal(inline.length,0,f+' contains inline script'); }
+for(const f of ['index.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/^\s*<!DOCTYPE html>/i.test(h),f+' missing doctype'); assert(!/user-scalable=no/i.test(h),f+' disables zoom'); const inline=[...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>/gi)]; assert.equal(inline.length,0,f+' contains inline script'); }
+assert(!fs.existsSync('termene.html'),'retired Termene page still exists');
+assert(!fs.existsSync('js/termene.js'),'retired Termene UI code still exists');
+assert(!fs.existsSync('js/termene-core.js'),'retired Termene calculation core still exists');
 const storage=fs.readFileSync('js/storage.js','utf8'); assert(!/function\s+(applyTheme|toggleTheme)\s*\(/.test(storage),'duplicate theme functions');
 const css=fs.readFileSync('css/style.css','utf8');
 assert(!/fonts\.googleapis\.com/.test(css),'external font import');
@@ -47,7 +45,7 @@ let vcpFemale=lr.__schedule({life:false,art:'VCP591',sentenceOver10:false,totalD
 assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFemale.articleInfo.includes('VCP art. 59¹'));
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
-for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=41/.test(h),f+' stale css cache version'); }
+for(const f of ['index.html','contopiri.html','transfer/index.html','transfer/rules.html']){ const h=fs.readFileSync(f,'utf8'); assert(/style\.css\?v=41/.test(h),f+' stale css cache version'); }
 
 // Footer/versionare: toate paginile folosesc același version.js, iar numărul există numai în version.json.
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
@@ -56,7 +54,7 @@ const versionSource=fs.readFileSync('js/version.js','utf8');
 assert(versionSource.includes("new URL('../version.json', scriptUrl)"));
 assert(versionSource.includes('© Alin Talfeș'));
 assert(versionSource.includes('Toate datele sunt stocate exclusiv local'));
-for(const f of ['index.html','termene.html','contopiri.html','transfer/index.html','transfer/rules.html']){
+for(const f of ['index.html','contopiri.html','transfer/index.html','transfer/rules.html']){
   const h=fs.readFileSync(f,'utf8');
   const expected=f.startsWith('transfer/')?'../js/version.js?v=38':'js/version.js?v=38';
   assert(h.includes(`src="${expected}"`),f+' missing centralized version.js');
@@ -64,8 +62,6 @@ for(const f of ['index.html','termene.html','contopiri.html','transfer/index.htm
   assert(!/<footer\b/i.test(h),f+' contains duplicated static footer');
 }
 assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
-
-
 
 // Remediere audit 2026-08: Transfer, theme, export, reanalizare, validări.
 const transferApp=fs.readFileSync('transfer/app.js','utf8');
@@ -78,16 +74,18 @@ assert(fs.readFileSync('js/export.js','utf8').includes('DATE INTRODUSE'));
 assert(fs.readFileSync('js/app.js','utf8').includes('Reanalizare 6 ani și 6 luni'));
 assert(fs.readFileSync('js/app.js','utf8').includes('ALTE DATE ȘI EXPLICAȚII LC'));
 assert(fs.readFileSync('js/contopiri.js','utf8').includes('hasInvalidRow'));
-assert(fs.readFileSync('js/termene.js','utf8').includes('Number.isSafeInteger(duration)'));
-assert(fs.readFileSync('js/termene.js','utf8').includes('Pentru termenele calculate pe ore'));
-for(const f of ['termene.html','contopiri.html','transfer/index.html','transfer/rules.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
+for(const f of ['contopiri.html','transfer/index.html','transfer/rules.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
+
+const manifest=fs.readFileSync('manifest.json','utf8');
+assert(!manifest.includes('termene.html'),'PWA manifest still exposes retired Termene route');
+const readme=fs.readFileSync('README.md','utf8');
+assert(!readme.includes('/termene.html'),'README still exposes retired Termene route');
 
 console.log('All audit regression tests passed.');
 
 assert(!fs.readFileSync('transfer/app.js','utf8').includes('versionDisplay'),'transfer app has stale versionDisplay');
 assert(!fs.readFileSync('transfer/rules-page.js','utf8').includes('versionDisplay'),'transfer rules has stale versionDisplay');
 assert(fs.readFileSync('js/theme.js','utf8').includes('#0b1220'),'theme color mismatch');
-assert(fs.readFileSync('js/termene.js','utf8').includes("Number(document.getElementById('durationInput').value)"),'termene truncates decimals');
 
 // Reguli perioade neexecutate: evadare/boală exclud doar prima zi; întreruperea exclude ambele capete.
 let escape9=lr.__non([{type:'escape',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(escape9,9);
@@ -103,7 +101,6 @@ assert(exportSource.includes('PROPOZABILĂ DUPĂ ZILE MUNCITE'),'copy output mis
 assert(!/cleanOutput\s*=\s*content\.innerText/.test(exportSource),'copy still copies full visible results');
 const appAfter=fs.readFileSync('js/app.js','utf8'); assert(/\bmDays,\s*\n\s*tDays,/.test(appAfter),'calculation snapshot missing mDays');
 const cssAfter=fs.readFileSync('css/style.css','utf8'); assert(cssAfter.includes('#loadBtn { position: relative; overflow: visible; }'),'saved-case badge is not anchored to load button');
-
 
 // Transfer profile compliance – consolidated Decision 360/2020 at 30.03.2026.
 const transferRulesSourceCompliance=fs.readFileSync('transfer/rules.js','utf8');

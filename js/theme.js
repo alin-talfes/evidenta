@@ -102,7 +102,6 @@
             '': ['pedepse', 'CALCUL ȘI EVIDENȚĂ', 'Pedepse și liberare condiționată', 'Durata pedepsei, deduceri, expirare și termene de liberare condiționată.'],
             'index.html': ['pedepse', 'CALCUL ȘI EVIDENȚĂ', 'Pedepse și liberare condiționată', 'Durata pedepsei, deduceri, expirare și termene de liberare condiționată.'],
             'contopiri.html': ['contopiri', 'CALCUL ȘI EVIDENȚĂ', 'Contopiri', 'Instrument de lucru pentru operațiunile de contopire și recalcularea situației juridice.'],
-            'termene.html': ['termene', 'CALCUL ȘI EVIDENȚĂ', 'Termene procedurale', 'Calcul și verificare a termenelor utilizate în activitatea de evidență.'],
             'transfer': ['transfer', 'TRANSFER ȘI PROFILARE', 'Transfer și profilare', 'Identificarea unităților compatibile și aplicarea criteriilor de transfer.'],
             'transfer/index.html': ['transfer', 'TRANSFER ȘI PROFILARE', 'Transfer și profilare', 'Identificarea unităților compatibile și aplicarea criteriilor de transfer.'],
             'transfer/rules.html': ['transfer', 'TRANSFER ȘI PROFILARE', 'Reguli transfer', 'Regulile operaționale și juridice folosite pentru verificarea transferului.'],
@@ -123,10 +122,19 @@
             ['pedepse', 'Pedepse', new URL('./', rootUrl).href],
             ['contopiri', 'Contopiri', new URL('contopiri.html', rootUrl).href],
             ['transfer', 'Transfer', new URL('transfer/', rootUrl).href],
-            ['termene', 'Termene', new URL('termene.html', rootUrl).href],
             ['instructaj', 'Instructaj', new URL('instructaj/', rootUrl).href],
             ['semnalmente', 'Semnalmente', new URL('semnalmente/', rootUrl).href]
         ];
+    }
+
+    function removeRetiredModuleLinks() {
+        document.querySelectorAll('a[href]').forEach(link => {
+            try {
+                if (new URL(link.getAttribute('href'), location.href).pathname.endsWith('/termene.html')) link.remove();
+            } catch (_) {
+                // Ignore malformed legacy href values.
+            }
+        });
     }
 
     function buildUniversalShell() {
@@ -206,6 +214,7 @@
 
     function initThemeAndShell() {
         applyTheme(readTheme());
+        removeRetiredModuleLinks();
         buildUniversalShell();
         ensureFallbackControl();
         updateThemeButtons(readTheme());

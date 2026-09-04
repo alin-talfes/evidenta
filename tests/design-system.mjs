@@ -104,12 +104,12 @@ const htmlFiles = walk(repoDir)
   .map(file => path.relative(repoDir, file).split(path.sep).join("/"))
   .sort();
 
-assert.ok(htmlFiles.length >= 10, "Auditul trebuie să identifice toate paginile HTML actuale ale repo-ului");
+assert.ok(htmlFiles.length >= 9, "Auditul trebuie să identifice toate paginile HTML actuale ale repo-ului");
 
 function isCoveredByDesignSystem(relativePath, html) {
   if (html.includes("design-system.css")) return true;
 
-  if (["index.html", "contopiri.html", "termene.html", "transfer/index.html", "transfer/rules.html"].includes(relativePath)) {
+  if (["index.html", "contopiri.html", "transfer/index.html", "transfer/rules.html"].includes(relativePath)) {
     return /(?:\.\.\/)?js\/theme\.js/.test(html);
   }
 
@@ -133,5 +133,6 @@ assert.deepEqual(
 );
 
 assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css"), "Redirectul vechi Semnalmente trebuie să folosească direct design system-ul");
+assert.ok(!fs.existsSync(path.join(repoDir, "termene.html")), "Pagina Termene trebuie eliminată din inventarul repo-ului");
 
 console.log(`Design system: ${htmlFiles.length} pagini HTML sunt acoperite de aceeași bază vizuală și folosesc tema universală.`);

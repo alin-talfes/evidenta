@@ -24,13 +24,14 @@ for (const marker of [
   assert.ok(theme.includes(marker), `Controllerul universal trebuie să conțină ${marker}`);
 }
 
-for (const moduleLabel of ['Pedepse', 'Contopiri', 'Transfer', 'Termene', 'Instructaj', 'Semnalmente']) {
+for (const moduleLabel of ['Pedepse', 'Contopiri', 'Transfer', 'Instructaj', 'Semnalmente']) {
   assert.ok(theme.includes(`'${moduleLabel}'`), `Meniul global trebuie să includă ${moduleLabel}`);
 }
 
 const publicModulesBlock = theme.match(/function publicModules\(\) \{([\s\S]*?)\n    \}/)?.[1] || '';
 assert.ok(publicModulesBlock, 'Trebuie să existe lista comună de module publice');
-assert.equal((publicModulesBlock.match(/\['/g) || []).length, 6, 'Meniul global trebuie să aibă exact 6 module publice');
+assert.equal((publicModulesBlock.match(/\['/g) || []).length, 5, 'Meniul global trebuie să aibă exact 5 module publice');
+assert.ok(!publicModulesBlock.toLowerCase().includes('termene'), 'Modulul Termene a fost retras și nu trebuie expus în meniul public');
 assert.ok(!publicModulesBlock.toLowerCase().includes('ofiter'), 'Ofițer nu trebuie expus în meniul public');
 
 for (const marker of [
@@ -75,4 +76,8 @@ for (const [name, source] of Object.entries(loaders)) {
   assert.ok(source.includes('theme.js'), `${name} trebuie să încarce controllerul comun theme.js`);
 }
 
-console.log('Unified shell: meniu, antet, temă și audit vizual comun verificate.');
+assert.ok(!fs.existsSync(path.join(root, 'termene.html')), 'termene.html trebuie eliminat');
+assert.ok(!fs.existsSync(path.join(root, 'js/termene.js')), 'js/termene.js trebuie eliminat');
+assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-core.js trebuie eliminat');
+
+console.log('Unified shell: 5 module publice, antet, temă și audit vizual comun verificate.');

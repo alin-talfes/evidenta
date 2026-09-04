@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Evidență PPL",
   "short_name": "Evidență",
-  "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, transfer și termene procedurale.",
+  "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri și transfer.",
   "lang": "ro-RO",
   "dir": "ltr",
   "start_url": "./",
@@ -38,11 +38,6 @@
       "name": "Transfer",
       "short_name": "Transfer",
       "url": "./transfer/"
-    },
-    {
-      "name": "Termene",
-      "short_name": "Termene",
-      "url": "./termene.html"
     }
   ]
 }
