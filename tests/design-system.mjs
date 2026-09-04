@@ -8,6 +8,7 @@ const repoDir = path.dirname(testDir);
 const read = relative => fs.readFileSync(path.join(repoDir, relative), "utf8");
 
 const design = read("css/design-system.css");
+const themeController = read("js/theme.js");
 
 for (const token of [
   "--ev-bg:",
@@ -56,6 +57,14 @@ assert.ok(design.includes('html[data-theme="light"]'), "Design system-ul trebuie
 assert.ok(design.includes("body.light"), "Design system-ul trebuie să suporte tema light folosită de nucleul aplicației");
 assert.ok(design.includes("prefers-reduced-motion"), "Design system-ul trebuie să respecte reduced motion");
 
+assert.ok(themeController.includes("const THEME_STORAGE_KEY = 'evidenta-theme'"), "Tema trebuie salvată într-o singură cheie universală");
+assert.ok(themeController.includes("'anpTheme'"), "Controllerul trebuie să migreze cheia veche a nucleului");
+assert.ok(themeController.includes("'descriere-semnalmente-theme'"), "Controllerul trebuie să migreze cheia veche Semnalmente");
+assert.ok(themeController.includes("document.documentElement.dataset.theme"), "Tema universală trebuie aplicată pe elementul html");
+assert.ok(themeController.includes("classList.toggle('light'"), "Tema universală trebuie să suporte clasele light existente");
+assert.ok(themeController.includes("classList.toggle('dark'"), "Tema universală trebuie să suporte clasele dark existente");
+assert.ok(themeController.includes("window.addEventListener('storage'"), "Tema trebuie sincronizată între filele deschise");
+
 const bridges = {
   "nucleu aplicație": read("js/theme.js"),
   "Instructaj": read("instructaj/audit-enhancements.css"),
@@ -67,6 +76,17 @@ const bridges = {
 for (const [module, source] of Object.entries(bridges)) {
   assert.ok(source.includes("design-system.css"), `${module} trebuie să încarce design-system.css`);
 }
+
+const themeBridges = {
+  "Instructaj": read("instructaj/app.js"),
+  "Semnalmente": read("semnalmente/enhancements.js"),
+  "Semnalmente Benchmark": read("semnalmente/benchmark.html"),
+  "Ofițer": read("ofiter/access-gate.js")
+};
+for (const [module, source] of Object.entries(themeBridges)) {
+  assert.ok(source.includes("theme.js"), `${module} trebuie să încarce controllerul universal de temă`);
+}
+assert.ok(read("semnalmente/enhancements.js").includes("const THEME_KEY = 'evidenta-theme'"), "Semnalmente trebuie să folosească direct cheia universală");
 
 function walk(directory) {
   const found = [];
@@ -114,4 +134,4 @@ assert.deepEqual(
 
 assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css"), "Redirectul vechi Semnalmente trebuie să folosească direct design system-ul");
 
-console.log(`Design system: ${htmlFiles.length} pagini HTML sunt acoperite de aceeași bază vizuală.`);
+console.log(`Design system: ${htmlFiles.length} pagini HTML sunt acoperite de aceeași bază vizuală și folosesc tema universală.`);
