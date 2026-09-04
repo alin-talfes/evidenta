@@ -4,6 +4,17 @@
 
     const THEME_STORAGE_KEY = 'anpTheme';
 
+    function ensureDesignSystem() {
+        if (document.querySelector('link[data-evidenta-design-system]')) return;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = new URL('../css/design-system.css?v=1', document.currentScript?.src || location.href).href;
+        link.dataset.evidentaDesignSystem = 'true';
+        document.head.appendChild(link);
+    }
+
+    ensureDesignSystem();
+
     function updateThemeButton() {
         const button = document.getElementById('themeToggle');
         if (!button) return;
@@ -33,7 +44,7 @@
         applyTheme();
         const button = document.getElementById('themeToggle');
         if (button && !button.hasAttribute('onclick')) {
-  button.addEventListener('click', toggleTheme);
+            button.addEventListener('click', toggleTheme);
         }
     }
 
