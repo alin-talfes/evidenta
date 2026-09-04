@@ -1,6 +1,17 @@
 (function () {
   "use strict";
 
+  function ensureUniversalTheme() {
+    if (document.querySelector('script[data-evidenta-theme-controller]')) return;
+    const script = document.createElement("script");
+    script.src = new URL("../js/theme.js?v=3", document.currentScript?.src || location.href).href;
+    script.async = false;
+    script.dataset.evidentaThemeController = "true";
+    document.head.appendChild(script);
+  }
+
+  ensureUniversalTheme();
+
   if (!window.__INSTRUCTAJ_ENRICHED__) {
     import("./omj2188-completari.js")
       .then(() => import("./verificare-dosar-transfer.js"))
