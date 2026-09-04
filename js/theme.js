@@ -18,9 +18,11 @@
     }
 
     function ensureScript(href, dataAttribute) {
-        if (document.querySelector(`script[${dataAttribute}], script[src*="${href.split('/').pop().split('?')[0]}"]`)) return;
+        const expected = new URL(href, scriptUrl).href;
+        const exactAlreadyLoaded = [...document.scripts].some(script => script.src === expected);
+        if (document.querySelector(`script[${dataAttribute}]`) || exactAlreadyLoaded) return;
         const script = document.createElement('script');
-        script.src = new URL(href, scriptUrl).href;
+        script.src = expected;
         script.defer = true;
         script.setAttribute(dataAttribute, 'true');
         document.head.appendChild(script);
@@ -174,6 +176,7 @@
             'body > .app-shell > header.topbar',
             'body > .app-shell .suite-nav',
             'body > .app-shell .suite-links',
+            'footer:not(.ev-footer)',
             '#themeToggle',
             '#theme-btn',
             '#btn-theme',
@@ -194,6 +197,13 @@
 
         document.querySelectorAll('.help-text').forEach(element => {
             if (element.textContent?.includes('Rezultatul se actualizează automat')) element.remove();
+        });
+
+        document.querySelectorAll('.modal p').forEach(element => {
+            const text = element.textContent || '';
+            if (text.includes('Instrumente disponibile') || text.includes('Mod de utilizare') || text.includes('Calculator termene procedurale')) {
+                element.remove();
+            }
         });
 
         const sectionHub = document.querySelector('.section-hub');
@@ -283,7 +293,6 @@
             });
         });
         observer.observe(document.body, { childList: true, subtree: true });
-        window.setTimeout(() => observer.disconnect(), 4000);
     }
 
     window.addEventListener('storage', event => {
