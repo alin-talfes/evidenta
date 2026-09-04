@@ -52,6 +52,13 @@ for (const [module, source] of Object.entries(bridges)) {
   assert.ok(source.includes("design-system.css"), `${module} trebuie să încarce design-system.css`);
 }
 
+const instructajCss = read("instructaj/audit-enhancements.css");
+assert.ok(instructajCss.includes('.section-hub-card[data-view="glosar"]'), "Glosarul trebuie eliminat din meniul principal de categorii");
+assert.ok(instructajCss.includes('content: "Fundamente juridice și glosar"'), "Categoria Fundamente trebuie să includă explicit glosarul");
+assert.ok(instructajCss.includes(".course-nav"), "Navigarea duplicată din hero trebuie dezactivată");
+assert.ok(instructajCss.includes(".hero-panel .hero-actions"), "Butoanele duplicate din hero trebuie dezactivate");
+assert.ok(instructajCss.includes('aria-labelledby="glosar-heading"'), "Glosarul trebuie afișat împreună cu Fundamentele juridice");
+
 const corePages = [
   "index.html",
   "contopiri.html",
@@ -69,4 +76,4 @@ assert.ok(read("semnalmente/index.html").includes("enhancements.js"), "Semnalmen
 assert.ok(read("semnalmente/benchmark.html").includes("benchmark.css"), "Benchmark trebuie să încarce bridge-ul comun din benchmark.css");
 assert.ok(read("ofiter/index.html").includes("clean-learning.css"), "Ofițer trebuie să încarce ultimul strat CSS comun");
 
-console.log("Design system: nucleu, Instructaj, Semnalmente și Ofițer sunt conectate la aceeași bază vizuală.");
+console.log("Design system și navigare Instructaj: verificări trecute.");
