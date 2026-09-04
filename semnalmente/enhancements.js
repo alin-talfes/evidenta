@@ -5,16 +5,26 @@
         if (document.querySelector('link[data-evidenta-design-system]')) return;
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '../css/design-system.css?v=2';
+        link.href = '../css/design-system.css?v=3';
         link.dataset.evidentaDesignSystem = 'true';
         document.head.appendChild(link);
     }
 
+    function ensureUniversalTheme() {
+        if (document.querySelector('script[data-evidenta-theme-controller]')) return;
+        const script = document.createElement('script');
+        script.src = '../js/theme.js?v=3';
+        script.async = false;
+        script.dataset.evidentaThemeController = 'true';
+        document.head.appendChild(script);
+    }
+
     ensureDesignSystem();
+    ensureUniversalTheme();
 
     const MAX_FILE_BYTES = 15 * 1024 * 1024;
     const ALLOWED_MIME = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);
-    const THEME_KEY = 'descriere-semnalmente-theme';
+    const THEME_KEY = 'evidenta-theme';
     let toastTimer = null;
 
     function $(id) { return document.getElementById(id); }
@@ -247,15 +257,23 @@
     }
 
     function initTheme() {
+        if (window.EVIDENTA_THEME) {
+            window.applyTheme?.();
+            return;
+        }
         const saved = localStorage.getItem(THEME_KEY);
         const preferred = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
         document.documentElement.dataset.theme = preferred;
+        document.body.classList.toggle('light', preferred === 'light');
+        document.body.classList.toggle('dark', preferred === 'dark');
         const button = $('btn-theme');
         if (!button) return;
         button.setAttribute('aria-pressed', preferred === 'light' ? 'true' : 'false');
         button.addEventListener('click', () => {
             const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
             document.documentElement.dataset.theme = next;
+            document.body.classList.toggle('light', next === 'light');
+            document.body.classList.toggle('dark', next === 'dark');
             localStorage.setItem(THEME_KEY, next);
             button.setAttribute('aria-pressed', next === 'light' ? 'true' : 'false');
         });
