@@ -9,27 +9,12 @@
   const count = document.getElementById("result-count");
   const refs = document.getElementById("code-references");
   const glossary = document.getElementById("glossary");
-  const learningProgress = document.getElementById("learning-progress");
-  const storageKey = "evidenta-instructaj-progress-v1";
 
   let category = "Toate";
   let selected = null;
-  let progress = loadProgress();
-
-  function loadProgress() {
-    try {
-      return JSON.parse(localStorage.getItem(storageKey)) || {};
-    } catch (_) {
-      return {};
-    }
-  }
-
-  function saveProgress() {
-    localStorage.setItem(storageKey, JSON.stringify(progress));
-  }
 
   function esc(value) {
-    return String(value).replace(/[&<>"]/g, ch => ({
+    return String(value).replace(/[&<>\"]/g, ch => ({
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
@@ -37,32 +22,39 @@
     })[ch]);
   }
 
-  function workflowDone(workflow) {
-    const state = progress[workflow.id] || {};
-    return workflow.steps.reduce((sum, _, index) => sum + (state[index] ? 1 : 0), 0);
-  }
+  function normalizeLearningUi() {
+    const heroPanel = document.querySelector(".hero-panel");
+    if (heroPanel) {
+      heroPanel.innerHTML = `
+        <div class="hero-panel-head">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Mod de studiu</span>
+        </div>
+        <div class="study-guide">
+          <div><span>1</span><p><strong>Înțelege baza juridică</strong><small>Acte, definitivare, MEPI, deduceri și liberare.</small></p></div>
+          <div><span>2</span><p><strong>Deschide situația de lucru</strong><small>Procedura este prezentată în ordine logică, fără checklist.</small></p></div>
+          <div><span>3</span><p><strong>Verifică temeiul</strong><small>Compară întotdeauna cu actul concret și norma consolidată.</small></p></div>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#fundamente">Începe cu bazele</a>
+          <a class="button secondary" href="#proceduri">Mergi la proceduri</a>
+        </div>`;
+    }
 
-  function totalProgress() {
-    const total = data.workflows.reduce((sum, workflow) => sum + workflow.steps.length, 0);
-    const done = data.workflows.reduce((sum, workflow) => sum + workflowDone(workflow), 0);
-    const percent = total ? Math.round((done / total) * 100) : 0;
-    const completedWorkflows = data.workflows.filter(workflow => workflowDone(workflow) === workflow.steps.length).length;
-    return { total, done, percent, completedWorkflows };
-  }
+    const proceduresIntro = document.querySelector("#proceduri .section-heading p:last-child");
+    if (proceduresIntro) {
+      proceduresIntro.textContent = "Alege o situație și urmărește explicația în ordinea logică a operațiunilor. Pașii sunt material de studiu, fără bifare sau progres artificial.";
+    }
 
-  function renderLearningProgress() {
-    if (!learningProgress) return;
-    const state = totalProgress();
-    learningProgress.innerHTML = `
-      <div class="progress-summary">
-        <strong>${state.percent}%</strong>
-        <span>${state.done}/${state.total} pași parcurși</span>
-      </div>
-      <div class="progress-track" role="progressbar" aria-label="Progres total" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${state.percent}">
-        <i style="width:${state.percent}%"></i>
-      </div>
-      <small>${state.completedWorkflows}/${data.workflows.length} proceduri finalizate · progres salvat pe acest dispozitiv</small>
-    `;
+    const legacySequence = document.querySelector(".learning-checklist");
+    if (legacySequence) legacySequence.className = "study-sequence";
+
+    const methodItems = document.querySelectorAll(".method-card li");
+    for (const item of methodItems) {
+      if (item.textContent.toLocaleLowerCase("ro").includes("bifează")) {
+        item.innerHTML = "<strong>Lucrează în ordinea din fișă</strong> și tratează fiecare pas ca reper procedural, nu ca simplă listă mecanică.";
+      }
+    }
   }
 
   function filtered() {
@@ -99,22 +91,17 @@
     const items = filtered();
     count.textContent = `${items.length} ${items.length === 1 ? "procedură" : "proceduri"}`;
 
-    list.innerHTML = items.map(workflow => {
-      const done = workflowDone(workflow);
-      const percent = Math.round((done / workflow.steps.length) * 100);
-      const completed = done === workflow.steps.length;
-      return `
-        <button type="button"
-          class="workflow-card${selected === workflow.id ? " selected" : ""}${completed ? " completed" : ""}"
-          data-id="${esc(workflow.id)}">
-          <span class="card-meta">${esc(workflow.category)} · ${workflow.steps.length} pași</span>
-          <strong>${esc(workflow.title)}</strong>
-          <span class="workflow-summary">${esc(workflow.summary)}</span>
-          <div class="card-progress" aria-hidden="true"><i style="width:${percent}%"></i></div>
-          <small>${completed ? "Procedură parcursă" : `${done}/${workflow.steps.length} pași bifați`}</small>
-        </button>
-      `;
-    }).join("") || `<p class="empty">Nu am găsit o procedură pentru această căutare.</p>`;
+    list.innerHTML = items.map((workflow, index) => `
+      <button type="button"
+        class="workflow-card${selected === workflow.id ? " selected" : ""}"
+        data-id="${esc(workflow.id)}">
+        <span class="card-index">${String(index + 1).padStart(2, "0")}</span>
+        <span class="card-meta">${esc(workflow.category)} · ${workflow.steps.length} pași</span>
+        <strong>${esc(workflow.title)}</strong>
+        <span class="workflow-summary">${esc(workflow.summary)}</span>
+        <small>Deschide fișa →</small>
+      </button>
+    `).join("") || `<p class="empty">Nu am găsit o procedură pentru această căutare.</p>`;
   }
 
   function renderDetail(id, focus) {
@@ -125,9 +112,6 @@
     }
 
     selected = id;
-    const state = progress[id] || {};
-    const done = workflowDone(workflow);
-    const percent = Math.round((done / workflow.steps.length) * 100);
 
     detail.innerHTML = `
       <div class="detail-head">
@@ -137,13 +121,6 @@
           <p>${esc(workflow.summary)}</p>
         </div>
         <button class="close-detail" type="button" aria-label="Închide fișa">×</button>
-      </div>
-
-      <div class="detail-progress">
-        <div><strong>Progresul fișei</strong><span>${done}/${workflow.steps.length} pași</span></div>
-        <div class="progress-track" role="progressbar" aria-label="Progresul fișei" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
-          <i style="width:${percent}%"></i>
-        </div>
       </div>
 
       <div class="legal-box">
@@ -168,16 +145,14 @@
 
       <section class="steps-section">
         <div class="steps-heading">
-          <div><span class="panel-label">Checklist</span><h3>Pașii de lucru</h3></div>
-          <small>Bifează după efectuare</small>
+          <div><span class="panel-label">Ordine procedurală</span><h3>Pașii de lucru</h3></div>
+          <small>Material de studiu · fără bifare</small>
         </div>
-        <ol class="steps">
+        <ol class="study-steps">
           ${workflow.steps.map((step, index) => `
             <li>
-              <label>
-                <input type="checkbox" data-step="${index}" ${state[index] ? "checked" : ""}>
-                <span><b>Pasul ${index + 1}</b>${esc(step)}</span>
-              </label>
+              <span class="step-number">${String(index + 1).padStart(2, "0")}</span>
+              <div><b>Pasul ${index + 1}</b><p>${esc(step)}</p></div>
             </li>
           `).join("")}
         </ol>
@@ -240,15 +215,6 @@
     history.replaceState(null, "", `#${card.dataset.id}`);
   });
 
-  detail.addEventListener("change", event => {
-    if (!event.target.matches("[data-step]") || !selected) return;
-    progress[selected] = progress[selected] || {};
-    progress[selected][event.target.dataset.step] = event.target.checked;
-    saveProgress();
-    renderLearningProgress();
-    renderDetail(selected, false);
-  });
-
   detail.addEventListener("click", event => {
     if (!event.target.closest(".close-detail")) return;
     selected = null;
@@ -257,18 +223,8 @@
     history.replaceState(null, "", location.pathname);
   });
 
-  document.getElementById("reset-progress").addEventListener("click", () => {
-    if (!Object.keys(progress).length || confirm("Resetezi toate bifările salvate pe acest dispozitiv?")) {
-      progress = {};
-      saveProgress();
-      renderLearningProgress();
-      renderList();
-      if (selected) renderDetail(selected, false);
-    }
-  });
-
+  normalizeLearningUi();
   renderFilters();
-  renderLearningProgress();
   renderList();
   renderReferences();
   renderGlossary();
