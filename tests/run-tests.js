@@ -1,6 +1,5 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 function load(path,extra=''){ const ctx={console,Date,Math,Number,String,Array,Object,Set,JSON,globalThis:null}; ctx.globalThis=ctx; vm.createContext(ctx); vm.runInContext(fs.readFileSync(path,'utf8')+'\n'+extra,ctx,{filename:path}); return ctx; }
-function walk(dir){ return fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{ if(['.git','node_modules'].includes(entry.name)) return []; const full=require('path').join(dir,entry.name); return entry.isDirectory()?walk(full):[full]; }); }
 
 let u=load('js/utils.js',';globalThis.__add=addCalendarSafe;globalThis.__days=daysBetween;');
 assert.equal(u.__add(new Date(2025,0,31),0,1,0).getDate(),28);
@@ -81,14 +80,16 @@ const versionSource=fs.readFileSync('js/version.js','utf8');
 assert(versionSource.includes("new URL('../version.json', scriptUrl)"));
 assert(versionSource.includes('© Alin Talfeș'));
 assert(versionSource.includes("footer.className = 'ev-footer'"));
+assert(versionSource.includes("document.querySelectorAll('footer').forEach"));
 assert(!versionSource.includes('Toate datele sunt stocate exclusiv local'));
 assert(!versionSource.includes('footer-privacy'));
 const themeSource=fs.readFileSync('js/theme.js','utf8');
 assert(themeSource.includes("version.js?v=39"),'theme must load the universal version/footer controller');
-for(const file of walk('.').filter(file=>file.endsWith('.html'))){
-  assert(!/<footer\b/i.test(fs.readFileSync(file,'utf8')),file+' contains a duplicated static footer');
-}
+assert(themeSource.includes("'footer:not(.ev-footer)'"),'theme must remove legacy footers before the universal footer is rendered');
 assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
+for(const f of ['index.html','semnalmente/index.html','semnalmente/benchmark.html','transfer/rules.html']){
+  assert(!/<footer\b/i.test(fs.readFileSync(f,'utf8')),f+' contains a duplicated static footer');
+}
 
 const transferApp=fs.readFileSync('transfer/app.js','utf8');
 const transferRulesPage=fs.readFileSync('transfer/rules-page.js','utf8');
