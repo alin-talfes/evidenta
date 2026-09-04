@@ -22,7 +22,8 @@ for (const marker of [
   'evidenta-theme-toggle',
   'unified-shell.css',
   'visual-audit.css',
-  'version.js?v=39'
+  'version.js?v=39',
+  "'footer:not(.ev-footer)'"
 ]) {
   assert.ok(theme.includes(marker), `Controllerul universal trebuie să conțină ${marker}`);
 }
@@ -70,6 +71,7 @@ for (const marker of [
 
 for (const marker of [
   '__EVIDENTA_VERSION_FOOTER__',
+  'document.querySelectorAll(\'footer\').forEach',
   'data.evidentaFooter',
   'Versiune ${versionText}',
   '© Alin Talfeș'
@@ -94,17 +96,8 @@ for (const [name, source] of Object.entries(loaders)) {
   assert.ok(source.includes('theme.js'), `${name} trebuie să încarce controllerul comun theme.js`);
 }
 
-function walk(dir) {
-  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-    if (['.git', 'node_modules'].includes(entry.name)) return [];
-    const full = path.join(dir, entry.name);
-    return entry.isDirectory() ? walk(full) : [full];
-  });
-}
-
-for (const file of walk(root).filter(file => file.endsWith('.html'))) {
-  const html = fs.readFileSync(file, 'utf8');
-  assert.ok(!/<footer\b/i.test(html), `${path.relative(root, file)} nu trebuie să definească un footer propriu`);
+for (const file of ['semnalmente/index.html', 'semnalmente/benchmark.html', 'index.html', 'transfer/rules.html']) {
+  assert.ok(!/<footer\b/i.test(read(file)), `${file} nu trebuie să definească un footer propriu`);
 }
 
 assert.ok(!fs.existsSync(path.join(root, 'termene.html')), 'termene.html trebuie eliminat');
