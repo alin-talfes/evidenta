@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark light">
     <meta name="theme-color" content="#0b1220">
-    <meta name="description" content="Instrument local de calibrare și benchmark pentru motorul Semnalmente.">
+    <meta name="description" content="Validare și calibrare pentru motorul Semnalmente.">
     <title>Semnalmente — calibrare și benchmark</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="benchmark.css">
@@ -13,39 +13,19 @@
 <body>
     <a class="skip-link" href="#benchmark-main">Sari la conținut</a>
     <div class="app-shell benchmark-shell">
-        <header class="topbar">
-            <div class="brand-block">
-                <a class="brand-mark benchmark-back" href="index.html" aria-label="Înapoi la aplicație">←</a>
-                <div>
-                    <p class="eyebrow">VALIDARE ȘI CALIBRARE</p>
-                    <h1>Benchmark</h1>
-                    <p class="subtitle">Măsoară performanța motorului pe cazuri etalon, fără imagini și fără date de identificare.</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <nav class="suite-nav" aria-label="Navigare între aplicații">
-                    <a href="../">Evidență PPL</a>
-                    <a href="../instructaj/">Instructaj</a>
-                    <a href="./" aria-current="page">Semnalmente</a>
-                </nav>
-                <span class="status-chip"><span class="status-dot" aria-hidden="true"></span> Date procesate local</span>
-                <button type="button" class="icon-btn" id="btn-theme" aria-label="Schimbă tema" title="Schimbă tema">◐</button>
-            </div>
-        </header>
-
         <main id="benchmark-main">
             <section class="notice-panel" aria-labelledby="benchmark-notice-title">
                 <div class="notice-icon" aria-hidden="true">≋</div>
                 <div>
                     <h2 id="benchmark-notice-title">Ce măsoară această pagină</h2>
-                    <p>Încarcă înregistrări JSON conform <code>calibration-schema.json</code>. Referința trebuie stabilită independent de predicția aplicației. Pagina calculează exact-match accuracy, coverage/abstention, macro-F1, matrice de confuzie și rezultate separate pe versiune de motor și calitatea fotografiei. Fișierele nu sunt trimise către un server.</p>
+                    <p>Încarcă înregistrări JSON conform <a href="calibration-schema.json">schemei de calibrare</a>. Referința trebuie stabilită independent de predicția aplicației. Pagina calculează exact-match accuracy, coverage/abstention, macro-F1, matrice de confuzie și rezultate separate pe versiune de motor și calitatea fotografiei. Fișierele nu sunt trimise către un server.</p>
+                    <p><a href="docs/CALIBRATION.md">Protocol de calibrare</a> · <a href="index.html">Semnalmente</a></p>
                 </div>
             </section>
 
             <section class="panel benchmark-import" aria-labelledby="import-heading">
                 <div class="section-heading">
                     <div>
-                        <p class="section-kicker">SET DE VALIDARE</p>
                         <h2 id="import-heading">Încarcă cazurile etalon</h2>
                         <p>Poți selecta mai multe fișiere, un array JSON sau un bundle exportat anterior.</p>
                     </div>
@@ -66,7 +46,6 @@
             <section class="panel calibration-builder" aria-labelledby="builder-heading">
                 <div class="section-heading">
                     <div>
-                        <p class="section-kicker">CREARE CAZ ETALON</p>
                         <h2 id="builder-heading">Construiește o înregistrare dintr-un export al aplicației</h2>
                         <p>Încarcă un JSON exportat de Semnalmente. Predicția automată este extrasă intern și nu este afișată în formular, pentru a reduce biasul operatorului care stabilește referința.</p>
                     </div>
@@ -102,7 +81,6 @@
                 <section class="panel" aria-labelledby="trait-results-heading">
                     <div class="section-heading">
                         <div>
-                            <p class="section-kicker">PER CATEGORIE</p>
                             <h2 id="trait-results-heading">Performanța clasificatoarelor</h2>
                             <p>Accuracy include abstention în numitor. Accuracy condiționată arată performanța doar când motorul emite o clasă.</p>
                         </div>
@@ -118,7 +96,6 @@
                 <section class="panel matrix-panel" aria-labelledby="matrix-heading">
                     <div class="section-heading matrix-heading">
                         <div>
-                            <p class="section-kicker">ERORI</p>
                             <h2 id="matrix-heading">Matrice de confuzie</h2>
                             <p>Rândurile sunt etichetele de referință; coloanele sunt predicțiile motorului.</p>
                         </div>
@@ -131,13 +108,11 @@
 
                 <div class="benchmark-two-column">
                     <section class="panel" aria-labelledby="version-heading">
-                        <p class="section-kicker">REGRESIE</p>
                         <h2 id="version-heading">Pe versiune de motor</h2>
-                        <p class="section-copy">Compară cohortele fără a amesteca rezultatele v2/v3 sau versiunile viitoare.</p>
+                        <p class="section-copy">Compară separat rezultatele fiecărei versiuni de motor.</p>
                         <div class="table-scroll"><table class="benchmark-table compact"><thead><tr><th>Versiune</th><th>Cazuri</th><th>Accuracy</th><th>Coverage</th><th>Macro-F1</th></tr></thead><tbody id="version-table-body"></tbody></table></div>
                     </section>
                     <section class="panel" aria-labelledby="quality-heading">
-                        <p class="section-kicker">ROBUSTEȚE</p>
                         <h2 id="quality-heading">Pe calitatea fotografiei</h2>
                         <p class="section-copy">Separă performanța pe imagini bune, acceptabile și slabe.</p>
                         <div class="table-scroll"><table class="benchmark-table compact"><thead><tr><th>Calitate</th><th>Cazuri</th><th>Accuracy</th><th>Coverage</th><th>Macro-F1</th></tr></thead><tbody id="quality-table-body"></tbody></table></div>
@@ -145,21 +120,15 @@
                 </div>
 
                 <section class="panel integrity-panel" aria-labelledby="integrity-heading">
-                    <p class="section-kicker">INTEGRITATE SET</p>
                     <h2 id="integrity-heading">Probleme de date</h2>
                     <div id="integrity-content"></div>
                 </section>
             </section>
         </main>
-
-        <footer>
-            <div><strong>Semnalmente</strong><span>Benchmark local</span></div>
-            <div class="footer-links"><a href="index.html">Aplicație</a><a href="docs/CALIBRATION.md">Protocol calibrare</a><a href="calibration-schema.json">Schema JSON</a></div>
-        </footer>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="../js/theme.js?v=3"></script>
+    <script src="../js/theme.js?v=4"></script>
     <script type="module" src="benchmark.js"></script>
 </body>
 </html>
