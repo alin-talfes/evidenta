@@ -6,7 +6,12 @@ const fail=[];
 const note=[];
 const dormant=new Set(['dashboard-study-plan.css']);
 const ignoredDirs=new Set(['.git','node_modules']);
-const sharedDesignSystem=path.resolve(root,'../css/design-system.css');
+const sharedStyles=new Set([
+  path.resolve(root,'../css/design-system.css'),
+  path.resolve(root,'../css/unified-shell.css'),
+  path.resolve(root,'../css/visual-audit.css')
+]);
+const importedCss=new Set();
 
 function walk(dir){
   return fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
@@ -56,16 +61,19 @@ for(const file of cssFiles){
   for(const ref of localUrls(css)){
     const resolved=path.normalize(path.join(root,path.dirname(file),ref));
     const insideModule=resolved.startsWith(root+path.sep)||resolved===root;
-    const isSharedDesignSystem=resolved===sharedDesignSystem;
-    if(!insideModule&&!isSharedDesignSystem){
-      fail.push(`${file}: url() iese din modulul Ofițer fără a fi resursa comună aprobată: ${ref}`);
+    const isApprovedShared=sharedStyles.has(resolved);
+    if(!insideModule&&!isApprovedShared){
+      fail.push(`${file}: url() iese din modulul Ofițer fără a fi o resursă comună aprobată: ${ref}`);
       continue;
     }
     if(!fs.existsSync(resolved))fail.push(`${file}: resursă locală inexistentă în url(): ${ref}`);
+    if(insideModule&&resolved.endsWith('.css')) importedCss.add(path.relative(root,resolved).replaceAll('\\','/'));
   }
 }
 
-if(!fs.existsSync(sharedDesignSystem))fail.push('Lipsește stylesheet-ul comun ../css/design-system.css');
+for(const shared of sharedStyles){
+  if(!fs.existsSync(shared))fail.push(`Lipsește stylesheet-ul comun ${path.relative(root,shared).replaceAll('\\','/')}`);
+}
 
 const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const fastLoader=fs.readFileSync(path.join(root,'fast-loader.js'),'utf8');
@@ -74,9 +82,9 @@ const direct=new Set([...index.matchAll(/<link\b[^>]*rel=["']stylesheet["'][^>]*
 const lazy=new Set([...fastLoader.matchAll(/\bstyle\(\s*["']([^"']+\.css)["']\s*\)/g)].map(m=>m[1]));
 const sourceBlock=buildMobile.match(/const\s+sources\s*=\s*\[([^\]]+)\]/s)?.[1]||'';
 const bundled=new Set([...sourceBlock.matchAll(/["']([^"']+\.css)["']/g)].map(m=>m[1]));
-const active=new Set([...direct,...lazy,...bundled]);
+const active=new Set([...direct,...lazy,...bundled,...importedCss]);
 
-for(const href of [...direct,...lazy,...bundled]){
+for(const href of [...direct,...lazy,...bundled,...importedCss]){
   if(!fs.existsSync(path.join(root,href)))fail.push(`Referință CSS inexistentă: ${href}`);
 }
 for(const file of cssFiles){
@@ -104,5 +112,5 @@ if(fail.length){
   for(const item of fail)console.error(`- ${item}`);
   process.exit(1);
 }
-console.log(`CSS audit OK: ${cssFiles.length} fișiere, ${direct.size} directe, ${lazy.size} lazy, ${bundled.size} surse bundle, ${dormant.size} dormant intenționat, design system comun validat.`);
+console.log(`CSS audit OK: ${cssFiles.length} fișiere, ${direct.size} directe, ${lazy.size} lazy, ${bundled.size} surse bundle, ${importedCss.size} importuri CSS, ${dormant.size} dormant intenționat, resursele comune validate.`);
 for(const item of note)console.log(`- ${item}`);
