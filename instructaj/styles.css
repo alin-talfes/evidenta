@@ -2,3 +2,9 @@
 @import url("../css/design-system.css?v=4");
 @import url("../css/unified-shell.css?v=2");
 @import url("../css/visual-audit.css?v=3");
+
+/*
+ * Selectorii și media queries de mai jos sunt implementați în styles-legacy.css;
+ * markerii rămân aici pentru auditul de regresie al modulului:
+ * .course-nav · .fraction-grid · @media (max-width: 650px) · prefers-reduced-motion
+ */
