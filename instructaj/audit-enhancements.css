@@ -252,6 +252,14 @@
   cursor: pointer;
 }
 
+/* Înainte ca hub-ul să fie construit, conținutul voluminos rămâne ascuns. */
+body:not(:has(.section-hub)) .learning-section,
+body:not(:has(.section-hub)) .notice,
+body:not(:has(.section-hub)) .legal-strip,
+body:not(:has(.section-hub)) .method {
+  display: none !important;
+}
+
 .learning-section[hidden],
 .section-hub[hidden],
 .notice[hidden],
