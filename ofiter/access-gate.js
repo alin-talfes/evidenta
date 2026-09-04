@@ -5,6 +5,22 @@
   const ACCESS_DIGEST = "915f35cab3430325ef85ec31dc9cd0430bb667abaca0215914e5e3bbfa80c833";
   const root = document.documentElement;
 
+  // Aplică preferința comună cât mai devreme și încarcă controllerul universal.
+  try {
+    const savedTheme = localStorage.getItem("evidenta-theme")
+      || localStorage.getItem("anpTheme")
+      || localStorage.getItem("descriere-semnalmente-theme");
+    if (savedTheme === "light" || savedTheme === "dark") root.dataset.theme = savedTheme;
+  } catch {}
+
+  if (!document.querySelector('script[data-evidenta-theme-controller]')) {
+    const themeScript = document.createElement("script");
+    themeScript.src = new URL("../js/theme.js?v=3", document.currentScript?.src || location.href).href;
+    themeScript.async = false;
+    themeScript.dataset.evidentaThemeController = "true";
+    document.head.appendChild(themeScript);
+  }
+
   function authenticated() {
     try {
       return sessionStorage.getItem(SESSION_KEY) === ACCESS_DIGEST;
