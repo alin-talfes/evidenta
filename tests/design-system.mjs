@@ -26,14 +26,30 @@ for (const token of [
 
 for (const compatibilityToken of [
   "--bg: var(--ev-bg)",
+  "--bg-soft: var(--ev-bg-elevated)",
   "--surface: var(--ev-surface)",
+  "--surface-strong: var(--ev-surface-2)",
   "--text: var(--ev-text)",
   "--accent: var(--ev-accent)",
+  "--cyan: var(--ev-accent)",
   "--line: var(--ev-border)",
-  "--navy: var(--ev-text)",
+  "--gold: var(--ev-warning)",
   "--violet: var(--ev-accent)"
 ]) {
   assert.ok(design.includes(compatibilityToken), `Lipsește aliasul de compatibilitate: ${compatibilityToken}`);
+}
+
+for (const sharedComponent of [
+  ".topbar,",
+  ".sidebar,",
+  ".workflow-card,",
+  ".question-card,",
+  ".learning-module-card,",
+  ".access-card,",
+  ".reference-grid > article,",
+  ".btn-primary,"
+]) {
+  assert.ok(design.includes(sharedComponent), `Stratul vizual comun trebuie să normalizeze ${sharedComponent}`);
 }
 
 assert.ok(design.includes('html[data-theme="light"]'), "Design system-ul trebuie să suporte tema light folosită de Semnalmente");
@@ -52,28 +68,50 @@ for (const [module, source] of Object.entries(bridges)) {
   assert.ok(source.includes("design-system.css"), `${module} trebuie să încarce design-system.css`);
 }
 
-const instructajCss = read("instructaj/audit-enhancements.css");
-assert.ok(instructajCss.includes('.section-hub-card[data-view="glosar"]'), "Glosarul trebuie eliminat din meniul principal de categorii");
-assert.ok(instructajCss.includes('content: "Fundamente juridice și glosar"'), "Categoria Fundamente trebuie să includă explicit glosarul");
-assert.ok(instructajCss.includes(".course-nav"), "Navigarea duplicată din hero trebuie dezactivată");
-assert.ok(instructajCss.includes(".hero-panel .hero-actions"), "Butoanele duplicate din hero trebuie dezactivate");
-assert.ok(instructajCss.includes('aria-labelledby="glosar-heading"'), "Glosarul trebuie afișat împreună cu Fundamentele juridice");
-
-const corePages = [
-  "index.html",
-  "contopiri.html",
-  "termene.html",
-  "transfer/index.html",
-  "transfer/rules.html"
-];
-for (const page of corePages) {
-  const html = read(page);
-  assert.ok(/(?:\.\.\/)?js\/theme\.js/.test(html), `${page} trebuie să folosească js/theme.js pentru design system și temă`);
+function walk(directory) {
+  const found = [];
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    if ([".git", "node_modules"].includes(entry.name)) continue;
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) found.push(...walk(absolute));
+    else found.push(absolute);
+  }
+  return found;
 }
 
-assert.ok(read("instructaj/index.html").includes("audit-enhancements.css"), "Instructaj trebuie să păstreze bridge-ul CSS comun");
-assert.ok(read("semnalmente/index.html").includes("enhancements.js"), "Semnalmente trebuie să încarce bridge-ul comun din enhancements.js");
-assert.ok(read("semnalmente/benchmark.html").includes("benchmark.css"), "Benchmark trebuie să încarce bridge-ul comun din benchmark.css");
-assert.ok(read("ofiter/index.html").includes("clean-learning.css"), "Ofițer trebuie să încarce ultimul strat CSS comun");
+const htmlFiles = walk(repoDir)
+  .filter(file => file.endsWith(".html"))
+  .map(file => path.relative(repoDir, file).split(path.sep).join("/"))
+  .sort();
 
-console.log("Design system și navigare Instructaj: verificări trecute.");
+assert.ok(htmlFiles.length >= 10, "Auditul trebuie să identifice toate paginile HTML actuale ale repo-ului");
+
+function isCoveredByDesignSystem(relativePath, html) {
+  if (html.includes("design-system.css")) return true;
+
+  if (["index.html", "contopiri.html", "termene.html", "transfer/index.html", "transfer/rules.html"].includes(relativePath)) {
+    return /(?:\.\.\/)?js\/theme\.js/.test(html);
+  }
+
+  if (relativePath === "instructaj/index.html") return html.includes("audit-enhancements.css");
+  if (relativePath === "semnalmente/index.html") return html.includes("enhancements.js");
+  if (relativePath === "semnalmente/benchmark.html") return html.includes("benchmark.css");
+  if (relativePath === "ofiter/index.html") return html.includes("clean-learning.css");
+
+  return false;
+}
+
+const uncoveredPages = htmlFiles.filter(relativePath => {
+  const html = read(relativePath);
+  return !isCoveredByDesignSystem(relativePath, html);
+});
+
+assert.deepEqual(
+  uncoveredPages,
+  [],
+  `Orice pagină HTML trebuie conectată la design-system.css. Neacoperite: ${uncoveredPages.join(", ")}`
+);
+
+assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css"), "Redirectul vechi Semnalmente trebuie să folosească direct design system-ul");
+
+console.log(`Design system: ${htmlFiles.length} pagini HTML sunt acoperite de aceeași bază vizuală.`);
