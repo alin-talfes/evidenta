@@ -16,12 +16,13 @@ assert.equal(data.verifiedAt, "03.09.2026");
 assert.equal(data.workflows.length, 23, "Sunt necesare toate cele 23 de fișe operaționale");
 assert.equal(new Set(data.workflows.map(item => item.id)).size, data.workflows.length, "ID-urile trebuie să fie unice");
 
-const requiredSources = { omj: "255745", l254: "269415", hg157: "269789", cp: "109855", cpp: "120609" };
-assert.deepEqual([...data.sources.map(item => item.id)].sort(), Object.keys(requiredSources).sort(), "Trebuie publicate toate cele cinci surse normative");
+const dataSources = { omj: "255745", l254: "269415", hg157: "269789", cp: "109855", cpp: "120609" };
+const canonicalPageSources = { omj: "255630", l254: "150699", hg157: "177386", cp: "109855", cpp: "120609" };
+assert.deepEqual([...data.sources.map(item => item.id)].sort(), Object.keys(dataSources).sort(), "Trebuie publicate toate cele cinci surse normative");
 for (const item of data.sources) {
   assert.equal(item.verifiedAt, data.verifiedAt, `Data verificării pentru ${item.id}`);
   assert.ok(item.url.startsWith("https://legislatie.just.ro/"), `Sursă oficială pentru ${item.id}`);
-  assert.ok(item.url.includes(requiredSources[item.id]), `Document oficial corect pentru ${item.id}`);
+  assert.ok(item.url.includes(dataSources[item.id]), `Document oficial corect pentru ${item.id}`);
 }
 
 for (const workflow of data.workflows) {
@@ -61,8 +62,9 @@ for (const [id, refs] of Object.entries(mustContain)) {
 assert.ok(data.glossary.length >= 7, "Glosar pentru termenii juridici indispensabili");
 const html = fs.readFileSync(path.join(moduleDir, "index.html"), "utf8");
 for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]) assert.ok(html.includes(file), `${file} este încărcat`);
-for (const documentId of Object.values(requiredSources)) assert.ok(html.includes(documentId), `Sursa oficială ${documentId} este publicată`);
-assert.ok(!html.includes("120611"), "Legătura CPP veche nu trebuie păstrată");
+for (const documentId of Object.values(canonicalPageSources)) assert.ok(html.includes(documentId), `Pagina trebuie să publice sursa canonică oficială ${documentId}`);
+for (const staleDocumentId of ["269415", "269789", "120611"]) assert.ok(!html.includes(staleDocumentId), `Pagina nu trebuie să păstreze linkul vechi/intermediar ${staleDocumentId}`);
+assert.ok(html.includes("forma consolidată la zi"), "Pagina trebuie să indice explicit că trimiterile sunt către forma consolidată la zi");
 
 assert.ok(html.includes('id="fundamente"'), "Pagina principală trebuie să conțină secțiunea de fundamente juridice");
 for (const term of [
@@ -94,4 +96,4 @@ function inspectPublicFiles(dir) {
 inspectPublicFiles(repoDir);
 assert.ok(!fs.existsSync(path.join(repoDir, "training", "index.html")), "Ruta veche /training nu trebuie să redirecționeze spre /ofiter");
 
-console.log("Instructaj: structură, surse, conținut juridic și izolare /ofiter validate.");
+console.log("Instructaj: structură, surse canonice, conținut juridic și izolare /ofiter validate.");
