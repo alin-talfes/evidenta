@@ -17,10 +17,20 @@
         document.head.appendChild(link);
     }
 
-    function ensureSharedStyles() {
+    function ensureScript(href, dataAttribute) {
+        if (document.querySelector(`script[${dataAttribute}], script[src*="${href.split('/').pop().split('?')[0]}"]`)) return;
+        const script = document.createElement('script');
+        script.src = new URL(href, scriptUrl).href;
+        script.defer = true;
+        script.setAttribute(dataAttribute, 'true');
+        document.head.appendChild(script);
+    }
+
+    function ensureSharedAssets() {
         ensureStylesheet('../css/design-system.css?v=4', 'data-evidenta-design-system');
-        ensureStylesheet('../css/unified-shell.css?v=1', 'data-evidenta-unified-shell');
+        ensureStylesheet('../css/unified-shell.css?v=2', 'data-evidenta-unified-shell');
         ensureStylesheet('../css/visual-audit.css?v=1', 'data-evidenta-visual-audit');
+        ensureScript('../js/version.js?v=39', 'data-evidenta-version-controller');
     }
 
     function validTheme(value) {
@@ -99,22 +109,22 @@
     function pageContext() {
         const page = relativePage();
         const contexts = {
-            '': ['pedepse', 'CALCUL ȘI EVIDENȚĂ', 'Pedepse și liberare condiționată', 'Durata pedepsei, deduceri, expirare și termene de liberare condiționată.'],
-            'index.html': ['pedepse', 'CALCUL ȘI EVIDENȚĂ', 'Pedepse și liberare condiționată', 'Durata pedepsei, deduceri, expirare și termene de liberare condiționată.'],
-            'contopiri.html': ['contopiri', 'CALCUL ȘI EVIDENȚĂ', 'Contopiri', 'Instrument de lucru pentru operațiunile de contopire și recalcularea situației juridice.'],
-            'transfer': ['transfer', 'TRANSFER ȘI PROFILARE', 'Transfer și profilare', 'Identificarea unităților compatibile și aplicarea criteriilor de transfer.'],
-            'transfer/index.html': ['transfer', 'TRANSFER ȘI PROFILARE', 'Transfer și profilare', 'Identificarea unităților compatibile și aplicarea criteriilor de transfer.'],
-            'transfer/rules.html': ['transfer', 'TRANSFER ȘI PROFILARE', 'Reguli transfer', 'Regulile operaționale și juridice folosite pentru verificarea transferului.'],
-            'instructaj': ['instructaj', 'ÎNVĂȚARE ȘI PROCEDURI', 'Instructaj', 'Fundamente juridice, glosar și proceduri de evidență organizate pentru lucru curent.'],
-            'instructaj/index.html': ['instructaj', 'ÎNVĂȚARE ȘI PROCEDURI', 'Instructaj', 'Fundamente juridice, glosar și proceduri de evidență organizate pentru lucru curent.'],
-            'semnalmente': ['semnalmente', 'DESCRIERE ASISTATĂ', 'Semnalmente', 'Analiză facială asistată și generarea unei fișe descriptive verificabile de operator.'],
-            'semnalmente/index.html': ['semnalmente', 'DESCRIERE ASISTATĂ', 'Semnalmente', 'Analiză facială asistată și generarea unei fișe descriptive verificabile de operator.'],
-            'semnalmente/benchmark.html': ['semnalmente', 'VALIDARE ȘI CALIBRARE', 'Semnalmente · Benchmark', 'Calibrare locală, măsurarea performanței și analiza erorilor motorului Semnalmente.'],
-            'ofiter': [null, 'SPAȚIU PRIVAT DE ÎNVĂȚARE', 'Ofițer evidență', 'Pregătire structurată pentru concurs: grile, sinteză, calcule, legislație și interviu.'],
-            'ofiter/index.html': [null, 'SPAȚIU PRIVAT DE ÎNVĂȚARE', 'Ofițer evidență', 'Pregătire structurată pentru concurs: grile, sinteză, calcule, legislație și interviu.']
+            '': ['pedepse', 'Pedepse și liberare condiționată', 'Calculul pedepsei, deducerilor, expirării și liberării condiționate.'],
+            'index.html': ['pedepse', 'Pedepse și liberare condiționată', 'Calculul pedepsei, deducerilor, expirării și liberării condiționate.'],
+            'contopiri.html': ['contopiri', 'Contopiri', 'Calculul pedepsei rezultante pentru situații deja calificate juridic.'],
+            'transfer': ['transfer', 'Transfer și profilare', 'Filtrarea destinațiilor potrivit criteriilor de transfer și profilare.'],
+            'transfer/index.html': ['transfer', 'Transfer și profilare', 'Filtrarea destinațiilor potrivit criteriilor de transfer și profilare.'],
+            'transfer/rules.html': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
+            'instructaj': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
+            'instructaj/index.html': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
+            'semnalmente': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
+            'semnalmente/index.html': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
+            'semnalmente/benchmark.html': ['semnalmente', 'Semnalmente · Benchmark', 'Validarea și calibrarea motorului Semnalmente.'],
+            'ofiter': [null, 'Ofițer evidență', 'Pregătire pentru concursul de ofițer evidență.'],
+            'ofiter/index.html': [null, 'Ofițer evidență', 'Pregătire pentru concursul de ofițer evidență.']
         };
-        const [navKey, kicker, title, subtitle] = contexts[page] || [null, 'EVIDENȚĂ PPL', document.title || 'Evidență PPL', 'Instrument de lucru din suita Evidență PPL.'];
-        return { page, navKey, kicker, title, subtitle, isOfficer: page === 'ofiter' || page === 'ofiter/index.html' };
+        const [navKey, title, description] = contexts[page] || [null, document.title || 'Evidență PPL', 'Evidență PPL'];
+        return { page, navKey, title, description, isOfficer: page === 'ofiter' || page === 'ofiter/index.html' };
     }
 
     function publicModules() {
@@ -127,14 +137,71 @@
         ];
     }
 
+    function updateDescription(context) {
+        let description = document.querySelector('meta[name="description"]');
+        if (!description) {
+            description = document.createElement('meta');
+            description.name = 'description';
+            document.head.appendChild(description);
+        }
+        description.content = context.description;
+
+        const ogDescription = document.querySelector('meta[property="og:description"]');
+        if (ogDescription) ogDescription.content = context.description;
+    }
+
     function removeRetiredModuleLinks() {
         document.querySelectorAll('a[href]').forEach(link => {
             try {
                 if (new URL(link.getAttribute('href'), location.href).pathname.endsWith('/termene.html')) link.remove();
-            } catch (_) {
-                // Ignore malformed legacy href values.
-            }
+            } catch (_) {}
         });
+    }
+
+    function removeElements(selectors) {
+        document.querySelectorAll(selectors.join(',')).forEach(element => element.remove());
+    }
+
+    function pruneEditorialNoise() {
+        if (!document.body) return;
+
+        removeElements([
+            'body > .container > .app-nav',
+            'body > .container > .header',
+            'body > .container > header.header',
+            'body > .site-header',
+            'body > .app-shell > .topbar',
+            'body > .app-shell > header.topbar',
+            'body > .app-shell .suite-nav',
+            'body > .app-shell .suite-links',
+            '#themeToggle',
+            '#theme-btn',
+            '#btn-theme',
+            '.quality-checklist',
+            '.analysis-panel > div > .section-kicker',
+            '.analysis-panel > div > h2 + p',
+            '.results-section .results-heading-row .section-kicker',
+            '#results-heading + p',
+            '.saved-list .saved-heading-row .section-kicker',
+            '.benchmark-shell .section-kicker',
+            '.learning-hero .eyebrow',
+            '.learning-modules-head .eyebrow',
+            '.dashboard-bibliography .eyebrow',
+            '.page-heading > div > .eyebrow',
+            '.workflow-card > small',
+            '.steps-heading > small'
+        ]);
+
+        document.querySelectorAll('.help-text').forEach(element => {
+            if (element.textContent?.includes('Rezultatul se actualizează automat')) element.remove();
+        });
+
+        const sectionHub = document.querySelector('.section-hub');
+        if (sectionHub) {
+            document.querySelector('body > main > .hero')?.remove();
+            const hubHelp = sectionHub.querySelector('.section-hub-head > p:last-child');
+            if (hubHelp?.textContent?.includes('Deschide o singură categorie')) hubHelp.remove();
+        }
     }
 
     function buildUniversalShell() {
@@ -143,6 +210,7 @@
         const context = pageContext();
         document.body.classList.add('ev-unified');
         document.body.dataset.evPage = context.page || context.navKey || 'evidenta';
+        updateDescription(context);
 
         const shell = document.createElement('header');
         shell.className = 'ev-shell';
@@ -157,7 +225,7 @@
             <div class="ev-shell__bar">
                 <a class="ev-shell__brand" href="${rootUrl.href}" aria-label="Evidență PPL — pagina principală">
                     <span class="ev-shell__mark" aria-hidden="true">EV</span>
-                    <span class="ev-shell__brand-copy"><strong>Evidență PPL</strong><small>instrumente de evidență</small></span>
+                    <span class="ev-shell__brand-copy"><strong>Evidență PPL</strong></span>
                 </a>
                 <nav class="ev-shell__nav" aria-label="Modulele Evidență PPL">${navItems}</nav>
                 <div class="ev-shell__actions">
@@ -165,11 +233,7 @@
                 </div>
             </div>
             <div class="ev-shell__module">
-                <div class="ev-shell__module-copy">
-                    <p class="ev-shell__kicker">${context.kicker}</p>
-                    <h1>${context.title}</h1>
-                    <p>${context.subtitle}</p>
-                </div>
+                <h1>${context.title}</h1>
                 ${context.isOfficer ? '<span class="ev-shell__badge">Acces restricționat</span>' : ''}
             </div>`;
 
@@ -182,21 +246,10 @@
         if (logout && actions) actions.prepend(logout);
 
         updateThemeButtons(validTheme(document.documentElement.dataset.theme) || readTheme());
+        window.dispatchEvent(new CustomEvent('evidenta:shellready'));
     }
 
-    function ensureFallbackControl() {
-        if (document.querySelector('#evidenta-theme-toggle')) return;
-        const host = document.querySelector('.top-actions, .header-actions, .app-nav, .site-header');
-        if (!host) return;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.id = 'evidenta-theme-toggle';
-        button.className = 'icon-btn evidenta-theme-toggle';
-        host.appendChild(button);
-        updateThemeButtons(validTheme(document.documentElement.dataset.theme) || readTheme());
-    }
-
-    ensureSharedStyles();
+    ensureSharedAssets();
     const initialTheme = readTheme();
     document.documentElement.dataset.theme = initialTheme;
     document.documentElement.style.colorScheme = initialTheme;
@@ -215,9 +268,22 @@
     function initThemeAndShell() {
         applyTheme(readTheme());
         removeRetiredModuleLinks();
+        pruneEditorialNoise();
         buildUniversalShell();
-        ensureFallbackControl();
+        pruneEditorialNoise();
         updateThemeButtons(readTheme());
+
+        let scheduled = false;
+        const observer = new MutationObserver(() => {
+            if (scheduled) return;
+            scheduled = true;
+            requestAnimationFrame(() => {
+                scheduled = false;
+                pruneEditorialNoise();
+            });
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        window.setTimeout(() => observer.disconnect(), 4000);
     }
 
     window.addEventListener('storage', event => {
