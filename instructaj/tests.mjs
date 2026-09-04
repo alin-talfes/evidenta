@@ -64,6 +64,21 @@ for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]
 for (const documentId of Object.values(requiredSources)) assert.ok(html.includes(documentId), `Sursa oficială ${documentId} este publicată`);
 assert.ok(!html.includes("120611"), "Legătura CPP veche nu trebuie păstrată");
 
+assert.ok(html.includes('id="fundamente"'), "Pagina principală trebuie să conțină secțiunea de fundamente juridice");
+for (const term of [
+  "Sentință penală, decizie penală și încheiere",
+  "Când rămâne definitivă o sentință penală?",
+  "mandatul de executare a pedepsei închisorii",
+  "Ce este o citație?",
+  "Zile deduse",
+  "Liberarea la termen",
+  "Liberarea condiționată",
+  "Legea nr. 169/2017"
+]) assert.ok(html.includes(term), `Fundamentele juridice trebuie să includă: ${term}`);
+for (const historicalDocumentId of ["191305", "221138"]) {
+  assert.ok(html.includes(historicalDocumentId), `Sursa istorică oficială ${historicalDocumentId} trebuie publicată`);
+}
+
 const linkExtensions = new Set([".html", ".htm", ".md", ".js", ".json", ".xml"]);
 const forbiddenLink = /(?:href|src|content\s*=|location\.(?:href|replace)|Response\.redirect)[^\n>]*(?:\/ofiter\/?|\.\.\/ofiter\/|evidenta\/ofiter)/i;
 function inspectPublicFiles(dir) {
