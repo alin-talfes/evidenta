@@ -8,6 +8,7 @@ const repoDir = path.dirname(testDir);
 const read = relative => fs.readFileSync(path.join(repoDir, relative), "utf8");
 
 const design = read("css/design-system.css");
+const consistency = read("css/consistency.css");
 const themeController = read("js/theme.js");
 
 for (const token of [
@@ -57,6 +58,25 @@ assert.ok(design.includes('html[data-theme="light"]'), "Design system-ul trebuie
 assert.ok(design.includes("body.light"), "Design system-ul trebuie să suporte tema light folosită de nucleul aplicației");
 assert.ok(design.includes("prefers-reduced-motion"), "Design system-ul trebuie să respecte reduced motion");
 
+for (const marker of [
+  "--ev-page-gap:",
+  "--ev-panel-pad:",
+  "body.ev-unified",
+  ".page-heading",
+  ".section-heading",
+  ".learning-module-card",
+  ".section-hub-card",
+  ".upload-zone",
+  ".benchmark-drop",
+  ".access-card",
+  "@media (max-width: 620px)"
+]) {
+  assert.ok(consistency.includes(marker), `Stratul de consistență trebuie să conțină ${marker}`);
+}
+assert.ok(consistency.includes("var(--ev-surface)"), "Consistența trebuie să folosească suprafețele din design system");
+assert.ok(consistency.includes("var(--ev-border)"), "Consistența trebuie să folosească bordurile din design system");
+assert.ok(consistency.includes("var(--ev-accent)"), "Consistența trebuie să folosească accentul comun");
+
 assert.ok(themeController.includes("const THEME_STORAGE_KEY = 'evidenta-theme'"), "Tema trebuie salvată într-o singură cheie universală");
 assert.ok(themeController.includes("'anpTheme'"), "Controllerul trebuie să migreze cheia veche a nucleului");
 assert.ok(themeController.includes("'descriere-semnalmente-theme'"), "Controllerul trebuie să migreze cheia veche Semnalmente");
@@ -65,16 +85,22 @@ assert.ok(themeController.includes("classList.toggle('light'"), "Tema universal�
 assert.ok(themeController.includes("classList.toggle('dark'"), "Tema universală trebuie să suporte clasele dark existente");
 assert.ok(themeController.includes("window.addEventListener('storage'"), "Tema trebuie sincronizată între filele deschise");
 
-const bridges = {
-  "nucleu aplicație": read("js/theme.js"),
-  "Instructaj": read("instructaj/audit-enhancements.css"),
-  "Semnalmente": read("semnalmente/enhancements.js"),
-  "Semnalmente Benchmark": read("semnalmente/benchmark.css"),
-  "Ofițer": read("ofiter/clean-learning.css")
+const visualEntries = {
+  "nucleu și Transfer": read("css/style.css"),
+  "Instructaj": read("instructaj/styles.css"),
+  "Semnalmente și Benchmark": read("semnalmente/style.css"),
+  "Ofițer": read("ofiter/styles.css")
 };
 
-for (const [module, source] of Object.entries(bridges)) {
+for (const [module, source] of Object.entries(visualEntries)) {
   assert.ok(source.includes("design-system.css"), `${module} trebuie să încarce design-system.css`);
+  assert.ok(source.includes("unified-shell.css"), `${module} trebuie să încarce unified-shell.css`);
+  assert.ok(source.includes("visual-audit.css"), `${module} trebuie să încarce visual-audit.css`);
+  assert.ok(source.includes("consistency.css"), `${module} trebuie să încarce consistency.css`);
+  assert.ok(
+    source.lastIndexOf("consistency.css") > source.lastIndexOf("visual-audit.css"),
+    `${module} trebuie să încarce consistency.css după auditul vizual`
+  );
 }
 
 const themeBridges = {
@@ -135,4 +161,4 @@ assert.deepEqual(
 assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css"), "Redirectul vechi Semnalmente trebuie să folosească direct design system-ul");
 assert.ok(!fs.existsSync(path.join(repoDir, "termene.html")), "Pagina Termene trebuie eliminată din inventarul repo-ului");
 
-console.log(`Design system: ${htmlFiles.length} pagini HTML sunt acoperite de aceeași bază vizuală și folosesc tema universală.`);
+console.log(`Design system: ${htmlFiles.length} pagini HTML folosesc aceeași temă, același shell și același strat structural.`);
