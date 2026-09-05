@@ -22,13 +22,29 @@ const allFiles = walk(root);
 const cssFiles = allFiles.filter(file => file.endsWith('.css')).map(normalize).sort();
 const references = new Map(cssFiles.map(file => [file, new Set()]));
 
-function resolveCssReference(sourceFile, raw) {
+function referenceBaseDir(sourceFile, relativeSource, text) {
+  // HTML <base> changes how browser-relative stylesheets are resolved.
+  if (path.extname(sourceFile) === '.html') {
+    const baseHref = text.match(/<base\b[^>]*href=["']([^"']+)["']/i)?.[1];
+    if (baseHref && !/^(?:https?:|\/\/)/i.test(baseHref)) {
+      return path.resolve(path.dirname(sourceFile), baseHref);
+    }
+  }
+
+  // build-mobile-css.mjs is executed with cwd=ofiter, so source paths are relative to that module root.
+  if (relativeSource === 'ofiter/scripts/build-mobile-css.mjs') {
+    return path.join(root, 'ofiter');
+  }
+
+  return path.dirname(sourceFile);
+}
+
+function resolveCssReference(baseDir, raw) {
   const clean = raw.trim().split(/[?#]/, 1)[0];
   if (!clean || /^(?:https?:|data:|blob:|\/\/)/i.test(clean)) return null;
-  const sourceDir = path.dirname(sourceFile);
   const absolute = clean.startsWith('/')
     ? path.join(root, clean.replace(/^\/+/, ''))
-    : path.resolve(sourceDir, clean);
+    : path.resolve(baseDir, clean);
   const relative = normalize(absolute);
   return references.has(relative) ? relative : null;
 }
@@ -40,6 +56,7 @@ for (const sourceFile of allFiles) {
 
   let text;
   try { text = fs.readFileSync(sourceFile, 'utf8'); } catch { continue; }
+  const baseDir = referenceBaseDir(sourceFile, relativeSource, text);
 
   // Captures stylesheet paths in HTML, JS loaders, CSS @import/url and build scripts.
   const candidates = new Set();
@@ -51,7 +68,7 @@ for (const sourceFile of allFiles) {
   }
 
   for (const raw of candidates) {
-    const target = resolveCssReference(sourceFile, raw);
+    const target = resolveCssReference(baseDir, raw);
     if (target && target !== relativeSource) references.get(target).add(relativeSource);
   }
 }
