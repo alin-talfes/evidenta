@@ -1,0 +1,305 @@
+/*
+ * EVIDENȚĂ PPL — responsive comun
+ * Ultimul strat structural pentru desktop, tabletă și mobil.
+ * Nu schimbă logica modulelor; previne overflow-ul și uniformizează densitatea responsive.
+ */
+
+/* Protecții generale împotriva overflow-ului produs de conținut lung. */
+html {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body.ev-unified,
+body.ev-unified :is(main, .container, .app-shell, .view, .panel, .card, .detail, .section-heading, .panel-head, .page-heading),
+body.ev-unified :is(.form-grid, .upload-grid, .reference-grid, .summary-grid, .learning-modules-grid, .section-hub-grid, .exam-path-grid) > * {
+  min-width: 0;
+}
+
+body.ev-unified :is(h1, h2, h3, h4, p, li, a, label, .hint, .help-text, .section-copy) {
+  overflow-wrap: break-word;
+}
+
+body.ev-unified :is(img, video) {
+  max-width: 100%;
+  height: auto;
+}
+
+body.ev-unified pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Safe-area pentru iPhone/iPad fără a schimba gutter-ul pe desktop. */
+.ev-shell__bar,
+.ev-shell__module,
+.ev-footer__inner {
+  padding-left: max(var(--ev-shell-pad), env(safe-area-inset-left));
+  padding-right: max(var(--ev-shell-pad), env(safe-area-inset-right));
+}
+
+body.ev-unified > .container,
+body.ev-unified > main,
+body.ev-unified > .app-shell > main {
+  padding-left: max(var(--ev-shell-pad), env(safe-area-inset-left)) !important;
+  padding-right: max(var(--ev-shell-pad), env(safe-area-inset-right)) !important;
+}
+
+/* Ofițer este modul ascuns: nu afișează navigarea publică a suitei. */
+body.ev-unified[data-ev-page^="ofiter"] .ev-shell__nav {
+  display: none !important;
+}
+
+body.ev-unified[data-ev-page^="ofiter"] .ev-shell__bar {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+/* Grupurile flex/grid trebuie să poată contracta conținutul. */
+body.ev-unified :is(.compact-actions, .setup-actions, .builder-actions, .btn-row, .btn-group, .page-actions, .top-bar) > * {
+  min-width: 0;
+}
+
+body.ev-unified .date-wrapper {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px !important;
+}
+
+body.ev-unified .date-wrapper .btn-today {
+  width: auto !important;
+  min-width: 54px;
+}
+
+body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
+  flex-wrap: wrap;
+}
+
+/* Tablete landscape / desktop îngust. */
+@media (min-width: 900px) and (max-width: 1100px) {
+  body.ev-unified :is(.learning-modules-grid, .exam-path-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  body.ev-unified .reference-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Tabletă portrait și ferestre înguste. */
+@media (min-width: 641px) and (max-width: 899px) {
+  body.ev-unified :is(.section-hub-grid, .learning-modules-grid, .exam-path-grid, .reference-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  body.ev-unified .summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  body.ev-unified .benchmark-two-column {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.ev-unified :is(.page-heading, .section-heading, .panel-head) {
+    gap: 12px !important;
+  }
+}
+
+/* Navigarea globală pe ecrane medii rămâne într-o linie scrollabilă. */
+@media (min-width: 681px) and (max-width: 1040px) {
+  .ev-shell__nav {
+    scroll-snap-type: x proximity;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ev-shell__nav a {
+    scroll-snap-align: center;
+  }
+}
+
+/* Mobil. */
+@media (max-width: 640px) {
+  :root {
+    --ev-shell-pad: 14px;
+    --ev-page-gap: 14px;
+    --ev-panel-pad-mobile: 14px;
+    --ev-grid-gap: 10px;
+  }
+
+  body.ev-unified {
+    font-size: 14px !important;
+  }
+
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell > main {
+    padding-top: 16px !important;
+    padding-bottom: 26px !important;
+  }
+
+  /* Pe mobil toate cele 5 module publice rămân vizibile, fără scroll ascuns. */
+  .ev-shell__bar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+  }
+
+  .ev-shell__nav {
+    grid-column: 1 / -1;
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  .ev-shell__nav a {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    padding-inline: 6px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px !important;
+  }
+
+  body.ev-unified[data-ev-page^="ofiter"] .ev-shell__bar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  .ev-shell__brand-copy strong {
+    font-size: 13px;
+  }
+
+  .ev-shell__module {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .ev-shell__module h1 {
+    font-size: clamp(22px, 7vw, 26px) !important;
+  }
+
+  body.ev-unified :is(
+    .form-grid,
+    .upload-grid,
+    .setup-options,
+    .learning-modules-grid,
+    .section-hub-grid,
+    .benchmark-two-column,
+    .builder-meta,
+    .reference-grid,
+    .operational-grid,
+    .exam-path-grid,
+    .summary-grid
+  ) {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.ev-unified :is(.page-heading, .section-heading, .panel-head, .learning-modules-head, .exam-path-head) {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  body.ev-unified :is(.page-actions, .compact-actions, .setup-actions, .builder-actions, .btn-row, .btn-group) {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  body.ev-unified :is(.page-actions, .compact-actions, .setup-actions, .builder-actions, .btn-row, .btn-group) > :is(button, .btn, a.btn, .primary, .secondary) {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.ev-unified :is(input, select, textarea) {
+    max-width: 100%;
+  }
+
+  body.ev-unified select,
+  body.ev-unified :is(input[type="text"], input[type="search"], input[type="number"], input[type="date"], input[type="time"], input[type="password"], textarea) {
+    font-size: 16px !important; /* previne zoom-ul automat iOS */
+  }
+
+  body.ev-unified .workflow {
+    max-width: 100%;
+    overflow-x: auto !important;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.ev-unified :is(.rules-container, .table-scroll) {
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+  }
+
+  body.ev-unified :is(.rules-table, .benchmark-table) {
+    min-width: max-content;
+  }
+
+  body.ev-unified :is(.modal-content, .modal-card, .dialog-card) {
+    width: min(100%, 720px) !important;
+    max-width: calc(100vw - 28px) !important;
+    max-height: calc(100dvh - 28px) !important;
+    overflow: auto !important;
+  }
+
+  /* Scroll intern lung pe Contopiri este util pe desktop, dar incomod pe telefon. */
+  body.ev-unified[data-ev-page="contopiri.html"] .legal-box {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri.html"] .legal-box h4 {
+    position: static !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  /* Bara fixă a modulului Ofițer nu trebuie să acopere footer-ul. */
+  body.ev-unified[data-ev-page^="ofiter"] .ev-footer {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Telefoane foarte înguste: toolbar-ul principal din Pedepse nu trebuie să depășească viewportul. */
+@media (max-width: 410px) {
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar #resetBtn {
+    grid-column: 1 / -1;
+    width: 100% !important;
+  }
+
+  .ev-footer__inner {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+}
+
+/* Touch targets coerente pe dispozitive tactile, inclusiv tablete. */
+@media (hover: none), (pointer: coarse) {
+  body.ev-unified :is(button, .btn, .primary, .secondary, .nav-item, .ev-shell__nav a, .ev-shell__theme) {
+    min-height: 44px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ev-unified *,
+  body.ev-unified *::before,
+  body.ev-unified *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
