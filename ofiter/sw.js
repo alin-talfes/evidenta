@@ -1,11 +1,11 @@
-const CACHE = "evidenta-ofiter-v109";
-const GENERATED_CACHE = "evidenta-ofiter-generated-v13";
+const CACHE = "evidenta-ofiter-v110";
+const GENERATED_CACHE = "evidenta-ofiter-generated-v14";
 
 const CORE_ASSETS = [
   "./","./index.html","./styles.css?v=2","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./clean-learning.css","./access-gate.js",
   "./data-core.js?v=2","./bootstrap.js?v=3","./persistence-layer.js","./generated/runtime-bundle.js?v=3","./dashboard-cockpit.js?v=1",
-  "./generated/controllers/interview.js","./generated/controllers/legislation.js","./generated/controllers/official.js",
-  "./heavy-data-loader.js","./legislation-virtual.js","./scenario-questions.js","./scenario-questions.css",
+  "./generated/controllers/interview.js","./generated/controllers/legislation.js?v=3","./generated/controllers/official.js",
+  "./heavy-data-loader.js","./legislation-virtual.js?v=2","./scenario-questions.js","./scenario-questions.css",
   "../css/final-layer.css?v=1",
   "./manifest.webmanifest","./icon.svg","./icon-192.png","./apple-touch-icon.png"
 ];
@@ -31,7 +31,7 @@ self.addEventListener("fetch",event=>{
     })());return;
   }
   if(url.pathname.includes("/generated/")&&url.pathname.endsWith(".json")){
-    event.respondWith(caches.open(GENERATED_CACHE).then(async cache=>{const cached=await cache.match(request);const update=fetch(request).then(response=>{if(response.ok)cache.put(request,response.clone()).catch(()=>{});return response}).catch(()=>null);return cached||update}));return;
+    event.respondWith(caches.open(GENERATED_CACHE).then(async cache=>{const cached=await cache.match(request);const update=fetch(request,{cache:"no-store"}).then(response=>{if(response.ok)cache.put(request,response.clone()).catch(()=>{});return response}).catch(()=>null);return cached||update}));return;
   }
   event.respondWith(caches.match(request).then(cached=>{if(cached)return cached;return fetch(request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(request,copy)).catch(()=>{})}return response})}));
 });

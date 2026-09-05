@@ -27,7 +27,8 @@ core=core.replace("$$('[data-exam-answer]').forEach(b=>b.onclick=()=>{examAnswer
 function controllerSource(name,nodes){
   let source=nodes.map(node=>appSource.slice(node.start,node.end)).join('\n');
   source=source.split(persistencePattern).join('window.TRAINING_PERSISTENCE?.queue(state)');
-  return `${source}\nwindow.TRAINING_CONTROLLER_${name.toUpperCase()}=true;`;
+  const autoInit=name==='legislation'?`\nfunction initLegislationController(){if(!document.getElementById("legislation-content"))return;bindLegislation();renderLegislation();document.getElementById("legislation")?.setAttribute("data-legislation-controller-ready","true")}\nqueueMicrotask(initLegislationController);`:'';
+  return `${source}\nwindow.TRAINING_CONTROLLER_${name.toUpperCase()}=true;${autoInit}`;
 }
 function minify(code){return transformSync(code,{loader:'js',target:'es2020',minifyWhitespace:true,minifySyntax:true,minifyIdentifiers:false,legalComments:'none'}).code.trim()}
 function runtimeCode(file){

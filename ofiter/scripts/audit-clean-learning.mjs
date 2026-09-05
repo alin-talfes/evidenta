@@ -46,6 +46,9 @@ for (const asset of ["clean-learning.css", "bootstrap.js", "access-gate.js", "ge
 }
 const sw = read("sw.js");
 if (!sw.includes('fetch(request,{cache:"no-store"})')) throw new Error("Navigarea trebuie să folosească rețeaua înaintea cache-ului, pentru a evita dashboarduri vechi.");
+if (!sw.includes('evidenta-ofiter-generated-v14')) throw new Error("Cache-ul dataseturilor legislative nu a fost invalidat.");
+if (!sw.includes('./generated/controllers/legislation.js?v=3')) throw new Error("Service worker-ul trebuie să precache-uiască exact controllerul Legislație cerut de runtime.");
+if (!sw.includes('./legislation-virtual.js?v=2')) throw new Error("Service worker-ul trebuie să precache-uiască exact rendererul virtual Legislație cerut de runtime.");
 const bootstrap = read("bootstrap.js");
 if (!bootstrap.includes("updateViaCache:'none'")) throw new Error("Actualizarea service worker-ului poate fi blocată de cache.");
 if (!bootstrap.includes('generated/runtime-bundle.js?v=3')) throw new Error("Pachetul principal trebuie încărcat cu versiune explicită.");
@@ -58,10 +61,15 @@ const officialUrls = [...coreData.matchAll(/url:"(https:\/\/legislatie\.just\.ro
 if (officialUrls.length !== 7) throw new Error("Fiecare dintre cele 7 acte trebuie să aibă link oficial către Portalul Legislativ.");
 if (!officialUrls.includes("https://legislatie.just.ro/Public/DetaliiDocumentAfis/255745")) throw new Error("Linkul OMJ nr. 2188/C/2022 trebuie să deschidă Instrucțiunile oficiale.");
 const legislationController = read("generated/controllers/legislation.js");
-for (const marker of ["DELIMITARE DIN BIBLIOGRAFIE", "legal-scope", "Deschide forma oficial\\u0103 consolidat\\u0103", "catalog=laws.map", "laws.forEach"]) {
+for (const marker of ["DELIMITARE DIN BIBLIOGRAFIE", "legal-scope", "Deschide forma oficială consolidată", "catalog=laws.map", "laws.forEach", "initLegislationController", "queueMicrotask(initLegislationController)"]) {
   if (!legislationController.includes(marker)) throw new Error(`Informație absentă din modulul combinat: ${marker}`);
 }
 if (!legislationController.includes('law.id==="omj2188"?"sinteza"')) throw new Error("OMJ nr. 2188/C/2022 nu este inclus explicit în catalogul Legislație.");
+const legislationData = JSON.parse(read("generated/legislation-data.json"));
+if (!Array.isArray(legislationData) || legislationData.length < 6) throw new Error("Datasetul Legislație este gol sau incomplet.");
+for (const id of ["l254", "cp", "cpp", "hg157", "l145", "cod"]) {
+  if (!legislationData.some(act => act.id === id && Array.isArray(act.articles))) throw new Error(`Datasetul Legislație nu conține actul integrat ${id}.`);
+}
 const virtualLegislation = read("legislation-virtual.js");
 for (const marker of ["catalog=laws.map", "DELIMITARE DIN BIBLIOGRAFIE", "legal-scope", "Deschide forma oficială consolidată", 'law.id==="omj2188"?"sinteza"']) {
   if (!virtualLegislation.includes(marker)) throw new Error(`Afișarea virtualizată poate suprascrie modulul combinat: ${marker}`);
