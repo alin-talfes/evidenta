@@ -42,15 +42,10 @@
   .learning-hero .hero-action,.page-heading>.primary{width:100%;min-height:48px}
 
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:14px}
-  .stat-card{min-width:0;padding:13px;border-radius:11px}
-  .stat-card>span{display:block;font-size:11px;line-height:1.25;min-height:28px}
-  .stat-card strong{font-size:25px;margin:4px 0 0}
-  .stat-card small{font-size:10px;line-height:1.25}
   .dashboard-grid{grid-template-columns:1fr;gap:14px}
   .panel{padding:17px;border-radius:12px}
   .panel-head{align-items:flex-start;gap:10px}
   .panel-head .text-btn{flex:none;padding:6px 4px}
-  .focus-number{font-size:48px;margin:18px 0 10px}
 
   .module{grid-template-columns:40px minmax(0,1fr);gap:8px 11px;padding:12px 0}
   .module-index{width:38px;height:38px}
@@ -63,10 +58,6 @@
   .filters{flex-direction:column;gap:9px}
   .filters input,.filters select,.setup-options select,textarea{width:100%;font-size:16px}
   input,select,textarea{font-size:16px!important}
-  .learn-summary{align-items:flex-start}
-  .study-grid{grid-template-columns:1fr;gap:12px}
-  .study-card{min-height:0;padding:17px 17px 58px}
-  .study-card footer{left:17px;right:17px}
 
   .law-card{grid-template-columns:40px minmax(0,1fr);gap:12px;padding:15px}
   .law-number{width:40px;height:40px}
@@ -204,8 +195,6 @@
   main{padding-left:11px;padding-right:11px}
   .brand>span:last-child{font-size:12px}
   .brand small{letter-spacing:.12em}
-  .stat-card{padding:11px}
-  .stat-card strong{font-size:22px}
   .official-actions{grid-template-columns:1fr}
   .mobile-nav-btn .mobile-nav-label{font-size:9px}
   .mobile-more-grid{grid-template-columns:1fr}
@@ -214,6 +203,5 @@
 @media (min-width:768px) and (max-width:1050px){
   main{padding:28px}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .criteria-profile{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

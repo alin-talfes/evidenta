@@ -43,22 +43,7 @@ body.ev-unified > .app-shell > main {
 }
 
 /* Ritm comun între blocuri. */
-body.ev-unified .card,
-body.ev-unified .panel,
-body.ev-unified .analysis-panel,
-body.ev-unified .results-section,
-body.ev-unified .question-card,
-body.ev-unified .study-card,
-body.ev-unified .law-card,
-body.ev-unified .official-set,
-body.ev-unified .workflow-card,
-body.ev-unified .metric-card,
-body.ev-unified .basic-card,
-body.ev-unified .legal-box,
-body.ev-unified .anexa-box,
-body.ev-unified .result-box,
-body.ev-unified .notice,
-body.ev-unified .notice-panel {
+body.ev-unified .card, body.ev-unified .panel, body.ev-unified .analysis-panel, body.ev-unified .results-section, body.ev-unified .question-card, body.ev-unified .law-card, body.ev-unified .official-set, body.ev-unified .workflow-card, body.ev-unified .metric-card, body.ev-unified .basic-card, body.ev-unified .legal-box, body.ev-unified .anexa-box, body.ev-unified .result-box, body.ev-unified .notice, body.ev-unified .notice-panel {
   min-width: 0;
   border-color: var(--ev-border) !important;
   border-radius: var(--ev-radius-lg) !important;

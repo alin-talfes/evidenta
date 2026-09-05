@@ -45,15 +45,10 @@
   .learning-hero .hero-action,.page-heading>.primary{width:100%;min-height:48px}
 
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:14px}
-  .stat-card{min-width:0;padding:13px;border-radius:11px}
-  .stat-card>span{display:block;font-size:11px;line-height:1.25;min-height:28px}
-  .stat-card strong{font-size:25px;margin:4px 0 0}
-  .stat-card small{font-size:10px;line-height:1.25}
   .dashboard-grid{grid-template-columns:1fr;gap:14px}
   .panel{padding:17px;border-radius:12px}
   .panel-head{align-items:flex-start;gap:10px}
   .panel-head .text-btn{flex:none;padding:6px 4px}
-  .focus-number{font-size:48px;margin:18px 0 10px}
 
   .module{grid-template-columns:40px minmax(0,1fr);gap:8px 11px;padding:12px 0}
   .module-index{width:38px;height:38px}
@@ -66,10 +61,6 @@
   .filters{flex-direction:column;gap:9px}
   .filters input,.filters select,.setup-options select,textarea{width:100%;font-size:16px}
   input,select,textarea{font-size:16px!important}
-  .learn-summary{align-items:flex-start}
-  .study-grid{grid-template-columns:1fr;gap:12px}
-  .study-card{min-height:0;padding:17px 17px 58px}
-  .study-card footer{left:17px;right:17px}
 
   .law-card{grid-template-columns:40px minmax(0,1fr);gap:12px;padding:15px}
   .law-number{width:40px;height:40px}
@@ -207,8 +198,6 @@
   main{padding-left:11px;padding-right:11px}
   .brand>span:last-child{font-size:12px}
   .brand small{letter-spacing:.12em}
-  .stat-card{padding:11px}
-  .stat-card strong{font-size:22px}
   .official-actions{grid-template-columns:1fr}
   .mobile-nav-btn .mobile-nav-label{font-size:9px}
   .mobile-more-grid{grid-template-columns:1fr}
@@ -217,7 +206,6 @@
 @media (min-width:768px) and (max-width:1050px){
   main{padding:28px}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .criteria-profile{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
@@ -226,10 +214,6 @@
 
 @media (max-width:767px){
   /* Study cards: avoid absolute footer collisions on long legal content. */
-  .study-card{padding:17px!important}
-  .study-card footer{position:static;margin-top:16px;padding-top:11px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
-  .study-card footer>span{font-size:10px;line-height:1.35}
-  .study-card .card-toggle{min-height:44px;padding:8px 10px}
 
   /* Legislation: reading-first layout with comfortable legal-text rhythm. */
   #legislation .notice{font-size:13px;line-height:1.55}
@@ -243,7 +227,6 @@
   .legal-article-head{display:flex;flex-direction:column;align-items:stretch;gap:11px}
   .legal-article-head>div{min-width:0}
   .legal-article-head h3{font-size:16px;line-height:1.4;overflow-wrap:anywhere}
-  .legal-article-head .card-toggle{width:100%;min-height:44px}
   .legal-intro{font-size:15px;line-height:1.65}
   .legal-intro.subsection{margin-top:18px}
   .legal-lines{padding-left:1.35rem;margin:12px 0 4px}
@@ -325,8 +308,6 @@
 }
 
 @media (max-width:420px){
-  .study-card footer{grid-template-columns:1fr}
-  .study-card footer .card-toggle{width:100%}
   .interview-summary{gap:5px}
   .interview-summary>div{padding:10px 5px}
   #exam-area .question-actions{grid-template-columns:1fr}
@@ -363,8 +344,6 @@
   .learning-hero>div{min-width:0}
   .learning-hero .hero-action{margin-top:2px}
   .stats-grid{align-items:stretch}
-  .stat-card{display:flex;flex-direction:column;justify-content:center}
-  .stat-card .progress{width:100%}
   .focus-panel{box-shadow:0 14px 30px rgba(16,35,63,.16)}
 
   .page-heading>*,.panel-head>*,.law-card>*,.official-set>*,.interview-card>*,.legal-act>header>*{min-width:0}
@@ -392,8 +371,8 @@
   h1,h2{text-wrap:balance}
   #interview-draft,.draft-label textarea{scroll-margin-bottom:calc(var(--mobile-nav-height) + 24px + env(safe-area-inset-bottom))}
 
-  .dark .learning-hero,.dark .stat-card,.dark .panel,.dark .study-card,.dark .law-card,.dark .legal-act,.dark .legal-article,.dark .official-set,.dark .question-card,.dark .mistake-item,.dark .interview-profile,.dark .interview-card,.dark .interview-workspace,.dark .interview-simulation-panel,.dark .written-card,.dark .written-head{background:var(--surface);border-color:var(--line);color:var(--text)}
-  .dark .question-card h2,.dark .study-card h2,.dark .law-card h2,.dark .official-set h2,.dark .interview-card h2,.dark .interview-workspace h2,.dark .legal-act h2,.dark .legal-article h3{color:var(--navy)}
+  .dark .learning-hero, .dark .panel, .dark .law-card, .dark .legal-act, .dark .legal-article, .dark .official-set, .dark .question-card, .dark .mistake-item, .dark .interview-profile, .dark .interview-card, .dark .interview-workspace, .dark .interview-simulation-panel, .dark .written-card, .dark .written-head{background:var(--surface);border-color:var(--line);color:var(--text)}
+  .dark .question-card h2, .dark .law-card h2, .dark .official-set h2, .dark .interview-card h2, .dark .interview-workspace h2, .dark .legal-act h2, .dark .legal-article h3{color:var(--navy)}
   .dark .answer{background:#132234;border-color:#2b4055;color:var(--text)}
   .dark .answer:hover{background:#173044;border-color:#4f8e99}
   .dark .answer.correct{background:#173a30;border-color:#2c8d68}
@@ -417,9 +396,6 @@
 @media (max-width:360px){
   .learning-hero{padding:14px}
   .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-card>span{min-height:0}
-  .stat-card small{display:none}
-  .focus-number{font-size:43px}
 }
 
 @media (max-width:340px){
@@ -427,30 +403,27 @@
   .brand>span:last-child{font-size:11px}
   .page-heading h1{font-size:24px}
   .stats-grid{gap:6px}
-  .stat-card{padding:10px 9px}
-  .stat-card strong{font-size:20px}
   .mobile-nav-btn .mobile-nav-label{font-size:8.5px}
 }
 
 @media (hover:none) and (pointer:coarse){
   .primary:hover{filter:none;transform:none}
   .secondary:hover{background:transparent}
-  .study-card:hover,.law-card:hover{transform:none;box-shadow:none}
-  .study-card:not(.learned) .card-toggle:hover{border-color:var(--line);color:var(--muted)}
+  .law-card:hover{transform:none;box-shadow:none}
   .score-scale button:not(.active):hover{border-color:var(--line)}
   .answer:not(.correct):not(.wrong):hover{border-color:var(--line);background:var(--surface)}
   .dark .answer:not(.correct):not(.wrong):hover{background:#132234;border-color:#2b4055}
 }
 
 @media (prefers-contrast:more){
-  .mobile-nav,.mobile-more-sheet,.study-card,.question-card,.legal-article,.interview-card{border-width:2px}
+  .mobile-nav, .mobile-more-sheet, .question-card, .legal-article, .interview-card{border-width:2px}
   .mobile-nav-btn.active,.mobile-more-item.active{outline:2px solid currentColor;outline-offset:-2px}
   .primary,.secondary,.answer{font-weight:850}
 }
 
 @supports (content-visibility:auto){
   @media (max-width:767px){
-    .study-card,.legal-article,.official-set,.interview-card,.mistake-item{content-visibility:auto;contain-intrinsic-size:auto 240px}
+    .legal-article, .official-set, .interview-card, .mistake-item{content-visibility:auto;contain-intrinsic-size:auto 240px}
   }
 }
 
@@ -484,14 +457,7 @@
 
 /* Long study lists can contain large legal answers. Let the browser skip layout
    and paint for cards that are still far below the viewport. */
-.interview-list > *,
-.legislation-content > *,
-.official-list > *,
-.study-grid > *,
-.exam-training-list > *,
-.mistakes-list > *,
-.bibliography-list > *,
-.module-list > *{
+.interview-list > *, .legislation-content > *, .official-list > *, .exam-training-list > *, .mistakes-list > *, .bibliography-list > *, .module-list > *{
   content-visibility:auto;
   contain-intrinsic-size:auto 180px;
 }
@@ -505,7 +471,7 @@
   }
   .mobile-nav{box-shadow:0 -2px 8px rgba(16,35,63,.06)!important}
   .topbar{box-shadow:0 2px 8px rgba(8,20,36,.08)!important}
-  .learning-hero,.stat-card,.panel,.question-card,.focus-panel{box-shadow:none!important}
+  .learning-hero, .panel, .question-card, .focus-panel{box-shadow:none!important}
   .mobile-more-sheet{transition:transform .12s ease,opacity .12s ease!important}
   .mobile-more-overlay{transition:opacity .12s ease!important}
   .progress i{transition:none!important}

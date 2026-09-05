@@ -2,10 +2,6 @@
 
 @media (max-width:767px){
   /* Study cards: avoid absolute footer collisions on long legal content. */
-  .study-card{padding:17px!important}
-  .study-card footer{position:static;margin-top:16px;padding-top:11px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
-  .study-card footer>span{font-size:10px;line-height:1.35}
-  .study-card .card-toggle{min-height:44px;padding:8px 10px}
 
   /* Legislation: reading-first layout with comfortable legal-text rhythm. */
   #legislation .notice{font-size:13px;line-height:1.55}
@@ -19,7 +15,6 @@
   .legal-article-head{display:flex;flex-direction:column;align-items:stretch;gap:11px}
   .legal-article-head>div{min-width:0}
   .legal-article-head h3{font-size:16px;line-height:1.4;overflow-wrap:anywhere}
-  .legal-article-head .card-toggle{width:100%;min-height:44px}
   .legal-intro{font-size:15px;line-height:1.65}
   .legal-intro.subsection{margin-top:18px}
   .legal-lines{padding-left:1.35rem;margin:12px 0 4px}
@@ -101,8 +96,6 @@
 }
 
 @media (max-width:420px){
-  .study-card footer{grid-template-columns:1fr}
-  .study-card footer .card-toggle{width:100%}
   .interview-summary{gap:5px}
   .interview-summary>div{padding:10px 5px}
   #exam-area .question-actions{grid-template-columns:1fr}

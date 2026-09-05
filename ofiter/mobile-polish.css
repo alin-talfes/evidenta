@@ -18,8 +18,6 @@
   .learning-hero>div{min-width:0}
   .learning-hero .hero-action{margin-top:2px}
   .stats-grid{align-items:stretch}
-  .stat-card{display:flex;flex-direction:column;justify-content:center}
-  .stat-card .progress{width:100%}
   .focus-panel{box-shadow:0 14px 30px rgba(16,35,63,.16)}
 
   .page-heading>*,.panel-head>*,.law-card>*,.official-set>*,.interview-card>*,.legal-act>header>*{min-width:0}
@@ -47,8 +45,8 @@
   h1,h2{text-wrap:balance}
   #interview-draft,.draft-label textarea{scroll-margin-bottom:calc(var(--mobile-nav-height) + 24px + env(safe-area-inset-bottom))}
 
-  .dark .learning-hero,.dark .stat-card,.dark .panel,.dark .study-card,.dark .law-card,.dark .legal-act,.dark .legal-article,.dark .official-set,.dark .question-card,.dark .mistake-item,.dark .interview-profile,.dark .interview-card,.dark .interview-workspace,.dark .interview-simulation-panel,.dark .written-card,.dark .written-head{background:var(--surface);border-color:var(--line);color:var(--text)}
-  .dark .question-card h2,.dark .study-card h2,.dark .law-card h2,.dark .official-set h2,.dark .interview-card h2,.dark .interview-workspace h2,.dark .legal-act h2,.dark .legal-article h3{color:var(--navy)}
+  .dark .learning-hero, .dark .panel, .dark .law-card, .dark .legal-act, .dark .legal-article, .dark .official-set, .dark .question-card, .dark .mistake-item, .dark .interview-profile, .dark .interview-card, .dark .interview-workspace, .dark .interview-simulation-panel, .dark .written-card, .dark .written-head{background:var(--surface);border-color:var(--line);color:var(--text)}
+  .dark .question-card h2, .dark .law-card h2, .dark .official-set h2, .dark .interview-card h2, .dark .interview-workspace h2, .dark .legal-act h2, .dark .legal-article h3{color:var(--navy)}
   .dark .answer{background:#132234;border-color:#2b4055;color:var(--text)}
   .dark .answer:hover{background:#173044;border-color:#4f8e99}
   .dark .answer.correct{background:#173a30;border-color:#2c8d68}
@@ -72,9 +70,6 @@
 @media (max-width:360px){
   .learning-hero{padding:14px}
   .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-card>span{min-height:0}
-  .stat-card small{display:none}
-  .focus-number{font-size:43px}
 }
 
 @media (max-width:340px){
@@ -82,30 +77,27 @@
   .brand>span:last-child{font-size:11px}
   .page-heading h1{font-size:24px}
   .stats-grid{gap:6px}
-  .stat-card{padding:10px 9px}
-  .stat-card strong{font-size:20px}
   .mobile-nav-btn .mobile-nav-label{font-size:8.5px}
 }
 
 @media (hover:none) and (pointer:coarse){
   .primary:hover{filter:none;transform:none}
   .secondary:hover{background:transparent}
-  .study-card:hover,.law-card:hover{transform:none;box-shadow:none}
-  .study-card:not(.learned) .card-toggle:hover{border-color:var(--line);color:var(--muted)}
+  .law-card:hover{transform:none;box-shadow:none}
   .score-scale button:not(.active):hover{border-color:var(--line)}
   .answer:not(.correct):not(.wrong):hover{border-color:var(--line);background:var(--surface)}
   .dark .answer:not(.correct):not(.wrong):hover{background:#132234;border-color:#2b4055}
 }
 
 @media (prefers-contrast:more){
-  .mobile-nav,.mobile-more-sheet,.study-card,.question-card,.legal-article,.interview-card{border-width:2px}
+  .mobile-nav, .mobile-more-sheet, .question-card, .legal-article, .interview-card{border-width:2px}
   .mobile-nav-btn.active,.mobile-more-item.active{outline:2px solid currentColor;outline-offset:-2px}
   .primary,.secondary,.answer{font-weight:850}
 }
 
 @supports (content-visibility:auto){
   @media (max-width:767px){
-    .study-card,.legal-article,.official-set,.interview-card,.mistake-item{content-visibility:auto;contain-intrinsic-size:auto 240px}
+    .legal-article, .official-set, .interview-card, .mistake-item{content-visibility:auto;contain-intrinsic-size:auto 240px}
   }
 }
 

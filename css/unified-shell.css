@@ -275,21 +275,7 @@ body > .app-shell > main { width: 100% !important; max-width: none !important; }
   box-shadow: var(--ev-shadow-soft) !important;
 }
 
-.card,
-.panel,
-.detail,
-.workflow-card,
-.section-hub-card,
-.learning-module-card,
-.basic-card,
-.notice-panel,
-.analysis-panel,
-.results-section,
-.metric-card,
-.law-card,
-.official-set,
-.question-card,
-.study-card {
+.card, .panel, .detail, .workflow-card, .section-hub-card, .learning-module-card, .basic-card, .notice-panel, .analysis-panel, .results-section, .metric-card, .law-card, .official-set, .question-card {
   border-radius: var(--ev-radius-lg) !important;
   border-color: var(--ev-border) !important;
   background: var(--ev-surface) !important;

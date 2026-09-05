@@ -82,6 +82,7 @@ assert.ok(!transferSupplement.includes('MĂSURĂ — Verificarea dosarului sosit
 const html = fs.readFileSync(path.join(moduleDir, "index.html"), "utf8");
 const app = fs.readFileSync(path.join(moduleDir, "app.js"), "utf8");
 const styles = fs.readFileSync(path.join(moduleDir, "styles.css"), "utf8");
+const stylesLegacy = fs.readFileSync(path.join(moduleDir, "styles-legacy.css"), "utf8");
 const enhancements = fs.readFileSync(path.join(moduleDir, "audit-enhancements.css"), "utf8");
 
 for (const file of ["styles.css", "audit-enhancements.css", "data.js", "app.js"]) {
@@ -134,8 +135,11 @@ for (const jsFeature of ["normalizeLearningUi", "study-steps", "step-number", "M
 for (const forbiddenJs of ["localStorage", "renderLearningProgress", "card-progress", "detail-progress", "data-step", "type=\"checkbox\""]) {
   assert.ok(!app.includes(forbiddenJs), `JS nu trebuie să păstreze logică de checklist/progres: ${forbiddenJs}`);
 }
-for (const cssFeature of [".course-nav", ".fraction-grid", "@media (max-width: 650px)", "prefers-reduced-motion"]) {
-  assert.ok(styles.includes(cssFeature), `CSS learning trebuie să includă ${cssFeature}`);
+for (const cssFeature of [".fraction-grid", "@media (max-width: 650px)", "prefers-reduced-motion"]) {
+  assert.ok(stylesLegacy.includes(cssFeature), `CSS learning trebuie să includă ${cssFeature}`);
+}
+for (const removedLegacySelector of [".course-nav", ".hero-panel", ".progress-summary"]) {
+  assert.ok(!stylesLegacy.includes(removedLegacySelector), `CSS legacy nu trebuie să reintroducă ${removedLegacySelector}`);
 }
 for (const enhancement of ["#learning-progress", "#reset-progress", ".study-guide", ".study-sequence", ".study-steps"]) {
   assert.ok(enhancements.includes(enhancement), `Stratul CSS fără checklist trebuie să includă ${enhancement}`);

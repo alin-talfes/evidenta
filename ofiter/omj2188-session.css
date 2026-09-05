@@ -13,8 +13,6 @@
 .omj-session-method{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:14px}
 .omj-session-method span{display:flex;align-items:center;gap:6px;padding:8px;border-radius:9px;background:var(--bg);color:var(--muted);font-size:11px;font-weight:700}
 .omj-session-method b{display:grid;place-items:center;width:22px;height:22px;border-radius:99px;background:var(--navy);color:#fff;font-size:10px}
-.omj-session-progress{margin-bottom:14px}
-.omj-session-progress>div:first-child{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;color:var(--muted);font-size:11px}
 .omj-memory-card{padding:17px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}
 .omj-memory-card h3{margin:7px 0 11px;color:var(--navy);font-size:19px;line-height:1.35}
 .omj-memory-meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.055em}
