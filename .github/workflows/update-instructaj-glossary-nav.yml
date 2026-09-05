@@ -16,6 +16,17 @@ jobs:
         with:
           node-version: 22
       - run: python3 scripts/update_instructaj_glossary_nav.py
+      - name: Adaptează testul de cache CSS
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('tests/run-tests.js')
+          s = p.read_text(encoding='utf-8')
+          old = 'style\\.css\\?v=41'
+          if old not in s:
+              raise RuntimeError('Nu am găsit versiunea veche de cache în tests/run-tests.js')
+          p.write_text(s.replace(old, 'style\\.css\\?v=42'), encoding='utf-8')
+          PY
       - run: npm run check:syntax
       - run: npm test
       - run: |
