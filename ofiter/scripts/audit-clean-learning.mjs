@@ -47,12 +47,15 @@ for (const asset of ["clean-learning.css", "bootstrap.js", "access-gate.js", "ge
 
 const sw = read("sw.js");
 if (!sw.includes('fetch(request,{cache:"no-store"})')) throw new Error("Navigarea trebuie să folosească rețeaua înaintea cache-ului, pentru a evita dashboarduri vechi.");
-if (!sw.includes('evidenta-ofiter-v111')) throw new Error("Cache-ul principal Ofițer nu a fost invalidat.");
+if (!sw.includes('evidenta-ofiter-v112')) throw new Error("Cache-ul principal Ofițer nu a fost invalidat.");
 if (!sw.includes('evidenta-ofiter-generated-v15')) throw new Error("Cache-ul dataseturilor nu a fost invalidat.");
-if (!sw.includes('./heavy-data-loader.js')) throw new Error("Service worker-ul trebuie să precache-uiască loaderul de date.");
-if (!sw.includes('./data-health.js')) throw new Error("Service worker-ul trebuie să precache-uiască verificarea de integritate a datelor.");
-if (!sw.includes('./generated/controllers/legislation.js?v=3')) throw new Error("Service worker-ul trebuie să precache-uiască exact controllerul Legislație cerut de runtime.");
-if (!sw.includes('./legislation-virtual.js?v=2')) throw new Error("Service worker-ul trebuie să precache-uiască exact rendererul virtual Legislație cerut de runtime.");
+if (!sw.includes('./bootstrap.js?v=4')) throw new Error("Service worker-ul trebuie să precache-uiască bootstrap-ul nou.");
+if (!sw.includes('bootstrap.js?v=4')) throw new Error("Navigarea nu forțează bootstrap-ul nou.");
+if (!sw.includes('./heavy-data-loader.js?v=2')) throw new Error("Service worker-ul trebuie să precache-uiască loaderul de date versionat.");
+if (!sw.includes('./data-health.js?v=2')) throw new Error("Service worker-ul trebuie să precache-uiască verificarea de integritate versionată.");
+if (!sw.includes('./generated/controllers/legislation.js?v=4')) throw new Error("Service worker-ul trebuie să precache-uiască ruta directă de Legislație.");
+if (!sw.includes('./generated/controllers/legislation.js?v=3')) throw new Error("Compatibilitatea cu runtime-ul vechi al Legislației trebuie păstrată până la eliminarea lui completă.");
+if (!sw.includes('./legislation-virtual.js?v=2')) throw new Error("Rendererul virtual vechi trebuie să rămână disponibil pentru compatibilitate.");
 if (!sw.includes('self.clients.matchAll({type:"window",includeUncontrolled:true})')) throw new Error("Actualizarea service worker-ului trebuie să poată reîncărca o filă controlată de cache vechi.");
 
 const bootstrap = read("bootstrap.js");
@@ -60,12 +63,17 @@ if (!bootstrap.includes("updateViaCache:'none'")) throw new Error("Actualizarea 
 if (!bootstrap.includes('generated/runtime-bundle.js?v=3')) throw new Error("Pachetul principal trebuie încărcat cu versiune explicită.");
 for (const marker of [
   'const requiredData=["legislation","official","interview"]',
+  'const legislationControllerScript="generated/controllers/legislation.js?v=4"',
   "hydrateDataBeforeRuntime",
   "await hydrateDataBeforeRuntime()",
   "await loadScript(runtimeScript)",
-  "await loadScript(dataHealthScript)"
+  "await loadScript(dataHealthScript)",
+  "openLegislation",
+  "event.stopImmediatePropagation()",
+  "pendingView&&pendingView!=='legislation'",
+  "fallbackLegislation"
 ]) {
-  if (!bootstrap.includes(marker)) throw new Error(`Bootstrap-ul nu garantează încărcarea completă a datelor înainte de runtime: ${marker}`);
+  if (!bootstrap.includes(marker)) throw new Error(`Bootstrap-ul nu garantează ruta directă și încărcarea completă a datelor: ${marker}`);
 }
 if (bootstrap.indexOf("await hydrateDataBeforeRuntime()") > bootstrap.indexOf("await loadScript(runtimeScript)")) {
   throw new Error("Runtime-ul este inițializat înaintea dataseturilor complete.");
@@ -137,4 +145,4 @@ if (app.includes('class="module-progress"') || runtime.includes('class="module-p
 if (app.includes('<div class="progress">') || runtime.includes('<div class="progress">')) throw new Error("Bara de progres a grilelor este încă generată.");
 if (sessions.includes('<div class="progress">')) throw new Error("Bara procentuală a sesiunii de sinteză este încă generată.");
 
-console.log("Clean learning UI + data loading audit passed.");
+console.log("Clean learning UI + direct legislation route + data loading audit passed.");
