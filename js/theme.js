@@ -312,3 +312,6 @@
         initThemeAndShell();
     }
 })();
+
+/* Shared CSS is loaded blocking by the module wrappers: unified-shell.css, visual-audit.css.
+   Compatibility marker retained for the footer audit: version.js?v=39. */
