@@ -2,6 +2,7 @@
 @import url("./design-system.css?v=4");
 @import url("./unified-shell.css?v=2");
 @import url("./visual-audit.css?v=3");
+@import url("./consistency.css?v=1");
 
 /* Compatibilitate pentru auditul nucleului; valorile reale sunt centralizate în design-system.css. */
 /* --bg: #0b1220; --accent: #4f8cff; body.light */
