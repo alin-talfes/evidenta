@@ -27,3 +27,4 @@ jobs:
           git add -A
           git commit -m "Elimină stilurile CSS fantomă confirmate"
           git push origin main
+# rerun after mobile bundle generator fix
