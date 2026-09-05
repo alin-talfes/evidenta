@@ -296,13 +296,13 @@ body.ev-unified .legal-box {
 }
 body.ev-unified .legal-box > :first-child { margin-top: 0 !important; }
 body.ev-unified .legal-box > :last-child { margin-bottom: 0 !important; }
-body.ev-unified[data-ev-page="contopiri.html"] .legal-box,
+body.ev-unified[data-ev-page="contopiri"] .legal-box,
 body.ev-unified[data-ev-page="termene.html"] .legal-box {
   max-height: min(48vh, 460px);
   overflow: auto;
   scrollbar-gutter: stable;
 }
-body.ev-unified[data-ev-page="contopiri.html"] .legal-box h4,
+body.ev-unified[data-ev-page="contopiri"] .legal-box h4,
 body.ev-unified[data-ev-page="termene.html"] .legal-box h4 {
   position: sticky;
   top: -18px;

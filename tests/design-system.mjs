@@ -106,7 +106,7 @@ for (const [module, source] of Object.entries(visualEntries)) {
 const themeBridges = {
   "Instructaj": read("instructaj/app.js"),
   "Semnalmente": read("semnalmente/enhancements.js"),
-  "Semnalmente Benchmark": read("semnalmente/benchmark.html"),
+  "Semnalmente Benchmark": read("semnalmente/benchmark/index.html"),
   "Ofițer": read("ofiter/access-gate.js")
 };
 for (const [module, source] of Object.entries(themeBridges)) {
@@ -135,13 +135,13 @@ assert.ok(htmlFiles.length >= 9, "Auditul trebuie să identifice toate paginile 
 function isCoveredByDesignSystem(relativePath, html) {
   if (html.includes("design-system.css")) return true;
 
-  if (["index.html", "contopiri.html", "transfer/index.html", "transfer/rules.html"].includes(relativePath)) {
+  if (["index.html", "contopiri/index.html", "transfer/index.html", "transfer/rules/index.html"].includes(relativePath)) {
     return /(?:\.\.\/)?js\/theme\.js/.test(html);
   }
 
   if (relativePath === "instructaj/index.html") return html.includes("audit-enhancements.css");
   if (relativePath === "semnalmente/index.html") return html.includes("enhancements.js");
-  if (relativePath === "semnalmente/benchmark.html") return html.includes("benchmark.css");
+  if (relativePath === "semnalmente/benchmark/index.html") return html.includes("benchmark.css");
   if (relativePath === "ofiter/index.html") return html.includes("clean-learning.css");
 
   return false;

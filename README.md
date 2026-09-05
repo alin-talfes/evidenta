@@ -7,7 +7,7 @@ Aplicație web statică pentru activități de evidență, calcule juridice, pre
 | Modul | Rol | Adresă |
 |---|---|---|
 | Evidență pedepse | Expirare, deduceri, fracții și liberare condiționată | [Deschide](https://alin-talfes.github.io/evidenta/) |
-| Contopiri | Calcul aritmetic pentru pedepse rezultante | [Deschide](https://alin-talfes.github.io/evidenta/contopiri.html) |
+| Contopiri | Calcul aritmetic pentru pedepse rezultante | [Deschide](https://alin-talfes.github.io/evidenta/contopiri/) |
 | Transfer și profilare | Filtrarea unităților și regulile de transfer | [Deschide](https://alin-talfes.github.io/evidenta/transfer/) |
 | Instructaj evidență | 23 de moduri de lucru explicate pe baza OMJ nr. 2.188/C/2022, Legii nr. 254/2013, HG nr. 157/2016 și a Codurilor penal/procedural | [Deschide](https://alin-talfes.github.io/evidenta/instructaj/) |
 | Semnalmente | Fișă descriptivă facială asistată și verificabilă | [Deschide](https://alin-talfes.github.io/evidenta/semnalmente/) |
@@ -19,7 +19,7 @@ Ruta `/descriere-semnalmente/` este păstrată în acest repository numai ca red
 ```text
 evidenta/
 ├── index.html
-├── contopiri.html
+├── contopiri/
 ├── css/
 ├── js/
 ├── transfer/

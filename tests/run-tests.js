@@ -18,7 +18,7 @@ assert(tr.__u.length>=39);
 assert.equal(new Set(tr.__u.map(x=>x.id)).size,tr.__u.length);
 assert(Array.isArray(tr.__g('masculin','major','inchis','Hunedoara','executare',false)));
 
-for(const f of ['index.html','contopiri.html','transfer/index.html','transfer/rules.html']){
+for(const f of ['index.html','contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
   const h=fs.readFileSync(f,'utf8');
   assert(/^\s*<!DOCTYPE html>/i.test(h),f+' missing doctype');
   assert(!/user-scalable=no/i.test(h),f+' disables zoom');
@@ -70,7 +70,7 @@ assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFema
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 
-for(const f of ['index.html','contopiri.html','transfer/index.html','transfer/rules.html']){
+for(const f of ['index.html','contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
   assert(/style\.css\?v=41/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
 }
 
@@ -87,7 +87,7 @@ const themeSource=fs.readFileSync('js/theme.js','utf8');
 assert(themeSource.includes("version.js?v=39"),'theme must load the universal version/footer controller');
 assert(themeSource.includes("'footer:not(.ev-footer)'"),'theme must remove legacy footers before the universal footer is rendered');
 assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
-for(const f of ['index.html','semnalmente/index.html','semnalmente/benchmark.html','transfer/rules.html']){
+for(const f of ['index.html','semnalmente/index.html','semnalmente/benchmark/index.html','transfer/rules/index.html']){
   assert(!/<footer\b/i.test(fs.readFileSync(f,'utf8')),f+' contains a duplicated static footer');
 }
 
@@ -101,7 +101,7 @@ assert(fs.readFileSync('js/export.js','utf8').includes('DATE INTRODUSE'));
 assert(fs.readFileSync('js/app.js','utf8').includes('Reanalizare 6 ani și 6 luni'));
 assert(fs.readFileSync('js/app.js','utf8').includes('ALTE DATE ȘI EXPLICAȚII LC'));
 assert(fs.readFileSync('js/contopiri.js','utf8').includes('hasInvalidRow'));
-for(const f of ['contopiri.html','transfer/index.html','transfer/rules.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
+for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
 
 const manifest=fs.readFileSync('manifest.json','utf8');
 assert(!manifest.includes('termene.html'),'PWA manifest still exposes retired Termene route');
@@ -126,7 +126,7 @@ assert(cssAfter.includes('#loadBtn { position: relative; overflow: visible; }'),
 
 const transferRulesSourceCompliance=fs.readFileSync('transfer/rules.js','utf8');
 const transferIndexSourceCompliance=fs.readFileSync('transfer/index.html','utf8');
-const transferRulesPageCompliance=fs.readFileSync('transfer/rules.html','utf8');
+const transferRulesPageCompliance=fs.readFileSync('transfer/rules/index.html','utf8');
 assert(transferRulesSourceCompliance.includes("consolidatedAt: '30.03.2026'"),'transfer legal baseline metadata missing');
 assert(transferRulesSourceCompliance.includes("latestAmendment: 'Ordinul ANP nr. 105/2026'"),'latest profile amendment metadata missing');
 for (const annex of [1,2,3,4,5,6,7,8]) assert(transferRulesPageCompliance.includes(`Anexa ${annex} –`),`rules page missing Annex ${annex}`);

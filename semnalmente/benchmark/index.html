@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <base href="../">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#0b1220">
+    <meta name="description" content="Validare și calibrare pentru motorul Semnalmente.">
+    <title>Semnalmente — calibrare și benchmark</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="benchmark.css">
+</head>
+<body>
+    <a class="skip-link" href="#benchmark-main">Sari la conținut</a>
+    <div class="app-shell benchmark-shell">
+        <main id="benchmark-main">
+            <section class="notice-panel" aria-labelledby="benchmark-notice-title">
+                <div class="notice-icon" aria-hidden="true">≋</div>
+                <div>
+                    <h2 id="benchmark-notice-title">Ce măsoară această pagină</h2>
+                    <p>Încarcă înregistrări JSON conform <a href="calibration-schema.json">schemei de calibrare</a>. Referința trebuie stabilită independent de predicția aplicației. Pagina calculează exact-match accuracy, coverage/abstention, macro-F1, matrice de confuzie și rezultate separate pe versiune de motor și calitatea fotografiei. Fișierele nu sunt trimise către un server.</p>
+                    <p><a href="docs/CALIBRATION.md">Protocol de calibrare</a> · <a href="./">Semnalmente</a></p>
+                </div>
+            </section>
+
+            <section class="panel benchmark-import" aria-labelledby="import-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="import-heading">Încarcă cazurile etalon</h2>
+                        <p>Poți selecta mai multe fișiere, un array JSON sau un bundle exportat anterior.</p>
+                    </div>
+                    <div class="compact-actions">
+                        <input class="sr-only" type="file" id="benchmark-files" accept="application/json,.json" multiple>
+                        <button class="btn btn-primary" type="button" id="btn-load-dataset">Selectează JSON</button>
+                        <button class="btn btn-ghost" type="button" id="btn-export-report" disabled>Exportă raport</button>
+                        <button class="btn btn-danger-ghost" type="button" id="btn-clear-dataset" disabled>Golește</button>
+                    </div>
+                </div>
+                <div class="benchmark-drop" id="benchmark-drop" role="button" tabindex="0" aria-describedby="drop-help">
+                    <strong>Trage aici fișierele de calibrare</strong>
+                    <span id="drop-help">JSON individual, listă de cazuri sau bundle. Nu încărca fotografii.</span>
+                </div>
+                <div class="dataset-status" id="dataset-status" role="status" aria-live="polite">Niciun caz încărcat.</div>
+            </section>
+
+            <section class="panel calibration-builder" aria-labelledby="builder-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="builder-heading">Construiește o înregistrare dintr-un export al aplicației</h2>
+                        <p>Încarcă un JSON exportat de Semnalmente. Predicția automată este extrasă intern și nu este afișată în formular, pentru a reduce biasul operatorului care stabilește referința.</p>
+                    </div>
+                    <div class="compact-actions">
+                        <input class="sr-only" type="file" id="analysis-file" accept="application/json,.json">
+                        <button class="btn btn-ghost" type="button" id="btn-load-analysis">Încarcă predicția</button>
+                    </div>
+                </div>
+                <div class="builder-state" id="builder-state">Nu este încărcat niciun export Semnalmente.</div>
+                <div class="builder-form" id="builder-form" hidden>
+                    <div class="builder-meta">
+                        <label>Case ID pseudonimizat<input type="text" id="builder-case-id" maxlength="80" placeholder="ex. CAL-001" autocomplete="off"></label>
+                        <label class="builder-check"><input type="checkbox" id="builder-blinded"> Referința a fost stabilită fără vizualizarea predicției automate</label>
+                    </div>
+                    <div class="reference-grid" id="reference-grid"></div>
+                    <div class="builder-actions">
+                        <button class="btn btn-success" type="button" id="btn-add-calibration-case">Adaugă la setul de benchmark</button>
+                        <button class="btn btn-secondary" type="button" id="btn-reset-builder">Resetează formularul</button>
+                    </div>
+                    <p class="builder-warning">Nu folosi nume, CNP, număr matricol sau alte identificatoare personale în <code>caseId</code>. Referința trebuie să provină din evaluare umană independentă, nu din corectarea rezultatului aplicației.</p>
+                </div>
+            </section>
+
+            <section class="benchmark-results" id="benchmark-results" hidden>
+                <div class="summary-grid" aria-label="Rezumat benchmark">
+                    <article class="metric-card"><span>Cazuri valide</span><strong id="metric-cases">0</strong><small id="metric-invalid">0 invalide</small></article>
+                    <article class="metric-card"><span>Accuracy micro</span><strong id="metric-micro">—</strong><small>toate comparațiile</small></article>
+                    <article class="metric-card"><span>Accuracy macro</span><strong id="metric-macro">—</strong><small>medie pe categorii</small></article>
+                    <article class="metric-card"><span>Macro-F1</span><strong id="metric-f1">—</strong><small>echilibru precizie/recall</small></article>
+                    <article class="metric-card"><span>Coverage</span><strong id="metric-coverage">—</strong><small id="metric-abstentions">0 abstention</small></article>
+                </div>
+
+                <section class="panel" aria-labelledby="trait-results-heading">
+                    <div class="section-heading">
+                        <div>
+                            <h2 id="trait-results-heading">Performanța clasificatoarelor</h2>
+                            <p>Accuracy include abstention în numitor. Accuracy condiționată arată performanța doar când motorul emite o clasă.</p>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="benchmark-table">
+                            <thead><tr><th>Categorie</th><th>N</th><th>Corecte</th><th>Abst.</th><th>Coverage</th><th>Accuracy</th><th>Accuracy cond.</th><th>Macro-F1</th></tr></thead>
+                            <tbody id="trait-table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="panel matrix-panel" aria-labelledby="matrix-heading">
+                    <div class="section-heading matrix-heading">
+                        <div>
+                            <h2 id="matrix-heading">Matrice de confuzie</h2>
+                            <p>Rândurile sunt etichetele de referință; coloanele sunt predicțiile motorului.</p>
+                        </div>
+                        <label class="matrix-selector">Categorie
+                            <select id="matrix-trait"></select>
+                        </label>
+                    </div>
+                    <div class="table-scroll" id="matrix-container"></div>
+                </section>
+
+                <div class="benchmark-two-column">
+                    <section class="panel" aria-labelledby="version-heading">
+                        <h2 id="version-heading">Pe versiune de motor</h2>
+                        <p class="section-copy">Compară separat rezultatele fiecărei versiuni de motor.</p>
+                        <div class="table-scroll"><table class="benchmark-table compact"><thead><tr><th>Versiune</th><th>Cazuri</th><th>Accuracy</th><th>Coverage</th><th>Macro-F1</th></tr></thead><tbody id="version-table-body"></tbody></table></div>
+                    </section>
+                    <section class="panel" aria-labelledby="quality-heading">
+                        <h2 id="quality-heading">Pe calitatea fotografiei</h2>
+                        <p class="section-copy">Separă performanța pe imagini bune, acceptabile și slabe.</p>
+                        <div class="table-scroll"><table class="benchmark-table compact"><thead><tr><th>Calitate</th><th>Cazuri</th><th>Accuracy</th><th>Coverage</th><th>Macro-F1</th></tr></thead><tbody id="quality-table-body"></tbody></table></div>
+                    </section>
+                </div>
+
+                <section class="panel integrity-panel" aria-labelledby="integrity-heading">
+                    <h2 id="integrity-heading">Probleme de date</h2>
+                    <div id="integrity-content"></div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="../js/theme.js?v=4"></script>
+    <script type="module" src="benchmark.js"></script>
+</body>
+</html>

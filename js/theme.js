@@ -114,14 +114,20 @@
             '': ['pedepse', 'Pedepse și liberare condiționată', 'Calculul pedepsei, deducerilor, expirării și liberării condiționate.'],
             'index.html': ['pedepse', 'Pedepse și liberare condiționată', 'Calculul pedepsei, deducerilor, expirării și liberării condiționate.'],
             'contopiri.html': ['contopiri', 'Contopiri', 'Calculul pedepsei rezultante pentru situații deja calificate juridic.'],
+            'contopiri': ['contopiri', 'Contopiri', 'Calculul pedepsei rezultante pentru situații deja calificate juridic.'],
+            'contopiri/index.html': ['contopiri', 'Contopiri', 'Calculul pedepsei rezultante pentru situații deja calificate juridic.'],
             'transfer': ['transfer', 'Transfer și profilare', 'Filtrarea destinațiilor potrivit criteriilor de transfer și profilare.'],
             'transfer/index.html': ['transfer', 'Transfer și profilare', 'Filtrarea destinațiilor potrivit criteriilor de transfer și profilare.'],
             'transfer/rules.html': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
+            'transfer/rules': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
+            'transfer/rules/index.html': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
             'instructaj': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
             'instructaj/index.html': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
             'semnalmente': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
             'semnalmente/index.html': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
             'semnalmente/benchmark.html': ['semnalmente', 'Semnalmente · Benchmark', 'Validarea și calibrarea motorului Semnalmente.'],
+            'semnalmente/benchmark': ['semnalmente', 'Semnalmente · Benchmark', 'Validarea și calibrarea motorului Semnalmente.'],
+            'semnalmente/benchmark/index.html': ['semnalmente', 'Semnalmente · Benchmark', 'Validarea și calibrarea motorului Semnalmente.'],
             'ofiter': [null, 'Ofițer evidență', 'Pregătire pentru concursul de ofițer evidență.'],
             'ofiter/index.html': [null, 'Ofițer evidență', 'Pregătire pentru concursul de ofițer evidență.']
         };
@@ -132,7 +138,7 @@
     function publicModules() {
         return [
             ['pedepse', 'Pedepse', new URL('./', rootUrl).href],
-            ['contopiri', 'Contopiri', new URL('contopiri.html', rootUrl).href],
+            ['contopiri', 'Contopiri', new URL('contopiri/', rootUrl).href],
             ['transfer', 'Transfer', new URL('transfer/', rootUrl).href],
             ['instructaj', 'Instructaj', new URL('instructaj/', rootUrl).href],
             ['semnalmente', 'Semnalmente', new URL('semnalmente/', rootUrl).href]

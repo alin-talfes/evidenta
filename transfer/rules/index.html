@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <base href="../">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Regulile de transfer – Decizia 360/2020</title>
+    <link rel="stylesheet" href="../css/style.css?v=41" />
+    <script src="../js/theme.js?v=34" defer></script>
+    <script src="../js/version.js?v=39" defer></script>
+    <link rel="icon" href="../favicon-ev-2.svg" sizes="any" type="image/svg+xml">
+    <link rel="mask-icon" href="../favicon-ev-2.svg" color="#4f8cff">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="description" content="Anexele și regulile utilizate pentru transfer și profilare.">
+    <meta property="og:title" content="Regulile de transfer – Decizia 360/2020">
+    <meta property="og:description" content="Anexele și regulile utilizate pentru transfer și profilare.">
+    <meta property="og:type" content="website">
+</head>
+<body>
+<div class="container">
+    <div class="page-actions transfer-page-actions">
+        <a class="btn btn-outline" href="./">ÎNAPOI LA TRANSFER</a>
+    </div>
+
+    <div class="card">
+        <h3>Filtrare rapidă</h3>
+        <div class="filter-container">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="filterInput" placeholder="Caută după unitate, județ, regim..." />
+            </div>
+            <button class="filter-clear" id="filterClear">✕ Resetează</button>
+            <span class="filter-stats" id="filterStats">0 afișate / <strong>0</strong> total</span>
+        </div>
+    </div>
+
+    <div class="card" id="anexa1Card">
+        <h3>Anexa 1 – Profilarea unităților</h3>
+        <p>Arondarea unităților pe județe și regimuri de custodie pentru persoanele de sex masculin majore.</p>
+        <div class="rules-container" style="overflow-x:auto;">
+            <table class="rules-table" id="anexa1Table">
+                <thead>
+                    <tr>
+                        <th>Unitate</th>
+                        <th>Județe deservite</th>
+                        <th>Regimuri de custodie (masculin / major)</th>
+                    </tr>
+                </thead>
+                <tbody id="anexa1Body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card" id="anexa2Card">
+        <h3>Anexa 2 – Secții interioare și exterioare</h3>
+        <p>Anexa 2 stabilește structurile interioare/exterioare și nu reprezintă o regulă autonomă de arondare după județ. Pentru stabilirea destinației se utilizează profilarea și anexele operaționale aplicabile.</p>
+    </div>
+
+    <div class="card" id="anexa3Card">
+        <h3>Anexa 3 – Arondarea pentru primirea de la poliție</h3>
+        <p>Unitățile și organele de poliție care depun persoane private de libertate, conform Anexei 3.</p>
+        <div class="rules-container" style="overflow-x:auto;">
+            <table class="rules-table" id="anexa3Table">
+                <thead>
+                    <tr>
+                        <th>Unitatea</th>
+                        <th>Organul de poliție care depune</th>
+                        <th>Categorii primite</th>
+                    </tr>
+                </thead>
+                <tbody id="anexa3Body"></tbody>
+            </table>
+        </div>
+        <div class="anexa-box" style="margin-top:12px;">
+            <strong>Notă:</strong> Pe cale de excepție, locurile de deținere pot primi și de la alte inspectorate de poliție decât cele arondate, în situații justificate.
+        </div>
+    </div>
+
+    <div class="card" id="anexa4Card">
+        <h3>Anexa 4 – Transfer după stabilirea regimului provizoriu</h3>
+        <p>Operațiune distinctă de profilarea generală: transferul se dispune de directorul locului de deținere conform arondării prevăzute în Anexa 4. Modul principal nu substituie această arondare cu rezultatele Anexei 1.</p>
+        <div class="anexa-box"><strong>Regulă:</strong> pentru o speță de regim provizoriu se verifică direct Anexa 4 în forma consolidată aplicabilă; nu se utilizează modul „Executare pedeapsă” ca echivalent automat.</div>
+    </div>
+
+    <div class="card" id="anexa5Card">
+        <h3>Anexa 5 – Măsuri educative cu executare în penitenciar</h3>
+        <p>Unitățile care găzduiesc persoane față de care s-a dispus aplicarea unei măsuri educative cu executare sau continuare în penitenciar.</p>
+        <div id="anexa5Container"></div>
+    </div>
+
+    <div class="card" id="anexa6Card">
+        <h3>Anexa 6 – Tranzitul între unități</h3>
+        <p>Unitățile de tranzit și rutele pe care se efectuează transferurile între unitățile subordonate ANP.</p>
+        <div id="anexa6Container"></div>
+    </div>
+
+    <div class="card" id="anexa7Card">
+        <h3>Anexa 7 – Expertize medico-legale</h3>
+        <p>Centrele și unitățile penitenciare arondate pentru efectuarea expertizelor medico-legale psihiatrice și pentru amânarea/întreruperea executării pedepsei pe motiv de boală.</p>
+        <div id="anexa7Container"></div>
+    </div>
+
+    <div class="card" id="anexa8Card">
+        <h3>Anexa 8 – Tulburări psihice grave</h3>
+        <p>Unitățile cu secții pentru custodierea persoanelor diagnosticate cu tulburări psihice grave.</p>
+        <div id="anexa8Container"></div>
+    </div>
+</div>
+
+<script src="rules.js"></script>
+<script src="rules-page.js?v=34"></script>
+</body>
+</html>

@@ -40,7 +40,7 @@ assert.ok(
 );
 
 assert.ok(
-  responsive.includes('body.ev-unified[data-ev-page="contopiri.html"] .legal-box') &&
+  responsive.includes('body.ev-unified[data-ev-page="contopiri"] .legal-box') &&
   responsive.includes('max-height: none !important'),
   'Contopiri nu trebuie să folosească nested-scroll pentru baza legală pe telefon'
 );

@@ -251,12 +251,12 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   }
 
   /* Scroll intern lung pe Contopiri este util pe desktop, dar incomod pe telefon. */
-  body.ev-unified[data-ev-page="contopiri.html"] .legal-box {
+  body.ev-unified[data-ev-page="contopiri"] .legal-box {
     max-height: none !important;
     overflow: visible !important;
   }
 
-  body.ev-unified[data-ev-page="contopiri.html"] .legal-box h4 {
+  body.ev-unified[data-ev-page="contopiri"] .legal-box h4 {
     position: static !important;
     margin-inline: 0 !important;
     padding-inline: 0 !important;

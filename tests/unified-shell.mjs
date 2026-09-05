@@ -90,7 +90,7 @@ const loaders = {
   'transfer': read('transfer/index.html'),
   'instructaj': read('instructaj/app.js'),
   'semnalmente': read('semnalmente/enhancements.js'),
-  'benchmark': read('semnalmente/benchmark.html'),
+  'benchmark': read('semnalmente/benchmark/index.html'),
   'ofiter': read('ofiter/access-gate.js')
 };
 
@@ -100,12 +100,12 @@ for (const [name, source] of Object.entries(loaders)) {
 
 const publicPages = [
   'index.html',
-  'contopiri.html',
+  'contopiri/index.html',
   'transfer/index.html',
-  'transfer/rules.html',
+  'transfer/rules/index.html',
   'instructaj/index.html',
   'semnalmente/index.html',
-  'semnalmente/benchmark.html',
+  'semnalmente/benchmark/index.html',
   'descriere-semnalmente/index.html'
 ];
 const officerHref = /href\s*=\s*["'][^"']*(?:^|\/)ofiter(?:\/|\/index\.html|[?#]|["'])/i;
@@ -114,7 +114,7 @@ for (const file of publicPages) {
   assert.ok(!officerHref.test(html), `${file} nu trebuie să expună link vizibil către modulul ascuns Ofițer`);
 }
 
-for (const file of ['semnalmente/index.html', 'semnalmente/benchmark.html', 'index.html', 'transfer/rules.html']) {
+for (const file of ['semnalmente/index.html', 'semnalmente/benchmark/index.html', 'index.html', 'transfer/rules/index.html']) {
   assert.ok(!/<footer\b/i.test(read(file)), `${file} nu trebuie să definească un footer propriu`);
 }
 
