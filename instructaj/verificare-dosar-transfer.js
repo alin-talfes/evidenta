@@ -9,7 +9,7 @@
   const workflow = {
     id: "verificare-dosar-transfer",
     category: "Regim și transfer",
-    title: "MĂSURĂ — Verificarea dosarului sosit prin transfer",
+    title: "Verificarea dosarului sosit prin transfer",
     summary: "Control integral al identității, titlului de deținere, hotărârilor, calculelor, deducerilor, interdicțiilor, situațiilor speciale și termenelor după sosirea dosarului prin transfer.",
     legal: [
       "OMJ nr. 2.188/C/2022: art. 17–24, 68–82, 190–197 și 229–230",

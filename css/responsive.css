@@ -303,3 +303,59 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     transition-duration: .01ms !important;
   }
 }
+
+/* NAVIGAȚIE PUBLICĂ CENTRATĂ — mobil și tabletă */
+@media (max-width: 1040px) {
+  body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__bar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    column-gap: 10px !important;
+    row-gap: 8px !important;
+  }
+
+  body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav {
+    grid-column: 1 / -1;
+    width: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px !important;
+    margin-inline: auto;
+    padding: 0 0 10px !important;
+    overflow: visible !important;
+    scroll-snap-type: none;
+  }
+
+  body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1040px) {
+  body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
+    flex: 0 1 116px;
+    min-width: 104px;
+    max-width: 132px;
+    padding-inline: 10px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav {
+    display: flex !important;
+    grid-template-columns: none !important;
+  }
+
+  body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
+    flex: 0 0 calc((100% - 12px) / 3);
+    width: auto;
+    max-width: 150px;
+    min-width: 0;
+    padding-inline: 5px !important;
+  }
+}
+

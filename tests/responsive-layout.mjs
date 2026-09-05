@@ -27,6 +27,15 @@ for (const marker of [
   assert.ok(responsive.includes(marker), `Responsive comun trebuie să conțină: ${marker}`);
 }
 
+
+assert.ok(
+  responsive.includes('/* NAVIGAȚIE PUBLICĂ CENTRATĂ — mobil și tabletă */') &&
+  responsive.includes('body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav') &&
+  responsive.includes('flex-wrap: wrap') &&
+  responsive.includes('justify-content: center'),
+  'Meniul public trebuie să fie centrat și uniform pe mobil/tabletă'
+);
+
 assert.ok(
   responsive.includes('body.ev-unified[data-ev-page^="ofiter"] .ev-shell__nav') &&
   responsive.includes('display: none !important'),
@@ -59,9 +68,9 @@ const wrappers = {
 };
 
 for (const [module, source] of Object.entries(wrappers)) {
-  assert.ok(source.includes('responsive.css?v=1'), `${module} trebuie să încarce responsive.css`);
+  assert.ok(source.includes('responsive.css?v=2'), `${module} trebuie să încarce responsive.css`);
   assert.ok(
-    source.indexOf('responsive.css?v=1') > source.indexOf('consistency.css?v=1'),
+    source.indexOf('responsive.css?v=2') > source.indexOf('consistency.css?v=1'),
     `${module}: responsive.css trebuie să fie după consistency.css`
   );
 }

@@ -59,7 +59,25 @@ for (const [id, refs] of Object.entries(mustContain)) {
   for (const ref of refs) assert.ok(legal.includes(ref), `${id} trebuie să includă ${ref}`);
 }
 
-assert.ok(data.glossary.length >= 7, "Glosar pentru termenii juridici indispensabili");
+assert.ok(data.glossary.length >= 45, "Glosarul trebuie să acopere amplu termenii juridici de lucru");
+for (const term of [
+  "Act executoriu",
+  "Citație",
+  "Contestație la executare",
+  "Contopirea pedepselor",
+  "Hotărâre definitivă",
+  "Liberare condiționată",
+  "Mandat de executare a pedepsei închisorii (MEPI)",
+  "Pedeapsă accesorie",
+  "Pedeapsă complementară",
+  "Recidivă",
+  "Temei de deținere"
+]) {
+  assert.ok(data.glossary.some(item => item.term === term && item.meaning.length > 60), `Glosarul trebuie să explice: ${term}`);
+}
+const transferSupplement = fs.readFileSync(path.join(moduleDir, "verificare-dosar-transfer.js"), "utf8");
+assert.ok(transferSupplement.includes('title: "Verificarea dosarului sosit prin transfer"'), "Fișa transfer trebuie să aibă titlul curat");
+assert.ok(!transferSupplement.includes('MĂSURĂ — Verificarea dosarului sosit prin transfer'), "Prefixul MĂSURĂ trebuie eliminat din titlu");
 
 const html = fs.readFileSync(path.join(moduleDir, "index.html"), "utf8");
 const app = fs.readFileSync(path.join(moduleDir, "app.js"), "utf8");

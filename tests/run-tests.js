@@ -71,7 +71,7 @@ let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDay
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 
 for(const f of ['index.html','contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
-  assert(/style\.css\?v=41/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
+  assert(/style\.css\?v=42/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
 }
 
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
