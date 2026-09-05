@@ -1,0 +1,29 @@
+name: Prune ghost CSS
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/prune-ghost-css.yml]
+permissions:
+  contents: write
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save postcss
+      - run: node scripts/prune_ghost_css.mjs
+      - run: cd ofiter && node scripts/build-mobile-css.mjs
+      - run: npm run check:syntax
+      - run: npm test
+      - run: |
+          rm scripts/prune_ghost_css.mjs .github/workflows/prune-ghost-css.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Elimină stilurile CSS fantomă confirmate"
+          git push origin main
