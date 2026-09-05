@@ -1,39 +1,19 @@
-// Shared theme + universal product shell for the entire Evidenta PPL application.
+// Shared theme + universal product shell for the entire Evidență PPL application.
 (function () {
     'use strict';
+
+    const READY_ATTRIBUTE = 'data-ev-ready';
+    if (window.__EVIDENTA_THEME_CONTROLLER__) {
+        document.documentElement.setAttribute(READY_ATTRIBUTE, 'true');
+        return;
+    }
+    window.__EVIDENTA_THEME_CONTROLLER__ = true;
 
     const THEME_STORAGE_KEY = 'evidenta-theme';
     const LEGACY_KEYS = ['anpTheme', 'descriere-semnalmente-theme'];
     const THEME_CONTROL_SELECTOR = '#themeToggle, #btn-theme, #theme-btn, #evidenta-theme-toggle';
     const scriptUrl = new URL(document.currentScript?.src || location.href, location.href);
     const rootUrl = new URL('../', scriptUrl);
-
-    function ensureStylesheet(href, dataAttribute) {
-        if (document.querySelector(`link[${dataAttribute}], link[href*="${href.split('/').pop().split('?')[0]}"]`)) return;
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = new URL(href, scriptUrl).href;
-        link.setAttribute(dataAttribute, 'true');
-        document.head.appendChild(link);
-    }
-
-    function ensureScript(href, dataAttribute) {
-        const expected = new URL(href, scriptUrl).href;
-        const exactAlreadyLoaded = [...document.scripts].some(script => script.src === expected);
-        if (document.querySelector(`script[${dataAttribute}]`) || exactAlreadyLoaded) return;
-        const script = document.createElement('script');
-        script.src = expected;
-        script.defer = true;
-        script.setAttribute(dataAttribute, 'true');
-        document.head.appendChild(script);
-    }
-
-    function ensureSharedAssets() {
-        ensureStylesheet('../css/design-system.css?v=4', 'data-evidenta-design-system');
-        ensureStylesheet('../css/unified-shell.css?v=2', 'data-evidenta-unified-shell');
-        ensureStylesheet('../css/visual-audit.css?v=1', 'data-evidenta-visual-audit');
-        ensureScript('../js/version.js?v=39', 'data-evidenta-version-controller');
-    }
 
     function validTheme(value) {
         return value === 'light' || value === 'dark' ? value : null;
@@ -101,6 +81,16 @@
         return applyTheme(current === 'light' ? 'dark' : 'light', { persist: true });
     }
 
+    function ensureVersionController() {
+        const expected = new URL('../js/version.js?v=40', scriptUrl).href;
+        if ([...document.scripts].some(script => script.src === expected || /\/js\/version\.js(?:\?|$)/.test(script.src))) return;
+        const script = document.createElement('script');
+        script.src = expected;
+        script.defer = true;
+        script.dataset.evidentaVersionController = 'true';
+        document.head.appendChild(script);
+    }
+
     function relativePage() {
         const rootPath = rootUrl.pathname.endsWith('/') ? rootUrl.pathname : `${rootUrl.pathname}/`;
         const pathname = location.pathname;
@@ -153,7 +143,6 @@
             document.head.appendChild(description);
         }
         description.content = context.description;
-
         const ogDescription = document.querySelector('meta[property="og:description"]');
         if (ogDescription) ogDescription.content = context.description;
     }
@@ -207,9 +196,7 @@
 
         document.querySelectorAll('.modal p').forEach(element => {
             const text = element.textContent || '';
-            if (text.includes('Instrumente disponibile') || text.includes('Mod de utilizare') || text.includes('Calculator termene procedurale')) {
-                element.remove();
-            }
+            if (text.includes('Instrumente disponibile') || text.includes('Mod de utilizare') || text.includes('Calculator termene procedurale')) element.remove();
         });
 
         const sectionHub = document.querySelector('.section-hub');
@@ -262,15 +249,11 @@
         if (logout && actions) actions.prepend(logout);
 
         updateThemeButtons(validTheme(document.documentElement.dataset.theme) || readTheme());
+
+        const currentNav = shell.querySelector('.ev-shell__nav a[aria-current="page"]');
+        requestAnimationFrame(() => currentNav?.scrollIntoView({ block: 'nearest', inline: 'center' }));
         window.dispatchEvent(new CustomEvent('evidenta:shellready'));
     }
-
-    ensureSharedAssets();
-    const initialTheme = readTheme();
-    document.documentElement.dataset.theme = initialTheme;
-    document.documentElement.style.colorScheme = initialTheme;
-    persistTheme(initialTheme);
-    updateThemeMeta(initialTheme);
 
     document.addEventListener('click', event => {
         const button = event.target.closest?.(THEME_CONTROL_SELECTOR);
@@ -282,23 +265,28 @@
     }, true);
 
     function initThemeAndShell() {
-        applyTheme(readTheme());
-        removeRetiredModuleLinks();
-        pruneEditorialNoise();
-        buildUniversalShell();
-        pruneEditorialNoise();
-        updateThemeButtons(readTheme());
+        try {
+            applyTheme(readTheme());
+            removeRetiredModuleLinks();
+            pruneEditorialNoise();
+            buildUniversalShell();
+            pruneEditorialNoise();
+            updateThemeButtons(readTheme());
+            ensureVersionController();
 
-        let scheduled = false;
-        const observer = new MutationObserver(() => {
-            if (scheduled) return;
-            scheduled = true;
-            requestAnimationFrame(() => {
-                scheduled = false;
-                pruneEditorialNoise();
+            let scheduled = false;
+            const observer = new MutationObserver(() => {
+                if (scheduled) return;
+                scheduled = true;
+                requestAnimationFrame(() => {
+                    scheduled = false;
+                    pruneEditorialNoise();
+                });
             });
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
+            observer.observe(document.body, { childList: true, subtree: true });
+        } finally {
+            document.documentElement.setAttribute(READY_ATTRIBUTE, 'true');
+        }
     }
 
     window.addEventListener('storage', event => {
@@ -311,6 +299,12 @@
     window.EVIDENTA_THEME_STORAGE_KEY = THEME_STORAGE_KEY;
     window.EVIDENTA_THEME = { get: readTheme, set: theme => applyTheme(theme, { persist: true }), toggle: toggleTheme };
     window.EVIDENTA_SHELL = { rebuild: buildUniversalShell, context: pageContext };
+
+    const initialTheme = readTheme();
+    document.documentElement.dataset.theme = initialTheme;
+    document.documentElement.style.colorScheme = initialTheme;
+    persistTheme(initialTheme);
+    updateThemeMeta(initialTheme);
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initThemeAndShell, { once: true });
