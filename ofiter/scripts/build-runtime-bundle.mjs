@@ -22,7 +22,10 @@ core=core.replace("if(id==='mistakes')renderMistakes();if(id==='legislation')ren
   .replace('$("#interview-simulation-start").onclick=startInterviewSimulation;$("#interview-category").onchange=renderInterview;$("#interview-difficulty").onchange=renderInterview;$("#interview-search").oninput=renderInterview;', '$("#interview-simulation-start").onclick=()=>window.TRAINING_LAZY_LOADER?.ensureView("interview").then(()=>startInterviewSimulation());$("#interview-category").onchange=()=>window.TRAINING_LAZY_LOADER?.ensureView("interview").then(()=>renderInterview());$("#interview-difficulty").onchange=()=>window.TRAINING_LAZY_LOADER?.ensureView("interview").then(()=>renderInterview());$("#interview-search").oninput=()=>window.TRAINING_LAZY_LOADER?.ensureView("interview").then(()=>renderInterview());');
 const persistencePattern='localStorage.setItem("evidenta-training",JSON.stringify(state))';
 core=core.split(persistencePattern).join('window.TRAINING_PERSISTENCE?.queue(state)');
-core=core.replace("$$('[data-exam-answer]').forEach(b=>b.onclick=()=>{examAnswers[q.id]=Number(b.dataset.examAnswer);renderExam()});","$$('[data-exam-answer]').forEach(b=>b.onclick=()=>{examAnswers[q.id]=Number(b.dataset.examAnswer);$$('[data-exam-answer]').forEach(x=>x.classList.toggle('selected',x===b))});");
+core=core.replace(
+  "$$('[data-exam-answer]').forEach(b=>b.onclick=()=>{examAnswers[q.id]=Number(b.dataset.examAnswer);renderExam()});",
+  () => "$$('[data-exam-answer]').forEach(b=>b.onclick=()=>{examAnswers[q.id]=Number(b.dataset.examAnswer);$$('[data-exam-answer]').forEach(x=>x.classList.toggle('selected',x===b))});"
+);
 
 function controllerSource(name,nodes){
   let source=nodes.map(node=>appSource.slice(node.start,node.end)).join('\n');

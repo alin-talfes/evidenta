@@ -2,7 +2,7 @@
   if(window.TRAINING_BOOT)return;
   let bootPromise=null,pendingView=null,replaying=false,preloaded=false;
   const persistenceScript="persistence-layer.js";
-  const runtimeScript="generated/runtime-bundle.js?v=3";
+  const runtimeScript="generated/runtime-bundle.js?v=4";
   const preloadList=[persistenceScript,runtimeScript];
   const $=selector=>document.querySelector(selector);
   const $$=selector=>[...document.querySelectorAll(selector)];
