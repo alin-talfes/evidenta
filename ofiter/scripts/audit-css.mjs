@@ -10,7 +10,8 @@ const sharedStyles=new Set([
   path.resolve(root,'../css/design-system.css'),
   path.resolve(root,'../css/unified-shell.css'),
   path.resolve(root,'../css/visual-audit.css'),
-  path.resolve(root,'../css/consistency.css')
+  path.resolve(root,'../css/consistency.css'),
+  path.resolve(root,'../css/responsive.css')
 ]);
 const importedCss=new Set();
 
