@@ -71,7 +71,8 @@ assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFema
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 
-for(const f of ['index.html','contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
+assert(/style\.css\?v=43/.test(fs.readFileSync('index.html','utf8')),'index.html stale css cache version');
+for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
   assert(/style\.css\?v=42/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
 }
 
