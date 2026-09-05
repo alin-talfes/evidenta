@@ -10,13 +10,14 @@ const sharedStyles=new Set([
   path.resolve(root,'../css/unified-shell.css'),
   path.resolve(root,'../css/visual-audit.css'),
   path.resolve(root,'../css/consistency.css'),
-  path.resolve(root,'../css/responsive.css')
+  path.resolve(root,'../css/responsive.css'),
+  path.resolve(root,'../css/final-layer.css')
 ]);
 const importedCss=new Set();
 
 function walk(dir){
   return fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
-    if(ignoredDirs.has(entry.name))return [];
+    if(ignoredDirs.has(entry.name))return[];
     const full=path.join(dir,entry.name);
     return entry.isDirectory()?walk(full):[path.relative(root,full).replaceAll('\\','/')];
   });

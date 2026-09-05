@@ -1,11 +1,12 @@
-const CACHE = "evidenta-ofiter-v108";
+const CACHE = "evidenta-ofiter-v109";
 const GENERATED_CACHE = "evidenta-ofiter-generated-v13";
 
 const CORE_ASSETS = [
   "./","./index.html","./styles.css?v=2","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./clean-learning.css","./access-gate.js",
-  "./data-core.js?v=2","./bootstrap.js?v=3","./persistence-layer.js","./generated/runtime-bundle.js?v=3",
+  "./data-core.js?v=2","./bootstrap.js?v=3","./persistence-layer.js","./generated/runtime-bundle.js?v=3","./dashboard-cockpit.js?v=1",
   "./generated/controllers/interview.js","./generated/controllers/legislation.js","./generated/controllers/official.js",
   "./heavy-data-loader.js","./legislation-virtual.js","./scenario-questions.js","./scenario-questions.css",
+  "../css/final-layer.css?v=1",
   "./manifest.webmanifest","./icon.svg","./icon-192.png","./apple-touch-icon.png"
 ];
 

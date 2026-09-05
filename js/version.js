@@ -7,13 +7,39 @@
     const scriptUrl = document.currentScript?.src || new URL('js/version.js', document.baseURI).href;
     const versionUrl = new URL('../version.json', scriptUrl).href;
 
-    function ensureUxUpgrades() {
-        if (document.querySelector('script[data-evidenta-ux-controller]')) return;
+    function ensureScript(selector, src, datasetKey) {
+        if (document.querySelector(selector)) return;
         const script = document.createElement('script');
-        script.src = new URL('./ux-upgrades.js?v=1', scriptUrl).href;
+        script.src = src;
         script.async = false;
-        script.dataset.evidentaUxController = 'true';
+        if (datasetKey) script.dataset[datasetKey] = 'true';
         document.head.appendChild(script);
+    }
+
+    function ensureUxUpgrades() {
+        ensureScript(
+            'script[data-evidenta-ux-controller]',
+            new URL('./ux-upgrades.js?v=1', scriptUrl).href,
+            'evidentaUxController'
+        );
+    }
+
+    function ensurePageControllers() {
+        if (document.getElementById('resultsCard') && document.getElementById('birthDate')) {
+            ensureScript(
+                'script[data-evidenta-pedepse-controller]',
+                new URL('./pedepse-ux.js?v=1', scriptUrl).href,
+                'evidentaPedepseController'
+            );
+        }
+
+        if (location.pathname.includes('/ofiter/')) {
+            ensureScript(
+                'script[data-evidenta-officer-cockpit]',
+                new URL('../ofiter/dashboard-cockpit.js?v=1', scriptUrl).href,
+                'evidentaOfficerCockpit'
+            );
+        }
     }
 
     function renderFooter(versionText) {
@@ -55,9 +81,13 @@
     }
 
     ensureUxUpgrades();
+    ensurePageControllers();
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFooter, { once: true });
+        document.addEventListener('DOMContentLoaded', () => {
+            ensurePageControllers();
+            initFooter();
+        }, { once: true });
     } else {
         initFooter();
     }
