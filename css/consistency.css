@@ -1,0 +1,352 @@
+/*
+ * EVIDENȚĂ PPL — consistență structurală între module
+ * Strat final: uniformizează geometria, ritmul și componentele fără a schimba logica funcțională.
+ */
+:root {
+  --ev-page-gap: 18px;
+  --ev-panel-pad: 20px;
+  --ev-panel-pad-mobile: 16px;
+  --ev-grid-gap: 14px;
+}
+
+body.ev-unified {
+  color: var(--ev-text) !important;
+  background:
+    radial-gradient(circle at 8% -5%, color-mix(in srgb, var(--ev-accent) 12%, transparent), transparent 28rem),
+    var(--ev-bg) !important;
+}
+
+html[data-theme="light"] body.ev-unified,
+body.ev-unified.light {
+  background: linear-gradient(180deg, #f8fafc 0, var(--ev-bg) 22rem) !important;
+}
+
+/* Aceeași ramă de conținut și același ritm vertical. */
+body.ev-unified > .container,
+body.ev-unified > main,
+body.ev-unified > .app-shell,
+body.ev-unified > .app-shell > main {
+  width: 100% !important;
+  max-width: var(--ev-shell-max) !important;
+  margin-inline: auto !important;
+}
+
+body.ev-unified > .container,
+body.ev-unified > main,
+body.ev-unified > .app-shell > main {
+  padding-top: 24px !important;
+  padding-bottom: 40px !important;
+}
+
+body.ev-unified :is(
+  .container > .card,
+  .container > .legal-box,
+  .container > .result-box,
+  main > .panel,
+  main > section.panel,
+  main > .notice-panel,
+  .view > .panel,
+  .view > .notice,
+  .view > .exam-workspace,
+  .learning-section,
+  .method,
+  .section-hub,
+  .analysis-panel,
+  .results-section
+) {
+  margin-top: 0 !important;
+  margin-bottom: var(--ev-page-gap) !important;
+}
+
+/* Suprafețe de nivel principal identice. */
+body.ev-unified :is(
+  .card,
+  .panel,
+  .detail,
+  .notice-panel,
+  .analysis-panel,
+  .results-section,
+  .legal-box,
+  .result-box,
+  .question-card,
+  .study-card,
+  .law-card,
+  .official-set,
+  .exam-workspace,
+  .written-workspace,
+  .learning-module-card,
+  .section-hub-card,
+  .basic-card,
+  .workflow-card,
+  .metric-card,
+  .exam-path-card,
+  .access-card
+) {
+  color: var(--ev-text) !important;
+  border: 1px solid var(--ev-border) !important;
+  border-radius: var(--ev-radius-lg) !important;
+  background: var(--ev-surface) !important;
+  box-shadow: var(--ev-shadow-soft) !important;
+}
+
+body.ev-unified :is(
+  .container > .card,
+  main > .panel,
+  main > section.panel,
+  .view > .panel,
+  .analysis-panel,
+  .results-section,
+  .exam-workspace,
+  .written-workspace,
+  .legal-box
+) {
+  padding: var(--ev-panel-pad) !important;
+}
+
+body.ev-unified :is(
+  .learning-module-card,
+  .section-hub-card,
+  .workflow-card,
+  .metric-card,
+  .exam-path-card,
+  .study-card,
+  .law-card,
+  .question-card
+) {
+  padding: 16px !important;
+}
+
+/* Titlurile interne sunt subordonate titlului universal din shell. */
+body.ev-unified :is(.page-heading, .section-heading, .panel-head, .learning-modules-head, .exam-path-head) {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin-top: 0 !important;
+  margin-bottom: 14px !important;
+}
+
+body.ev-unified .page-heading h1 {
+  margin: 0 !important;
+  color: var(--ev-text) !important;
+  font-size: clamp(1.4rem, 2.2vw, 1.75rem) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.02em !important;
+  font-weight: 850 !important;
+}
+
+body.ev-unified :is(.section-heading h2, .panel-head h2, .learning-modules-head h2, .exam-path-head h2, .panel > h2, .panel > h3, .card > h3) {
+  margin-top: 0 !important;
+  color: var(--ev-text) !important;
+  font-size: 1.08rem !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.01em !important;
+  font-weight: 820 !important;
+}
+
+body.ev-unified :is(.page-heading p, .section-heading p, .panel-head p, .learning-modules-head p, .exam-path-head p) {
+  max-width: 74ch;
+  margin-bottom: 0 !important;
+  color: var(--ev-text-secondary) !important;
+}
+
+/* Etichete mici: un singur tratament vizual. */
+body.ev-unified :is(.eyebrow, .section-kicker, .panel-label, .notice-kicker, .upload-type, .metric-card > span) {
+  color: var(--ev-accent-strong) !important;
+  font-family: var(--ev-font) !important;
+  font-size: .68rem !important;
+  font-weight: 850 !important;
+  letter-spacing: .07em !important;
+  text-transform: uppercase !important;
+}
+
+/* Grilele păstrează numărul de coloane specific funcției, dar folosesc aceeași densitate. */
+body.ev-unified :is(
+  .form-grid,
+  .upload-grid,
+  .learning-modules-grid,
+  .section-hub-grid,
+  .summary-grid,
+  .benchmark-two-column,
+  .reference-grid,
+  .basics-grid,
+  .operational-grid,
+  .setup-options,
+  .exam-path-grid,
+  .builder-meta
+) {
+  gap: var(--ev-grid-gap) !important;
+}
+
+body.ev-unified :is(.learning-modules-grid, .section-hub-grid, .exam-path-grid) {
+  margin-top: 14px !important;
+}
+
+/* Toolbars, filtre și fluxuri secundare. */
+body.ev-unified :is(.page-actions, .top-bar, .workflow, .filters, .category-viewbar, .compact-actions, .setup-actions, .builder-actions) {
+  gap: 8px !important;
+}
+
+body.ev-unified :is(.page-actions, .top-bar, .workflow, .filters, .category-viewbar) {
+  padding: 10px !important;
+  border: 1px solid var(--ev-border) !important;
+  border-radius: var(--ev-radius-lg) !important;
+  background: var(--ev-surface) !important;
+  box-shadow: var(--ev-shadow-soft) !important;
+}
+
+/* Controale uniforme. */
+body.ev-unified :is(
+  button,
+  .btn,
+  .primary,
+  .secondary,
+  .btn-utility,
+  .btn-big,
+  .toggle-btn,
+  .filter,
+  .back-to-categories,
+  .access-submit,
+  .access-logout
+) {
+  min-height: 42px !important;
+  border-radius: 10px !important;
+  font-family: var(--ev-font) !important;
+}
+
+body.ev-unified :is(
+  input[type="text"], input[type="search"], input[type="number"],
+  input[type="date"], input[type="time"], input[type="password"],
+  select, textarea
+) {
+  min-height: 44px !important;
+  color: var(--ev-text) !important;
+  border: 1px solid var(--ev-border-strong) !important;
+  border-radius: 10px !important;
+  background: var(--ev-input-bg) !important;
+  box-shadow: none !important;
+}
+
+/* Avertismentele și notele nu mai au stiluri complet diferite între module. */
+body.ev-unified :is(.notice, .notice-panel, .warning-panel, .stop-panel, .practice-panel, .code-note) {
+  color: var(--ev-text) !important;
+  border: 1px solid var(--ev-border) !important;
+  border-left: 3px solid var(--ev-accent) !important;
+  border-radius: var(--ev-radius-lg) !important;
+  background: color-mix(in srgb, var(--ev-surface) 93%, var(--ev-accent) 7%) !important;
+  box-shadow: var(--ev-shadow-soft) !important;
+}
+
+body.ev-unified :is(.notice.warning, .warning-panel) {
+  border-left-color: var(--ev-warning) !important;
+  background: color-mix(in srgb, var(--ev-surface) 94%, var(--ev-warning) 6%) !important;
+}
+
+/* Tabele și zone de date. */
+body.ev-unified :is(.rules-container, .table-scroll) {
+  overflow-x: auto !important;
+  border: 1px solid var(--ev-border) !important;
+  border-radius: 12px !important;
+  background: var(--ev-surface) !important;
+}
+
+body.ev-unified :is(.rules-table, .benchmark-table) {
+  width: 100% !important;
+  color: var(--ev-text) !important;
+  background: var(--ev-surface) !important;
+}
+
+body.ev-unified :is(.rules-table th, .benchmark-table th) {
+  color: var(--ev-muted) !important;
+  background: var(--ev-surface-2) !important;
+}
+
+/* Semnalmente: zonele de încărcare se comportă ca aceleași carduri secundare. */
+body.ev-unified .upload-zone,
+body.ev-unified .benchmark-drop,
+body.ev-unified .builder-state {
+  border-color: var(--ev-border-strong) !important;
+  border-radius: 12px !important;
+  background: var(--ev-surface-2) !important;
+  color: var(--ev-text-secondary) !important;
+}
+
+/* Ofițer: navigarea internă rămâne funcțională, dar se aliniază cu shell-ul suitei. */
+body.ev-unified > .app-shell > .sidebar {
+  border-bottom: 1px solid var(--ev-border) !important;
+  background: var(--ev-surface) !important;
+}
+
+body.ev-unified > .app-shell > .sidebar .nav-item {
+  min-height: 38px !important;
+  border-radius: 10px !important;
+  color: var(--ev-text-secondary) !important;
+}
+
+body.ev-unified > .app-shell > .sidebar .nav-item.active {
+  color: var(--ev-text) !important;
+  border-color: var(--ev-border) !important;
+  background: var(--ev-accent-soft) !important;
+}
+
+/* Login-ul Ofițer folosește aceleași suprafețe și aceeași scară. */
+body.ev-unified .access-card {
+  width: min(100%, 430px) !important;
+  padding: 24px !important;
+}
+
+@media (max-width: 760px) {
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell > main {
+    padding-top: 18px !important;
+    padding-bottom: 30px !important;
+  }
+
+  body.ev-unified :is(.page-heading, .section-heading, .panel-head, .learning-modules-head, .exam-path-head) {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  body.ev-unified :is(
+    .container > .card,
+    main > .panel,
+    main > section.panel,
+    .view > .panel,
+    .analysis-panel,
+    .results-section,
+    .exam-workspace,
+    .written-workspace,
+    .legal-box
+  ) {
+    padding: var(--ev-panel-pad-mobile) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  body.ev-unified :is(
+    .form-grid,
+    .upload-grid,
+    .setup-options,
+    .learning-modules-grid,
+    .section-hub-grid,
+    .benchmark-two-column,
+    .builder-meta,
+    .reference-grid,
+    .operational-grid,
+    .exam-path-grid
+  ) {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.ev-unified :is(.page-actions, .compact-actions, .setup-actions, .builder-actions) > :is(button, .btn, a.btn) {
+    flex: 1 1 auto !important;
+  }
+}
+
+@media print {
+  body.ev-unified :is(.card, .panel, .notice-panel, .legal-box, .result-box) {
+    box-shadow: none !important;
+  }
+}
