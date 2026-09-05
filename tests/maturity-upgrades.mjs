@@ -8,6 +8,7 @@ const root = path.dirname(here);
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const finalLayer = read('css/final-layer.css');
+const coreStyle = read('css/style.css');
 const pedepse = read('js/pedepse-ux.js');
 const officer = read('ofiter/dashboard-cockpit.js');
 const version = read('js/version.js');
@@ -35,6 +36,18 @@ for (const marker of [
 }
 
 for (const marker of [
+  'body.ev-unified[data-ev-page="pedepse"] .deduction-row',
+  'body.ev-unified[data-ev-page="pedepse"] .non-exec-row',
+  '> .btn-danger',
+  'position: static !important',
+  'grid-template-columns: minmax(0, 1fr) 44px',
+  '@media (max-width: 430px)'
+]) {
+  assert.ok(coreStyle.includes(marker), `Layoutul rândurilor Pedepse trebuie să conțină ${marker}`);
+}
+assert.ok(!coreStyle.includes('data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row) > .btn-danger {\n  position: absolute'), 'Butonul X din Pedepse nu trebuie poziționat absolut');
+
+for (const marker of [
   'validateBeforeCalculation',
   'renderValidationSummary',
   'enhanceCalculationResult',
@@ -60,4 +73,4 @@ for (const marker of [
 assert.ok(version.includes('pedepse-ux.js?v=1'), 'Version controller trebuie să încarce UX-ul Pedepse');
 assert.ok(version.includes('dashboard-cockpit.js?v=1'), 'Version controller trebuie să încarce cockpit-ul Ofițer');
 
-console.log('Maturity UX: CSS consolidat fără FOUC, rezultat Pedepse și cockpit Ofițer verificate.');
+console.log('Maturity UX: CSS consolidat fără FOUC, rezultat Pedepse, rânduri fără suprapuneri și cockpit Ofițer verificate.');
