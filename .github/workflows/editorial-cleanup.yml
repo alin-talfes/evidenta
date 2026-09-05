@@ -1,4 +1,4 @@
-name: Editorial cleanup
+name: Clean routes and Instructaj cards
 on:
   push:
     branches: [main]
@@ -22,5 +22,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Curăță copy-ul redundant și unifică footer-ul"
+          git commit -m "Folosește URL-uri curate și închide cardurile Fundamente"
           git push origin main
