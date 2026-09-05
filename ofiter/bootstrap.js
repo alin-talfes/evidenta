@@ -2,8 +2,11 @@
   if(window.TRAINING_BOOT)return;
   let bootPromise=null,pendingView=null,replaying=false,preloaded=false;
   const persistenceScript="persistence-layer.js";
+  const dataLoaderScript="heavy-data-loader.js";
   const runtimeScript="generated/runtime-bundle.js?v=3";
-  const preloadList=[persistenceScript,runtimeScript];
+  const dataHealthScript="data-health.js";
+  const requiredData=["legislation","official","interview"];
+  const preloadList=[persistenceScript,dataLoaderScript,runtimeScript,dataHealthScript];
   const $=selector=>document.querySelector(selector);
   const $$=selector=>[...document.querySelectorAll(selector)];
   const legalParagraphPattern=/^\(\d+(?:(?:\^\d+)|[¹²³⁴⁵⁶⁷⁸⁹⁰]+)?\)/;
@@ -55,9 +58,37 @@
 
   function loadScript(src){
     return new Promise((resolve,reject)=>{
-      if([...document.scripts].some(script=>script.getAttribute('src')===src)){resolve();return}
-      const script=document.createElement('script');script.src=src;script.async=false;script.onload=resolve;script.onerror=()=>reject(new Error(`Nu pot încărca ${src}`));document.body.appendChild(script);
+      const existing=[...document.scripts].find(script=>script.getAttribute('src')===src);
+      if(existing){
+        if(existing.dataset.trainingLoaded==='true'||existing.readyState==='complete'){resolve();return}
+        existing.addEventListener('load',resolve,{once:true});
+        existing.addEventListener('error',()=>reject(new Error(`Nu pot încărca ${src}`)),{once:true});
+        return;
+      }
+      const script=document.createElement('script');
+      script.src=src;script.async=false;
+      script.onload=()=>{script.dataset.trainingLoaded='true';resolve()};
+      script.onerror=()=>reject(new Error(`Nu pot încărca ${src}`));
+      document.body.appendChild(script);
     });
+  }
+
+  async function hydrateDataBeforeRuntime(){
+    document.documentElement.dataset.dataBooting='true';
+    try{
+      await loadScript(dataLoaderScript);
+      if(typeof window.loadTrainingHeavyData!=='function')throw new Error('Loaderul dataseturilor nu este disponibil.');
+      await window.loadTrainingHeavyData(requiredData);
+      const missing=requiredData.filter(part=>!window.TRAINING_HEAVY_DATA?.[part]);
+      if(missing.length)throw new Error(`Dataseturi indisponibile: ${missing.join(', ')}`);
+      document.documentElement.dataset.dataReady='true';
+      delete document.documentElement.dataset.dataLoadError;
+    }catch(error){
+      console.error('Training data preload:',error);
+      document.documentElement.dataset.dataLoadError='true';
+    }finally{
+      delete document.documentElement.dataset.dataBooting;
+    }
   }
 
   function ensureApp(){
@@ -66,10 +97,13 @@
     bootPromise=(async()=>{
       await loadScript(persistenceScript);
       if(window.TRAINING_STATE_READY?.then)await window.TRAINING_STATE_READY;
+      await hydrateDataBeforeRuntime();
       await loadScript(runtimeScript);
+      await loadScript(dataHealthScript);
       document.documentElement.dataset.appReady='true';delete document.documentElement.dataset.appBooting;
       if(pendingView&&typeof window.showView==='function')window.showView(pendingView);
       document.dispatchEvent(new CustomEvent('training:app-ready'));
+      window.TRAINING_DATA_HEALTH?.audit?.();
       return true;
     })().catch(error=>{console.error('Training bootstrap:',error);delete document.documentElement.dataset.appBooting;document.documentElement.dataset.appBootError='true';bootPromise=null;throw error});
     return bootPromise;
@@ -107,5 +141,5 @@
     if(document.readyState==='complete')schedule();else window.addEventListener('load',schedule,{once:true});
   }
   if(document.readyState==='complete')setTimeout(prepareServiceWorker,0);else window.addEventListener('load',()=>setTimeout(prepareServiceWorker,0),{once:true});
-  window.TRAINING_BOOT={ensureApp,visualView,preloadScripts,get ready(){return document.documentElement.dataset.appReady==='true'}};
+  window.TRAINING_BOOT={ensureApp,visualView,preloadScripts,hydrateDataBeforeRuntime,get ready(){return document.documentElement.dataset.appReady==='true'}};
 })();
