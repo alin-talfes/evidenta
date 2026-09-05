@@ -1,12 +1,13 @@
 (()=>{
   if(window.TRAINING_BOOT)return;
-  let bootPromise=null,pendingView=null,replaying=false,preloaded=false;
+  let bootPromise=null,pendingView=null,replaying=false,preloaded=false,legislationPromise=null;
   const persistenceScript="persistence-layer.js";
-  const dataLoaderScript="heavy-data-loader.js";
+  const dataLoaderScript="heavy-data-loader.js?v=2";
   const runtimeScript="generated/runtime-bundle.js?v=3";
-  const dataHealthScript="data-health.js";
+  const dataHealthScript="data-health.js?v=2";
+  const legislationControllerScript="generated/controllers/legislation.js?v=4";
   const requiredData=["legislation","official","interview"];
-  const preloadList=[persistenceScript,dataLoaderScript,runtimeScript,dataHealthScript];
+  const preloadList=[persistenceScript,dataLoaderScript,runtimeScript,dataHealthScript,legislationControllerScript];
   const $=selector=>document.querySelector(selector);
   const $$=selector=>[...document.querySelectorAll(selector)];
   const legalParagraphPattern=/^\(\d+(?:(?:\^\d+)|[¹²³⁴⁵⁶⁷⁸⁹⁰]+)?\)/;
@@ -91,6 +92,45 @@
     }
   }
 
+  function fallbackLegislation(error){
+    const host=document.getElementById('legislation-content');
+    if(!host)return;
+    const items=typeof laws!=='undefined'&&Array.isArray(laws)?laws:[];
+    const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    host.innerHTML=`<div class="notice warning"><strong>Legislația nu s-a putut reda complet.</strong><p>Catalogul oficial rămâne disponibil mai jos. Reîncarcă pagina pentru a reîncerca textele integrate.</p>${error?`<small>${esc(error.message||error)}</small>`:''}</div>${items.map(act=>`<section class="legal-act"><header><div><p class="eyebrow">BIBLIOGRAFIE</p><h2>${esc(act.title)}</h2><p class="legal-scope">${esc(act.scope)}</p></div><div class="legal-act-actions"><a class="official-link" href="${esc(act.url)}" target="_blank" rel="noopener">Deschide forma oficială consolidată ↗</a></div></header></section>`).join('')}`;
+  }
+
+  async function openLegislation(){
+    if(legislationPromise)return legislationPromise;
+    legislationPromise=(async()=>{
+      visualView('legislation');
+      const host=document.getElementById('legislation');
+      if(host){host.dataset.loading='true';delete host.dataset.loadError}
+      try{
+        await ensureApp();
+        await loadScript(dataLoaderScript);
+        if(!window.TRAINING_HEAVY_DATA?.legislation&&typeof window.loadTrainingHeavyData==='function')await window.loadTrainingHeavyData('legislation');
+        await loadScript(legislationControllerScript);
+        if(typeof bindLegislation==='function')bindLegislation();
+        if(typeof renderLegislation!=='function')throw new Error('Rendererul Legislație nu este disponibil.');
+        renderLegislation();
+        observeLegalReading();
+        if(host){delete host.dataset.loading;delete host.dataset.loadError;host.dataset.directRoute='true'}
+        document.dispatchEvent(new CustomEvent('training:view-ready',{detail:{id:'legislation',direct:true}}));
+        window.TRAINING_DATA_HEALTH?.audit?.();
+        return true;
+      }catch(error){
+        console.error('Legislation direct route:',error);
+        if(host){delete host.dataset.loading;host.dataset.loadError='true'}
+        fallbackLegislation(error);
+        return false;
+      }finally{
+        legislationPromise=null;
+      }
+    })();
+    return legislationPromise;
+  }
+
   function ensureApp(){
     if(bootPromise)return bootPromise;
     preloadScripts();document.documentElement.dataset.appBooting='true';
@@ -98,10 +138,13 @@
       await loadScript(persistenceScript);
       if(window.TRAINING_STATE_READY?.then)await window.TRAINING_STATE_READY;
       await hydrateDataBeforeRuntime();
+      const directLegislation=pendingView==='legislation';
+      if(directLegislation){try{history.replaceState(null,'','#dashboard')}catch{}}
       await loadScript(runtimeScript);
+      if(directLegislation){try{history.replaceState(null,'','#legislation')}catch{}}
       await loadScript(dataHealthScript);
       document.documentElement.dataset.appReady='true';delete document.documentElement.dataset.appBooting;
-      if(pendingView&&typeof window.showView==='function')window.showView(pendingView);
+      if(pendingView&&pendingView!=='legislation'&&typeof window.showView==='function')window.showView(pendingView);
       document.dispatchEvent(new CustomEvent('training:app-ready'));
       window.TRAINING_DATA_HEALTH?.audit?.();
       return true;
@@ -126,20 +169,34 @@
   },{capture:true,passive:true});
 
   document.addEventListener('click',event=>{
-    if(replaying||document.documentElement.dataset.appReady==='true')return;
     const nav=event.target.closest('.nav-item,[data-go]');
-    if(nav){const id=nav.dataset.view||nav.dataset.go;if(id){event.preventDefault();visualView(id);ensureApp().catch(()=>{});return}}
+    const id=nav?.dataset?.view||nav?.dataset?.go;
+    if(id==='legislation'){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      pendingView='legislation';
+      openLegislation().catch(()=>{});
+      return;
+    }
+    if(replaying||document.documentElement.dataset.appReady==='true')return;
+    if(nav&&id){event.preventDefault();visualView(id);ensureApp().catch(()=>{});return}
     const action=event.target.closest('[data-start-adaptive],[data-start-quiz],#quiz-start,#adaptive-start,#mistakes-start,#exam-start,#interview-simulation-start');
     if(action){event.preventDefault();ensureApp().then(()=>{replaying=true;try{action.click()}finally{replaying=false}}).catch(()=>{})}
   },true);
 
-  window.addEventListener('hashchange',()=>{if(document.documentElement.dataset.appReady==='true')return;const id=decodeURIComponent(location.hash.replace(/^#/,''));if(id)visualView(id)});
+  window.addEventListener('hashchange',()=>{
+    const id=decodeURIComponent(location.hash.replace(/^#/,''));
+    if(id==='legislation'){openLegislation().catch(()=>{});return}
+    if(document.documentElement.dataset.appReady==='true')return;
+    if(id)visualView(id);
+  });
   const initial=(()=>{try{const value=decodeURIComponent(location.hash.replace(/^#/,''));return value==='bibliography'?'legislation':value}catch{return ''}})();
-  if(initial&&initial!=='dashboard'&&document.getElementById(initial)){visualView(initial);ensureApp().catch(()=>{})}
+  if(initial==='legislation')openLegislation().catch(()=>{});
+  else if(initial&&initial!=='dashboard'&&document.getElementById(initial)){visualView(initial);ensureApp().catch(()=>{})}
   else{
     const schedule=()=>{if(document.documentElement.dataset.appReady==='true'||bootPromise)return;if('requestIdleCallback' in window)requestIdleCallback(()=>ensureApp().catch(()=>{}),{timeout:700});else setTimeout(()=>ensureApp().catch(()=>{}),220)};
     if(document.readyState==='complete')schedule();else window.addEventListener('load',schedule,{once:true});
   }
   if(document.readyState==='complete')setTimeout(prepareServiceWorker,0);else window.addEventListener('load',()=>setTimeout(prepareServiceWorker,0),{once:true});
-  window.TRAINING_BOOT={ensureApp,visualView,preloadScripts,hydrateDataBeforeRuntime,get ready(){return document.documentElement.dataset.appReady==='true'}};
+  window.TRAINING_BOOT={ensureApp,visualView,preloadScripts,hydrateDataBeforeRuntime,openLegislation,get ready(){return document.documentElement.dataset.appReady==='true'}};
 })();
