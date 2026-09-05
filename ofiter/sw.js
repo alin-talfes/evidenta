@@ -4,8 +4,8 @@ const CACHE_PREFIX = "evidenta-ofiter-";
 
 const CORE_ASSETS = [
   "./","./index.html","./styles.css?v=2","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./clean-learning.css","./access-gate.js",
-  "./data-core.js?v=2","./bootstrap.js?v=3","./bootstrap.js?v=4","./persistence-layer.js","./heavy-data-loader.js","./heavy-data-loader.js?v=2","./data-health.js","./data-health.js?v=2","./generated/runtime-bundle.js?v=3","./dashboard-cockpit.js?v=1",
-  "./generated/controllers/interview.js","./generated/controllers/legislation.js?v=3","./generated/controllers/legislation.js?v=4","./generated/controllers/official.js",
+  "./data-core.js?v=2","./bootstrap.js?v=3","./bootstrap.js?v=4","./persistence-layer.js","./heavy-data-loader.js","./heavy-data-loader.js?v=2","./data-health.js","./data-health.js?v=2","./data-health.js?v=3","./generated/runtime-bundle.js?v=3","./dashboard-cockpit.js?v=1",
+  "./generated/controllers/interview.js","./generated/controllers/interview.js?v=2","./generated/controllers/legislation.js?v=3","./generated/controllers/legislation.js?v=4","./generated/controllers/official.js",
   "./legislation-virtual.js?v=2","./scenario-questions.js","./scenario-questions.css",
   "../css/final-layer.css?v=1",
   "./manifest.webmanifest","./icon.svg","./icon-192.png","./apple-touch-icon.png"
@@ -30,13 +30,10 @@ self.addEventListener("activate",event=>{
   event.waitUntil((async()=>{
     const keys=await caches.keys();
     const obsolete=keys.filter(key=>key.startsWith(CACHE_PREFIX)&&key!==CACHE&&key!==GENERATED_CACHE);
-    const upgrading=obsolete.length>0;
     await Promise.all(obsolete.map(key=>caches.delete(key)));
     await self.clients.claim();
-    if(upgrading){
-      const clients=await self.clients.matchAll({type:"window",includeUncontrolled:true});
-      await Promise.all(clients.map(client=>client.navigate(client.url).catch(()=>null)));
-    }
+    const clients=await self.clients.matchAll({type:"window",includeUncontrolled:true});
+    await Promise.all(clients.map(client=>client.navigate(client.url).catch(()=>null)));
   })());
 });
 
@@ -58,6 +55,9 @@ self.addEventListener("fetch",event=>{
         return cached?await rewriteNavigationResponse(cached):Response.error();
       }
     })());return;
+  }
+  if(url.pathname.endsWith("/data-health.js")&&url.searchParams.get("v")==="2"){
+    event.respondWith(fetch("./data-health.js?v=3",{cache:"no-store"}).catch(()=>caches.match("./data-health.js?v=3").then(cached=>cached||Response.error())));return;
   }
   if(url.pathname.includes("/generated/")&&url.pathname.endsWith(".json")){
     event.respondWith((async()=>{
