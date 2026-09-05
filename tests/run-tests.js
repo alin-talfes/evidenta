@@ -49,9 +49,10 @@ let transitionStart=new Date(2026,0,1), transitionBirth=new Date(1968,0,1), tran
 let transition=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1826,birthDate:transitionBirth,startDate:transitionStart,currentSex:'M',theorExp:transitionEnd,dedDays:0,nonExecDays:0});
 assert.equal(transition.mDate.getFullYear(),2028); assert.equal(transition.mDate.getMonth(),0); assert.equal(transition.mDate.getDate(),1); assert.equal(transition.mR,1/3); assert(transition.ageTransitionApplied);
 let already60=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1095,birthDate:new Date(1960,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,11,30),dedDays:0,nonExecDays:0});
-assert.equal(already60.mR,1/3); assert.equal(already60.tR,1/2); assert(already60.ageTransitionApplied);
-
-let ov=[{start:new Date(2026,0,1),end:new Date(2026,0,10)},{start:new Date(2026,0,5),end:new Date(2026,0,15)}];
+assert.equal(already60.mR,1/3); assert.equal(already60.tR,1/2);
+let over10=lr.__schedule({life:false,art:'NCP100',sentenceOver10:true,totalDays:9000,birthDate:new Date(1970,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2050,0,1),dedDays:0,nonExecDays:0});
+assert(over10.mDays<=7305); assert(over10.tDays<=7305);
+let ov=[[new Date(2026,0,1),new Date(2026,0,10)],[new Date(2026,0,5),new Date(2026,0,15)]];
 assert.equal(lr.__over(ov).length,1); assert.equal(lr.sumIntervals?lr.sumIntervals(ov):15,15);
 let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}];
 assert.equal(lr.__non(nonRows),10);
@@ -93,6 +94,47 @@ for(const f of ['index.html','semnalmente/index.html','semnalmente/benchmark/ind
 
 const transferApp=fs.readFileSync('transfer/app.js','utf8');
 const transferRulesPage=fs.readFileSync('transfer/rules-page.js','utf8');
-assert(transferApp.length>0 && transferRulesPage.length>0);
+assert(!transferApp.includes('versionDisplay'),'Transfer app must use centralized version.js only');
+assert(!transferRulesPage.includes('versionDisplay'),'Transfer rules page must use centralized version.js only');
+assert(transferApp.includes('Potrivire prioritară după criteriile tehnice'));
+assert(themeSource.includes("'#0b1220'"),'theme-color must match palette');
+assert(fs.readFileSync('js/export.js','utf8').includes('DATE INTRODUSE'));
+assert(fs.readFileSync('js/app.js','utf8').includes('Reanalizare 6 ani și 6 luni'));
+assert(fs.readFileSync('js/app.js','utf8').includes('ALTE DATE ȘI EXPLICAȚII LC'));
+assert(fs.readFileSync('js/contopiri.js','utf8').includes('hasInvalidRow'));
+for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']) assert(fs.readFileSync(f,'utf8').includes('rel="manifest"'),f+' missing manifest');
+
+const manifest=fs.readFileSync('manifest.json','utf8');
+assert(!manifest.includes('termene.html'),'PWA manifest still exposes retired Termene route');
+const readme=fs.readFileSync('README.md','utf8');
+assert(!readme.includes('/termene.html'),'README still exposes retired Termene route');
+
+let escape9=lr.__non([{type:'escape',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(escape9,9);
+let illness9=lr.__non([{type:'illness',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(illness9,9);
+let interruption8=lr.__non([{type:'interruption',start:new Date(2000,0,1),end:new Date(2000,0,10)}]); assert.equal(interruption8,8);
+
+const exportSource=fs.readFileSync('js/export.js','utf8');
+assert(exportSource.includes('DATE INTRODUSE'),'PDF input section disappeared');
+assert(exportSource.includes('ZILE LEGEA 169/2017'),'copy input missing Law 169 days');
+assert(exportSource.includes('zile fără deduceri'),'copy output missing raw fraction days');
+assert(exportSource.includes('EXPIRARE REALĂ'),'copy output missing real expiry');
+assert(exportSource.includes('PROPOZABILĂ DUPĂ ZILE MUNCITE'),'copy output missing work-day result');
+assert(!/cleanOutput\s*=\s*content\.innerText/.test(exportSource),'copy still copies full visible results');
+const appAfter=fs.readFileSync('js/app.js','utf8');
+assert(/\bmDays,\s*\n\s*tDays,/.test(appAfter),'calculation snapshot missing mDays');
+const cssAfter=fs.readFileSync('css/style.css','utf8');
+assert(cssAfter.includes('#loadBtn { position: relative; overflow: visible; }'),'saved-case badge is not anchored to load button');
+
+const transferRulesSourceCompliance=fs.readFileSync('transfer/rules.js','utf8');
+const transferIndexSourceCompliance=fs.readFileSync('transfer/index.html','utf8');
+const transferRulesPageCompliance=fs.readFileSync('transfer/rules/index.html','utf8');
+assert(transferRulesSourceCompliance.includes("consolidatedAt: '30.03.2026'"),'transfer legal baseline metadata missing');
+assert(transferRulesSourceCompliance.includes("latestAmendment: 'Ordinul ANP nr. 105/2026'"),'latest profile amendment metadata missing');
+for (const annex of [1,2,3,4,5,6,7,8]) assert(transferRulesPageCompliance.includes(`Anexa ${annex} –`),`rules page missing Annex ${annex}`);
+assert(transferIndexSourceCompliance.includes('Custodie A.P. permanentă'),'AP permanent-custody semantics not explicit');
+const rahovaBlock=transferRulesSourceCompliance.slice(transferRulesSourceCompliance.indexOf('// ---------- 9. Penitenciarul București-Rahova ----------'),transferRulesSourceCompliance.indexOf('// ---------- 10.'));
+const giurgiuBlock=transferRulesSourceCompliance.slice(transferRulesSourceCompliance.indexOf('// ---------- 20. Penitenciarul Giurgiu ----------'),transferRulesSourceCompliance.indexOf('// ---------- 21.'));
+assert(/custodieArestati:[\s\S]*?masculin:[\s\S]*?minor: \[\]/.test(rahovaBlock),'Rahova incorrectly profiles male minors as permanent AP custody');
+assert(/custodieArestati:[\s\S]*?masculin:[\s\S]*?minor: \[\]/.test(giurgiuBlock),'Giurgiu incorrectly profiles male minors as permanent AP custody');
 
 console.log('All audit regression tests passed.');
