@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 22
       - run: python3 scripts/editorial_cleanup.py
-      - name: Normalizează redirecturile fără JavaScript inline
+      - name: Normalizează redirecturile și testele canonice
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -29,6 +29,12 @@ jobs:
           p = Path('tests/clean-routes.mjs')
           s = p.read_text(encoding='utf-8')
           s = s.replace("html.includes('location.replace')", "/http-equiv=[\"']refresh/i.test(html)")
+          p.write_text(s, encoding='utf-8')
+          p = Path('tests/run-tests.js')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("'contopiri.html'", "'contopiri/index.html'")
+          s = s.replace("'transfer/rules.html'", "'transfer/rules/index.html'")
+          s = s.replace("'semnalmente/benchmark.html'", "'semnalmente/benchmark/index.html'")
           p.write_text(s, encoding='utf-8')
           PY
       - run: npm run check:syntax
