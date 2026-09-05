@@ -7,6 +7,15 @@
     const scriptUrl = document.currentScript?.src || new URL('js/version.js', document.baseURI).href;
     const versionUrl = new URL('../version.json', scriptUrl).href;
 
+    function ensureUxUpgrades() {
+        if (document.querySelector('script[data-evidenta-ux-controller]')) return;
+        const script = document.createElement('script');
+        script.src = new URL('./ux-upgrades.js?v=1', scriptUrl).href;
+        script.async = false;
+        script.dataset.evidentaUxController = 'true';
+        document.head.appendChild(script);
+    }
+
     function renderFooter(versionText) {
         document.querySelectorAll('footer').forEach(footer => footer.remove());
 
@@ -44,6 +53,8 @@
             renderFooter('—');
         }
     }
+
+    ensureUxUpgrades();
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initFooter, { once: true });
