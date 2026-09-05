@@ -4,7 +4,6 @@ import path from 'node:path';
 const root=process.cwd();
 const fail=[];
 const note=[];
-const dormant=new Set(['dashboard-study-plan.css']);
 const ignoredDirs=new Set(['.git','node_modules']);
 const sharedStyles=new Set([
   path.resolve(root,'../css/design-system.css'),
@@ -91,11 +90,8 @@ for(const href of [...direct,...lazy,...bundled,...importedCss]){
 }
 for(const file of cssFiles){
   if(file.startsWith('generated/')&&file!=='generated/mobile-bundle.css')continue;
-  if(active.has(file)||dormant.has(file))continue;
+  if(active.has(file))continue;
   fail.push(`CSS fără traseu de încărcare declarat: ${file}`);
-}
-for(const file of dormant){
-  if(!cssFiles.includes(file))fail.push(`CSS dormant declarat dar inexistent: ${file}`);
 }
 
 const banner='/* GENERATED FILE — edit source CSS files, not this bundle. */\n';
@@ -114,5 +110,5 @@ if(fail.length){
   for(const item of fail)console.error(`- ${item}`);
   process.exit(1);
 }
-console.log(`CSS audit OK: ${cssFiles.length} fișiere, ${direct.size} directe, ${lazy.size} lazy, ${bundled.size} surse bundle, ${importedCss.size} importuri CSS, ${dormant.size} dormant intenționat, resursele comune validate.`);
+console.log(`CSS audit OK: ${cssFiles.length} fișiere, ${direct.size} directe, ${lazy.size} lazy, ${bundled.size} surse bundle, ${importedCss.size} importuri CSS, fără excepții dormant, resursele comune validate.`);
 for(const item of note)console.log(`- ${item}`);
