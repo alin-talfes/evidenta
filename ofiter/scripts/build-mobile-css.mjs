@@ -10,8 +10,9 @@ console.log(`Generated ${target} from ${sources.length} source files.`);
 
 const index='index.html';
 let html=fs.readFileSync(index,'utf8');
-const old=`  <link rel="stylesheet" href="styles.css">\n  <link rel="stylesheet" href="mobile.css">\n  <link rel="stylesheet" href="mobile-study.css">\n  <link rel="stylesheet" href="mobile-polish.css">\n  <link rel="stylesheet" href="runtime-performance.css">`;
-const next=`  <link rel="stylesheet" href="styles.css">\n  <link rel="stylesheet" href="generated/mobile-bundle.css">`;
-if(html.includes(old))html=html.replace(old,next);
-else if(!html.includes(next))throw new Error('Expected stylesheet block not found.');
-fs.writeFileSync(index,html);
+if(!html.includes('generated/mobile-bundle.css')){
+  const legacyLinks=/\s*<link rel="stylesheet" href="mobile\.css(?:\?[^\"]*)?">\s*<link rel="stylesheet" href="mobile-study\.css(?:\?[^\"]*)?">\s*<link rel="stylesheet" href="mobile-polish\.css(?:\?[^\"]*)?">\s*<link rel="stylesheet" href="runtime-performance\.css(?:\?[^\"]*)?">/;
+  if(!legacyLinks.test(html))throw new Error('Nu există nici bundle-ul mobil, nici blocul legacy de stylesheet-uri mobile.');
+  html=html.replace(legacyLinks,'\n  <link rel="stylesheet" href="generated/mobile-bundle.css">');
+  fs.writeFileSync(index,html);
+}
