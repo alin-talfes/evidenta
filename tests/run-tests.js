@@ -122,7 +122,7 @@ assert(exportSource.includes('PROPOZABILĂ DUPĂ ZILE MUNCITE'),'copy output mis
 assert(!/cleanOutput\s*=\s*content\.innerText/.test(exportSource),'copy still copies full visible results');
 const appAfter=fs.readFileSync('js/app.js','utf8');
 assert(/\bmDays,\s*\n\s*tDays,/.test(appAfter),'calculation snapshot missing mDays');
-const cssAfter=fs.readFileSync('css/style.css','utf8');
+const cssAfter=fs.readFileSync('css/style-legacy.css','utf8');
 assert(cssAfter.includes('#loadBtn { position: relative; overflow: visible; }'),'saved-case badge is not anchored to load button');
 
 const transferRulesSourceCompliance=fs.readFileSync('transfer/rules.js','utf8');
