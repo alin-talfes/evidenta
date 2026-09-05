@@ -23,9 +23,16 @@ for (const [legacy, target] of [
 
 const theme = read('js/theme.js');
 assert.ok(theme.includes("new URL('contopiri/', rootUrl)"), 'Meniul universal trebuie să folosească /contopiri/');
+const publicModulesBlock = theme.match(/function publicModules\(\) \{([\s\S]*?)\n    \}/)?.[1] || '';
+assert.ok(publicModulesBlock, 'Lista publică de module trebuie să existe');
+assert.ok(!publicModulesBlock.includes('.html'), 'Meniul universal nu trebuie să genereze URL-uri cu .html');
 for (const route of ["'contopiri':", "'transfer/rules':", "'semnalmente/benchmark':"]) {
   assert.ok(theme.includes(route), `Theme controller trebuie să recunoască ruta ${route}`);
 }
+
+const manifest = JSON.parse(read('manifest.json'));
+const contopiriShortcut = manifest.shortcuts?.find(item => item.name === 'Contopiri');
+assert.equal(contopiriShortcut?.url, './contopiri/', 'Shortcut-ul PWA Contopiri trebuie să folosească ruta curată');
 
 const instructaj = read('instructaj/index.html');
 assert.ok(!/<details class="basic-card"\s+open>/i.test(instructaj), 'Cardurile Fundamente juridice trebuie să pornească toate închise');
