@@ -37,6 +37,8 @@ assert.ok(publicModulesBlock, 'Trebuie să existe lista comună de module public
 assert.equal((publicModulesBlock.match(/\['/g) || []).length, 5, 'Meniul global trebuie să aibă exact 5 module publice');
 assert.ok(!publicModulesBlock.toLowerCase().includes('termene'), 'Modulul Termene a fost retras și nu trebuie expus în meniul public');
 assert.ok(!publicModulesBlock.toLowerCase().includes('ofiter'), 'Ofițer nu trebuie expus în meniul public');
+assert.ok(theme.includes("'ofiter': [null"), 'Ofițer trebuie marcat explicit ca modul fără intrare în navigarea publică');
+assert.ok(theme.includes("'ofiter/index.html': [null"), 'Ruta explicită Ofițer trebuie să rămână fără intrare în navigarea publică');
 assert.ok(!theme.includes('instrumente de evidență'), 'Shell-ul nu trebuie să conțină slogan redundant');
 assert.ok(!theme.includes('ev-shell__kicker'), 'Shell-ul nu trebuie să dubleze titlul cu un kicker decorativ');
 assert.ok(!theme.includes('context.subtitle'), 'Shell-ul nu trebuie să repete descrieri sub titlul modulului');
@@ -96,6 +98,22 @@ for (const [name, source] of Object.entries(loaders)) {
   assert.ok(source.includes('theme.js'), `${name} trebuie să încarce controllerul comun theme.js`);
 }
 
+const publicPages = [
+  'index.html',
+  'contopiri.html',
+  'transfer/index.html',
+  'transfer/rules.html',
+  'instructaj/index.html',
+  'semnalmente/index.html',
+  'semnalmente/benchmark.html',
+  'descriere-semnalmente/index.html'
+];
+const officerHref = /href\s*=\s*["'][^"']*(?:^|\/)ofiter(?:\/|\/index\.html|[?#]|["'])/i;
+for (const file of publicPages) {
+  const html = read(file);
+  assert.ok(!officerHref.test(html), `${file} nu trebuie să expună link vizibil către modulul ascuns Ofițer`);
+}
+
 for (const file of ['semnalmente/index.html', 'semnalmente/benchmark.html', 'index.html', 'transfer/rules.html']) {
   assert.ok(!/<footer\b/i.test(read(file)), `${file} nu trebuie să definească un footer propriu`);
 }
@@ -104,4 +122,4 @@ assert.ok(!fs.existsSync(path.join(root, 'termene.html')), 'termene.html trebuie
 assert.ok(!fs.existsSync(path.join(root, 'js/termene.js')), 'js/termene.js trebuie eliminat');
 assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-core.js trebuie eliminat');
 
-console.log('Unified shell: 5 module publice și footer unic verificate.');
+console.log('Unified shell: 5 module publice, Ofițer ascuns din navigare și footer unic verificate.');
