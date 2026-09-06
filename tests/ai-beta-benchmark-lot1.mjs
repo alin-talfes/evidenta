@@ -9,6 +9,7 @@ vm.runInContext(read('js/contopiri-core.js'),ctx,{filename:'js/contopiri-core.js
 vm.runInContext(read('ai/core.js'),ctx,{filename:'ai/core.js'});
 vm.runInContext(read('ai/safety.js'),ctx,{filename:'ai/safety.js'});
 vm.runInContext(read('ai/real-doc-hardening.js'),ctx,{filename:'ai/real-doc-hardening.js'});
+vm.runInContext(read('ai/real-doc-deductions.js'),ctx,{filename:'ai/real-doc-deductions.js'});
 
 const analyze=ctx.AIDocumentSafety.analyze;
 
