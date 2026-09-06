@@ -1,0 +1,141 @@
+/* AI Documente — previzualizare sursă, exclusiv cu tokenii design-system */
+.ai-source-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ai-source-preview-btn {
+  min-width: 108px;
+}
+
+.ai-source-dialog {
+  width: min(94vw, 1040px);
+  max-height: 92vh;
+  padding: 0;
+  overflow: hidden;
+  color: var(--ev-text);
+  border: 1px solid var(--ev-border);
+  border-radius: var(--ev-radius-lg);
+  background: var(--ev-surface);
+  box-shadow: var(--ev-shadow-strong, var(--ev-shadow-soft));
+}
+
+.ai-source-dialog::backdrop {
+  background: color-mix(in srgb, var(--ev-bg) 78%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.ai-source-dialog-shell {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  max-height: 92vh;
+}
+
+.ai-source-dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px 13px;
+  border-bottom: 1px solid var(--ev-border);
+  background: var(--ev-surface);
+}
+
+.ai-source-dialog-head h2 {
+  margin: 3px 0 0;
+  color: var(--ev-text);
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.ai-source-dialog-kicker {
+  color: var(--ev-accent-strong);
+  font-size: .68rem;
+  font-weight: 850;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.ai-source-dialog-status {
+  min-height: 38px;
+  padding: 10px 18px;
+  color: var(--ev-text-secondary);
+  border-bottom: 1px solid var(--ev-border);
+  background: var(--ev-surface-2);
+  font-size: .78rem;
+}
+
+.ai-source-dialog-viewer {
+  min-height: 260px;
+  overflow: auto;
+  display: grid;
+  place-items: start center;
+  padding: 16px;
+  background: var(--ev-bg);
+}
+
+.ai-source-preview-canvas,
+.ai-source-preview-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--ev-border);
+  border-radius: var(--ev-radius-md);
+  background: var(--ev-surface);
+  box-shadow: var(--ev-shadow-soft);
+}
+
+.ai-source-dialog-excerpt {
+  padding: 12px 18px 16px;
+  border-top: 1px solid var(--ev-border);
+  background: var(--ev-surface);
+}
+
+.ai-source-dialog-excerpt strong {
+  color: var(--ev-text);
+  font-size: .74rem;
+}
+
+.ai-source-dialog-excerpt p {
+  max-height: 118px;
+  margin: 6px 0 0;
+  overflow: auto;
+  color: var(--ev-text-secondary);
+  font-size: .76rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 680px) {
+  .ai-source-dialog {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+  }
+
+  .ai-source-dialog-shell {
+    max-height: calc(100vh - 16px);
+  }
+
+  .ai-source-dialog-head {
+    padding: 14px;
+  }
+
+  .ai-source-dialog-status,
+  .ai-source-dialog-excerpt {
+    padding-inline: 14px;
+  }
+
+  .ai-source-dialog-viewer {
+    min-height: 210px;
+    padding: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-source-dialog,
+  .ai-source-preview-btn {
+    scroll-behavior: auto;
+    transition: none;
+  }
+}
