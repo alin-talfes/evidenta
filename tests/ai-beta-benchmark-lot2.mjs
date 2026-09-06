@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 const read=f=>fs.readFileSync(f,'utf8');
 const ctx={console,Date,Math,Number,String,Array,Object,Set,Map,JSON,Uint32Array,globalThis:null}; ctx.globalThis=ctx;
 vm.createContext(ctx);
-for(const file of ['js/contopiri-core.js','ai/core.js','ai/safety.js','ai/real-doc-deductions.js','ai/real-doc-hardening.js','ai/beta-lot2-hardening.js','ai/beta-lot2-postprocess.js','ai/beta-lot3-hardening.js','ai/beta-lot3-postprocess.js']) vm.runInContext(read(file),ctx,{filename:file});
+for(const file of ['js/contopiri-core.js','ai/core.js','ai/safety.js','ai/real-doc-deductions.js','ai/real-doc-hardening.js','ai/beta-lot2-hardening.js','ai/beta-lot2-postprocess.js','ai/beta-lot3-hardening.js','ai/beta-lot3-postprocess.js','ai/beta-lot3-metadata.js']) vm.runInContext(read(file),ctx,{filename:file});
 const analyze=ctx.AIDocumentSafety.analyze;
 const json=v=>JSON.parse(JSON.stringify(v));
 
