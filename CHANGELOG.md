@@ -7,8 +7,9 @@ Pachet Security & Privacy concentrat pe documentele reale încărcate în modulu
 ### Securitate AI Documente
 - PDF.js securizat la versiunea 6.2.108.
 - `isEvalSupported`, scripting, XFA și WASM PDF.js dezactivate explicit la parsarea documentelor.
-- CSP dedicată pentru pagina AI; vechiul CDN PDF.js nu mai este permis de politica paginii.
-- Selectorul de documente rămâne blocat până la inițializarea PDF/OCR.
+- CSP dedicată pentru pagina AI, cu `connect-src 'self'`; pagina nu mai are acces direct la CDN-uri.
+- PDF.js, Tesseract.js, worker-ele, variantele Tesseract Core/WASM și modelul românesc sunt expuse printr-un Service Worker limitat la `/ai/`, cu allowlist și verificare SHA-256 înainte de cache/utilizare.
+- Selectorul de documente rămâne blocat până la inițializarea PDF/OCR prin runtime-ul verificat.
 - Preflight PDF: magic-header `%PDF-` și blocarea elementelor active JavaScript/OpenAction/Launch/EmbeddedFile/RichMedia/SubmitForm.
 - După selectarea unui document se blochează conexiunile externe din thread-ul principal al paginii AI.
 - Datele sensibile din DOM sunt golite la părăsirea paginii; documentele nu sunt salvate de modulul AI.
