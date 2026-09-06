@@ -13,6 +13,7 @@ const coreSource = read('ai/core.js');
 const safetySource = read('ai/safety.js');
 const deps = read('ai/dependencies.js');
 const dateMaskSource = read('ai/date-mask.js');
+const deductionRulesSource = read('ai/deduction-rules.js');
 
 assert.match(html, /^<!DOCTYPE html>/i);
 assert.ok(html.includes('ALPHA'), 'Modulul AI trebuie marcat vizibil ALPHA');
@@ -23,6 +24,8 @@ assert.ok(html.includes('id="calculateBtn" disabled'), 'Calculul ALPHA trebuie b
 assert.ok(!html.includes('<script src="https://'), 'Dependențele externe nu trebuie încărcate la simpla deschidere a paginii');
 assert.ok(html.includes('ai/dependencies.js') && html.includes('ai/safety.js'), 'Straturile de siguranță/dependențe lipsesc');
 assert.ok(html.includes('ai/date-mask.js'), 'Masca de dată comună modulului AI trebuie încărcată');
+assert.ok(html.includes('ai/deduction-rules.js'), 'Regulile speciale pentru măsurile preventive trebuie încărcate');
+assert.ok(html.includes('Reținere de 24 de ore') || html.includes('reținere de 24 de ore'), 'UI trebuie să explice regula reținerii de 24 de ore');
 assert.ok((html.match(/class="date-masked"/g) || []).length >= 3, 'Câmpurile statice de dată trebuie marcate date-masked');
 assert.ok(app.includes('ContopiriCore.calculate'), 'AI trebuie să reutilizeze motorul Contopiri');
 assert.ok(app.includes('calculateLiberationSchedule'), 'AI trebuie să reutilizeze motorul Pedepse/LC');
@@ -45,12 +48,20 @@ vm.createContext(context);
 vm.runInContext(coreSource, context, { filename:'ai/core.js' });
 vm.runInContext(safetySource, context, { filename:'ai/safety.js' });
 vm.runInContext(dateMaskSource, context, { filename:'ai/date-mask.js' });
+vm.runInContext(deductionRulesSource, context, { filename:'ai/deduction-rules.js' });
 
 assert.equal(context.AIDateMask.formatDateValue('01012026'), '01.01.2026');
 assert.equal(context.AIDateMask.formatDateValue('01.01.2026'), '01.01.2026');
 assert.equal(context.AIDateMask.formatDateValue('010'), '01.0');
 assert.equal(context.AIDateMask.formatDateValue('ab01-01/2026xyz'), '01.01.2026');
 assert.equal(context.AIDateMask.formatDateValue('010120261234'), '01.01.2026');
+
+assert.equal(context.AIDeductionRules.inferTypeFromSource('Se deduce reținerea de 24 de ore de la 12.02.2025 până la 13.02.2025.'), 'retention24h');
+assert.equal(context.AIDeductionRules.inferTypeFromSource('Se deduce arestul preventiv de la 12.02.2025 până la 13.02.2025.'), 'preventive');
+assert.equal(context.AIDeductionRules.deductionDays('retention24h', '12.02.2025', '13.02.2025'), 1, 'Reținerea de 24h care traversează două date trebuie să însemne o singură zi');
+assert.equal(context.AIDeductionRules.deductionDays('preventive', '12.02.2025', '13.02.2025'), 2, 'Arestul preventiv păstrează ambele capete incluse');
+assert.equal(context.AIDeductionRules.deductionDays('generic', '12.02.2025', '13.02.2025'), 2, 'Deducerea generică rămâne inclusivă');
+assert.equal(context.AIDeductionRules.deductionDays('retention24h', '12.02.2025', '14.02.2025'), null, 'O reținere de 24h nu poate acoperi trei date calendaristice');
 
 const sample = `Mandat de executare nr. 123/2026. Condamnat născut la data de 04.05.2001. Data începerii executării: 17.06.2026. Primit în penitenciar la data de 18.06.2026. În baza art. 39 se contopesc pedepsele. Condamnă la pedeapsa de 3 ani închisoare. Condamnă la pedeapsa de 2 ani închisoare. Va executa în final pedeapsa rezultantă de 3 ani și 8 luni închisoare. Se deduce perioada de la 01.01.2026 la 16.06.2026. Art. 100 Cod penal.`;
 const parsed = context.AIDocumentSafety.analyze(sample);
@@ -70,4 +81,4 @@ assert.deepEqual(JSON.parse(JSON.stringify(conflicting.finalSentence)), { years:
 assert.equal(conflicting.article, '', 'Articolele contradictorii nu trebuie auto-selectate');
 assert.ok(conflicting.warnings.some(w => w.includes('CONFLICT')));
 
-console.log('AI Documente ALPHA: lazy-load, mască automată zz.ll.aaaa, validare umană, conflicte, stare stale și reutilizarea motoarelor verificate.');
+console.log('AI Documente ALPHA: lazy-load, mască zz.ll.aaaa, reținere 24h=1 zi, arest preventiv inclusiv, validare umană, conflicte și motoare verificate.');

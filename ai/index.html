@@ -84,7 +84,8 @@
 
       <div class="ai-section-gap">
         <div class="ai-inline"><h3>Perioade deduse</h3><button type="button" class="btn btn-outline btn-sm" id="addDeductionBtn">+ Adaugă</button></div>
-        <div class="ai-table-wrap"><table class="ai-table"><thead><tr><th>Început</th><th>Sfârșit</th><th>Sursă</th><th></th></tr></thead><tbody id="deductionRows"></tbody></table></div>
+        <p class="ai-note">Regulă specială: o reținere de 24 de ore se deduce ca 1 zi chiar dacă intervalul traversează două date calendaristice (ex. 12.02.2025–13.02.2025). Arestul preventiv și celelalte perioade calculate pe zile păstrează ambele capete incluse.</p>
+        <div class="ai-table-wrap"><table class="ai-table"><thead><tr><th>Început</th><th>Sfârșit</th><th>Tip</th><th>Sursă</th><th></th></tr></thead><tbody id="deductionRows"></tbody></table></div>
       </div>
 
       <label class="ai-confirm ai-section-gap" for="confirmedData">
@@ -116,6 +117,7 @@
   <script src="ai/safety.js?v=1"></script>
   <script src="ai/dependencies.js?v=1"></script>
   <script src="ai/date-mask.js?v=1"></script>
+  <script src="ai/deduction-rules.js?v=1"></script>
   <script src="ai/app.js?v=2"></script>
 </body>
 </html>
