@@ -56,9 +56,9 @@
       <div id="warningList"></div>
       <div class="ai-review-grid">
         <div><label for="sex">Sex</label><select id="sex"><option value="M">Masculin</option><option value="F">Feminin</option></select></div>
-        <div><label for="birthDate">Data nașterii</label><input id="birthDate" type="text" inputmode="numeric" placeholder="zz.ll.aaaa"></div>
-        <div><label for="startDate">Data începerii executării</label><input id="startDate" type="text" inputmode="numeric" placeholder="zz.ll.aaaa"></div>
-        <div><label for="receivedDate">Data primirii în penitenciar/centru</label><input id="receivedDate" type="text" inputmode="numeric" placeholder="zz.ll.aaaa"></div>
+        <div><label for="birthDate">Data nașterii</label><input id="birthDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
+        <div><label for="startDate">Data începerii executării</label><input id="startDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
+        <div><label for="receivedDate">Data primirii în penitenciar/centru</label><input id="receivedDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
         <div class="wide"><label for="article">Articol / configurație IMSweb</label>
           <select id="article">
             <option value="">— verificare manuală —</option>
@@ -115,6 +115,7 @@
   <script src="ai/core.js?v=1"></script>
   <script src="ai/safety.js?v=1"></script>
   <script src="ai/dependencies.js?v=1"></script>
+  <script src="ai/date-mask.js?v=1"></script>
   <script src="ai/app.js?v=2"></script>
 </body>
 </html>
