@@ -34,7 +34,7 @@
           <input id="fileInput" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,image/bmp,image/tiff,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" multiple>
         </label>
         <div class="ai-ocr-profile" aria-label="Profil OCR">
-          <span>OCR română · ron</span><span>tessdata_best</span><span>300 DPI</span><span>auto-rotate + deskew</span><span>preprocesare locală</span>
+          <span>OCR română · ron</span><span>tessdata_best</span><span>300 DPI</span><span>auto-rotate + deskew</span><span>preprocesare locală</span><span>cache local-first</span>
         </div>
         <div id="fileList" class="ai-file-list" aria-live="polite"></div>
         <div class="ai-actions">
@@ -44,6 +44,7 @@
         <div id="statusText" class="ai-status" aria-live="polite"></div>
         <div class="ai-progress" aria-hidden="true"><span id="progressBar"></span></div>
         <p class="ai-library-note">PDF-urile cu text sunt citite direct. Pentru scanări și imagini, modulul normalizează rezoluția, contrastul și tonurile de gri, corectează înclinările mici și permite auto-rotirea OCR. Fiecare pagină OCR păstrează scorul de încredere. Sub 80%, valorile numerice importante nu sunt folosite automat fără verificare explicită.</p>
+        <p class="ai-library-note">Dependențele OCR/PDF sunt încărcate local-first. Dacă asset-urile locale nu sunt încă prezente, versiunile externe fixate sunt folosite ca fallback, iar scripturile sunt păstrate în Cache Storage; modelul românesc este păstrat în cache-ul Tesseract pentru reutilizare.</p>
       </section>
 
       <section class="ai-card" aria-labelledby="text-title">
@@ -97,7 +98,7 @@
   <script src="ai/core.js?v=2"></script>
   <script src="ai/safety.js?v=2"></script>
   <script src="ai/ocr-ro.js?v=2"></script>
-  <script src="ai/dependencies.js?v=3"></script>
+  <script src="ai/dependencies.js?v=4"></script>
   <script src="ai/date-mask.js?v=1"></script>
   <script src="ai/deduction-rules.js?v=2"></script>
   <script src="ai/app.js?v=3"></script>
