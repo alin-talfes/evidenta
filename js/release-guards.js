@@ -68,7 +68,7 @@ function patchMainResult(){
             const value = item.querySelector('.result-value');
             if (!value) return;
             if (label === 'Detențiune pe viață') value.textContent = `Fără dată de expirare. Prag VCP art. 55¹: ${years} ani / ${calc.mDays} zile.`;
-            if (label === 'Prag IMSweb') {
+            if (label === 'prag LC') {
                 item.querySelector('.result-label').textContent = 'Prag VCP art. 55¹';
                 value.textContent = `${years} ani / ${calc.mDays} zile`;
             }
@@ -151,7 +151,7 @@ function install(){
             const calc = root.lastCalculation;
             if (!text || !calc?.life || calc.art !== VCP_LIFE_ARTICLE) return text;
             const years = calc.mDays !== root.LC_TWENTY_YEAR_CAP_DAYS ? 15 : 20;
-            return text.replaceAll('prag IMSweb 20 ani', `prag VCP art. 55¹ ${years} ani`);
+            return text.replaceAll('prag LC 20 ani', `prag VCP art. 55¹ ${years} ani`);
         };
     }
 

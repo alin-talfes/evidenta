@@ -142,3 +142,13 @@ body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row) > .bt
     grid-row: 4;
   }
 }
+
+
+/* Convenție tipografică unitară — module operaționale */
+.container .card > h2,
+.container .card > h3,
+.container .legal-box > h4,
+.ai-page .ai-card > h2,
+.ai-page .ai-inline > h3 {
+  text-transform: uppercase;
+}

@@ -99,7 +99,7 @@ function protectPrimaryNumericFields(analysis){
   }
   if (analysis.article&&lowOcr(meta.article?.ocrConfidence)) {
     analysis.suggestedArticle=analysis.article; analysis.article='';
-    addWarning(analysis,numericWarning('articolul/configurația IMSweb',meta.article.ocrConfidence));
+    addWarning(analysis,numericWarning('articolul/configurația algoritmului de liberare condiționată',meta.article.ocrConfidence));
   }
 }
 

@@ -205,7 +205,7 @@ function analyzeDocument(rawText){
   if (!finalSentence&&!life) warnings.push('Pedeapsa rezultantă nu a fost identificată cu suficientă certitudine. Completeaz-o manual.');
   if (!start) warnings.push('Data începerii executării nu a fost identificată. Completeaz-o manual.');
   if (!birth) warnings.push('Data nașterii nu a fost identificată; fracția LC nu poate fi calculată sigur fără ea.');
-  if (!article.value) warnings.push('Articolul/configurația LC nu a fost identificată. Selectează-l manual din matricea IMSweb.');
+  if (!article.value) warnings.push('Articolul/configurația LC nu a fost identificată. Selectează-l manual din algoritmul de liberare condiționată.');
   if (penalties.length>1&&!/concurs|contop|art\.?\s*39/.test(folded)) warnings.push('Au fost găsite mai multe cuantumuri de pedeapsă, dar nu a fost identificată clar o contopire. Verifică manual categoriile.');
   return {
     text,life,birthDate:birth?.value||'',startDate:start?.value||'',article:article.value,

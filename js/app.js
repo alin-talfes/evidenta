@@ -146,7 +146,7 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
     if (life) return {
         article: labels[art] || art,
         sentenceBand: 'Detențiune pe viață',
-        age: 'Se aplică configurația IMSweb aferentă articolului selectat; pragul temporal utilizat de motor este 20 ani / 7.305 zile.',
+        age: 'Se aplică configurația algoritmului de liberare condiționată aferentă articolului selectat; pragul temporal utilizat de motor este 20 ani / 7.305 zile.',
         minimum: `Prag efectiv: ${schedule.mDays} zile. Zilele muncite nu reduc acest prag.`,
         proposed: `Data de împlinire a pragului: ${fmtDate(schedule.tDate)}.`
     };
@@ -162,7 +162,7 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
             ? `Sunt aplicate condițiile aferente pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}) de la data împlinirii acestuia.`
             : `Sunt aplicate condițiile anterioare pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}).`;
     } else {
-        age = `Categoria de vârstă este verificată pentru configurația IMSweb ${labels[art] || art}.`;
+        age = `Categoria de vârstă este verificată pentru configurația algoritmului de liberare condiționată ${labels[art] || art}.`;
     }
 
     return {
@@ -199,7 +199,7 @@ function calculateAll() {
 
     if (life) {
         totalDays = LC_TWENTY_YEAR_CAP_DAYS;
-        steps.push(`Detențiune pe viață: fără expirare teoretică. Pentru configurația IMSweb selectată se utilizează pragul de ${LC_TWENTY_YEAR_CAP_DAYS} zile.`);
+        steps.push(`Detențiune pe viață: fără expirare teoretică. Pentru configurația algoritmului de liberare condiționată selectată se utilizează pragul de ${LC_TWENTY_YEAR_CAP_DAYS} zile.`);
     } else {
         theorExp = addCalendarSafe(startDate, y, m, d);
         theorExp.setDate(theorExp.getDate() - 1);
@@ -384,7 +384,7 @@ function calculateAll() {
 
     html += life
         ? `<div class="result-section"><h4>DETALII PEDEAPSĂ</h4><div class="result-grid">
-            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. Prag IMSweb: ${LC_TWENTY_YEAR_CAP_DAYS} zile.</div></div>
+            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. prag LC: ${LC_TWENTY_YEAR_CAP_DAYS} zile.</div></div>
             <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
             <div class="result-item"><div class="result-label">Zile neexecutate</div><div class="result-value">${non} zile</div></div>
             <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
@@ -401,12 +401,12 @@ function calculateAll() {
     html += `<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">
         <div class="result-item">
             <div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div>
-            <div class="result-value">${life ? `Prag IMSweb ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
+            <div class="result-value">${life ? `prag LC ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div>
         </div>
         <div class="result-item">
             <div class="result-label">DATA ÎMPLINIRII FRACȚIEI TOTALE / PROPOZABILĂ</div>
-            <div class="result-value">${life ? `Prag IMSweb ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
+            <div class="result-value">${life ? `prag LC ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div>
         </div>
     </div></div>`;
@@ -449,7 +449,7 @@ function calculateAll() {
         <div class="result-item"><div class="result-label">Condiția de vârstă aplicată</div><div class="result-value result-value-small">${lcDetails.age}</div></div>
         <div class="result-item"><div class="result-label">Fracția / pragul minim</div><div class="result-value result-value-small">${lcDetails.minimum}</div></div>
         <div class="result-item"><div class="result-label">Fracția / data propozabilă</div><div class="result-value result-value-small">${lcDetails.proposed}</div></div>
-        <div class="result-item"><div class="result-label">${life ? 'Prag IMSweb' : 'Mandat total'}</div><div class="result-value">${life ? `${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
+        <div class="result-item"><div class="result-label">${life ? 'prag LC' : 'Mandat total'}</div><div class="result-value">${life ? `${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
         ${reanalysisLabel ? `<div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>` : ''}
         ${quarantineEnd ? `<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div><div class="result-note">calculată de la primirea în penitenciar/centru</div></div>` : ''}
     </div></div>`;

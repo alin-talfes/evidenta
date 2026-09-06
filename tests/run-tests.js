@@ -89,7 +89,7 @@ assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.a
 const indexSource=fs.readFileSync('index.html','utf8');
 assert(/style\.css\?v=43/.test(indexSource),'index.html stale css cache version');
 assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
-assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 IMSweb options missing');
+assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 algoritm liberare condiționată options missing');
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
 assert(indexSource.includes('js/rules.js?v=37') && indexSource.includes('js/app.js?v=37'),'Pedepse cache version not bumped');
 for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']){

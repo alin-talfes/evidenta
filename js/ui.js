@@ -249,11 +249,11 @@ function openInfoModal() {
                 Aplicația calculează termenele pedepselor privative de libertate, fracțiile utilizate în vederea liberării condiționate, perioadele deduse și perioadele care nu se consideră executate.</p>
 
                 <p><strong>Configurații LC</strong><br>
-                Matricea de fracții reproduce configurațiile operaționale IMSweb ANP introduse în motor, inclusiv regulile VCP și configurațiile anterioare Legii nr. 140/1996. Valoarea 1/100 este păstrată ca parametru tehnic IMSweb acolo unde apare în matricea oficială.</p>
+                Matricea de fracții reproduce configurațiile operaționale algoritmul de liberare condiționată introduse în motor, inclusiv regulile VCP și configurațiile anterioare Legii nr. 140/1996. Valoarea 1/100 este păstrată ca parametru tehnic al algoritmului de liberare condiționată acolo unde apare în matricea oficială.</p>
 
                 <p><strong>Mod de utilizare</strong><br>
                 1. Completați sexul și data nașterii.<br>
-                2. Selectați articolul/configurația IMSweb și introduceți durata și data începerii executării.<br>
+                2. Selectați articolul/configurația algoritmului de liberare condiționată și introduceți durata și data începerii executării.<br>
                 3. Introduceți separat data primirii în penitenciar/centru numai dacă doriți calcularea carantinei de 21 zile.<br>
                 4. Adăugați deducerile, zilele de recurs compensatoriu și perioadele neexecutate, după caz.<br>
                 5. Apăsați „CALCULEAZĂ”.</p>

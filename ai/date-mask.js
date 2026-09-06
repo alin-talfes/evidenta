@@ -18,6 +18,18 @@ function applyDateMask(event){
   input.value = formatDateValue(input.value);
 }
 
+function setToday(inputId){
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const current = typeof root.today === 'function' ? root.today() : new Date();
+  const value = typeof root.fmtDate === 'function'
+    ? root.fmtDate(current)
+    : `${String(current.getDate()).padStart(2,'0')}.${String(current.getMonth()+1).padStart(2,'0')}.${current.getFullYear()}`;
+  input.value = value;
+  input.dispatchEvent(new Event('input', { bubbles:true }));
+  input.dispatchEvent(new Event('change', { bubbles:true }));
+}
+
 function decorateDateInput(input){
   if (!(input instanceof HTMLInputElement) || !input.matches(DATE_SELECTOR)) return;
   input.classList.add('date-masked');
@@ -34,6 +46,11 @@ function decorateAll(rootNode){
 
 function init(){
   decorateAll(document);
+  document.addEventListener('click', event => {
+    const button = event.target.closest?.('[data-ai-today]');
+    if (!button) return;
+    setToday(button.dataset.aiToday);
+  });
   document.addEventListener('input', event => {
     if (event.target instanceof HTMLInputElement && event.target.matches(DATE_SELECTOR)) applyDateMask(event);
   });
@@ -49,7 +66,7 @@ function init(){
   }).observe(document.body, { childList:true, subtree:true });
 }
 
-root.AIDateMask = { formatDateValue };
+root.AIDateMask = { formatDateValue, setToday };
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
   else init();

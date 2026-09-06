@@ -39,7 +39,7 @@ function buildNarrativeText() {
     const inputLines = [
         'INPUT',
         `DATA NAȘTERII: ${input.birthDate || fmtDate(calc.birthDate) || '—'}`,
-        `ARTICOL / CONFIGURAȚIE IMSweb: ${calc.art || input.art || '—'}`,
+        `ARTICOL / CONFIGURAȚIE algoritm liberare condiționată: ${calc.art || input.art || '—'}`,
         `DATA ÎNCEPERII PEDEPSEI: ${input.start || fmtDate(calc.startDate) || '—'}`,
         `DATA PRIMIRII ÎN PENITENCIAR/CENTRU: ${input.prisonReceived || (calc.prisonReceivedDate ? fmtDate(calc.prisonReceivedDate) : '—')}`,
         `PERIOADA: ${duration}`,
@@ -55,8 +55,8 @@ function buildNarrativeText() {
     const outputLines = [
         'OUTPUT',
         `EXPIRARE REALĂ: ${calc.realExp ? fmtDate(calc.realExp) : '—'}`,
-        `FRACȚIE MINIMĂ: ${calc.life ? 'prag IMSweb 20 ani' : fractionText(calc.mR)} = ${calc.mDays ?? '—'} zile fără deduceri | DATA: ${calc.mDate ? fmtDate(calc.mDate) : '—'}`,
-        `FRACȚIE TOTALĂ / PROPOZABILĂ: ${calc.life ? 'prag IMSweb 20 ani' : fractionText(calc.tR)} = ${calc.tDays ?? '—'} zile fără deduceri | DATA: ${calc.tDate ? fmtDate(calc.tDate) : '—'}`,
+        `FRACȚIE MINIMĂ: ${calc.life ? 'prag LC 20 ani' : fractionText(calc.mR)} = ${calc.mDays ?? '—'} zile fără deduceri | DATA: ${calc.mDate ? fmtDate(calc.mDate) : '—'}`,
+        `FRACȚIE TOTALĂ / PROPOZABILĂ: ${calc.life ? 'prag LC 20 ani' : fractionText(calc.tR)} = ${calc.tDays ?? '—'} zile fără deduceri | DATA: ${calc.tDate ? fmtDate(calc.tDate) : '—'}`,
         `PROPOZABILĂ DUPĂ ZILE MUNCITE: ${calc.life ? '—' : (calc.workDaysResult || fmtDate(calc.tDate) || '—')}${calc.life ? '' : ` | ZILE MUNCITE APLICATE: ${calc.workDaysApplied || 0}`}`,
         `REANALIZARE REGIM: ${reanalysisText}`,
         `CARANTINĂ: ${calc.quarantineEnd ? fmtDate(calc.quarantineEnd) : '— (necalculată fără data primirii în penitenciar/centru)'}`

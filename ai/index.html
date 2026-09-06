@@ -11,7 +11,7 @@
   <meta name="description" content="OCR românesc și analiză asistată a mandatelor și hotărârilor pentru calculul pedepselor și contopirilor.">
   <link rel="stylesheet" href="css/design-system.css?v=4">
   <link rel="stylesheet" href="css/style.css?v=43">
-  <link rel="stylesheet" href="ai/styles.css?v=6">
+  <link rel="stylesheet" href="ai/styles.css?v=7">
   <link rel="stylesheet" href="ai/source-preview.css?v=2">
   <link rel="stylesheet" href="ai/security.css?v=1">
   <script src="js/theme.js?v=41" defer></script>
@@ -29,7 +29,7 @@
 
     <div class="ai-grid">
       <section class="ai-card" aria-labelledby="upload-title">
-        <h2 id="upload-title">1. Încarcă documentul</h2>
+        <h2 id="upload-title">ÎNCARCĂ DOCUMENTUL</h2>
         <label class="ai-dropzone ai-security-locked" id="dropZone" for="fileInput" aria-disabled="true">
           <strong>PDF / imagini</strong>
           <span>Atinge sau trage fișierele aici</span>
@@ -49,20 +49,20 @@
       </section>
 
       <section class="ai-card" aria-labelledby="text-title">
-        <h2 id="text-title">2. Text extras</h2>
+        <h2 id="text-title">TEXT EXTRAS</h2>
         <textarea id="rawText" class="ai-textarea" spellcheck="false" autocomplete="off" placeholder="Textul extras apare aici. Îl poți corecta înainte de reanalizare."></textarea>
         <div class="ai-actions"><button type="button" class="btn btn-outline" id="reanalyzeTextBtn">REANALIZEAZĂ TEXTUL</button></div>
       </section>
     </div>
 
     <section class="ai-card ai-section-gap ai-hidden" id="reviewCard" aria-labelledby="review-title">
-      <h2 id="review-title">3. Verifică datele</h2>
+      <h2 id="review-title">VERIFICĂ DATELE</h2>
       <div id="warningList"></div>
       <div class="ai-review-grid">
         <div><label for="sex">Sex</label><select id="sex"><option value="M">Masculin</option><option value="F">Feminin</option></select></div>
         <div><label for="birthDate">Data nașterii</label><input id="birthDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
-        <div><label for="startDate">Data începerii executării</label><input id="startDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
-        <div><label for="receivedDate">Data primirii în penitenciar/centru</label><input id="receivedDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
+        <div><label for="startDate">Data începerii executării</label><div class="date-wrapper"><input id="startDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" data-ai-today="startDate" aria-label="Setează data începerii executării la data de azi">AZI</button></div></div>
+        <div><label for="receivedDate">Data primirii în penitenciar/centru</label><div class="date-wrapper"><input id="receivedDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" data-ai-today="receivedDate" aria-label="Setează data primirii la data de azi">AZI</button></div></div>
         <div class="wide"><label for="article">ALGORITM LIBERARE CONDIȚIONATĂ</label>
           <select id="article"><option value="">— verificare manuală —</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. (2)</option><option value="VCP603">VCP art. 60 alin. (3)</option><option value="VCP551">VCP art. 55¹ (viață)</option><option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option><option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option><option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. (4) v</option></select>
         </div>
@@ -71,13 +71,13 @@
       </div>
 
       <div class="ai-section-gap">
-        <div class="ai-inline"><h3>Pedepse componente / resturi</h3><button type="button" class="btn btn-outline btn-sm" id="addPenaltyBtn">+ Adaugă</button></div>
+        <div class="ai-inline"><h3>PEDEPSE COMPONENTE / RESTURI</h3><button type="button" class="btn btn-outline btn-sm" id="addPenaltyBtn">+ Adaugă</button></div>
         <p class="ai-note">OCR sub 80% → rândul rămâne pe „Ignoră” până la verificare.</p>
         <div class="ai-table-wrap"><table class="ai-table ai-table-penalties"><thead><tr><th>Ani</th><th>Luni</th><th>Zile</th><th>Categorie</th><th>Sursă</th><th></th></tr></thead><tbody id="penaltyRows"></tbody></table></div>
       </div>
 
       <div class="ai-section-gap">
-        <div class="ai-inline"><h3>Perioade deduse</h3><button type="button" class="btn btn-outline btn-sm" id="addDeductionBtn">+ Adaugă</button></div>
+        <div class="ai-inline"><h3>PERIOADE DEDUSE</h3><button type="button" class="btn btn-outline btn-sm" id="addDeductionBtn">+ Adaugă</button></div>
         <p class="ai-note"><strong>Reținere de 24 de ore = 1 zi.</strong> Arest preventiv/domiciliu = capete incluse.</p>
         <div class="ai-table-wrap"><table class="ai-table ai-table-deductions"><thead><tr><th>Început</th><th>Sfârșit</th><th>Tip</th><th>Sursă</th><th></th></tr></thead><tbody id="deductionRows"></tbody></table></div>
       </div>
@@ -87,8 +87,8 @@
       <div id="calcError" class="ai-error ai-hidden" role="alert"></div>
     </section>
 
-    <section class="ai-card ai-section-gap ai-hidden" id="resultCard" aria-labelledby="result-title"><h2 id="result-title">4. Rezultat</h2><div id="resultContent"></div></section>
-    <section class="ai-card ai-section-gap ai-hidden" id="evidenceCard" aria-labelledby="evidence-title"><h2 id="evidence-title">Surse document</h2><div id="evidenceList" class="ai-evidence"></div></section>
+    <section class="ai-card ai-section-gap ai-hidden" id="resultCard" aria-labelledby="result-title"><h2 id="result-title">REZULTAT</h2><div id="resultContent"></div></section>
+    <section class="ai-card ai-section-gap ai-hidden" id="evidenceCard" aria-labelledby="evidence-title"><h2 id="evidence-title">SURSE DOCUMENT</h2><div id="evidenceList" class="ai-evidence"></div></section>
   </main>
 
   <script src="js/utils.js?v=36"></script>
@@ -107,7 +107,7 @@
   <script src="ai/beta-lot3-measures.js?v=1"></script>
   <script src="ai/dependencies.js?v=4"></script>
   <script src="ai/security-runtime.js?v=2"></script>
-  <script src="ai/date-mask.js?v=1"></script>
+  <script src="ai/date-mask.js?v=2"></script>
   <script src="ai/deduction-rules.js?v=3"></script>
   <script src="ai/app.js?v=3"></script>
   <script src="ai/source-preview.js?v=1"></script>

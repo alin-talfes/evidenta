@@ -296,7 +296,7 @@ function calculateReviewed(){
       const sentenceOver10=!life && (duration.years*12+duration.months+duration.days/30)>120;
       schedule=calculateLiberationSchedule({life,art,sentenceOver10,totalDays,birthDate,startDate,currentSex:sex,theorExp,dedDays:ded,nonExecDays:0});
       if (schedule.error) warnings.push(`LC: ${schedule.error}`);
-    } else warnings.push('Fracțiile LC nu au fost calculate: sunt necesare articolul/configurația IMSweb și data nașterii.');
+    } else warnings.push('Fracțiile LC nu au fost calculate: sunt necesare articolul/configurația algoritmului de liberare condiționată și data nașterii.');
 
     let quarantineEnd=null;
     if (receivedDate) { quarantineEnd=new Date(receivedDate); quarantineEnd.setDate(quarantineEnd.getDate()+20); }
