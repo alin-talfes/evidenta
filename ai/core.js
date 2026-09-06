@@ -51,7 +51,7 @@ function pageContextAt(text, index){
 
 function ocrConfidenceFromSource(source){
   const match = String(source || '').match(/OCR\s+(\d{1,3})%/i);
-  return match ? Number(match[1]) : null;
+  return match ? Number(match[1]) : undefined;
 }
 
 function sourceSnippet(text, index, fragment, radius = 150){
