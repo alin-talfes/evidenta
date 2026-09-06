@@ -24,6 +24,14 @@
         );
     }
 
+    function ensureLegalReleaseGuards() {
+        ensureScript(
+            'script[data-evidenta-legal-release-guards]',
+            new URL('./release-guards.js?v=1', scriptUrl).href,
+            'evidentaLegalReleaseGuards'
+        );
+    }
+
     function ensurePageControllers() {
         if (document.getElementById('resultsCard') && document.getElementById('birthDate')) {
             ensureScript(
@@ -95,15 +103,18 @@
 
     window.addEventListener('evidenta:shellready', ensureAiNavigation);
     ensureUxUpgrades();
+    ensureLegalReleaseGuards();
     ensurePageControllers();
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
+            ensureLegalReleaseGuards();
             ensurePageControllers();
             ensureAiNavigation();
             initFooter();
         }, { once: true });
     } else {
+        ensureLegalReleaseGuards();
         ensureAiNavigation();
         initFooter();
     }
