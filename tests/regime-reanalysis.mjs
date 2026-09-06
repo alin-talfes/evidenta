@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+
+const ctx={console,Date,Math,Number,String,Array,Object,Set,globalThis:null}; ctx.globalThis=ctx;
+vm.createContext(ctx);
+vm.runInContext(fs.readFileSync('js/utils.js','utf8')+'\n'+fs.readFileSync('js/rules.js','utf8')+'\n'+fs.readFileSync('js/regime-reanalysis.js','utf8'),ctx);
+const R=ctx.RegimeReanalysisRules;
+assert.ok(R?.calculateArticle53,'Motorul art. 53 trebuie expus');
+const ref=new Date(2026,0,1);
+const calc=R.calculateArticle53({referenceDate:ref,years:5,months:0,days:0,deductedDays:10});
+assert.equal(calc.totalDays,1826,'Durata calendaristică de 5 ani de la 01.01.2026 trebuie să includă anul bisect 2028');
+assert.equal(calc.fifth,365,'1/5 se ia din pedeapsa cea mai mare');
+assert.equal(calc.date.getFullYear(),2026); assert.equal(calc.date.getMonth(),11); assert.equal(calc.date.getDate(),21,'Cele 10 zile deduse trebuie să deplaseze data de 1/5');
+assert.throws(()=>R.calculateArticle53({referenceDate:ref,years:0,months:0,days:0,deductedDays:0}),/pedeapsei celei mai mari/);
+assert.throws(()=>R.calculateArticle53({referenceDate:ref,years:1,months:0,days:0,deductedDays:9999}),/depășesc/);
+const source=fs.readFileSync('js/regime-reanalysis.js','utf8');
+assert.ok(source.includes('regimeMultiple'),'UI-ul trebuie să aibă opțiunea pentru mai multe pedepse');
+assert.ok(source.includes('regimeReferenceDate'),'Data de referință art. 53 trebuie păstrată');
+assert.ok(source.includes('collectStoredCaseData'),'Persistența speței trebuie extinsă');
+console.log('Reanalizare regim art. 53: pedeapsa cea mai mare, data de referință și deducerile verificate.');
