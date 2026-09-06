@@ -27,17 +27,11 @@ function mountAccessibleModal(overlay) {
 
 // ========== INTERFAȚĂ UTILIZATOR (DOM) ==========
 
-// Variabila globală pentru sexul curent (M/F)
 let currentSex = 'M';
-
-// Referințe către elementele DOM pentru toggle-ul de sex
 const sexToggle = document.getElementById('sexToggle');
 const sexLabelM = document.getElementById('sexLabelM');
 const sexLabelF = document.getElementById('sexLabelF');
 
-/**
- * Actualizează interfața pentru selectarea sexului.
- */
 function updateSexUI() {
     if (!sexToggle) return;
     if (sexToggle.checked) {
@@ -52,9 +46,6 @@ function updateSexUI() {
     if (typeof updAgeTag === 'function') updAgeTag();
 }
 
-/**
- * Aplică masca pentru câmpurile de dată (zz.ll.aaaa).
- */
 function applyDateMask(e) {
     const input = e.target;
     let val = input.value.replace(/\D/g, '');
@@ -66,17 +57,11 @@ function applyDateMask(e) {
     input.value = formatted;
 }
 
-/**
- * Setează data de azi în câmpul specificat.
- */
 function setToday(inputId) {
     const input = document.getElementById(inputId);
     if (input) input.value = fmtDate(today());
 }
 
-/**
- * Actualizează eticheta de vârstă și categorie.
- */
 function updAgeTag() {
     const b = document.getElementById('birthDate');
     const tag = document.getElementById('ageTag');
@@ -95,9 +80,6 @@ function updAgeTag() {
     tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`;
 }
 
-/**
- * Adaugă un rând pentru perioadă dedusă.
- */
 function addDedRow() {
     const container = document.getElementById('deductionsContainer');
     if (!container) return;
@@ -115,9 +97,6 @@ function addDedRow() {
     r.querySelector('.ded-end')?.addEventListener('input', () => updDed(r));
 }
 
-/**
- * Actualizează numărul de zile pentru un rând de deducere.
- */
 function updDed(r) {
     const s = r.querySelector('.ded-start')?.value.trim() || '';
     const e = r.querySelector('.ded-end')?.value.trim() || '';
@@ -132,9 +111,6 @@ function updDed(r) {
     }
 }
 
-/**
- * Adaugă un rând pentru recurs compensatoriu.
- */
 function addManDedRow() {
     const container = document.getElementById('manualDeductionsContainer');
     if (!container) return;
@@ -148,9 +124,6 @@ function addManDedRow() {
     container.appendChild(r);
 }
 
-/**
- * Adaugă un rând pentru perioadă adăugată.
- */
 function addNonExecRow() {
     const container = document.getElementById('nonExecContainer');
     if (!container) return;
@@ -160,7 +133,7 @@ function addNonExecRow() {
     r.innerHTML = `
         <div><label>Tip</label><select class="ne-type">
             <option value="escape">Evadare</option>
-            <option value="illness">Boală</option>
+            <option value="illness">Boală provocată voit (hotărâre definitivă)</option>
             <option value="interruption">Întrerupere</option>
         </select></div>
         <div><label>Data început</label><input type="text" class="ne-start date-masked" placeholder="zz.ll.aaaa"></div>
@@ -174,9 +147,6 @@ function addNonExecRow() {
     r.querySelector('.ne-type')?.addEventListener('change', () => updNonExec(r));
 }
 
-/**
- * Actualizează numărul de zile pentru un rând de perioadă adăugată.
- */
 function updNonExec(r) {
     const s = r.querySelector('.ne-start')?.value.trim() || '';
     const e = r.querySelector('.ne-end')?.value.trim() || '';
@@ -197,16 +167,10 @@ function updNonExec(r) {
     }
 }
 
-/**
- * Confirmă resetarea și apoi resetează toate câmpurile.
- */
 function confirmReset() {
     if (confirm('Sigur doriți să resetați toate câmpurile?')) resetAll();
 }
 
-/**
- * Resetează toate câmpurile formularului și rezultatele.
- */
 function resetAll() {
     if (sexToggle) {
         currentSex = 'M';
@@ -215,7 +179,7 @@ function resetAll() {
     }
     const ids = [
         'birthDate', 'observations', 'liberationArticle', 'lifeSentence',
-        'durYears', 'durMonths', 'durDays', 'startDate', 'conditionalReleaseDate',
+        'durYears', 'durMonths', 'durDays', 'startDate', 'prisonReceivedDate', 'conditionalReleaseDate',
         'masuriRefDate', 'masuriDays', 'masuriResult'
     ];
     ids.forEach(id => {
@@ -237,6 +201,8 @@ function resetAll() {
         const sentenceDuration = document.getElementById('sentenceDuration');
         if (sentenceDuration) sentenceDuration.classList.remove('hidden');
     }
+    const article = document.getElementById('liberationArticle');
+    if (article) article.disabled = false;
     const resultsCard = document.getElementById('resultsCard');
     if (resultsCard) resultsCard.classList.add('hidden');
     const ageTag = document.getElementById('ageTag');
@@ -247,9 +213,6 @@ function resetAll() {
     if (typeof calcMasuriPreventive === 'function') calcMasuriPreventive();
 }
 
-/**
- * Afișează sau ascunde pașii de calcul.
- */
 function toggleSteps() {
     const container = document.getElementById('stepsContainer');
     const btn = document.getElementById('toggleStepsBtn');
@@ -265,9 +228,6 @@ function toggleSteps() {
     }
 }
 
-/**
- * Deschide modalul cu informații și ghid de utilizare detaliat.
- */
 function openInfoModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -282,47 +242,39 @@ function openInfoModal() {
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <h4 id="info-title" style="margin:0;">INFORMAȚII ȘI GHID DE UTILIZARE</h4>
-                <button class="btn btn-outline btn-sm close-btn"  style="flex-shrink:0;">Închide</button>
+                <button class="btn btn-outline btn-sm close-btn" style="flex-shrink:0;">Închide</button>
             </div>
             <div style="font-size:0.85rem;color:var(--text-light);line-height:1.6;">
                 <p><strong>Scopul aplicației</strong><br>
-                Aplicația permite calculul termenelor pedepselor privative de libertate, al liberării condiționate,
-                al perioadelor deduse și adăugate, precum și al recursului compensatoriu prevăzut de Legea nr. 169/2017.</p>
+                Aplicația calculează termenele pedepselor privative de libertate, fracțiile utilizate în vederea liberării condiționate, perioadele deduse și perioadele care nu se consideră executate.</p>
 
-                <p><strong>Instrumente disponibile</strong><br>
-                Prin meniul principal (butonul ☰) se pot accesa:
-                <br>• <strong>Calculator termene pedepse privative de libertate</strong> – pagina principală;
-                <br>• <strong>Calculator termene procedurale</strong> – pentru termenele prevăzute de Codul de procedură penală;
-                <br>• <strong>Calculator pedeapsă rezultantă</strong> – pentru contopiri, recidivă și revocare rest.</p>
+                <p><strong>Configurații LC</strong><br>
+                Matricea de fracții reproduce configurațiile operaționale IMSweb ANP introduse în motor, inclusiv regulile VCP și configurațiile anterioare Legii nr. 140/1996. Valoarea 1/100 este păstrată ca parametru tehnic IMSweb acolo unde apare în matricea oficială.</p>
 
                 <p><strong>Mod de utilizare</strong><br>
-                1. Completați secțiunea „DATE GENERALE PPL” (sexul, data nașterii, observații).<br>
-                2. Introduceți datele pedepsei în secțiunea „DETALII PEDEAPSĂ PPL”.<br>
-                3. Adăugați perioadele deduse, recursul compensatoriu și perioadele adăugate, după caz.<br>
-                4. Opțional, completați data liberării condiționate și prelungirile măsurilor preventive.<br>
-                5. Apăsați „CALCULEAZĂ”.<br>
-                6. Rezultatele vor afișa: expirarea teoretică și reală, zilele deduse/adăugate,
-                   fracțiile de liberare condiționată, termenul de reanalizare 1/5 și cronologia termenelor.<br>
-                7. Folosiți butoanele „COPIAZĂ REZULTATELE” sau „EXPORTĂ PDF” pentru a păstra datele.</p>
+                1. Completați sexul și data nașterii.<br>
+                2. Selectați articolul/configurația IMSweb și introduceți durata și data începerii executării.<br>
+                3. Introduceți separat data primirii în penitenciar/centru numai dacă doriți calcularea carantinei de 21 zile.<br>
+                4. Adăugați deducerile, zilele de recurs compensatoriu și perioadele neexecutate, după caz.<br>
+                5. Apăsați „CALCULEAZĂ”.</p>
 
                 <p><strong>Reguli de calcul importante</strong><br>
-                • Ziua de început și ziua de sfârșit sunt incluse în durata pedepsei (art. 22 din OMJ 2188/C/2022).<br>
+                • Ziua de început și ziua de sfârșit sunt incluse în durata pedepsei.<br>
                 • Luna și anul se consideră împlinite cu o zi înainte de ziua corespunzătoare.<br>
-                • Fracțiile de liberare condiționată se calculează prin rotunjire în jos (Math.floor),
-                  în defavoarea condamnatului, conform Codului penal.<br>
-                • Perioadele deduse se scad, iar perioadele adăugate (evadare, boală provocată voit, întrerupere) se adaugă la durata pedepsei.</p>
+                • La fracțiile LC se utilizează cifra întreagă rezultată; partea zecimală nu se ridică la următoarea zi.<br>
+                • Deducerile influențează data împlinirii fracției, nu baza procentuală a fracției.<br>
+                • La schimbarea regimului favorabil de vârstă, zilele considerate executate nu pot deplasa termenul înaintea zilei în care pragul de vârstă a fost împlinit.<br>
+                • Fracția de 1/5 pentru schimbarea regimului nu este aplicată automat măsurilor educative NCP art. 124/125.<br>
+                • Boala provocată voit se introduce numai în situația juridică în care există hotărârea definitivă necesară.</p>
 
                 <p><strong>Confidențialitate</strong><br>
-                Toate datele sunt stocate exclusiv local, în browserul utilizatorului (localStorage) și nu sunt transmise către servere externe.</p>
+                Datele salvate de funcția de spețe sunt păstrate în localStorage-ul browserului.</p>
             </div>
         </div>
     `;
     mountAccessibleModal(overlay);
 }
 
-/**
- * Deschide modalul cu bazele legale (OMJ 2188/C/2022).
- */
 function openLegalModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) existingOverlay.remove();
@@ -337,7 +289,7 @@ function openLegalModal() {
         <div class="modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <h4 id="legal-title" style="margin:0;">OMJ 2188/C/2022</h4>
-                <button class="btn btn-outline btn-sm close-btn"  style="flex-shrink:0;">Închide</button>
+                <button class="btn btn-outline btn-sm close-btn" style="flex-shrink:0;">Închide</button>
             </div>
             <div style="max-height:70vh; overflow-y:auto;">
     `;
@@ -355,14 +307,10 @@ function openLegalModal() {
     }
 
     html += `</div></div>`;
-
     overlay.innerHTML = html;
     mountAccessibleModal(overlay);
 }
 
-/**
- * Deschide modalul de încărcare a spețelor salvate.
- */
 function openLoadModal() {
     const existingOverlay = document.querySelector('.modal-overlay');
     if (existingOverlay) closeModal(existingOverlay);
@@ -395,9 +343,6 @@ function openLoadModal() {
     mountAccessibleModal(overlay);
 }
 
-/**
- * Formatează o dată cu avertisment vizual (expirat/curând).
- */
 function formatDateWithWarning(date) {
     if (!date || isNaN(date)) return fmtDate(date);
     const t = today();

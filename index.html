@@ -21,9 +21,7 @@
     <div class="container">
         <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
             <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('hidden')" aria-label="Meniu principal">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
             <button class="btn-utility primary" id="saveBtn" onclick="saveCase()">SALVEAZĂ</button>
             <button class="btn-utility" id="loadBtn" onclick="openLoadModal()">ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
@@ -65,7 +63,7 @@
                 <h3 id="sentence-heading">DETALII PEDEAPSĂ PPL</h3>
                 <div class="form-grid">
                     <div>
-                        <label for="liberationArticle">Articol liberare condiționată</label>
+                        <label for="liberationArticle">Articol / configurație IMSweb</label>
                         <select id="liberationArticle" aria-required="true">
                             <option value="">—</option>
                             <option value="NCP100">NCP art. 100</option>
@@ -76,6 +74,10 @@
                             <option value="VCP591">VCP art. 59¹</option>
                             <option value="VCP602">VCP art. 60 alin. 2</option>
                             <option value="VCP603">VCP art. 60 alin. 3</option>
+                            <option value="VCP551">VCP art. 55¹ (viață)</option>
+                            <option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option>
+                            <option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option>
+                            <option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. 4 v</option>
                         </select>
                     </div>
                     <div>
@@ -92,11 +94,21 @@
                     <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
                     <div><label for="durDays">Zile</label><input type="number" id="durDays" value="0" min="0"></div>
                 </div>
-                <div class="mt-12">
-                    <label for="startDate">Data începerii executării pedepsei</label>
-                    <div class="date-wrapper">
-                        <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa">
-                        <button type="button" class="btn-today" data-target="startDate" onclick="setToday('startDate')">AZI</button>
+                <div class="form-grid mt-12">
+                    <div>
+                        <label for="startDate">Data începerii executării pedepsei</label>
+                        <div class="date-wrapper">
+                            <input type="text" id="startDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            <button type="button" class="btn-today" data-target="startDate" onclick="setToday('startDate')">AZI</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="prisonReceivedDate">Data primirii în penitenciar/centru (opțional)</label>
+                        <div class="date-wrapper">
+                            <input type="text" id="prisonReceivedDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            <button type="button" class="btn-today" data-target="prisonReceivedDate" onclick="setToday('prisonReceivedDate')">AZI</button>
+                        </div>
+                        <p class="help-text">Folosită numai pentru termenul de 21 zile de carantină; nu înlocuiește data începerii executării.</p>
                     </div>
                 </div>
             </div>
@@ -114,8 +126,8 @@
             </div>
 
             <div class="card" aria-labelledby="nonExec-heading">
-                <h3 id="nonExec-heading">PERIOADE ADĂUGATE</h3>
-                <div id="nonExecContainer" role="list" aria-label="Listă perioade adăugate"></div>
+                <h3 id="nonExec-heading">PERIOADE CARE NU SE CONSIDERĂ EXECUTATE</h3>
+                <div id="nonExecContainer" role="list" aria-label="Listă perioade neexecutate"></div>
                 <button class="btn btn-outline btn-sm" id="addNonExecBtn" onclick="addNonExecRow()">+ Adaugă</button>
             </div>
 
@@ -166,17 +178,17 @@
                 <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
                     <h4 id="steps-heading">PAȘII CALCULULUI</h4>
                     <ol id="stepsList"></ol>
-                    <p class="footnote">Notă: Math.floor(x) = partea întreagă inferioară (rotunjire în jos, în defavoarea condamnatului).</p>
+                    <p class="footnote">Notă: la fracțiile de liberare condiționată se utilizează cifra întreagă rezultată; partea zecimală nu se ridică la următoarea zi.</p>
                 </div>
             </div>
         </main>
     </div>
     <script src="js/utils.js?v=36"></script>
-    <script src="js/rules.js?v=36"></script>
+    <script src="js/rules.js?v=37"></script>
     <script src="js/legal.js?v=36"></script>
-    <script src="js/storage.js?v=36"></script>
-    <script src="js/export.js?v=36"></script>
-    <script src="js/ui.js?v=36"></script>
-    <script src="js/app.js?v=36"></script>
+    <script src="js/storage.js?v=37"></script>
+    <script src="js/export.js?v=37"></script>
+    <script src="js/ui.js?v=37"></script>
+    <script src="js/app.js?v=37"></script>
 </body>
 </html>

@@ -1,9 +1,5 @@
 // ========== GESTIONARE ERORI GLOBALE ==========
 
-/**
- * Afișează un toast discret cu eroarea apărută.
- * @param {string} message - mesajul de afișat
- */
 function showGlobalError(message) {
     let toast = document.getElementById('globalErrorToast');
     if (!toast) {
@@ -25,12 +21,10 @@ function showGlobalError(message) {
     }
     toast.textContent = message;
     clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(() => {
-        toast.remove();
-    }, 5000);
+    toast._timeout = setTimeout(() => toast.remove(), 5000);
 }
 
-window.onerror = function (msg, source, lineno, colno, error) {
+window.onerror = function (msg, source, lineno, colno) {
     console.error('Eroare globală:', msg, 'în', source, 'linia', lineno, 'coloana', colno);
     showGlobalError('A apărut o eroare neașteptată. Încearcă din nou.');
     return true;
@@ -44,29 +38,27 @@ window.addEventListener('unhandledrejection', function (event) {
 
 // ========== APLICAȚIE PRINCIPALĂ ==========
 
-/**
- * Validare completă a datelor de intrare.
- * @param {Date} birthDate - data nașterii
- * @param {Date} startDate - data începerii executării
- * @param {boolean} life - detențiune pe viață
- * @param {string} art - articol liberare condiționată
- * @param {number} y - ani pedeapsă
- * @param {number} m - luni pedeapsă
- * @param {number} d - zile pedeapsă
- * @returns {string[]} - lista erorilor
- */
+const LIFE_ARTICLES = new Set(['NCP99', 'VCP551']);
+const EDUCATIONAL_ARTICLES = new Set(['NCP124', 'NCP125']);
+
 function validateInputs(birthDate, startDate, life, art, y, m, d) {
     const err = [];
     if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.');
     if (!startDate) err.push('Data începerii este invalidă sau incompletă.');
     if (!life && !art) err.push('Selectați articolul de liberare condiționată.');
-    if (life && art !== 'NCP99') err.push('Pentru detențiunea pe viață se aplică NCP art. 99.');
-    if (!life && art === 'NCP99') err.push('NCP art. 99 se utilizează numai pentru detențiunea pe viață.');
+    if (life && !LIFE_ARTICLES.has(art)) err.push('Pentru detențiunea pe viață selectați NCP art. 99 sau VCP art. 55¹.');
+    if (!life && LIFE_ARTICLES.has(art)) err.push('Articolul selectat se utilizează numai pentru detențiunea pe viață.');
+
     for (const [label, value] of [['Ani', y], ['Luni', m], ['Zile', d]]) {
         if (!Number.isSafeInteger(value) || value < 0) err.push(`${label}: introduceți un număr întreg pozitiv sau zero.`);
     }
     if (!life && y === 0 && m === 0 && d === 0) err.push('Introduceți durata pedepsei.');
     if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.');
+
+    const prisonReceivedRaw = document.getElementById('prisonReceivedDate')?.value.trim() || '';
+    if (prisonReceivedRaw && !parseDate(prisonReceivedRaw)) {
+        err.push('Data primirii în penitenciar/centru este invalidă sau incompletă.');
+    }
 
     document.querySelectorAll('.deduction-row').forEach((r, i) => {
         const st = r.querySelector('.ded-start').value.trim();
@@ -85,15 +77,14 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
         const st = r.querySelector('.ne-start').value.trim();
         const en = r.querySelector('.ne-end').value.trim();
         if (!st || !en) {
-            err.push(`Perioada adăugată ${i + 1}: ambele date sunt obligatorii.`);
+            err.push(`Perioada neexecutată ${i + 1}: ambele date sunt obligatorii.`);
         } else {
             const sD = parseDate(st);
             const eD = parseDate(en);
-            if (!sD || !eD) err.push(`Perioada adăugată ${i + 1}: format dată invalid.`);
-            else if (eD <= sD) err.push(`Perioada adăugată ${i + 1}: data finală trebuie să fie strict după data inițială.`);
+            if (!sD || !eD) err.push(`Perioada neexecutată ${i + 1}: format dată invalid.`);
+            else if (eD <= sD) err.push(`Perioada neexecutată ${i + 1}: data finală trebuie să fie strict după data inițială.`);
         }
     });
-
 
     document.querySelectorAll('.manual-days').forEach((input, i) => {
         const value = Number(input.value || 0);
@@ -103,10 +94,6 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
     return err;
 }
 
-/**
- * Actualizează data propozabilă scăzând zilele muncite introduse.
- * Folosește window.lastProposedDate setat la calcul.
- */
 function updateProposedDateWithWorkDays() {
     const input = document.getElementById('workDaysInput');
     const result = document.getElementById('workDaysResult');
@@ -115,16 +102,21 @@ function updateProposedDateWithWorkDays() {
 
     const requested = Number(input.value || 0);
     const safeRequested = Number.isSafeInteger(requested) && requested >= 0 ? requested : 0;
-    const maxReduction = Math.max(0, daysBetween(window.lastMinimumDate, window.lastProposedDate));
+    const reductionFloor = window.lastWorkReductionFloorDate || window.lastMinimumDate;
+    const maxReduction = Math.max(0, daysBetween(reductionFloor, window.lastProposedDate));
     const applied = Math.min(safeRequested, maxReduction);
     const newDate = new Date(window.lastProposedDate);
     newDate.setDate(newDate.getDate() - applied);
     result.value = fmtDate(newDate);
 
+    const ageFloorActive = reductionFloor > window.lastMinimumDate;
     if (note) {
+        const floorReason = ageFloorActive
+            ? ` Limita este ${fmtDate(reductionFloor)}, deoarece fracția favorabilă de vârstă nu poate produce efecte înainte de împlinirea pragului de vârstă.`
+            : ` Limita este fracția minimă obligatorie (${fmtDate(window.lastMinimumDate)}).`;
         note.textContent = safeRequested > maxReduction
-  ? `Au fost aplicate maximum ${maxReduction} zile; fracția minimă obligatorie (${fmtDate(window.lastMinimumDate)}) nu poate fi depășită.`
-  : `Se pot scădea cel mult ${maxReduction} zile până la fracția minimă obligatorie.`;
+            ? `Au fost aplicate maximum ${maxReduction} zile.${floorReason}`
+            : `Se pot scădea cel mult ${maxReduction} zile.${floorReason}`;
     }
     input.setCustomValidity(Number.isSafeInteger(requested) && requested >= 0 ? '' : 'Introduceți un număr întreg pozitiv sau zero.');
 
@@ -135,18 +127,30 @@ function updateProposedDateWithWorkDays() {
     }
 }
 
-
 function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
     const labels = {
-        NCP100: 'NCP art. 100', NCP99: 'NCP art. 99', NCP124: 'NCP art. 124', NCP125: 'NCP art. 125',
-        VCP59: 'VCP art. 59', VCP591: 'VCP art. 59¹', VCP602: 'VCP art. 60 alin. (2)', VCP603: 'VCP art. 60 alin. (3)'
+        NCP100: 'NCP art. 100',
+        NCP99: 'NCP art. 99',
+        NCP124: 'NCP art. 124',
+        NCP125: 'NCP art. 125',
+        VCP59: 'VCP art. 59',
+        VCP591: 'VCP art. 59¹',
+        VCP602: 'VCP art. 60 alin. (2)',
+        VCP603: 'VCP art. 60 alin. (3)',
+        VCP551: 'VCP art. 55¹',
+        PRE14059: 'Anterior L. 140/1996 – art. 59 v',
+        PRE14060: 'Anterior L. 140/1996 – art. 60 v',
+        PRE140604: 'Anterior L. 140/1996 – art. 60 alin. (4) v'
     };
+
     if (life) return {
-        article: 'NCP art. 99', sentenceBand: 'Detențiune pe viață',
-        age: 'Condiția de vârstă este verificată potrivit art. 99; pragul temporal utilizat de aplicație este executarea efectivă a 20 de ani (7.305 zile).',
+        article: labels[art] || art,
+        sentenceBand: 'Detențiune pe viață',
+        age: 'Se aplică configurația IMSweb aferentă articolului selectat; pragul temporal utilizat de motor este 20 ani / 7.305 zile.',
         minimum: `Prag efectiv: ${schedule.mDays} zile. Zilele muncite nu reduc acest prag.`,
         proposed: `Data de împlinire a pragului: ${fmtDate(schedule.tDate)}.`
     };
+
     const threshold = schedule.ageThresholdYears;
     let age;
     if (art === 'NCP100') {
@@ -155,29 +159,28 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
             : 'Se aplică fracțiile pentru persoana sub 60 de ani. Dacă împlinește 60 de ani înainte de termen, motorul recalculează de la data aniversării.';
     } else if (art === 'VCP59' || art === 'VCP591') {
         age = schedule.ageRegime === 'elderly'
-            ? `Articolul VCP rămâne neschimbat; sunt aplicate condițiile aferente pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}) de la data împlinirii acestuia.`
-            : `Articolul VCP rămâne neschimbat; sunt aplicate condițiile anterioare pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}).`;
+            ? `Sunt aplicate condițiile aferente pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}) de la data împlinirii acestuia.`
+            : `Sunt aplicate condițiile anterioare pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}).`;
     } else {
-        age = `Categoria de vârstă este determinată la data de referință prevăzută de motorul articolului ${labels[art] || art}.`;
+        age = `Categoria de vârstă este verificată pentru configurația IMSweb ${labels[art] || art}.`;
     }
+
     return {
         article: labels[art] || art,
         sentenceBand: sentenceOver10 ? '>10 ani' : '≤10 ani',
         age,
         minimum: `${fracStr(schedule.mR)} → ${schedule.mDays} zile. Fracția minimă este limita efectivă și nu poate fi redusă prin zile muncite.`,
-        proposed: `${fracStr(schedule.tR)} → ${schedule.tDays} zile. Zilele considerate executate pot reduce data propozabilă numai până la fracția minimă.`
+        proposed: `${fracStr(schedule.tR)} → ${schedule.tDays} zile. Zilele considerate executate contribuie la realizarea fracției totale, fără depășirea limitei efective aplicabile.`
     };
 }
 
-/**
- * Calculează toate datele și afișează rezultatele.
- */
 function calculateAll() {
     const errC = document.getElementById('errorContainer');
     errC.classList.remove('visible');
 
     const birthDate = parseDate(document.getElementById('birthDate').value.trim());
     const startDate = parseDate(document.getElementById('startDate').value.trim());
+    const prisonReceivedDate = parseDate(document.getElementById('prisonReceivedDate')?.value.trim() || '');
     const life = document.getElementById('lifeSentence').checked;
     const art = document.getElementById('liberationArticle').value;
     const y = Number(document.getElementById('durYears').value || 0);
@@ -196,18 +199,17 @@ function calculateAll() {
 
     if (life) {
         totalDays = LC_TWENTY_YEAR_CAP_DAYS;
-        steps.push(`Detențiune pe viață: nu există expirare teoretică a pedepsei. Pentru liberarea condiționată se aplică direct pragul efectiv de 20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile.`);
+        steps.push(`Detențiune pe viață: fără expirare teoretică. Pentru configurația IMSweb selectată se utilizează pragul de ${LC_TWENTY_YEAR_CAP_DAYS} zile.`);
     } else {
         theorExp = addCalendarSafe(startDate, y, m, d);
         theorExp.setDate(theorExp.getDate() - 1);
         totalDays = daysBetween(startDate, theorExp) + 1;
-        steps.push(`Data începerii executării: ${fmtDate(startDate)}. Durata pedepsei: ${y} ani, ${m} luni, ${d} zile.`);
-        steps.push(`Adunăm calendaristic: anii, apoi lunile, apoi zilele. Scădem o zi (regula OMJ 2188/C/2022).`);
+        steps.push(`Data începerii executării: ${fmtDate(startDate)}. Durata: ${y} ani, ${m} luni, ${d} zile.`);
+        steps.push('Adunăm calendaristic anii, lunile și zilele, apoi scădem o zi conform regulii de calcul a duratei executării.');
         steps.push(`Expirarea teoretică este ${fmtDate(theorExp)}.`);
-        steps.push(`Numărăm zilele dintre ${fmtDate(startDate)} și ${fmtDate(theorExp)}, inclusiv ambele capete: ${totalDays} zile.`);
+        steps.push(`Totalul mandatului, cu ambele capete incluse, este ${totalDays} zile.`);
     }
 
-    // Perioade deduse
     const dedIntervals = [];
     document.querySelectorAll('.deduction-row').forEach(r => {
         const sD = parseDate(r.querySelector('.ded-start').value.trim());
@@ -227,9 +229,8 @@ function calculateAll() {
         errC.classList.add('visible');
         return;
     }
-    steps.push(`Perioadele deduse însumează ${ded} zile (după unificarea suprapunerilor).`);
+    steps.push(`Perioadele deduse însumează ${ded} zile, după unificarea suprapunerilor.`);
 
-    // Perioade adăugate; suprapunerile sunt acceptate, semnalate și numărate o singură dată.
     const nonRawRows = [];
     const nonRowsData = [];
     document.querySelectorAll('.non-exec-row').forEach(r => {
@@ -245,67 +246,76 @@ function calculateAll() {
     });
     const nonOverlapInfo = findIntervalOverlaps(nonRawRows.map(r => [r.start, r.end]));
     const non = sumNonExecutedPeriods(nonRawRows);
-    steps.push(`Perioadele adăugate (neexecutate) însumează ${non} zile după eliminarea dublării zilelor suprapuse.`);
+    steps.push(`Perioadele care nu se consideră executate însumează ${non} zile după eliminarea dublării suprapunerilor.`);
 
-    // Expirare reală există numai pentru pedepsele determinate.
     let realExp = null;
     if (!life) {
         realExp = new Date(theorExp);
         realExp.setDate(realExp.getDate() - ded + non);
-        steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile adăugate = ${fmtDate(realExp)}.`);
+        steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile neexecutate = ${fmtDate(realExp)}.`);
     }
 
     const sentenceOver10 = life ? false : (y * 12 + m + d / 30) > 120;
-    const schedule = calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, birthDate, startDate, currentSex, theorExp, dedDays: ded, nonExecDays: non });
+    const schedule = calculateLiberationSchedule({
+        life, art, sentenceOver10, totalDays, birthDate, startDate, currentSex, theorExp,
+        dedDays: ded, nonExecDays: non
+    });
     if (schedule.error) {
         errC.innerHTML = '• ' + schedule.error;
         errC.classList.add('visible');
         return;
     }
+
     const { mR, tR, mDays, tDays, mDate, tDate, articleInfo } = schedule;
     const lcDetails = buildLcDetails({ life, art, schedule, sentenceOver10, sex: currentSex });
-    steps.push(`Articolul aplicabil: ${articleInfo}.`);
+    steps.push(`Configurația aplicabilă: ${articleInfo}.`);
     if (life) {
-        steps.push(`Pragul minim și data propozabilă coincid la ${LC_TWENTY_YEAR_CAP_DAYS} zile efective; zilele muncite nu reduc acest prag.`);
+        steps.push(`Pragul minim și data propozabilă coincid la ${LC_TWENTY_YEAR_CAP_DAYS} zile; zilele muncite nu reduc acest prag.`);
     } else {
-        steps.push(`Fracția minimă: ${fracStr(mR)} = ${mDays} zile. Fracția totală/propozabilă: ${fracStr(tR)} = ${tDays} zile.`);
-        if (schedule.ageTransitionApplied) steps.push(`La împlinirea pragului de vârstă de ${schedule.ageThresholdYears || 60} ani condițiile se schimbă; noile condiții produc efecte cel mai devreme din chiar ziua împlinirii pragului.`);
+        steps.push(`Fracția obligatorie: ${fracStr(mR)} = ${mDays} zile. Fracția totală: ${fracStr(tR)} = ${tDays} zile.`);
+        if (schedule.ageTransitionApplied) {
+            steps.push(`La împlinirea pragului de vârstă de ${schedule.ageThresholdYears || 60} ani se aplică regimul favorabil numai din ziua aniversării.`);
+        }
     }
 
-    // Salvează global data propozabilă pentru scăderea zilelor muncite
     window.lastProposedDate = new Date(tDate);
     window.lastMinimumDate = new Date(mDate);
+    window.lastWorkReductionFloorDate = schedule.workReductionFloorDate ? new Date(schedule.workReductionFloorDate) : new Date(mDate);
 
-    // Reanalizare regim: 1/5 pentru pedeapsa determinată; 6 ani și 6 luni pentru detențiunea pe viață.
-    const fifth = life ? null : Math.floor(totalDays / 5);
+    const isEducationalMeasure = EDUCATIONAL_ARTICLES.has(art);
+    let fifth = null;
     let fDate = null;
-    let reanalysisLabel = 'Reanalizare 1/5';
-    if (!life) {
-        fDate = thresholdDate(startDate, fifth, ded, non);
-    } else {
+    let reanalysisLabel = null;
+
+    if (life) {
         const baseReanalysis = addCalendarSafe(startDate, 6, 6, 0);
         baseReanalysis.setDate(baseReanalysis.getDate() - 1);
         fDate = new Date(baseReanalysis);
         fDate.setDate(fDate.getDate() - ded + non);
         reanalysisLabel = 'Reanalizare 6 ani și 6 luni';
+    } else if (!isEducationalMeasure) {
+        fifth = Math.floor(totalDays / 5);
+        fDate = thresholdDate(startDate, fifth, ded, non);
+        reanalysisLabel = 'Reanalizare 1/5';
     }
 
-    // Zile executate și rest
     const elapsedEnd = realExp && today() > realExp ? realExp : today();
     const calendarDaysSinceStart = elapsedEnd >= startDate ? Math.max(0, daysBetween(startDate, elapsedEnd) + 1) : 0;
     const remaining = realExp ? Math.max(0, daysBetween(today(), realExp) + 1) : '—';
 
-    // Carantină
-    const quarantineEnd = new Date(startDate);
-    quarantineEnd.setDate(quarantineEnd.getDate() + 20);
+    let quarantineEnd = null;
+    if (prisonReceivedDate) {
+        quarantineEnd = new Date(prisonReceivedDate);
+        quarantineEnd.setDate(quarantineEnd.getDate() + 20);
+        steps.push(`Carantina de 21 zile este calculată separat de la data primirii în penitenciar/centru: ${fmtDate(prisonReceivedDate)} → ${fmtDate(quarantineEnd)}.`);
+    }
 
-    // Alerte
     const alertDates = [
         { label: 'Fracție minimă obligatorie', date: mDate },
         { label: 'Data propusă (totală)', date: tDate },
-        { label: reanalysisLabel, date: fDate },
+        ...(reanalysisLabel ? [{ label: reanalysisLabel, date: fDate }] : []),
         { label: 'Expirare reală', date: realExp },
-        { label: 'Carantină expiră', date: quarantineEnd }
+        ...(quarantineEnd ? [{ label: 'Carantină expiră', date: quarantineEnd }] : [])
     ];
     const t = today();
     const alerts = [];
@@ -327,11 +337,11 @@ function calculateAll() {
     document.getElementById('alertsContainer').innerHTML = alertsHtml;
     document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
 
-    // Timeline
     const timelineItems = [
         { label: 'Început executare', date: startDate },
-        { label: 'Carantină expiră', date: quarantineEnd },
-        { label: reanalysisLabel, date: fDate },
+        ...(prisonReceivedDate ? [{ label: 'Primire penitenciar/centru', date: prisonReceivedDate }] : []),
+        ...(quarantineEnd ? [{ label: 'Carantină expiră', date: quarantineEnd }] : []),
+        ...(reanalysisLabel ? [{ label: reanalysisLabel, date: fDate }] : []),
         { label: 'Fracție minimă obligatorie', date: mDate },
         { label: 'Data propusă (totală)', date: tDate },
         { label: 'Expirare teoretică', date: theorExp },
@@ -354,7 +364,6 @@ function calculateAll() {
     document.getElementById('timelineList').innerHTML = timelineHtml;
     document.getElementById('timelineContainer').classList.remove('hidden');
 
-    // Rest după liberare condiționată
     let restHtml = '';
     const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
     if (condReleaseStr && parseDate(condReleaseStr)) {
@@ -369,23 +378,22 @@ function calculateAll() {
         }
     }
 
-    // Construire HTML rezultate
     const nume = document.getElementById('observations').value.trim();
     let html = '';
     if (nume) html += `<div class="result-item observations-result"><div class="result-label">Observații</div><div class="result-value">${escapeHtml(nume)}</div></div>`;
 
     html += life
         ? `<div class="result-section"><h4>DETALII PEDEAPSĂ</h4><div class="result-grid">
-            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. Prag LC: 20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile.</div></div>
+            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. Prag IMSweb: ${LC_TWENTY_YEAR_CAP_DAYS} zile.</div></div>
             <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
-            <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value">${non} zile</div></div>
+            <div class="result-item"><div class="result-label">Zile neexecutate</div><div class="result-value">${non} zile</div></div>
             <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
         </div></div>`
         : `<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">
             <div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>
             <div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div>
             <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
-            <div class="result-item"><div class="result-label">Zile adăugate (neexecutate)</div><div class="result-value">${non} zile</div></div>
+            <div class="result-item"><div class="result-label">Zile neexecutate</div><div class="result-value">${non} zile</div></div>
             <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
             <div class="result-item"><div class="result-label">Rest rămas</div><div class="result-value">${remaining} zile</div></div>
         </div></div>`;
@@ -393,12 +401,12 @@ function calculateAll() {
     html += `<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">
         <div class="result-item">
             <div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div>
-            <div class="result-value">${life ? `Prag efectiv 20 ani / ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
+            <div class="result-value">${life ? `Prag IMSweb ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div>
         </div>
         <div class="result-item">
-            <div class="result-label">DATA PROPOZABILĂ</div>
-            <div class="result-value">${life ? `Prag efectiv 20 ani / ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
+            <div class="result-label">DATA ÎMPLINIRII FRACȚIEI TOTALE / PROPOZABILĂ</div>
+            <div class="result-value">${life ? `Prag IMSweb ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div>
         </div>
     </div></div>`;
@@ -406,11 +414,10 @@ function calculateAll() {
     if (dedOverlapInfo.length || nonOverlapInfo.length) {
         html += `<div class="result-section overlap-notice"><h4>INFORMARE SUPRAPUNERI</h4>
             ${dedOverlapInfo.length ? `<p>Există ${dedOverlapInfo.length} suprapunere(i) între perioadele deduse. Zilele comune au fost numărate o singură dată.</p>` : ''}
-            ${nonOverlapInfo.length ? `<p>Există ${nonOverlapInfo.length} suprapunere(i) între perioadele adăugate. Zilele comune au fost numărate o singură dată.</p>` : ''}
+            ${nonOverlapInfo.length ? `<p>Există ${nonOverlapInfo.length} suprapunere(i) între perioadele neexecutate. Zilele comune au fost numărate o singură dată.</p>` : ''}
         </div>`;
     }
 
-    // Zilele muncite pot reduce numai fracția propozabilă a pedepselor determinate.
     if (!life) html += `<div class="result-section">
         <h4>SCĂDERE ZILE MUNCITE DIN DATA PROPOZABILĂ</h4>
         <div class="form-grid">
@@ -423,23 +430,28 @@ function calculateAll() {
                 <input type="text" id="workDaysResult" readonly class="result-input" tabindex="-1">
             </div>
         </div>
-        <p id="workDaysNote" class="help-text"><em>Zilele câștigate reduc data propozabilă, fără a putea coborî sub fracția minimă obligatorie.</em></p>
+        <p id="workDaysNote" class="help-text"><em>Zilele considerate executate contribuie la realizarea fracției totale, cu respectarea limitei efective și, după caz, a pragului de vârstă.</em></p>
     </div>`;
-    html += `<div class="result-section"><h4>REANALIZARE REGIM</h4><div class="result-grid">
-        <div class="result-item"><div class="result-label">${reanalysisLabel}</div>
-            <div class="result-value">${life ? 'Prag temporal: 6 ani și 6 luni de la începerea executării, ajustat cu perioadele deduse/adăugate.' : `(fără deduceri: ${fifth}z / după deduceri și perioade adăugate: ${daysBetween(startDate, fDate) + 1}z)`}</div>
-            <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div>
-        </div>
-    </div></div>`;
+
+    if (reanalysisLabel) {
+        html += `<div class="result-section"><h4>REANALIZARE REGIM</h4><div class="result-grid">
+            <div class="result-item"><div class="result-label">${reanalysisLabel}</div>
+                <div class="result-value">${life ? 'Prag temporal: 6 ani și 6 luni, ajustat cu perioadele deduse/neexecutate.' : `(fără deduceri: ${fifth}z / după ajustări: ${daysBetween(startDate, fDate) + 1}z)`}</div>
+                <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div>
+            </div>
+        </div></div>`;
+    } else if (isEducationalMeasure) {
+        html += `<div class="result-section"><h4>REANALIZARE REGIM</h4><p class="help-text">Fracția de 1/5 prevăzută pentru pedeapsa închisorii nu este aplicată automat măsurilor educative NCP art. 124/125.</p></div>`;
+    }
 
     html += `<div class="result-section"><h4>ALTE DATE ȘI EXPLICAȚII LC</h4><div class="result-grid">
         <div class="result-item important"><div class="result-label">Articol LC</div><div class="result-value">${lcDetails.article}</div><div class="result-note">${lcDetails.sentenceBand}</div></div>
         <div class="result-item"><div class="result-label">Condiția de vârstă aplicată</div><div class="result-value result-value-small">${lcDetails.age}</div></div>
         <div class="result-item"><div class="result-label">Fracția / pragul minim</div><div class="result-value result-value-small">${lcDetails.minimum}</div></div>
         <div class="result-item"><div class="result-label">Fracția / data propozabilă</div><div class="result-value result-value-small">${lcDetails.proposed}</div></div>
-        <div class="result-item"><div class="result-label">${life ? 'Prag LC' : 'Mandat total'}</div><div class="result-value">${life ? `20 ani / ${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
-        <div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>
-        <div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div></div>
+        <div class="result-item"><div class="result-label">${life ? 'Prag IMSweb' : 'Mandat total'}</div><div class="result-value">${life ? `${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
+        ${reanalysisLabel ? `<div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>` : ''}
+        ${quarantineEnd ? `<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div><div class="result-note">calculată de la primirea în penitenciar/centru</div></div>` : ''}
     </div></div>`;
 
     html += restHtml;
@@ -451,22 +463,22 @@ function calculateAll() {
     document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
     document.getElementById('resultsCard').classList.remove('hidden');
 
-    // Inițializare scădere zile muncite doar pentru pedepsele determinate.
     if (!life) updateProposedDateWithWorkDays();
 
-    // ===== SALVARE GLOBALĂ PENTRU EXPORT =====
     window.lastCalculation = {
         life,
         sex: currentSex,
         birthDate,
         startDate,
+        prisonReceivedDate,
+        quarantineEnd,
         theorExp,
         realExp,
         ded,
         non,
-        dedIntervals, // array de [Date, Date]
-        nonRowsData, // array de { type, start, end, days }
-        recursDays: ded - sumIntervals(dedIntervals), // zile recurs compensatoriu separate
+        dedIntervals,
+        nonRowsData,
+        recursDays: ded - sumIntervals(dedIntervals),
         mDays,
         tDays,
         tDate,
@@ -478,29 +490,33 @@ function calculateAll() {
         fifth,
         fDate,
         mDate,
+        isEducationalMeasure,
+        workReductionFloorDate: new Date(window.lastWorkReductionFloorDate),
         duration: { y, m, d },
         art,
         inputData: {
             sex: currentSex === 'M' ? 'Masculin' : 'Feminin',
             birthDate: document.getElementById('birthDate').value.trim(),
             observations: document.getElementById('observations').value.trim(),
-            life, art, y: String(y), m: String(m), d: String(d),
+            life,
+            art,
+            y: String(y), m: String(m), d: String(d),
             start: document.getElementById('startDate').value.trim(),
+            prisonReceived: document.getElementById('prisonReceivedDate')?.value.trim() || '',
             condRelease: document.getElementById('conditionalReleaseDate').value.trim(),
             dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({ start: r.querySelector('.ded-start')?.value.trim() || '', end: r.querySelector('.ded-end')?.value.trim() || '' })).filter(r => r.start || r.end),
             manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
             nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({ type: r.querySelector('.ne-type')?.value || '', start: r.querySelector('.ne-start')?.value.trim() || '', end: r.querySelector('.ne-end')?.value.trim() || '' })).filter(r => r.start || r.end)
         },
         workDaysInput: document.getElementById('workDaysInput')?.value || '0',
+        workDaysRequested: 0,
+        workDaysApplied: 0,
         workDaysResult: document.getElementById('workDaysResult')?.value || ''
     };
 
     autoSave();
 }
 
-/**
- * Calculează măsurile preventive în timp real.
- */
 function calcMasuriPreventive() {
     const refDate = parseDate(document.getElementById('masuriRefDate').value.trim());
     const days = parseInt(document.getElementById('masuriDays').value);
@@ -518,53 +534,61 @@ function calcMasuriPreventive() {
     resultInput.value = fmtDate(resultDate);
 }
 
-// ========== INIȚIALIZARE ==========
+function syncLifeArticleUI(source) {
+    const lifeSentence = document.getElementById('lifeSentence');
+    const article = document.getElementById('liberationArticle');
+    const sentenceDuration = document.getElementById('sentenceDuration');
+    if (!lifeSentence || !article || !sentenceDuration) return;
+
+    if (source === 'life') {
+        if (lifeSentence.checked) {
+            if (!LIFE_ARTICLES.has(article.value)) article.value = 'NCP99';
+            sentenceDuration.classList.add('hidden');
+        } else {
+            if (LIFE_ARTICLES.has(article.value)) article.value = '';
+            sentenceDuration.classList.remove('hidden');
+        }
+    } else if (source === 'article') {
+        if (LIFE_ARTICLES.has(article.value)) {
+            lifeSentence.checked = true;
+            sentenceDuration.classList.add('hidden');
+        } else if (lifeSentence.checked) {
+            lifeSentence.checked = false;
+            sentenceDuration.classList.remove('hidden');
+        }
+    }
+    article.disabled = false;
+    updAgeTag();
+}
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Tema
     applyTheme();
-
-    // Badge spețe
     updateCaseBadge();
-
-    // Restaurare auto-save
     restoreAutoSave();
 
-    // Evenimente care nu sunt acoperite de onclick în HTML
     sexToggle.addEventListener('change', updateSexUI);
 
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('date-masked')) applyDateMask(e);
     });
 
-
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
-    document.getElementById('liberationArticle').addEventListener('change', updAgeTag);
+    document.getElementById('liberationArticle').addEventListener('change', function() {
+        syncLifeArticleUI('article');
+    });
     document.getElementById('lifeSentence').addEventListener('change', function() {
-        document.getElementById('sentenceDuration').classList.toggle('hidden', this.checked);
-        const article = document.getElementById('liberationArticle');
-        if (this.checked) {
-            article.value = 'NCP99';
-            article.disabled = true;
-        } else {
-            article.disabled = false;
-            if (article.value === 'NCP99') article.value = '';
-        }
-        updAgeTag();
+        syncLifeArticleUI('life');
     });
 
     document.getElementById('masuriRefDate').addEventListener('input', calcMasuriPreventive);
-    // masuriDays are deja oninput în HTML
     calcMasuriPreventive();
 
-    // Escape închide modalul
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const overlay = document.querySelector('.modal-overlay');
             if (overlay) (typeof closeModal === 'function' ? closeModal(overlay) : overlay.remove());
         }
     });
-
 
     let autoSaveTimer;
     const scheduleAutoSave = () => {
@@ -574,7 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('input', scheduleAutoSave);
     document.addEventListener('change', scheduleAutoSave);
 
-    // Avertisment la părăsirea paginii
     window.addEventListener('beforeunload', function(e) {
         const hasData = () => {
             const birth = document.getElementById('birthDate').value.trim();
@@ -591,6 +614,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Actualizare inițială interfață sex
     updateSexUI();
+    syncLifeArticleUI('life');
 });

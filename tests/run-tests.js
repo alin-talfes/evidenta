@@ -32,6 +32,7 @@ assert(!fs.existsSync('js/termene-core.js'),'retired Termene calculation core st
 
 const storage=fs.readFileSync('js/storage.js','utf8');
 assert(!/function\s+(applyTheme|toggleTheme)\s*\(/.test(storage),'duplicate theme functions');
+assert(storage.includes('prisonReceived'),'saved cases must preserve prison receipt date');
 const css=fs.readFileSync('css/style.css','utf8');
 const designCss=fs.readFileSync('css/design-system.css','utf8');
 assert(!/fonts\.googleapis\.com/.test(css+designCss),'external font import');
@@ -45,24 +46,38 @@ let lr=load('js/utils.js',';'+fs.readFileSync('js/rules.js','utf8')+';globalThis
 let lifeStart=new Date(2026,7,29), lifeBirth=new Date(1980,0,1);
 let lifeCalc=lr.__schedule({life:true,art:'NCP99',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
 assert.equal(lifeCalc.mDays,7305); assert.equal(lifeCalc.tDays,7305); assert.equal(lifeCalc.mDate.getFullYear(),2046); assert.equal(lifeCalc.mDate.getMonth(),7); assert.equal(lifeCalc.mDate.getDate(),28);
+let vcpLife=lr.__schedule({life:true,art:'VCP551',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
+assert.equal(vcpLife.mDays,7305); assert(vcpLife.articleInfo.includes('VCP art. 55¹'));
+
 let transitionStart=new Date(2026,0,1), transitionBirth=new Date(1968,0,1), transitionEnd=new Date(2030,11,31);
 let transition=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1826,birthDate:transitionBirth,startDate:transitionStart,currentSex:'M',theorExp:transitionEnd,dedDays:0,nonExecDays:0});
 assert.equal(transition.mDate.getFullYear(),2028); assert.equal(transition.mDate.getMonth(),0); assert.equal(transition.mDate.getDate(),1); assert.equal(transition.mR,1/3); assert(transition.ageTransitionApplied);
+assert(transition.workReductionFloorDate>=new Date(2028,0,1),'work-day reduction may cross the 60-year threshold');
 let already60=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1095,birthDate:new Date(1960,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,11,30),dedDays:0,nonExecDays:0});
 assert.equal(already60.mR,1/3); assert.equal(already60.tR,1/2);
 let over10=lr.__schedule({life:false,art:'NCP100',sentenceOver10:true,totalDays:9000,birthDate:new Date(1970,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2050,0,1),dedDays:0,nonExecDays:0});
 assert(over10.mDays<=7305); assert(over10.tDays<=7305);
+
+let old59=lr.__schedule({life:false,art:'PRE14059',sentenceOver10:false,totalDays:1461,birthDate:new Date(1990,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2029,11,31),dedDays:0,nonExecDays:0});
+assert.equal(old59.mR,1/3); assert.equal(old59.tR,1/2);
+let old60=lr.__schedule({life:false,art:'PRE14060',sentenceOver10:false,totalDays:1461,birthDate:new Date(1990,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2029,11,31),dedDays:0,nonExecDays:0});
+assert.equal(old60.mR,1/2); assert.equal(old60.tR,2/3);
+let old604=lr.__schedule({life:false,art:'PRE140604',sentenceOver10:false,totalDays:1461,birthDate:new Date(1960,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2029,11,31),dedDays:0,nonExecDays:0});
+assert.equal(old604.mR,1/100); assert.equal(old604.tR,1/4);
+
 let ov=[[new Date(2026,0,1),new Date(2026,0,10)],[new Date(2026,0,5),new Date(2026,0,15)]];
 assert.equal(lr.__over(ov).length,1); assert.equal(lr.sumIntervals?lr.sumIntervals(ov):15,15);
 let nonRows=[{type:'escape',start:new Date(2026,0,1),end:new Date(2026,0,10)},{type:'interruption',start:new Date(2026,0,5),end:new Date(2026,0,12)}];
 assert.equal(lr.__non(nonRows),10);
 
 const appSource=fs.readFileSync('js/app.js','utf8');
-assert(appSource.includes("life && art !== 'NCP99'"));
-assert(appSource.includes("!life && art === 'NCP99'"));
-assert(appSource.includes('if (!life) html += `<div class="result-section">'));
+assert(appSource.includes("new Set(['NCP99', 'VCP551'])"),'life article matrix missing VCP 55¹');
+assert(appSource.includes('EDUCATIONAL_ARTICLES.has(art)'),'educational-measure guard missing');
+assert(appSource.includes('else if (!isEducationalMeasure)'),'1/5 must not be applied automatically to NCP 124/125');
+assert(appSource.includes('lastWorkReductionFloorDate'),'age/work-day floor missing');
+assert(appSource.includes('quarantineEnd = new Date(prisonReceivedDate)'),'quarantine must be anchored to prison receipt date');
 assert(appSource.includes("article.value = 'NCP99'"));
-assert(appSource.includes('article.disabled = true'));
+assert(appSource.includes('article.disabled = false'));
 
 let vcpMale=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:2200,birthDate:new Date(1968,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2032,0,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpMale.mR,1/100); assert.equal(vcpMale.tR,1/3); assert(vcpMale.ageTransitionApplied); assert(vcpMale.articleInfo.includes('VCP art. 59'));
@@ -71,7 +86,12 @@ assert.equal(vcpFemale.mR,1/100); assert.equal(vcpFemale.tR,1/4); assert(vcpFema
 let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:900,birthDate:new Date(1985,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2028,5,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 
-assert(/style\.css\?v=43/.test(fs.readFileSync('index.html','utf8')),'index.html stale css cache version');
+const indexSource=fs.readFileSync('index.html','utf8');
+assert(/style\.css\?v=43/.test(indexSource),'index.html stale css cache version');
+assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
+assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 IMSweb options missing');
+assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
+assert(indexSource.includes('js/rules.js?v=37') && indexSource.includes('js/app.js?v=37'),'Pedepse cache version not bumped');
 for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
   assert(/style\.css\?v=42/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
 }
@@ -120,6 +140,8 @@ assert(exportSource.includes('ZILE LEGEA 169/2017'),'copy input missing Law 169 
 assert(exportSource.includes('zile fără deduceri'),'copy output missing raw fraction days');
 assert(exportSource.includes('EXPIRARE REALĂ'),'copy output missing real expiry');
 assert(exportSource.includes('PROPOZABILĂ DUPĂ ZILE MUNCITE'),'copy output missing work-day result');
+assert(exportSource.includes('REANALIZARE REGIM'),'copy output missing regime reanalysis');
+assert(exportSource.includes('prisonReceived'),'export must preserve prison receipt date');
 assert(!/cleanOutput\s*=\s*content\.innerText/.test(exportSource),'copy still copies full visible results');
 const appAfter=fs.readFileSync('js/app.js','utf8');
 assert(/\bmDays,\s*\n\s*tDays,/.test(appAfter),'calculation snapshot missing mDays');
