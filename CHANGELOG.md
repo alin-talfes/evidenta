@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.1 — 2026-09-06
+
+Pachet Security & Privacy concentrat pe documentele reale încărcate în modulul AI.
+
+### Securitate AI Documente
+- PDF.js securizat la versiunea 6.2.108.
+- `isEvalSupported`, scripting, XFA și WASM PDF.js dezactivate explicit la parsarea documentelor.
+- CSP dedicată pentru pagina AI; vechiul CDN PDF.js nu mai este permis de politica paginii.
+- Selectorul de documente rămâne blocat până la inițializarea PDF/OCR.
+- Preflight PDF: magic-header `%PDF-` și blocarea elementelor active JavaScript/OpenAction/Launch/EmbeddedFile/RichMedia/SubmitForm.
+- După selectarea unui document se blochează conexiunile externe din thread-ul principal al paginii AI.
+- Datele sensibile din DOM sunt golite la părăsirea paginii; documentele nu sunt salvate de modulul AI.
+- Fixture-urile publice de benchmark au fost înlocuite cu valori complet sintetice.
+- Extractorul pentru deduceri mixte din documentele benchmark este activ și în runtime-ul paginii AI.
+
+### Domeniu
+- GitHub Pages și celelalte module rămân publice și fără login.
+- Modulele obișnuite sunt destinate datelor fictive/de test; hardening-ul 1.0.1 vizează fluxul PDF/imagine din AI Documente.
+
 ## 1.0.0 — 2026-09-06
 
 Prima versiune stabilă a suitei Evidență PPL.
