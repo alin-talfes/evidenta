@@ -16,7 +16,7 @@ function inferTypeFromSource(source){
   const value = fold(source);
   const retention = /\bretin(?:ere|erea|erii|ut|uta)\b/.test(value) && /(?:\b24\s*(?:de\s*)?ore\b|\b24\s*h\b)/.test(value);
   if (retention) return TYPE_RETENTION_24H;
-  if (/\b(?:arest|arestare)\s+preventiv(?:a|e)?\b/.test(value)) return TYPE_PREVENTIVE;
+  if (/\b(?:arest(?:ul|ului)?|arestare(?:a|ii)?)\s+preventiv(?:a|e|ul|ului)?\b/.test(value)) return TYPE_PREVENTIVE;
   return TYPE_GENERIC;
 }
 
