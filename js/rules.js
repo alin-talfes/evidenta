@@ -1,32 +1,32 @@
-// ========== REGULI DE CALCUL / MATRICE IMSweb ==========
-// Matricea de mai jos reproduce configurațiile operaționale furnizate din IMSweb ANP.
-// Valorile tehnice IMSweb (inclusiv 1/100) se păstrează ca atare; nu se substituie cu interpretări doctrinare.
+// ========== ALGORITM LIBERARE CONDIȚIONATĂ ==========
+// Matricea de mai jos definește configurațiile operaționale ale algoritmului.
+// Valorile tehnice (inclusiv 1/100) se păstrează ca atare; nu se substituie cu interpretări doctrinare.
 const liberationRules = [
-    { article:"NCP100", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3], source:"IMSweb ANP" },
-    { article:"NCP100", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3,7305], total:[3,4,7305], source:"IMSweb ANP" },
-    { article:"NCP100", age:["BATRAN"], maxYears:10, mandatory:[1,3], total:[1,2], source:"IMSweb ANP" },
-    { article:"NCP100", age:["BATRAN"], minYears:10, mandatory:[1,2,7305], total:[2,3,7305], source:"IMSweb ANP" },
-    { article:"NCP99", age:["MINOR","TANAR","MAJOR","BATRAN"], life:true, mandatory:[1,2,7305], total:[1,2,7305], source:"IMSweb ANP" },
-    { article:"NCP124", age:["MINOR","TANAR","MAJOR","BATRAN"], mandatory:[1,2], total:[1,2], source:"IMSweb ANP" },
-    { article:"NCP125", age:["MINOR","TANAR","MAJOR","BATRAN"], mandatory:[1,2], total:[1,2], source:"IMSweb ANP" },
+    { article:"NCP100", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"NCP100", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3,7305], total:[3,4,7305], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"NCP100", age:["BATRAN"], maxYears:10, mandatory:[1,3], total:[1,2], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"NCP100", age:["BATRAN"], minYears:10, mandatory:[1,2,7305], total:[2,3,7305], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"NCP99", age:["MINOR","TANAR","MAJOR","BATRAN"], life:true, mandatory:[1,2,7305], total:[1,2,7305], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"NCP124", age:["MINOR","TANAR","MAJOR","BATRAN"], mandatory:[1,2], total:[1,2], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"NCP125", age:["MINOR","TANAR","MAJOR","BATRAN"], mandatory:[1,2], total:[1,2], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
 
-    { article:"VCP59", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3], source:"IMSweb ANP" },
-    { article:"VCP59", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3], total:[3,4], source:"IMSweb ANP" },
-    { article:"VCP591", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,3], total:[1,2], source:"IMSweb ANP" },
-    { article:"VCP591", age:["MAJOR","TANAR"], minYears:10, mandatory:[1,2], total:[2,3], source:"IMSweb ANP" },
-    // 1/100 este valoarea tehnică folosită de IMSweb pentru fracția obligatorie în aceste configurații.
-    { article:"VCP602", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,3], source:"IMSweb ANP" },
-    { article:"VCP602", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,2], source:"IMSweb ANP" },
-    { article:"VCP603", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,4], source:"IMSweb ANP" },
-    { article:"VCP603", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3], source:"IMSweb ANP" },
-    { article:"VCP551", age:["MINOR","TANAR","MAJOR","BATRAN"], life:true, mandatory:[1,2,7305], total:[1,2,7305], source:"IMSweb ANP" },
+    { article:"VCP59", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP59", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3], total:[3,4], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP591", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,3], total:[1,2], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP591", age:["MAJOR","TANAR"], minYears:10, mandatory:[1,2], total:[2,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    // 1/100 este valoarea tehnică utilizată pentru fracția obligatorie în aceste configurații.
+    { article:"VCP602", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP602", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,2], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP603", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,4], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP603", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"VCP551", age:["MINOR","TANAR","MAJOR","BATRAN"], life:true, mandatory:[1,2,7305], total:[1,2,7305], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
 
-    { article:"PRE14059", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,3], total:[1,2], source:"IMSweb ANP" },
-    { article:"PRE14059", age:["MAJOR","TANAR"], minYears:10, mandatory:[1,2], total:[2,3], source:"IMSweb ANP" },
-    { article:"PRE14060", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3], source:"IMSweb ANP" },
-    { article:"PRE14060", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3], total:[3,4], source:"IMSweb ANP" },
-    { article:"PRE140604", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,4], source:"IMSweb ANP" },
-    { article:"PRE140604", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3], source:"IMSweb ANP" }
+    { article:"PRE14059", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,3], total:[1,2], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"PRE14059", age:["MAJOR","TANAR"], minYears:10, mandatory:[1,2], total:[2,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"PRE14060", age:["MAJOR","TANAR"], maxYears:10, mandatory:[1,2], total:[2,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"PRE14060", age:["MAJOR","TANAR"], minYears:10, mandatory:[2,3], total:[3,4], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"PRE140604", age:["BATRAN"], maxYears:10, mandatory:[1,100], total:[1,4], source:"ALGORITM LIBERARE CONDIȚIONATĂ" },
+    { article:"PRE140604", age:["BATRAN"], minYears:10, mandatory:[1,100], total:[1,3], source:"ALGORITM LIBERARE CONDIȚIONATĂ" }
 ];
 
 /**
@@ -78,7 +78,7 @@ function getLiberationFractions(life, art, ageAtExpiry, sentenceOver10, totalDay
             !r.life &&
             ((r.maxYears && !sentenceOver10) || (r.minYears && sentenceOver10) || (!r.maxYears && !r.minYears))
         );
-        if (!rule) return { error: 'Nu există regulă IMSweb pentru această combinație de articol, vârstă și durată.' };
+        if (!rule) return { error: 'Nu există configurație în algoritmul de liberare condiționată pentru această combinație de articol, vârstă și durată.' };
         mR = rule.mandatory[0] / rule.mandatory[1];
         tR = rule.total[0] / rule.total[1];
         pM = rule.mandatory[2] || Infinity;
@@ -169,7 +169,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
             mDays: LC_TWENTY_YEAR_CAP_DAYS, tDays: LC_TWENTY_YEAR_CAP_DAYS,
             mDate: date, tDate: new Date(date),
             pM: LC_TWENTY_YEAR_CAP_DAYS, pT: LC_TWENTY_YEAR_CAP_DAYS,
-            articleInfo: `${label} (detențiune pe viață — prag IMSweb 20 ani / 7.305 zile)`,
+            articleInfo: `${label} (detențiune pe viață — prag 20 ani / 7.305 zile)`,
             lifeThreshold: true,
             ageTransitionApplied: false,
             ageRegime: 'life',
@@ -218,7 +218,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
         const is59 = art === 'VCP59';
         const youngMR = is59 ? (sentenceOver10 ? 2/3 : 1/2) : (sentenceOver10 ? 1/2 : 1/3);
         const youngTR = is59 ? (sentenceOver10 ? 3/4 : 2/3) : (sentenceOver10 ? 2/3 : 1/2);
-        // 1/100 este sentinelul operațional IMSweb pentru lipsa unui prag efectiv distinct la regimul favorabil de vârstă.
+        // 1/100 este sentinelul operațional pentru lipsa unui prag efectiv distinct la regimul favorabil de vârstă.
         const elderMR = 1/100;
         const elderTR = is59 ? (sentenceOver10 ? 1/2 : 1/3) : (sentenceOver10 ? 1/3 : 1/4);
         const birthday = vcpElderlyBirthday(birthDate, currentSex);
