@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.2 — 2026-09-06
+
+Patch de benchmark pentru modulul AI Documente.
+
+### AI Documente
+- Recunoaște ștampilele de intrare de forma `Intrarea Nr. … Ziua … luna …`, inclusiv ani OCR de forma `20 26`.
+- Data primirii din ștampilă este blocată automat dacă pagina are OCR sub 80%.
+- Conflictele dintre data primirii extrasă textual și ștampila de intrare sunt tratate fail-closed.
+- Clasificarea documentului principal nu mai confundă un MEPI cu sentințele/deciziile doar citate în cuprins.
+- Benchmark-ul Lot 1 verifică acum explicit aceste cazuri prin fixture-uri complet sintetice.
+
 ## 1.0.1 — 2026-09-06
 
 Pachet Security & Privacy concentrat pe documentele reale încărcate în modulul AI.
