@@ -4,7 +4,19 @@
 const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
 const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const TESSERACT_URL = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
+const TESSERACT_WORKER_URL = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/worker.min.js';
+const TESSERACT_CORE_PATH = 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0';
 const TESSERACT_LANG_PATH = 'https://tessdata.projectnaptha.com/4.0.0_best';
+
+const LOCAL_PDFJS_URL = 'ai/vendor/pdfjs/pdf.min.js';
+const LOCAL_PDFJS_WORKER_URL = 'ai/vendor/pdfjs/pdf.worker.min.js';
+const LOCAL_TESSERACT_URL = 'ai/vendor/tesseract/tesseract.min.js';
+const LOCAL_TESSERACT_WORKER_URL = 'ai/vendor/tesseract/worker.min.js';
+const LOCAL_TESSERACT_CORE_PATH = 'ai/vendor/tesseract-core';
+const LOCAL_TESSERACT_LANG_PATH = 'ai/vendor/tessdata-best';
+
+const RESOURCE_CACHE = 'evidenta-ai-deps-v1';
+const OCR_CACHE_PATH = 'evidenta-ai-ron-best-v1';
 const OCR_LANGUAGE = 'ron';
 const OCR_DPI = '300';
 const LOW_CONFIDENCE_THRESHOLD = 78;
@@ -13,22 +25,89 @@ let pdfPromise = null;
 let tesseractPromise = null;
 let workerPromise = null;
 let currentLogger = null;
+let tesseractWorkerObjectUrl = '';
+let pdfWorkerObjectUrl = '';
 
-function loadScript(url, globalName){
-  if (root[globalName]) return Promise.resolve(root[globalName]);
+function absoluteUrl(path){
+  try { return new URL(path, document.baseURI).href; }
+  catch (_) { return path; }
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 12000){
+  const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const timeout = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+  try {
+    return await fetch(url, {
+      cache: 'force-cache',
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer',
+      ...options,
+      ...(controller ? { signal:controller.signal } : {})
+    });
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
+async function localAssetAvailable(path){
+  const url = absoluteUrl(path);
+  try {
+    const response = await fetchWithTimeout(url, { method:'HEAD' }, 5000);
+    if (response.ok) return true;
+    if (response.status === 405) {
+      const probe = await fetchWithTimeout(url, { method:'GET', headers:{ Range:'bytes=0-0' } }, 5000);
+      return probe.ok;
+    }
+  } catch (_) {}
+  return false;
+}
+
+async function cacheStorage(){
+  if (!('caches' in root)) return null;
+  try { return await caches.open(RESOURCE_CACHE); }
+  catch (_) { return null; }
+}
+
+async function cacheFirstResponse(url){
+  const cache = await cacheStorage();
+  if (cache) {
+    const cached = await cache.match(url);
+    if (cached) return { response:cached, cached:true };
+  }
+  const response = await fetchWithTimeout(url, { mode:'cors' }, 20000);
+  if (!response.ok) throw new Error(`Resursa nu a putut fi descărcată (${response.status}).`);
+  if (cache) {
+    try { await cache.put(url, response.clone()); } catch (_) {}
+  }
+  return { response, cached:false };
+}
+
+async function cachedBlobUrl(url, mime = 'application/javascript'){
+  const { response } = await cacheFirstResponse(url);
+  const blob = await response.blob();
+  return URL.createObjectURL(blob.type ? blob : new Blob([blob], { type:mime }));
+}
+
+function loadScriptUrl(url, globalName, cleanupUrl = ''){
+  if (root[globalName]) {
+    if (cleanupUrl) URL.revokeObjectURL(cleanupUrl);
+    return Promise.resolve(root[globalName]);
+  }
   return new Promise((resolve, reject) => {
-    const existing = [...document.scripts].find(script => script.src === url);
-    const script = existing || document.createElement('script');
+    const script = document.createElement('script');
     let settled = false;
     const timeout = setTimeout(() => {
       if (settled) return;
       settled = true;
-      reject(new Error(`Încărcarea resursei externe a expirat: ${globalName}.`));
+      script.remove();
+      if (cleanupUrl) URL.revokeObjectURL(cleanupUrl);
+      reject(new Error(`Încărcarea resursei a expirat: ${globalName}.`));
     }, 30000);
     const done = () => {
       if (settled) return;
       settled = true;
       clearTimeout(timeout);
+      if (cleanupUrl) URL.revokeObjectURL(cleanupUrl);
       if (root[globalName]) resolve(root[globalName]);
       else reject(new Error(`Resursa ${globalName} s-a încărcat fără obiectul global așteptat.`));
     };
@@ -36,25 +115,58 @@ function loadScript(url, globalName){
       if (settled) return;
       settled = true;
       clearTimeout(timeout);
-      reject(new Error(`Nu s-a putut încărca ${globalName}. Verifică accesul la internet.`));
+      script.remove();
+      if (cleanupUrl) URL.revokeObjectURL(cleanupUrl);
+      reject(new Error(`Nu s-a putut încărca ${globalName}.`));
     };
     script.addEventListener('load', done, { once:true });
     script.addEventListener('error', fail, { once:true });
-    if (!existing) {
-      script.src = url;
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      script.referrerPolicy = 'no-referrer';
-      script.dataset.aiExternalDependency = globalName;
-      document.head.appendChild(script);
-    }
+    script.src = url;
+    script.async = true;
+    script.referrerPolicy = 'no-referrer';
+    script.dataset.aiDependency = globalName;
+    document.head.appendChild(script);
   });
+}
+
+async function loadScript(localPath, remoteUrl, globalName){
+  if (root[globalName]) return root[globalName];
+
+  if (await localAssetAvailable(localPath)) {
+    try { return await loadScriptUrl(absoluteUrl(localPath), globalName); }
+    catch (_) {
+      // Un asset local corupt nu trebuie să blocheze fallback-ul versionat.
+    }
+  }
+
+  try {
+    const objectUrl = await cachedBlobUrl(remoteUrl);
+    return await loadScriptUrl(objectUrl, globalName, objectUrl);
+  } catch (cacheError) {
+    try { return await loadScriptUrl(remoteUrl, globalName); }
+    catch (networkError) {
+      const error = new Error(`Nu s-a putut încărca ${globalName}. Nici copia locală/cache, nici fallback-ul extern nu sunt disponibile.`);
+      error.cause = networkError || cacheError;
+      throw error;
+    }
+  }
+}
+
+async function resolvePdfWorker(){
+  if (await localAssetAvailable(LOCAL_PDFJS_WORKER_URL)) return absoluteUrl(LOCAL_PDFJS_WORKER_URL);
+  if (pdfWorkerObjectUrl) return pdfWorkerObjectUrl;
+  try {
+    pdfWorkerObjectUrl = await cachedBlobUrl(PDFJS_WORKER_URL);
+    return pdfWorkerObjectUrl;
+  } catch (_) {
+    return PDFJS_WORKER_URL;
+  }
 }
 
 async function ensurePdf(){
   if (!pdfPromise) {
-    pdfPromise = loadScript(PDFJS_URL, 'pdfjsLib').then(pdfjsLib => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+    pdfPromise = loadScript(LOCAL_PDFJS_URL, PDFJS_URL, 'pdfjsLib').then(async pdfjsLib => {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = await resolvePdfWorker();
       return pdfjsLib;
     }).catch(error => {
       pdfPromise = null;
@@ -66,12 +178,35 @@ async function ensurePdf(){
 
 async function ensureTesseract(){
   if (!tesseractPromise) {
-    tesseractPromise = loadScript(TESSERACT_URL, 'Tesseract').catch(error => {
+    tesseractPromise = loadScript(LOCAL_TESSERACT_URL, TESSERACT_URL, 'Tesseract').catch(error => {
       tesseractPromise = null;
       throw error;
     });
   }
   return tesseractPromise;
+}
+
+async function resolveTesseractWorker(){
+  if (await localAssetAvailable(LOCAL_TESSERACT_WORKER_URL)) {
+    return { path:absoluteUrl(LOCAL_TESSERACT_WORKER_URL), blob:false };
+  }
+  if (tesseractWorkerObjectUrl) return { path:tesseractWorkerObjectUrl, blob:true };
+  try {
+    tesseractWorkerObjectUrl = await cachedBlobUrl(TESSERACT_WORKER_URL);
+    return { path:tesseractWorkerObjectUrl, blob:true };
+  } catch (_) {
+    return { path:TESSERACT_WORKER_URL, blob:false };
+  }
+}
+
+async function resolveCorePath(){
+  const sentinel = `${LOCAL_TESSERACT_CORE_PATH}/tesseract-core.wasm.js`;
+  return (await localAssetAvailable(sentinel)) ? absoluteUrl(LOCAL_TESSERACT_CORE_PATH) : TESSERACT_CORE_PATH;
+}
+
+async function resolveLangPath(){
+  const sentinel = `${LOCAL_TESSERACT_LANG_PATH}/${OCR_LANGUAGE}.traineddata.gz`;
+  return (await localAssetAvailable(sentinel)) ? absoluteUrl(LOCAL_TESSERACT_LANG_PATH) : TESSERACT_LANG_PATH;
 }
 
 function psmValue(Tesseract, key, fallback){
@@ -91,8 +226,20 @@ async function getOcrWorker(logger){
   if (!workerPromise) {
     const Tesseract = await ensureTesseract();
     const oem = Tesseract?.OEM?.LSTM_ONLY ?? 1;
+    const [workerSource, corePath, langPath] = await Promise.all([
+      resolveTesseractWorker(),
+      resolveCorePath(),
+      resolveLangPath()
+    ]);
+
     workerPromise = Tesseract.createWorker(OCR_LANGUAGE, oem, {
-      langPath: TESSERACT_LANG_PATH,
+      workerPath: workerSource.path,
+      workerBlobURL: !workerSource.blob,
+      corePath,
+      langPath,
+      cachePath: OCR_CACHE_PATH,
+      cacheMethod: 'write',
+      gzip: true,
       logger: message => currentLogger?.(message),
       errorHandler: error => console.error('Tesseract worker:', error)
     }).then(async worker => {
@@ -163,16 +310,43 @@ async function recognize(source, logger){
   return (await recognizeDetailed(source, logger)).text;
 }
 
+async function dependencyStatus(){
+  const [pdfLocal, pdfWorkerLocal, tesseractLocal, workerLocal, coreLocal, langLocal] = await Promise.all([
+    localAssetAvailable(LOCAL_PDFJS_URL),
+    localAssetAvailable(LOCAL_PDFJS_WORKER_URL),
+    localAssetAvailable(LOCAL_TESSERACT_URL),
+    localAssetAvailable(LOCAL_TESSERACT_WORKER_URL),
+    localAssetAvailable(`${LOCAL_TESSERACT_CORE_PATH}/tesseract-core.wasm.js`),
+    localAssetAvailable(`${LOCAL_TESSERACT_LANG_PATH}/${OCR_LANGUAGE}.traineddata.gz`)
+  ]);
+  return {
+    pdfLocal, pdfWorkerLocal, tesseractLocal, workerLocal, coreLocal, langLocal,
+    cacheStorage: 'caches' in root,
+    languageCache: OCR_CACHE_PATH
+  };
+}
+
 async function terminateOcr(){
   currentLogger = null;
-  if (!workerPromise) return;
-  try {
-    const worker = await workerPromise;
-    await worker.terminate();
-  } catch (_) {
-    // Resetarea trebuie să continue chiar dacă worker-ul era deja oprit.
-  } finally {
-    workerPromise = null;
+  if (workerPromise) {
+    try {
+      const worker = await workerPromise;
+      await worker.terminate();
+    } catch (_) {
+      // Resetarea trebuie să continue chiar dacă worker-ul era deja oprit.
+    } finally {
+      workerPromise = null;
+    }
+  }
+}
+
+function releaseDependencyObjectUrls(){
+  for (const key of ['tesseractWorkerObjectUrl','pdfWorkerObjectUrl']) {
+    const url = key === 'tesseractWorkerObjectUrl' ? tesseractWorkerObjectUrl : pdfWorkerObjectUrl;
+    if (!url) continue;
+    try { URL.revokeObjectURL(url); } catch (_) {}
+    if (key === 'tesseractWorkerObjectUrl') tesseractWorkerObjectUrl = '';
+    else pdfWorkerObjectUrl = '';
   }
 }
 
@@ -241,19 +415,32 @@ root.AIDocumentDependencies = {
   PDFJS_URL,
   PDFJS_WORKER_URL,
   TESSERACT_URL,
+  TESSERACT_WORKER_URL,
+  TESSERACT_CORE_PATH,
   TESSERACT_LANG_PATH,
+  LOCAL_PDFJS_URL,
+  LOCAL_PDFJS_WORKER_URL,
+  LOCAL_TESSERACT_URL,
+  LOCAL_TESSERACT_WORKER_URL,
+  LOCAL_TESSERACT_CORE_PATH,
+  LOCAL_TESSERACT_LANG_PATH,
+  RESOURCE_CACHE,
+  OCR_CACHE_PATH,
   OCR_LANGUAGE,
   OCR_DPI,
   ensurePdf,
   ensureTesseract,
   recognize,
   recognizeDetailed,
+  dependencyStatus,
   terminateOcr,
   revokeConfirmation
 };
 
 if (typeof window !== 'undefined') {
   document.addEventListener('DOMContentLoaded', initReviewGuards, { once:true });
-  window.addEventListener('pagehide', () => { void terminateOcr(); }, { once:true });
+  window.addEventListener('pagehide', () => {
+    void terminateOcr().finally(releaseDependencyObjectUrls);
+  }, { once:true });
 }
 })(typeof window !== 'undefined' ? window : globalThis);
