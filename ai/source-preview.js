@@ -5,10 +5,6 @@ let sourceFiles = [];
 let previewObjectUrl = '';
 const SOURCE_RX = /^(.+?)\s+—\s+(pagina\s+(\d+)|imagine)\b/i;
 
-function esc(value){
-  return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-}
-
 function parseSourceReference(value){
   const text = String(value || '').trim();
   const match = text.match(SOURCE_RX);
@@ -35,6 +31,13 @@ function cleanupObjectUrl(){
   previewObjectUrl = '';
 }
 
+function closeDialog(dialog){
+  if (!dialog) return;
+  if (typeof dialog.close === 'function') dialog.close();
+  else dialog.removeAttribute('open');
+  cleanupObjectUrl();
+}
+
 function ensureDialog(){
   let dialog = document.getElementById('aiSourceDialog');
   if (dialog) return dialog;
@@ -53,9 +56,9 @@ function ensureDialog(){
       <div class="ai-source-dialog-excerpt"><strong>Fragment extras</strong><p id="aiSourceDialogExcerpt"></p></div>
     </div>`;
   document.body.appendChild(dialog);
-  dialog.querySelector('[data-source-close]').addEventListener('click', () => dialog.close?.());
+  dialog.querySelector('[data-source-close]').addEventListener('click', () => closeDialog(dialog));
   dialog.addEventListener('click', event => {
-    if (event.target === dialog) dialog.close?.();
+    if (event.target === dialog) closeDialog(dialog);
   });
   dialog.addEventListener('close', cleanupObjectUrl);
   return dialog;
@@ -169,7 +172,10 @@ function init(){
 
   input?.addEventListener('change', event => rememberFiles(event.target.files));
   drop?.addEventListener('drop', event => rememberFiles(event.dataTransfer?.files));
-  clear?.addEventListener('click', () => { sourceFiles = []; cleanupObjectUrl(); document.getElementById('aiSourceDialog')?.close?.(); });
+  clear?.addEventListener('click', () => {
+    sourceFiles = [];
+    closeDialog(document.getElementById('aiSourceDialog'));
+  });
 
   document.addEventListener('click', event => {
     const button = event.target.closest?.('[data-source-preview]');
