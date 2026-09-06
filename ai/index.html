@@ -10,7 +10,7 @@
   <meta name="description" content="OCR românesc și analiză asistată a mandatelor și hotărârilor pentru calculul pedepselor și contopirilor.">
   <link rel="stylesheet" href="css/design-system.css?v=4">
   <link rel="stylesheet" href="css/style.css?v=43">
-  <link rel="stylesheet" href="ai/styles.css?v=3">
+  <link rel="stylesheet" href="ai/styles.css?v=4">
   <script src="js/theme.js?v=41" defer></script>
   <script src="js/version.js?v=41" defer></script>
   <link rel="icon" href="favicon-ev-2.svg" sizes="any" type="image/svg+xml">
@@ -33,10 +33,7 @@
           <input id="fileInput" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,image/bmp,image/tiff,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" multiple>
         </label>
         <div class="ai-ocr-profile" aria-label="Profil OCR">
-          <span>OCR română · ron</span>
-          <span>tessdata_best</span>
-          <span>300 DPI</span>
-          <span>preprocesare locală</span>
+          <span>OCR română · ron</span><span>tessdata_best</span><span>300 DPI</span><span>auto-rotate + deskew</span><span>preprocesare locală</span>
         </div>
         <div id="fileList" class="ai-file-list" aria-live="polite"></div>
         <div class="ai-actions">
@@ -45,17 +42,15 @@
         </div>
         <div id="statusText" class="ai-status" aria-live="polite"></div>
         <div class="ai-progress" aria-hidden="true"><span id="progressBar"></span></div>
-        <p class="ai-library-note">PDF-urile cu text sunt citite direct. Pentru paginile scanate și imagini, modulul normalizează rezoluția, contrastul și tonurile de gri înainte de OCR. Tesseract.js folosește modelul românesc <code>ron</code>, iar la rezultate slabe rulează automat o a doua segmentare. Bibliotecile și modelul OCR sunt descărcate în browser; documentul nu este transmis de acest modul către un backend propriu.</p>
+        <p class="ai-library-note">PDF-urile cu text sunt citite direct. Pentru scanări și imagini, modulul normalizează rezoluția, contrastul și tonurile de gri, corectează înclinările mici și permite auto-rotirea OCR. Fiecare pagină OCR păstrează scorul de încredere. Sub 80%, valorile numerice importante nu sunt folosite automat fără verificare explicită.</p>
       </section>
 
       <section class="ai-card" aria-labelledby="text-title">
         <h2 id="text-title">2. Text extras</h2>
         <textarea id="rawText" class="ai-textarea" spellcheck="false" placeholder="Textul extras din document va apărea aici. Îl poți corecta manual înainte de reanalizare."></textarea>
-        <div class="ai-actions">
-          <button type="button" class="btn btn-outline" id="reanalyzeTextBtn">REANALIZEAZĂ TEXTUL</button>
-        </div>
-        <p class="ai-note">OCR-ul normalizează diacriticele românești vechi cu sedilă (Ş/ş, Ţ/ţ) la formele actuale (Ș/ș, Ț/ț) și corectează numai confuziile O/0 sau I/1 aflate în tokenuri care arată ca date calendaristice. Restul textului rămâne disponibil pentru verificare manuală.</p>
-        <p class="ai-note">Analiza este conservatoare. Dacă același set de documente conține valori contradictorii pentru data nașterii, începutul executării, pedeapsa finală sau regula LC, câmpul respectiv este lăsat necompletat și conflictul este semnalat.</p>
+        <div class="ai-actions"><button type="button" class="btn btn-outline" id="reanalyzeTextBtn">REANALIZEAZĂ TEXTUL</button></div>
+        <p class="ai-note">Textul este păstrat separat pe document/pagină, împreună cu modul de citire și, la OCR, procentul de încredere. Diacriticele românești vechi cu sedilă sunt normalizate la Ș/Ț, iar confuziile O/0 sau I/1 sunt corectate numai în tokenuri care arată ca date calendaristice.</p>
+        <p class="ai-note">Analiza este conservatoare. Valorile contradictorii sau numerice provenite din OCR slab sunt marcate pentru verificare și nu sunt transformate automat în rezultate juridice.</p>
       </section>
     </div>
 
@@ -68,17 +63,7 @@
         <div><label for="startDate">Data începerii executării</label><input id="startDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
         <div><label for="receivedDate">Data primirii în penitenciar/centru</label><input id="receivedDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>
         <div class="wide"><label for="article">Articol / configurație IMSweb</label>
-          <select id="article">
-            <option value="">— verificare manuală —</option>
-            <option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option>
-            <option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option>
-            <option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option>
-            <option value="VCP602">VCP art. 60 alin. (2)</option><option value="VCP603">VCP art. 60 alin. (3)</option>
-            <option value="VCP551">VCP art. 55¹ (viață)</option>
-            <option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option>
-            <option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option>
-            <option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. (4) v</option>
-          </select>
+          <select id="article"><option value="">— verificare manuală —</option><option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option><option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option><option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option><option value="VCP602">VCP art. 60 alin. (2)</option><option value="VCP603">VCP art. 60 alin. (3)</option><option value="VCP551">VCP art. 55¹ (viață)</option><option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option><option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option><option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. (4) v</option></select>
         </div>
         <div class="wide ai-inline"><label><input id="lifeSentence" type="checkbox"> Detențiune pe viață</label><span class="ai-pill">documentul nu este trimis către un server propriu</span></div>
         <div class="wide"><label>Pedeapsa rezultantă identificată / verificată</label><div class="ai-duration"><input id="finalYears" type="number" min="0" step="1" value="0" aria-label="Ani"><input id="finalMonths" type="number" min="0" step="1" value="0" aria-label="Luni"><input id="finalDays" type="number" min="0" step="1" value="0" aria-label="Zile"></div></div>
@@ -86,47 +71,34 @@
 
       <div class="ai-section-gap">
         <div class="ai-inline"><h3>Pedepse componente / resturi</h3><button type="button" class="btn btn-outline btn-sm" id="addPenaltyBtn">+ Adaugă</button></div>
-        <p class="ai-note">Selectează categoria juridică numai după verificarea documentului. „Ignoră” înseamnă că acel cuantum nu intră în calcul.</p>
+        <p class="ai-note">Dacă un cuantum provine din OCR sub 80%, rândul este evidențiat și rămâne implicit pe „Ignoră” până când îl verifici în document.</p>
         <div class="ai-table-wrap"><table class="ai-table"><thead><tr><th>Ani</th><th>Luni</th><th>Zile</th><th>Categorie</th><th>Sursă</th><th></th></tr></thead><tbody id="penaltyRows"></tbody></table></div>
       </div>
 
       <div class="ai-section-gap">
         <div class="ai-inline"><h3>Perioade deduse</h3><button type="button" class="btn btn-outline btn-sm" id="addDeductionBtn">+ Adaugă</button></div>
-        <p class="ai-note">Regulă specială: o Reținere de 24 de ore se deduce ca 1 zi chiar dacă intervalul traversează două date calendaristice (ex. 12.02.2025–13.02.2025). Arestul preventiv și arestul la domiciliu păstrează ambele capete incluse.</p>
+        <p class="ai-note">Reținerea de 24 de ore se deduce ca 1 zi. Arestul preventiv și arestul la domiciliu păstrează ambele capete incluse. O perioadă numerică provenită din OCR sub 80% trebuie confirmată individual înainte de calcul.</p>
         <div class="ai-table-wrap"><table class="ai-table"><thead><tr><th>Început</th><th>Sfârșit</th><th>Tip</th><th>Sursă</th><th></th></tr></thead><tbody id="deductionRows"></tbody></table></div>
       </div>
 
-      <label class="ai-confirm ai-section-gap" for="confirmedData">
-        <input id="confirmedData" type="checkbox">
-        <span><strong>Am verificat datele față de documentul-sursă.</strong><small>În ALPHA, calculul este blocat până la această confirmare.</small></span>
-      </label>
-
-      <div class="ai-actions">
-        <button type="button" class="btn btn-primary" id="calculateBtn" disabled>VERIFICĂ ȘI CALCULEAZĂ</button>
-      </div>
+      <label class="ai-confirm ai-section-gap" for="confirmedData"><input id="confirmedData" type="checkbox"><span><strong>Am verificat datele față de documentul-sursă.</strong><small>În ALPHA, calculul este blocat până la această confirmare.</small></span></label>
+      <div class="ai-actions"><button type="button" class="btn btn-primary" id="calculateBtn" disabled>VERIFICĂ ȘI CALCULEAZĂ</button></div>
       <div id="calcError" class="ai-error ai-hidden" role="alert"></div>
     </section>
 
-    <section class="ai-card ai-section-gap ai-hidden" id="resultCard" aria-labelledby="result-title">
-      <h2 id="result-title">4. Rezultat în modulul AI</h2>
-      <div id="resultContent"></div>
-    </section>
-
-    <section class="ai-card ai-section-gap ai-hidden" id="evidenceCard" aria-labelledby="evidence-title">
-      <h2 id="evidence-title">Surse identificate în document</h2>
-      <div id="evidenceList" class="ai-evidence"></div>
-    </section>
+    <section class="ai-card ai-section-gap ai-hidden" id="resultCard" aria-labelledby="result-title"><h2 id="result-title">4. Rezultat în modulul AI</h2><div id="resultContent"></div></section>
+    <section class="ai-card ai-section-gap ai-hidden" id="evidenceCard" aria-labelledby="evidence-title"><h2 id="evidence-title">Surse identificate pe document și pagină</h2><div id="evidenceList" class="ai-evidence"></div></section>
   </main>
 
   <script src="js/utils.js?v=36"></script>
   <script src="js/rules.js?v=37"></script>
   <script src="js/contopiri-core.js?v=34"></script>
-  <script src="ai/core.js?v=1"></script>
-  <script src="ai/safety.js?v=1"></script>
-  <script src="ai/ocr-ro.js?v=1"></script>
-  <script src="ai/dependencies.js?v=2"></script>
+  <script src="ai/core.js?v=2"></script>
+  <script src="ai/safety.js?v=2"></script>
+  <script src="ai/ocr-ro.js?v=2"></script>
+  <script src="ai/dependencies.js?v=3"></script>
   <script src="ai/date-mask.js?v=1"></script>
   <script src="ai/deduction-rules.js?v=2"></script>
-  <script src="ai/app.js?v=2"></script>
+  <script src="ai/app.js?v=3"></script>
 </body>
 </html>
