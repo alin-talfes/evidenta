@@ -4,6 +4,10 @@
 const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
 const PDFJS_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const TESSERACT_URL = 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js';
+const TESSERACT_LANG_PATH = 'https://tessdata.projectnaptha.com/4.0.0_best';
+const OCR_LANGUAGE = 'ron';
+const OCR_DPI = '300';
+const LOW_CONFIDENCE_THRESHOLD = 78;
 
 let pdfPromise = null;
 let tesseractPromise = null;
@@ -70,13 +74,30 @@ async function ensureTesseract(){
   return tesseractPromise;
 }
 
+function psmValue(Tesseract, key, fallback){
+  return Tesseract?.PSM?.[key] ?? fallback;
+}
+
+async function configureWorker(worker, Tesseract, pageSegMode){
+  await worker.setParameters({
+    tessedit_pageseg_mode: pageSegMode,
+    preserve_interword_spaces: '1',
+    user_defined_dpi: OCR_DPI
+  });
+}
+
 async function getOcrWorker(logger){
   currentLogger = typeof logger === 'function' ? logger : null;
   if (!workerPromise) {
     const Tesseract = await ensureTesseract();
-    workerPromise = Tesseract.createWorker('ron', 1, {
+    const oem = Tesseract?.OEM?.LSTM_ONLY ?? 1;
+    workerPromise = Tesseract.createWorker(OCR_LANGUAGE, oem, {
+      langPath: TESSERACT_LANG_PATH,
       logger: message => currentLogger?.(message),
       errorHandler: error => console.error('Tesseract worker:', error)
+    }).then(async worker => {
+      await configureWorker(worker, Tesseract, psmValue(Tesseract, 'AUTO', '3'));
+      return worker;
     }).catch(error => {
       workerPromise = null;
       throw error;
@@ -85,10 +106,56 @@ async function getOcrWorker(logger){
   return workerPromise;
 }
 
+function normalizedCandidate(result){
+  const rawText = result?.data?.text || '';
+  const text = root.AIRomanianOCR?.normalizeRomanianText
+    ? root.AIRomanianOCR.normalizeRomanianText(rawText)
+    : rawText;
+  const confidence = Number(result?.data?.confidence || 0);
+  const score = root.AIRomanianOCR?.scoreCandidate
+    ? root.AIRomanianOCR.scoreCandidate(text, confidence)
+    : confidence;
+  return { text, confidence, score };
+}
+
+function scaledLogger(logger, offset, span){
+  if (typeof logger !== 'function') return null;
+  return message => {
+    const copy = { ...message };
+    if (copy.status === 'recognizing text' && Number.isFinite(copy.progress)) {
+      copy.progress = Math.max(0, Math.min(1, offset + copy.progress * span));
+    }
+    logger(copy);
+  };
+}
+
 async function recognize(source, logger){
+  const Tesseract = await ensureTesseract();
   const worker = await getOcrWorker(logger);
-  const result = await worker.recognize(source);
-  return result?.data?.text || '';
+  const prepared = root.AIRomanianOCR?.preprocessSource
+    ? await root.AIRomanianOCR.preprocessSource(source)
+    : source;
+
+  const autoMode = psmValue(Tesseract, 'AUTO', '3');
+  const blockMode = psmValue(Tesseract, 'SINGLE_BLOCK', '6');
+
+  await configureWorker(worker, Tesseract, autoMode);
+  currentLogger = scaledLogger(logger, 0, 0.76);
+  const first = normalizedCandidate(await worker.recognize(prepared));
+
+  const retry = first.confidence < LOW_CONFIDENCE_THRESHOLD || first.text.length < 120 || first.score < 68;
+  if (!retry) {
+    currentLogger = typeof logger === 'function' ? logger : null;
+    return first.text;
+  }
+
+  await configureWorker(worker, Tesseract, blockMode);
+  currentLogger = scaledLogger(logger, 0.76, 0.24);
+  const second = normalizedCandidate(await worker.recognize(prepared));
+  await configureWorker(worker, Tesseract, autoMode);
+  currentLogger = typeof logger === 'function' ? logger : null;
+
+  return second.score > first.score ? second.text : first.text;
 }
 
 async function terminateOcr(){
@@ -169,6 +236,9 @@ root.AIDocumentDependencies = {
   PDFJS_URL,
   PDFJS_WORKER_URL,
   TESSERACT_URL,
+  TESSERACT_LANG_PATH,
+  OCR_LANGUAGE,
+  OCR_DPI,
   ensurePdf,
   ensureTesseract,
   recognize,

@@ -4,6 +4,7 @@
 const TYPE_GENERIC = 'generic';
 const TYPE_RETENTION_24H = 'retention24h';
 const TYPE_PREVENTIVE = 'preventive';
+const TYPE_HOME_ARREST = 'home_arrest';
 
 function fold(value){
   return String(value || '')
@@ -16,6 +17,7 @@ function inferTypeFromSource(source){
   const value = fold(source);
   const retention = /\bretin(?:ere|erea|erii|ut|uta)\b/.test(value) && /(?:\b24\s*(?:de\s*)?ore\b|\b24\s*h\b)/.test(value);
   if (retention) return TYPE_RETENTION_24H;
+  if (/\barest(?:ul|ului)?\s+la\s+domiciliu\b|\barestare(?:a|ii)?\s+la\s+domiciliu\b/.test(value)) return TYPE_HOME_ARREST;
   if (/\b(?:arest(?:ul|ului)?|arestare(?:a|ii)?)\s+preventiv(?:a|e|ul|ului)?\b/.test(value)) return TYPE_PREVENTIVE;
   return TYPE_GENERIC;
 }
@@ -52,7 +54,8 @@ function createTypeSelect(source){
   select.innerHTML = [
     `<option value="${TYPE_GENERIC}">Altă perioadă — capete incluse</option>`,
     `<option value="${TYPE_RETENTION_24H}">Reținere 24 h — 1 zi</option>`,
-    `<option value="${TYPE_PREVENTIVE}">Arest preventiv — capete incluse</option>`
+    `<option value="${TYPE_PREVENTIVE}">Arest preventiv — capete incluse</option>`,
+    `<option value="${TYPE_HOME_ARREST}">Arest la domiciliu — capete incluse</option>`
   ].join('');
   select.value = inferTypeFromSource(source);
   select.addEventListener('change', revokeConfirmation);
@@ -88,7 +91,7 @@ function addResultNote(count){
   const note = document.createElement('div');
   note.id = 'ai-retention-rule-note';
   note.className = 'ai-warning';
-  note.textContent = `Regulă aplicată: ${count} interval(e) marcate „Reținere 24 h” au fost deduse cu câte 1 zi fiecare. Arestul preventiv și celelalte perioade rămân calculate cu ambele capete incluse.`;
+  note.textContent = `Regulă aplicată: ${count} interval(e) marcate „Reținere 24 h” au fost deduse cu câte 1 zi fiecare. Arestul preventiv, arestul la domiciliu și celelalte perioade rămân calculate cu ambele capete incluse.`;
   container.prepend(note);
 }
 
@@ -138,6 +141,7 @@ root.AIDeductionRules = {
   TYPE_GENERIC,
   TYPE_RETENTION_24H,
   TYPE_PREVENTIVE,
+  TYPE_HOME_ARREST,
   inferTypeFromSource,
   deductionDays
 };
