@@ -4,6 +4,8 @@
 const ROMANIAN_LANGUAGE = 'ron';
 const MIN_LONG_EDGE = 1800;
 const MAX_LONG_EDGE = 3400;
+const MAX_SKEW_DEGREES = 2.5;
+const SKEW_STEP = 0.5;
 const LEGAL_TERMS = [
   'pedeaps', 'inchisoare', 'închisoare', 'condamn', 'execut', 'mandat',
   'sentin', 'deciz', 'arest', 'retin', 'rețin', 'deduc', 'penitenciar',
@@ -48,7 +50,6 @@ function fold(value){
 function scoreCandidate(text, confidence = 0){
   const normalized = normalizeRomanianText(text);
   if (!normalized) return 0;
-
   const letters = (normalized.match(/[A-Za-zĂÂÎȘȚăâîșț]/g) || []).length;
   const strange = (normalized.match(/[�□■]/g) || []).length;
   const printableRatio = Math.min(1, letters / Math.max(1, normalized.length) * 1.9);
@@ -87,36 +88,22 @@ function createCanvas(width, height){
   return canvas;
 }
 
-function enhanceCanvas(sourceCanvas){
-  if (!sourceCanvas || !sourceCanvas.width || !sourceCanvas.height) return sourceCanvas;
-  const scale = desiredScale(sourceCanvas.width, sourceCanvas.height);
-  const canvas = createCanvas(sourceCanvas.width * scale, sourceCanvas.height * scale);
-  if (!canvas) return sourceCanvas;
+function grayscaleAndContrast(canvas){
   const ctx = canvas.getContext('2d', { willReadFrequently:true });
-  if (!ctx) return sourceCanvas;
-
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(sourceCanvas, 0, 0, canvas.width, canvas.height);
-
+  if (!ctx) return canvas;
   const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const pixels = image.data;
   const histogram = new Uint32Array(256);
   let total = 0;
-
   for (let i = 0; i < pixels.length; i += 4) {
     const gray = Math.round(0.2126 * pixels[i] + 0.7152 * pixels[i + 1] + 0.0722 * pixels[i + 2]);
     histogram[gray] += 1;
     total += 1;
   }
-
   const low = percentile(histogram, total, 0.015);
   const high = percentile(histogram, total, 0.985);
   const spread = Math.max(55, high - low);
   const effectiveHigh = low + spread;
-
   for (let i = 0; i < pixels.length; i += 4) {
     const gray = 0.2126 * pixels[i] + 0.7152 * pixels[i + 1] + 0.0722 * pixels[i + 2];
     const linear = Math.max(0, Math.min(1, (gray - low) / Math.max(1, effectiveHigh - low)));
@@ -126,14 +113,87 @@ function enhanceCanvas(sourceCanvas){
     pixels[i + 2] = corrected;
     pixels[i + 3] = 255;
   }
-
   ctx.putImageData(image, 0, 0);
   return canvas;
 }
 
+function projectionScore(canvas, angleDeg){
+  const ctx = canvas?.getContext?.('2d', { willReadFrequently:true });
+  if (!ctx || !canvas.width || !canvas.height) return 0;
+  const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  const stride = Math.max(2, Math.floor(Math.max(canvas.width, canvas.height) / 900));
+  const rows = new Float64Array(canvas.height + Math.ceil(canvas.width * 0.06) + 8);
+  const slope = Math.tan(angleDeg * Math.PI / 180);
+  const offset = Math.ceil(canvas.width * 0.03) + 2;
+  for (let y = 0; y < canvas.height; y += stride) {
+    for (let x = 0; x < canvas.width; x += stride) {
+      const i = (y * canvas.width + x) * 4;
+      if (data[i] > 170) continue;
+      const row = Math.round(y - x * slope) + offset;
+      if (row >= 0 && row < rows.length) rows[row] += 1;
+    }
+  }
+  let score = 0;
+  for (const value of rows) score += value * value;
+  return score;
+}
+
+function estimateSkewAngle(canvas){
+  if (!canvas?.width || !canvas?.height) return 0;
+  const base = projectionScore(canvas, 0);
+  let bestAngle = 0;
+  let bestScore = base;
+  for (let angle = -MAX_SKEW_DEGREES; angle <= MAX_SKEW_DEGREES + 0.001; angle += SKEW_STEP) {
+    if (Math.abs(angle) < 0.001) continue;
+    const score = projectionScore(canvas, angle);
+    if (score > bestScore) {
+      bestScore = score;
+      bestAngle = Number(angle.toFixed(2));
+    }
+  }
+  if (!base || bestScore / base < 1.035 || Math.abs(bestAngle) < 0.4) return 0;
+  return bestAngle;
+}
+
+function rotateCanvas(sourceCanvas, degrees){
+  if (!sourceCanvas || !degrees) return sourceCanvas;
+  const radians = degrees * Math.PI / 180;
+  const sin = Math.abs(Math.sin(radians));
+  const cos = Math.abs(Math.cos(radians));
+  const width = Math.ceil(sourceCanvas.width * cos + sourceCanvas.height * sin);
+  const height = Math.ceil(sourceCanvas.width * sin + sourceCanvas.height * cos);
+  const canvas = createCanvas(width, height);
+  const ctx = canvas?.getContext('2d');
+  if (!canvas || !ctx) return sourceCanvas;
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, width, height);
+  ctx.translate(width / 2, height / 2);
+  ctx.rotate(radians);
+  ctx.drawImage(sourceCanvas, -sourceCanvas.width / 2, -sourceCanvas.height / 2);
+  return canvas;
+}
+
+function enhanceCanvas(sourceCanvas){
+  if (!sourceCanvas || !sourceCanvas.width || !sourceCanvas.height) return sourceCanvas;
+  const scale = desiredScale(sourceCanvas.width, sourceCanvas.height);
+  const canvas = createCanvas(sourceCanvas.width * scale, sourceCanvas.height * scale);
+  if (!canvas) return sourceCanvas;
+  const ctx = canvas.getContext('2d', { willReadFrequently:true });
+  if (!ctx) return sourceCanvas;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(sourceCanvas, 0, 0, canvas.width, canvas.height);
+  grayscaleAndContrast(canvas);
+  const skew = estimateSkewAngle(canvas);
+  const corrected = skew ? rotateCanvas(canvas, -skew) : canvas;
+  try { corrected.dataset.ocrSkewCorrection = String(skew ? -skew : 0); } catch (_) {}
+  return corrected;
+}
+
 async function sourceToCanvas(source){
   if (typeof document === 'undefined') return null;
-
   if (typeof HTMLCanvasElement !== 'undefined' && source instanceof HTMLCanvasElement) {
     const clone = createCanvas(source.width, source.height);
     const ctx = clone?.getContext('2d');
@@ -141,7 +201,6 @@ async function sourceToCanvas(source){
     ctx.drawImage(source, 0, 0);
     return clone;
   }
-
   if (typeof ImageBitmap !== 'undefined' && source instanceof ImageBitmap) {
     const canvas = createCanvas(source.width, source.height);
     const ctx = canvas?.getContext('2d');
@@ -149,7 +208,6 @@ async function sourceToCanvas(source){
     ctx.drawImage(source, 0, 0);
     return canvas;
   }
-
   if (typeof Blob !== 'undefined' && source instanceof Blob && typeof createImageBitmap === 'function') {
     const bitmap = await createImageBitmap(source);
     try {
@@ -162,7 +220,6 @@ async function sourceToCanvas(source){
       bitmap.close?.();
     }
   }
-
   return null;
 }
 
@@ -180,10 +237,14 @@ root.AIRomanianOCR = {
   ROMANIAN_LANGUAGE,
   MIN_LONG_EDGE,
   MAX_LONG_EDGE,
+  MAX_SKEW_DEGREES,
   normalizeRomanianText,
   normalizeDateLikeGlyphs,
   scoreCandidate,
   desiredScale,
+  projectionScore,
+  estimateSkewAngle,
+  rotateCanvas,
   enhanceCanvas,
   preprocessSource
 };
