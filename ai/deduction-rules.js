@@ -58,8 +58,29 @@ function createTypeSelect(source){
     `<option value="${TYPE_HOME_ARREST}">Arest la domiciliu — capete incluse</option>`
   ].join('');
   select.value = inferTypeFromSource(source);
-  select.addEventListener('change', revokeConfirmation);
   return select;
+}
+
+function syncRow(row, preserveOriginal=true){
+  const type = row.querySelector('.d-measure-type')?.value || TYPE_GENERIC;
+  const startInput = row.querySelector('.d-start');
+  const endInput = row.querySelector('.d-end');
+  if (!startInput || !endInput) return;
+  const retention = type === TYPE_RETENTION_24H;
+
+  if (retention) {
+    if (preserveOriginal && row.dataset.retentionOriginalEnd == null) row.dataset.retentionOriginalEnd = endInput.value;
+    endInput.value = startInput.value;
+    endInput.disabled = true;
+    endInput.setAttribute('aria-label','Sfârșit reținere — identic cu data reținerii');
+  } else {
+    if (row.dataset.retentionOriginalEnd != null) {
+      endInput.value = row.dataset.retentionOriginalEnd;
+      delete row.dataset.retentionOriginalEnd;
+    }
+    endInput.disabled = false;
+    endInput.setAttribute('aria-label','Sfârșit perioadă dedusă');
+  }
 }
 
 function decorateRow(row){
@@ -68,73 +89,26 @@ function decorateRow(row){
   if (!sourceCell) return;
   const typeCell = document.createElement('td');
   typeCell.className = 'ai-deduction-type';
-  typeCell.appendChild(createTypeSelect(sourceCell.textContent || ''));
+  const select = createTypeSelect(sourceCell.textContent || '');
+  typeCell.appendChild(select);
   row.insertBefore(typeCell, sourceCell);
   row.dataset.deductionRuleReady = 'true';
-}
 
-function decorateRows(){
-  document.querySelectorAll('#deductionRows tr').forEach(decorateRow);
-}
-
-function showCalculationError(message){
-  const box = document.getElementById('calcError');
-  if (!box) return;
-  box.textContent = message;
-  box.classList.remove('ai-hidden');
-}
-
-function addResultNote(count){
-  if (!count) return;
-  const container = document.getElementById('resultContent');
-  if (!container || document.getElementById('ai-retention-rule-note')) return;
-  const note = document.createElement('div');
-  note.id = 'ai-retention-rule-note';
-  note.className = 'ai-warning';
-  note.textContent = `Regulă aplicată: ${count} interval(e) marcate „Reținere 24 h” au fost deduse cu câte 1 zi fiecare. Arestul preventiv, arestul la domiciliu și celelalte perioade rămân calculate cu ambele capete incluse.`;
-  container.prepend(note);
-}
-
-function prepareSpecialDeductions(event){
-  const restores = [];
-  let retentionCount = 0;
-  try {
-    document.querySelectorAll('#deductionRows tr').forEach((row, index) => {
-      const type = row.querySelector('.d-measure-type')?.value || TYPE_GENERIC;
-      if (type !== TYPE_RETENTION_24H) return;
-      const startInput = row.querySelector('.d-start');
-      const endInput = row.querySelector('.d-end');
-      const start = startInput?.value.trim() || '';
-      const end = endInput?.value.trim() || '';
-      if (!start || !end) return;
-      const days = deductionDays(type, start, end);
-      if (days === null) {
-        throw new Error(`Deducerea ${index + 1}: o reținere de 24 de ore nu poate acoperi mai mult de două date calendaristice consecutive. Verifică intervalul sau schimbă tipul măsurii.`);
-      }
-      retentionCount += 1;
-      restores.push([endInput, endInput.value]);
-      endInput.value = startInput.value;
-    });
-  } catch (error) {
-    restores.forEach(([input, value]) => { input.value = value; });
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    showCalculationError(error.message || String(error));
-    return;
-  }
-
-  queueMicrotask(() => {
-    restores.forEach(([input, value]) => { input.value = value; });
-    addResultNote(retentionCount);
+  const startInput = row.querySelector('.d-start');
+  select.addEventListener('change',()=>{ syncRow(row,true); revokeConfirmation(); });
+  startInput?.addEventListener('input',()=>{
+    if ((select.value || TYPE_GENERIC) === TYPE_RETENTION_24H) syncRow(row,false);
   });
+  syncRow(row,true);
 }
+
+function decorateRows(){ document.querySelectorAll('#deductionRows tr').forEach(decorateRow); }
 
 function init(){
   const body = document.getElementById('deductionRows');
   if (!body) return;
   decorateRows();
   new MutationObserver(decorateRows).observe(body, { childList:true });
-  document.getElementById('calculateBtn')?.addEventListener('click', prepareSpecialDeductions, true);
 }
 
 root.AIDeductionRules = {
