@@ -7,7 +7,7 @@ const ctx={console,Date,Math,Number,String,Array,Object,Set,Map,JSON,Uint32Array
 vm.createContext(ctx);
 for(const file of [
   'js/contopiri-core.js','ai/core.js','ai/safety.js','ai/real-doc-deductions.js','ai/real-doc-hardening.js',
-  'ai/beta-lot2-hardening.js','ai/beta-lot2-postprocess.js','ai/beta-lot3-hardening.js','ai/beta-lot3-postprocess.js','ai/beta-lot3-metadata.js'
+  'ai/beta-lot2-hardening.js','ai/beta-lot2-postprocess.js','ai/beta-lot3-hardening.js','ai/beta-lot3-postprocess.js','ai/beta-lot3-metadata.js','ai/beta-lot3-measures.js'
 ]) vm.runInContext(read(file),ctx,{filename:file});
 const analyze=ctx.AIDocumentSafety.analyze;
 
