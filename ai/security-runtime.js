@@ -14,6 +14,7 @@ let pdfWorkerObjectUrl='';
 let sensitiveFiles=[];
 let runtimeReady=false;
 let networkLocked=false;
+let preflightPassed=false;
 const nativeFetch=root.fetch?.bind(root);
 const NativeXHR=root.XMLHttpRequest;
 const NativeWebSocket=root.WebSocket;
@@ -151,6 +152,7 @@ function setInputReady(ready){
 
 function scrubSensitiveDom(){
   sensitiveFiles=[];
+  preflightPassed=false;
   const ids=['rawText','fileInput','evidenceList','resultContent','warningList'];
   for(const id of ids){
     const el=document.getElementById(id);
@@ -162,6 +164,7 @@ function scrubSensitiveDom(){
 
 function rememberSelected(list){
   sensitiveFiles=[...(list||[])];
+  preflightPassed=false;
   if(sensitiveFiles.length) lockOutboundNetwork();
 }
 
@@ -188,22 +191,25 @@ function init(){
   },true);
 
   analyze?.addEventListener('click',event=>{
+    if(preflightPassed){ preflightPassed=false; return; }
     if(!runtimeReady){ event.preventDefault(); event.stopImmediatePropagation(); setStatus('Runtime-ul securizat nu este pregătit.',true); return; }
     event.preventDefault();
     event.stopImmediatePropagation();
     analyze.disabled=true;
     setStatus('Verificare de securitate a documentului…');
     void preflightFiles().then(()=>{
+      preflightPassed=true;
       analyze.disabled=false;
       setStatus('Document verificat. Începe procesarea locală.');
       analyze.click();
     }).catch(error=>{
+      preflightPassed=false;
       analyze.disabled=false;
       setStatus(error?.message||String(error),true);
     });
   },true);
 
-  clear?.addEventListener('click',()=>{ sensitiveFiles=[]; },true);
+  clear?.addEventListener('click',()=>{ sensitiveFiles=[]; preflightPassed=false; },true);
   root.addEventListener('pagehide',scrubSensitiveDom,{once:true});
 }
 
