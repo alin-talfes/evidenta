@@ -74,7 +74,10 @@ function detectDocumentTypes(text){
 function addWarning(analysis,message){ if (!analysis.warnings.includes(message)) analysis.warnings.push(message); }
 function addEvidence(analysis,label,value,confidence,source){
   if (!value||analysis.evidence.some(item=>item.label===label&&item.value===value)) return;
-  analysis.evidence.push({label,value,confidence,source,ocrConfidence:root.AIDocumentCore.ocrConfidenceFromSource?.(source)??null});
+  const item={label,value,confidence,source};
+  const ocrConfidence=root.AIDocumentCore.ocrConfidenceFromSource?.(source);
+  if (Number.isFinite(ocrConfidence)) item.ocrConfidence=ocrConfidence;
+  analysis.evidence.push(item);
 }
 function lowOcr(value){ return Number.isFinite(value) && value < NUMERIC_OCR_REVIEW_THRESHOLD; }
 function numericWarning(label,confidence){ return `NECESITĂ VERIFICARE NUMERICĂ: ${label} provine dintr-o pagină OCR cu încredere ${Math.round(confidence)}%. Valoarea nu a fost folosită automat.`; }
@@ -120,6 +123,12 @@ function protectRows(analysis){
   if (riskyDeductions) addWarning(analysis,`NECESITĂ VERIFICARE NUMERICĂ: ${riskyDeductions} perioadă/perioade deduse provin din OCR sub ${NUMERIC_OCR_REVIEW_THRESHOLD}%. Confirmă explicit fiecare rând înainte de calcul.`);
 }
 
+function stripEmptyOcrMetadata(analysis){
+  for (const collection of [analysis.penalties,analysis.deductions,analysis.finalSentenceCandidates,analysis.evidence]) {
+    for (const item of collection||[]) if (!Number.isFinite(item.ocrConfidence)) delete item.ocrConfidence;
+  }
+}
+
 function analyze(rawText){
   const analysis=root.AIDocumentCore.analyzeDocument(rawText);
   const text=analysis.text||String(rawText||'');
@@ -162,6 +171,7 @@ function analyze(rawText){
 
   analysis.conflicts={birthDate:birthHits.length>1,startDate:startHits.length>1,receivedDate:receivedHits.length>1,finalSentence:finalDurations.length>1,article:articles.length>1};
   analysis.numericReviewRequired=(analysis.penalties||[]).some(x=>x.reviewRequired)||(analysis.deductions||[]).some(x=>x.reviewRequired)||analysis.warnings.some(w=>w.includes('NECESITĂ VERIFICARE NUMERICĂ'));
+  stripEmptyOcrMetadata(analysis);
   return analysis;
 }
 
