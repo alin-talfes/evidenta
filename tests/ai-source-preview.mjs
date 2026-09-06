@@ -13,14 +13,14 @@ const css = read('ai/source-preview.css');
 
 assert.ok(html.includes('ai/source-preview.js'), 'Modulul AI trebuie să încarce controllerul de previzualizare sursă');
 assert.ok(html.includes('ai/source-preview.css'), 'Modulul AI trebuie să încarce stilurile previzualizării sursă');
-assert.ok(html.includes('VEZI SURSA'), 'UI-ul trebuie să explice accesul direct la documentul-sursă');
+assert.ok(source.includes("button.textContent = 'VEZI SURSA'"), 'Sursele trebuie să primească buton contextual VEZI SURSA');
 assert.ok(source.includes('AIDocumentDependencies?.ensurePdf'), 'Previzualizarea PDF trebuie să reutilizeze PDF.js lazy din modulul AI');
 assert.ok(source.includes('URL.createObjectURL'), 'Imaginile originale trebuie previzualizate local, fără upload');
 assert.ok(source.includes('MutationObserver'), 'Sursele generate dinamic trebuie decorate cu acțiunea de previzualizare');
 assert.ok(source.includes('showModal'), 'Previzualizarea trebuie deschisă într-un dialog accesibil');
 assert.ok(source.includes('page.render'), 'Pagina PDF indicată de proveniență trebuie redată efectiv');
 assert.ok(css.includes('var(--ev-surface)') && css.includes('var(--ev-border)') && css.includes('var(--ev-accent-strong)'), 'Dialogul sursă trebuie să folosească design-system-ul comun');
-assert.ok(css.includes('@media (prefers-reduced-motion: reduce)'), 'Previzualizarea sursă trebuie să respecte reduced motion');
+assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)/, 'Previzualizarea sursă trebuie să respecte reduced motion');
 
 const context = { globalThis:null, window:undefined, document:{ addEventListener(){} }, console };
 context.globalThis = context;
