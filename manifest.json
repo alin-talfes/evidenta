@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Evidență PPL",
   "short_name": "Evidență",
-  "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri și transfer.",
+  "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, AI documente și transfer.",
   "lang": "ro-RO",
   "dir": "ltr",
   "start_url": "./",
@@ -11,33 +11,14 @@
   "orientation": "any",
   "background_color": "#0b1220",
   "theme_color": "#0b1220",
-  "categories": [
-    "productivity",
-    "utilities"
-  ],
+  "categories": ["productivity", "utilities"],
   "icons": [
-    {
-      "src": "favicon-ev-2.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    {"src": "favicon-ev-2.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
   ],
   "shortcuts": [
-    {
-      "name": "Pedepse",
-      "short_name": "Pedepse",
-      "url": "./"
-    },
-    {
-      "name": "Contopiri",
-      "short_name": "Contopiri",
-      "url": "./contopiri/"
-    },
-    {
-      "name": "Transfer",
-      "short_name": "Transfer",
-      "url": "./transfer/"
-    }
+    {"name": "Pedepse", "short_name": "Pedepse", "url": "./"},
+    {"name": "Contopiri", "short_name": "Contopiri", "url": "./contopiri/"},
+    {"name": "AI Documente · ALPHA", "short_name": "AI ALPHA", "url": "./ai/"},
+    {"name": "Transfer", "short_name": "Transfer", "url": "./transfer/"}
   ]
 }
