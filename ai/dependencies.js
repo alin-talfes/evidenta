@@ -104,6 +104,67 @@ async function terminateOcr(){
   }
 }
 
+function revokeConfirmation(message = 'Datele au fost modificate. Verifică din nou documentul și reconfirmă înainte de calcul.'){
+  const confirmed = document.getElementById('confirmedData');
+  const button = document.getElementById('calculateBtn');
+  if (confirmed) confirmed.checked = false;
+  if (button) button.disabled = true;
+  document.getElementById('resultCard')?.classList.add('ai-hidden');
+  if (message && document.getElementById('statusText')) document.getElementById('statusText').textContent = message;
+}
+
+function initReviewGuards(){
+  const review = document.getElementById('reviewCard');
+  const confirmed = document.getElementById('confirmedData');
+  const calculate = document.getElementById('calculateBtn');
+  const revokeFromEdit = event => {
+    if (event.target?.id === 'confirmedData') return;
+    if (confirmed?.checked) revokeConfirmation();
+  };
+
+  review?.addEventListener('input', revokeFromEdit);
+  review?.addEventListener('change', revokeFromEdit);
+  review?.addEventListener('click', event => {
+    if (event.target.closest('#addPenaltyBtn,#addDeductionBtn,.p-remove,.d-remove')) revokeConfirmation();
+  });
+
+  document.getElementById('rawText')?.addEventListener('input', () => {
+    if (!review?.classList.contains('ai-hidden')) {
+      revokeConfirmation('Textul extras a fost modificat. Apasă „REANALIZEAZĂ TEXTUL” înainte de calcul.');
+      review.classList.add('ai-hidden');
+      document.getElementById('evidenceCard')?.classList.add('ai-hidden');
+    }
+  });
+
+  const invalidateFiles = () => {
+    revokeConfirmation('Selecția de documente s-a schimbat. Rulează din nou analiza.');
+    review?.classList.add('ai-hidden');
+    document.getElementById('evidenceCard')?.classList.add('ai-hidden');
+  };
+  document.getElementById('fileInput')?.addEventListener('change', invalidateFiles);
+  document.getElementById('dropZone')?.addEventListener('drop', invalidateFiles);
+
+  calculate?.addEventListener('click', event => {
+    for (const [id, label] of [
+      ['birthDate', 'Data nașterii'],
+      ['startDate', 'Data începerii executării'],
+      ['receivedDate', 'Data primirii în penitenciar/centru']
+    ]) {
+      const input = document.getElementById(id);
+      const raw = input?.value.trim() || '';
+      if (!raw || root.parseDate?.(raw)) continue;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const box = document.getElementById('calcError');
+      if (box) {
+        box.textContent = `${label}: dată invalidă. Folosește formatul zz.ll.aaaa.`;
+        box.classList.remove('ai-hidden');
+      }
+      return;
+    }
+  }, true);
+}
+
 root.AIDocumentDependencies = {
   PDFJS_URL,
   PDFJS_WORKER_URL,
@@ -111,10 +172,12 @@ root.AIDocumentDependencies = {
   ensurePdf,
   ensureTesseract,
   recognize,
-  terminateOcr
+  terminateOcr,
+  revokeConfirmation
 };
 
 if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', initReviewGuards, { once:true });
   window.addEventListener('pagehide', () => { void terminateOcr(); }, { once:true });
 }
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -31,6 +31,9 @@ assert.ok(app.includes('sfârșitul nu poate preceda începutul'), 'Deducerile i
 assert.ok(deps.includes("tesseract.js@7.0.0"), 'Tesseract trebuie fixat la o versiune exactă');
 assert.ok(deps.includes('createWorker'), 'OCR trebuie să reutilizeze un worker Tesseract');
 assert.ok(deps.includes('terminateOcr'), 'Worker-ul OCR trebuie eliberat la reset/ieșire');
+assert.ok(deps.includes('revokeConfirmation'), 'Editarea datelor trebuie să revoce confirmarea umană');
+assert.ok(deps.includes('Textul extras a fost modificat'), 'Modificarea textului trebuie să invalideze analiza anterioară');
+assert.ok(deps.includes('dată invalidă. Folosește formatul'), 'Datele manuale invalide trebuie blocate înainte de calcul');
 assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(html), 'AI nu trebuie să conțină script inline');
 
 const context = { console, Date, globalThis:null };
@@ -57,4 +60,4 @@ assert.deepEqual(JSON.parse(JSON.stringify(conflicting.finalSentence)), { years:
 assert.equal(conflicting.article, '', 'Articolele contradictorii nu trebuie auto-selectate');
 assert.ok(conflicting.warnings.some(w => w.includes('CONFLICT')));
 
-console.log('AI Documente ALPHA: lazy-load, validare umană, conflicte și reutilizarea motoarelor verificate.');
+console.log('AI Documente ALPHA: lazy-load, validare umană, conflicte, stare stale și reutilizarea motoarelor verificate.');
