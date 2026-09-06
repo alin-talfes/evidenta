@@ -11,7 +11,7 @@ const LEGAL_TERMS = [
 ];
 
 function normalizeDateLikeGlyphs(text){
-  return String(text || '').replace(/\b[0-3OQIl|]{1,2}[.\/-][0-1OQIl|]{1,2}[.\/-][12OQIl|][0-9OQIl|]{3}\b/g, token => token
+  return String(text || '').replace(/\b[0-3OQIl|][0-9OQIl|]?[.\/-][0-1OQIl|][0-9OQIl|]?[.\/-][12OQIl|][0-9OQIl|]{3}\b/g, token => token
     .replace(/[OQ]/g, '0')
     .replace(/[Il|]/g, '1'));
 }
