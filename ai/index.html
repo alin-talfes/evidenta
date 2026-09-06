@@ -5,12 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' blob: 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://tessdata.projectnaptha.com; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
   <meta name="theme-color" content="#0b1220">
   <title>AI Documente — Evidență PPL</title>
   <meta name="description" content="OCR românesc și analiză asistată a mandatelor și hotărârilor pentru calculul pedepselor și contopirilor.">
   <link rel="stylesheet" href="css/design-system.css?v=4">
   <link rel="stylesheet" href="css/style.css?v=43">
-  <link rel="stylesheet" href="ai/styles.css?v=5">
+  <link rel="stylesheet" href="ai/styles.css?v=6">
   <link rel="stylesheet" href="ai/source-preview.css?v=2">
   <script src="js/theme.js?v=41" defer></script>
   <script src="js/version.js?v=41" defer></script>
@@ -22,33 +23,33 @@
   <main id="ai-main" class="ai-page">
     <div class="ai-alpha-banner" role="note">
       <span class="ai-alpha-badge">ALPHA</span>
-      <p>OCR-ul poate greși. <strong>Verifică datele extrase înainte de calcul.</strong></p>
+      <p><strong>Procesare locală în browser.</strong> PDF-ul nu este încărcat pe un server și nu este salvat de modulul AI. Verifică datele extrase înainte de calcul.</p>
     </div>
 
     <div class="ai-grid">
       <section class="ai-card" aria-labelledby="upload-title">
         <h2 id="upload-title">1. Încarcă documentul</h2>
-        <label class="ai-dropzone" id="dropZone" for="fileInput">
+        <label class="ai-dropzone ai-security-locked" id="dropZone" for="fileInput" aria-disabled="true">
           <strong>PDF / imagini</strong>
           <span>Atinge sau trage fișierele aici</span>
-          <input id="fileInput" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,image/bmp,image/tiff,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" multiple>
+          <input id="fileInput" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,image/bmp,image/tiff,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" multiple disabled>
         </label>
-        <div class="ai-ocr-profile" aria-label="OCR română · ron; tessdata_best; 300 DPI; procesare local-first">
-          <span>OCR română · ron</span><span>300 DPI</span><span>local-first</span>
+        <div class="ai-ocr-profile" aria-label="OCR română · ron; 300 DPI; procesare locală securizată">
+          <span>OCR română · ron</span><span>300 DPI</span><span>local</span>
         </div>
         <div id="fileList" class="ai-file-list" aria-live="polite"></div>
         <div class="ai-actions">
-          <button type="button" class="btn btn-primary" id="analyzeFilesBtn">CITEȘTE ȘI ANALIZEAZĂ</button>
+          <button type="button" class="btn btn-primary" id="analyzeFilesBtn" disabled>CITEȘTE ȘI ANALIZEAZĂ</button>
           <button type="button" class="btn btn-outline" id="clearBtn">RESET</button>
         </div>
-        <div id="statusText" class="ai-status" aria-live="polite"></div>
+        <div id="statusText" class="ai-status" aria-live="polite">Inițializare securizată…</div>
         <div class="ai-progress" aria-hidden="true"><span id="progressBar"></span></div>
         <p class="ai-library-note"><strong>OCR sub 80%:</strong> valorile numerice cer verificare explicită.</p>
       </section>
 
       <section class="ai-card" aria-labelledby="text-title">
         <h2 id="text-title">2. Text extras</h2>
-        <textarea id="rawText" class="ai-textarea" spellcheck="false" placeholder="Textul extras apare aici. Îl poți corecta înainte de reanalizare."></textarea>
+        <textarea id="rawText" class="ai-textarea" spellcheck="false" autocomplete="off" placeholder="Textul extras apare aici. Îl poți corecta înainte de reanalizare."></textarea>
         <div class="ai-actions"><button type="button" class="btn btn-outline" id="reanalyzeTextBtn">REANALIZEAZĂ TEXTUL</button></div>
       </section>
     </div>
@@ -95,8 +96,10 @@
   <script src="ai/core.js?v=2"></script>
   <script src="ai/safety.js?v=2"></script>
   <script src="ai/ocr-ro.js?v=2"></script>
+  <script src="ai/real-doc-deductions.js?v=1"></script>
   <script src="ai/real-doc-hardening.js?v=1"></script>
   <script src="ai/dependencies.js?v=4"></script>
+  <script src="ai/security-runtime.js?v=1"></script>
   <script src="ai/date-mask.js?v=1"></script>
   <script src="ai/deduction-rules.js?v=3"></script>
   <script src="ai/app.js?v=3"></script>
