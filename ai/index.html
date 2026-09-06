@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <base href="../">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>AI Documente — Evidență PPL</title>
+  <meta name="description" content="OCR și analiză asistată a mandatelor și hotărârilor pentru calculul pedepselor și contopirilor.">
+  <link rel="stylesheet" href="css/style.css?v=43">
+  <link rel="stylesheet" href="ai/styles.css?v=1">
+  <script src="js/theme.js?v=41" defer></script>
+  <script src="js/version.js?v=40" defer></script>
+  <link rel="icon" href="favicon-ev-2.svg" sizes="any" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <a href="#ai-main" class="skip-link">Sari la conținutul principal</a>
+  <main id="ai-main" class="ai-page">
+    <div class="ai-alpha-banner" role="note">
+      <span class="ai-alpha-badge">ALPHA</span>
+      <p><strong>AI Documente este în versiune ALPHA.</strong> OCR-ul și extragerea automată pot greși. Verifică obligatoriu datele identificate înainte de calcul. Rezultatele juridice sunt produse de motoarele deterministe existente din Pedepse și Contopiri, nu de OCR.</p>
+    </div>
+
+    <div class="ai-grid">
+      <section class="ai-card" aria-labelledby="upload-title">
+        <h2 id="upload-title">1. Încarcă documentul</h2>
+        <label class="ai-dropzone" id="dropZone" for="fileInput">
+          <strong>PDF sau imagini</strong><br>
+          <span>Selectează unul sau mai multe fișiere ori trage-le aici.</span>
+          <input id="fileInput" type="file" accept="application/pdf,image/*" multiple>
+        </label>
+        <div id="fileList" class="ai-file-list" aria-live="polite"></div>
+        <div class="ai-actions">
+          <button type="button" class="btn btn-gold" id="analyzeFilesBtn">CITEȘTE ȘI ANALIZEAZĂ</button>
+          <button type="button" class="btn btn-outline" id="clearBtn">RESET</button>
+        </div>
+        <div id="statusText" class="ai-status" aria-live="polite"></div>
+        <div class="ai-progress" aria-hidden="true"><span id="progressBar"></span></div>
+        <p class="ai-library-note">PDF-urile cu text sunt citite direct. Pentru paginile scanate și imagini se folosește OCR în browser.</p>
+      </section>
+
+      <section class="ai-card" aria-labelledby="text-title">
+        <h2 id="text-title">2. Text extras</h2>
+        <textarea id="rawText" class="ai-textarea" placeholder="Textul extras din document va apărea aici. Îl poți corecta manual înainte de reanalizare."></textarea>
+        <div class="ai-actions">
+          <button type="button" class="btn btn-outline" id="reanalyzeTextBtn">REANALIZEAZĂ TEXTUL</button>
+        </div>
+        <p class="ai-note">În această versiune ALPHA, analiza semantică este conservatoare: extrage doar informații pentru care există indicii textuale suficiente și lasă restul pentru verificare manuală.</p>
+      </section>
+    </div>
+
+    <section class="ai-card ai-section-gap ai-hidden" id="reviewCard" aria-labelledby="review-title">
+      <h2 id="review-title">3. Verifică datele identificate</h2>
+      <div id="warningList"></div>
+      <div class="ai-review-grid">
+        <div><label for="sex">Sex</label><select id="sex"><option value="M">Masculin</option><option value="F">Feminin</option></select></div>
+        <div><label for="birthDate">Data nașterii</label><input id="birthDate" type="text" placeholder="zz.ll.aaaa"></div>
+        <div><label for="startDate">Data începerii executării</label><input id="startDate" type="text" placeholder="zz.ll.aaaa"></div>
+        <div><label for="receivedDate">Data primirii în penitenciar/centru</label><input id="receivedDate" type="text" placeholder="zz.ll.aaaa"></div>
+        <div class="wide"><label for="article">Articol / configurație IMSweb</label>
+          <select id="article">
+            <option value="">— verificare manuală —</option>
+            <option value="NCP100">NCP art. 100</option><option value="NCP99">NCP art. 99 (viață)</option>
+            <option value="NCP124">NCP art. 124</option><option value="NCP125">NCP art. 125</option>
+            <option value="VCP59">VCP art. 59</option><option value="VCP591">VCP art. 59¹</option>
+            <option value="VCP602">VCP art. 60 alin. (2)</option><option value="VCP603">VCP art. 60 alin. (3)</option>
+            <option value="VCP551">VCP art. 55¹ (viață)</option>
+            <option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option>
+            <option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option>
+            <option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. (4) v</option>
+          </select>
+        </div>
+        <div class="wide ai-inline"><label><input id="lifeSentence" type="checkbox"> Detențiune pe viață</label><span class="ai-pill">documentul nu este trimis de acest modul către un server propriu</span></div>
+        <div class="wide"><label>Pedeapsa rezultantă identificată / verificată</label><div class="ai-duration"><input id="finalYears" type="number" min="0" value="0" aria-label="Ani"><input id="finalMonths" type="number" min="0" value="0" aria-label="Luni"><input id="finalDays" type="number" min="0" value="0" aria-label="Zile"></div></div>
+      </div>
+
+      <div class="ai-section-gap">
+        <div class="ai-inline"><h3>Pedepse componente / resturi</h3><button type="button" class="btn btn-outline btn-sm" id="addPenaltyBtn">+ Adaugă</button></div>
+        <p class="ai-note">Selectează categoria juridică numai după verificarea documentului. „Ignoră” înseamnă că acel cuantum nu intră în calcul.</p>
+        <div class="ai-table-wrap"><table class="ai-table"><thead><tr><th>Ani</th><th>Luni</th><th>Zile</th><th>Categorie</th><th>Sursă</th><th></th></tr></thead><tbody id="penaltyRows"></tbody></table></div>
+      </div>
+
+      <div class="ai-section-gap">
+        <div class="ai-inline"><h3>Perioade deduse</h3><button type="button" class="btn btn-outline btn-sm" id="addDeductionBtn">+ Adaugă</button></div>
+        <div class="ai-table-wrap"><table class="ai-table"><thead><tr><th>Început</th><th>Sfârșit</th><th>Sursă</th><th></th></tr></thead><tbody id="deductionRows"></tbody></table></div>
+      </div>
+
+      <div class="ai-actions">
+        <button type="button" class="btn btn-gold" id="calculateBtn">VERIFICĂ ȘI CALCULEAZĂ</button>
+      </div>
+      <div id="calcError" class="ai-error ai-hidden" role="alert"></div>
+    </section>
+
+    <section class="ai-card ai-section-gap ai-hidden" id="resultCard" aria-labelledby="result-title">
+      <h2 id="result-title">4. Rezultat în modulul AI</h2>
+      <div id="resultContent"></div>
+    </section>
+
+    <section class="ai-card ai-section-gap ai-hidden" id="evidenceCard" aria-labelledby="evidence-title">
+      <h2 id="evidence-title">Surse identificate în document</h2>
+      <div id="evidenceList" class="ai-evidence"></div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="js/utils.js?v=36"></script>
+  <script src="js/rules.js?v=37"></script>
+  <script src="js/contopiri-core.js?v=34"></script>
+  <script src="ai/core.js?v=1"></script>
+  <script src="ai/app.js?v=1"></script>
+</body>
+</html>
