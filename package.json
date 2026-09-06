@@ -2,7 +2,7 @@
   "name": "evidenta-ppl",
   "private": true,
   "scripts": {
-    "test": "TZ=UTC node tests/run-tests.js && node tests/manual-deductions.mjs && node tests/contopiri-litb.mjs && node tests/ai-document.mjs && node tests/ai-ocr-upgrade.mjs && node tests/design-system.mjs && node tests/unified-shell.mjs && node tests/responsive-layout.mjs && node tests/clean-routes.mjs && node tests/css-ghosts.mjs && node tests/css-selector-report.mjs && node tests/ux-upgrades.mjs && node tests/maturity-upgrades.mjs && node instructaj/tests.mjs && node instructaj/tests-transfer.mjs && (cd ofiter && node scripts/audit-css.mjs) && node ofiter/scripts/audit-clean-learning.mjs",
+    "test": "TZ=UTC node tests/run-tests.js && node tests/manual-deductions.mjs && node tests/contopiri-litb.mjs && node tests/ai-document.mjs && node tests/ai-ocr-upgrade.mjs && node tests/ai-source-preview.mjs && node tests/design-system.mjs && node tests/unified-shell.mjs && node tests/responsive-layout.mjs && node tests/clean-routes.mjs && node tests/css-ghosts.mjs && node tests/css-selector-report.mjs && node tests/ux-upgrades.mjs && node tests/maturity-upgrades.mjs && node instructaj/tests.mjs && node instructaj/tests-transfer.mjs && (cd ofiter && node scripts/audit-css.mjs) && node ofiter/scripts/audit-clean-learning.mjs",
     "check:syntax": "find js transfer instructaj ofiter ai -type f \\( -name \"*.js\" -o -name \"*.mjs\" \\) -print0 | xargs -0 -n1 node --check"
   }
 }
