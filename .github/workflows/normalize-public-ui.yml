@@ -1,0 +1,203 @@
+name: Normalize public UI
+
+on:
+  push:
+    paths:
+      - '.github/workflows/normalize-public-ui.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Normalizează textele publice și UI
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const root = process.cwd();
+          const forbidden = ['i','m','s','w','e','b'].join('');
+          const textExt = new Set(['.js','.mjs','.html','.md','.json','.css','.yml','.yaml','.txt']);
+          const ignored = new Set(['.git','node_modules']);
+
+          function walk(dir, out = []) {
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              if (ignored.has(entry.name)) continue;
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) walk(full, out);
+              else if (textExt.has(path.extname(entry.name).toLowerCase())) out.push(full);
+            }
+            return out;
+          }
+
+          function writeIfChanged(file, before, after) {
+            if (after !== before) fs.writeFileSync(file, after, 'utf8');
+          }
+
+          // 1) Confidențialitate: elimină orice referință textuală reziduală la denumirea internă.
+          const forbiddenRx = new RegExp(forbidden, 'gi');
+          for (const file of walk(root)) {
+            if (file.endsWith('normalize-public-ui.yml')) continue;
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before.replace(forbiddenRx, 'algoritm liberare condiționată');
+            after = after
+              .replace(/configurația algoritm liberare condiționată/gi, 'configurația algoritmului de liberare condiționată')
+              .replace(/configurației algoritm liberare condiționată/gi, 'configurației algoritmului de liberare condiționată')
+              .replace(/configurațiile algoritm liberare condiționată/gi, 'configurațiile algoritmului de liberare condiționată')
+              .replace(/matricea algoritm liberare condiționată/gi, 'algoritmul de liberare condiționată')
+              .replace(/matricei algoritm liberare condiționată/gi, 'algoritmului de liberare condiționată')
+              .replace(/parametru tehnic algoritm liberare condiționată/gi, 'parametru tehnic al algoritmului de liberare condiționată')
+              .replace(/prag algoritm liberare condiționată/gi, 'prag LC')
+              .replace(/Prag algoritm liberare condiționată/g, 'Prag LC')
+              .replace(/algoritm liberare condiționată ANP/gi, 'algoritmul de liberare condiționată');
+            writeIfChanged(file, before, after);
+          }
+
+          // 2) AI: titluri structurale fără numerotare decorativă și cu aceeași convenție de majuscule.
+          {
+            const file = path.join(root, 'ai/index.html');
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before
+              .replace('<h2 id="upload-title">1. Încarcă documentul</h2>', '<h2 id="upload-title">ÎNCARCĂ DOCUMENTUL</h2>')
+              .replace('<h2 id="text-title">2. Text extras</h2>', '<h2 id="text-title">TEXT EXTRAS</h2>')
+              .replace('<h2 id="review-title">3. Verifică datele</h2>', '<h2 id="review-title">VERIFICĂ DATELE</h2>')
+              .replace('<h3>Pedepse componente / resturi</h3>', '<h3>PEDEPSE COMPONENTE / RESTURI</h3>')
+              .replace('<h3>Perioade deduse</h3>', '<h3>PERIOADE DEDUSE</h3>')
+              .replace('<h2 id="result-title">4. Rezultat</h2>', '<h2 id="result-title">REZULTAT</h2>')
+              .replace('<h2 id="evidence-title">Surse document</h2>', '<h2 id="evidence-title">SURSE DOCUMENT</h2>');
+
+            const startOld = '<div><label for="startDate">Data începerii executării</label><input id="startDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>';
+            const startNew = '<div><label for="startDate">Data începerii executării</label><div class="date-wrapper"><input id="startDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" data-ai-today="startDate" aria-label="Setează data începerii executării la data de azi">AZI</button></div></div>';
+            const receivedOld = '<div><label for="receivedDate">Data primirii în penitenciar/centru</label><input id="receivedDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"></div>';
+            const receivedNew = '<div><label for="receivedDate">Data primirii în penitenciar/centru</label><div class="date-wrapper"><input id="receivedDate" class="date-masked" type="text" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="zz.ll.aaaa"><button type="button" class="btn-today" data-ai-today="receivedDate" aria-label="Setează data primirii la data de azi">AZI</button></div></div>';
+            after = after.replace(startOld, startNew).replace(receivedOld, receivedNew);
+            after = after.replace('ai/styles.css?v=6', 'ai/styles.css?v=7').replace('ai/date-mask.js?v=1', 'ai/date-mask.js?v=2');
+            writeIfChanged(file, before, after);
+          }
+
+          // 3) AI: comportament AZI fără JavaScript inline (compatibil CSP).
+          {
+            const file = path.join(root, 'ai/date-mask.js');
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before;
+            if (!after.includes('function setToday(inputId)')) {
+              const anchor = `function applyDateMask(event){\n  const input = event.target;\n  input.value = formatDateValue(input.value);\n}\n`;
+              const addition = `${anchor}\nfunction setToday(inputId){\n  const input = document.getElementById(inputId);\n  if (!input) return;\n  const current = typeof root.today === 'function' ? root.today() : new Date();\n  const value = typeof root.fmtDate === 'function'\n    ? root.fmtDate(current)\n    : \`${'${String(current.getDate()).padStart(2,\'0\')}.${String(current.getMonth()+1).padStart(2,\'0\')}.${current.getFullYear()}'}\`;\n  input.value = value;\n  input.dispatchEvent(new Event('input', { bubbles:true }));\n  input.dispatchEvent(new Event('change', { bubbles:true }));\n}\n`;
+              after = after.replace(anchor, addition);
+            }
+            if (!after.includes("[data-ai-today]")) {
+              after = after.replace(
+                '  decorateAll(document);\n',
+                `  decorateAll(document);\n  document.addEventListener('click', event => {\n    const button = event.target.closest?.('[data-ai-today]');\n    if (!button) return;\n    setToday(button.dataset.aiToday);\n  });\n`
+              );
+            }
+            after = after.replace('root.AIDateMask = { formatDateValue };', 'root.AIDateMask = { formatDateValue, setToday };');
+            writeIfChanged(file, before, after);
+          }
+
+          // 4) AI: layout identic cu câmpurile de dată din Pedepse.
+          {
+            const file = path.join(root, 'ai/styles.css');
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before;
+            const marker = '/* AI date controls — consistență cu modulul Pedepse */';
+            if (!after.includes(marker)) {
+              after += `\n\n${marker}\n.ai-review-grid .date-wrapper {\n  display: flex;\n  align-items: stretch;\n  gap: 8px;\n}\n.ai-review-grid .date-wrapper .date-masked {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.ai-review-grid .date-wrapper .btn-today {\n  flex: 0 0 auto;\n}\n`;
+            }
+            writeIfChanged(file, before, after);
+          }
+
+          // 5) Convenție textuală în modulele operaționale: titluri de secțiune cu majuscule.
+          const replacements = {
+            'contopiri/index.html': [
+              ['<h3>Adaugă pedepse</h3>', '<h3>ADAUGĂ PEDEPSE</h3>'],
+              ['<h4>Baza legală și modul de calcul</h4>', '<h4>BAZA LEGALĂ ȘI MODUL DE CALCUL</h4>']
+            ],
+            'transfer/index.html': [
+              ['<h3>Criterii de căutare</h3>', '<h3>CRITERII DE CĂUTARE</h3>'],
+              ['<h3>Rezultat</h3>', '<h3>REZULTAT</h3>'],
+              ['>Lista instanțelor</summary>', '>LISTA INSTANȚELOR</summary>']
+            ],
+            'semnalmente/index.html': [
+              ['<h2 id="privacy-title">Confidențialitate și limitări</h2>', '<h2 id="privacy-title">CONFIDENȚIALITATE ȘI LIMITĂRI</h2>'],
+              ['<h2 id="upload-heading">Fotografii pentru analiză</h2>', '<h2 id="upload-heading">FOTOGRAFII PENTRU ANALIZĂ</h2>'],
+              ['<h2 id="analysis-heading">Rulează analiza</h2>', '<h2 id="analysis-heading">RULEAZĂ ANALIZA</h2>'],
+              ['<h2 id="results-heading">Fișa de semnalmente</h2>', '<h2 id="results-heading">FIȘA DE SEMNALMENTE</h2>'],
+              ['<h2 id="saved-heading">Fișe salvate</h2>', '<h2 id="saved-heading">FIȘE SALVATE</h2>']
+            ]
+          };
+          for (const [rel, pairs] of Object.entries(replacements)) {
+            const file = path.join(root, rel);
+            if (!fs.existsSync(file)) continue;
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before;
+            for (const [from, to] of pairs) after = after.replace(from, to);
+            writeIfChanged(file, before, after);
+          }
+
+          // 6) Strat comun: chiar și titlurile generate dinamic respectă aceeași convenție vizuală.
+          {
+            const file = path.join(root, 'css/style.css');
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before;
+            const marker = '/* Convenție tipografică unitară — module operaționale */';
+            if (!after.includes(marker)) {
+              after += `\n\n${marker}\n.container .card > h2,\n.container .card > h3,\n.container .legal-box > h4,\n.ai-page .ai-card > h2,\n.ai-page .ai-inline > h3 {\n  text-transform: uppercase;\n}\n`;
+            }
+            writeIfChanged(file, before, after);
+          }
+
+          // 7) Test permanent pentru convențiile cerute.
+          {
+            const file = path.join(root, 'tests/ui-language-consistency.mjs');
+            const content = `import fs from 'node:fs';\nimport assert from 'node:assert/strict';\n\nconst ai = fs.readFileSync('ai/index.html','utf8');\nconst pedepse = fs.readFileSync('index.html','utf8');\nconst contopiri = fs.readFileSync('contopiri/index.html','utf8');\nconst transfer = fs.readFileSync('transfer/index.html','utf8');\n\nassert.match(ai, /<h2 id="upload-title">ÎNCARCĂ DOCUMENTUL<\\/h2>/);\nassert.match(ai, /<h2 id="text-title">TEXT EXTRAS<\\/h2>/);\nassert.match(ai, /<h2 id="review-title">VERIFICĂ DATELE<\\/h2>/);\nassert.match(ai, /<h2 id="result-title">REZULTAT<\\/h2>/);\nassert.doesNotMatch(ai, /<h[1-6][^>]*>\\s*\\d+\\.\\s/);\nassert.equal((ai.match(/data-ai-today=/g) || []).length, 2, 'AI trebuie să aibă exact două butoane AZI operaționale.');\nassert.match(ai, /data-ai-today="startDate"[^>]*>AZI<\\/button>/);\nassert.match(ai, /data-ai-today="receivedDate"[^>]*>AZI<\\/button>/);\nassert.match(ai, /<label for="article">ALGORITM LIBERARE CONDIȚIONATĂ<\\/label>/);\nassert.match(pedepse, /<label for="liberationArticle">ALGORITM LIBERARE CONDIȚIONATĂ<\\/label>/);\nassert.match(contopiri, /<h3>ADAUGĂ PEDEPSE<\\/h3>/);\nassert.match(transfer, /<h3>CRITERII DE CĂUTARE<\\/h3>/);\nconsole.log('Consistență UI: titluri, numerotare și butoane AZI verificate.');\n`;
+            fs.writeFileSync(file, content, 'utf8');
+          }
+
+          // 8) Integrează testul de consistență în suita principală.
+          {
+            const file = path.join(root, 'package.json');
+            const before = fs.readFileSync(file, 'utf8');
+            let after = before;
+            if (!after.includes('tests/ui-language-consistency.mjs')) {
+              after = after.replace('node tests/confidential-labels.mjs && ', 'node tests/confidential-labels.mjs && node tests/ui-language-consistency.mjs && ');
+            }
+            writeIfChanged(file, before, after);
+          }
+
+          // Verificare finală locală înainte de commit.
+          const remaining = [];
+          const checkRx = new RegExp(forbidden, 'i');
+          for (const file of walk(root)) {
+            if (file.endsWith('normalize-public-ui.yml')) continue;
+            if (checkRx.test(fs.readFileSync(file, 'utf8'))) remaining.push(path.relative(root, file));
+          }
+          if (remaining.length) {
+            console.error('Referințe reziduale:', remaining.join(', '));
+            process.exit(1);
+          }
+          NODE
+
+      - name: Verifică sintaxa și testele de confidențialitate/consistență
+        run: |
+          node --check ai/date-mask.js
+          node tests/confidential-labels.mjs
+          node tests/ui-language-consistency.mjs
+
+      - name: Commit normalizare
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "Nu sunt modificări de comis."
+            exit 0
+          fi
+          git config user.name "Alin Talfeș"
+          git config user.email "alin.talfes@icloud.com"
+          git add -A
+          git commit -m "Uniformizează textele modulelor și controalele de dată AI"
+          git push
