@@ -106,7 +106,7 @@ async function getOcrWorker(logger){
   return workerPromise;
 }
 
-function normalizedCandidate(result){
+function normalizedCandidate(result, pass){
   const rawText = result?.data?.text || '';
   const text = root.AIRomanianOCR?.normalizeRomanianText
     ? root.AIRomanianOCR.normalizeRomanianText(rawText)
@@ -115,7 +115,7 @@ function normalizedCandidate(result){
   const score = root.AIRomanianOCR?.scoreCandidate
     ? root.AIRomanianOCR.scoreCandidate(text, confidence)
     : confidence;
-  return { text, confidence, score };
+  return { text, confidence, score, pass };
 }
 
 function scaledLogger(logger, offset, span){
@@ -129,7 +129,7 @@ function scaledLogger(logger, offset, span){
   };
 }
 
-async function recognize(source, logger){
+async function recognizeDetailed(source, logger){
   const Tesseract = await ensureTesseract();
   const worker = await getOcrWorker(logger);
   const prepared = root.AIRomanianOCR?.preprocessSource
@@ -141,21 +141,26 @@ async function recognize(source, logger){
 
   await configureWorker(worker, Tesseract, autoMode);
   currentLogger = scaledLogger(logger, 0, 0.76);
-  const first = normalizedCandidate(await worker.recognize(prepared));
+  const first = normalizedCandidate(await worker.recognize(prepared, { rotateAuto: true }), 'auto');
 
   const retry = first.confidence < LOW_CONFIDENCE_THRESHOLD || first.text.length < 120 || first.score < 68;
   if (!retry) {
     currentLogger = typeof logger === 'function' ? logger : null;
-    return first.text;
+    return { ...first, retried:false };
   }
 
   await configureWorker(worker, Tesseract, blockMode);
   currentLogger = scaledLogger(logger, 0.76, 0.24);
-  const second = normalizedCandidate(await worker.recognize(prepared));
+  const second = normalizedCandidate(await worker.recognize(prepared, { rotateAuto: true }), 'single-block');
   await configureWorker(worker, Tesseract, autoMode);
   currentLogger = typeof logger === 'function' ? logger : null;
 
-  return second.score > first.score ? second.text : first.text;
+  const best = second.score > first.score ? second : first;
+  return { ...best, retried:true };
+}
+
+async function recognize(source, logger){
+  return (await recognizeDetailed(source, logger)).text;
 }
 
 async function terminateOcr(){
@@ -242,6 +247,7 @@ root.AIDocumentDependencies = {
   ensurePdf,
   ensureTesseract,
   recognize,
+  recognizeDetailed,
   terminateOcr,
   revokeConfirmation
 };
