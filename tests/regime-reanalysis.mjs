@@ -12,7 +12,7 @@ const calc=R.calculateArticle53({referenceDate:ref,years:5,months:0,days:0,deduc
 assert.equal(calc.totalDays,1826,'Durata calendaristică de 5 ani de la 01.01.2026 trebuie să includă anul bisect 2028');
 assert.equal(calc.fifth,365,'1/5 se ia din pedeapsa cea mai mare');
 assert.equal(calc.date.getFullYear(),2026); assert.equal(calc.date.getMonth(),11); assert.equal(calc.date.getDate(),21,'Cele 10 zile deduse trebuie să deplaseze data de 1/5');
-assert.throws(()=>R.calculateArticle53({referenceDate:ref,years:0,months:0,days:0,deductedDays:0}),/pedeapsei celei mai mari/);
+assert.throws(()=>R.calculateArticle53({referenceDate:ref,years:0,months:0,days:0,deductedDays:0}),/pedepsei celei mai mari/);
 assert.throws(()=>R.calculateArticle53({referenceDate:ref,years:1,months:0,days:0,deductedDays:9999}),/depășesc/);
 const source=fs.readFileSync('js/regime-reanalysis.js','utf8');
 assert.ok(source.includes('regimeMultiple'),'UI-ul trebuie să aibă opțiunea pentru mai multe pedepse');
