@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.4 — 2026-09-07
+
+Patch de benchmark pentru un MEPI simplu cu ștampilă de intrare și rubrică de deduceri necompletată.
+
+### AI Documente
+- Recunoaște formula explicită `urmând ca acesta să execute ...` ca sursă pentru pedeapsa finală, cu protecție OCR sub 80% și conflict fail-closed.
+- Recunoaște ștampile de intrare de tip `Intrare Nr. ... / zz.ll.aaaa` și `Ziua ... luna ... aaaa`; data este folosită numai ca dată a primirii în penitenciar/centru.
+- Data primirii nu este copiată și nu este presupusă ca dată a începerii executării.
+- O rubrică de deduceri de tip `de la --- până la ---` este tratată explicit ca necompletată și nu generează nicio perioadă dedusă.
+- Date calendaristice aflate ulterior în text nu pot fi absorbite accidental în rubrica de deduceri goală.
+- Conflictele între o dată textuală de primire și ștampila de intrare rămân fail-closed.
+- Fixture-ul de benchmark este complet sintetic și nu conține identificatori sau date personale din sursa reală.
+
 ## 1.0.3 — 2026-09-07
 
 Patch de consistență Pedepse/AI și hardening al contopirilor.
