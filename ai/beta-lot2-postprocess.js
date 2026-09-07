@@ -27,6 +27,21 @@ function preventiveRows(text){
   }
   return out;
 }
+function combinedToDateRows(text,documentDate){
+  const out=[];
+  if(!documentDate) return out;
+  const rx=new RegExp(`(?:măsurilor\\s+preventive\\s+privative\\s+de\\s+libertate|reținere\\s*,\\s*arest\\s+preventiv[^.;\\n]{0,80}?arest\\s+la\\s+domiciliu)[^.;\\n]{0,260}?(?:începând\\s+cu\\s+data\\s+de|de\\s+la)\\s*(${DATE_SRC})\\s+la\\s+zi(?:\\s*[—–-]\\s*(${DATE_SRC}))?`,'gi');
+  let m; while((m=rx.exec(text))){
+    const a=parseDate(m[1]); if(!a) continue;
+    const explicit=m[2]?parseDate(m[2]):null;
+    const mismatch=explicit&&explicit.iso!==documentDate;
+    const source=`Perioadă dedusă — ${sourceAt(text,m.index,m[0])} · „la zi” ancorat la data mandatului ${documentDate}${mismatch?`; data OCR ${explicit.iso} nu a fost folosită`:''}`;
+    const row={start:a.iso,end:documentDate,type:'generic',confidence:'mediu',source,reviewRequired:true};
+    const c=ocrConfidence(source); if(Number.isFinite(c)) row.ocrConfidence=c;
+    out.push(row);
+  }
+  return out;
+}
 function install(){
   if(!root.AIDocumentSafety||root.AIDocumentSafety.__betaLot2Postprocess) return;
   const base=root.AIDocumentSafety.analyze;
@@ -34,7 +49,7 @@ function install(){
     const analysis=base(rawText);
     if(analysis.multiplePrimaryDocuments) return analysis;
     const text=primaryScope(rawText);
-    const extra=preventiveRows(text);
+    const extra=[...preventiveRows(text),...combinedToDateRows(text,analysis.documentDate||'')];
     if(extra.length){
       analysis.deductions=unique([...(analysis.deductions||[]),...extra]);
       analysis.numericReviewRequired=true;
@@ -45,5 +60,5 @@ function install(){
   root.AIDocumentSafety.__betaLot2Postprocess=true;
 }
 install();
-root.AIBetaLot2Postprocess={preventiveRows,primaryScope};
+root.AIBetaLot2Postprocess={preventiveRows,combinedToDateRows,primaryScope};
 })(typeof window!=='undefined'?window:globalThis);
