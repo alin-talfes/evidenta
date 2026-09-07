@@ -10,12 +10,70 @@
   --ev-grid-gap: 14px;
 }
 
+/* Redesign instituțional 2026 — ierarhie clară, suprafețe calme, accent auriu. */
+body.ev-unified :is(.card, .panel, .detail, .ai-card, .basic-card, .method-card, .learning-module-card) {
+  border-color: var(--ev-border) !important;
+  border-radius: var(--ev-radius-lg) !important;
+}
+
+body.ev-unified :is(.card, .panel, .ai-card) {
+  position: relative;
+  overflow: clip;
+}
+
+body.ev-unified :is(.card, .panel, .ai-card)::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--ev-brand-gold), var(--ev-brand-blue));
+  opacity: .9;
+}
+
+body.ev-unified :is(h1, h2, h3, h4) {
+  color: var(--ev-text);
+  letter-spacing: -.018em;
+}
+
+body.ev-unified :is(.card, .panel, .ai-card) > :is(h2, h3):first-child {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ev-border);
+}
+
+body.ev-unified :is(button, .btn, .nav-item, .filter, .section-hub-card) {
+  min-height: 44px;
+  border-radius: 12px !important;
+}
+
+body.ev-unified :is(input, select, textarea) {
+  border-radius: 12px !important;
+}
+
+body.ev-unified :is(input, select, textarea):hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--ev-accent) 45%, var(--ev-border-strong));
+}
+
+body.ev-unified :is(.result-box, .summary-card, .result-item, .metric-card) {
+  border-color: var(--ev-border) !important;
+  background: color-mix(in srgb, var(--ev-surface) 92%, var(--ev-brand-blue) 8%) !important;
+}
+
+@media (max-width: 680px) {
+  body.ev-unified :is(.card, .panel, .ai-card) {
+    border-radius: 16px !important;
+  }
+
+  .ev-shell__module {
+    min-height: 70px;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   html:not([data-theme]) { background: #f3f6fa; }
 }
 
 @media (prefers-color-scheme: dark) {
-  html:not([data-theme]) { background: #0b1220; }
+  html:not([data-theme]) { background: #041633; }
 }
 
 /* Stabilizare structurală: toate regulile sunt disponibile înainte de primul paint. */

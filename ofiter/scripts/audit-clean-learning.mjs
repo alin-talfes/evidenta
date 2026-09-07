@@ -29,7 +29,7 @@ for (const id of forbiddenDashboardIds) {
 }
 
 if (!html.includes('href="clean-learning.css"')) throw new Error("Lipsește stratul CSS pentru interfața simplificată.");
-for (const asset of ['styles.css?v=2', 'data-core.js?v=2', 'bootstrap.js?v=3']) {
+for (const asset of ['styles.css?v=3', 'data-core.js?v=2', 'bootstrap.js?v=3']) {
   if (!html.includes(asset)) throw new Error(`Resursa critică nu are versiune pentru invalidarea cache-ului: ${asset}`);
 }
 const moduleViews = ["quiz", "synthesis", "calculations", "mistakes", "exam", "legislation", "official", "interview"];
@@ -47,7 +47,7 @@ for (const asset of ["clean-learning.css", "bootstrap.js", "access-gate.js", "ge
 
 const sw = read("sw.js");
 if (!sw.includes('fetch(request,{cache:"no-store"})')) throw new Error("Navigarea trebuie să folosească rețeaua înaintea cache-ului, pentru a evita dashboarduri vechi.");
-if (!sw.includes('evidenta-ofiter-v112')) throw new Error("Cache-ul principal Ofițer nu a fost invalidat.");
+if (!sw.includes('evidenta-ofiter-v114')) throw new Error("Cache-ul principal Ofițer nu a fost invalidat.");
 if (!sw.includes('evidenta-ofiter-generated-v15')) throw new Error("Cache-ul dataseturilor nu a fost invalidat.");
 if (!sw.includes('./bootstrap.js?v=4')) throw new Error("Service worker-ul trebuie să precache-uiască bootstrap-ul nou.");
 if (!sw.includes('bootstrap.js?v=4')) throw new Error("Navigarea nu forțează bootstrap-ul nou.");

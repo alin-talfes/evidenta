@@ -1,18 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EV">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="E">
   <defs>
     <linearGradient id="bg" x1="72" y1="56" x2="440" y2="456" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#182844"/>
-      <stop offset="1" stop-color="#0b1220"/>
+      <stop stop-color="#15589b"/>
+      <stop offset="1" stop-color="#031b48"/>
     </linearGradient>
     <linearGradient id="ring" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4f8cff"/>
-      <stop offset="1" stop-color="#2dd4bf"/>
+      <stop stop-color="#ffcc05"/>
+      <stop offset="1" stop-color="#e8b800"/>
     </linearGradient>
   </defs>
   <rect x="28" y="28" width="456" height="456" rx="112" fill="url(#bg)"/>
   <rect x="49" y="49" width="414" height="414" rx="93" fill="none" stroke="url(#ring)" stroke-width="14"/>
-  <g fill="#f4f7fb" aria-hidden="true" transform="translate(-48 0)">
-    <path d="M126 150h132v44h-82v40h72v42h-72v42h84v44H126V150Z"/>
-    <path d="M270 150h52l54 148 54-148h52l-81 212h-50L270 150Z"/>
-  </g>
+  <path fill="#ffffff" aria-hidden="true" d="M156 126h208v54H222v49h122v54H222v49h146v54H156V126Z"/>
 </svg>
