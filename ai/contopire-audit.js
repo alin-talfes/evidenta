@@ -126,31 +126,60 @@ function auditText(text){
   return audits;
 }
 
+function validateSelectedAgainstFinal(analysis){
+  const final=analysis.finalSentence;
+  if(!final||!toDays(final)) return;
+  const selected=(analysis.penalties||[]).filter(p=>p.group&&p.group!=='ignore');
+  if(!selected.length) return;
+  const groups={concurs:[],recidiva:[],revocare:[],litb:[]};
+  for(const p of selected){
+    if(!groups[p.group]) return;
+    const totalDays=toDays(p);
+    if(!(totalDays>0)) return;
+    groups[p.group].push({...p,totalDays});
+  }
+  let calc;
+  try { calc=root.ContopiriCore.calculate(groups); } catch(_){ return; }
+  if(sameDays(calc.finalDuration,final)) return;
+  for(const p of selected){
+    p.suggestedGroup=p.group;
+    p.group='ignore';
+    p.reviewRequired=true;
+    p.confidence='scăzut';
+  }
+  analysis.arithmeticConflict=true;
+  analysis.numericReviewRequired=true;
+  addWarning(analysis,`CONFLICT ARITMETIC: componentele detectate automat ar produce ${label(calc.finalDuration)}, dar documentul indică ${label(final)}. Componentele au fost trecute pe „Ignoră” până la verificare.`);
+}
+
 function apply(analysis,text){
   const audits=auditText(text);
-  if(!audits.length) return analysis;
-  analysis.contopireAudits=audits.map(a=>({
-    components:a.components.map(x=>({years:x.years,months:x.months,days:x.days})),
-    expectedContest:a.expectedContest,
-    expectedFinal:a.expectedFinal,
-    mismatches:[...a.mismatches]
-  }));
-  const problems=audits.filter(a=>a.mismatches.length);
-  if(problems.length){
-    analysis.arithmeticConflict=true;
-    analysis.numericReviewRequired=true;
-    for(const p of analysis.penalties||[]){ if(p.group==='concurs'){ p.reviewRequired=true; if(p.confidence==='ridicat') p.confidence='mediu'; } }
-    for(const audit of problems){
-      addWarning(analysis,`NECESITĂ VERIFICARE NUMERICĂ — CONFLICT ARITMETIC CONTOPIRE: ${audit.mismatches.join('; ')}. Verifică hotărârea/mandatul înainte de calcul; modulul nu corectează automat pedeapsa dispusă.`);
+  if(audits.length){
+    analysis.contopireAudits=audits.map(a=>({
+      components:a.components.map(x=>({years:x.years,months:x.months,days:x.days})),
+      expectedContest:a.expectedContest,
+      expectedFinal:a.expectedFinal,
+      mismatches:[...a.mismatches]
+    }));
+    const problems=audits.filter(a=>a.mismatches.length);
+    if(problems.length){
+      analysis.arithmeticConflict=true;
+      analysis.numericReviewRequired=true;
+      for(const p of analysis.penalties||[]){ if(p.group==='concurs'){ p.reviewRequired=true; if(p.confidence==='ridicat') p.confidence='mediu'; } }
+      for(const audit of problems){
+        addWarning(analysis,`NECESITĂ VERIFICARE NUMERICĂ — CONFLICT ARITMETIC CONTOPIRE: ${audit.mismatches.join('; ')}. Verifică hotărârea/mandatul înainte de calcul; modulul nu corectează automat pedeapsa dispusă.`);
+      }
+    } else {
+      for(const audit of audits){
+        const components=audit.components.map(label).join(' + ');
+        const value=audit.addition
+          ? `${components} → concurs ${label(audit.expectedContest)}; + ${label(audit.addition)} → ${label(audit.expectedFinal)}`
+          : `${components} → ${label(audit.expectedContest)}`;
+        addEvidence(analysis,'Contopire verificată aritmetic',value,audit.source);
+      }
     }
   } else {
-    for(const audit of audits){
-      const components=audit.components.map(label).join(' + ');
-      const value=audit.addition
-        ? `${components} → concurs ${label(audit.expectedContest)}; + ${label(audit.addition)} → ${label(audit.expectedFinal)}`
-        : `${components} → ${label(audit.expectedContest)}`;
-      addEvidence(analysis,'Contopire verificată aritmetic',value,audit.source);
-    }
+    validateSelectedAgainstFinal(analysis);
   }
   return analysis;
 }
@@ -167,5 +196,5 @@ function install(){
 }
 
 install();
-root.AIContopireAudit={parseDurations,auditText,apply};
+root.AIContopireAudit={parseDurations,auditText,validateSelectedAgainstFinal,apply};
 })(typeof window!=='undefined'?window:globalThis);
