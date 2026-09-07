@@ -66,9 +66,19 @@ function init(){
   }).observe(document.body, { childList:true, subtree:true });
 }
 
+function loadResultParity(){
+  const load = src => new Promise((resolve,reject)=>{
+    if ([...document.scripts].some(s=>s.src&&s.src.endsWith(src))) return resolve();
+    const script=document.createElement('script'); script.src=src; script.onload=resolve; script.onerror=reject; document.head.appendChild(script);
+  });
+  setTimeout(()=>{ load('js/quarantine-rules.js').then(()=>load('ai/result-pedepse.js')).catch(()=>{}); },0);
+}
+
 root.AIDateMask = { formatDateValue, setToday };
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
-  else init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once:true });
+    document.addEventListener('DOMContentLoaded', loadResultParity, { once:true });
+  } else { init(); loadResultParity(); }
 }
 })(typeof window !== 'undefined' ? window : globalThis);
