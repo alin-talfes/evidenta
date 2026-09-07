@@ -2,11 +2,11 @@
   <defs>
     <linearGradient id="bg" x1="72" y1="56" x2="440" y2="456" gradientUnits="userSpaceOnUse">
       <stop stop-color="#182844"/>
-      <stop offset="1" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#031b48"/>
     </linearGradient>
     <linearGradient id="ring" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4f8cff"/>
-      <stop offset="1" stop-color="#2dd4bf"/>
+      <stop stop-color="#ffcc05"/>
+      <stop offset="1" stop-color="#e8b800"/>
     </linearGradient>
   </defs>
   <rect x="28" y="28" width="456" height="456" rx="112" fill="url(#bg)"/>

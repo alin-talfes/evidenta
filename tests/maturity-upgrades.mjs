@@ -15,7 +15,7 @@ const version = read('js/version.js');
 
 for (const wrapper of ['css/style.css', 'instructaj/styles.css', 'semnalmente/style.css', 'ofiter/styles.css']) {
   const source = read(wrapper);
-  assert.ok(source.includes('final-layer.css?v=1'), `${wrapper} trebuie să încarce stratul final consolidat`);
+  assert.ok(source.includes('final-layer.css?v=2'), `${wrapper} trebuie să încarce stratul final consolidat`);
   assert.ok(!/@import\s+url\([^)]*consistency\.css/i.test(source), `${wrapper} nu trebuie să mai încarce consistency.css activ`);
   assert.ok(!/@import\s+url\([^)]*hotfix\.css/i.test(source), `${wrapper} nu trebuie să mai încarce hotfix.css activ`);
   assert.ok(!/@import\s+url\([^)]*ux-upgrades\.css/i.test(source), `${wrapper} nu trebuie să mai încarce ux-upgrades.css activ`);

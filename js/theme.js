@@ -46,7 +46,7 @@
             meta.name = 'theme-color';
             document.head.appendChild(meta);
         }
-        meta.content = theme === 'light' ? '#f8fafc' : '#0b1220';
+        meta.content = theme === 'light' ? '#eef4fb' : '#031b48';
     }
 
     function updateThemeButtons(theme) {

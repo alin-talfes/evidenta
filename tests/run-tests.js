@@ -37,8 +37,8 @@ const css=fs.readFileSync('css/style.css','utf8');
 const designCss=fs.readFileSync('css/design-system.css','utf8');
 assert(!/fonts\.googleapis\.com/.test(css+designCss),'external font import');
 assert(!/UNIVERSAL COMPONENT NORMALIZATION/.test(css+designCss),'legacy normalization layer remains');
-assert(designCss.includes('--ev-bg: #0b1220;'),'dark palette missing');
-assert(designCss.includes('--ev-accent: #4f8cff;'),'accent palette missing');
+assert(designCss.includes('--ev-bg: #041633;'),'dark palette missing');
+assert(designCss.includes('--ev-brand-gold: #ffcc05;'),'institutional accent palette missing');
 assert(designCss.includes('body.light'),'light theme missing');
 assert(!/#59e1c2|#ff8b99|#c7a8ff|#98600b|#b33248/i.test(css+designCss),'legacy hard-coded palette remains');
 
@@ -87,13 +87,13 @@ let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDay
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 
 const indexSource=fs.readFileSync('index.html','utf8');
-assert(/style\.css\?v=43/.test(indexSource),'index.html stale css cache version');
+assert(/style\.css\?v=44/.test(indexSource),'index.html stale css cache version');
 assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
 assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 algoritm liberare condiționată options missing');
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
 assert(indexSource.includes('js/rules.js?v=37') && indexSource.includes('js/app.js?v=37'),'Pedepse cache version not bumped');
 for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
-  assert(/style\.css\?v=42/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
+  assert(/style\.css\?v=44/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
 }
 
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
@@ -118,7 +118,7 @@ const transferRulesPage=fs.readFileSync('transfer/rules-page.js','utf8');
 assert(!transferApp.includes('versionDisplay'),'Transfer app must use centralized version.js only');
 assert(!transferRulesPage.includes('versionDisplay'),'Transfer rules page must use centralized version.js only');
 assert(transferApp.includes('Potrivire prioritară după criteriile tehnice'));
-assert(themeSource.includes("'#0b1220'"),'theme-color must match palette');
+assert(themeSource.includes("'#031b48'"),'theme-color must match palette');
 assert(fs.readFileSync('js/export.js','utf8').includes('DATE INTRODUSE'));
 assert(fs.readFileSync('js/app.js','utf8').includes('Reanalizare 6 ani și 6 luni'));
 assert(fs.readFileSync('js/app.js','utf8').includes('ALTE DATE ȘI EXPLICAȚII LC'));

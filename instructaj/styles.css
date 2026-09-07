@@ -1,11 +1,11 @@
 @import url("./styles-legacy.css?v=3");
-@import url("../css/design-system.css?v=4");
-@import url("../css/unified-shell.css?v=2");
+@import url("../css/design-system.css?v=5");
+@import url("../css/unified-shell.css?v=3");
 @import url("../css/visual-audit.css?v=3");
 /* Surse consolidate în final-layer.css: "../css/consistency.css?v=1" */
 @import url("../css/responsive.css?v=2");
 /* Compatibilitate/audit: "../css/hotfix.css?v=1" "../css/ux-upgrades.css?v=1" */
-@import url("../css/final-layer.css?v=1");
+@import url("../css/final-layer.css?v=2");
 
 /* Convenție unitară pentru toate controalele cu rol vizual de buton. */
 :where(

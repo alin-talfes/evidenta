@@ -30,8 +30,8 @@ body > .app-shell .suite-links {
   z-index: 80;
   width: 100%;
   color: var(--ev-text);
-  background: color-mix(in srgb, var(--ev-bg) 92%, transparent);
-  border-bottom: 1px solid var(--ev-border);
+  background: color-mix(in srgb, var(--ev-brand-navy-deep) 94%, transparent);
+  border-bottom: 3px solid var(--ev-brand-gold);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -68,10 +68,10 @@ body > .app-shell .suite-links {
   height: 36px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--ev-border-strong);
-  border-radius: 10px;
-  background: var(--ev-accent-soft);
-  color: var(--ev-accent-strong);
+  border: 2px solid var(--ev-brand-gold);
+  border-radius: 50%;
+  background: var(--ev-brand-navy);
+  color: var(--ev-brand-gold);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: .06em;
@@ -83,7 +83,7 @@ body > .app-shell .suite-links {
 }
 
 .ev-shell__brand-copy strong {
-  color: var(--ev-text);
+  color: var(--ev-brand-white);
   font-size: 14px;
   font-weight: 900;
   letter-spacing: .02em;
@@ -105,7 +105,7 @@ body > .app-shell .suite-links {
   padding: 0 11px;
   border: 1px solid transparent;
   border-radius: 10px;
-  color: var(--ev-text-secondary) !important;
+  color: #dbe9f8 !important;
   background: transparent;
   text-decoration: none;
   white-space: nowrap;
@@ -121,9 +121,9 @@ body > .app-shell .suite-links {
 }
 
 .ev-shell__nav a[aria-current="page"] {
-  color: #fff !important;
-  border-color: var(--ev-accent);
-  background: var(--ev-accent);
+  color: var(--ev-brand-navy-deep) !important;
+  border-color: var(--ev-brand-gold);
+  background: var(--ev-brand-gold);
   box-shadow: 0 5px 14px color-mix(in srgb, var(--ev-accent) 20%, transparent);
 }
 
@@ -166,12 +166,13 @@ body > .app-shell .suite-links {
   gap: 24px;
   padding-top: 18px;
   padding-bottom: 18px;
-  border-top: 1px solid color-mix(in srgb, var(--ev-border) 70%, transparent);
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  background: linear-gradient(90deg, rgba(21, 88, 155, .18), transparent 68%);
 }
 
 .ev-shell__module h1 {
   margin: 0;
-  color: var(--ev-text);
+  color: var(--ev-brand-white);
   font-size: clamp(24px, 3vw, 34px);
   line-height: 1.08;
   letter-spacing: -.025em;
@@ -182,8 +183,9 @@ body > .app-shell .suite-links {
   padding: 6px 10px;
   border: 1px solid var(--ev-border);
   border-radius: 999px;
-  color: var(--ev-muted);
-  background: var(--ev-surface);
+  color: var(--ev-brand-gold);
+  background: rgba(255, 204, 5, .08);
+  border-color: rgba(255, 204, 5, .32);
   font-size: 10px;
   font-weight: 850;
   letter-spacing: .06em;
@@ -301,9 +303,15 @@ textarea,
 .primary,
 .btn-primary,
 .access-submit {
-  color: #fff !important;
+  color: var(--ev-accent-contrast) !important;
   background: var(--ev-accent) !important;
   border-color: var(--ev-accent) !important;
+}
+
+.btn-gold {
+  color: var(--ev-brand-navy-deep) !important;
+  background: var(--ev-brand-gold) !important;
+  border-color: var(--ev-brand-gold-strong) !important;
 }
 
 .btn-outline,

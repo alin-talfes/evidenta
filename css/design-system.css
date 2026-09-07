@@ -4,32 +4,41 @@
  */
 :root {
   color-scheme: dark;
-  --ev-bg: #0b1220;
-  --ev-bg-elevated: #0f1929;
-  --ev-surface: #142033;
-  --ev-surface-2: #1a2940;
-  --ev-surface-3: #21334d;
-  --ev-text: #f4f7fb;
-  --ev-text-secondary: #c7d2e1;
-  --ev-muted: #94a5bb;
-  --ev-accent: #4f8cff;
-  --ev-accent-strong: #7aa7ff;
-  --ev-accent-soft: rgba(79, 140, 255, .13);
-  --ev-secondary: #2dd4bf;
+  /* Paletă inspirată din însemnul Ministerului Justiției / ANP. */
+  --ev-brand-navy: #062765;
+  --ev-brand-navy-deep: #031b48;
+  --ev-brand-blue: #15589b;
+  --ev-brand-blue-bright: #2474bd;
+  --ev-brand-gold: #ffcc05;
+  --ev-brand-gold-strong: #e8b800;
+  --ev-brand-white: #ffffff;
+  --ev-bg: #041633;
+  --ev-bg-elevated: #08224b;
+  --ev-surface: #0b2b59;
+  --ev-surface-2: #103665;
+  --ev-surface-3: #17477d;
+  --ev-text: #f8fbff;
+  --ev-text-secondary: #d7e4f4;
+  --ev-muted: #a9bed8;
+  --ev-accent: var(--ev-brand-gold);
+  --ev-accent-strong: #ffe06a;
+  --ev-accent-soft: rgba(255, 204, 5, .13);
+  --ev-accent-contrast: var(--ev-brand-navy-deep);
+  --ev-secondary: #55a7e8;
   --ev-success: #34d399;
   --ev-success-soft: rgba(52, 211, 153, .12);
   --ev-warning: #fbbf24;
   --ev-warning-soft: rgba(251, 191, 36, .12);
   --ev-danger: #f87171;
   --ev-danger-soft: rgba(248, 113, 113, .12);
-  --ev-border: #293a53;
-  --ev-border-strong: #405674;
-  --ev-input-bg: #0f1b2d;
-  --ev-radius-sm: 8px;
-  --ev-radius-md: 12px;
-  --ev-radius-lg: 16px;
-  --ev-shadow: 0 18px 48px rgba(0, 0, 0, .28);
-  --ev-shadow-soft: 0 8px 24px rgba(0, 0, 0, .18);
+  --ev-border: #234a79;
+  --ev-border-strong: #416b9a;
+  --ev-input-bg: #061e43;
+  --ev-radius-sm: 10px;
+  --ev-radius-md: 14px;
+  --ev-radius-lg: 20px;
+  --ev-shadow: 0 22px 56px rgba(0, 10, 31, .34);
+  --ev-shadow-soft: 0 10px 28px rgba(0, 10, 31, .22);
   --ev-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --ev-control-height: 44px;
 
@@ -54,15 +63,15 @@
   --accent-strong: var(--ev-accent-strong);
   --accent-soft: var(--ev-accent-soft);
   --secondary: var(--ev-secondary);
-  --cyan: var(--ev-accent);
+  --cyan: var(--ev-brand-blue-bright);
   --success: var(--ev-success);
   --success-soft: var(--ev-success-soft);
   --ok: var(--ev-success);
   --ok-soft: var(--ev-success-soft);
   --warning: var(--ev-warning);
   --warning-soft: var(--ev-warning-soft);
-  --gold: var(--ev-warning);
-  --gold-soft: var(--ev-warning-soft);
+  --gold: var(--ev-brand-gold);
+  --gold-soft: rgba(255, 204, 5, .13);
   --danger: var(--ev-danger);
   --error: var(--ev-danger);
   --danger-soft: var(--ev-danger-soft);
@@ -92,26 +101,27 @@ body.light,
 html[data-theme="light"],
 :root[data-theme="light"] {
   color-scheme: light;
-  --ev-bg: #f3f6fa;
-  --ev-bg-elevated: #eaf0f7;
+  --ev-bg: #eef4fb;
+  --ev-bg-elevated: #e2edf9;
   --ev-surface: #ffffff;
-  --ev-surface-2: #f3f6fa;
-  --ev-surface-3: #e8eef6;
-  --ev-text: #172033;
-  --ev-text-secondary: #4f6075;
-  --ev-muted: #6f8094;
-  --ev-accent: #2563eb;
-  --ev-accent-strong: #1d4ed8;
-  --ev-accent-soft: rgba(37, 99, 235, .09);
-  --ev-secondary: #0f766e;
+  --ev-surface-2: #f2f7fc;
+  --ev-surface-3: #e4effa;
+  --ev-text: #071f4d;
+  --ev-text-secondary: #36516f;
+  --ev-muted: #617891;
+  --ev-accent: #0b4b91;
+  --ev-accent-strong: #063a75;
+  --ev-accent-soft: rgba(11, 75, 145, .09);
+  --ev-accent-contrast: #ffffff;
+  --ev-secondary: #1564aa;
   --ev-success: #047857;
   --ev-success-soft: rgba(4, 120, 87, .09);
-  --ev-warning: #9a6700;
-  --ev-warning-soft: rgba(154, 103, 0, .09);
+  --ev-warning: #8b6500;
+  --ev-warning-soft: rgba(255, 204, 5, .15);
   --ev-danger: #c24141;
   --ev-danger-soft: rgba(194, 65, 65, .08);
-  --ev-border: #d5dfeb;
-  --ev-border-strong: #aebed1;
+  --ev-border: #cfdeed;
+  --ev-border-strong: #9fb7d1;
   --ev-input-bg: #ffffff;
   --ev-shadow: 0 16px 38px rgba(31, 48, 72, .12);
   --ev-shadow-soft: 0 6px 18px rgba(31, 48, 72, .08);
@@ -122,14 +132,14 @@ html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
 body {
   color: var(--ev-text);
   background:
-    radial-gradient(circle at 8% -5%, rgba(79, 140, 255, .12), transparent 28rem),
-    radial-gradient(circle at 95% 8%, rgba(45, 212, 191, .05), transparent 24rem),
+    radial-gradient(circle at 8% -5%, rgba(36, 116, 189, .20), transparent 30rem),
+    radial-gradient(circle at 94% 4%, rgba(255, 204, 5, .07), transparent 24rem),
     var(--ev-bg);
   font-family: var(--ev-font);
   line-height: 1.55;
 }
 body.light,
-html[data-theme="light"] body { background: linear-gradient(180deg, #f8fafc 0, var(--ev-bg) 22rem); }
+html[data-theme="light"] body { background: linear-gradient(180deg, #f8fbff 0, var(--ev-bg) 24rem); }
 button, input, select, textarea, table { font: inherit; }
 a { color: var(--ev-accent-strong); }
 
@@ -150,6 +160,12 @@ a { color: var(--ev-accent-strong); }
 :where(.card, .panel, .detail) {
   border-style: solid;
   border-width: 1px;
+}
+
+:where(.card, .panel, .detail)::selection,
+body ::selection {
+  color: var(--ev-brand-navy-deep);
+  background: var(--ev-brand-gold);
 }
 
 :where(.eyebrow, .section-kicker, .panel-label) {
@@ -185,7 +201,7 @@ a { color: var(--ev-accent-strong); }
 }
 
 :where(.app-nav a, .app-nav__link, .suite-nav a, .suite-links a)[aria-current="page"] {
-  color: #fff;
+  color: var(--ev-accent-contrast);
   background: var(--ev-accent);
 }
 
@@ -208,10 +224,17 @@ a { color: var(--ev-accent-strong); }
 }
 
 :where(.btn-primary, .primary, .access-submit) {
-  color: #fff;
+  color: var(--ev-accent-contrast);
   background: var(--ev-accent);
   border-color: var(--ev-accent);
   box-shadow: 0 6px 16px color-mix(in srgb, var(--ev-accent) 22%, transparent);
+}
+
+:where(.btn-gold, .btn-today) {
+  color: var(--ev-brand-navy-deep) !important;
+  background: var(--ev-brand-gold) !important;
+  border-color: var(--ev-brand-gold-strong) !important;
+  box-shadow: 0 7px 18px rgba(255, 204, 5, .18);
 }
 
 :where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout):hover {
