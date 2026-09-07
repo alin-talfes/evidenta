@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.3 — 2026-09-07
+
+Patch de consistență Pedepse/AI și hardening al contopirilor.
+
+### AI Documente
+- Rezultatele sunt afișate pe aceleași secțiuni vizuale ca în modulul Pedepse: detalii mandat/pedeapsă, fracții LC, reanalizare regim și carantină.
+- Reanalizarea **1/5** este calculată și afișată explicit pentru pedepsele determinate, cu aceeași formulă comună ca în Pedepse.
+- Auditul aritmetic al contopirilor verifică independent componentele, pedeapsa cea mai grea, sporul, rezultanta concursului și rezultanta finală; neconcordanțele generează avertizare critică, fără corectarea automată a hotărârii.
+- Parserul de audit păstrează corect zilele din cuantumuri de tip `1 an 6 luni și 20 de zile` și nu confundă `descontopește` cu o nouă operațiune de contopire.
+- Fixture-urile publice folosite pentru benchmark sunt complet sintetice și nu păstrează identificatorii documentelor reale.
+
+### Carantină
+- Regula este centralizată și comună pentru Pedepse și AI.
+- Ziua primirii este **ZIUA 1**.
+- **ZIUA 21** este ultima zi de carantină.
+- Din **ZIUA 22** poate fi stabilit provizoriu regimul.
+
 ## 1.0.2 — 2026-09-06
 
 Patch de benchmark pentru modulul AI Documente.
