@@ -13,7 +13,8 @@
   "theme_color": "#031b48",
   "categories": ["productivity", "utilities"],
   "icons": [
-    {"src": "favicon-ev-2.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+    {"src": "favicon-ev-2.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "favicon-ev-2.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable"}
   ],
   "shortcuts": [
     {"name": "Pedepse", "short_name": "Pedepse", "url": "./"},
