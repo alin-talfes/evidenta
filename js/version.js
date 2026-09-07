@@ -50,6 +50,27 @@
         }
     }
 
+    function ensureCalculationParity() {
+        ensureScript(
+            'script[data-evidenta-quarantine-rules]',
+            new URL('./quarantine-rules.js?v=1', scriptUrl).href,
+            'evidentaQuarantineRules'
+        );
+        if (location.pathname.includes('/ai/')) {
+            ensureScript(
+                'script[data-evidenta-ai-result-parity]',
+                new URL('../ai/result-pedepse.js?v=1', scriptUrl).href,
+                'evidentaAiResultParity'
+            );
+        } else if (document.getElementById('resultsCard') && document.getElementById('prisonReceivedDate')) {
+            ensureScript(
+                'script[data-evidenta-quarantine-ui]',
+                new URL('./quarantine-ui.js?v=1', scriptUrl).href,
+                'evidentaQuarantineUi'
+            );
+        }
+    }
+
     function ensureAiNavigation() {
         const nav = document.querySelector('.ev-shell__nav');
         if (!nav || nav.querySelector('[data-ai-documents-link]')) return;
@@ -105,16 +126,19 @@
     ensureUxUpgrades();
     ensureLegalReleaseGuards();
     ensurePageControllers();
+    ensureCalculationParity();
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             ensureLegalReleaseGuards();
             ensurePageControllers();
+            ensureCalculationParity();
             ensureAiNavigation();
             initFooter();
         }, { once: true });
     } else {
         ensureLegalReleaseGuards();
+        ensureCalculationParity();
         ensureAiNavigation();
         initFooter();
     }
