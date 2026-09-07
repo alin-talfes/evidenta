@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.5 — 2026-09-07
+
+Patch de robustețe pentru selecția documentelor din AI.
+
+### AI Documente
+- Detectează local fișierele încărcate de două ori folosind SHA-256 calculat în browser.
+- Elimină numai duplicatele byte-identice; fișierele diferite cu același nume sau aceeași dimensiune sunt păstrate.
+- Fișierele duplicate sunt ignorate înainte de OCR, pentru a evita dublarea surselor, a textului extras și a câmpurilor juridice.
+- Hash-urile sunt utilizate numai în sesiunea curentă și nu sunt încărcate sau persistate de modulul AI.
+- Benchmark-ul păstrează 15 documente reale unice; fotografia repetată este folosită drept test de consistență/duplicare, nu ca document nou.
+
 ## 1.0.4 — 2026-09-07
 
 Patch de benchmark pentru un MEPI simplu cu ștampilă de intrare și rubrică de deduceri necompletată.
