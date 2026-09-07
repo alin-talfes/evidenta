@@ -6,10 +6,16 @@ function sourceAt(text,index,fragment){ return root.AIDocumentCore?.sourceSnippe
 function ocrConfidence(source){ return root.AIDocumentCore?.ocrConfidenceFromSource?.(source); }
 function unique(rows){ const map=new Map(); for(const r of rows||[]){ if(!r?.start) continue; const key=`${r.start}|${r.end}|${r.type||'generic'}`; if(!map.has(key)) map.set(key,r); } return [...map.values()]; }
 function scope(rawText){ const s=root.AIBetaLot3Hardening?.scopePrimary?.(rawText); return s?.multiple?{text:String(rawText||''),multiple:true}:{text:s?.text||String(rawText||''),multiple:false}; }
+function mandateDate(text){
+  const rx=new RegExp(`(?:MANDAT\\s+DE\\s+EXECUTARE[\\s\\S]{0,220}?\\bNr\\.?[^\\n]{0,90}?\\bdin\\s+|\\bemis\\s+la\\s+)(${DATE_SRC})`,'i');
+  const m=rx.exec(String(text||''));
+  const parsed=m?parseDate(m[1]):null;
+  return parsed?.iso||'';
+}
 function combinedMeasureRows(text,documentDate){
   if(!documentDate) return [];
   const out=[];
-  const rx=new RegExp(`(?:durata\\s+)?(?:măsurilor|masurilor)\\s+preventive\\s+privative\\s+de\\s+libertate[^;\\n]{0,160}?(?:respectiv\\s+)?(?:reținere|retinere)\\s*,?\\s*arest\\s+preventiv\\s*(?:și|si|,)\\s*arest\\s+la\\s+domiciliu[^;\\n]{0,120}?(?:începând\\s+cu\\s+data\\s+de|incepand\\s+cu\\s+data\\s+de|de\\s+la|din\\s+data\\s+de)\\s*(${DATE_SRC})\\s+la\\s+zi(?:\\s*[—–-]\\s*(${DATE_SRC}))?`,'gi');
+  const rx=new RegExp(`(?:durata\\s+)?(?:măsurilor|masurilor)\\s+preventive\\s+privative\\s+de\\s+libertate[^;\\n]{0,360}?(?:începând\\s+cu\\s+data\\s+de|incepand\\s+cu\\s+data\\s+de|de\\s+la|din\\s+data\\s+de)\\s*(${DATE_SRC})\\s+la\\s+zi(?:\\s*[—–-]\\s*(${DATE_SRC}))?`,'gi');
   let m; while((m=rx.exec(text))){
     const a=parseDate(m[1]); if(!a) continue;
     const observed=m[2]?parseDate(m[2]):null;
@@ -28,10 +34,14 @@ function install(){
     const analysis=base(rawText);
     if(analysis.multiplePrimaryDocuments) return analysis;
     const s=scope(rawText); if(s.multiple) return analysis;
-    const extra=combinedMeasureRows(s.text,analysis.documentDate||'');
+    const documentDate=analysis.documentDate||mandateDate(s.text);
+    if(documentDate&&!analysis.documentDate) analysis.documentDate=documentDate;
+    const extra=combinedMeasureRows(s.text,documentDate);
     if(extra.length){
       let rows=[...(analysis.deductions||[])];
-      for(const r of extra){ rows=rows.filter(x=>!(x.start===r.start&&/la\s+zi/i.test(x.source||'')&&x.end!==r.end)); }
+      for(const r of extra){
+        rows=rows.filter(x=>!(x.start===r.start&&(/la\\s+zi/i.test(x.source||'')||x.end!==r.end)));
+      }
       analysis.deductions=unique([...rows,...extra]);
       analysis.numericReviewRequired=true;
       if(!(analysis.warnings||[]).some(w=>String(w).startsWith('DEDUCERI:'))) analysis.warnings.push('DEDUCERI: perioadele interpretate automat trebuie confirmate înainte de calcul.');
@@ -41,5 +51,5 @@ function install(){
   root.AIDocumentSafety.__betaLot3Measures=true;
 }
 install();
-root.AIBetaLot3Measures={combinedMeasureRows};
+root.AIBetaLot3Measures={combinedMeasureRows,mandateDate};
 })(typeof window!=='undefined'?window:globalThis);
