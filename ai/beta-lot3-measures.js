@@ -5,6 +5,12 @@ function parseDate(v){ return root.AIDocumentCore?.parseDateToken?.(String(v||''
 function sourceAt(text,index,fragment){ return root.AIDocumentCore?.sourceSnippet?.(text,index,fragment) || String(fragment||'').trim(); }
 function ocrConfidence(source){ return root.AIDocumentCore?.ocrConfidenceFromSource?.(source); }
 function unique(rows){ const map=new Map(); for(const r of rows||[]){ if(!r?.start) continue; const key=`${r.start}|${r.end}|${r.type||'generic'}`; if(!map.has(key)) map.set(key,r); } return [...map.values()]; }
+function normalizeGenericTypes(rows){
+  for(const row of rows||[]){
+    if(!row.type) row.type='generic';
+  }
+  return rows||[];
+}
 function scope(rawText){ const s=root.AIBetaLot3Hardening?.scopePrimary?.(rawText); return s?.multiple?{text:String(rawText||''),multiple:true}:{text:s?.text||String(rawText||''),multiple:false}; }
 function mandateDate(text){
   const rx=new RegExp(`(?:MANDAT\\s+DE\\s+EXECUTARE[\\s\\S]{0,220}?\\bNr\\.?[^\\n]{0,90}?\\bdin\\s+|\\bemis\\s+la\\s+)(${DATE_SRC})`,'i');
@@ -33,6 +39,7 @@ function install(){
   root.AIDocumentSafety.analyze=function(rawText){
     const analysis=base(rawText);
     if(analysis.multiplePrimaryDocuments) return analysis;
+    normalizeGenericTypes(analysis.deductions);
     const s=scope(rawText); if(s.multiple) return analysis;
     const documentDate=analysis.documentDate||mandateDate(s.text);
     if(documentDate&&!analysis.documentDate) analysis.documentDate=documentDate;
@@ -42,7 +49,7 @@ function install(){
       for(const r of extra){
         rows=rows.filter(x=>!(x.start===r.start&&(/la\\s+zi/i.test(x.source||'')||x.end!==r.end)));
       }
-      analysis.deductions=unique([...rows,...extra]);
+      analysis.deductions=normalizeGenericTypes(unique([...rows,...extra]));
       analysis.numericReviewRequired=true;
       if(!(analysis.warnings||[]).some(w=>String(w).startsWith('DEDUCERI:'))) analysis.warnings.push('DEDUCERI: perioadele interpretate automat trebuie confirmate înainte de calcul.');
     }
@@ -51,5 +58,5 @@ function install(){
   root.AIDocumentSafety.__betaLot3Measures=true;
 }
 install();
-root.AIBetaLot3Measures={combinedMeasureRows,mandateDate};
+root.AIBetaLot3Measures={combinedMeasureRows,mandateDate,normalizeGenericTypes};
 })(typeof window!=='undefined'?window:globalThis);
