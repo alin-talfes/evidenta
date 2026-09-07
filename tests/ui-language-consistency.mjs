@@ -26,8 +26,8 @@ assert.match(contopiri, /<h3>ADAUGĂ PEDEPSE<\/h3>/);
 assert.match(transfer, /<h3>CRITERII DE CĂUTARE<\/h3>/);
 
 for (const [file, css] of buttonStyles) {
-  assert.match(css, /:where\(button, input\[type="button"\], input\[type="submit"\], input\[type="reset"\]\)/, `${file}: lipsește selectorul comun pentru butoane.`);
+  assert.match(css, /:where\([\s\S]*?button,[\s\S]*?a\.btn,[\s\S]*?\.btn,[\s\S]*?\.toggle-btn,[\s\S]*?\.access-submit[\s\S]*?\)\s*\{/, `${file}: lipsește selectorul comun extins pentru controalele tip buton.`);
   assert.match(css, /text-transform:\s*uppercase\s*!important;/, `${file}: butoanele nu sunt forțate la majuscule.`);
 }
 
-console.log('Consistență UI: titluri, numerotare, butoane AZI și majusculele butoanelor verificate.');
+console.log('Consistență UI: titluri, numerotare, butoane AZI și toate controalele tip buton sunt verificate cu majuscule.');
