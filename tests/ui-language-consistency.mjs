@@ -5,6 +5,12 @@ const ai = fs.readFileSync('ai/index.html','utf8');
 const pedepse = fs.readFileSync('index.html','utf8');
 const contopiri = fs.readFileSync('contopiri/index.html','utf8');
 const transfer = fs.readFileSync('transfer/index.html','utf8');
+const buttonStyles = [
+  'css/style.css',
+  'instructaj/styles.css',
+  'ofiter/styles.css',
+  'semnalmente/style.css'
+].map(file => [file, fs.readFileSync(file,'utf8')]);
 
 assert.match(ai, /<h2 id="upload-title">ÎNCARCĂ DOCUMENTUL<\/h2>/);
 assert.match(ai, /<h2 id="text-title">TEXT EXTRAS<\/h2>/);
@@ -18,4 +24,10 @@ assert.match(ai, /<label for="article">ALGORITM LIBERARE CONDIȚIONATĂ<\/label>
 assert.match(pedepse, /<label for="liberationArticle">ALGORITM LIBERARE CONDIȚIONATĂ<\/label>/);
 assert.match(contopiri, /<h3>ADAUGĂ PEDEPSE<\/h3>/);
 assert.match(transfer, /<h3>CRITERII DE CĂUTARE<\/h3>/);
-console.log('Consistență UI: titluri, numerotare și butoane AZI verificate.');
+
+for (const [file, css] of buttonStyles) {
+  assert.match(css, /:where\(button, input\[type="button"\], input\[type="submit"\], input\[type="reset"\]\)/, `${file}: lipsește selectorul comun pentru butoane.`);
+  assert.match(css, /text-transform:\s*uppercase\s*!important;/, `${file}: butoanele nu sunt forțate la majuscule.`);
+}
+
+console.log('Consistență UI: titluri, numerotare, butoane AZI și majusculele butoanelor verificate.');
