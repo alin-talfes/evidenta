@@ -25,7 +25,7 @@ Niciun blocant deschis.
 
 Acest gate **nu blochează versiunea 1.0 a suitei**. Modulul AI rămâne marcat ALPHA până la validarea lui separată.
 
-- [ ] Benchmark pe minimum 20–30 documente reale/anonimizate: PDF text, PDF scanat, fotografii, MEPI, sentințe și decizii.
+- [ ] Benchmark pe minimum 20–30 documente reale/anonimizate: **15 documente evaluate până acum**; PDF text, PDF scanat, fotografii, MEPI, sentințe și decizii.
 - [ ] Criteriu de acceptare: zero valori juridice sau numerice greșite folosite silențios în calcul.
 - [ ] Verificare pe dispozitive reale: Safari/iPhone, Chrome Android și desktop.
 
