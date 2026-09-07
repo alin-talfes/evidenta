@@ -7,6 +7,7 @@ function toDays(d){ return d?root.ContopiriCore?.toDays?.(Number(d.years||0),Num
 function label(d){ return d&&root.ContopiriCore?.formatDuration?root.ContopiriCore.formatDuration(d):`${d?.years||0} ani, ${d?.months||0} luni, ${d?.days||0} zile`; }
 function sameDays(a,b){ const x=toDays(a),y=toDays(b); return Number.isFinite(x)&&Number.isFinite(y)&&x===y; }
 function addWarning(a,msg){ a.warnings=a.warnings||[]; if(msg&&!a.warnings.includes(msg)) a.warnings.push(msg); }
+function removeWarningPrefix(a,prefix){ a.warnings=(a.warnings||[]).filter(w=>!String(w).startsWith(prefix)); }
 function addEvidence(a,labelText,value,source){
   a.evidence=a.evidence||[];
   if(a.evidence.some(x=>x.label===labelText&&x.value===value)) return;
@@ -170,6 +171,8 @@ function apply(analysis,text){
         addWarning(analysis,`NECESITĂ VERIFICARE NUMERICĂ — CONFLICT ARITMETIC CONTOPIRE: ${audit.mismatches.join('; ')}. Verifică hotărârea/mandatul înainte de calcul; modulul nu corectează automat pedeapsa dispusă.`);
       }
     } else {
+      analysis.arithmeticConflict=false;
+      removeWarningPrefix(analysis,'CONFLICT ARITMETIC:');
       for(const audit of audits){
         const components=audit.components.map(label).join(' + ');
         const value=audit.addition
