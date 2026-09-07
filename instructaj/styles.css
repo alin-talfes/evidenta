@@ -7,7 +7,23 @@
 /* Compatibilitate/audit: "../css/hotfix.css?v=1" "../css/ux-upgrades.css?v=1" */
 @import url("../css/final-layer.css?v=1");
 
-/* Convenție unitară pentru toate butoanele, inclusiv cele generate dinamic. */
-:where(button, input[type="button"], input[type="submit"], input[type="reset"]) {
+/* Convenție unitară pentru toate controalele cu rol vizual de buton. */
+:where(
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  a.btn,
+  .btn,
+  .btn-utility,
+  .btn-big,
+  .toggle-btn,
+  .filter,
+  .access-submit,
+  .access-logout,
+  .text-btn,
+  .icon-btn,
+  .back-to-categories
+) {
   text-transform: uppercase !important;
 }
