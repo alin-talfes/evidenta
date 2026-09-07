@@ -2,7 +2,11 @@
 'use strict';
 
 function clean(v){ return String(v||'').replace(/\u00ad/g,'').replace(/\r/g,'').replace(/[ \t]{2,}/g,' ').trim(); }
-function duration(v){ return root.AIDocumentCore?.durationFromString?.(String(v||'')) || null; }
+function duration(v){
+  const parsed=parseDurations(String(v||''));
+  if(parsed.length){ const d=parsed[0]; return {years:d.years,months:d.months,days:d.days}; }
+  return root.AIDocumentCore?.durationFromString?.(String(v||'')) || null;
+}
 function toDays(d){ return d?root.ContopiriCore?.toDays?.(Number(d.years||0),Number(d.months||0),Number(d.days||0)):null; }
 function label(d){ return d&&root.ContopiriCore?.formatDuration?root.ContopiriCore.formatDuration(d):`${d?.years||0} ani, ${d?.months||0} luni, ${d?.days||0} zile`; }
 function sameDays(a,b){ const x=toDays(a),y=toDays(b); return Number.isFinite(x)&&Number.isFinite(y)&&x===y; }
@@ -117,7 +121,7 @@ function auditOne(text,contestIndex){
 
 function auditText(text){
   const value=String(text||''),audits=[];
-  const rx=/contope(?:ște|ste)\b/gi;
+  const rx=/\bcontope(?:ște|ste)\b/gi;
   let m;
   while((m=rx.exec(value))){
     const audit=auditOne(value,m.index);
