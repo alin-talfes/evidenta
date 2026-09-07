@@ -18,7 +18,7 @@ const c=fakeFile('scan-b.jpg',[1,2,3,4,6]);
 const d=fakeFile('alt.pdf',[9,8,7]);
 const result=await ctx.AIFileDedup.dedupeExactFiles([a,b,c,d]);
 assert.equal(result.available,true);
-assert.deepEqual(result.files.map(x=>x.name),['scan-a.jpg','scan-b.jpg','alt.pdf']);
+assert.deepEqual(Array.from(result.files,x=>x.name),['scan-a.jpg','scan-b.jpg','alt.pdf']);
 assert.equal(result.duplicates.length,1);
 assert.equal(result.duplicates[0].file.name,'scan-a-copy.jpg');
 assert.equal(result.duplicates[0].duplicateOf.name,'scan-a.jpg');
