@@ -33,9 +33,9 @@ for (const compatibilityToken of [
   "--surface-strong: var(--ev-surface-2)",
   "--text: var(--ev-text)",
   "--accent: var(--ev-accent)",
-  "--cyan: var(--ev-accent)",
+  "--cyan: var(--ev-brand-blue-bright)",
   "--line: var(--ev-border)",
-  "--gold: var(--ev-warning)",
+  "--gold: var(--ev-brand-gold)",
   "--violet: var(--ev-accent)"
 ]) {
   assert.ok(design.includes(compatibilityToken), `Lipsește aliasul de compatibilitate: ${compatibilityToken}`);
