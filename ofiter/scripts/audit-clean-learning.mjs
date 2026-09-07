@@ -47,7 +47,7 @@ for (const asset of ["clean-learning.css", "bootstrap.js", "access-gate.js", "ge
 
 const sw = read("sw.js");
 if (!sw.includes('fetch(request,{cache:"no-store"})')) throw new Error("Navigarea trebuie să folosească rețeaua înaintea cache-ului, pentru a evita dashboarduri vechi.");
-if (!sw.includes('evidenta-ofiter-v112')) throw new Error("Cache-ul principal Ofițer nu a fost invalidat.");
+if (!sw.includes('evidenta-ofiter-v114')) throw new Error("Cache-ul principal Ofițer nu a fost invalidat.");
 if (!sw.includes('evidenta-ofiter-generated-v15')) throw new Error("Cache-ul dataseturilor nu a fost invalidat.");
 if (!sw.includes('./bootstrap.js?v=4')) throw new Error("Service worker-ul trebuie să precache-uiască bootstrap-ul nou.");
 if (!sw.includes('bootstrap.js?v=4')) throw new Error("Navigarea nu forțează bootstrap-ul nou.");
