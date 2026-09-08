@@ -18,6 +18,7 @@ assert.match(html,/id="fileInput"[^>]*disabled/,'Selecția documentelor trebuie 
 assert.match(html,/id="analyzeFilesBtn"[^>]*disabled/,'Analiza trebuie blocată până la inițializarea securizată');
 assert.ok(html.includes('PDF-ul nu este încărcat pe un server'),'Utilizatorul trebuie informat concis despre procesarea locală');
 assert.ok(html.indexOf('ai/security-runtime.js')<html.indexOf('ai/app.js'),'Runtime-ul de securitate trebuie încărcat înaintea aplicației AI');
+assert.ok(html.includes('ai/dependencies.js?v=5')&&html.includes('ai/security-runtime.js?v=4'),'Versiunile publice trebuie schimbate când runtime-ul OCR/securitate se modifică');
 assert.ok(html.indexOf('ai/real-doc-deductions.js')<html.indexOf('ai/real-doc-hardening.js'),'Extractorul de deduceri reale trebuie activ în runtime înaintea hardening-ului');
 
 assert.ok(security.includes("PDF_VERSION='6.2.108'"),'PDF.js trebuie fixat la versiunea reparată 6.2.108');
