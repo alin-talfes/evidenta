@@ -166,6 +166,24 @@ body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row) > .bt
   }
 }
 
+/* Transfer — cele trei moduri de căutare trebuie să rămână în interiorul cardului pe mobil. */
+body.ev-unified[data-ev-page="transfer"] .toggle-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  max-width: 100%;
+}
+
+body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: 6px;
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
 /* Convenție tipografică unitară — module operaționale */
 .container .card > h2,
 .container .card > h3,
