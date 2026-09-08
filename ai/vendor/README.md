@@ -25,8 +25,8 @@ ai/vendor/
 
 Versiuni țintă:
 - PDF.js 3.11.174
-- Tesseract.js 7.0.0
-- tesseract.js-core 7.0.0
+- Tesseract.js 6.0.1
+- tesseract.js-core 6.0.0 (LSTM baseline; compatibil cu `tessdata_best`)
 - `ron.traineddata.gz` din profilul `4.0.0_best`
 
 Nu se schimbă motorul juridic. Aceste fișiere servesc exclusiv stratul PDF/OCR.

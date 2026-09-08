@@ -38,15 +38,15 @@ assert.ok(security.includes('deps.ensurePdf=securePdf'),'Loaderul PDF trebuie î
 assert.ok(security.includes('deps.recognizeDetailed=secureRecognizeDetailed'),'OCR-ul trebuie rutat prin runtime-ul securizat');
 assert.ok(security.includes('await Promise.all([securePdf(),warmOcr()])'),'PDF/OCR trebuie inițializate înainte ca selecția documentelor să fie activată');
 
-assert.ok(securitySw.includes("CACHE_NAME = 'evidenta-ai-secure-deps-v3'"),'Cache-ul verificat trebuie versionat');
+assert.ok(securitySw.includes("CACHE_NAME = 'evidenta-ai-secure-deps-v4'"),'Cache-ul verificat trebuie versionat');
 assert.ok(securitySw.includes("crypto.subtle.digest('SHA-256'"),'Service Worker-ul trebuie să verifice SHA-256 înainte de cache');
 assert.ok(securitySw.includes('Dependency SHA-256 mismatch'),'Hash mismatch trebuie să blocheze resursa');
 assert.ok(securitySw.includes("'Cross-Origin-Resource-Policy': 'same-origin'"),'Resursele verificate trebuie reexpuse same-origin');
 for(const hash of [
   '9fab0c910bf1484835c5c2aeb68f7eb3dfce7f9eb435a004526c5af86d70890c',
   'bc0d1b88ea0b66196b1d36a58ac243c6d92adfe725624e2a9fdd381bdf8ef434',
-  '000c27d9cd0def655f77b36c72a389c0ab13793aa31cb4d7aab56d09c0afbc7e',
-  '576b7df7e3393e137e51849357c9adb53fe7ac1bb69bfa06cf3d61520f182c6d',
+  '10fff78484067759c43028a02a72d76d0b90eb17302bb23b58a9ec5410bc928b',
+  '38645599043239c0eb6db08a6504a92dcdc292200535f3e9339cd77c4443b842',
   'df2a1d0084f58da0fc6f08831e86fcac28f8995213e081331d06c3b0cab6b596'
 ]) assert.ok(securitySw.includes(hash),`Lipsește hash-ul allowlist ${hash}`);
 

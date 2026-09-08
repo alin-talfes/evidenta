@@ -31,8 +31,8 @@ assert.ok(deps.includes('resolveLangPath'), 'Modelul ron trebuie să permită lo
 assert.ok(deps.includes('resolveTesseractWorker'), 'Worker-ul Tesseract trebuie să permită local/cache-first');
 assert.ok(deps.includes('resolvePdfWorker'), 'Worker-ul PDF.js trebuie să permită local/cache-first');
 assert.ok(deps.includes('dependencyStatus'), 'Starea local/cache a dependențelor trebuie să poată fi auditată');
-assert.ok(deps.includes("tesseract.js-core@7.0.0"), 'Core-ul Tesseract trebuie fixat la 7.0.0');
-assert.ok(deps.includes("tesseract.js@7.0.0"), 'Tesseract.js trebuie să rămână fixat la 7.0.0');
+assert.ok(deps.includes("tesseract.js-core@6.0.0"), 'Core-ul Tesseract trebuie fixat la versiunea compatibilă cu modelul float tessdata_best');
+assert.ok(deps.includes("tesseract.js@6.0.1"), 'Tesseract.js trebuie să rămână fixat la versiunea compatibilă cu tessdata_best');
 assert.ok(deps.includes('4.0.0_best'), 'Modelul românesc best trebuie păstrat');
 assert.ok(vendorReadme.includes('ron.traineddata.gz'), 'Documentația self-host trebuie să indice modelul românesc');
 assert.ok(vendorReadme.includes('tesseract-core-relaxedsimd'), 'Documentația trebuie să includă variantele moderne de core');

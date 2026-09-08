@@ -1,7 +1,7 @@
 /* Evidență AI — secure dependency proxy (scope: /ai/) */
 'use strict';
 
-const CACHE_NAME = 'evidenta-ai-secure-deps-v3';
+const CACHE_NAME = 'evidenta-ai-secure-deps-v4';
 const PREFIX = '/_secure/';
 
 const RESOURCES = {
@@ -18,15 +18,15 @@ const RESOURCES = {
     type: 'text/javascript; charset=utf-8'
   },
   'tesseract/tesseract.min.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.min.js',
-    sha256: '000c27d9cd0def655f77b36c72a389c0ab13793aa31cb4d7aab56d09c0afbc7e',
+    url: 'https://cdn.jsdelivr.net/npm/tesseract.js@6.0.1/dist/tesseract.min.js',
+    sha256: '10fff78484067759c43028a02a72d76d0b90eb17302bb23b58a9ec5410bc928b',
     bytes: 62961,
     type: 'text/javascript; charset=utf-8'
   },
   'tesseract/worker.min.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/worker.min.js',
-    sha256: '576b7df7e3393e137e51849357c9adb53fe7ac1bb69bfa06cf3d61520f182c6d',
-    bytes: 111307,
+    url: 'https://cdn.jsdelivr.net/npm/tesseract.js@6.0.1/dist/worker.min.js',
+    sha256: '38645599043239c0eb6db08a6504a92dcdc292200535f3e9339cd77c4443b842',
+    bytes: 111162,
     type: 'text/javascript; charset=utf-8'
   },
   'tesseract-core/tesseract-core.wasm.js': {
@@ -54,15 +54,15 @@ const RESOURCES = {
     type: 'application/wasm'
   },
   'tesseract-core/tesseract-core-lstm.wasm.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-lstm.wasm.js',
-    sha256: 'eef5f8b2f8e20e150680b20adaec4a60babafee3adbe8a94583c81fee46e8680',
-    bytes: 3896484,
+    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@6.0.0/tesseract-core-lstm.wasm.js',
+    sha256: '775a35df6f2ae100e02609443e6bd5cafcd07983dd6175454ca4a432a7730687',
+    bytes: 3954181,
     type: 'text/javascript; charset=utf-8'
   },
   'tesseract-core/tesseract-core-lstm.wasm': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-lstm.wasm',
-    sha256: '66b17df6e20c5329a17ffa9c202a47eaa3e32500b253d4c7f38e7f2bc01457c3',
-    bytes: 2855361,
+    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@6.0.0/tesseract-core-lstm.wasm',
+    sha256: '220e2e87551edccb85519796a170469f8ab2a8055216789e3b8b1ada18b7bc2b',
+    bytes: 2871085,
     type: 'application/wasm'
   },
   'tesseract-core/tesseract-core-simd-lstm.wasm.js': {

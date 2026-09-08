@@ -39,7 +39,7 @@ assert.ok(app.includes('AIDocumentDependencies.recognize'), 'OCR trebuie executa
 assert.ok(app.includes('Confirmă că ai verificat datele'), 'Calculul trebuie să ceară confirmare explicită');
 assert.ok(app.includes('sfârșitul nu poate preceda începutul'), 'Deducerile inversate trebuie respinse explicit');
 
-assert.ok(deps.includes("tesseract.js@7.0.0"), 'Tesseract trebuie fixat la o versiune exactă');
+assert.ok(deps.includes("tesseract.js@6.0.1"), 'Tesseract trebuie fixat la o versiune exactă compatibilă cu tessdata_best');
 assert.ok(deps.includes("OCR_LANGUAGE = 'ron'"), 'Worker-ul OCR trebuie inițializat explicit pentru limba română');
 assert.ok(deps.includes('4.0.0_best'), 'OCR-ul românesc trebuie să folosească profilul tessdata_best');
 assert.ok(deps.includes('createWorker(OCR_LANGUAGE'), 'OCR trebuie să reutilizeze un worker Tesseract românesc');
