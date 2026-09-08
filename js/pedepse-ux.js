@@ -284,6 +284,15 @@
     if (!calc || !content || !card || card.classList.contains('hidden')) return;
 
     const existingDetails = content.innerHTML;
+    const detailsRoot = document.createElement('div');
+    detailsRoot.innerHTML = existingDetails;
+    const conditionalReleaseRestSection = [...detailsRoot.querySelectorAll('.result-section')].find(section =>
+      section.querySelector('h4')?.textContent?.includes('REST RĂMAS DE EXECUTAT')
+    );
+    const primaryRestHtml = conditionalReleaseRestSection?.outerHTML || '';
+    conditionalReleaseRestSection?.remove();
+    const detailsHtml = detailsRoot.innerHTML;
+
     const primaryDate = calc.life ? calc.tDate : calc.realExp;
     const primaryLabel = calc.life ? 'Prag temporal pentru LC' : 'Expirare reală';
     const minimum = calc.life
@@ -336,6 +345,8 @@
           </article>
         </div>
 
+        ${primaryRestHtml}
+
         <div class="ev-result-check">
           <span aria-hidden="true">✓</span>
           <p><strong>Calcul finalizat.</strong> Rezultatul trebuie confruntat cu mandatul, hotărârile și situația juridică din dosar înainte de operare.</p>
@@ -344,7 +355,7 @@
 
       <details class="ev-result-details">
         <summary>Vezi toate detaliile și explicațiile calculului</summary>
-        <div class="ev-result-details__content">${existingDetails}</div>
+        <div class="ev-result-details__content">${detailsHtml}</div>
       </details>`;
 
     content.innerHTML = summary;
