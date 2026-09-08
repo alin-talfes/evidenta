@@ -28,8 +28,11 @@ for(const guard of ['isEvalSupported:false','enableScripting:false','enableXfa:f
   assert.ok(security.includes(guard),`Lipsește protecția PDF.js: ${guard}`);
 }
 for(const token of ['/JavaScript','/OpenAction','/Launch','/EmbeddedFile','/RichMedia','/SubmitForm']){
-  assert.ok(security.includes(`'${token}'`),`Preflight-ul PDF trebuie să blocheze ${token}`);
+  assert.ok(security.includes(token),`Preflight-ul PDF trebuie să blocheze ${token}`);
 }
+assert.ok(security.includes('hasUnsafeEmbeddedFiles'),'Atașamentele PDF trebuie validate structural, nu acceptate generic');
+assert.ok(security.includes('application#2Fjson')&&security.includes('usedOnDeviceOCR'),'Doar metadata JSON Adobe Scan strictă poate fi exceptată');
+assert.ok(security.includes("found.push('/EmbeddedFile')"),'Orice EmbeddedFile care nu corespunde integral metadata scannerului trebuie blocat');
 assert.ok(security.includes("'%PDF-'"),'Fișierul PDF trebuie validat prin magic header, nu doar prin extensie');
 assert.ok(security.includes('lockOutboundNetwork'),'După selectarea documentului trebuie blocat traficul extern din fereastra AI');
 assert.ok(security.includes("sendBeacon',{configurable:true,value:()=>false}"),'sendBeacon trebuie dezactivat în modul sensibil');

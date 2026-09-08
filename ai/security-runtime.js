@@ -21,7 +21,7 @@ const TESSERACT_WORKER_URL=new URL('tesseract/worker.min.js',SECURE_BASE).href;
 const TESSERACT_CORE_PATH=new URL('tesseract-core/tesseract-core-lstm.wasm.js',SECURE_BASE).href;
 const TESSERACT_LANG_PATH=new URL('tessdata-best/',SECURE_BASE).href.replace(/\/$/,'');
 const OCR_CACHE_PATH='evidenta-ai-ron-best-v2';
-const DANGEROUS_PDF_TOKENS=['/JavaScript','/JS','/OpenAction','/AA','/Launch','/EmbeddedFile','/RichMedia','/SubmitForm','/GoToE'];
+const DANGEROUS_PDF_TOKENS=['/JavaScript','/JS','/OpenAction','/AA','/Launch','/RichMedia','/SubmitForm','/GoToE'];
 
 let securePdfPromise=null;
 let secureTesseractPromise=null;
@@ -237,11 +237,22 @@ function bytesToAscii(bytes){
   return out;
 }
 
+function hasUnsafeEmbeddedFiles(raw){
+  const embeddedCount=(raw.match(/\/Type\/EmbeddedFile\b/g)||[]).length;
+  if(!embeddedCount) return false;
+  // Adobe Scan adaugă pentru fiecare pagină un obiect JSON intern, fără datele
+  // documentului. Acceptăm exclusiv această schemă și numai dacă explică toate
+  // obiectele EmbeddedFile din PDF; orice alt atașament rămâne fail-closed.
+  const scannerMetadata=/<<\/Length\s+\d+\/Subtype\/application#2Fjson\/Type\/EmbeddedFile>>\s*stream\s*\{"type":"(?:Document|Book)","isBackSide":(?:true|false),"languages":\["[a-z]{2}-[a-z]{2}"\],"usedOnDeviceOCR":(?:true|false)\}\s*endstream/g;
+  return (raw.match(scannerMetadata)||[]).length!==embeddedCount;
+}
+
 async function inspectPdfFile(file){
   const bytes=new Uint8Array(await file.arrayBuffer());
   if(bytes.length<5||String.fromCharCode(...bytes.subarray(0,5))!=='%PDF-') throw new Error(`${file.name}: extensia este PDF, dar semnătura fișierului nu este validă.`);
   const raw=bytesToAscii(bytes);
   const found=DANGEROUS_PDF_TOKENS.filter(token=>raw.includes(token));
+  if(hasUnsafeEmbeddedFiles(raw)) found.push('/EmbeddedFile');
   if(found.length) throw new Error(`${file.name}: documentul conține elemente PDF active (${found.join(', ')}). Din motive de securitate, fișierul a fost blocat.`);
   return true;
 }
@@ -291,6 +302,6 @@ function init(){
   root.addEventListener('pagehide',()=>{scrubSensitiveDom();void terminateSecureOcr();},{once:true});
 }
 
-root.AISecurityRuntime={PDF_VERSION,PDF_MODULE_URL,PDF_WORKER_URL,TESSERACT_URL,DANGEROUS_PDF_TOKENS,prepareRuntime,inspectPdfFile,preflightFiles,get ready(){return runtimeReady;}};
+root.AISecurityRuntime={PDF_VERSION,PDF_MODULE_URL,PDF_WORKER_URL,TESSERACT_URL,DANGEROUS_PDF_TOKENS,hasUnsafeEmbeddedFiles,prepareRuntime,inspectPdfFile,preflightFiles,get ready(){return runtimeReady;}};
 if(typeof document!=='undefined') document.addEventListener('DOMContentLoaded',init,{once:true});
 })(typeof window!=='undefined'?window:globalThis);
