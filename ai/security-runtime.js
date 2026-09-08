@@ -269,10 +269,16 @@ function setStatus(message,error=false){
   if(status){status.textContent=message||'';status.classList.toggle('ai-security-error',Boolean(error));}
 }
 
-function setInputReady(ready){
-  const input=document.getElementById('fileInput');const drop=document.getElementById('dropZone');const analyze=document.getElementById('analyzeFilesBtn');
-  if(input) input.disabled=!ready;if(analyze) analyze.disabled=!ready;
-  drop?.setAttribute('aria-disabled',String(!ready));drop?.classList.toggle('ai-security-locked',!ready);
+function setSelectionReady(ready){
+  const input=document.getElementById('fileInput');const drop=document.getElementById('dropZone');
+  if(input) input.disabled=!ready;
+  if(ready) drop?.removeAttribute('aria-disabled');
+  else drop?.setAttribute('aria-disabled','true');
+}
+
+function setAnalysisReady(ready){
+  const analyze=document.getElementById('analyzeFilesBtn');
+  if(analyze) analyze.disabled=!ready;
 }
 
 function scrubSensitiveDom(){
@@ -288,8 +294,8 @@ function rememberSelected(list){sensitiveFiles=[...(list||[])];preflightPassed=f
 
 function init(){
   const input=document.getElementById('fileInput');const drop=document.getElementById('dropZone');const analyze=document.getElementById('analyzeFilesBtn');const clear=document.getElementById('clearBtn');
-  setInputReady(false);setStatus('Inițializare securizată…');
-  void prepareRuntime().then(()=>{setInputReady(true);setStatus('Procesare locală securizată pregătită.');}).catch(error=>{setInputReady(false);setStatus(`Modul AI blocat: ${error?.message||error}`,true);});
+  setSelectionReady(true);setAnalysisReady(false);setStatus('Poți alege documentul. Motorul local se inițializează…');
+  void prepareRuntime().then(()=>{setAnalysisReady(true);setStatus('Procesare locală securizată pregătită.');}).catch(error=>{setAnalysisReady(false);setStatus(`Analiza nu este disponibilă: ${error?.message||error}`,true);});
   input?.addEventListener('change',event=>rememberSelected(event.target.files),true);
   drop?.addEventListener('drop',event=>{if(!runtimeReady){event.preventDefault();event.stopImmediatePropagation();return;}rememberSelected(event.dataTransfer?.files);},true);
   analyze?.addEventListener('click',event=>{

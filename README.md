@@ -1,6 +1,6 @@
 # Evidență — suită de instrumente
 
-**Versiune stabilă: 1.0.0.** Modulul AI Documente rămâne separat în stadiul **ALPHA**.
+**Versiune stabilă: 1.0.0.** Modulul AI Documente este disponibil separat în versiunea **BETA 0.9**.
 
 Aplicație web statică pentru activități de evidență, calcule juridice, pregătire profesională și descriere asistată a semnalmentelor. Toate modulele sunt publicate prin GitHub Pages din același repository.
 
@@ -10,7 +10,7 @@ Aplicație web statică pentru activități de evidență, calcule juridice, pre
 |---|---|---|
 | Evidență pedepse | Expirare, deduceri, fracții și liberare condiționată | [Deschide](https://alin-talfes.github.io/evidenta/) |
 | Contopiri | Calcul aritmetic pentru pedepse rezultante | [Deschide](https://alin-talfes.github.io/evidenta/contopiri/) |
-| AI Documente (ALPHA) | OCR și extragere asistată din mandate/hotărâri, cu reutilizarea motoarelor Pedepse și Contopiri | [Deschide](https://alin-talfes.github.io/evidenta/ai/) |
+| AI Documente (BETA 0.9) | OCR și extragere asistată din mandate/hotărâri, cu reutilizarea motoarelor Pedepse și Contopiri | [Deschide](https://alin-talfes.github.io/evidenta/ai/) |
 | Transfer și profilare | Filtrarea unităților și regulile de transfer | [Deschide](https://alin-talfes.github.io/evidenta/transfer/) |
 | Instructaj evidență | Moduri de lucru explicate pe baza actelor normative și instrucțiunilor relevante | [Deschide](https://alin-talfes.github.io/evidenta/instructaj/) |
 | Semnalmente | Fișă descriptivă facială asistată și verificabilă | [Deschide](https://alin-talfes.github.io/evidenta/semnalmente/) |
@@ -23,7 +23,7 @@ Ruta `/descriere-semnalmente/` este păstrată în acest repository numai ca red
 evidenta/
 ├── index.html
 ├── contopiri/
-├── ai/                       # OCR + analiză documente (ALPHA)
+├── ai/                       # OCR + analiză documente (BETA 0.9)
 ├── css/
 ├── js/
 ├── transfer/
@@ -50,7 +50,7 @@ cd semnalmente && npm test
 
 - Datele aplicațiilor sunt stocate local în browser, dacă modulul nu precizează altfel.
 - Instrumentele juridice nu înlocuiesc verificarea documentarului penal și a actelor normative aplicabile speței.
-- AI Documente este în versiune **ALPHA**: OCR-ul și extragerea automată trebuie verificate înainte de calcul.
+- AI Documente este în versiune **BETA 0.9**: OCR-ul și extragerea automată trebuie verificate înainte de calcul.
 - AI Documente preferă resurse locale/cache și poate utiliza surse externe ca fallback pentru bibliotecile PDF/OCR și modelul OCR.
 - Calculele din AI Documente sunt executate de aceleași motoare deterministe folosite de modulele Pedepse și Contopiri; OCR-ul nu generează formulele juridice.
 - Rezultatele modulului Semnalmente sunt euristice, nu identificare biometrică sau expertiză criminalistică.

@@ -15,6 +15,7 @@ assert.ok(html.includes('ai-table-deductions'), 'Tabelul deducerilor trebuie să
 assert.ok(css.includes('@media (max-width:680px)'), 'AI trebuie să aibă breakpoint mobil');
 assert.ok(css.includes('.ai-table-penalties thead') && css.includes('.ai-table-deductions thead'), 'Headerele tabelelor trebuie tratate explicit pe mobil');
 assert.ok(css.includes('min-height:44px') || css.includes('min-height: 44px'), 'Controalele tactile trebuie să aibă minimum 44px');
+assert.ok(css.includes('.ai-dropzone input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}'), 'Selectorul de fișiere trebuie să acopere direct zona tactilă pe mobil');
 assert.ok(css.includes('.ai-table-penalties td:nth-child(1)::before') && css.includes('content:"Ani"'), 'Cardurile mobile trebuie să păstreze etichetele câmpurilor de pedeapsă');
 assert.ok(css.includes('.ai-table-deductions td:nth-child(1)::before') && css.includes('content:"Început"'), 'Cardurile mobile trebuie să păstreze etichetele deducerilor');
 assert.ok(previewCss.includes('100dvh'), 'Previzualizarea sursei trebuie să folosească viewport dinamic pe mobil');

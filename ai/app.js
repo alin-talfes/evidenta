@@ -65,7 +65,7 @@ async function extractPdf(file, fileIndex, totalFiles){
   if (pdf.numPages > MAX_PDF_PAGES) {
     await pdf.cleanup?.();
     await pdf.destroy?.();
-    throw new Error(`${file.name}: ${pdf.numPages} pagini. Limita ALPHA este ${MAX_PDF_PAGES} pagini/PDF.`);
+    throw new Error(`${file.name}: ${pdf.numPages} pagini. Limita BETA este ${MAX_PDF_PAGES} pagini/PDF.`);
   }
   const pages=[];
   try {

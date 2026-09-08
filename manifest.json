@@ -18,7 +18,7 @@
   "shortcuts": [
     {"name": "Pedepse", "short_name": "Pedepse", "url": "./"},
     {"name": "Contopiri", "short_name": "Contopiri", "url": "./contopiri/"},
-    {"name": "AI Documente · ALPHA", "short_name": "AI ALPHA", "url": "./ai/"},
+    {"name": "AI Documente · BETA", "short_name": "AI BETA", "url": "./ai/"},
     {"name": "Transfer", "short_name": "Transfer", "url": "./transfer/"}
   ]
 }

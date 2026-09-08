@@ -14,11 +14,11 @@ for(const rule of ["object-src 'none'","frame-src 'none'","base-uri 'self'","for
 assert.ok(!html.includes('https://cdn.jsdelivr.net'),'Pagina AI nu trebuie să permită conexiuni directe către CDN');
 assert.ok(!html.includes('tessdata.projectnaptha.com'),'Pagina AI nu trebuie să permită conexiuni directe către tessdata');
 assert.ok(!html.includes('cdnjs.cloudflare.com'),'Pagina AI nu trebuie să permită vechiul CDN PDF.js');
-assert.match(html,/id="fileInput"[^>]*disabled/,'Selecția documentelor trebuie blocată până la inițializarea securizată');
+assert.doesNotMatch(html,/id="fileInput"[^>]*disabled/,'Selecția locală trebuie disponibilă imediat, inclusiv cât timp motorul se inițializează');
 assert.match(html,/id="analyzeFilesBtn"[^>]*disabled/,'Analiza trebuie blocată până la inițializarea securizată');
 assert.ok(html.includes('PDF-ul nu este încărcat pe un server'),'Utilizatorul trebuie informat concis despre procesarea locală');
 assert.ok(html.indexOf('ai/security-runtime.js')<html.indexOf('ai/app.js'),'Runtime-ul de securitate trebuie încărcat înaintea aplicației AI');
-assert.ok(html.includes('ai/dependencies.js?v=5')&&html.includes('ai/security-runtime.js?v=4'),'Versiunile publice trebuie schimbate când runtime-ul OCR/securitate se modifică');
+assert.ok(html.includes('ai/dependencies.js?v=5')&&html.includes('ai/security-runtime.js?v=5'),'Versiunile publice trebuie schimbate când runtime-ul OCR/securitate se modifică');
 assert.ok(html.indexOf('ai/real-doc-deductions.js')<html.indexOf('ai/real-doc-hardening.js'),'Extractorul de deduceri reale trebuie activ în runtime înaintea hardening-ului');
 
 assert.ok(security.includes("PDF_VERSION='6.2.108'"),'PDF.js trebuie fixat la versiunea reparată 6.2.108');
@@ -40,7 +40,8 @@ assert.ok(security.includes("sendBeacon',{configurable:true,value:()=>false}"),'
 assert.ok(security.includes('scrubSensitiveDom'),'Datele sensibile din DOM trebuie șterse la părăsirea paginii');
 assert.ok(security.includes('deps.ensurePdf=securePdf'),'Loaderul PDF trebuie înlocuit fail-closed cu runtime-ul securizat');
 assert.ok(security.includes('deps.recognizeDetailed=secureRecognizeDetailed'),'OCR-ul trebuie rutat prin runtime-ul securizat');
-assert.ok(security.includes('await Promise.all([securePdf(),warmOcr()])'),'PDF/OCR trebuie inițializate înainte ca selecția documentelor să fie activată');
+assert.ok(security.includes('setSelectionReady(true);setAnalysisReady(false)'),'Selecția locală trebuie separată de disponibilitatea motorului de analiză');
+assert.ok(security.includes('await Promise.all([securePdf(),warmOcr()])'),'PDF/OCR trebuie inițializate înainte ca analiza documentelor să fie activată');
 
 assert.ok(securitySw.includes("CACHE_NAME = 'evidenta-ai-secure-deps-v4'"),'Cache-ul verificat trebuie versionat');
 assert.ok(securitySw.includes("crypto.subtle.digest('SHA-256'"),'Service Worker-ul trebuie să verifice SHA-256 înainte de cache');

@@ -56,4 +56,4 @@ assert.deepEqual(json(result.contopireAudits[0].expectedFinal),expectedApplicati
 assert.deepEqual(json(result.contopireAudits[0].mismatches),[]);
 assert.equal(Boolean(result.arithmeticConflict),false);
 
-console.log('AI ALPHA benchmark lot 6: pereche sintetică document–aplicație, contopire 1/3, recidivist, rubrică goală și separarea sigură a datei de început.');
+console.log('AI BETA benchmark lot 6: pereche sintetică document–aplicație, contopire 1/3, recidivist, rubrică goală și separarea sigură a datei de început.');

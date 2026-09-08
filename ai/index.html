@@ -11,9 +11,9 @@
   <meta name="description" content="OCR românesc și analiză asistată a mandatelor și hotărârilor pentru calculul pedepselor și contopirilor.">
   <link rel="stylesheet" href="css/design-system.css?v=4">
   <link rel="stylesheet" href="css/style.css?v=43">
-  <link rel="stylesheet" href="ai/styles.css?v=7">
+  <link rel="stylesheet" href="ai/styles.css?v=8">
   <link rel="stylesheet" href="ai/source-preview.css?v=2">
-  <link rel="stylesheet" href="ai/security.css?v=1">
+  <link rel="stylesheet" href="ai/security.css?v=2">
   <script src="js/theme.js?v=41" defer></script>
   <script src="js/version.js?v=41" defer></script>
   <link rel="icon" href="favicon-ev-2.svg" type="image/svg+xml">
@@ -22,18 +22,18 @@
 <body>
   <a href="#ai-main" class="skip-link">Sari la conținutul principal</a>
   <main id="ai-main" class="ai-page">
-    <div class="ai-alpha-banner" role="note">
-      <span class="ai-alpha-badge">ALPHA</span>
+    <div class="ai-beta-banner" role="note">
+      <span class="ai-beta-badge">BETA 0.9</span>
       <p><strong>Procesare locală în browser.</strong> PDF-ul nu este încărcat pe un server și nu este salvat de modulul AI. Verifică datele extrase înainte de calcul.</p>
     </div>
 
     <div class="ai-grid">
       <section class="ai-card" aria-labelledby="upload-title">
         <h2 id="upload-title">ÎNCARCĂ DOCUMENTUL</h2>
-        <label class="ai-dropzone ai-security-locked" id="dropZone" for="fileInput" aria-disabled="true">
+        <label class="ai-dropzone" id="dropZone" for="fileInput">
           <strong>PDF / imagini</strong>
           <span>Atinge sau trage fișierele aici</span>
-          <input id="fileInput" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,image/bmp,image/tiff,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" multiple disabled>
+          <input id="fileInput" type="file" accept="application/pdf,image/png,image/jpeg,image/webp,image/bmp,image/tiff,.pdf,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" multiple aria-label="Alege PDF-uri sau imagini pentru analiză">
         </label>
         <div class="ai-ocr-profile" aria-label="OCR română · ron; tessdata_best; 300 DPI; procesare locală securizată">
           <span>OCR română · ron</span><span>300 DPI</span><span>local</span>
@@ -109,12 +109,12 @@
   <script src="ai/beta-lot5-hardening.js?v=1"></script>
   <script src="ai/contopire-audit.js?v=1"></script>
   <script src="ai/dependencies.js?v=5"></script>
-  <script src="ai/security-runtime.js?v=4"></script>
+  <script src="ai/security-runtime.js?v=5"></script>
   <script src="ai/date-mask.js?v=2"></script>
   <script src="ai/deduction-rules.js?v=3"></script>
   <script src="ai/file-dedup.js?v=1"></script>
   <script src="ai/file-dedup-runtime.js?v=1"></script>
-  <script src="ai/app.js?v=4"></script>
+  <script src="ai/app.js?v=5"></script>
   <script src="ai/source-preview.js?v=1"></script>
 </body>
 </html>

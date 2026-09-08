@@ -18,11 +18,11 @@ const dateMaskSource = read('ai/date-mask.js');
 const deductionRulesSource = read('ai/deduction-rules.js');
 
 assert.match(html, /^<!DOCTYPE html>/i);
-assert.ok(html.includes('ALPHA'), 'Modulul AI trebuie marcat vizibil ALPHA');
+assert.ok(html.includes('BETA 0.9'), 'Modulul AI trebuie marcat vizibil BETA 0.9');
 assert.ok(html.includes('application/pdf'), 'Upload-ul trebuie să accepte PDF');
 assert.ok(html.includes('image/png') && html.includes('image/jpeg'), 'Upload-ul trebuie limitat la imagini raster suportate');
 assert.ok(html.includes('id="confirmedData"'), 'Confirmarea verificării umane lipsește');
-assert.ok(html.includes('id="calculateBtn" disabled'), 'Calculul ALPHA trebuie blocat înainte de confirmare');
+assert.ok(html.includes('id="calculateBtn" disabled'), 'Calculul BETA trebuie blocat înainte de confirmare');
 assert.ok(!html.includes('<script src="https://'), 'Dependențele externe nu trebuie încărcate la simpla deschidere a paginii');
 assert.ok(html.includes('ai/dependencies.js') && html.includes('ai/safety.js'), 'Straturile de siguranță/dependențe lipsesc');
 assert.ok(html.includes('ai/ocr-ro.js'), 'Profilul OCR dedicat limbii române trebuie încărcat');
@@ -63,7 +63,7 @@ for (const token of ['var(--ev-surface)', 'var(--ev-border)', 'var(--ev-accent)'
 assert.ok(aiCss.includes('body.ev-unified[data-ev-page="ai"]'), 'CSS AI trebuie delimitat explicit în shell-ul comun');
 assert.ok(aiCss.includes('@media (prefers-reduced-motion: reduce)'), 'CSS AI trebuie să respecte reduced motion');
 assert.ok(!aiCss.includes('rgba(148,163,184'), 'CSS AI nu trebuie să păstreze paleta hard-coded veche');
-assert.ok(!aiCss.includes('#b45309'), 'Badge-ul ALPHA trebuie să folosească tokenii design-system-ului');
+assert.ok(!aiCss.includes('#b45309'), 'Badge-ul BETA trebuie să folosească tokenii design-system-ului');
 
 const context = { console, Date, Math, Number, String, Array, Object, Set, JSON, Uint32Array, globalThis:null };
 context.globalThis = context;
@@ -115,4 +115,4 @@ assert.deepEqual(JSON.parse(JSON.stringify(conflicting.finalSentence)), { years:
 assert.equal(conflicting.article, '', 'Articolele contradictorii nu trebuie auto-selectate');
 assert.ok(conflicting.warnings.some(w => w.includes('CONFLICT')));
 
-console.log('AI Documente ALPHA: OCR ron+tessdata_best, preprocesare scanări, fallback PSM, diacritice românești, design-system, deduceri și motoare verificate.');
+console.log('AI Documente BETA 0.9: OCR ron+tessdata_best, preprocesare scanări, fallback PSM, diacritice românești, design-system, deduceri și motoare verificate.');
