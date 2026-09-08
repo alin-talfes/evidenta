@@ -21,6 +21,7 @@ assert.ok(html.indexOf('ai/security-runtime.js')<html.indexOf('ai/app.js'),'Runt
 assert.ok(html.indexOf('ai/real-doc-deductions.js')<html.indexOf('ai/real-doc-hardening.js'),'Extractorul de deduceri reale trebuie activ în runtime înaintea hardening-ului');
 
 assert.ok(security.includes("PDF_VERSION='6.2.108'"),'PDF.js trebuie fixat la versiunea reparată 6.2.108');
+assert.ok(security.includes("tesseract-core/tesseract-core-lstm.wasm.js"),'OCR trebuie să folosească explicit core-ul LSTM baseline, compatibil între browsere');
 assert.ok(security.includes('ensureSecurityWorker'),'Runtime-ul trebuie să ceară Service Worker-ul de integritate înainte de PDF/OCR');
 assert.ok(security.includes("new URL('_secure/',SW_URL)"),'Dependențele trebuie expuse prin URL-uri virtuale same-origin');
 for(const guard of ['isEvalSupported:false','enableScripting:false','enableXfa:false','useWasm:false']){
@@ -37,7 +38,7 @@ assert.ok(security.includes('deps.ensurePdf=securePdf'),'Loaderul PDF trebuie î
 assert.ok(security.includes('deps.recognizeDetailed=secureRecognizeDetailed'),'OCR-ul trebuie rutat prin runtime-ul securizat');
 assert.ok(security.includes('await Promise.all([securePdf(),warmOcr()])'),'PDF/OCR trebuie inițializate înainte ca selecția documentelor să fie activată');
 
-assert.ok(securitySw.includes("CACHE_NAME = 'evidenta-ai-secure-deps-v2'"),'Cache-ul verificat trebuie versionat');
+assert.ok(securitySw.includes("CACHE_NAME = 'evidenta-ai-secure-deps-v3'"),'Cache-ul verificat trebuie versionat');
 assert.ok(securitySw.includes("crypto.subtle.digest('SHA-256'"),'Service Worker-ul trebuie să verifice SHA-256 înainte de cache');
 assert.ok(securitySw.includes('Dependency SHA-256 mismatch'),'Hash mismatch trebuie să blocheze resursa');
 assert.ok(securitySw.includes("'Cross-Origin-Resource-Policy': 'same-origin'"),'Resursele verificate trebuie reexpuse same-origin');

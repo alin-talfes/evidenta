@@ -13,7 +13,12 @@ const PDF_MODULE_URL=new URL('pdf/pdf.min.mjs',SECURE_BASE).href;
 const PDF_WORKER_URL=new URL('pdf/pdf.worker.min.mjs',SECURE_BASE).href;
 const TESSERACT_URL=new URL('tesseract/tesseract.min.js',SECURE_BASE).href;
 const TESSERACT_WORKER_URL=new URL('tesseract/worker.min.js',SECURE_BASE).href;
-const TESSERACT_CORE_PATH=new URL('tesseract-core/',SECURE_BASE).href.replace(/\/$/,'');
+// Use the baseline LSTM build explicitly. Automatic core selection can choose a
+// relaxed-SIMD wrapper that is incompatible with the corresponding WASM binary
+// in some Chromium/WebView builds and aborts on real documents with a missing
+// DotProductSSE symbol. The baseline LSTM core is slower, but deterministic and
+// works on every browser supported by this module.
+const TESSERACT_CORE_PATH=new URL('tesseract-core/tesseract-core-lstm.wasm.js',SECURE_BASE).href;
 const TESSERACT_LANG_PATH=new URL('tessdata-best/',SECURE_BASE).href.replace(/\/$/,'');
 const OCR_CACHE_PATH='evidenta-ai-ron-best-v2';
 const DANGEROUS_PDF_TOKENS=['/JavaScript','/JS','/OpenAction','/AA','/Launch','/EmbeddedFile','/RichMedia','/SubmitForm','/GoToE'];

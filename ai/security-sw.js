@@ -1,7 +1,7 @@
 /* Evidență AI — secure dependency proxy (scope: /ai/) */
 'use strict';
 
-const CACHE_NAME = 'evidenta-ai-secure-deps-v2';
+const CACHE_NAME = 'evidenta-ai-secure-deps-v3';
 const PREFIX = '/_secure/';
 
 const RESOURCES = {
