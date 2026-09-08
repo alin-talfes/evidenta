@@ -7,7 +7,10 @@
 /* Compatibilitate/audit: "../css/hotfix.css?v=1" "../css/ux-upgrades.css?v=1" */
 @import url("../css/final-layer.css?v=1");
 
-/* Convenție unitară pentru toate controalele cu rol vizual de buton. */
+/*
+ * Modul Ofițer: textul interfeței se afișează în forma în care este scris,
+ * fără transformare forțată în majuscule.
+ */
 :where(
   button,
   input[type="button"],
@@ -23,7 +26,125 @@
   .access-logout,
   .text-btn,
   .icon-btn,
-  .back-to-categories
+  .back-to-categories,
+  .eyebrow,
+  .section-kicker,
+  .panel-label
 ) {
-  text-transform: uppercase !important;
+  text-transform: none !important;
+}
+
+:where(.eyebrow, .section-kicker, .panel-label, .access-eyebrow) {
+  letter-spacing: .04em !important;
+}
+
+/*
+ * Filtre și căutare: controalele rămân lizibile și nu se comprimă excesiv
+ * când un modul are mai multe select-uri lângă câmpul de căutare.
+ */
+.filters {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px !important;
+}
+
+.filters > input[type="search"] {
+  flex: 2 1 320px !important;
+  width: auto !important;
+  min-width: min(100%, 260px) !important;
+}
+
+.filters > select {
+  flex: 1 1 185px !important;
+  width: auto !important;
+  min-width: min(100%, 165px) !important;
+}
+
+.filters :is(input, select) {
+  min-height: 44px;
+  padding: 10px 12px !important;
+}
+
+.setup-options {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/*
+ * Desktop: meniul intern al modulului revine în sidebar vertical.
+ * Bara orizontală comună era prea densă pentru cele nouă secțiuni Ofițer.
+ */
+@media (min-width: 1024px) {
+  body > .app-shell {
+    width: min(100%, var(--ev-shell-max)) !important;
+    display: grid !important;
+    grid-template-columns: 248px minmax(0, 1fr) !important;
+    align-items: start !important;
+  }
+
+  body > .app-shell > .sidebar {
+    position: sticky !important;
+    top: 12px !important;
+    width: 100% !important;
+    min-height: calc(100vh - 24px) !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 5px !important;
+    overflow: visible !important;
+    padding: 20px 14px !important;
+    border: 0 !important;
+    border-right: 1px solid var(--ev-border) !important;
+    background: var(--ev-surface) !important;
+  }
+
+  body > .app-shell > .sidebar .nav-item {
+    width: 100% !important;
+    min-height: 42px !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    padding: 9px 11px !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+
+  body > .app-shell > .sidebar .nav-item span {
+    display: inline !important;
+    min-width: 0;
+  }
+
+  body > .app-shell > .sidebar .nav-item b {
+    margin-left: auto;
+  }
+
+  body > .app-shell > main {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding-top: 32px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .filters {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .filters > input[type="search"],
+  .filters > select {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex-basis: 100% !important;
+  }
+
+  .setup-options {
+    grid-template-columns: 1fr !important;
+  }
 }
