@@ -112,7 +112,7 @@
   display: block;
   color: var(--accent-strong);
   font-size: .72rem;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .07em;
 }
 

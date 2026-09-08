@@ -7,7 +7,6 @@ const contopiri = fs.readFileSync('contopiri/index.html','utf8');
 const transfer = fs.readFileSync('transfer/index.html','utf8');
 const buttonStyles = [
   'css/style.css',
-  'instructaj/styles.css',
   'ofiter/styles.css',
   'semnalmente/style.css'
 ].map(file => [file, fs.readFileSync(file,'utf8')]);
@@ -30,4 +29,4 @@ for (const [file, css] of buttonStyles) {
   assert.match(css, /text-transform:\s*uppercase\s*!important;/, `${file}: butoanele nu sunt forțate la majuscule.`);
 }
 
-console.log('Consistență UI: titluri, numerotare, butoane AZI și toate controalele tip buton sunt verificate cu majuscule.');
+console.log('Consistență UI: titluri, numerotare, butoane AZI și controalele tip buton din modulele operaționale sunt verificate cu majuscule.');

@@ -27,9 +27,9 @@ assert.ok(workflow.steps.some(item => {
   const text = item.toLocaleLowerCase("ro");
   return text.includes("extrădat") && text.includes("garan");
 }), "Fișa trebuie să trateze extrădarea și garanțiile");
-assert.ok(workflow.steps.some(item => item.includes("RECHIZITORIU")), "Fișa trebuie să trateze rechizitoriul/cauza nouă");
-assert.ok(workflow.steps.some(item => item.includes("PROBE BIOLOGICE")), "Fișa trebuie să trateze probele biologice");
-assert.ok(workflow.steps.some(item => item.includes("REGISTRUL DE TERMENE")), "Fișa trebuie să impună actualizarea registrului de termene");
+assert.ok(workflow.steps.some(item => item.includes("Rechizitoriu")), "Fișa trebuie să trateze rechizitoriul/cauza nouă");
+assert.ok(workflow.steps.some(item => item.includes("Probe biologice")), "Fișa trebuie să trateze probele biologice");
+assert.ok(workflow.steps.some(item => item.includes("Registrul de termene")), "Fișa trebuie să impună actualizarea registrului de termene");
 assert.ok(workflow.legalRules.some(item => item.includes("proceduri operaționale interne")), "Practica internă trebuie separată explicit de norma juridică generală");
 
 const ids = data.workflows.map(item => item.id);

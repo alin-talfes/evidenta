@@ -99,7 +99,7 @@ footer {
   color: var(--gold);
   font-size: .73rem;
   font-weight: 850;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .095em;
 }
 
@@ -130,7 +130,7 @@ footer {
   color: var(--gold);
   font-size: .72rem;
   font-weight: 850;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .08em;
 }
 
@@ -875,7 +875,7 @@ footer {
   margin-bottom: .12rem;
   color: var(--accent-strong);
   font-size: .68rem;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .07em;
 }
 
@@ -966,7 +966,7 @@ footer {
   color: var(--gold);
   font-size: .68rem;
   font-weight: 850;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .08em;
 }
 

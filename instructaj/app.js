@@ -14,7 +14,7 @@
 
   if (!window.__INSTRUCTAJ_ENRICHED__) {
     import("./omj2188-completari.js")
-      .then(() => import("./verificare-dosar-transfer.js"))
+      .then(() => import("./verificare-dosar-transfer.js?v=2"))
       .then(() => {
         window.__INSTRUCTAJ_ENRICHED__ = true;
         const script = document.createElement("script");
