@@ -63,7 +63,8 @@ async function extractPdf(file, fileIndex, totalFiles){
   const bytes = new Uint8Array(await file.arrayBuffer());
   const pdf = await pdfjsLib.getDocument({ data:bytes }).promise;
   if (pdf.numPages > MAX_PDF_PAGES) {
-    await pdf.destroy();
+    await pdf.cleanup?.();
+    await pdf.destroy?.();
     throw new Error(`${file.name}: ${pdf.numPages} pagini. Limita ALPHA este ${MAX_PDF_PAGES} pagini/PDF.`);
   }
   const pages=[];
@@ -96,7 +97,8 @@ async function extractPdf(file, fileIndex, totalFiles){
       page.cleanup?.();
     }
   } finally {
-    await pdf.destroy();
+    await pdf.cleanup?.();
+    await pdf.destroy?.();
   }
   return pages.join('\n\n');
 }

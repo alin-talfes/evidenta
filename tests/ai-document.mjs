@@ -35,6 +35,7 @@ assert.ok(app.includes('ContopiriCore.calculate'), 'AI trebuie să reutilizeze m
 assert.ok(app.includes('calculateLiberationSchedule'), 'AI trebuie să reutilizeze motorul Pedepse/LC');
 assert.ok(app.includes('sumIntervals'), 'Deducerile trebuie calculate cu funcția comună');
 assert.ok(app.includes('AIDocumentDependencies.ensurePdf'), 'PDF.js trebuie încărcat lazy');
+assert.ok(app.includes('pdf.cleanup?.()') && app.includes('pdf.destroy?.()'), 'Eliberarea PDF trebuie să fie compatibilă și să nu piardă rezultatul OCR');
 assert.ok(app.includes('AIDocumentDependencies.recognize'), 'OCR trebuie executat prin worker-ul reutilizabil');
 assert.ok(app.includes('Confirmă că ai verificat datele'), 'Calculul trebuie să ceară confirmare explicită');
 assert.ok(app.includes('sfârșitul nu poate preceda începutul'), 'Deducerile inversate trebuie respinse explicit');
