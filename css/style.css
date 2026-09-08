@@ -7,6 +7,29 @@
 /* Compatibilitate/audit: "./hotfix.css?v=1" "./ux-upgrades.css?v=1" */
 @import url("./final-layer.css?v=1");
 
+/* Pedepse — ritm vertical uniform în rezultatul operațional. */
+.ev-result-overview > .result-section {
+  margin-top: 0;
+}
+
+.ev-result-overview > .result-section > h4 {
+  margin: 0 0 8px;
+}
+
+.ev-result-overview > .result-section > .result-grid {
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.ev-result-overview > .result-section .result-label {
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+
+.ev-result-overview > .result-section .result-value {
+  line-height: 1.3;
+}
+
 /* Pedepse — butonul de ștergere este o coloană de acțiune, nu un element suprapus. */
 body.ev-unified[data-ev-page="pedepse"] .deduction-row,
 body.ev-unified[data-ev-page="pedepse"] .non-exec-row {
