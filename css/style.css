@@ -64,6 +64,36 @@ body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row) > .bt
   border-radius: 10px;
 }
 
+/* Pedepse — recurs compensatoriu: X-ul are coloană proprie și nu mai suprapune inputul. */
+#manualDeductionsContainer .period-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: end;
+  gap: 8px;
+}
+
+#manualDeductionsContainer .period-row > div {
+  width: auto;
+  min-width: 0;
+}
+
+#manualDeductionsContainer .period-row > div:nth-child(2) {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+#manualDeductionsContainer .period-row .btn-danger {
+  position: static !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px;
+  min-height: 44px !important;
+  margin: 0;
+  padding: 0 !important;
+  border-radius: 10px;
+}
+
 @media (max-width: 760px) {
   body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row) {
     grid-template-columns: repeat(2, minmax(0, 1fr)) 44px;
