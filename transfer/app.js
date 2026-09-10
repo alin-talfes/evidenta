@@ -227,7 +227,7 @@
                     if (m.isCustodie) extra += ' (secție de arestare preventivă)';
                     html += `
                         <div class="match-item ${isBest ? 'best' : ''}">
-                            <span class="primary">${m.unitate.nume}${extra}</span>
+                            <span class="match-name">${m.unitate.nume}${extra}</span>
                             <span class="reason">${reason}</span>
                             <span class="tag">${tag}</span>
                         </div>
