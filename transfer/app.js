@@ -37,50 +37,6 @@
             populateJudete();
 
             // ============================================================
-            // 1A. LISTA INSTANȚELOR – MONTAJ LA CERERE
-            // ============================================================
-            // Lista este mare și, deși <details> este închis, rămâne în DOM. Pe
-            // Safari/iOS, inserarea rezultatului deasupra ei poate declanșa un
-            // recalcul de layout disproporționat. Păstrăm conținutul, dar îl
-            // scoatem din DOM până când utilizatorul deschide explicit lista.
-            const instanteCard = document.getElementById('instanteCard');
-
-            function enableLazyInstanteList() {
-                if (!instanteCard) return;
-                const details = instanteCard.querySelector('details');
-                if (!details) return;
-
-                const summary = details.querySelector('summary');
-                const panel = summary ? summary.nextElementSibling : null;
-                if (!panel) return;
-
-                const panelHtml = panel.innerHTML;
-                const panelStyle = panel.getAttribute('style') || '';
-                panel.remove();
-
-                function mountPanel() {
-                    if (details.querySelector('[data-instante-lazy="true"]')) return;
-                    const lazyPanel = document.createElement('div');
-                    lazyPanel.dataset.instanteLazy = 'true';
-                    if (panelStyle) lazyPanel.setAttribute('style', panelStyle);
-                    lazyPanel.innerHTML = panelHtml;
-                    details.appendChild(lazyPanel);
-                }
-
-                function unmountPanel() {
-                    const lazyPanel = details.querySelector('[data-instante-lazy="true"]');
-                    if (lazyPanel) lazyPanel.remove();
-                }
-
-                details.addEventListener('toggle', function() {
-                    if (details.open) mountPanel();
-                    else unmountPanel();
-                });
-            }
-
-            enableLazyInstanteList();
-
-            // ============================================================
             // 2. TOGGLE MOD – 3 moduri: judiciar, custodieArestati, executare
             // ============================================================
             const toggleBtns = document.querySelectorAll('.toggle-btn');
