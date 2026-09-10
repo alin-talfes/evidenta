@@ -3,7 +3,7 @@
             // 1. LISTA JUDEȚELOR – ORDINE ALFABETICĂ, FĂRĂ GRUPARE
             // ============================================================
             const allJudete = [];
-            for (const [grupa, judete] of Object.entries(JUDETE_GRUPATE)) {
+            for (const [, judete] of Object.entries(JUDETE_GRUPATE)) {
                 judete.forEach(j => allJudete.push(j));
             }
             allJudete.sort();
@@ -37,6 +37,50 @@
             populateJudete();
 
             // ============================================================
+            // 1A. LISTA INSTANȚELOR – MONTAJ LA CERERE
+            // ============================================================
+            // Lista este mare și, deși <details> este închis, rămâne în DOM. Pe
+            // Safari/iOS, inserarea rezultatului deasupra ei poate declanșa un
+            // recalcul de layout disproporționat. Păstrăm conținutul, dar îl
+            // scoatem din DOM până când utilizatorul deschide explicit lista.
+            const instanteCard = document.getElementById('instanteCard');
+
+            function enableLazyInstanteList() {
+                if (!instanteCard) return;
+                const details = instanteCard.querySelector('details');
+                if (!details) return;
+
+                const summary = details.querySelector('summary');
+                const panel = summary ? summary.nextElementSibling : null;
+                if (!panel) return;
+
+                const panelHtml = panel.innerHTML;
+                const panelStyle = panel.getAttribute('style') || '';
+                panel.remove();
+
+                function mountPanel() {
+                    if (details.querySelector('[data-instante-lazy="true"]')) return;
+                    const lazyPanel = document.createElement('div');
+                    lazyPanel.dataset.instanteLazy = 'true';
+                    if (panelStyle) lazyPanel.setAttribute('style', panelStyle);
+                    lazyPanel.innerHTML = panelHtml;
+                    details.appendChild(lazyPanel);
+                }
+
+                function unmountPanel() {
+                    const lazyPanel = details.querySelector('[data-instante-lazy="true"]');
+                    if (lazyPanel) lazyPanel.remove();
+                }
+
+                details.addEventListener('toggle', function() {
+                    if (details.open) mountPanel();
+                    else unmountPanel();
+                });
+            }
+
+            enableLazyInstanteList();
+
+            // ============================================================
             // 2. TOGGLE MOD – 3 moduri: judiciar, custodieArestati, executare
             // ============================================================
             const toggleBtns = document.querySelectorAll('.toggle-btn');
@@ -55,7 +99,6 @@
                     btn.classList.toggle('active', btn.dataset.mode === mode);
                 });
 
-                // Resetăm checkbox-ul de risc la schimbarea modului
                 riscCheckbox.checked = false;
 
                 if (mode === 'judiciar') {
@@ -72,14 +115,12 @@
                     regimHint.style.display = 'none';
                     regimArestat.style.display = '';
                     modeAdvice.textContent = 'Modul „Custodie A.P. permanentă” – profilare Anexa 1. Nu reprezintă primirea inițială de la poliție din Anexa 3.';
-                } else { // executare
+                } else {
                     judetLabel.textContent = 'Județul de domiciliu';
                     riscGroup.style.display = 'none';
                     regimGroup.style.display = 'block';
                     regimHint.style.display = 'none';
-                    // ascundem opțiunea arestat preventiv
                     regimArestat.style.display = 'none';
-                    // dacă este selectat arestat, trecem la deschis
                     const radioArestat = document.querySelector('input[name="regim"][value="arestat"]');
                     if (radioArestat && radioArestat.checked) {
                         const radioDeschis = document.querySelector('input[name="regim"][value="deschis"]');
@@ -95,7 +136,6 @@
                 });
             });
 
-            // Setăm modul implicit: judiciar
             setMode('judiciar');
 
             // ============================================================
@@ -128,14 +168,12 @@
 
                 return rawMatches.filter(match => {
                     return match && match.unitate && typeof match.unitate.nume === 'string';
-                }).map(match => {
-                    if (!Array.isArray(match.judeteDeservite)) {
-                        match.judeteDeservite = Array.isArray(match.unitate.judeteDeservite)
-                            ? match.unitate.judeteDeservite
-                            : [];
-                    }
-                    return match;
-                });
+                }).map(match => ({
+                    ...match,
+                    judeteDeservite: Array.isArray(match.judeteDeservite)
+                        ? match.judeteDeservite
+                        : (Array.isArray(match.unitate.judeteDeservite) ? match.unitate.judeteDeservite : [])
+                }));
             }
 
             function runSearchEngine(sex, varsta, regim, judet, mode, risc) {
@@ -145,18 +183,22 @@
                 return normalizeMatches(gasesteUnitati(sex, varsta, regim, judet, mode, risc));
             }
 
+            function setResultHtml(html) {
+                resultArea.innerHTML = html;
+            }
+
             function findDestination() {
                 const sex = getSelectedRadioValue('sex') || 'masculin';
                 const varsta = getSelectedRadioValue('varsta') || 'major';
-                const judet = document.getElementById('judet').value;
+                const judet = judetSelect.value;
 
                 if (!judet) {
-                    resultArea.innerHTML = `
-                        <div class="result-card error">
+                    setResultHtml(`
+                        <div class="result-card error" role="alert">
                             <div class="result-title">Eroare</div>
                             <div class="result-sub">Selectați un județ pentru a continua.</div>
                         </div>
-                    `;
+                    `);
                     return;
                 }
 
@@ -169,7 +211,7 @@
                     matches = runSearchEngine(sex, varsta, regim, judet, 'judiciar', useRisc);
                 } else if (currentMode === 'custodieArestati') {
                     matches = runSearchEngine(sex, varsta, null, judet, 'custodieArestati', false);
-                } else { // executare
+                } else {
                     const regim = getSelectedRadioValue('regim') || 'deschis';
                     matches = runSearchEngine(sex, varsta, regim, judet, 'executare', false);
                 }
@@ -179,7 +221,7 @@
                     if (currentMode === 'custodieArestati') {
                         extraMsg = ' Nu există unități profilate în Anexa 1 pentru custodie permanentă A.P. potrivit criteriilor selectate.';
                     }
-                    resultArea.innerHTML = `
+                    setResultHtml(`
                         <div class="result-card error">
                             <div class="result-title">Nicio unitate găsită</div>
                             <div class="result-sub">
@@ -189,11 +231,10 @@
                             </div>
                             <div class="result-detail">Verificați corectitudinea datelor sau consultați Anexa 1 a Deciziei 360/2020.</div>
                         </div>
-                    `;
+                    `);
                     return;
                 }
 
-                // Sortare: pentru executare, prioritizăm unitățile care nu sunt doar pentru muncă
                 if (currentMode === 'executare') {
                     matches.sort((a, b) => {
                         if (a.esteMunca && !b.esteMunca) return 1;
@@ -205,7 +246,6 @@
                         return 0;
                     });
                 } else {
-                    // Pentru judiciar și arestat, sortare după judeteDeservite
                     matches.sort((a, b) => {
                         const aHas = a.judeteDeservite.includes(judet);
                         const bHas = b.judeteDeservite.includes(judet);
@@ -226,15 +266,9 @@
                     const reason = isBest ? 'Potrivire prioritară după criteriile tehnice' : 'Alternativă compatibilă';
                     const tag = isBest ? 'Prioritar' : 'Compatibil';
                     let extra = '';
-                    if (m.isRisc) {
-                        extra = ' (acceptă risc pentru siguranță)';
-                    }
-                    if (m.esteMunca) {
-                        extra += ' (regim deschis pentru muncă)';
-                    }
-                    if (m.isCustodie) {
-                        extra += ' (secție de arestare preventivă)';
-                    }
+                    if (m.isRisc) extra = ' (acceptă risc pentru siguranță)';
+                    if (m.esteMunca) extra += ' (regim deschis pentru muncă)';
+                    if (m.isCustodie) extra += ' (secție de arestare preventivă)';
                     html += `
                         <div class="match-item ${isBest ? 'best' : ''}">
                             <span class="primary">${m.unitate.nume}${extra}</span>
@@ -270,25 +304,31 @@
                     </div>
                 `;
 
-                resultArea.innerHTML = html;
+                setResultHtml(html);
             }
 
             function safeFindDestination() {
-                if (cautaBtn.disabled) return;
+                if (!cautaBtn || cautaBtn.dataset.searchRunning === 'true') return;
 
-                cautaBtn.disabled = true;
+                const startedAt = performance.now();
+                cautaBtn.dataset.searchRunning = 'true';
+                cautaBtn.setAttribute('aria-busy', 'true');
+
                 try {
                     findDestination();
                 } catch (error) {
                     console.error('Eroare la căutarea destinației de transfer:', error);
-                    resultArea.innerHTML = `
+                    setResultHtml(`
                         <div class="result-card error" role="alert">
                             <div class="result-title">Căutarea nu a putut fi finalizată</div>
                             <div class="result-sub">Motorul de transfer a întâmpinat o eroare. Reîncărcați pagina și încercați din nou.</div>
                         </div>
-                    `;
+                    `);
                 } finally {
-                    cautaBtn.disabled = false;
+                    delete cautaBtn.dataset.searchRunning;
+                    cautaBtn.removeAttribute('aria-busy');
+                    const elapsed = performance.now() - startedAt;
+                    if (elapsed > 100) console.warn(`Căutarea Transfer a durat ${elapsed.toFixed(1)} ms.`);
                 }
             }
 
@@ -298,17 +338,17 @@
             cautaBtn.addEventListener('click', safeFindDestination);
 
             resetBtn.addEventListener('click', function() {
-                document.getElementById('judet').value = '';
+                judetSelect.value = '';
                 setRadioValue('sex', 'masculin');
                 setRadioValue('varsta', 'major');
                 setRadioValue('regim', 'arestat');
                 setMode('judiciar');
                 riscCheckbox.checked = false;
-                resultArea.innerHTML = `
+                setResultHtml(`
                     <div class="empty-state">
                         <p>Completează criteriile și apasă „Caută destinația”.</p>
                     </div>
-                `;
+                `);
             });
 
             document.querySelectorAll('select, input').forEach(el => {
@@ -319,9 +359,7 @@
                     }
                 });
             });
-            // ============================================================
-            // 7. MESAJ INIȚIAL
-            // ============================================================
+
             console.log('Aplicația de transfer – Decizia 360/2020, formă consolidată 30.03.2026 – încărcată cu succes.');
             console.log('Județe disponibile: ' + allJudete.length);
 
