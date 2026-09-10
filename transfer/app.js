@@ -123,6 +123,28 @@
             const resetBtn = document.getElementById('resetBtn');
             const resultArea = document.getElementById('resultArea');
 
+            function normalizeMatches(rawMatches) {
+                if (!Array.isArray(rawMatches)) return [];
+
+                return rawMatches.filter(match => {
+                    return match && match.unitate && typeof match.unitate.nume === 'string';
+                }).map(match => {
+                    if (!Array.isArray(match.judeteDeservite)) {
+                        match.judeteDeservite = Array.isArray(match.unitate.judeteDeservite)
+                            ? match.unitate.judeteDeservite
+                            : [];
+                    }
+                    return match;
+                });
+            }
+
+            function runSearchEngine(sex, varsta, regim, judet, mode, risc) {
+                if (typeof gasesteUnitati !== 'function') {
+                    throw new Error('Motorul de reguli pentru transfer nu este disponibil.');
+                }
+                return normalizeMatches(gasesteUnitati(sex, varsta, regim, judet, mode, risc));
+            }
+
             function findDestination() {
                 const sex = getSelectedRadioValue('sex') || 'masculin';
                 const varsta = getSelectedRadioValue('varsta') || 'major';
@@ -144,12 +166,12 @@
                     const regim = getSelectedRadioValue('regim') || 'arestat';
                     const risc = riscCheckbox.checked;
                     const useRisc = (regim !== 'educativ' && regim !== 'masura_educativa_penitenciar' && risc);
-                    matches = gasesteUnitati(sex, varsta, regim, judet, 'judiciar', useRisc);
+                    matches = runSearchEngine(sex, varsta, regim, judet, 'judiciar', useRisc);
                 } else if (currentMode === 'custodieArestati') {
-                    matches = gasesteUnitati(sex, varsta, null, judet, 'custodieArestati', false);
+                    matches = runSearchEngine(sex, varsta, null, judet, 'custodieArestati', false);
                 } else { // executare
                     const regim = getSelectedRadioValue('regim') || 'deschis';
-                    matches = gasesteUnitati(sex, varsta, regim, judet, 'executare', false);
+                    matches = runSearchEngine(sex, varsta, regim, judet, 'executare', false);
                 }
 
                 if (matches.length === 0) {
@@ -251,10 +273,29 @@
                 resultArea.innerHTML = html;
             }
 
+            function safeFindDestination() {
+                if (cautaBtn.disabled) return;
+
+                cautaBtn.disabled = true;
+                try {
+                    findDestination();
+                } catch (error) {
+                    console.error('Eroare la căutarea destinației de transfer:', error);
+                    resultArea.innerHTML = `
+                        <div class="result-card error" role="alert">
+                            <div class="result-title">Căutarea nu a putut fi finalizată</div>
+                            <div class="result-sub">Motorul de transfer a întâmpinat o eroare. Reîncărcați pagina și încercați din nou.</div>
+                        </div>
+                    `;
+                } finally {
+                    cautaBtn.disabled = false;
+                }
+            }
+
             // ============================================================
             // 5. EVENT LISTENERS
             // ============================================================
-            cautaBtn.addEventListener('click', findDestination);
+            cautaBtn.addEventListener('click', safeFindDestination);
 
             resetBtn.addEventListener('click', function() {
                 document.getElementById('judet').value = '';
@@ -274,7 +315,7 @@
                 el.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        findDestination();
+                        safeFindDestination();
                     }
                 });
             });
