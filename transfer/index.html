@@ -17,8 +17,6 @@
 </head>
 <body>
     <div class="container">
-
-        <!-- ========== BARĂ DE SUS ========== -->
         <nav class="app-nav" aria-label="Modulele aplicației">
             <span class="app-nav__brand">Evidență PPL</span>
             <a class="app-nav__link" href="../">Pedepse</a>
@@ -27,31 +25,26 @@
             <a class="app-nav__link" href="../instructaj/">Instructaj</a>
             <a class="app-nav__link" href="../semnalmente/">Semnalmente</a>
         </nav>
-    
 
         <div class="page-actions transfer-page-actions">
             <a class="btn btn-outline" href="rules/">REGULI TRANSFER</a>
             <button id="themeToggle" aria-label="Schimbă tema">🌙</button>
         </div>
 
-    <!-- ========== HEADER ========== -->
         <header class="header">
             <div class="header-inner">
                 <h1>DESTINAȚIE TRANSFER ȘI PROFILARE</h1>
-            <p class="module-intro">Identifică rapid unitățile compatibile pe baza situației juridice și criteriilor de transfer.</p>
+                <p class="module-intro">Identifică rapid unitățile compatibile pe baza situației juridice și criteriilor de transfer.</p>
                 <div class="subtitle">SIMPLIFICAREA DECIZIEI DE PROFILARE (NR. 360/2020)</div>
             </div>
         </header>
 
-        <!-- ========== CARD PRINCIPAL ========== -->
         <div class="card">
             <h3>CRITERII DE CĂUTARE</h3>
             <p class="section-help">Selectează situația juridică și criteriile persoanei. Motorul principal folosește profilarea din Anexa 1; primirea de la poliție, regimul provizoriu și anexele speciale sunt operațiuni juridice distincte, prezentate separat în „Reguli transfer”.</p>
 
             <form id="transferForm" autocomplete="off">
                 <div class="form-grid">
-
-                    <!-- Mod de căutare (toggle 3 butoane) -->
                     <div class="form-group full">
                         <label>Mod de căutare</label>
                         <div class="toggle-group" id="toggleGroup">
@@ -64,7 +57,6 @@
                         </div>
                     </div>
 
-                    <!-- Județul -->
                     <div class="form-group full">
                         <label for="judet"><span id="judetLabel">Județul organului judiciar care îl citează</span></label>
                         <select id="judet">
@@ -72,7 +64,6 @@
                         </select>
                     </div>
 
-                    <!-- Sex -->
                     <div class="form-group">
                         <label>Sex</label>
                         <div class="radio-group" id="sexGroup">
@@ -87,7 +78,6 @@
                         </div>
                     </div>
 
-                    <!-- Vârstă -->
                     <div class="form-group">
                         <label>Vârstă</label>
                         <div class="radio-group" id="varstaGroup">
@@ -106,7 +96,6 @@
                         </div>
                     </div>
 
-                    <!-- Regim de executare – vizibil doar în modurile judiciar și executare -->
                     <div class="form-group full" id="regimGroup">
                         <label>Regim de executare / situație juridică</label>
                         <div class="radio-group" id="regimGroupRadio">
@@ -144,7 +133,6 @@
                         </div>
                     </div>
 
-                    <!-- Risc pentru siguranță – doar în modul judiciar -->
                     <div class="form-group full" id="riscGroup" style="display:flex;">
                         <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
                             <input type="checkbox" id="riscCheckbox" style="width:18px; height:18px; cursor:pointer;">
@@ -152,18 +140,15 @@
                         </label>
                         <div class="hint">Această opțiune este disponibilă doar în modul „Afaceri judiciare”.</div>
                     </div>
-
                 </div>
 
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary" id="cautaBtn">Caută destinația</button>
                     <button type="button" class="btn btn-secondary" id="resetBtn">Resetează</button>
                 </div>
-
             </form>
         </div>
 
-        <!-- ========== CARD REZULTATE ========== -->
         <div class="card" id="resultsCard" style="border-left-color: var(--accent);">
             <h3>REZULTAT</h3>
             <div id="resultArea">
@@ -172,93 +157,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- ========== LISTA INSTANȚELOR ========== -->
-        <div class="card" id="instanteCard" style="border-left-color: var(--accent);">
-            <details>
-                <summary style="font-weight:700; font-size:1rem; color:var(--accent-strong); cursor:pointer; padding:4px 0;">LISTA INSTANȚELOR</summary>
-                <div style="font-size:0.75rem; color:var(--text-light); line-height:1.8; margin-top:12px; max-height:400px; overflow-y:auto; padding-right:8px;">
-                    <strong>Curtea de Apel ALBA IULIA</strong><br>
-                    ALBA<br> Tribunalul ALBA<br> Judecătoria AIUD<br> Judecătoria ALBA IULIA<br> Judecătoria BLAJ<br> Judecătoria CÂMPENI<br> Judecătoria SEBEȘ<br>
-                    HUNEDOARA<br> Tribunalul HUNEDOARA<br> Judecătoria BRAD<br> Judecătoria DEVA<br> Judecătoria HAȚEG<br> Judecătoria HUNEDOARA<br> Judecătoria ORAȘTIE<br> Judecătoria PETROȘANI<br>
-                    SIBIU<br> Tribunalul SIBIU<br> Judecătoria AGNITA<br> Judecătoria MEDIAȘ<br> Judecătoria SALIȘTE<br> Judecătoria SIBIU<br> Judecătoria AVRIG<br>
-                    <br>
-                    <strong>Curtea de Apel BACĂU</strong><br>
-                    BACĂU<br> Tribunalul BACĂU<br> Judecătoria BACĂU<br> Judecătoria BUHUȘI<br> Judecătoria MOINEȘTI<br> Judecătoria ONEȘTI<br> Judecătoria PODU TURCULUI<br>
-                    NEAMȚ<br> Tribunalul NEAMȚ<br> Judecătoria BICAZ<br> Judecătoria PIATRA-NEAMT<br> Judecătoria ROMAN<br> Judecătoria TÂRGU NEAMȚ<br>
-                    <br>
-                    <strong>Curtea de Apel BRAȘOV</strong><br>
-                    BRAȘOV<br> Tribunalul BRAȘOV<br> Tribunalul pentru minori și familie BRAȘOV<br> Judecătoria BRAȘOV<br> Judecătoria FĂGĂRAȘ<br> Judecătoria RUPEA<br> Judecătoria ZĂRNEȘTI<br>
-                    COVASNA<br> Tribunalul COVASNA<br> Judecătoria ÎNTORSURA BUZĂULUI<br> Judecătoria SFÂNTU GHEORGHE<br> Judecătoria TÂRGU SECUIESC<br>
-                    <br>
-                    <strong>Curtea de Apel BUCUREȘTI</strong><br>
-                    BUCUREȘTI<br> Curtea Militara de Apel BUCUREȘTI<br> Tribunalul BUCUREȘTI<br> Tribunalul Militar BUCUREȘTI<br> Tribunalul Militar Teritorial BUCUREȘTI<br>
-                    Judecătoria SECTORUL 1 BUCUREȘTI<br> Judecătoria SECTORUL 2 BUCUREȘTI<br> Judecătoria SECTORUL 3 BUCUREȘTI<br> Judecătoria SECTORUL 4 BUCUREȘTI<br> Judecătoria SECTORUL 5 BUCUREȘTI<br> Judecătoria SECTORUL 6 BUCUREȘTI<br>
-                    CĂLĂRAȘI<br> Tribunalul CĂLĂRAȘI<br> Judecătoria CĂLĂRAȘI<br> Judecătoria LEHLIU-GARA<br> Judecătoria OLTENIȚA<br>
-                    IALOMIȚA<br> Tribunalul IALOMIȚA<br> Judecătoria FETEȘTI<br> Judecătoria SLOBOZIA<br> Judecătoria URZICENI<br>
-                    GIURGIU<br> Tribunalul GIURGIU<br> Judecătoria BOLINTIN VALE<br> Judecătoria GIURGIU<br>
-                    ILFOV<br> Tribunalul ILFOV<br> Judecătoria BUFTEA<br> Judecătoria CORNETU<br>
-                    TELEORMAN<br> Tribunalul TELEORMAN<br> Judecătoria ROȘIORI DE VEDE<br> Judecătoria TURNU MĂGURELE<br> Judecătoria VIDELE<br> Judecătoria ZIMNICEA<br> Judecătoria ALEXANDRIA<br>
-                    <br>
-                    <strong>Curtea de Apel CLUJ</strong><br>
-                    BISTRIȚA NĂSĂUD<br> Tribunalul BISTRIȚA NĂSĂUD<br> Judecătoria BECLEAN<br> Judecătoria BISTRIȚA<br> Judecătoria NĂSĂUD<br>
-                    CLUJ<br> Tribunalul CLUJ<br> Tribunalul Militar CLUJ-NAPOCA<br> Tribunalul Specializat CLUJ<br> Judecătoria CLUJ-NAPOCA<br> Judecătoria DEJ<br> Judecătoria GHERLA<br> Judecătoria HUEDIN<br> Judecătoria TURDA<br>
-                    MARAMUREȘ<br> Tribunalul MARAMUREȘ<br> Judecătoria BAIA MARE<br> Judecătoria DRAGOMIREȘTI<br> Judecătoria SIGHETU MARMAȚIEI<br> Judecătoria TÂRGU LAPUȘ<br> Judecătoria VIȘEU DE SUS<br>
-                    SĂLAJ<br> Tribunalul SĂLAJ<br> Judecătoria ȘIMLEUL SILVANIEI<br> Judecătoria ZALĂU<br> Judecătoria JIBOU<br>
-                    <br>
-                    <strong>Curtea de Apel CONSTANȚA</strong><br>
-                    CONSTANȚA<br> Tribunalul CONSTANȚA<br> Judecătoria CONSTANȚA<br> Judecătoria MANGALIA<br> Judecătoria MEDGIDIA<br> Judecătoria HÂRȘOVA<br>
-                    TULCEA<br> Tribunalul TULCEA<br> Judecătoria BABADAG<br> Judecătoria MACIN<br> Judecătoria TULCEA<br>
-                    <br>
-                    <strong>Curtea de Apel CRAIOVA</strong><br>
-                    DOLJ<br> Tribunalul DOLJ<br> Judecătoria BĂILEȘTI<br> Judecătoria CALAFAT<br> Judecătoria CRAIOVA<br> Judecătoria FILIAȘI<br> Judecătoria SEGARCEA<br>
-                    GORJ<br> Tribunalul GORJ<br> Judecătoria MOTRU<br> Judecătoria NOVACI<br> Judecătoria TÂRGU-CĂRBUNEȘTI<br> Judecătoria TÂRGU JIU<br>
-                    MEHEDINȚI<br> Tribunalul MEHEDINȚI<br> Judecătoria BAIA DE ARAMĂ<br> Judecătoria DROBETA-TURNU SEVERIN<br> Judecătoria ORȘOVA<br> Judecătoria STREHAIA<br> Judecătoria VÂNJU MARE<br>
-                    OLT<br> Tribunalul OLT<br> Judecătoria BALȘ<br> Judecătoria CARACAL<br> Judecătoria CORABIA<br> Judecătoria SLATINA<br>
-                    <br>
-                    <strong>Curtea de Apel GALAȚI</strong><br>
-                    BRĂILA<br> Tribunalul BRĂILA<br> Judecătoria BRĂILA<br> Judecătoria FĂUREI<br> Judecătoria ÎNSURĂȚEI<br>
-                    GALAȚI<br> Tribunalul GALAȚI<br> Judecătoria GALAȚI<br> Judecătoria TÂRGU BUJOR<br> Judecătoria TECUCI<br> Judecătoria LIEȘTI<br>
-                    VRANCEA<br> Tribunalul VRANCEA<br> Judecătoria ADJUD<br> Judecătoria FOCȘANI<br> Judecătoria PANCIU<br>
-                    <br>
-                    <strong>Curtea de Apel IAȘI</strong><br>
-                    IAȘI<br> Tribunalul IAȘI<br> Tribunalul Militar IAȘI<br> Judecătoria PAȘCANI<br> Judecătoria HÂRLĂU<br> Judecătoria IAȘI<br> Judecătoria RĂDUCĂNENI<br>
-                    VASLUI<br> Tribunalul VASLUI<br> Judecătoria BÂRLAD<br> Judecătoria HUȘI<br> Judecătoria VASLUI<br>
-                    <br>
-                    <strong>Curtea de Apel ORADEA</strong><br>
-                    BIHOR<br> Tribunalul BIHOR<br> Judecătoria ALESD<br> Judecătoria BEIUȘ<br> Judecătoria MARGHITA<br> Judecătoria ORADEA<br> Judecătoria SALONTA<br>
-                    SATU MARE<br> Tribunalul SATU MARE<br> Judecătoria CAREI<br> Judecătoria NEGREȘTI-OAȘ<br> Judecătoria SATU MARE<br>
-                    <br>
-                    <strong>Curtea de Apel PITEȘTI</strong><br>
-                    ARGEȘ<br> Tribunalul ARGEȘ<br> Tribunalul Specializat ARGEȘ<br> Judecătoria CÂMPULUNG<br> Judecătoria COSTEȘTI<br> Judecătoria CURTEA DE ARGEȘ<br> Judecătoria PITEȘTI<br> Judecătoria TOPOLOVENI<br>
-                    VÂLCEA<br> Tribunalul VÂLCEA<br> Judecătoria BĂLCEȘTI<br> Judecătoria BREZOI<br> Judecătoria DRĂGĂȘANI<br> Judecătoria HOREZU<br> Judecătoria RÂMNICU VALCEA<br>
-                    <br>
-                    <strong>Curtea de Apel PLOIEȘTI</strong><br>
-                    BUZĂU<br> Tribunalul BUZĂU<br> Judecătoria BUZĂU<br> Judecătoria PĂTÂRLAGELE<br> Judecătoria POGOANELE<br> Judecătoria RÂMNICU SARAT<br>
-                    PRAHOVA<br> Tribunalul PRAHOVA<br> Judecătoria CÂMPINA<br> Judecătoria MIZIL<br> Judecătoria PLOIEȘTI<br> Judecătoria SINAIA<br> Judecătoria VĂLENII DE MUNTE<br>
-                    DÂMBOVIȚA<br> Tribunalul DÂMBOVIȚA<br> Judecătoria GĂEȘTI<br> Judecătoria MORENI<br> Judecătoria PUCIOASA<br> Judecătoria RĂCARI<br> Judecătoria TÂRGOVIȘTE<br>
-                    <br>
-                    <strong>Curtea de Apel SUCEAVA</strong><br>
-                    BOTOȘANI<br> Tribunalul BOTOȘANI<br> Judecătoria BOTOȘANI<br> Judecătoria Darabani<br> Judecătoria DOROHOI<br> Judecătoria SĂVENI<br>
-                    SUCEAVA<br> Tribunalul SUCEAVA<br> Judecătoria CÂMPULUNG MOLDOVENESC<br> Judecătoria FĂLTICENI<br> Judecătoria GURA HUMORULUI<br> Judecătoria RĂDĂUȚI<br> Judecătoria SUCEAVA<br> Judecătoria VATRA DORNEI<br>
-                    <br>
-                    <strong>Curtea de Apel TÂRGU MUREȘ</strong><br>
-                    HARGHITA<br> Tribunalul HARGHITA<br> Judecătoria GHEORGHENI<br> Judecătoria MIERCUREA CIUC<br> Judecătoria ODORHEIU SECUIESC<br> Judecătoria TOPLIȚA<br>
-                    MUREȘ<br> Tribunalul MUREȘ<br> Tribunalul Specializat MUREȘ<br> Judecătoria LUDUȘ<br> Judecătoria REGHIN<br> Judecătoria SIGHIȘOARA<br> Judecătoria TÂRGU MUREȘ<br> Judecătoria TÂRNAVENI<br>
-                    <br>
-                    <strong>Curtea de Apel TIMIȘOARA</strong><br>
-                    ARAD<br> Tribunalul ARAD<br> Judecătoria CHIȘINEU CRIȘ<br> Judecătoria GURA HONȚ<br> Judecătoria INEU<br> Judecătoria LIPOVA<br> Judecătoria ARAD<br>
-                    CARAȘ SEVERIN<br> Tribunalul CARAȘ SEVERIN<br> Judecătoria CARANSEBEȘ<br> Judecătoria MOLDOVA-NOUĂ<br> Judecătoria ORAVIȚA<br> Judecătoria REȘITA<br>
-                    TIMIȘ<br> Tribunalul Militar TIMIȘOARA<br> Tribunalul TIMIȘ<br> Judecătoria FĂGET<br> Judecătoria DETA<br> Judecătoria LUGOJ<br> Judecătoria SÂNNICOLAUL MARE<br> Judecătoria TIMIȘOARA
-                </div>
-            </details>
-        </div>
-
-        <!-- ========== FOOTER ========== -->
-</div>
-
-    <!-- ========== SCRIPTS ========== -->
     <script src="rules.js?v=20260910-1"></script>
-    <script src="app.js?v=20260910-2"></script>
+    <script src="app.js?v=20260910-3"></script>
 </body>
 </html>
