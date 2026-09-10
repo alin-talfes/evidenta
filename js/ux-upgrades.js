@@ -154,23 +154,29 @@
     return [mode, judet && `județ ${judet}`, sex, varsta, regim].filter(Boolean).join(' · ');
   }
 
+  function setTextIfChanged(node, value) {
+    if (node && node.textContent !== value) node.textContent = value;
+  }
+
   function normalizeTransferResults() {
     if (pageName() !== 'transfer') return;
     const resultArea = document.getElementById('resultArea');
     if (!resultArea) return;
 
     const title = resultArea.querySelector('.result-title');
-    if (title?.textContent?.trim() === 'Unități recomandate') title.textContent = 'Unități compatibile';
+    if (title?.textContent?.trim() === 'Unități recomandate') {
+      setTextIfChanged(title, 'Unități compatibile');
+    }
 
     const criteria = transferCriteriaText();
     resultArea.querySelectorAll('.match-item').forEach((item, index) => {
       const tag = item.querySelector('.tag');
       const reason = item.querySelector('.reason');
       if (index === 0) {
-        if (tag) tag.textContent = 'Prima potrivire tehnică';
-        if (reason) reason.textContent = 'Prima potrivire după criteriile tehnice';
+        setTextIfChanged(tag, 'Prima potrivire tehnică');
+        setTextIfChanged(reason, 'Prima potrivire după criteriile tehnice');
       } else if (reason?.textContent?.includes('Alternativă')) {
-        reason.textContent = 'Potrivire compatibilă';
+        setTextIfChanged(reason, 'Potrivire compatibilă');
       }
 
       if (item.querySelector('.ev-match-why')) return;
@@ -188,8 +194,22 @@
     const resultArea = document.getElementById('resultArea');
     if (!resultArea || resultArea.dataset.evObserved === 'true') return;
     resultArea.dataset.evObserved = 'true';
+
+    const observerOptions = { childList: true, subtree: true };
+    let observer;
+    const observe = () => observer.observe(resultArea, observerOptions);
+
+    observer = new MutationObserver(() => {
+      observer.disconnect();
+      try {
+        normalizeTransferResults();
+      } finally {
+        observe();
+      }
+    });
+
     normalizeTransferResults();
-    new MutationObserver(normalizeTransferResults).observe(resultArea, { childList: true, subtree: true });
+    observe();
   }
 
   function initTransferRulesTabs() {

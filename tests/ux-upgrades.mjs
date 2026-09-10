@@ -11,7 +11,7 @@ const version = read('js/version.js');
 const ux = read('js/ux-upgrades.js');
 const css = read('css/ux-upgrades.css');
 
-assert.ok(version.includes('ux-upgrades.js?v=1'), 'Controllerul de versiune trebuie să încarce upgrade-urile UX comune');
+assert.ok(version.includes('ux-upgrades.js?v=2'), 'Controllerul de versiune trebuie să încarce versiunea reparată a upgrade-urilor UX comune');
 assert.ok(version.includes('data-evidenta-ux-controller') || version.includes('evidentaUxController'), 'Loaderul UX trebuie să prevină dublarea controllerului');
 
 for (const marker of [
@@ -28,6 +28,10 @@ for (const marker of [
 ]) {
   assert.ok(ux.includes(marker), `Upgrade-ul UX trebuie să conțină ${marker}`);
 }
+
+assert.ok(ux.includes('function setTextIfChanged(node, value)'), 'Normalizarea Transfer trebuie să evite mutațiile DOM redundante');
+assert.ok(ux.includes('observer.disconnect()'), 'Observerul Transfer trebuie suspendat în timpul normalizării pentru a preveni recursia');
+assert.ok(!ux.includes('new MutationObserver(normalizeTransferResults)'), 'Observerul Transfer nu trebuie să invoce direct o funcție care își mută propriul subtree');
 
 for (const marker of [
   '.ev-shell__menu',
