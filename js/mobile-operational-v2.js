@@ -66,7 +66,7 @@
       (mode || sentence).insertAdjacentElement(mode ? 'afterend' : 'beforebegin', lc.details);
     }
 
-    const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'masuri-preventive-heading'];
+    const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'regime-multiple-heading', 'masuri-preventive-heading'];
     const rareCards = rareIds.map(id => document.getElementById(id)?.closest('.card')).filter(Boolean);
     if (rareCards.length) {
       const advanced = detailsShell('ev-mobile-advanced-details', 'Opțiuni avansate');
