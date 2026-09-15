@@ -60,22 +60,73 @@ function extractExplicitFinal(text){
   return null;
 }
 
+function extractContestComponents(text){
+  const original=String(text||'');
+  const normalized=fold(original);
+  if(!(/\bart\.?\s*39\b/.test(normalized)||/concurs\s+de\s+infractiuni/.test(normalized)||/spor\s+de\s+o\s+treime/.test(normalized)||/o\s+treime\s+din\s+(?:suma|totalul)\s+celorlalte/.test(normalized))) return [];
+  const rx=/condamna[^.;\n]{0,180}/gi;
+  const out=[];
+  let m;
+  while((m=rx.exec(normalized))){
+    const duration=parseDuration(m[0]);
+    if(!duration||(duration.years===0&&duration.months===0&&duration.days===0)) continue;
+    const source=root.AIDocumentCore?.sourceSnippet?.(original,m.index,original.slice(m.index,Math.min(original.length,m.index+m[0].length)))||original.slice(m.index,m.index+m[0].length).trim();
+    const ocrConfidence=root.AIDocumentCore?.ocrConfidenceFromSource?.(source);
+    const low=Number.isFinite(ocrConfidence)&&ocrConfidence<80;
+    out.push({
+      ...duration,
+      group:low?'ignore':'concurs',
+      suggestedGroup:low?'concurs':undefined,
+      confidence:low?'scăzut':'ridicat',
+      reviewRequired:low,
+      source,
+      ...(Number.isFinite(ocrConfidence)?{ocrConfidence}:{})
+    });
+  }
+  const unique=[];
+  for(const item of out){
+    if(unique.some(x=>x.years===item.years&&x.months===item.months&&x.days===item.days&&x.source===item.source)) continue;
+    unique.push(item);
+  }
+  return unique;
+}
+
+function mergeContestComponents(analysis){
+  const extracted=extractContestComponents(analysis.text);
+  if(!extracted.length) return;
+  const existing=Array.isArray(analysis.penalties)?analysis.penalties:[];
+  const result=[...existing];
+  for(const item of extracted){
+    const duplicate=result.some(x=>x.years===item.years&&x.months===item.months&&x.days===item.days&&x.group===item.group&&x.source===item.source);
+    if(!duplicate) result.push(item);
+  }
+  analysis.penalties=result;
+  if(extracted.some(item=>item.reviewRequired)){
+    analysis.numericReviewRequired=true;
+    analysis.warnings=analysis.warnings||[];
+    const warning='NECESITĂ VERIFICARE NUMERICĂ: una sau mai multe pedepse componente ale concursului provin din OCR sub 80%. Confirmă rândurile înainte de contopire.';
+    if(!analysis.warnings.includes(warning)) analysis.warnings.push(warning);
+  }
+}
+
 function apply(analysis){
   if(!analysis?.text) return analysis;
   const explicit=extractExplicitFinal(analysis.text);
-  if(!explicit) return analysis;
-  analysis.finalSentence={years:explicit.years,months:explicit.months,days:explicit.days};
-  analysis.extractionMeta={...(analysis.extractionMeta||{}),finalSentence:{source:explicit.source,basis:'explicit_result_duration'}};
-  analysis.evidence=Array.isArray(analysis.evidence)?analysis.evidence:[];
-  analysis.evidence=analysis.evidence.filter(item=>item?.label!=='Pedeapsă rezultantă');
-  analysis.evidence.push({
-    label:'Pedeapsă rezultantă',
-    value:`${explicit.years} ani, ${explicit.months} luni, ${explicit.days} zile`,
-    confidence:'ridicat',
-    source:explicit.source,
-    ocrConfidence:root.AIDocumentCore?.ocrConfidenceFromSource?.(explicit.source)
-  });
-  analysis.warnings=(analysis.warnings||[]).filter(w=>!String(w).includes('Pedeapsa rezultantă nu a fost identificată'));
+  if(explicit){
+    analysis.finalSentence={years:explicit.years,months:explicit.months,days:explicit.days};
+    analysis.extractionMeta={...(analysis.extractionMeta||{}),finalSentence:{source:explicit.source,basis:'explicit_result_duration'}};
+    analysis.evidence=Array.isArray(analysis.evidence)?analysis.evidence:[];
+    analysis.evidence=analysis.evidence.filter(item=>item?.label!=='Pedeapsă rezultantă');
+    analysis.evidence.push({
+      label:'Pedeapsă rezultantă',
+      value:`${explicit.years} ani, ${explicit.months} luni, ${explicit.days} zile`,
+      confidence:'ridicat',
+      source:explicit.source,
+      ocrConfidence:root.AIDocumentCore?.ocrConfidenceFromSource?.(explicit.source)
+    });
+    analysis.warnings=(analysis.warnings||[]).filter(w=>!String(w).includes('Pedeapsa rezultantă nu a fost identificată'));
+  }
+  mergeContestComponents(analysis);
   return analysis;
 }
 
@@ -87,5 +138,5 @@ function install(){
 }
 
 install();
-root.AIBetaLot7Duration={parseDuration,extractExplicitFinal,apply};
+root.AIBetaLot7Duration={parseDuration,extractExplicitFinal,extractContestComponents,apply};
 })(typeof window!=='undefined'?window:globalThis);
