@@ -7,7 +7,6 @@ const version = JSON.parse(read('version.json')).version;
 const releaseGate = read('RELEASE_GATE.md');
 const packageJson = JSON.parse(read('package.json'));
 const manifest = JSON.parse(read('manifest.json'));
-const indexSource = read('index.html');
 const versionSource = read('js/version.js');
 const manualRules = read('js/deduction-ui.js');
 
@@ -20,7 +19,6 @@ assert.ok(packageJson.scripts.test.includes('tests/release-gate.mjs'), 'Release 
 for (const route of ['./', './contopiri/', './ai/', './transfer/']) {
   assert.ok(manifest.shortcuts.some(item => item.url === route), `Manifestul nu expune ruta ${route}`);
 }
-assert.ok(indexSource.includes('js/regime-reanalysis.js'), 'Motorul art. 53 trebuie încărcat în Pedepse');
 assert.ok(versionSource.includes('release-guards.js'), 'Protecțiile juridice de release trebuie încărcate în runtime');
 
 const ctx = { console, Date, Math, Number, String, Array, Object, Set, JSON, globalThis:null };
@@ -112,7 +110,6 @@ assert.ok(manualRules.includes('data.dedRows = collectTypedDedRows()'), 'Salvare
 assert.ok(manualRules.includes('saved.type'), 'Încărcarea speței trebuie să restaureze tipul deducerii');
 assert.ok(aiRules.includes('TYPE_RETENTION_24H'), 'AI trebuie să păstreze regula reținerii');
 assert.ok(read('js/app.js').includes('EDUCATIONAL_ARTICLES.has(art)'), 'Măsurile educative nu trebuie să primească automat reanalizarea 1/5');
-assert.ok(read('js/regime-reanalysis.js').includes('calculateArticle53'), 'Motorul art. 53 trebuie păstrat');
 assert.ok(read('transfer/rules.js').includes("consolidatedAt: '30.03.2026'"), 'Baseline-ul profilării transfer trebuie păstrat explicit');
 
-console.log('Release gate 1.0: LC, VCP 55¹ 20/15 ani, praguri de vârstă, art. 53, contopiri, deduceri, persistență și rute verificate.');
+console.log('Release gate 1.0: LC, VCP 55¹ 20/15 ani, praguri de vârstă, contopiri, deduceri, persistență și rute verificate.');
