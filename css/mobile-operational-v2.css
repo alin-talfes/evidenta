@@ -70,7 +70,12 @@
 
 @media (max-width:600px) {
   html { -webkit-text-size-adjust:100%; }
-  body { overscroll-behavior-y:none; }
+  body {
+    overscroll-behavior-y:none;
+    /* Bara de navigare este fixed; rezervăm spațiu real sub ultimul control. */
+    padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  #main-content { padding-bottom:18px; }
 
   button,
   a,
