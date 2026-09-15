@@ -71,6 +71,14 @@
         }
     }
 
+    function ensureOperationalUpgrades() {
+        ensureScript(
+            'script[data-evidenta-operational-upgrades]',
+            new URL('./operational-upgrades.js?v=1', scriptUrl).href,
+            'evidentaOperationalUpgrades'
+        );
+    }
+
     function ensureAiNavigation() {
         const nav = document.querySelector('.ev-shell__nav');
         if (!nav || nav.querySelector('[data-ai-documents-link]')) return;
@@ -127,18 +135,22 @@
     ensureLegalReleaseGuards();
     ensurePageControllers();
     ensureCalculationParity();
+    ensureOperationalUpgrades();
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             ensureLegalReleaseGuards();
             ensurePageControllers();
             ensureCalculationParity();
+            ensureOperationalUpgrades();
             ensureAiNavigation();
             initFooter();
         }, { once: true });
     } else {
         ensureLegalReleaseGuards();
+        ensurePageControllers();
         ensureCalculationParity();
+        ensureOperationalUpgrades();
         ensureAiNavigation();
         initFooter();
     }
