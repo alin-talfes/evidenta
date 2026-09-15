@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v6';
+const VERSION = 'v7';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -42,7 +42,7 @@ const CORE_PATHS = [
   './js/operational-corrections.js',
   './js/operational-finalize.js',
   './js/mobile-operational-v2.js',
-  './js/pedepse-modes-v3.js',
+  './js/pedepse-modes-v4.js',
   './js/disclosure-hardening.js',
   './js/pwa-register.js',
   './transfer/app.js',
