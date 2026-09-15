@@ -82,18 +82,26 @@
             new URL('./operational-corrections.js?v=3', scriptUrl).href,
             'evidentaOperationalCorrections'
         );
+        ensureScript(
+            'script[data-evidenta-operational-finalize]',
+            new URL('./operational-finalize.js?v=1', scriptUrl).href,
+            'evidentaOperationalFinalize'
+        );
     }
 
     function ensureAiNavigation() {
         const nav = document.querySelector('.ev-shell__nav');
-        if (!nav || nav.querySelector('[data-ai-documents-link]')) return;
+        if (!nav || [...nav.querySelectorAll('a')].some(a => {
+            try { return /\/ai\/?$/.test(new URL(a.href, location.href).pathname); }
+            catch (_) { return false; }
+        })) return;
         const link = document.createElement('a');
         link.href = new URL('../ai/', scriptUrl).href;
         link.textContent = 'AI · BETA';
         link.dataset.aiDocumentsLink = 'true';
         if (/\/ai(?:\/|\/index\.html)?$/.test(location.pathname)) link.setAttribute('aria-current', 'page');
         const contopiri = [...nav.querySelectorAll('a')].find(a => /\/contopiri\/?$/.test(new URL(a.href, location.href).pathname));
-        if (contopiri?.nextSibling) nav.insertBefore(link, contopiri.nextSibling);
+        if (contopiri) nav.insertBefore(link, contopiri);
         else nav.appendChild(link);
     }
 
