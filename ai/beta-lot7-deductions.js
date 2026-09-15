@@ -4,6 +4,7 @@
 const DATE_SRC='[0-3]?\\d[.\\/-][01]?\\d[.\\/-](?:19|20)\\d{2}';
 
 function parseDate(value){ return root.AIDocumentCore?.parseDateToken?.(String(value||'').trim()) || null; }
+function dayNumber(value){ const p=parseDate(value); return p?Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000):null; }
 function sourceAt(text,index,fragment){ return root.AIDocumentCore?.sourceSnippet?.(text,index,fragment) || String(fragment||'').trim(); }
 function ocrConfidence(source){ return root.AIDocumentCore?.ocrConfidenceFromSource?.(source); }
 function addWarning(analysis,message){ analysis.warnings=analysis.warnings||[]; if(message&&!analysis.warnings.includes(message)) analysis.warnings.push(message); }
@@ -25,6 +26,11 @@ function dedupe(rows){
     if(!existing||(!existing.reviewRequired&&row.reviewRequired)) map.set(key,row);
   }
   return [...map.values()];
+}
+
+function validOrdered(start,end){
+  const a=dayNumber(start),b=dayNumber(end);
+  return Number.isFinite(a)&&Number.isFinite(b)&&b>=a;
 }
 
 function deductionSegments(text){
@@ -53,7 +59,7 @@ function parseOperationalMixedList(text){
     const preventive=new RegExp(`(?:arestului\\s+preventiv|arestării\\s+preventive|arestarii\\s+preventive)[^,;\\n]{0,120}?(?:din\\s+data\\s+de|de\\s+la|din)\\s*(${DATE_SRC})\\s*(?:până|pana)\\s*(?:în\\s+)?(?:data\\s+de\\s*)?(${DATE_SRC})`,'i').exec(value);
     if(preventive){
       const start=parseDate(preventive[1]),end=parseDate(preventive[2]);
-      if(start&&end&&end.date>=start.date) rows.push(makeRow(text,segment.index+preventive.index,start.iso,end.iso,'preventive',preventive[0],'interval calculat cu ambele capete incluse'));
+      if(start&&end&&validOrdered(start.iso,end.iso)) rows.push(makeRow(text,segment.index+preventive.index,start.iso,end.iso,'preventive',preventive[0],'interval calculat cu ambele capete incluse'));
     }
 
     const preventiveOpen=new RegExp(`(?:arestului\\s+preventiv|arestării\\s+preventive|arestarii\\s+preventive)[^,;\\n]{0,120}?(?:din\\s+data\\s+de|de\\s+la|din)\\s*(${DATE_SRC})\\s*(?:până\\s+)?la\\s+zi\\b`,'i').exec(value);
@@ -71,7 +77,7 @@ function parseOperationalMixedList(text){
     const homeClosed=new RegExp(`(?:arestului\\s+la\\s+domiciliu|arestului\\s+domiciliar)[^,;\\n]{0,120}?(?:din\\s+data\\s+de|de\\s+la|din)\\s*(${DATE_SRC})\\s*(?:până|pana)\\s*(?:în\\s+)?(?:data\\s+de\\s*)?(${DATE_SRC})`,'i').exec(value);
     if(homeClosed){
       const start=parseDate(homeClosed[1]),end=parseDate(homeClosed[2]);
-      if(start&&end&&end.date>=start.date) rows.push(makeRow(text,segment.index+homeClosed.index,start.iso,end.iso,'home_arrest',homeClosed[0],'interval calculat cu ambele capete incluse'));
+      if(start&&end&&validOrdered(start.iso,end.iso)) rows.push(makeRow(text,segment.index+homeClosed.index,start.iso,end.iso,'home_arrest',homeClosed[0],'interval calculat cu ambele capete incluse'));
     }
   }
   return dedupe(rows);
