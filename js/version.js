@@ -77,6 +77,11 @@
             new URL('./operational-upgrades.js?v=1', scriptUrl).href,
             'evidentaOperationalUpgrades'
         );
+        ensureScript(
+            'script[data-evidenta-operational-corrections]',
+            new URL('./operational-corrections.js?v=1', scriptUrl).href,
+            'evidentaOperationalCorrections'
+        );
     }
 
     function ensureAiNavigation() {
