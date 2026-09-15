@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v3';
+const VERSION = 'v4';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -36,6 +36,7 @@ const CORE_PATHS = [
   './js/ui.js',
   './js/app.js',
   './js/deduction-ui.js',
+  './js/regime-reanalysis.js',
   './js/contopiri-core.js',
   './js/contopiri.js',
   './js/operational-upgrades.js',
