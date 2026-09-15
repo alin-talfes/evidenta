@@ -10,7 +10,7 @@
     if (document.querySelector('link[data-evidenta-pedepse-modes-v3]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/pedepse-modes-v3.css?v=1', scriptUrl).href;
+    link.href = new URL('../css/pedepse-modes-v3.css?v=2', scriptUrl).href;
     link.dataset.evidentaPedepseModesV3 = 'true';
     document.head.appendChild(link);
   }
@@ -36,19 +36,28 @@
     if (buttons && !buttons.children.length) optional.remove();
   }
 
+  function normalizeModeLabels(mode) {
+    const quick = mode.querySelector('[data-mode="quick"]');
+    const full = mode.querySelector('[data-mode="full"]');
+    if (quick) quick.textContent = 'Calcul rapid';
+    if (full) full.textContent = 'Calcul complet LC';
+  }
+
   function buildPreventivePanel() {
     const heading = document.getElementById('masuri-preventive-heading');
     const card = heading?.closest('.card');
     if (!card) return null;
 
     removeLegacyPreventiveToggle(card);
+    heading.textContent = 'CALCUL MĂSURI PREVENTIVE';
 
     let panel = document.querySelector('.ev-preventive-mode-panel');
     if (!panel) {
-      panel = document.createElement('details');
+      panel = document.createElement('section');
       panel.className = 'ev-preventive-mode-panel';
       panel.hidden = true;
-      panel.innerHTML = '<summary>Prelungiri măsuri preventive</summary><div class="ev-preventive-mode-panel__body"></div>';
+      panel.setAttribute('aria-labelledby', 'masuri-preventive-heading');
+      panel.innerHTML = '<div class="ev-preventive-mode-panel__body"></div>';
       document.querySelector('.ev-calc-mode')?.insertAdjacentElement('afterend', panel);
     }
 
@@ -75,22 +84,13 @@
     if (value === 'preventive') document.body.classList.remove('ev-quick-mode');
 
     mode.querySelectorAll('[data-mode]').forEach(button => {
-      button.classList.toggle('is-active', button.dataset.mode === value);
-      button.setAttribute('aria-pressed', String(button.dataset.mode === value));
+      const active = button.dataset.mode === value;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
     });
 
     const panel = document.querySelector('.ev-preventive-mode-panel');
-    if (panel) {
-      panel.hidden = value !== 'preventive';
-      if (value === 'preventive' && panel.dataset.evOpenedOnce !== 'true') {
-        panel.open = true;
-        panel.dataset.evOpenedOnce = 'true';
-      }
-    }
-
-    if (value !== 'preventive') {
-      document.querySelector('.ev-preventive-mode-panel')?.setAttribute('hidden', '');
-    }
+    if (panel) panel.hidden = value !== 'preventive';
   }
 
   function currentMode(mode) {
@@ -107,6 +107,7 @@
     mode.setAttribute('role', 'group');
     mode.setAttribute('aria-label', 'Tip calcul');
 
+    normalizeModeLabels(mode);
     buildPreventivePanel();
     ensureThirdModeButton(mode);
 
@@ -118,8 +119,8 @@
       const button = event.target.closest('[data-mode]');
       if (!button) return;
       const requested = button.dataset.mode;
-      // Listenerul vechi gestionează rapid/complet. Aplicăm starea finală după el,
-      // astfel încât al treilea mod să rămână complet separat.
+      // Controllerul existent gestionează rapid/complet. Aplicăm starea finală după el,
+      // astfel încât calculatorul de măsuri preventive să rămână o categorie separată.
       queueMicrotask(() => setActiveMode(mode, requested));
     });
 
