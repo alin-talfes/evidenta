@@ -27,7 +27,7 @@ if(!health.includes('document.getElementById("official-sets")?.children.length')
 if(!health.includes('document.getElementById("interview-list")?.children.length')) throw new Error("Spețele de interviu nu sunt verificate după randare.");
 
 for(const marker of [
-  'evidenta-ofiter-v113','./data-health.js?v=4','./generated/controllers/official.js?v=2','./generated/controllers/interview.js?v=2',
+  'evidenta-ofiter-v114','./styles.css?v=3','./data-health.js?v=4','./generated/controllers/official.js?v=2','./generated/controllers/interview.js?v=2',
   './exam-training.js?v=2','./calculation-engine.js?v=2','./calculation-age-cases.js?v=2',
   '["2","3"].includes(url.searchParams.get("v"))','fetch("./data-health.js?v=4"'
 ]) if(!sw.includes(marker)) throw new Error(`Service worker-ul nu invalidează/precache-uiește corect modulele: ${marker}`);
