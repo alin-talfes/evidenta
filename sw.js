@@ -23,6 +23,7 @@ const CORE_PATHS = [
   './css/design-system.css',
   './css/operational-upgrades.css',
   './css/mobile-operational-v2.css',
+  './css/pwa-mobile.css',
   './js/theme.js',
   './js/version.js',
   './js/utils.js',
