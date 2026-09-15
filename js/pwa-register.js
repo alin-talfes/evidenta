@@ -32,7 +32,7 @@
     if (document.querySelector('link[data-evidenta-pwa-mobile]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/pwa-mobile.css?v=1', scriptUrl).href;
+    link.href = new URL('../css/pwa-mobile.css?v=2', scriptUrl).href;
     link.dataset.evidentaPwaMobile = 'true';
     document.head.appendChild(link);
   }
