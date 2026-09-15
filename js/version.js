@@ -95,9 +95,9 @@
             'evidentaMobileOperationalV2'
         );
         ensureScript(
-            'script[data-evidenta-pedepse-modes-v3]',
-            new URL('./pedepse-modes-v3.js?v=2', scriptUrl).href,
-            'evidentaPedepseModesV3'
+            'script[data-evidenta-pedepse-modes-v4]',
+            new URL('./pedepse-modes-v4.js?v=1', scriptUrl).href,
+            'evidentaPedepseModesV4'
         );
         ensureScript(
             'script[data-evidenta-disclosure-hardening]',
