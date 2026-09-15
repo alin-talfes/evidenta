@@ -28,6 +28,21 @@
     if (!link.href) link.href = href;
   }
 
+  function ensureViewportFit() {
+    let viewport = document.head.querySelector('meta[name="viewport"]');
+    if (!viewport) {
+      viewport = document.createElement('meta');
+      viewport.name = 'viewport';
+      viewport.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover';
+      document.head.appendChild(viewport);
+      return;
+    }
+    if (!/\bviewport-fit\s*=\s*cover\b/i.test(viewport.content || '')) {
+      const current = String(viewport.content || '').trim().replace(/\s*,\s*$/, '');
+      viewport.content = `${current || 'width=device-width, initial-scale=1.0'}, viewport-fit=cover`;
+    }
+  }
+
   function ensureStyleSheet() {
     if (document.querySelector('link[data-evidenta-pwa-mobile]')) return;
     const link = document.createElement('link');
@@ -50,6 +65,7 @@
   }
 
   function hardenMobileHead() {
+    ensureViewportFit();
     ensureMeta('mobile-web-app-capable', 'yes');
     ensureMeta('apple-mobile-web-app-capable', 'yes');
     ensureMeta('apple-mobile-web-app-status-bar-style', 'black-translucent');
