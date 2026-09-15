@@ -9,6 +9,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const version = read('js/version.js');
 const operational = read('js/operational-upgrades.js');
+const corrections = read('js/operational-corrections-v4.js');
 const finalize = read('js/operational-finalize.js');
 const mobile = read('js/mobile-operational-v2.js');
 const mobileCss = read('css/mobile-operational-v2.css');
@@ -24,7 +25,7 @@ const aiSw = read('ai/security-sw.js');
 const index = read('index.html');
 const manifest = JSON.parse(read('manifest.json'));
 
-for (const marker of ['operational-upgrades.js?v=1','operational-finalize.js?v=1','mobile-operational-v2.js?v=1','pedepse-modes-v4.js?v=1','disclosure-hardening.js?v=1','pwa-register.js?v=1']) {
+for (const marker of ['operational-upgrades.js?v=1','operational-corrections-v4.js?v=1','operational-finalize.js?v=1','mobile-operational-v2.js?v=1','pedepse-modes-v4.js?v=1','disclosure-hardening.js?v=1','pwa-register.js?v=1']) {
   assert.ok(version.includes(marker), `Loaderul global trebuie să includă ${marker}`);
 }
 
@@ -50,10 +51,14 @@ for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','C
   assert.ok(modes.includes(marker), `Modurile Pedepse trebuie să includă ${marker}`);
 }
 assert.ok(modes.includes('observer.disconnect()'), 'Observer-ul de inițializare trebuie deconectat imediat după montarea modurilor.');
-assert.ok(modes.includes('Nu există observer permanent'), 'Controllerul nu trebuie să mențină un MutationObserver permanent pe body.');
+assert.ok(modes.includes('Nu există observer permanent'), 'Controllerul modurilor nu trebuie să mențină un MutationObserver permanent pe body.');
 assert.ok(kill.includes('__EVIDENTA_PEDEPSE_MODES_V3__ = true'), 'Bootstrap-ul extern trebuie să neutralizeze versiunea v3 rămasă eventual în cache.');
 assert.ok(index.includes('pedepse-modes-v3-kill.js?v=1'), 'Pagina Pedepse trebuie să încarce protecția externă pentru cache-ul v3.');
 assert.ok(index.includes('pedepse-modes-v4.js?v=1'), 'Pagina Pedepse trebuie să poată încărca direct controllerul v4 chiar dacă version.js este vechi în cache.');
+assert.ok(index.includes('operational-corrections-v4.js?v=1'), 'Pagina Pedepse trebuie să încarce direct corecțiile fără observer înainte de loader-ele posibil cache-uite.');
+assert.ok(!corrections.includes('new MutationObserver'), 'Corecțiile operaționale Pedepse nu trebuie să instaleze MutationObserver permanent.');
+assert.ok(!corrections.includes('bodyObserver'), 'Corecțiile operaționale nu trebuie să observe întreg document.body.');
+assert.ok(corrections.includes('if (next !== text) paragraph.textContent = next'), 'Rescrierea mesajelor trebuie să fie idempotentă și să evite mutații DOM identice.');
 assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(index), 'index.html nu trebuie să conțină script inline.');
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Cele trei moduri trebuie aliniate în trei coloane egale.');
 assert.ok(modesCss.includes('@media (max-width:600px)'), 'Cele trei moduri trebuie să aibă layout dedicat pe telefon.');
@@ -79,11 +84,11 @@ assert.ok(pwaCss.includes('ev-offline-badge'), 'Starea offline trebuie comunicat
 assert.ok(pwaCss.includes('.ev-shell__brand-home'), 'Identitatea din header trebuie stilizată fără linkuri imbricate.');
 assert.ok(pwaCss.includes('white-space:normal'), 'Metadatele versiunii/copyright trebuie să poată coborî pe rândul doi pe telefoane mici.');
 
-for (const marker of ['service worker','evidenta-static-','navigationResponse','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pedepse-modes-v4.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
+for (const marker of ['service worker',"const VERSION = 'v8'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/pedepse-modes-v4.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
 assert.ok(!sw.includes('./js/regime-reanalysis.js'), 'Service Worker-ul nu trebuie să mai păstreze în cache modulul retras.');
-for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v5','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pedepse-modes-v4.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v6','evidenta-ai-runtime-v6','tessdata-best/ron.traineddata.gz','navigationResponse','../js/operational-corrections-v4.js','../js/pedepse-modes-v4.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să păstreze securitatea și offline-ul: ${marker}`);
 }
 
@@ -91,4 +96,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse fără observer permanent, măsuri preventive separate, cache guard extern, disclosure-uri, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
+console.log('Mobile/PWA audit: moduri Pedepse, măsuri preventive separate, corecții fără observer global, runtime critic network-first, cache guard, disclosure-uri, viewport iPhone/Android, camere, prefill și offline verificate.');
