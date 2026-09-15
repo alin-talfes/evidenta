@@ -1,9 +1,9 @@
-const CACHE = "evidenta-ofiter-v113"; // upgrade from evidenta-ofiter-v112
+const CACHE = "evidenta-ofiter-v114";
 const GENERATED_CACHE = "evidenta-ofiter-generated-v15";
 const CACHE_PREFIX = "evidenta-ofiter-";
 
 const CORE_ASSETS = [
-  "./","./index.html","./styles.css?v=2","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./clean-learning.css","./access-gate.js",
+  "./","./index.html","./styles.css?v=3","./generated/mobile-bundle.css","./dashboard-shell.css","./access-gate.css","./clean-learning.css","./access-gate.js",
   "./data-core.js?v=2","./bootstrap.js?v=3","./bootstrap.js?v=4","./persistence-layer.js","./heavy-data-loader.js","./heavy-data-loader.js?v=2","./data-health.js","./data-health.js?v=2","./data-health.js?v=3","./data-health.js?v=4","./generated/runtime-bundle.js?v=3","./dashboard-cockpit.js?v=1",
   "./generated/controllers/interview.js","./generated/controllers/interview.js?v=2","./generated/controllers/legislation.js?v=3","./generated/controllers/legislation.js?v=4","./generated/controllers/official.js","./generated/controllers/official.js?v=2",
   "./exam-training.css","./exam-training.css?v=2","./exam-training.js","./exam-training.js?v=2","./functional-fixes.js","./functional-fixes.js?v=2",
