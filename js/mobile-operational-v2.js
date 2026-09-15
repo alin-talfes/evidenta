@@ -66,9 +66,8 @@
       (mode || sentence).insertAdjacentElement(mode ? 'afterend' : 'beforebegin', lc.details);
     }
 
-    // Măsurile preventive NU sunt o opțiune avansată a calculului pedepsei.
-    // Ele au categorie/mod propriu, administrat de pedepse-modes-v3.js.
-    const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'regime-multiple-heading'];
+    // Măsurile preventive au categorie/mod propriu și nu intră în opțiunile avansate.
+    const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];
     const rareCards = rareIds.map(id => document.getElementById(id)?.closest('.card')).filter(Boolean);
     if (rareCards.length) {
       const advanced = detailsShell('ev-mobile-advanced-details', 'Opțiuni avansate');
