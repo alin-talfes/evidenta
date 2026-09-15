@@ -10,7 +10,7 @@
     if (document.querySelector('link[data-evidenta-pedepse-modes-v3]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/pedepse-modes-v3.css?v=2', scriptUrl).href;
+    link.href = new URL('../css/pedepse-modes-v3.css?v=3', scriptUrl).href;
     link.dataset.evidentaPedepseModesV3 = 'true';
     document.head.appendChild(link);
   }
@@ -23,14 +23,20 @@
 
   function removeLegacyPreventiveToggle(card) {
     const optional = document.querySelector('.ev-optional-tools');
-    if (!optional || !card) return;
-    optional.querySelectorAll('.ev-optional-toggle').forEach(button => {
-      const controls = button.getAttribute('aria-controls');
-      const text = button.textContent?.toLocaleLowerCase('ro') || '';
-      if ((controls && controls === card.id) || text.includes('măsuri preventive') || text.includes('masuri preventive')) button.remove();
+    if (optional && card) {
+      optional.querySelectorAll('.ev-optional-toggle').forEach(button => {
+        const controls = button.getAttribute('aria-controls');
+        const text = button.textContent?.toLocaleLowerCase('ro') || '';
+        if ((controls && controls === card.id) || text.includes('măsuri preventive') || text.includes('masuri preventive')) button.remove();
+      });
+      const buttons = optional.querySelector('.ev-optional-tools__buttons');
+      if (buttons && !buttons.children.length) optional.remove();
+    }
+
+    document.querySelectorAll('.ev-mobile-advanced-details summary, .ev-mobile-advanced-details button').forEach(control => {
+      const text = control.textContent?.toLocaleLowerCase('ro') || '';
+      if (text.includes('măsuri preventive') || text.includes('masuri preventive')) control.remove();
     });
-    const buttons = optional.querySelector('.ev-optional-tools__buttons');
-    if (buttons && !buttons.children.length) optional.remove();
   }
 
   function removeEmptyAdvancedDisclosure() {
@@ -42,8 +48,10 @@
   function normalizeModeLabels(mode) {
     const quick = mode.querySelector('[data-mode="quick"]');
     const full = mode.querySelector('[data-mode="full"]');
+    const preventive = mode.querySelector('[data-mode="preventive"]');
     if (quick && quick.textContent !== 'Calcul rapid') quick.textContent = 'Calcul rapid';
     if (full && full.textContent !== 'Calcul complet LC') full.textContent = 'Calcul complet LC';
+    if (preventive && preventive.textContent !== 'Măsuri preventive') preventive.textContent = 'Măsuri preventive';
   }
 
   function ensurePreventivePanel(mode) {
@@ -70,9 +78,9 @@
 
     removeLegacyPreventiveToggle(card);
     if (heading.textContent !== 'CALCUL MĂSURI PREVENTIVE') heading.textContent = 'CALCUL MĂSURI PREVENTIVE';
-    if (card.dataset.evPreventiveCard !== 'true') card.dataset.evPreventiveCard = 'true';
-    if (card.classList.contains('ev-optional-card')) card.classList.remove('ev-optional-card');
-    if (card.hidden) card.hidden = false;
+    card.dataset.evPreventiveCard = 'true';
+    card.classList.remove('ev-optional-card');
+    card.hidden = false;
     if (card.parentElement !== body) body.appendChild(card);
     removeEmptyAdvancedDisclosure();
     return panel;
@@ -80,12 +88,13 @@
 
   function ensureThirdModeButton(mode) {
     let button = mode.querySelector('[data-mode="preventive"]');
-    if (button) return button;
-    button = document.createElement('button');
-    button.type = 'button';
-    button.dataset.mode = 'preventive';
+    if (!button) {
+      button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.mode = 'preventive';
+      mode.appendChild(button);
+    }
     button.textContent = 'Măsuri preventive';
-    mode.appendChild(button);
     return button;
   }
 
@@ -105,31 +114,56 @@
   }
 
   function currentMode(mode) {
+    if (document.body.classList.contains('ev-preventive-mode')) return 'preventive';
     return mode.querySelector('[data-mode].is-active')?.dataset.mode || 'quick';
   }
 
-  function initMode(mode) {
-    if (!mode || mode.dataset.evThreeModesV4 === 'true') return true;
-    const heading = document.getElementById('masuri-preventive-heading');
-    if (!heading) return false;
-
+  function repairMode(mode) {
+    if (!mode) return false;
+    mode.dataset.evThreeModes = 'true';
     mode.dataset.evThreeModesV4 = 'true';
     mode.setAttribute('role', 'group');
     mode.setAttribute('aria-label', 'Tip calcul');
+    ensureThirdModeButton(mode);
     normalizeModeLabels(mode);
     movePreventiveCard(mode);
-    ensureThirdModeButton(mode);
-
     mode.querySelectorAll('[data-mode]').forEach(button => {
       button.setAttribute('aria-pressed', String(button.classList.contains('is-active')));
     });
+    return true;
+  }
+
+  function initMode(mode) {
+    if (!mode) return false;
+
+    const heading = document.getElementById('masuri-preventive-heading');
+    if (!heading) return false;
+
+    const alreadyBound = mode.dataset.evThreeModesV4 === 'true';
+    repairMode(mode);
+    if (alreadyBound) {
+      setActiveMode(mode, currentMode(mode));
+      return true;
+    }
 
     mode.addEventListener('click', event => {
       const button = event.target.closest('[data-mode]');
-      if (!button) return;
+      if (!button || !mode.contains(button)) return;
       const requested = button.dataset.mode;
+
+      // Controllerul vechi al modurilor cunoaște doar quick/full și ar interpreta
+      // „preventive” ca quick. Interceptăm exclusiv al treilea mod înainte de bubble.
+      if (requested === 'preventive') {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setActiveMode(mode, 'preventive');
+        return;
+      }
+
+      // Pentru quick/full lăsăm controllerul existent să gestioneze câmpurile LC,
+      // apoi sincronizăm doar starea vizuală/panoul separat.
       queueMicrotask(() => setActiveMode(mode, requested));
-    });
+    }, true);
 
     setActiveMode(mode, currentMode(mode));
     return true;
@@ -140,8 +174,8 @@
     if (!isPedepse()) return;
     if (initMode(document.querySelector('.ev-calc-mode'))) return;
 
-    // Controllerul modurilor poate apărea puțin mai târziu. Observăm doar până la
-    // inițializare, apoi deconectăm imediat observer-ul. Nu există observer permanent.
+    // .ev-calc-mode este creat dinamic de controllerul operațional. Observăm doar
+    // până la inițializare, apoi deconectăm imediat observer-ul.
     const observer = new MutationObserver(() => {
       if (initMode(document.querySelector('.ev-calc-mode'))) observer.disconnect();
     });
