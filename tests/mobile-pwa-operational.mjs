@@ -20,6 +20,7 @@ const pwa = read('js/pwa-register.js');
 const pwaCss = read('css/pwa-mobile.css');
 const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
+const index = read('index.html');
 const manifest = JSON.parse(read('manifest.json'));
 
 for (const marker of ['operational-upgrades.js?v=1','operational-finalize.js?v=1','mobile-operational-v2.js?v=1','pedepse-modes-v3.js?v=2','disclosure-hardening.js?v=1','pwa-register.js?v=1']) {
@@ -33,13 +34,16 @@ for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToP
 assert.ok(finalize.includes('openEndedOmitted'), 'Transferul AI → Pedepse trebuie să evite dublarea deducerii deschise „la zi”.');
 assert.ok(finalize.includes('normalizeGlobalNav'), 'Navigarea globală trebuie normalizată pe toate modulele.');
 
-for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','regime-multiple-heading','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture', 'compactContopiriResult','compactTransfer','compactSemnalmente']) {
+for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture','compactContopiriResult','compactTransfer','compactSemnalmente']) {
   assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
 }
 assert.ok(
-  mobile.includes("const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'regime-multiple-heading'];"),
-  'Măsurile preventive nu trebuie mutate în Opțiuni avansate.'
+  mobile.includes("const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];"),
+  'Opțiunile avansate trebuie să conțină numai funcțiile păstrate.'
 );
+assert.ok(!mobile.includes('regime-multiple-heading'), 'Cardul REGIM — MAI MULTE PEDEPSE a fost retras și nu trebuie recreat/mutat de controllerul mobil.');
+assert.ok(!index.includes('regime-reanalysis.js'), 'Pagina Pedepse nu trebuie să mai încarce modulul retras de art. 53/mai multe pedepse.');
+assert.ok(!index.includes('REGIM — MAI MULTE PEDEPSE'), 'Cardul retras nu trebuie să existe în markup.');
 
 for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE',"button.dataset.mode = 'preventive'","createElement('section')",'movePreventiveCard','evPreventiveCard']) {
   assert.ok(modes.includes(marker), `Modurile Pedepse trebuie să includă ${marker}`);
@@ -68,9 +72,10 @@ assert.ok(pwaCss.includes('ev-offline-badge'), 'Starea offline trebuie comunicat
 assert.ok(pwaCss.includes('.ev-shell__brand-home'), 'Identitatea din header trebuie stilizată fără linkuri imbricate.');
 assert.ok(pwaCss.includes('white-space:normal'), 'Metadatele versiunii/copyright trebuie să poată coborî pe rândul doi pe telefoane mici.');
 
-for (const marker of ['service worker','evidenta-static-','navigationResponse','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/regime-reanalysis.js','./js/pedepse-modes-v3.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
+for (const marker of ['service worker','evidenta-static-','navigationResponse','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pedepse-modes-v3.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
+assert.ok(!sw.includes('./js/regime-reanalysis.js'), 'Service Worker-ul nu trebuie să mai păstreze în cache modulul retras.');
 for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v4','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pedepse-modes-v3.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să păstreze securitatea și offline-ul: ${marker}`);
 }
@@ -79,4 +84,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse, măsuri preventive separate, disclosure-uri, art. 53, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
+console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse, măsuri preventive separate, cardul regim multiplu retras, disclosure-uri, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
