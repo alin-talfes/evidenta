@@ -43,12 +43,25 @@
     nav.dataset.evOperationalSignature = signature;
   }
 
+  function aiRowSource(row) {
+    return row.querySelector('.ai-source')?.textContent?.toLocaleLowerCase('ro') || '';
+  }
+
   function aiRowType(row) {
-    const source = row.querySelector('.ai-source')?.textContent?.toLocaleLowerCase('ro') || '';
+    const source = aiRowSource(row);
     if (source.includes('reținere 24') || source.includes('retinere 24')) return 'retention24h';
     if (source.includes('domiciliu')) return 'home_arrest';
     if (source.includes('preventiv')) return 'preventive';
     return 'generic';
+  }
+
+  function aiRowIsOpenEnded(row) {
+    const source = aiRowSource(row);
+    const start = row.querySelector('.d-start')?.value.trim() || '';
+    const end = row.querySelector('.d-end')?.value.trim() || '';
+    if (!start || aiRowType(row) === 'retention24h') return false;
+    if (!end) return true;
+    return /(?:la\s+zi|„la\s+zi”|până\s+la\s+zi|pana\s+la\s+zi)/i.test(source);
   }
 
   function safeSessionSet(key, value) {
@@ -72,9 +85,13 @@
         if (!start && !end) return;
         const type = aiRowType(row);
         if (type === 'retention24h' && start && !end) end = start;
+        if (aiRowIsOpenEnded(row)) {
+          // „... de la X la zi” stabilește data începerii X. Intervalul nu se
+          // transferă și ca deducere, altfel perioada X→mandat s-ar scădea de două ori.
+          openEndedOmitted += 1;
+          return;
+        }
         if (!start || !end) {
-          // O deducere deschisă „... la zi” stabilește data de început și nu se
-          // mai transferă ca interval separat, pentru a evita dublarea scăderii.
           openEndedOmitted += 1;
           return;
         }
@@ -101,13 +118,9 @@
     const primary = document.querySelector('.ev-ai-primary');
     if (!primary) return;
     const rows = [...document.querySelectorAll('#deductionRows tr')];
-    const hasOpen = rows.some(row => {
-      const start = row.querySelector('.d-start')?.value.trim() || '';
-      const end = row.querySelector('.d-end')?.value.trim() || '';
-      return Boolean(start && !end && aiRowType(row) !== 'retention24h');
-    });
+    const openRows = rows.filter(aiRowIsOpenEnded);
     let note = primary.querySelector('.ev-ai-open-ended-note');
-    if (!hasOpen) {
+    if (!openRows.length) {
       note?.remove();
       return;
     }
@@ -116,7 +129,8 @@
       note.className = 'ev-ai-open-ended-note';
       primary.querySelector('.ev-ai-primary__deductions')?.insertAdjacentElement('afterend', note);
     }
-    note.textContent = 'Deducerea „la zi” stabilește data începerii. La transferul în Pedepse se trimit numai intervalele închise, pentru a evita dublarea scăderii.';
+    const dates = [...new Set(openRows.map(row => row.querySelector('.d-start')?.value.trim()).filter(Boolean))];
+    note.textContent = `Deducerea „la zi”${dates.length ? ` (${dates.join(', ')})` : ''} stabilește data începerii. La transferul în Pedepse se trimit numai deducerile închise, pentru a evita dublarea scăderii.`;
   }
 
   function syncQuickResultControls() {
