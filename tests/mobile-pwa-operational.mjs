@@ -35,7 +35,7 @@ for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate'
   assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
 }
 
-for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE','data-mode="preventive"','createElement(\'section\')']) {
+for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE',"button.dataset.mode = 'preventive'","createElement('section')"]) {
   assert.ok(modes.includes(marker), `Modurile Pedepse trebuie să includă ${marker}`);
 }
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Cele trei moduri trebuie aliniate în trei coloane egale.');
