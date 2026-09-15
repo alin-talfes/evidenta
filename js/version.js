@@ -6,6 +6,7 @@
 
     const scriptUrl = document.currentScript?.src || new URL('js/version.js', document.baseURI).href;
     const versionUrl = new URL('../version.json', scriptUrl).href;
+    let currentVersion = '—';
 
     function ensureScript(selector, src, datasetKey) {
         if (document.querySelector(selector)) return;
@@ -93,6 +94,11 @@
             'evidentaMobileOperationalV2'
         );
         ensureScript(
+            'script[data-evidenta-pedepse-modes-v3]',
+            new URL('./pedepse-modes-v3.js?v=1', scriptUrl).href,
+            'evidentaPedepseModesV3'
+        );
+        ensureScript(
             'script[data-evidenta-pwa-register]',
             new URL('./pwa-register.js?v=1', scriptUrl).href,
             'evidentaPwaRegister'
@@ -115,45 +121,54 @@
         else nav.appendChild(link);
     }
 
-    function renderFooter(versionText) {
+    function removeLegacyFooters() {
         document.querySelectorAll('footer').forEach(footer => footer.remove());
-
-        const footer = document.createElement('footer');
-        footer.className = 'ev-footer';
-        footer.dataset.evidentaFooter = 'true';
-        footer.setAttribute('role', 'contentinfo');
-
-        const inner = document.createElement('div');
-        inner.className = 'ev-footer__inner';
-
-        const version = document.createElement('span');
-        version.className = 'ev-footer__version';
-        version.textContent = `Versiune ${versionText}`;
-
-        const copyright = document.createElement('span');
-        copyright.className = 'ev-footer__copyright';
-        copyright.textContent = '© Alin Talfeș';
-
-        inner.append(version, copyright);
-        footer.appendChild(inner);
-        document.body.appendChild(footer);
     }
 
-    async function initFooter() {
+    function renderBrandIdentity(versionText = currentVersion) {
+        removeLegacyFooters();
+        const copy = document.querySelector('.ev-shell__brand-copy');
+        if (!copy) return;
+        copy.replaceChildren();
+
+        const title = document.createElement('strong');
+        title.textContent = 'Evidență PPL';
+
+        const meta = document.createElement('span');
+        meta.className = 'ev-shell__brand-meta';
+        meta.append(document.createTextNode(` · versiune ${versionText} · `));
+
+        const author = document.createElement('a');
+        author.href = 'https://wa.me/alin.talfes';
+        author.target = '_blank';
+        author.rel = 'noopener noreferrer';
+        author.textContent = '© Alin Talfeș';
+        author.setAttribute('aria-label', 'Alin Talfeș pe WhatsApp');
+        meta.appendChild(author);
+
+        copy.append(title, meta);
+    }
+
+    async function initVersionIdentity() {
+        removeLegacyFooters();
         try {
             const response = await fetch(versionUrl, { cache: 'no-store' });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             const version = typeof data?.version === 'string' ? data.version.trim() : '';
             if (!version) throw new Error('Versiune invalidă');
-            renderFooter(version);
+            currentVersion = version;
         } catch (error) {
             console.error('Nu s-a putut încărca version.json:', error);
-            renderFooter('—');
+            currentVersion = '—';
         }
+        renderBrandIdentity(currentVersion);
     }
 
-    window.addEventListener('evidenta:shellready', ensureAiNavigation);
+    window.addEventListener('evidenta:shellready', () => {
+        ensureAiNavigation();
+        renderBrandIdentity(currentVersion);
+    });
     ensureUxUpgrades();
     ensureLegalReleaseGuards();
     ensurePageControllers();
@@ -167,7 +182,7 @@
             ensureCalculationParity();
             ensureOperationalUpgrades();
             ensureAiNavigation();
-            initFooter();
+            initVersionIdentity();
         }, { once: true });
     } else {
         ensureLegalReleaseGuards();
@@ -175,6 +190,6 @@
         ensureCalculationParity();
         ensureOperationalUpgrades();
         ensureAiNavigation();
-        initFooter();
+        initVersionIdentity();
     }
 })();
