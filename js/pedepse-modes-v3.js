@@ -36,6 +36,12 @@
     if (buttons && !buttons.children.length) optional.remove();
   }
 
+  function removeEmptyAdvancedDisclosure() {
+    const body = document.querySelector('.ev-mobile-advanced-details__body');
+    const details = body?.closest('.ev-mobile-advanced-details');
+    if (body && details && body.children.length === 0) details.remove();
+  }
+
   function normalizeModeLabels(mode) {
     const quick = mode.querySelector('[data-mode="quick"]');
     const full = mode.querySelector('[data-mode="full"]');
@@ -43,14 +49,7 @@
     if (full) full.textContent = 'Calcul complet LC';
   }
 
-  function buildPreventivePanel() {
-    const heading = document.getElementById('masuri-preventive-heading');
-    const card = heading?.closest('.card');
-    if (!card) return null;
-
-    removeLegacyPreventiveToggle(card);
-    heading.textContent = 'CALCUL MĂSURI PREVENTIVE';
-
+  function ensurePreventivePanel(mode) {
     let panel = document.querySelector('.ev-preventive-mode-panel');
     if (!panel) {
       panel = document.createElement('section');
@@ -58,13 +57,28 @@
       panel.hidden = true;
       panel.setAttribute('aria-labelledby', 'masuri-preventive-heading');
       panel.innerHTML = '<div class="ev-preventive-mode-panel__body"></div>';
-      document.querySelector('.ev-calc-mode')?.insertAdjacentElement('afterend', panel);
+      mode.insertAdjacentElement('afterend', panel);
     }
+    return panel;
+  }
 
+  function movePreventiveCard(mode) {
+    const heading = document.getElementById('masuri-preventive-heading');
+    const card = heading?.closest('.card');
+    if (!card) return null;
+
+    const panel = ensurePreventivePanel(mode);
     const body = panel.querySelector('.ev-preventive-mode-panel__body');
-    if (body && card.parentElement !== body) body.appendChild(card);
-    card.hidden = false;
+    if (!body) return panel;
+
+    removeLegacyPreventiveToggle(card);
+    heading.textContent = 'CALCUL MĂSURI PREVENTIVE';
+    card.dataset.evPreventiveCard = 'true';
     card.classList.remove('ev-optional-card');
+    card.hidden = false;
+
+    if (card.parentElement !== body) body.appendChild(card);
+    removeEmptyAdvancedDisclosure();
     return panel;
   }
 
@@ -89,7 +103,7 @@
       button.setAttribute('aria-pressed', String(active));
     });
 
-    const panel = document.querySelector('.ev-preventive-mode-panel');
+    const panel = movePreventiveCard(mode);
     if (panel) panel.hidden = value !== 'preventive';
   }
 
@@ -108,7 +122,7 @@
     mode.setAttribute('aria-label', 'Tip calcul');
 
     normalizeModeLabels(mode);
-    buildPreventivePanel();
+    movePreventiveCard(mode);
     ensureThirdModeButton(mode);
 
     mode.querySelectorAll('[data-mode]').forEach(button => {
@@ -120,22 +134,22 @@
       if (!button) return;
       const requested = button.dataset.mode;
       // Controllerul existent gestionează rapid/complet. Aplicăm starea finală după el,
-      // astfel încât calculatorul de măsuri preventive să rămână o categorie separată.
+      // iar calculatorul măsurilor preventive rămâne complet separat de opțiunile avansate.
       queueMicrotask(() => setActiveMode(mode, requested));
     });
 
     setActiveMode(mode, currentMode(mode));
 
+    let queued = false;
     const observer = new MutationObserver(() => {
-      const card = document.getElementById('masuri-preventive-heading')?.closest('.card');
-      const panelBody = document.querySelector('.ev-preventive-mode-panel__body');
-      if (card && panelBody && card.parentElement !== panelBody) {
-        removeLegacyPreventiveToggle(card);
-        panelBody.appendChild(card);
-        card.hidden = false;
-      }
+      if (queued) return;
+      queued = true;
+      queueMicrotask(() => {
+        queued = false;
+        movePreventiveCard(mode);
+      });
     });
-    observer.observe(document.getElementById('main-content') || document.body, { childList:true, subtree:true });
+    observer.observe(document.body, { childList:true, subtree:true });
   }
 
   ensureStyles();
