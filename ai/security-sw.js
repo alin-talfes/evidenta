@@ -57,7 +57,7 @@ const SHELL_PATHS = [
   './core.js', './safety.js', './ocr-ro.js', './real-doc-deductions.js', './real-doc-hardening.js',
   './beta-lot2-hardening.js', './beta-lot2-postprocess.js', './beta-lot3-hardening.js', './beta-lot3-postprocess.js',
   './beta-lot3-metadata.js', './beta-lot3-measures.js', './beta-lot4-hardening.js', './beta-lot5-hardening.js',
-  './beta-lot7-start-date.js', './contopire-audit.js', './dependencies.js', './security-runtime.js',
+  './beta-lot7-start-date.js', './beta-lot7-duration.js', './contopire-audit.js', './dependencies.js', './security-runtime.js',
   './date-mask.js', './deduction-rules.js', './file-dedup.js', './file-dedup-runtime.js', './app.js', './source-preview.js', './result-pedepse.js',
   '../manifest.json', '../version.json', '../favicon-ev-2.svg',
   '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile-operational-v2.css', '../css/pwa-mobile.css',
