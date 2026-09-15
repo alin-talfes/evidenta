@@ -36,8 +36,12 @@ assert.ok(finalize.includes('normalizeGlobalNav'), 'Navigarea globală trebuie n
 for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','regime-multiple-heading','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture', 'compactContopiriResult','compactTransfer','compactSemnalmente']) {
   assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
 }
+assert.ok(
+  mobile.includes("const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'regime-multiple-heading'];"),
+  'Măsurile preventive nu trebuie mutate în Opțiuni avansate.'
+);
 
-for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE',"button.dataset.mode = 'preventive'","createElement('section')"]) {
+for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE',"button.dataset.mode = 'preventive'","createElement('section')",'movePreventiveCard','evPreventiveCard']) {
   assert.ok(modes.includes(marker), `Modurile Pedepse trebuie să includă ${marker}`);
 }
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Cele trei moduri trebuie aliniate în trei coloane egale.');
@@ -75,4 +79,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse, disclosure-uri, art. 53, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
+console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse, măsuri preventive separate, disclosure-uri, art. 53, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
