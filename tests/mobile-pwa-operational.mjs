@@ -13,6 +13,7 @@ const finalize = read('js/operational-finalize.js');
 const mobile = read('js/mobile-operational-v2.js');
 const mobileCss = read('css/mobile-operational-v2.css');
 const modes = read('js/pedepse-modes-v4.js');
+const kill = read('js/pedepse-modes-v3-kill.js');
 const modesCss = read('css/pedepse-modes-v3.css');
 const disclosure = read('js/disclosure-hardening.js');
 const disclosureCss = read('css/disclosure-hardening.css');
@@ -50,8 +51,10 @@ for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','C
 }
 assert.ok(modes.includes('observer.disconnect()'), 'Observer-ul de inițializare trebuie deconectat imediat după montarea modurilor.');
 assert.ok(modes.includes('Nu există observer permanent'), 'Controllerul nu trebuie să mențină un MutationObserver permanent pe body.');
-assert.ok(index.includes('__EVIDENTA_PEDEPSE_MODES_V3__ = true'), 'Bootstrap-ul trebuie să neutralizeze versiunea v3 rămasă eventual în cache.');
+assert.ok(kill.includes('__EVIDENTA_PEDEPSE_MODES_V3__ = true'), 'Bootstrap-ul extern trebuie să neutralizeze versiunea v3 rămasă eventual în cache.');
+assert.ok(index.includes('pedepse-modes-v3-kill.js?v=1'), 'Pagina Pedepse trebuie să încarce protecția externă pentru cache-ul v3.');
 assert.ok(index.includes('pedepse-modes-v4.js?v=1'), 'Pagina Pedepse trebuie să poată încărca direct controllerul v4 chiar dacă version.js este vechi în cache.');
+assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(index), 'index.html nu trebuie să conțină script inline.');
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Cele trei moduri trebuie aliniate în trei coloane egale.');
 assert.ok(modesCss.includes('@media (max-width:600px)'), 'Cele trei moduri trebuie să aibă layout dedicat pe telefon.');
 assert.ok(modesCss.includes('@media (max-width:380px)'), 'Etichetele celor trei moduri trebuie să rămână lizibile și pe telefoane înguste.');
@@ -88,4 +91,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse fără observer permanent, măsuri preventive separate, cardul regim multiplu retras, disclosure-uri, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
+console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse fără observer permanent, măsuri preventive separate, cache guard extern, disclosure-uri, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
