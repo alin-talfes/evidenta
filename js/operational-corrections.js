@@ -21,10 +21,11 @@
     root.querySelectorAll?.('.overlap-notice p').forEach(paragraph => {
       const text = paragraph.textContent || '';
       if (!text.includes('perioadele deduse')) return;
-      paragraph.textContent = text.replace(
+      const next = text.replace(
         'Zilele comune au fost numărate o singură dată.',
         'Intervalele au fost calculate integral, inclusiv porțiunile suprapuse. Verifică dacă suprapunerea este intenționată.'
       );
+      if (next !== text) paragraph.textContent = next;
     });
   }
 
@@ -51,27 +52,27 @@
     patchOverlapNotices(root);
   }
 
+  function refreshAfterAction() {
+    syncQuickVisibility();
+    patchText(document.body);
+  }
+
   function init() {
     document.querySelectorAll('.date-masked').forEach(input => {
       if (!input.getAttribute('inputmode')) input.setAttribute('inputmode', 'numeric');
       if (!input.getAttribute('autocomplete')) input.setAttribute('autocomplete', 'off');
     });
-    syncQuickVisibility();
     removeOfficerSuiteNav();
-    patchText(document.body);
-    patchOverlapNotices(document);
+    refreshAfterAction();
 
-    const bodyObserver = new MutationObserver(records => {
-      let classChanged = false;
-      for (const record of records) {
-        if (record.type === 'attributes' && record.target === document.body) classChanged = true;
-        for (const node of record.addedNodes || []) patchText(node);
-      }
-      if (classChanged) syncQuickVisibility();
-      removeOfficerSuiteNav();
-      patchOverlapNotices(document);
+    document.addEventListener('click', event => {
+      if (!event.target.closest('#calcBtn,[data-mode],#addDedBtn,#addManDedBtn,#addNonExecBtn')) return;
+      requestAnimationFrame(refreshAfterAction);
     });
-    bodyObserver.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['class'] });
+    document.addEventListener('change', event => {
+      if (!event.target.closest('#liberationArticle,#lifeSentence,.ded-type')) return;
+      requestAnimationFrame(refreshAfterAction);
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
