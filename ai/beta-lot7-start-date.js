@@ -36,8 +36,28 @@ function mandateDate(text){
 
 function openEndedDeductionStart(text){
   const value=String(text||'');
-  // Regula operațională: numai o formulă de deducere care leagă explicit o dată de „la zi”.
-  // Nu folosim simple mențiuni „arest ... la zi” din alte contexte.
+
+  // În formulele mixte pot exista mai multe date înainte de „la zi”.
+  // Data relevantă este ultima dată explicită din dispoziția de deducere înainte de „la zi”,
+  // adică începutul intervalului deschis care continuă până la momentul mandatului.
+  const segmentRx=/(?:se\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^.;\n]{0,900}?\bla\s+zi\b/gi;
+  let segment;
+  while((segment=segmentRx.exec(value))){
+    const dateRx=new RegExp(DATE_SRC,'g');
+    const dates=[...segment[0].matchAll(dateRx)];
+    if(!dates.length) continue;
+    const last=dates[dates.length-1];
+    const before=segment[0].slice(Math.max(0,(last.index||0)-70),last.index||0);
+    if(!/(?:de\s+la|din\s+data\s+de|începând\s+cu|incepand\s+cu|de\s+la\s+data\s+de)\s*$/i.test(before)) {
+      // Acceptăm și formulele eliptice din liste: „... 14.01.2026 la zi”, dar numai
+      // în interiorul unei dispoziții explicite de deducere.
+      const after=segment[0].slice((last.index||0)+last[0].length);
+      if(!/^\s*(?:până\s+)?la\s+zi\b/i.test(after)) continue;
+    }
+    const parsed=parseDate(last[0]);
+    if(parsed) return {value:parsed.iso,index:segment.index+(last.index||0),source:sourceAt(value,segment.index,segment[0])};
+  }
+
   const patterns=[
     new RegExp(`(?:se\\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^.;\\n]{0,520}?(?:de\\s+la|din\\s+data\\s+de|începând\\s+cu|incepand\\s+cu)\\s*(${DATE_SRC})\\s+(?:până\\s+)?la\\s+zi\\b`,'i'),
     new RegExp(`(?:se\\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^.;\\n]{0,520}?(${DATE_SRC})[^.;\\n]{0,120}?\\bla\\s+zi\\b`,'i')
