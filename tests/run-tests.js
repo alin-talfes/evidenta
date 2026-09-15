@@ -92,22 +92,30 @@ assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
 assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 algoritm liberare condiționată options missing');
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
 assert(indexSource.includes('js/rules.js?v=37') && indexSource.includes('js/app.js?v=37'),'Pedepse cache version not bumped');
-for(const f of ['contopiri/index.html','transfer/index.html','transfer/rules/index.html']){
-  assert(/style\.css\?v=42/.test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
+const styleVersions={
+  'contopiri/index.html':42,
+  'transfer/index.html':43,
+  'transfer/rules/index.html':42
+};
+for(const [f,version] of Object.entries(styleVersions)){
+  assert(new RegExp(`style\\.css\\?v=${version}`).test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
 }
 
 const versionData=JSON.parse(fs.readFileSync('version.json','utf8'));
 assert.match(versionData.version,/^\d+\.\d+(?:\.\d+)?$/);
 const versionSource=fs.readFileSync('js/version.js','utf8');
 assert(versionSource.includes("new URL('../version.json', scriptUrl)"));
-assert(versionSource.includes('© Alin Talfeș'));
-assert(versionSource.includes("footer.className = 'ev-footer'"));
+assert(versionSource.includes('normalizeBrandContainer'));
+assert(versionSource.includes('renderBrandIdentity'));
+assert(versionSource.includes('copyright (c)'));
+assert(versionSource.includes('https://wa.me/alin.talfes'));
 assert(versionSource.includes("document.querySelectorAll('footer').forEach"));
+assert(!versionSource.includes("footer.className = 'ev-footer'"),'version controller must not recreate the retired footer');
 assert(!versionSource.includes('Toate datele sunt stocate exclusiv local'));
 assert(!versionSource.includes('footer-privacy'));
 const themeSource=fs.readFileSync('js/theme.js','utf8');
-assert(themeSource.includes("version.js?v=39"),'theme must load the universal version/footer controller');
-assert(themeSource.includes("'footer:not(.ev-footer)'"),'theme must remove legacy footers before the universal footer is rendered');
+assert(themeSource.includes("version.js?v=40"),'theme must load the current universal version/header controller');
+assert(themeSource.includes("'footer:not(.ev-footer)'"),'theme must remove legacy footers');
 assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
 for(const f of ['index.html','semnalmente/index.html','semnalmente/benchmark/index.html','transfer/rules/index.html']){
   assert(!/<footer\b/i.test(fs.readFileSync(f,'utf8')),f+' contains a duplicated static footer');
