@@ -6,6 +6,7 @@
 
     const scriptUrl = document.currentScript?.src || new URL('js/version.js', document.baseURI).href;
     const versionUrl = new URL('../version.json', scriptUrl).href;
+    const homeUrl = new URL('../', scriptUrl).href;
     let currentVersion = '—';
 
     function ensureScript(selector, src, datasetKey) {
@@ -95,7 +96,7 @@
         );
         ensureScript(
             'script[data-evidenta-pedepse-modes-v3]',
-            new URL('./pedepse-modes-v3.js?v=1', scriptUrl).href,
+            new URL('./pedepse-modes-v3.js?v=2', scriptUrl).href,
             'evidentaPedepseModesV3'
         );
         ensureScript(
@@ -125,28 +126,47 @@
         document.querySelectorAll('footer').forEach(footer => footer.remove());
     }
 
+    function normalizeBrandContainer() {
+        let brand = document.querySelector('.ev-shell__brand');
+        if (!brand || brand.tagName !== 'A') return brand;
+
+        const replacement = document.createElement('div');
+        replacement.className = brand.className;
+        replacement.setAttribute('aria-label', 'Identitate Evidență PPL');
+        while (brand.firstChild) replacement.appendChild(brand.firstChild);
+        brand.replaceWith(replacement);
+        return replacement;
+    }
+
     function renderBrandIdentity(versionText = currentVersion) {
         removeLegacyFooters();
-        const copy = document.querySelector('.ev-shell__brand-copy');
+        const brand = normalizeBrandContainer();
+        const copy = brand?.querySelector('.ev-shell__brand-copy') || document.querySelector('.ev-shell__brand-copy');
         if (!copy) return;
         copy.replaceChildren();
 
+        const home = document.createElement('a');
+        home.className = 'ev-shell__brand-home';
+        home.href = homeUrl;
+        home.setAttribute('aria-label', 'Evidență PPL — pagina principală');
+
         const title = document.createElement('strong');
         title.textContent = 'Evidență PPL';
+        home.appendChild(title);
 
         const meta = document.createElement('span');
         meta.className = 'ev-shell__brand-meta';
-        meta.append(document.createTextNode(` · versiune ${versionText} · `));
+        meta.append(document.createTextNode(` - versiune ${versionText} - copyright (c) `));
 
         const author = document.createElement('a');
         author.href = 'https://wa.me/alin.talfes';
         author.target = '_blank';
         author.rel = 'noopener noreferrer';
-        author.textContent = '© Alin Talfeș';
+        author.textContent = 'Alin Talfeș';
         author.setAttribute('aria-label', 'Alin Talfeș pe WhatsApp');
         meta.appendChild(author);
 
-        copy.append(title, meta);
+        copy.append(home, meta);
     }
 
     async function initVersionIdentity() {
