@@ -73,15 +73,21 @@ for (const marker of [
 
 for (const marker of [
   '__EVIDENTA_VERSION_FOOTER__',
-  'document.querySelectorAll(\'footer\').forEach',
-  'footer.dataset.evidentaFooter',
-  'Versiune ${versionText}',
-  '© Alin Talfeș'
+  "document.querySelectorAll('footer').forEach",
+  'normalizeBrandContainer',
+  'renderBrandIdentity',
+  'Evidență PPL',
+  'copyright (c)',
+  'https://wa.me/alin.talfes',
+  "author.textContent = 'Alin Talfeș'"
 ]) {
-  assert.ok(version.includes(marker), `Footer-ul central trebuie să conțină ${marker}`);
+  assert.ok(version.includes(marker), `Identitatea centrală din header trebuie să conțină ${marker}`);
 }
-assert.ok(!version.includes('Toate datele sunt stocate exclusiv local'), 'Footer-ul nu trebuie să conțină explicații de confidențialitate');
-assert.ok(!version.includes('footer-privacy'), 'Footer-ul trebuie să conțină numai versiunea și copyright-ul');
+assert.ok(!version.includes("document.createElement('footer')"), 'Versiunea și copyright-ul nu trebuie recreate într-un footer.');
+assert.ok(!version.includes('footer.dataset.evidentaFooter'), 'Nu trebuie să existe footer central generat de controllerul de versiune.');
+assert.ok(!version.includes('© Alin Talfeș'), 'Copyright-ul trebuie afișat textual ca „copyright (c)”, nu cu simbolul ©.');
+assert.ok(!version.includes('Toate datele sunt stocate exclusiv local'), 'Identitatea din header nu trebuie să conțină explicații de confidențialitate');
+assert.ok(!version.includes('footer-privacy'), 'Nu trebuie reintrodus conținut editorial în footer');
 
 assert.ok(shell.includes('@media (max-width: 680px)'), 'Shell-ul universal trebuie să aibă tratament mobil');
 
@@ -122,4 +128,4 @@ assert.ok(!fs.existsSync(path.join(root, 'termene.html')), 'termene.html trebuie
 assert.ok(!fs.existsSync(path.join(root, 'js/termene.js')), 'js/termene.js trebuie eliminat');
 assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-core.js trebuie eliminat');
 
-console.log('Unified shell: 5 module publice, Ofițer ascuns din navigare și footer unic verificate.');
+console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea versiune/copyright mutată în header.');
