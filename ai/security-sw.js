@@ -1,8 +1,11 @@
-/* Evidență AI — secure dependency proxy (scope: /ai/) */
+/* Evidență AI — secure dependency proxy + offline shell (scope: /ai/) */
 'use strict';
 
-const CACHE_NAME = 'evidenta-ai-secure-deps-v4';
+const SECURE_CACHE = 'evidenta-ai-secure-deps-v5';
+const SHELL_CACHE = 'evidenta-ai-shell-v1';
+const RUNTIME_CACHE = 'evidenta-ai-runtime-v1';
 const PREFIX = '/_secure/';
+const SCOPE = new URL(self.registration.scope);
 
 const RESOURCES = {
   'pdf/pdf.min.mjs': {
@@ -29,30 +32,6 @@ const RESOURCES = {
     bytes: 111162,
     type: 'text/javascript; charset=utf-8'
   },
-  'tesseract-core/tesseract-core.wasm.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core.wasm.js',
-    sha256: '0bc6ce3e5fbbd0cd89706cf2fd70960e3372f4f01ee24265b26990808aaeb286',
-    bytes: 4687944,
-    type: 'text/javascript; charset=utf-8'
-  },
-  'tesseract-core/tesseract-core.wasm': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core.wasm',
-    sha256: 'c7f5ace62ac0ad065e71e9c6725f1d7cdf82e7eda8fba532cbb9563964da7098',
-    bytes: 3449168,
-    type: 'application/wasm'
-  },
-  'tesseract-core/tesseract-core-simd.wasm.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-simd.wasm.js',
-    sha256: '6b61ef4e911b5cf57e656bbfe983d6e2b3711a02dd164154ddda064566e8e09d',
-    bytes: 4690932,
-    type: 'text/javascript; charset=utf-8'
-  },
-  'tesseract-core/tesseract-core-simd.wasm': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-simd.wasm',
-    sha256: '7d237a13edfeb0fa2f104744fccde0a00e0c076c3e23b7a8fc7af75ec9af2c3e',
-    bytes: 3451410,
-    type: 'application/wasm'
-  },
   'tesseract-core/tesseract-core-lstm.wasm.js': {
     url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@6.0.0/tesseract-core-lstm.wasm.js',
     sha256: '775a35df6f2ae100e02609443e6bd5cafcd07983dd6175454ca4a432a7730687',
@@ -65,42 +44,6 @@ const RESOURCES = {
     bytes: 2871085,
     type: 'application/wasm'
   },
-  'tesseract-core/tesseract-core-simd-lstm.wasm.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-simd-lstm.wasm.js',
-    sha256: 'c58b46a4c796c0b8afccf77591d5b875b6896b45d402bbce8caa6f5362447b38',
-    bytes: 3899472,
-    type: 'text/javascript; charset=utf-8'
-  },
-  'tesseract-core/tesseract-core-simd-lstm.wasm': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-simd-lstm.wasm',
-    sha256: '34e8d50cac216427d86bf397d610fdd9f49492539bbcdfbfccc4eda20c810bea',
-    bytes: 2857601,
-    type: 'application/wasm'
-  },
-  'tesseract-core/tesseract-core-relaxedsimd.wasm.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-relaxedsimd.wasm.js',
-    sha256: '843074aa5bad1cc6421b74a86201768ced9f244795e4d81435435a61a40ce535',
-    bytes: 4697227,
-    type: 'text/javascript; charset=utf-8'
-  },
-  'tesseract-core/tesseract-core-relaxedsimd.wasm': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-relaxedsimd.wasm',
-    sha256: '45f8c9b516df326b6ae6b493ed3a6289df5cbd10490e7b6ff8bf5b12ea42d1da',
-    bytes: 3456075,
-    type: 'application/wasm'
-  },
-  'tesseract-core/tesseract-core-relaxedsimd-lstm.wasm.js': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-relaxedsimd-lstm.wasm.js',
-    sha256: '861a536cf9ef8e63cb644d57bab39c388f37f7d6b6f60024b741c5f6b39a59b3',
-    bytes: 3905767,
-    type: 'text/javascript; charset=utf-8'
-  },
-  'tesseract-core/tesseract-core-relaxedsimd-lstm.wasm': {
-    url: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@7.0.0/tesseract-core-relaxedsimd-lstm.wasm',
-    sha256: '7985c92d4c64e7267d24cadffe1b2a1da6bf8aa55fdcaf953fe94fe122a24545',
-    bytes: 2862266,
-    type: 'application/wasm'
-  },
   'tessdata-best/ron.traineddata.gz': {
     url: 'https://tessdata.projectnaptha.com/4.0.0_best/ron.traineddata.gz',
     sha256: 'df2a1d0084f58da0fc6f08831e86fcac28f8995213e081331d06c3b0cab6b596',
@@ -108,6 +51,19 @@ const RESOURCES = {
     type: 'application/gzip'
   }
 };
+
+const SHELL_PATHS = [
+  './', './index.html', './styles.css', './security.css', './source-preview.css',
+  './core.js', './safety.js', './ocr-ro.js', './real-doc-deductions.js', './real-doc-hardening.js',
+  './beta-lot2-hardening.js', './beta-lot2-postprocess.js', './beta-lot3-hardening.js', './beta-lot3-postprocess.js',
+  './beta-lot3-metadata.js', './beta-lot3-measures.js', './beta-lot4-hardening.js', './beta-lot5-hardening.js',
+  './beta-lot7-start-date.js', './contopire-audit.js', './dependencies.js', './security-runtime.js',
+  './date-mask.js', './deduction-rules.js', './file-dedup.js', './file-dedup-runtime.js', './app.js', './source-preview.js', './result-pedepse.js',
+  '../manifest.json', '../version.json', '../favicon-ev-2.svg',
+  '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile-operational-v2.css', '../css/pwa-mobile.css',
+  '../js/theme.js', '../js/version.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
+  '../js/operational-upgrades.js', '../js/operational-corrections.js', '../js/operational-finalize.js', '../js/mobile-operational-v2.js', '../js/pwa-register.js'
+];
 
 function hex(buffer) {
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
@@ -120,7 +76,7 @@ function resourceKey(url) {
 }
 
 async function verifiedResponse(request, resource) {
-  const cache = await caches.open(CACHE_NAME);
+  const cache = await caches.open(SECURE_CACHE);
   const cached = await cache.match(request, { ignoreSearch: true });
   if (cached) return cached;
 
@@ -149,23 +105,90 @@ async function verifiedResponse(request, resource) {
   return safe;
 }
 
-self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
+function scoped(path) { return new URL(path, SCOPE).href; }
+
+async function warmShell() {
+  const cache = await caches.open(SHELL_CACHE);
+  await Promise.allSettled(SHELL_PATHS.map(async path => {
+    const request = new Request(scoped(path), { cache:'reload', credentials:'same-origin' });
+    const response = await fetch(request);
+    if (response.ok) await cache.put(request, response);
+  }));
+}
+
+async function navigationResponse(request) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) (await caches.open(RUNTIME_CACHE)).put(request, response.clone()).catch(() => {});
+    return response;
+  } catch (_) {
+    return (await caches.match(request, { ignoreSearch:true }))
+      || (await caches.match(scoped('./index.html'), { ignoreSearch:true }))
+      || (await caches.match(scoped('./'), { ignoreSearch:true }))
+      || new Response('Modulul AI nu este disponibil offline încă. Deschide-l o dată cu internet pentru inițializare.', {
+        status:503,
+        headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
+      });
+  }
+}
+
+async function staticResponse(request) {
+  const cached = await caches.match(request, { ignoreSearch:true });
+  const refresh = fetch(request).then(async response => {
+    if (response.ok && response.type !== 'opaque') await (await caches.open(RUNTIME_CACHE)).put(request, response.clone());
+    return response;
+  }).catch(() => null);
+  if (cached) {
+    void refresh;
+    return cached;
+  }
+  return (await refresh) || new Response('', { status:504, statusText:'Offline' });
+}
+
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    await warmShell();
+    await self.skipWaiting();
+  })());
+});
+
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const names = await caches.keys();
-    await Promise.all(names.filter(name => name.startsWith('evidenta-ai-secure-deps-') && name !== CACHE_NAME).map(name => caches.delete(name)));
+    const current = new Set([SECURE_CACHE, SHELL_CACHE, RUNTIME_CACHE]);
+    await Promise.all(names.filter(name => (name.startsWith('evidenta-ai-secure-deps-') || name.startsWith('evidenta-ai-shell-') || name.startsWith('evidenta-ai-runtime-')) && !current.has(name)).map(name => caches.delete(name)));
     await self.clients.claim();
   })());
 });
 
+self.addEventListener('message', event => {
+  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
+});
+
 self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
   const key = resourceKey(url);
-  if (!key) return;
-  const resource = RESOURCES[key];
-  if (!resource) {
-    event.respondWith(new Response('Not allowed', { status: 404, headers: { 'Content-Type': 'text/plain' } }));
+  if (key) {
+    const resource = RESOURCES[key];
+    if (!resource) {
+      event.respondWith(new Response('Not allowed', { status:404, headers:{'Content-Type':'text/plain'} }));
+      return;
+    }
+    event.respondWith(verifiedResponse(request, resource).catch(() => new Response('Integrity check failed', {
+      status:502,
+      headers:{'Content-Type':'text/plain','Cache-Control':'no-store'}
+    })));
     return;
   }
-  event.respondWith(verifiedResponse(event.request, resource).catch(() => new Response('Integrity check failed', { status: 502, headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' } })));
+
+  if (url.origin !== location.origin) return;
+  if (request.mode === 'navigate') {
+    event.respondWith(navigationResponse(request));
+    return;
+  }
+  if (['script','style','image','font','manifest','worker'].includes(request.destination) || /\.(?:js|mjs|css|json|svg|png|webp|wasm|woff2?)$/i.test(url.pathname)) {
+    event.respondWith(staticResponse(request));
+  }
 });
