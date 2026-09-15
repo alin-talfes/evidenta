@@ -68,6 +68,7 @@ const CORE_PATHS = [
   './ai/beta-lot4-hardening.js',
   './ai/beta-lot5-hardening.js',
   './ai/beta-lot7-start-date.js',
+  './ai/beta-lot7-duration.js',
   './ai/contopire-audit.js',
   './ai/dependencies.js',
   './ai/security-runtime.js',
