@@ -43,7 +43,7 @@ assert.ok(security.includes('deps.recognizeDetailed=secureRecognizeDetailed'),'O
 assert.ok(security.includes('setSelectionReady(true);setAnalysisReady(false)'),'Selecția locală trebuie separată de disponibilitatea motorului de analiză');
 assert.ok(security.includes('await Promise.all([securePdf(),warmOcr()])'),'PDF/OCR trebuie inițializate înainte ca analiza documentelor să fie activată');
 
-assert.ok(securitySw.includes("CACHE_NAME = 'evidenta-ai-secure-deps-v4'"),'Cache-ul verificat trebuie versionat');
+assert.ok(securitySw.includes("SECURE_CACHE = 'evidenta-ai-secure-deps-v5'"),'Cache-ul verificat trebuie versionat');
 assert.ok(securitySw.includes("crypto.subtle.digest('SHA-256'"),'Service Worker-ul trebuie să verifice SHA-256 înainte de cache');
 assert.ok(securitySw.includes('Dependency SHA-256 mismatch'),'Hash mismatch trebuie să blocheze resursa');
 assert.ok(securitySw.includes("'Cross-Origin-Resource-Policy': 'same-origin'"),'Resursele verificate trebuie reexpuse same-origin');
@@ -58,4 +58,4 @@ for(const hash of [
 assert.ok(benchmark.includes('Fixture-uri complet sintetice'),'Benchmark-ul public trebuie să folosească numai date sintetice');
 assert.ok(benchmark.includes('mepi-sintetic.pdf')&&benchmark.includes('complex-sintetic.pdf'),'Fixture-urile publice trebuie marcate explicit ca sintetice');
 
-console.log('Security & Privacy 1.0.1: CSP same-origin, proxy SHA-256, PDF.js 6.2.108 fail-closed și fixture-uri sintetice verificate.');
+console.log('Security & Privacy: CSP same-origin, proxy SHA-256, PDF.js 6.2.108 fail-closed și fixture-uri sintetice verificate.');
