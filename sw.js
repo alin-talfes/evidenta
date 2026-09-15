@@ -1,89 +1,33 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v7';
+const VERSION = 'v8';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
 const SCOPE = new URL(self.registration.scope);
 
 const CORE_PATHS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './version.json',
-  './favicon-ev-2.svg',
-  './contopiri/',
-  './transfer/',
-  './transfer/rules/',
-  './instructaj/',
-  './semnalmente/',
-  './ai/',
-  './css/style.css',
-  './css/design-system.css',
-  './css/operational-upgrades.css',
-  './css/mobile-operational-v2.css',
-  './css/pedepse-modes-v3.css',
-  './css/disclosure-hardening.css',
-  './css/pwa-mobile.css',
-  './js/theme.js',
-  './js/version.js',
-  './js/utils.js',
-  './js/rules.js',
-  './js/legal.js',
-  './js/storage.js',
-  './js/export.js',
-  './js/ui.js',
-  './js/app.js',
-  './js/deduction-ui.js',
-  './js/contopiri-core.js',
-  './js/contopiri.js',
-  './js/operational-upgrades.js',
-  './js/operational-corrections.js',
-  './js/operational-finalize.js',
-  './js/mobile-operational-v2.js',
-  './js/pedepse-modes-v3-kill.js',
-  './js/pedepse-modes-v4.js',
-  './js/disclosure-hardening.js',
-  './js/pwa-register.js',
-  './transfer/app.js',
-  './transfer/rules.js',
-  './instructaj/styles.css',
-  './instructaj/audit-enhancements.css',
-  './instructaj/data.js',
-  './instructaj/app.js',
-  './instructaj/omj2188-completari.js',
-  './instructaj/verificare-dosar-transfer.js',
+  './', './index.html', './manifest.json', './version.json', './favicon-ev-2.svg',
+  './contopiri/', './transfer/', './transfer/rules/', './instructaj/', './semnalmente/', './ai/',
+  './css/style.css', './css/design-system.css', './css/operational-upgrades.css', './css/mobile-operational-v2.css',
+  './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/pwa-mobile.css',
+  './js/theme.js', './js/version.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
+  './js/export.js', './js/ui.js', './js/app.js', './js/deduction-ui.js', './js/contopiri-core.js', './js/contopiri.js',
+  './js/operational-upgrades.js', './js/operational-corrections.js', './js/operational-corrections-v4.js',
+  './js/operational-finalize.js', './js/mobile-operational-v2.js', './js/pedepse-modes-v3-kill.js',
+  './js/pedepse-modes-v4.js', './js/disclosure-hardening.js', './js/pwa-register.js',
+  './transfer/app.js', './transfer/rules.js',
+  './instructaj/styles.css', './instructaj/audit-enhancements.css', './instructaj/data.js', './instructaj/app.js',
+  './instructaj/omj2188-completari.js', './instructaj/verificare-dosar-transfer.js',
   './semnalmente/enhancements.js',
-  './ai/index.html',
-  './ai/styles.css',
-  './ai/security.css',
-  './ai/source-preview.css',
-  './ai/core.js',
-  './ai/safety.js',
-  './ai/ocr-ro.js',
-  './ai/real-doc-deductions.js',
-  './ai/real-doc-hardening.js',
-  './ai/beta-lot2-hardening.js',
-  './ai/beta-lot2-postprocess.js',
-  './ai/beta-lot3-hardening.js',
-  './ai/beta-lot3-postprocess.js',
-  './ai/beta-lot3-metadata.js',
-  './ai/beta-lot3-measures.js',
-  './ai/beta-lot4-hardening.js',
-  './ai/beta-lot5-hardening.js',
-  './ai/beta-lot7-start-date.js',
-  './ai/beta-lot7-duration.js',
-  './ai/contopire-audit.js',
-  './ai/dependencies.js',
-  './ai/security-runtime.js',
-  './ai/date-mask.js',
-  './ai/deduction-rules.js',
-  './ai/file-dedup.js',
-  './ai/file-dedup-runtime.js',
-  './ai/app.js',
-  './ai/source-preview.js',
-  './ai/result-pedepse.js'
+  './ai/index.html', './ai/styles.css', './ai/security.css', './ai/source-preview.css',
+  './ai/core.js', './ai/safety.js', './ai/ocr-ro.js', './ai/real-doc-deductions.js', './ai/real-doc-hardening.js',
+  './ai/beta-lot2-hardening.js', './ai/beta-lot2-postprocess.js', './ai/beta-lot3-hardening.js', './ai/beta-lot3-postprocess.js',
+  './ai/beta-lot3-metadata.js', './ai/beta-lot3-measures.js', './ai/beta-lot4-hardening.js', './ai/beta-lot5-hardening.js',
+  './ai/beta-lot7-start-date.js', './ai/beta-lot7-duration.js', './ai/contopire-audit.js', './ai/dependencies.js',
+  './ai/security-runtime.js', './ai/date-mask.js', './ai/deduction-rules.js', './ai/file-dedup.js', './ai/file-dedup-runtime.js',
+  './ai/app.js', './ai/source-preview.js', './ai/result-pedepse.js'
 ];
 
 function absolute(path) { return new URL(path, SCOPE).href; }
@@ -114,7 +58,7 @@ self.addEventListener('activate', event => {
 
 async function navigationResponse(request) {
   try {
-    const response = await fetch(request);
+    const response = await fetch(request, { cache:'no-store' });
     if (response.ok) {
       const cache = await caches.open(RUNTIME_CACHE);
       await cache.put(request, response.clone());
@@ -131,8 +75,7 @@ async function navigationResponse(request) {
       url.pathname.includes('/transfer/rules') ? './transfer/rules/' : null,
       url.pathname.endsWith('/instructaj/') ? './instructaj/' : null,
       url.pathname.endsWith('/semnalmente/') ? './semnalmente/' : null,
-      './index.html',
-      './'
+      './index.html', './'
     ].filter(Boolean);
     for (const candidate of candidates) {
       const hit = await caches.match(absolute(candidate), { ignoreSearch:true });
@@ -142,6 +85,19 @@ async function navigationResponse(request) {
       status:503,
       headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
     });
+  }
+}
+
+async function networkFirstStatic(request) {
+  try {
+    const response = await fetch(request, { cache:'no-store' });
+    if (response.ok && response.type !== 'opaque') {
+      const cache = await caches.open(RUNTIME_CACHE);
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch (_) {
+    return (await caches.match(request, { ignoreSearch:true })) || new Response('', { status:504, statusText:'Offline' });
   }
 }
 
@@ -159,6 +115,10 @@ async function staticResponse(request) {
   return (await update) || new Response('', { status:504, statusText:'Offline' });
 }
 
+function isCriticalRuntime(url) {
+  return /\/js\/(?:version|operational-upgrades|operational-corrections(?:-v4)?|operational-finalize|mobile-operational-v2|pedepse-modes-v3-kill|pedepse-modes-v4|disclosure-hardening|pwa-register)\.js$/i.test(url.pathname);
+}
+
 self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
@@ -167,6 +127,10 @@ self.addEventListener('fetch', event => {
   if (url.pathname.includes('/ai/_secure/')) return;
   if (request.mode === 'navigate') {
     event.respondWith(navigationResponse(request));
+    return;
+  }
+  if (isCriticalRuntime(url)) {
+    event.respondWith(networkFirstStatic(request));
     return;
   }
   const destination = request.destination;
