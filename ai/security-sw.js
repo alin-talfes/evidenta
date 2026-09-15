@@ -2,8 +2,8 @@
 'use strict';
 
 const SECURE_CACHE = 'evidenta-ai-secure-deps-v5';
-const SHELL_CACHE = 'evidenta-ai-shell-v3';
-const RUNTIME_CACHE = 'evidenta-ai-runtime-v3';
+const SHELL_CACHE = 'evidenta-ai-shell-v4';
+const RUNTIME_CACHE = 'evidenta-ai-runtime-v4';
 const PREFIX = '/_secure/';
 const SCOPE = new URL(self.registration.scope);
 
