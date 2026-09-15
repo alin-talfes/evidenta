@@ -42,7 +42,7 @@ function intervalItems(segment){
 }
 
 function row(text,index,start,end,type,raw,reason){
-  const prefix=type==='retention24h'?'Reținere 24 h — ':type==='preventive'?'Arest preventiv — ':'Perioadă dedusă — ';
+  const prefix=type==='retention24h'?'Reținere 24 h — ':type==='preventive'?'Arest preventiv — ':type==='home_arrest'?'Arest la domiciliu — ':'Perioadă dedusă — ';
   const source=`${prefix}${sourceAt(text,index,raw)}${reason?` · ${reason}`:''}`;
   const value={start,end,type,confidence:'mediu',source,reviewRequired:true};
   const c=ocrConfidence(source); if(Number.isFinite(c)) value.ocrConfidence=c;
@@ -93,6 +93,35 @@ function extractRespectivList(text,documentDate){
         const b=parseDate(item.end); if(b) out.push(row(text,m.index+m[0].length+item.index,a.iso,b.iso,'generic',item.raw,'lista combină măsuri/perioadă executată; capete incluse'));
       }
     });
+  }
+  return out;
+}
+
+function extractEnumeratedMeasures(text,documentDate){
+  const out=[];
+  const clause=/(?:se\s+)?deduce[^.;\n]{0,900}/gi;
+  let m;
+  while((m=clause.exec(text))){
+    const segment=m[0];
+    if(!/reținer|arestului\s+preventiv|arestului\s+la\s+domiciliu/i.test(segment)) continue;
+
+    const retention=new RegExp(`reținerii(?:\\s*\\(\\s*1\\s+zi\\s*\\))?[^,;]{0,110}?din\\s+data\\s+de\\s+(${DATE_SRC})`,'i').exec(segment);
+    if(retention){
+      const d=parseDate(retention[1]);
+      if(d) out.push(row(text,m.index+retention.index,d.iso,d.iso,'retention24h',retention[0],'reținere explicită de 24 h = 1 zi'));
+    }
+
+    const preventive=new RegExp(`arestului\\s+preventiv[^,;]{0,140}?din\\s+data\\s+de\\s+(${DATE_SRC})\\s+până\\s+(?:în\\s+)?data\\s+de\\s+(${DATE_SRC})`,'i').exec(segment);
+    if(preventive){
+      const a=parseDate(preventive[1]),b=parseDate(preventive[2]);
+      if(a&&b) out.push(row(text,m.index+preventive.index,a.iso,b.iso,'preventive',preventive[0],'interval explicit; capetele se includ'));
+    }
+
+    const home=new RegExp(`arestului\\s+la\\s+domiciliu[^,;]{0,140}?din\\s+data\\s+de\\s+(${DATE_SRC})\\s+(?:până\\s+)?la\\s+zi\\b`,'i').exec(segment);
+    if(home){
+      const a=parseDate(home[1]);
+      if(a) out.push(row(text,m.index+home.index,a.iso,documentDate||'','home_arrest',home[0],documentDate?`„la zi” propus până la data mandatului ${documentDate}`:'„la zi” necesită confirmarea datei de sfârșit'));
+    }
   }
   return out;
 }
@@ -173,7 +202,11 @@ function install(){
     const analysis=base(rawText),text=analysis.text||String(rawText||'');
     applyReceivedStamp(analysis,text);
     applyPrimaryDocumentType(analysis,text);
-    const extra=unique([...extractMixedRetainedArrested(text,analysis.documentDate||''),...extractRespectivList(text,analysis.documentDate||'')]);
+    const extra=unique([
+      ...extractMixedRetainedArrested(text,analysis.documentDate||''),
+      ...extractRespectivList(text,analysis.documentDate||''),
+      ...extractEnumeratedMeasures(text,analysis.documentDate||'')
+    ]);
     if(extra.length){
       const preserved=(analysis.deductions||[]).filter(existing=>!extra.some(x=>x.start===existing.start&&x.end===existing.end));
       analysis.deductions=unique([...preserved,...extra]);
@@ -185,5 +218,5 @@ function install(){
   root.AIDocumentSafety.__realDocDeductionHardening=true;
 }
 install();
-root.AIRealDocumentDeductions={extractMixedRetainedArrested,extractRespectivList,intervalItems,sentenceTail,extractReceivedStamp,detectPrimaryDocumentType};
+root.AIRealDocumentDeductions={extractMixedRetainedArrested,extractRespectivList,extractEnumeratedMeasures,intervalItems,sentenceTail,extractReceivedStamp,detectPrimaryDocumentType};
 })(typeof window!=='undefined'?window:globalThis);
