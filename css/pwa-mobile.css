@@ -1,0 +1,37 @@
+/* Cross-module PWA/mobile platform refinements. */
+.ev-offline-badge {
+  position:fixed;
+  z-index:12000;
+  left:50%;
+  top:max(6px, env(safe-area-inset-top, 0px));
+  transform:translateX(-50%);
+  max-width:calc(100vw - 24px);
+  padding:7px 11px;
+  border:1px solid rgba(245,158,11,.5);
+  border-radius:999px;
+  background:rgba(15,23,42,.94);
+  color:#fbbf24;
+  box-shadow:0 8px 28px rgba(0,0,0,.22);
+  font-size:.7rem;
+  font-weight:850;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+
+html.ev-offline .ev-shell__brand::after {
+  content:'offline';
+  margin-left:6px;
+  font-size:.62rem;
+  font-weight:800;
+  color:#f59e0b;
+}
+
+@media (max-width:600px) {
+  html.ev-standalone body { min-height:var(--ev-visual-height, 100dvh); }
+  html.ev-ios.ev-standalone .ev-shell { padding-top:env(safe-area-inset-top, 0px); }
+  html.ev-ios input,
+  html.ev-ios select,
+  html.ev-ios textarea { font-size:16px !important; }
+  html.ev-android .ev-mobile-nav,
+  html.ev-ios .ev-mobile-nav { contain:layout paint; }
+}
