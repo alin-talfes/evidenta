@@ -87,6 +87,16 @@
             new URL('./operational-finalize.js?v=1', scriptUrl).href,
             'evidentaOperationalFinalize'
         );
+        ensureScript(
+            'script[data-evidenta-mobile-operational-v2]',
+            new URL('./mobile-operational-v2.js?v=1', scriptUrl).href,
+            'evidentaMobileOperationalV2'
+        );
+        ensureScript(
+            'script[data-evidenta-pwa-register]',
+            new URL('./pwa-register.js?v=1', scriptUrl).href,
+            'evidentaPwaRegister'
+        );
     }
 
     function ensureAiNavigation() {
