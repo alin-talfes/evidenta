@@ -171,7 +171,13 @@
       summary.textContent = 'Surse și dovezi OCR';
       evidence.insertAdjacentElement('beforebegin', details);
       details.append(summary, evidence);
-      evidence.classList.remove('ai-hidden');
+      const syncEvidenceVisibility = () => {
+        const hidden = evidence.classList.contains('ai-hidden');
+        details.hidden = hidden;
+        if (hidden) details.open = false;
+      };
+      new MutationObserver(syncEvidenceVisibility).observe(evidence, { attributes:true, attributeFilter:['class'] });
+      syncEvidenceVisibility();
     }
   }
 
