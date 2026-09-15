@@ -28,6 +28,15 @@
     if (!link.href) link.href = href;
   }
 
+  function ensureStyleSheet() {
+    if (document.querySelector('link[data-evidenta-pwa-mobile]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = new URL('../css/pwa-mobile.css?v=1', scriptUrl).href;
+    link.dataset.evidentaPwaMobile = 'true';
+    document.head.appendChild(link);
+  }
+
   function platformClass() {
     const ua = navigator.userAgent || '';
     const platform = navigator.platform || '';
@@ -47,6 +56,7 @@
     ensureMeta('apple-mobile-web-app-title', 'Evidență');
     ensureMeta('format-detection', 'telephone=no');
     ensureLink('manifest', new URL('../manifest.json', scriptUrl).href);
+    ensureStyleSheet();
   }
 
   function monitorViewport() {
