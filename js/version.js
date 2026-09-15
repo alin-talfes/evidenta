@@ -100,6 +100,11 @@
             'evidentaPedepseModesV3'
         );
         ensureScript(
+            'script[data-evidenta-disclosure-hardening]',
+            new URL('./disclosure-hardening.js?v=1', scriptUrl).href,
+            'evidentaDisclosureHardening'
+        );
+        ensureScript(
             'script[data-evidenta-pwa-register]',
             new URL('./pwa-register.js?v=1', scriptUrl).href,
             'evidentaPwaRegister'
