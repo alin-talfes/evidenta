@@ -2,8 +2,8 @@
 'use strict';
 
 const SECURE_CACHE = 'evidenta-ai-secure-deps-v5';
-const SHELL_CACHE = 'evidenta-ai-shell-v4';
-const RUNTIME_CACHE = 'evidenta-ai-runtime-v4';
+const SHELL_CACHE = 'evidenta-ai-shell-v5';
+const RUNTIME_CACHE = 'evidenta-ai-runtime-v5';
 const PREFIX = '/_secure/';
 const SCOPE = new URL(self.registration.scope);
 
@@ -62,7 +62,7 @@ const SHELL_PATHS = [
   '../manifest.json', '../version.json', '../favicon-ev-2.svg',
   '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile-operational-v2.css', '../css/pedepse-modes-v3.css', '../css/disclosure-hardening.css', '../css/pwa-mobile.css',
   '../js/theme.js', '../js/version.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
-  '../js/operational-upgrades.js', '../js/operational-corrections.js', '../js/operational-finalize.js', '../js/mobile-operational-v2.js', '../js/pedepse-modes-v3.js', '../js/disclosure-hardening.js', '../js/pwa-register.js'
+  '../js/operational-upgrades.js', '../js/operational-corrections.js', '../js/operational-finalize.js', '../js/mobile-operational-v2.js', '../js/pedepse-modes-v4.js', '../js/disclosure-hardening.js', '../js/pwa-register.js'
 ];
 
 function hex(buffer) {
