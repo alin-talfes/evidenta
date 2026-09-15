@@ -33,7 +33,7 @@ for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToP
 assert.ok(finalize.includes('openEndedOmitted'), 'Transferul AI → Pedepse trebuie să evite dublarea deducerii deschise „la zi”.');
 assert.ok(finalize.includes('normalizeGlobalNav'), 'Navigarea globală trebuie normalizată pe toate modulele.');
 
-for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture', 'compactContopiriResult','compactTransfer','compactSemnalmente']) {
+for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','regime-multiple-heading','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture', 'compactContopiriResult','compactTransfer','compactSemnalmente']) {
   assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
 }
 
@@ -57,17 +57,17 @@ assert.ok(mobileCss.includes('.deduction-row'), 'Deducerile trebuie să aibă la
 assert.ok(mobileCss.includes('env(safe-area-inset-bottom'), 'Layout-ul mobil trebuie să respecte safe-area iPhone.');
 assert.ok(mobileCss.includes('font-size:16px'), 'Inputurile mobile trebuie să evite zoom-ul automat Safari iOS.');
 
-for (const marker of ['apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine','pwa-mobile.css?v=2']) {
+for (const marker of ['ensureViewportFit','viewport-fit=cover','apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine','pwa-mobile.css?v=2']) {
   assert.ok(pwa.includes(marker), `Controllerul PWA trebuie să includă auditul/platforma ${marker}`);
 }
 assert.ok(pwaCss.includes('ev-offline-badge'), 'Starea offline trebuie comunicată vizual.');
 assert.ok(pwaCss.includes('.ev-shell__brand-home'), 'Identitatea din header trebuie stilizată fără linkuri imbricate.');
 assert.ok(pwaCss.includes('white-space:normal'), 'Metadatele versiunii/copyright trebuie să poată coborî pe rândul doi pe telefoane mici.');
 
-for (const marker of ['service worker','evidenta-static-','navigationResponse','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pedepse-modes-v3.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
+for (const marker of ['service worker','evidenta-static-','navigationResponse','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/regime-reanalysis.js','./js/pedepse-modes-v3.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
-for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v3','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pedepse-modes-v3.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v4','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pedepse-modes-v3.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să păstreze securitatea și offline-ul: ${marker}`);
 }
 
@@ -75,4 +75,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse, disclosure-uri, camere, prefill, carduri, iPhone/Android și offline verificate.');
+console.log('Mobile/PWA audit: bottom navigation, moduri Pedepse, disclosure-uri, art. 53, viewport iPhone/Android, camere, prefill, carduri și offline verificate.');
