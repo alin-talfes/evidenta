@@ -81,7 +81,7 @@
         );
         ensureScript(
             'script[data-evidenta-operational-corrections]',
-            new URL('./operational-corrections.js?v=3', scriptUrl).href,
+            new URL('./operational-corrections-v4.js?v=1', scriptUrl).href,
             'evidentaOperationalCorrections'
         );
         ensureScript(
