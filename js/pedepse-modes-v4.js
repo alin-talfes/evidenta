@@ -118,6 +118,33 @@
     return mode.querySelector('[data-mode].is-active')?.dataset.mode || 'quick';
   }
 
+  function guardPreventiveOwnership(mode) {
+    if (!mode || mode.dataset.evPreventiveGuard === 'true') return;
+    mode.dataset.evPreventiveGuard = 'true';
+
+    const root = document.getElementById('main-content') || document.body;
+    let observer;
+    const repair = () => {
+      movePreventiveCard(mode);
+      const optional = document.querySelector('.ev-optional-tools');
+      if (!optional) return false;
+      const stray = [...optional.querySelectorAll('.ev-optional-toggle')].some(button => {
+        const text = button.textContent?.toLocaleLowerCase('ro') || '';
+        return text.includes('măsuri preventive') || text.includes('masuri preventive');
+      });
+      if (!stray) {
+        observer?.disconnect();
+        return true;
+      }
+      return false;
+    };
+
+    if (repair()) return;
+    observer = new MutationObserver(() => repair());
+    observer.observe(root, { childList:true, subtree:true });
+    window.setTimeout(() => observer.disconnect(), 7000);
+  }
+
   function repairMode(mode) {
     if (!mode) return false;
     mode.dataset.evThreeModes = 'true';
@@ -127,6 +154,7 @@
     ensureThirdModeButton(mode);
     normalizeModeLabels(mode);
     movePreventiveCard(mode);
+    guardPreventiveOwnership(mode);
     mode.querySelectorAll('[data-mode]').forEach(button => {
       button.setAttribute('aria-pressed', String(button.classList.contains('is-active')));
     });
@@ -175,7 +203,7 @@
     if (initMode(document.querySelector('.ev-calc-mode'))) return;
 
     // .ev-calc-mode este creat dinamic de controllerul operațional. Observăm doar
-    // până la inițializare, apoi deconectăm imediat observer-ul.
+    // până la inițializare, apoi deconectăm imediat observer-ul. Nu există observer permanent.
     const observer = new MutationObserver(() => {
       if (initMode(document.querySelector('.ev-calc-mode'))) observer.disconnect();
     });
