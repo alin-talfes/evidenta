@@ -1,0 +1,58 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { fileURLToPath } from 'node:url';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const root = path.dirname(here);
+const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+
+const version = read('js/version.js');
+const operational = read('js/operational-upgrades.js');
+const finalize = read('js/operational-finalize.js');
+const mobile = read('js/mobile-operational-v2.js');
+const mobileCss = read('css/mobile-operational-v2.css');
+const pwa = read('js/pwa-register.js');
+const pwaCss = read('css/pwa-mobile.css');
+const sw = read('sw.js');
+const aiSw = read('ai/security-sw.js');
+const manifest = JSON.parse(read('manifest.json'));
+
+for (const marker of ['operational-upgrades.js?v=1','operational-finalize.js?v=1','mobile-operational-v2.js?v=1','pwa-register.js?v=1']) {
+  assert.ok(version.includes(marker), `Loaderul global trebuie să includă ${marker}`);
+}
+
+for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToPedepse','addContopiriTransferButton','initTransfer','initInstructajSearch','initSemnalmente']) {
+  assert.ok(operational.includes(marker), `Fluxul operațional trebuie să includă ${marker}`);
+}
+
+assert.ok(finalize.includes('openEndedOmitted'), 'Transferul AI → Pedepse trebuie să evite dublarea deducerii deschise „la zi”.');
+assert.ok(finalize.includes('normalizeGlobalNav'), 'Navigarea globală trebuie normalizată pe toate modulele.');
+
+for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture', 'compactContopiriResult','compactTransfer','compactSemnalmente']) {
+  assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
+}
+
+assert.ok(mobileCss.includes('@media (max-width:600px)'), 'Layout-ul operațional trebuie optimizat explicit pentru telefoane ≤600 px.');
+assert.ok(mobileCss.includes('.ai-table thead { display:none'), 'Tabelele AI trebuie transformate în carduri pe telefon.');
+assert.ok(mobileCss.includes('.deduction-row'), 'Deducerile trebuie să aibă layout mobil de tip card.');
+assert.ok(mobileCss.includes('env(safe-area-inset-bottom'), 'Layout-ul mobil trebuie să respecte safe-area iPhone.');
+assert.ok(mobileCss.includes('font-size:16px'), 'Inputurile mobile trebuie să evite zoom-ul automat Safari iOS.');
+
+for (const marker of ['apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine']) {
+  assert.ok(pwa.includes(marker), `Controllerul PWA trebuie să includă auditul/platforma ${marker}`);
+}
+assert.ok(pwaCss.includes('ev-offline-badge'), 'Starea offline trebuie comunicată vizual.');
+
+for (const marker of ['service worker','evidenta-static-','navigationResponse','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/']) {
+  assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
+}
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-','tessdata-best/ron.traineddata.gz','navigationResponse']) {
+  assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să păstreze securitatea și offline-ul: ${marker}`);
+}
+
+assert.equal(manifest.display, 'standalone');
+assert.equal(manifest.scope, './');
+assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
+
+console.log('Mobile/PWA audit: bottom navigation, calcul rapid, disclosure, camere, prefill, carduri, iPhone/Android și offline verificate.');
