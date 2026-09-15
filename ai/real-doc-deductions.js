@@ -99,10 +99,10 @@ function extractRespectivList(text,documentDate){
 
 function extractEnumeratedMeasures(text,documentDate){
   const out=[];
-  const clause=/(?:se\s+)?deduce[^.;\n]{0,900}/gi;
+  const trigger=/\b(?:deduce|deducând|deducand)\b/gi;
   let m;
-  while((m=clause.exec(text))){
-    const segment=m[0];
+  while((m=trigger.exec(text))){
+    const segment=sentenceTail(text,m.index,900);
     if(!/reținer|arestului\s+preventiv|arestului\s+la\s+domiciliu/i.test(segment)) continue;
 
     const retention=new RegExp(`reținerii(?:\\s*\\(\\s*1\\s+zi\\s*\\))?[^,;]{0,110}?din\\s+data\\s+de\\s+(${DATE_SRC})`,'i').exec(segment);
