@@ -1,0 +1,38 @@
+/* Robust disclosure behavior across mobile-first operational cards. */
+
+.ev-mobile-lc-details:not([open]) > :not(summary),
+.ev-mobile-advanced-details:not([open]) > :not(summary),
+.ev-ai-evidence-details:not([open]) > :not(summary),
+.ev-contopiri-result-details:not([open]) > :not(summary),
+.ev-transfer-help-details:not([open]) > :not(summary),
+.ev-ai-secondary:not([open]) > :not(summary),
+.ev-ai-components:not([open]) > :not(summary),
+.ev-legal-details:not([open]) > :not(summary) {
+  display:none !important;
+}
+
+.ev-mobile-lc-details[hidden],
+.ev-mobile-advanced-details[hidden],
+.ev-ai-evidence-details[hidden],
+.ev-contopiri-result-details[hidden],
+.ev-transfer-help-details[hidden] {
+  display:none !important;
+}
+
+/* Keep the notice title visible while only the explanatory content collapses. */
+body .ev-collapsible-notice.is-collapsed > div:not(.notice-icon):not([data-notice-toggle]) {
+  display:block !important;
+}
+body .ev-collapsible-notice.is-collapsed > div:not(.notice-icon):not([data-notice-toggle]) > :not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+  display:none !important;
+}
+
+/* A collapsed archive should not leave destructive/import controls floating without its content. */
+.ev-saved-collapsed .saved-heading-row .compact-actions {
+  display:none !important;
+}
+
+.ev-collapsible-notice [data-notice-toggle],
+.saved-list [data-saved-toggle] {
+  flex:0 0 auto;
+}
