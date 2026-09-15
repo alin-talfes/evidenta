@@ -38,9 +38,9 @@ function openEndedDeductionStart(text){
   const value=String(text||'');
 
   // În formulele mixte pot exista mai multe date înainte de „la zi”.
-  // Data relevantă este ultima dată explicită din dispoziția de deducere înainte de „la zi”,
-  // adică începutul intervalului deschis care continuă până la momentul mandatului.
-  const segmentRx=/(?:se\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^.;\n]{0,900}?\bla\s+zi\b/gi;
+  // Data relevantă este ultima dată explicită din dispoziția de deducere înainte de „la zi”.
+  // Punctele din date (ZZ.LL.AAAA) nu sunt tratate ca terminatoare de propoziție.
+  const segmentRx=/(?:se\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^;\n]{0,900}?\bla\s+zi\b/gi;
   let segment;
   while((segment=segmentRx.exec(value))){
     const dateRx=new RegExp(DATE_SRC,'g');
@@ -49,8 +49,6 @@ function openEndedDeductionStart(text){
     const last=dates[dates.length-1];
     const before=segment[0].slice(Math.max(0,(last.index||0)-70),last.index||0);
     if(!/(?:de\s+la|din\s+data\s+de|începând\s+cu|incepand\s+cu|de\s+la\s+data\s+de)\s*$/i.test(before)) {
-      // Acceptăm și formulele eliptice din liste: „... 14.01.2026 la zi”, dar numai
-      // în interiorul unei dispoziții explicite de deducere.
       const after=segment[0].slice((last.index||0)+last[0].length);
       if(!/^\s*(?:până\s+)?la\s+zi\b/i.test(after)) continue;
     }
@@ -59,8 +57,8 @@ function openEndedDeductionStart(text){
   }
 
   const patterns=[
-    new RegExp(`(?:se\\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^.;\\n]{0,520}?(?:de\\s+la|din\\s+data\\s+de|începând\\s+cu|incepand\\s+cu)\\s*(${DATE_SRC})\\s+(?:până\\s+)?la\\s+zi\\b`,'i'),
-    new RegExp(`(?:se\\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^.;\\n]{0,520}?(${DATE_SRC})[^.;\\n]{0,120}?\\bla\\s+zi\\b`,'i')
+    new RegExp(`(?:se\\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^;\\n]{0,520}?(?:de\\s+la|din\\s+data\\s+de|începând\\s+cu|incepand\\s+cu)\\s*(${DATE_SRC})\\s+(?:până\\s+)?la\\s+zi\\b`,'i'),
+    new RegExp(`(?:se\\s+)?(?:deduce|deducând|deducand|scade|scăzând|scazand)[^;\\n]{0,520}?(${DATE_SRC})[^;\\n]{0,120}?\\bla\\s+zi\\b`,'i')
   ];
   for(const rx of patterns){ const m=rx.exec(value); if(!m) continue; const p=parseDate(m[1]); if(p) return {value:p.iso,index:m.index,source:sourceAt(value,m.index,m[0])}; }
   return null;
