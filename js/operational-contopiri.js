@@ -73,6 +73,20 @@
     document.querySelector('#mergeResult [data-contopiri-to-pedepse]')?.remove();
   }
 
+  function compactContopiriResult(result = document.getElementById('mergeResult')) {
+    if (!result) return;
+    const detail = result.querySelector('.detail');
+    if (!detail || detail.closest('.ev-contopiri-result-details')) return;
+    const details = document.createElement('details');
+    details.className = 'ev-contopiri-result-details';
+    const summary = document.createElement('summary');
+    summary.textContent = 'Detalii calcul';
+    detail.insertAdjacentElement('beforebegin', details);
+    details.append(summary, detail);
+    window.EvidentaDisclosurePolicy?.normalize?.(details);
+    window.EvidentaDisclosureA11y?.scan?.(details);
+  }
+
   function fillContopiriFromPrefill() {
     const data = getSessionJson(PREFILL_CONTOPIRI, true);
     if (!data?.components?.length || typeof window.addPenaltyRow !== 'function') return;
@@ -108,15 +122,19 @@
     compactLegalBox();
     fillContopiriFromPrefill();
 
-    const resultObserver = new MutationObserver(() => addContopiriTransferButton());
-    resultObserver.observe(result, { childList:true });
+    const refreshResult = () => {
+      addContopiriTransferButton();
+      compactContopiriResult(result);
+    };
+    const resultObserver = new MutationObserver(refreshResult);
+    resultObserver.observe(result, { childList:true, subtree:true });
 
     const rowsObserver = new MutationObserver(removeContopiriTransferButton);
     rowsObserver.observe(rows, { childList:true });
     rows.addEventListener('input', removeContopiriTransferButton);
     rows.addEventListener('change', removeContopiriTransferButton);
 
-    addContopiriTransferButton();
+    refreshResult();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
