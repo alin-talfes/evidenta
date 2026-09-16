@@ -11,6 +11,7 @@ const version = read('js/version.js');
 const operational = read('js/operational-upgrades.js');
 const operationalCss = read('css/operational-upgrades.css');
 const corrections = read('js/operational-corrections-v4.js');
+const prisonDate = read('js/pedepse-prison-date.js');
 const noSpoilers = read('js/no-nonoptional-disclosures-v1.js');
 const finalize = read('js/operational-finalize.js');
 const mobile = read('js/mobile-operational-v2.js');
@@ -67,9 +68,24 @@ assert.ok(corrections.includes('pedepse-modes-v5.js?v=1'));
 assert.ok(corrections.includes('pedepse-optional-fix-v2.js?v=1'));
 assert.ok(corrections.includes('disclosure-hardening-v2.js?v=1'));
 assert.ok(corrections.includes('no-nonoptional-disclosures-v1.js?v=2'));
+assert.ok(corrections.includes('pedepse-prison-date.js?v=1'));
+assert.ok(!corrections.includes('patchPedepseFunctions'));
+assert.ok(!corrections.includes('__evPrisonDatePatched'));
+assert.ok(!corrections.includes("document.createElement('style')"));
 assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(index));
+
+for (const marker of ['setupControl','sync({ infer = false }','validateBeforeCalculation','prisonReceivedSameAsStart','window.syncPrisonReceivedControl']) {
+  assert.ok(prisonDate.includes(marker), `Controllerul datei de intrare trebuie să includă ${marker}`);
+}
+assert.ok(!prisonDate.includes('__evPrisonDatePatched'));
+assert.ok(!prisonDate.includes('window.calculateAll ='));
+assert.ok(!prisonDate.includes('window.populateStoredCase ='));
+assert.ok(!prisonDate.includes('window.setToday ='));
+
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'));
 assert.ok(modesCss.includes('.ev-preventive-days-control'));
+assert.ok(modesCss.includes('.ev-prison-same-check'));
+assert.ok(modesCss.includes('body.ev-quick-mode #prisonReceivedControl'));
 assert.ok(modesCss.includes('@media (max-width:600px)'));
 
 for (const marker of ['OPTIONAL_DETAILS_SELECTOR','details.ev-mobile-advanced-details','.ev-optional-tools details','details[data-ev-optional="true"]','details.open = true','neutralizeSummary','evStaticDisclosure','::-webkit-details-marker','pointer-events:none']) {
@@ -109,10 +125,11 @@ for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport',
 assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('scheduleBottomNavMetrics'));
 
-for (const marker of ['service worker',"const VERSION = 'v21'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
+for (const marker of ['service worker',"const VERSION = 'v22'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
 assert.ok(sw.includes('(?:version|ux-upgrades|operational-upgrades'));
+assert.ok(sw.includes('pedepse-prison-date'));
 for (const legacy of ['mobile-bottom-nav-clearance-v5.css','mobile-no-floating-v2.css','pwa-mobile.css','mobile-runtime-fixes-v2.css','mobile-operational-v2.css','pedepse-modes-v4.js','pedepse-modes-v3-kill.js']) {
   assert.ok(!sw.includes(legacy), `Service Worker-ul principal nu trebuie să precache-uiască ${legacy}`);
 }
@@ -128,4 +145,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: un singur loader global, numai bottom nav fixed, preseturi 30/60 pentru măsuri preventive și fără controllere duplicate în index.html.');
+console.log('Mobile/PWA audit: prison-date fără monkey patch, un singur loader global, preseturi 30/60 și numai bottom nav fixed.');
