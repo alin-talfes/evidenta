@@ -9,6 +9,13 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const version = read('js/version.js');
 const operational = read('js/operational-upgrades.js');
+const operationalNav = read('js/operational-navigation.js');
+const operationalPedepse = read('js/operational-pedepse.js');
+const operationalAi = read('js/operational-ai.js');
+const operationalContopiri = read('js/operational-contopiri.js');
+const operationalTransfer = read('js/operational-transfer.js');
+const operationalInstructaj = read('js/operational-instructaj.js');
+const operationalSemnalmente = read('js/operational-semnalmente.js');
 const operationalCss = read('css/operational-upgrades.css');
 const prisonDate = read('js/pedepse-prison-date.js');
 const quarantineUi = read('js/quarantine-ui.js');
@@ -44,15 +51,39 @@ for (const legacy of ['pedepse-modes-v4.js','pedepse-optional-fix.js','disclosur
   assert.ok(!version.includes(legacy), `Loaderul global nu trebuie să mai încarce ${legacy}`);
 }
 
-for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToPedepse','addContopiriTransferButton','initTransfer','initInstructajSearch','initSemnalmente']) {
-  assert.ok(operational.includes(marker), `Fluxul operațional trebuie să includă ${marker}`);
+for (const marker of [
+  'ensureController',
+  './operational-navigation.js?v=1',
+  './operational-pedepse.js?v=1',
+  './operational-ai.js?v=1',
+  './operational-contopiri.js?v=1',
+  './operational-transfer.js?v=1',
+  './operational-instructaj.js?v=1',
+  './operational-semnalmente.js?v=1'
+]) {
+  assert.ok(operational.includes(marker), `Orchestratorul operațional trebuie să includă ${marker}`);
 }
+for (const movedImplementation of ['quickCalculate','sendAiToPedepse','addContopiriTransferButton','addTransferCopy','CĂUTARE OPERATIVĂ','file-frontal']) {
+  assert.ok(!operational.includes(movedImplementation), `operational-upgrades.js nu trebuie să mai implementeze ${movedImplementation}`);
+}
+assert.ok(operationalNav.includes('ev-mobile-nav'));
+assert.ok(operationalPedepse.includes('Calcul rapid'));
+assert.ok(operationalPedepse.includes('quickCalculate'));
+assert.ok(operationalAi.includes('sendAiToPedepse'));
+assert.ok(operationalAi.includes('sendAiToContopiri'));
+assert.ok(operationalContopiri.includes('addContopiriTransferButton'));
+assert.ok(operationalContopiri.includes('removeContopiriTransferButton'));
+assert.ok(operationalContopiri.includes('resultObserver.observe(result, { childList:true })'));
+assert.ok(!operationalContopiri.includes('window.calculateMergedPenalties ='), 'Contopiri nu trebuie să suprascrie calculateMergedPenalties.');
+assert.ok(!operationalContopiri.includes('__evOperationalWrapped'), 'Contopiri nu trebuie să păstreze wrapper-ul legacy al motorului.');
+assert.ok(operationalTransfer.includes('addTransferCopy'));
+assert.ok(operationalTransfer.includes('ev-transfer-auto'));
+assert.ok(operationalInstructaj.includes('CĂUTARE OPERATIVĂ'));
+assert.ok(operationalInstructaj.includes('workflow-list'));
+assert.ok(operationalSemnalmente.includes("setAttribute('capture', 'environment')"));
+assert.ok(operationalSemnalmente.includes('ARATĂ ARHIVA'));
 assert.ok(!operational.includes('overrideDeductionSummation'), 'Politica de însumare trebuie definită în rules.js, nu suprascrisă la runtime.');
 assert.ok(!operational.includes('replaceOverlapCopy'), 'Copy-ul pentru suprapuneri trebuie definit la sursă, nu corectat după randare.');
-assert.ok(!operational.includes('window.calculateMergedPenalties ='), 'Contopiri nu trebuie să suprascrie calculateMergedPenalties.');
-assert.ok(!operational.includes('__evOperationalWrapped'), 'Contopiri nu trebuie să păstreze wrapper-ul legacy al motorului.');
-assert.ok(operational.includes('removeContopiriTransferButton'), 'Transferul Contopiri → Pedepse trebuie invalidat când se schimbă componentele.');
-assert.ok(operational.includes('resultObserver.observe(result, { childList:true })'), 'Rezultatul Contopiri trebuie observat local, fără monkey-patch pe motor.');
 assert.ok(!operationalCss.includes('position:sticky'), 'Stratul operațional nu trebuie să mai creeze suprafețe sticky pe mobil.');
 assert.ok(!operationalCss.includes('position:fixed'), 'Poziționarea fixed trebuie să fie definită exclusiv în politica canonică mobile.css.');
 assert.ok(operationalCss.includes('.ev-mobile-more-sheet {\n    position:absolute;'), 'Meniul Mai multe trebuie ancorat absolut de bottom nav, nu de viewport.');
@@ -153,20 +184,26 @@ for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport',
 assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('scheduleBottomNavMetrics'));
 
-for (const marker of ['service worker',"const VERSION = 'v25'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./js/rules.js','./js/app.js','./js/pedepse-ux.js','./js/deduction-ui.js','./js/quarantine-rules.js','./js/quarantine-ui.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
+for (const marker of [
+  'service worker',"const VERSION = 'v26'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/',
+  './js/pwa-register.js','./js/ux-upgrades.js','./js/rules.js','./js/app.js','./js/pedepse-ux.js','./js/deduction-ui.js','./js/quarantine-rules.js','./js/quarantine-ui.js',
+  './js/operational-navigation.js','./js/operational-pedepse.js','./js/operational-ai.js','./js/operational-contopiri.js','./js/operational-transfer.js','./js/operational-instructaj.js','./js/operational-semnalmente.js',
+  './css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js'
+]) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
-assert.ok(sw.includes('(?:version|ux-upgrades|rules|app|pedepse-ux|deduction-ui|quarantine-rules|quarantine-ui|operational-upgrades'));
+assert.ok(sw.includes('operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente'));
 assert.ok(sw.includes('pedepse-prison-date'));
 assert.ok(!sw.includes('operational-corrections-v4'));
 for (const legacy of ['mobile-bottom-nav-clearance-v5.css','mobile-no-floating-v2.css','pwa-mobile.css','mobile-runtime-fixes-v2.css','mobile-operational-v2.css','pedepse-modes-v4.js','pedepse-modes-v3-kill.js']) {
   assert.ok(!sw.includes(legacy), `Service Worker-ul principal nu trebuie să precache-uiască ${legacy}`);
 }
 
-for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v12','evidenta-ai-runtime-v12','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pwa-register.js','../js/ux-upgrades.js','../css/mobile.css','../css/mobile-modules.css','../js/pedepse-modes-v5.js','../js/pedepse-optional-fix-v2.js','../js/disclosure-hardening-v2.js','isCriticalSharedRuntime']) {
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v13','evidenta-ai-runtime-v13','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pwa-register.js','../js/ux-upgrades.js','../js/operational-upgrades.js','../js/operational-navigation.js','../js/operational-ai.js','../css/mobile.css','../css/mobile-modules.css','../js/pedepse-modes-v5.js','../js/pedepse-optional-fix-v2.js','../js/disclosure-hardening-v2.js','isCriticalSharedRuntime']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să includă ${marker}`);
 }
-assert.ok(aiSw.includes('(?:version|ux-upgrades|pwa-register'));
+assert.ok(aiSw.includes('operational-upgrades|operational-navigation|operational-ai'));
+assert.ok(!aiSw.includes('../js/operational-corrections-v4.js'));
 assert.ok(!aiSw.includes('../js/pedepse-modes-v4.js'));
 assert.ok(!aiSw.includes('../js/disclosure-hardening.js'));
 
@@ -174,4 +211,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: Contopiri fără monkey-patch, controllere stabile încărcate direct și numai bottom nav fixed.');
+console.log('Mobile/PWA audit: controllere operaționale separate pe module, fără monkey-patch și numai bottom nav fixed.');
