@@ -79,9 +79,14 @@
             new URL('./operational-upgrades.js?v=1', scriptUrl).href,
             'evidentaOperationalUpgrades'
         );
+        /*
+         * operational-corrections-v4 este punctul unic de compatibilitate pentru
+         * Pedepse și încarcă doar controllerele stabile curente: modes-v5,
+         * optional-fix-v2 și disclosure-hardening-v2.
+         */
         ensureScript(
             'script[data-evidenta-operational-corrections]',
-            new URL('./operational-corrections-v4.js?v=1', scriptUrl).href,
+            new URL('./operational-corrections-v4.js?v=2', scriptUrl).href,
             'evidentaOperationalCorrections'
         );
         ensureScript(
@@ -91,29 +96,12 @@
         );
         ensureScript(
             'script[data-evidenta-mobile-operational-v2]',
-            new URL('./mobile-operational-v2.js?v=1', scriptUrl).href,
+            new URL('./mobile-operational-v2.js?v=2', scriptUrl).href,
             'evidentaMobileOperationalV2'
         );
         ensureScript(
-            'script[data-evidenta-pedepse-modes-v4]',
-            new URL('./pedepse-modes-v4.js?v=1', scriptUrl).href,
-            'evidentaPedepseModesV4'
-        );
-        if (document.getElementById('masuri-preventive-heading')) {
-            ensureScript(
-                'script[data-evidenta-pedepse-optional-fix]',
-                new URL('./pedepse-optional-fix.js?v=1', scriptUrl).href,
-                'evidentaPedepseOptionalFix'
-            );
-        }
-        ensureScript(
-            'script[data-evidenta-disclosure-hardening]',
-            new URL('./disclosure-hardening.js?v=1', scriptUrl).href,
-            'evidentaDisclosureHardening'
-        );
-        ensureScript(
             'script[data-evidenta-pwa-register]',
-            new URL('./pwa-register.js?v=1', scriptUrl).href,
+            new URL('./pwa-register.js?v=2', scriptUrl).href,
             'evidentaPwaRegister'
         );
     }
