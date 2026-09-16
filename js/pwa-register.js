@@ -52,6 +52,15 @@
     document.head.appendChild(link);
   }
 
+  function ensureBottomNavClearance() {
+    if (document.querySelector('link[data-evidenta-bottom-nav-clearance]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = new URL('../css/mobile-bottom-nav-clearance-v2.css?v=1', scriptUrl).href;
+    link.dataset.evidentaBottomNavClearance = 'true';
+    document.head.appendChild(link);
+  }
+
   function platformClass() {
     const ua = navigator.userAgent || '';
     const platform = navigator.platform || '';
@@ -73,6 +82,7 @@
     ensureMeta('format-detection', 'telephone=no');
     ensureLink('manifest', new URL('../manifest.json', scriptUrl).href);
     ensureStyleSheet();
+    ensureBottomNavClearance();
   }
 
   function monitorViewport() {
