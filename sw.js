@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v42';
+const VERSION = 'v43';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -16,8 +16,7 @@ const CORE_PATHS = [
   './js/export.js', './js/ui.js', './js/app.js', './js/pedepse-ux.js', './js/deduction-ui.js', './js/quarantine-rules.js', './js/quarantine-ui.js', './js/contopiri-core.js', './js/contopiri.js',
   './js/operational-navigation.js', './js/operational-pedepse.js', './js/operational-ai.js', './js/operational-contopiri.js',
   './js/operational-transfer.js', './js/operational-instructaj.js', './js/operational-semnalmente.js',
-  './js/no-nonoptional-disclosures-v1.js', './js/pedepse-modes-v5.js',
-  './js/pedepse-optional-fix-v2.js', './js/disclosure-hardening-v2.js', './js/pwa-register.js',
+  './js/no-nonoptional-disclosures-v1.js', './js/pedepse-optional-fix-v2.js', './js/disclosure-hardening-v2.js', './js/pwa-register.js',
   './transfer/app.js', './transfer/rules.js',
   './instructaj/styles.css', './instructaj/audit-enhancements.css', './instructaj/data.js', './instructaj/app.js',
   './instructaj/omj2188-completari.js', './instructaj/verificare-dosar-transfer.js',
@@ -121,7 +120,7 @@ async function staticResponse(request) {
 }
 
 function isCriticalRuntime(url) {
-  return /\/js\/(?:version|ux-upgrades|rules|storage|ui|app|pedepse-ux|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|pedepse-modes-v5|pedepse-optional-fix-v2|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
+  return /\/js\/(?:version|ux-upgrades|rules|storage|ui|app|pedepse-ux|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|pedepse-optional-fix-v2|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
     || /\/css\/(?:operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening)\.css$/i.test(url.pathname);
 }
