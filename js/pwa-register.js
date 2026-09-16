@@ -43,25 +43,30 @@
     }
   }
 
-  function ensureStyleSheet() {
-    if (document.querySelector('link[data-evidenta-pwa-mobile]')) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = new URL('../css/pwa-mobile.css?v=2', scriptUrl).href;
-    link.dataset.evidentaPwaMobile = 'true';
-    document.head.appendChild(link);
-  }
-
-  function ensureBottomNavClearance() {
-    let link = document.querySelector('link[data-evidenta-bottom-nav-clearance]');
-    const href = new URL('../css/mobile-bottom-nav-clearance-v5.css?v=1', scriptUrl).href;
+  function ensureRuntimeStyle(datasetKey, relativeHref) {
+    let link = document.querySelector(`link[data-${datasetKey}]`);
+    const href = new URL(relativeHref, scriptUrl).href;
     if (!link) {
       link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.dataset.evidentaBottomNavClearance = 'true';
+      link.setAttribute(`data-${datasetKey}`, 'true');
       document.head.appendChild(link);
     }
     if (link.href !== href) link.href = href;
+    /* Keep runtime policy styles at the end of <head>, after legacy module CSS. */
+    document.head.appendChild(link);
+  }
+
+  function ensureStyleSheet() {
+    ensureRuntimeStyle('evidenta-pwa-mobile', '../css/pwa-mobile.css?v=3');
+  }
+
+  function ensureBottomNavClearance() {
+    ensureRuntimeStyle('evidenta-bottom-nav-clearance', '../css/mobile-bottom-nav-clearance-v6.css?v=1');
+  }
+
+  function ensureNoFloatingPolicy() {
+    ensureRuntimeStyle('evidenta-no-floating', '../css/mobile-no-floating-v2.css?v=1');
   }
 
   function platformClass() {
@@ -86,6 +91,7 @@
     ensureLink('manifest', new URL('../manifest.json', scriptUrl).href);
     ensureStyleSheet();
     ensureBottomNavClearance();
+    ensureNoFloatingPolicy();
   }
 
   function clearLegacyBottomNavState() {
@@ -107,11 +113,20 @@
 
   function initBottomNavLayout() {
     syncBottomNavLayout();
-    [0, 80, 240, 700, 1600].forEach(delay => window.setTimeout(syncBottomNavLayout, delay));
+    [0, 80, 240, 700, 1600].forEach(delay => window.setTimeout(() => {
+      hardenMobileHead();
+      syncBottomNavLayout();
+    }, delay));
     window.addEventListener('resize', syncBottomNavLayout, { passive:true });
     window.addEventListener('orientationchange', syncBottomNavLayout, { passive:true });
-    window.addEventListener('evidenta:shellready', syncBottomNavLayout);
-    window.addEventListener('load', syncBottomNavLayout, { once:true });
+    window.addEventListener('evidenta:shellready', () => {
+      hardenMobileHead();
+      syncBottomNavLayout();
+    });
+    window.addEventListener('load', () => {
+      hardenMobileHead();
+      syncBottomNavLayout();
+    }, { once:true });
   }
 
   function monitorViewport() {
@@ -160,7 +175,10 @@
     const worker = registration?.active || registration?.waiting || registration?.installing;
     worker?.postMessage?.({
       type:'PRECACHE_OPTIONAL',
-      paths:['./','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/']
+      paths:[
+        './','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/',
+        './css/mobile-bottom-nav-clearance-v6.css','./css/mobile-no-floating-v2.css'
+      ]
     });
   }
 
@@ -174,6 +192,7 @@
     window.addEventListener('offline', onlineState);
     window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change', () => {
       platformClass();
+      hardenMobileHead();
       syncBottomNavLayout();
     });
     const registration = await registerRootWorker();
