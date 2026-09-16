@@ -53,27 +53,7 @@ function enhance(){
   }
 }
 
-function isFullCalculationMode(){
-  return !document.body.classList.contains('ev-quick-mode') &&
-    !document.body.classList.contains('ev-preventive-mode');
-}
-
-function bindCalculationLifecycle(){
-  document.addEventListener('click', event => {
-    if (!event.target.closest('#calcBtn') || !isFullCalculationMode()) return;
-    const previousCalculation = root.lastCalculation;
-    setTimeout(() => {
-      if (!root.lastCalculation || root.lastCalculation === previousCalculation) return;
-      enhance();
-    }, 0);
-  }, true);
-}
-
 root.enhanceQuarantineResult = enhance;
-root.QuarantineUi = Object.freeze({ enhance, bindCalculationLifecycle });
+root.QuarantineUi = Object.freeze({ enhance });
 
-if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindCalculationLifecycle, { once:true });
-  else bindCalculationLifecycle();
-}
 })(typeof window !== 'undefined' ? window : globalThis);
