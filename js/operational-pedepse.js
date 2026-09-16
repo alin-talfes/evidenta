@@ -214,6 +214,68 @@
     return true;
   }
 
+  function detailsShell(className, summaryText) {
+    const details = document.createElement('details');
+    details.className = className;
+    const summary = document.createElement('summary');
+    summary.textContent = summaryText;
+    const body = document.createElement('div');
+    body.className = `${className}__body`;
+    details.append(summary, body);
+    return { details, body };
+  }
+
+  function buildMobileDisclosure() {
+    if (document.querySelector('.ev-mobile-lc-details')) return;
+    const sentence = document.getElementById('sentence-heading')?.closest('.card');
+    if (!sentence) return;
+    const general = document.getElementById('date-ppl-heading')?.closest('.card');
+    const directSentenceGrids = [...sentence.querySelectorAll(':scope > .form-grid')];
+    const lcGrid = directSentenceGrids.find(grid => grid.querySelector('#liberationArticle')) || null;
+    const mode = document.querySelector('.ev-calc-mode');
+
+    const lc = detailsShell('ev-mobile-lc-details', 'Liberare condiționată și date PPL');
+    lc.details.open = true;
+    if (general) lc.body.appendChild(general);
+    if (lcGrid) {
+      const card = document.createElement('section');
+      card.className = 'card ev-lc-controls-card';
+      const title = document.createElement('h3');
+      title.textContent = 'ALGORITM LIBERARE CONDIȚIONATĂ';
+      card.append(title, lcGrid);
+      lc.body.appendChild(card);
+    }
+    if (lc.body.children.length) (mode || sentence).insertAdjacentElement(mode ? 'afterend' : 'beforebegin', lc.details);
+
+    const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];
+    const rareCards = rareIds.map(id => document.getElementById(id)?.closest('.card')).filter(Boolean);
+    if (rareCards.length) {
+      const advanced = detailsShell('ev-mobile-advanced-details', 'Opțiuni avansate');
+      const deductionsCard = document.getElementById('deductions-heading')?.closest('.card');
+      rareCards.forEach(card => advanced.body.appendChild(card));
+      (deductionsCard || sentence).insertAdjacentElement('afterend', advanced.details);
+    }
+
+    const syncMode = () => {
+      const quick = document.body.classList.contains('ev-quick-mode');
+      lc.details.hidden = quick;
+      if (!quick && lc.details.querySelector('.ev-field-invalid,[aria-invalid="true"]')) lc.details.open = true;
+    };
+    syncMode();
+
+    document.getElementById('calcBtn')?.addEventListener('click', () => {
+      if (document.body.classList.contains('ev-quick-mode')) return;
+      requestAnimationFrame(() => {
+        if (lc.details.querySelector('.ev-field-invalid,[aria-invalid="true"]')) lc.details.open = true;
+        const advanced = document.querySelector('.ev-mobile-advanced-details');
+        if (advanced?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) advanced.open = true;
+      });
+    });
+
+    window.EvidentaDisclosurePolicy?.normalize?.(document);
+    window.EvidentaDisclosureA11y?.scan?.(document);
+  }
+
   function init() {
     if (!document.getElementById('calcBtn') || document.querySelector('.ev-calc-mode')) return;
 
@@ -244,6 +306,7 @@
       if (heading) heading.textContent = current === 'quick' ? 'CALCUL RAPID PEDEAPSĂ' : 'DETALII PEDEAPSĂ PPL';
       datesGrid?.classList.toggle('ev-quick-dates', current === 'quick');
       syncQuickResultControls();
+      requestAnimationFrame(() => window.EvidentaDisclosureA11y?.scan?.(document));
     };
 
     mode.addEventListener('click', event => {
@@ -260,6 +323,7 @@
 
     fillPedepseFromPrefill();
     setMode('quick');
+    requestAnimationFrame(buildMobileDisclosure);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
