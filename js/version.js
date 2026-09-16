@@ -103,7 +103,7 @@
     function ensureModuleOperationalControllers() {
         ensureStyle('link[data-evidenta-operational-upgrades]', new URL('../css/operational-upgrades.css?v=1', scriptUrl).href, 'evidentaOperationalUpgrades');
         ensureStyle('link[data-evidenta-mobile-modules]', new URL('../css/mobile-modules.css?v=1', scriptUrl).href, 'evidentaMobileModules');
-        ensureScript('script[data-evidenta-operational-navigation]', new URL('./operational-navigation.js?v=3', scriptUrl).href, 'evidentaOperationalNavigation');
+        ensureScript('script[data-evidenta-operational-navigation]', new URL('./operational-navigation.js?v=4', scriptUrl).href, 'evidentaOperationalNavigation');
 
         const p = operationalPage();
         if (isPedepsePage(p)) {
@@ -126,7 +126,7 @@
         const p = ensureModuleOperationalControllers();
         if (isPedepsePage(p)) ensurePedepseOperationalControllers();
         ensureGlobalOperationalControllers();
-        ensureScript('script[data-evidenta-pwa-register]', new URL('./pwa-register.js?v=2', scriptUrl).href, 'evidentaPwaRegister');
+        ensureScript('script[data-evidenta-pwa-register]', new URL('./pwa-register.js?v=3', scriptUrl).href, 'evidentaPwaRegister');
     }
 
     function removeLegacyFooters() {
