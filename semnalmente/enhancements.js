@@ -294,12 +294,13 @@
     }
 
     function normalizeReliabilityNotice() {
+        const next = 'Rezultatele sunt clasificări euristice bazate pe geometria landmark-urilor și sampling de culoare. Aplicația nu calculează un scor de încredere validat pentru aceste categorii. Fotografia de profil poate îmbunătăți analiza nasului și a urechii. Verificarea umană este obligatorie înainte de utilizarea rezultatului.';
         document.querySelectorAll('#results-grid .result-card').forEach(card => {
             const title = card.querySelector('.card-title')?.textContent?.trim().toLowerCase();
             if (title !== 'fiabilitate') return;
             const paragraph = card.querySelector('p');
-            if (!paragraph) return;
-            paragraph.textContent = 'Rezultatele sunt clasificări euristice bazate pe geometria landmark-urilor și sampling de culoare. Aplicația nu calculează un scor de încredere validat pentru aceste categorii. Fotografia de profil poate îmbunătăți analiza nasului și a urechii. Verificarea umană este obligatorie înainte de utilizarea rezultatului.';
+            if (!paragraph || paragraph.textContent === next) return;
+            paragraph.textContent = next;
         });
     }
 
