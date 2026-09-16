@@ -27,6 +27,8 @@ for (const [file, html] of [
   assert.ok(html.includes('ux-upgrades.js?v=3'), `${file} trebuie să declare controllerul UX consolidat curent`);
   assert.equal((html.match(/ux-upgrades\.js\?v=3/g) || []).length, 1, `${file} trebuie să declare controllerul UX o singură dată`);
 }
+assert.ok(rootHtml.includes('pedepse-ux.js?v=3'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
+assert.ok(rootHtml.includes('EvidentaPedepseUx.runCalculation(calculateAll)'), 'Fluxul de calcul Pedepse trebuie declarat explicit în markup.');
 assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
 assert.ok(!fs.existsSync(path.join(root, 'css/ux-upgrades.css')), 'CSS-ul UX separat trebuie eliminat după consolidarea în final-layer.css');
 assert.ok(!ux.includes('loadStylesheet'), 'Controllerul UX nu trebuie să mai injecteze un stylesheet la runtime');
@@ -52,17 +54,19 @@ assert.ok(ux.includes('observer.disconnect()'), 'Observerul Transfer trebuie sus
 assert.ok(!ux.includes('new MutationObserver(normalizeTransferResults)'), 'Observerul Transfer nu trebuie să invoce direct o funcție care își mută propriul subtree');
 
 for (const marker of [
-  'beforeCalculation',
+  'validateCalculation',
+  'runCalculation',
   'afterCalculation',
-  'bindCalculationLifecycle',
   'window.EvidentaPedepseUx',
   "new Set(['NCP99', 'VCP551'])"
 ]) {
   assert.ok(pedepseUx.includes(marker), `Controllerul Pedepse UX trebuie să includă ${marker}`);
 }
+assert.ok(!pedepseUx.includes('bindCalculationLifecycle'), 'Pedepse UX nu trebuie să intercepteze butonul de calcul prin listener global');
 assert.ok(!pedepseUx.includes('installCalculationGuard'), 'Pedepse UX nu trebuie să instaleze wrapper peste calculateAll');
 assert.ok(!pedepseUx.includes('window.calculateAll ='), 'Pedepse UX nu trebuie să suprascrie calculateAll');
 assert.ok(!pedepseUx.includes('__evEnhanced'), 'Pedepse UX nu trebuie să folosească marcaje de monkey-patch');
+assert.ok(!pedepseUx.includes('setTimeout(afterCalculation'), 'Post-procesarea Pedepse trebuie să fie apelată explicit, nu temporizată');
 
 for (const marker of [
   '.ev-shell__menu',
@@ -78,4 +82,4 @@ for (const marker of [
 }
 
 assert.ok(!ux.includes("href='../ofiter"), 'Upgrade-urile publice nu trebuie să expună ruta Ofițer');
-console.log('UX upgrades: controller declarat per pagină, fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
+console.log('UX upgrades: controller declarat per pagină, flux Pedepse explicit, fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
