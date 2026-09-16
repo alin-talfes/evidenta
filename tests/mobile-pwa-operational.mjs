@@ -59,7 +59,8 @@ for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','C
 }
 assert.ok(!index.includes('pedepse-modes-v3-kill.js'));
 assert.ok(!index.includes('pedepse-modes-v4.js'));
-assert.ok(index.includes('operational-corrections-v4.js?v=1'));
+assert.ok(!index.includes('operational-corrections-v4.js'), 'index.html nu trebuie să dubleze controllerul încărcat de version.js.');
+assert.ok(!index.includes('no-nonoptional-disclosures-v1.js'), 'index.html nu trebuie să dubleze politica disclosure încărcată de controllerul stabil.');
 assert.ok(!corrections.includes('new MutationObserver'));
 assert.ok(!corrections.includes('bodyObserver'));
 assert.ok(corrections.includes('pedepse-modes-v5.js?v=1'));
@@ -126,4 +127,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: numai bottom nav este fixed; restul suprafețelor mobile rămân în fluxul paginii.');
+console.log('Mobile/PWA audit: un singur loader global, numai bottom nav fixed, fără controllere duplicate în index.html.');
