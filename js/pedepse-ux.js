@@ -6,6 +6,7 @@
 
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
+  const LIFE_ARTICLES = new Set(['NCP99', 'VCP551']);
 
   function parseDateValue(value) {
     if (!String(value || '').trim()) return null;
@@ -74,11 +75,11 @@
     if (!life && !article?.value) {
       addIssue(issues, article, 'Selectează articolul de liberare condiționată.');
     }
-    if (life && article?.value !== 'NCP99') {
-      addIssue(issues, article, 'Pentru detențiunea pe viață se utilizează NCP art. 99.');
+    if (life && !LIFE_ARTICLES.has(article?.value)) {
+      addIssue(issues, article, 'Pentru detențiunea pe viață selectează NCP art. 99 sau VCP art. 55¹.');
     }
-    if (!life && article?.value === 'NCP99') {
-      addIssue(issues, article, 'NCP art. 99 se utilizează numai pentru detențiunea pe viață.');
+    if (!life && LIFE_ARTICLES.has(article?.value)) {
+      addIssue(issues, article, 'Articolul selectat se utilizează numai pentru detențiunea pe viață.');
     }
 
     const durationControls = [
@@ -104,16 +105,19 @@
     $$('.deduction-row').forEach((row, index) => {
       const start = row.querySelector('.ded-start');
       const end = row.querySelector('.ded-end');
+      const type = row.querySelector('.ded-type')?.value || 'preventive';
       const startText = start?.value.trim() || '';
       const endText = end?.value.trim() || '';
       const startDateRow = parseDateValue(startText);
-      const endDateRow = parseDateValue(endText);
+      const endDateRow = type === 'retention24h' ? startDateRow : parseDateValue(endText);
 
       if (!startText) addIssue(issues, start, `Deducerea ${index + 1}: completează data de început.`);
       else if (!startDateRow) addIssue(issues, start, `Deducerea ${index + 1}: data de început este invalidă.`);
 
-      if (!endText) addIssue(issues, end, `Deducerea ${index + 1}: completează data de sfârșit.`);
-      else if (!endDateRow) addIssue(issues, end, `Deducerea ${index + 1}: data de sfârșit este invalidă.`);
+      if (type !== 'retention24h') {
+        if (!endText) addIssue(issues, end, `Deducerea ${index + 1}: completează data de sfârșit.`);
+        else if (!endDateRow) addIssue(issues, end, `Deducerea ${index + 1}: data de sfârșit este invalidă.`);
+      }
 
       if (startDateRow && endDateRow) {
         if (endDateRow < startDateRow) {
@@ -284,6 +288,8 @@
     if (!calc || !content || !card || card.classList.contains('hidden')) return;
 
     const existingDetails = content.innerHTML;
+    if (content.querySelector('.ev-result-overview')) return;
+
     const detailsRoot = document.createElement('div');
     detailsRoot.innerHTML = existingDetails;
     const conditionalReleaseRestSection = [...detailsRoot.querySelectorAll('.result-section')].find(section =>
@@ -367,37 +373,47 @@
     footnote.textContent = 'Notă: fracțiile exprimate în zile folosesc partea întreagă inferioară; aplicația nu rotunjește fracția în sus.';
   }
 
-  function installCalculationGuard() {
-    const original = window.calculateAll;
-    if (typeof original !== 'function' || original.__evEnhanced) return;
+  function isFullCalculationMode() {
+    return !document.body.classList.contains('ev-quick-mode') &&
+      !document.body.classList.contains('ev-preventive-mode');
+  }
 
-    function enhancedCalculateAll(...args) {
-      const engineError = $('#errorContainer');
-      engineError?.classList.remove('visible');
+  function beforeCalculation(event) {
+    if (!isFullCalculationMode()) return true;
 
-      const issues = validateBeforeCalculation();
-      renderValidationSummary(issues);
-      if (issues.some(issue => issue.severity === 'error')) {
-        $('#resultsCard')?.classList.add('hidden');
-        return;
-      }
+    const engineError = $('#errorContainer');
+    engineError?.classList.remove('visible');
 
-      const result = original.apply(this, args);
-      if (!$('#errorContainer')?.classList.contains('visible')) {
-        enhanceCalculationResult();
-      }
-      return result;
+    const issues = validateBeforeCalculation();
+    renderValidationSummary(issues);
+    if (!issues.some(issue => issue.severity === 'error')) return true;
+
+    $('#resultsCard')?.classList.add('hidden');
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     }
+    return false;
+  }
 
-    enhancedCalculateAll.__evEnhanced = true;
-    enhancedCalculateAll.__evOriginal = original;
-    window.calculateAll = enhancedCalculateAll;
+  function afterCalculation() {
+    if (!isFullCalculationMode()) return;
+    if (!$('#errorContainer')?.classList.contains('visible')) enhanceCalculationResult();
+  }
+
+  function bindCalculationLifecycle() {
+    document.addEventListener('click', event => {
+      if (!event.target.closest('#calcBtn') || !isFullCalculationMode()) return;
+      if (!beforeCalculation(event)) return;
+      window.setTimeout(afterCalculation, 0);
+    }, true);
   }
 
   function init() {
     ensureValidationSummary();
     updateTechnicalFootnote();
-    installCalculationGuard();
+    bindCalculationLifecycle();
 
     document.addEventListener('input', event => {
       if (!event.target.matches('input, select, textarea')) return;
@@ -406,6 +422,13 @@
       }
     });
   }
+
+  window.EvidentaPedepseUx = Object.freeze({
+    beforeCalculation,
+    afterCalculation,
+    clearFieldState,
+    enhanceCalculationResult
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init, { once: true });
