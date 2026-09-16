@@ -19,6 +19,38 @@
   display:none !important;
 }
 
+/* Non-optional details are rendered as static sections, not interactive accordions. */
+details[data-ev-static-disclosure="true"] > summary.ev-static-disclosure-title {
+  display:flex;
+  align-items:center;
+  min-height:42px;
+  padding:10px 14px;
+  color:var(--ev-text, inherit);
+  font-size:.8rem;
+  font-weight:800;
+  line-height:1.35;
+  cursor:default;
+  user-select:text;
+  list-style:none;
+  pointer-events:none;
+}
+
+details[data-ev-static-disclosure="true"] > summary.ev-static-disclosure-title::-webkit-details-marker {
+  display:none;
+}
+
+details[data-ev-static-disclosure="true"] > summary.ev-static-disclosure-title::marker {
+  content:'';
+}
+
+.ev-match-why > summary.ev-static-disclosure-title {
+  min-height:0;
+  padding:0;
+  color:var(--ev-accent-strong, #7aa7ff);
+  font-size:.74rem;
+  font-weight:760;
+}
+
 /* Keep the notice title visible while only the explanatory content collapses. */
 body .ev-collapsible-notice.is-collapsed > div:not(.notice-icon):not([data-notice-toggle]) {
   display:block !important;
