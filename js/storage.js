@@ -48,6 +48,7 @@ function collectStoredCaseData() {
         d: document.getElementById('durDays').value,
         start: document.getElementById('startDate').value,
         prisonReceived: document.getElementById('prisonReceivedDate')?.value || '',
+        prisonReceivedSameAsStart: document.getElementById('prisonReceivedSameAsStart')?.checked ?? true,
         condRelease: document.getElementById('conditionalReleaseDate').value,
         masuriRefDate: document.getElementById('masuriRefDate')?.value || '',
         masuriDays: document.getElementById('masuriDays')?.value || '0',
@@ -89,9 +90,15 @@ function populateStoredCase(d) {
     document.getElementById('durDays').value = d.d || 0;
     document.getElementById('startDate').value = d.start || '';
     if (document.getElementById('prisonReceivedDate')) document.getElementById('prisonReceivedDate').value = d.prisonReceived || '';
+    const prisonSameAsStart = document.getElementById('prisonReceivedSameAsStart');
+    if (prisonSameAsStart && typeof d.prisonReceivedSameAsStart === 'boolean') prisonSameAsStart.checked = d.prisonReceivedSameAsStart;
+    if (typeof syncPrisonReceivedControl === 'function') {
+        syncPrisonReceivedControl({ infer: typeof d.prisonReceivedSameAsStart !== 'boolean' });
+    }
     document.getElementById('conditionalReleaseDate').value = d.condRelease || '';
     if (document.getElementById('masuriRefDate')) document.getElementById('masuriRefDate').value = d.masuriRefDate || '';
     if (document.getElementById('masuriDays')) document.getElementById('masuriDays').value = d.masuriDays || 0;
+    if (typeof syncPreventiveDayPresets === 'function') syncPreventiveDayPresets();
 
     const sentenceDuration = document.getElementById('sentenceDuration');
     if (sentenceDuration) sentenceDuration.classList.toggle('hidden', Boolean(d.life));
