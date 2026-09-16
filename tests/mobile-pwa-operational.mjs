@@ -12,6 +12,7 @@ const aiHtml = read('ai/index.html');
 const contopiriHtml = read('contopiri/index.html');
 const transferHtml = read('transfer/index.html');
 const transferRulesHtml = read('transfer/rules/index.html');
+const rules = read('js/rules.js');
 const nav = read('js/operational-navigation.js');
 const pedepse = read('js/operational-pedepse.js');
 const ai = read('js/operational-ai.js');
@@ -63,8 +64,13 @@ assert.ok(contopiriHtml.includes('operational-contopiri.js?v=2'));
 assert.ok(transferHtml.includes('operational-transfer.js?v=2'));
 assert.ok(transferRulesHtml.includes('operational-transfer.js?v=2'));
 
+assert.ok(!fs.existsSync(path.join(root, 'js/release-guards.js')), 'release-guards trebuie eliminat după integrarea protecțiilor în rules.js.');
+assert.ok(rules.includes('buildLifeSchedule'));
+assert.ok(rules.includes('applyVcpAgeFloor'));
+for (const html of [rootHtml, aiHtml]) {
+  assert.ok(!html.includes('release-guards.js'), 'Rutele care folosesc motorul LC trebuie să consume direct rules.js, fără release-guards.');
+}
 for (const html of [rootHtml, aiHtml, contopiriHtml, transferHtml, transferRulesHtml]) {
-  assert.ok(html.includes('release-guards.js?v=1'), 'Compatibilitatea juridică existentă trebuie păstrată declarativ până la integrarea în motorul core.');
   assert.ok(html.includes('quarantine-rules.js?v=1'), 'Regulile de carantină trebuie păstrate declarativ până la integrarea în motorul core.');
 }
 
@@ -127,7 +133,7 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v34'"));
+assert.ok(sw.includes("const VERSION = 'v35'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|disclosure-hardening'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
   assert.ok(sw.includes(`./js/${file}.js`), `SW trebuie să includă ${file}`);
@@ -148,4 +154,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: controllere declarative per pagină, version.js identity-only și lifecycle PWA determinist.');
+console.log('Mobile/PWA audit: controllere declarative per pagină, release guards integrate în core, version.js identity-only și lifecycle PWA determinist.');
