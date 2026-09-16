@@ -1,8 +1,0 @@
-/*
- * Fișier de compatibilitate pentru loaderul UX existent.
- * Regulile sunt încărcate blocant din final-layer.css; acest fișier nu mai
- * produce modificări vizuale după primul paint.
- * Markeri auditați: .ev-shell__menu .ev-optional-tools .ev-match-why
- * .ev-anexa-tabs .ev-verification-banner .ev-officer-mobile-nav
- * .ev-officer-more-sheet @media (max-width: 640px)
- */
