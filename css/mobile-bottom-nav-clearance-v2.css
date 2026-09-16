@@ -7,19 +7,28 @@
   :root {
     --ev-mobile-nav-bar-height: 60px;
     --ev-mobile-nav-safe-height: calc(var(--ev-mobile-nav-bar-height) + env(safe-area-inset-bottom, 0px));
-    --ev-mobile-content-clearance: calc(var(--ev-mobile-nav-safe-height) + 32px);
+    --ev-mobile-content-clearance: calc(var(--ev-mobile-nav-safe-height) + 36px);
   }
 
-  /* Body padding alone is unreliable in iOS standalone mode. Reserve the
-     clearance inside the actual scrolling content as well. */
+  /* The bottom nav is fixed, so each module's actual scrolling root must own
+     the clearance. Body padding alone is not sufficient on iOS/PWA and pages
+     such as Transfer/Contopiri use .container without a <main> element. */
   body {
     padding-bottom: var(--ev-mobile-nav-safe-height) !important;
   }
 
-  main,
-  #main-content {
+  body > .container,
+  body > main,
+  body > .app-shell > main {
     box-sizing: border-box;
     padding-bottom: var(--ev-mobile-content-clearance) !important;
+    scroll-padding-bottom: var(--ev-mobile-content-clearance);
+  }
+
+  /* Pedepse has main nested inside .container. Reserve the space once, on the
+     outer scrolling root, to avoid double bottom padding. */
+  body > .container > main {
+    padding-bottom: 0 !important;
     scroll-padding-bottom: var(--ev-mobile-content-clearance);
   }
 
@@ -32,16 +41,17 @@
     bottom: calc(var(--ev-mobile-nav-safe-height) + 8px) !important;
   }
 
-  /* Give the final visible control/card a little breathing room when the user
-     reaches the end of the page. */
-  main > :last-child,
-  #main-content > :last-child {
-    margin-bottom: 16px !important;
+  /* Keep the last visible content block clearly above the fixed navigation. */
+  body > .container > :last-child,
+  body > main > :last-child,
+  body > .app-shell > main > :last-child,
+  body > .container > main > :last-child {
+    margin-bottom: 20px !important;
   }
 }
 
-/* The keyboard changes the visual viewport, but the content clearance remains
-   on main so the fixed nav cannot cover the active field or last control. */
+/* When the software keyboard is open, remove only the redundant body padding;
+   the module scrolling root still keeps the bottom-nav clearance. */
 @media (max-width: 760px) {
   html.ev-virtual-keyboard-open body {
     padding-bottom: 0 !important;
