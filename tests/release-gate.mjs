@@ -9,6 +9,7 @@ const packageJson = JSON.parse(read('package.json'));
 const manifest = JSON.parse(read('manifest.json'));
 const versionSource = read('js/version.js');
 const manualRules = read('js/deduction-ui.js');
+const storageSource = read('js/storage.js');
 
 assert.match(version, /^\d+\.\d+\.\d+$/, 'Versiunea stabilă trebuie să folosească format semantic X.Y.Z');
 const coreSection = releaseGate.split('## Blocante 1.0')[1]?.split('##')[0] || '';
@@ -106,8 +107,10 @@ assert.deepEqual(JSON.parse(JSON.stringify(contest.finalDuration)), { years:4, m
 
 const aiRules = read('ai/deduction-rules.js');
 assert.ok(manualRules.includes('TYPE_RETENTION_24H'), 'Pedepse trebuie să păstreze regula reținerii');
-assert.ok(manualRules.includes('data.dedRows = collectTypedDedRows()'), 'Salvarea manuală trebuie să persiste tipul deducerii');
-assert.ok(manualRules.includes('saved.type'), 'Încărcarea speței trebuie să restaureze tipul deducerii');
+assert.ok(manualRules.includes('collectRows: collectTypedDedRows'), 'API-ul deducerilor trebuie să expună rândurile tipizate');
+assert.ok(storageSource.includes('ManualDeductionRules?.collectRows?.()'), 'Salvarea manuală trebuie să preia tipurile prin API-ul deducerilor');
+assert.ok(storageSource.includes('dedRows: collectStoredDeductionRows()'), 'Spețele salvate trebuie să persiste rândurile tipizate');
+assert.ok(storageSource.includes("type: r.type || 'generic'"), 'Încărcarea spețelor trebuie să restaureze tipul deducerii și să păstreze compatibilitatea legacy');
 assert.ok(aiRules.includes('TYPE_RETENTION_24H'), 'AI trebuie să păstreze regula reținerii');
 assert.ok(read('js/app.js').includes('EDUCATIONAL_ARTICLES.has(art)'), 'Măsurile educative nu trebuie să primească automat reanalizarea 1/5');
 assert.ok(read('transfer/rules.js').includes("consolidatedAt: '30.03.2026'"), 'Baseline-ul profilării transfer trebuie păstrat explicit');
