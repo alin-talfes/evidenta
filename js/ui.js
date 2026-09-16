@@ -82,37 +82,6 @@ function updAgeTag() {
     tag.innerHTML = `<span class="tag ${catClass}">${cat}</span> <small>${a.y} ani, ${a.m} luni, ${a.d} zile</small>`;
 }
 
-function addDedRow() {
-    const container = document.getElementById('deductionsContainer');
-    if (!container) return;
-    const r = document.createElement('div');
-    r.className = 'period-row deduction-row';
-    r.setAttribute('role', 'listitem');
-    r.innerHTML = `
-        <div><label>Început</label><input type="text" class="ded-start date-masked" placeholder="zz.ll.aaaa"></div>
-        <div><label>Sfârșit</label><input type="text" class="ded-end date-masked" placeholder="zz.ll.aaaa"></div>
-        <div style="min-width:50px;"><label>Zile</label><input type="text" class="ded-days" readonly style="background:rgba(0,0,0,0.2);font-weight:600;" tabindex="-1"></div>
-        <button class="btn btn-danger btn-sm" onclick="this.closest('.period-row').remove();" aria-label="Șterge rândul">X</button>
-    `;
-    container.appendChild(r);
-    r.querySelector('.ded-start')?.addEventListener('input', () => updDed(r));
-    r.querySelector('.ded-end')?.addEventListener('input', () => updDed(r));
-}
-
-function updDed(r) {
-    const s = r.querySelector('.ded-start')?.value.trim() || '';
-    const e = r.querySelector('.ded-end')?.value.trim() || '';
-    const f = r.querySelector('.ded-days');
-    if (!f) return;
-    if (s && e) {
-        const a = parseDate(s);
-        const b = parseDate(e);
-        f.value = (a && b && b >= a) ? daysBetween(a, b) + 1 : 'Eroare';
-    } else {
-        f.value = '';
-    }
-}
-
 function addManDedRow() {
     const container = document.getElementById('manualDeductionsContainer');
     if (!container) return;
