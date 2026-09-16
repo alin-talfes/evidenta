@@ -81,3 +81,46 @@ html.ev-offline .ev-shell__brand::after {
   html.ev-android .ev-mobile-nav,
   html.ev-ios .ev-mobile-nav { contain:layout paint; }
 }
+
+/*
+ * Mobile operational surfaces must not cover scrolling content.
+ * Persistent navigation, modal sheets, dialogs and the transient offline badge
+ * intentionally remain overlays; ordinary module controls stay in document flow.
+ */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode,
+  body.ev-unified[data-ev-page="pedepse"].ev-quick-mode .btn-row,
+  .ev-operational-search,
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel {
+    position:static !important;
+    inset:auto !important;
+    top:auto !important;
+    right:auto !important;
+    bottom:auto !important;
+    left:auto !important;
+    z-index:auto !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"].ev-quick-mode .btn-row {
+    margin:12px 0 0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    transform:none !important;
+    -webkit-transform:none !important;
+  }
+
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel {
+    transform:none !important;
+    -webkit-transform:none !important;
+  }
+
+  html.ev-mobile-nav-layout body.ev-quick-mode .btn-row,
+  html.ev-mobile-nav-layout body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel {
+    bottom:auto !important;
+  }
+}
