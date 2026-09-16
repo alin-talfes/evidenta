@@ -54,14 +54,19 @@
     }
 
     function ensureGlobalOperationalControllers() {
+        ensureStyle(
+            'link[data-evidenta-disclosure-hardening]',
+            new URL('../css/disclosure-hardening.css?v=2', scriptUrl).href,
+            'evidentaDisclosureHardening'
+        );
         ensureScript(
             'script[data-evidenta-no-nonoptional-disclosures]',
-            new URL('./no-nonoptional-disclosures-v1.js?v=2', scriptUrl).href,
+            new URL('./no-nonoptional-disclosures-v1.js?v=3', scriptUrl).href,
             'evidentaNoNonoptionalDisclosures'
         );
         ensureScript(
             'script[data-evidenta-disclosure-hardening-v2]',
-            new URL('./disclosure-hardening-v2.js?v=1', scriptUrl).href,
+            new URL('./disclosure-hardening-v2.js?v=2', scriptUrl).href,
             'evidentaDisclosureHardeningV2'
         );
     }
@@ -118,9 +123,9 @@
 
     function ensureOperationalUpgrades() {
         const p = ensureModuleOperationalControllers();
-        ensureGlobalOperationalControllers();
         if (isPedepsePage(p)) ensurePedepseOperationalControllers();
         ensureScript('script[data-evidenta-mobile-operational-v2]', new URL('./mobile-operational-v2.js?v=2', scriptUrl).href, 'evidentaMobileOperationalV2');
+        ensureGlobalOperationalControllers();
         ensureScript('script[data-evidenta-pwa-register]', new URL('./pwa-register.js?v=2', scriptUrl).href, 'evidentaPwaRegister');
     }
 
