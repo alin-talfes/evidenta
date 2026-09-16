@@ -7,23 +7,28 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(here);
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
-const fix = read('js/pedepse-optional-fix.js');
+const fix = read('js/pedepse-optional-fix-v2.js');
+const corrections = read('js/operational-corrections-v4.js');
 const version = read('js/version.js');
 
 for (const marker of [
-  "['recurs-heading', 'nonExec-heading', 'rest-heading']",
+  "const OPTIONAL_IDS = ['recurs-heading', 'nonExec-heading', 'rest-heading'];",
   'removePreventiveFromOptionalTools',
   'unwrapOptionalCards',
   'stopImmediatePropagation',
-  "card.hidden = !open",
-  'observer?.disconnect()',
-  '5000'
+  'card.hidden = !open',
+  'evOptionalFixV2Bound',
+  'initDeterministically',
+  'evidenta:shellready'
 ]) {
-  assert.ok(fix.includes(marker), `Fixul opțiunilor suplimentare trebuie să includă ${marker}`);
+  assert.ok(fix.includes(marker), `Controllerul v2 al opțiunilor suplimentare trebuie să includă ${marker}`);
 }
 
+assert.ok(!fix.includes('new MutationObserver'), 'Controllerul v2 nu trebuie să folosească observer global pentru opțiunile Pedepse.');
 assert.ok(!fix.includes("OPTIONAL_IDS = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'masuri-preventive-heading']"), 'Măsurile preventive nu trebuie tratate ca opțiune suplimentară.');
-assert.ok(version.includes('pedepse-optional-fix.js?v=1'), 'Loaderul global trebuie să încarce fixul pentru opțiunile Pedepse.');
-assert.ok(version.includes('data-evidenta-pedepse-optional-fix'), 'Loaderul trebuie să prevină încărcarea dublă a fixului Pedepse.');
 
-console.log('Pedepse optional runtime: opțiunile suplimentare se deschid direct, fără a rămâne captive într-un details închis; măsurile preventive rămân separate.');
+assert.ok(corrections.includes('pedepse-optional-fix-v2.js?v=1'), 'Punctul unic de compatibilitate trebuie să încarce optional-fix-v2.');
+assert.ok(corrections.includes('data-evidenta-pedepse-optional-fix-v2'), 'Încărcarea controllerului v2 trebuie deduplicată.');
+assert.ok(!version.includes('pedepse-optional-fix.js?v=1'), 'Loaderul global nu trebuie să mai încarce controllerul legacy.');
+
+console.log('Pedepse optional runtime: optional-fix-v2 este controllerul unic; fără observer global și fără măsuri preventive în opțiunile suplimentare.');
