@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v9';
+const VERSION = 'v10';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -17,7 +17,8 @@ const CORE_PATHS = [
   './js/export.js', './js/ui.js', './js/app.js', './js/deduction-ui.js', './js/contopiri-core.js', './js/contopiri.js',
   './js/operational-upgrades.js', './js/operational-corrections.js', './js/operational-corrections-v4.js',
   './js/operational-finalize.js', './js/mobile-operational-v2.js', './js/pedepse-modes-v3-kill.js',
-  './js/pedepse-modes-v4.js', './js/disclosure-hardening.js', './js/pwa-register.js',
+  './js/pedepse-modes-v4.js', './js/pedepse-modes-v5.js', './js/pedepse-optional-fix-v2.js',
+  './js/disclosure-hardening.js', './js/disclosure-hardening-v2.js', './js/pwa-register.js',
   './transfer/app.js', './transfer/rules.js',
   './instructaj/styles.css', './instructaj/audit-enhancements.css', './instructaj/data.js', './instructaj/app.js',
   './instructaj/omj2188-completari.js', './instructaj/verificare-dosar-transfer.js',
@@ -117,7 +118,8 @@ async function staticResponse(request) {
 }
 
 function isCriticalRuntime(url) {
-  return /\/js\/(?:version|operational-upgrades|operational-corrections(?:-v4)?|operational-finalize|mobile-operational-v2|pedepse-modes-v3-kill|pedepse-modes-v4|disclosure-hardening|pwa-register)\.js$/i.test(url.pathname)
+  return /\/js\/(?:version|operational-upgrades|operational-corrections(?:-v4)?|operational-finalize|mobile-operational-v2|pedepse-modes-v3-kill|pedepse-modes-v[45]|pedepse-optional-fix-v2|disclosure-hardening(?:-v2)?|pwa-register)\.js$/i.test(url.pathname)
+    || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
     || /\/css\/mobile-bottom-nav-clearance-v2\.css$/i.test(url.pathname);
 }
 
