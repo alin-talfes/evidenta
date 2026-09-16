@@ -4,8 +4,8 @@
   if (window.__EVIDENTA_DISCLOSURE_HARDENING_V2__) return;
   window.__EVIDENTA_DISCLOSURE_HARDENING_V2__ = true;
 
-  const scriptUrl = new URL(document.currentScript?.src || 'js/disclosure-hardening-v2.js', document.baseURI);
   let idCounter = 0;
+  let scanQueued = false;
 
   const DETAILS_SELECTOR = [
     '.ev-mobile-lc-details',
@@ -17,15 +17,6 @@
     '.ev-ai-components',
     '.ev-legal-details'
   ].join(',');
-
-  function ensureStyles() {
-    if (document.querySelector('link[data-evidenta-disclosure-hardening]')) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = new URL('../css/disclosure-hardening.css?v=1', scriptUrl).href;
-    link.dataset.evidentaDisclosureHardening = 'true';
-    document.head.appendChild(link);
-  }
 
   function ensureId(element, prefix = 'ev-disclosure') {
     if (!element) return '';
@@ -59,7 +50,7 @@
 
     if (button.dataset.evDisclosureV2Bound === 'true') return;
     button.dataset.evDisclosureV2Bound = 'true';
-    button.addEventListener('click', () => window.setTimeout(sync, 0));
+    button.addEventListener('click', () => queueScan());
   }
 
   function syncCustomDisclosures(root = document) {
@@ -97,18 +88,28 @@
     repairPreventiveCardOwnership();
   }
 
-  function initDeterministically() {
-    ensureStyles();
-    scan(document);
-    [0, 50, 180, 500].forEach(delay => window.setTimeout(() => scan(document), delay));
+  function queueScan() {
+    if (scanQueued) return;
+    scanQueued = true;
+    queueMicrotask(() => {
+      scanQueued = false;
+      scan(document);
+    });
   }
 
-  ensureStyles();
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDeterministically, { once: true });
-  } else {
-    initDeterministically();
+  function init() {
+    scan(document);
+    document.addEventListener('click', queueScan, true);
+    document.addEventListener('change', queueScan, true);
+    window.addEventListener('evidenta:shellready', queueScan);
+    window.addEventListener('load', queueScan, { once: true });
   }
-  window.addEventListener('evidenta:shellready', () => scan(document));
-  window.addEventListener('load', () => scan(document), { once: true });
+
+  window.EvidentaDisclosureA11y = Object.freeze({ scan, syncNativeDetails });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();
