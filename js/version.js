@@ -67,7 +67,7 @@
         } else if (document.getElementById('resultsCard') && document.getElementById('prisonReceivedDate')) {
             ensureScript(
                 'script[data-evidenta-quarantine-ui]',
-                new URL('./quarantine-ui.js?v=1', scriptUrl).href,
+                new URL('./quarantine-ui.js?v=2', scriptUrl).href,
                 'evidentaQuarantineUi'
             );
         }
