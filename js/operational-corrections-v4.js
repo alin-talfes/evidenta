@@ -4,6 +4,39 @@
   if (window.__EVIDENTA_OPERATIONAL_CORRECTIONS__) return;
   window.__EVIDENTA_OPERATIONAL_CORRECTIONS__ = true;
 
+  const scriptUrl = new URL(document.currentScript?.src || 'js/operational-corrections-v4.js', document.baseURI);
+
+  // Oprește controllerele vechi care instalau MutationObserver pe zone DOM largi.
+  // Variantele noi sunt încărcate înainte ca version.js să poată porni implementările legacy.
+  window.__EVIDENTA_PEDEPSE_OPTIONAL_FIX__ = true;
+  window.__EVIDENTA_PEDEPSE_MODES_V4__ = true;
+  window.__EVIDENTA_DISCLOSURE_HARDENING__ = true;
+
+  function ensureStableController(selector, relativeSrc, datasetKey) {
+    if (document.querySelector(selector)) return;
+    const script = document.createElement('script');
+    script.src = new URL(relativeSrc, scriptUrl).href;
+    script.async = false;
+    if (datasetKey) script.dataset[datasetKey] = 'true';
+    document.head.appendChild(script);
+  }
+
+  ensureStableController(
+    'script[data-evidenta-pedepse-modes-v5]',
+    './pedepse-modes-v5.js?v=1',
+    'evidentaPedepseModesV5'
+  );
+  ensureStableController(
+    'script[data-evidenta-pedepse-optional-fix-v2]',
+    './pedepse-optional-fix-v2.js?v=1',
+    'evidentaPedepseOptionalFixV2'
+  );
+  ensureStableController(
+    'script[data-evidenta-disclosure-hardening-v2]',
+    './disclosure-hardening-v2.js?v=1',
+    'evidentaDisclosureHardeningV2'
+  );
+
   function syncQuickVisibility() {
     const received = document.getElementById('prisonReceivedDate');
     const outer = received?.parentElement?.parentElement;
