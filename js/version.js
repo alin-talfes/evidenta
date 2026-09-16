@@ -73,22 +73,41 @@
         }
     }
 
+    function ensureStableOperationalControllers() {
+        ensureScript(
+            'script[data-evidenta-no-nonoptional-disclosures]',
+            new URL('./no-nonoptional-disclosures-v1.js?v=2', scriptUrl).href,
+            'evidentaNoNonoptionalDisclosures'
+        );
+        ensureScript(
+            'script[data-evidenta-pedepse-modes-v5]',
+            new URL('./pedepse-modes-v5.js?v=1', scriptUrl).href,
+            'evidentaPedepseModesV5'
+        );
+        ensureScript(
+            'script[data-evidenta-pedepse-optional-fix-v2]',
+            new URL('./pedepse-optional-fix-v2.js?v=1', scriptUrl).href,
+            'evidentaPedepseOptionalFixV2'
+        );
+        ensureScript(
+            'script[data-evidenta-disclosure-hardening-v2]',
+            new URL('./disclosure-hardening-v2.js?v=1', scriptUrl).href,
+            'evidentaDisclosureHardeningV2'
+        );
+        ensureScript(
+            'script[data-evidenta-pedepse-prison-date]',
+            new URL('./pedepse-prison-date.js?v=1', scriptUrl).href,
+            'evidentaPedepsePrisonDate'
+        );
+    }
+
     function ensureOperationalUpgrades() {
         ensureScript(
             'script[data-evidenta-operational-upgrades]',
             new URL('./operational-upgrades.js?v=1', scriptUrl).href,
             'evidentaOperationalUpgrades'
         );
-        /*
-         * operational-corrections-v4 este punctul unic de compatibilitate pentru
-         * Pedepse și încarcă doar controllerele stabile curente: modes-v5,
-         * optional-fix-v2 și disclosure-hardening-v2.
-         */
-        ensureScript(
-            'script[data-evidenta-operational-corrections]',
-            new URL('./operational-corrections-v4.js?v=2', scriptUrl).href,
-            'evidentaOperationalCorrections'
-        );
+        ensureStableOperationalControllers();
         ensureScript(
             'script[data-evidenta-operational-finalize]',
             new URL('./operational-finalize.js?v=1', scriptUrl).href,
