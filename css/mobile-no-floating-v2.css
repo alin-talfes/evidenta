@@ -44,6 +44,29 @@
     -webkit-backdrop-filter: none !important;
   }
 
+  /* Pedepse: ANI / LUNI / ZILE rămân pe un singur rând în toate modurile. */
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    align-items: end !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration > * {
+    min-width: 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration label {
+    font-size: .69rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration input {
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    padding-inline: 5px !important;
+  }
+
   /* Instructaj: căutarea este conținut normal și dispare în sus la scroll. */
   body.ev-unified[data-ev-page="instructaj"] .ev-operational-search {
     margin: 8px auto 12px !important;
