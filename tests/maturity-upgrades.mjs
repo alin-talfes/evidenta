@@ -10,6 +10,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const finalLayer = read('css/final-layer.css');
 const coreStyle = read('css/style.css');
 const pedepse = read('js/pedepse-ux.js');
+const pedepseOperational = read('js/operational-pedepse.js');
 const officer = read('ofiter/dashboard-cockpit.js');
 const officerBootstrap = read('ofiter/bootstrap.js');
 const rootHtml = read('index.html');
@@ -86,9 +87,13 @@ for (const marker of [
 }
 
 assert.ok(rootHtml.includes('js/pedepse-ux.js?v=4'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
-assert.ok(rootHtml.includes('EvidentaPedepseUx.runCalculation(calculateAll)'), 'Pagina Pedepse trebuie să lege explicit validarea, calculul și post-procesarea');
+assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Pagina Pedepse trebuie să lege explicit toate modurile de calcul prin dispatcherul operațional');
+assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Modul complet trebuie să lege validarea, calculul și post-procesarea prin Pedepse UX.');
+assert.ok(pedepseOperational.includes('quickCalculate()'), 'Dispatcherul trebuie să păstreze modul rapid.');
+assert.ok(pedepseOperational.includes('calcMasuriPreventive?.()'), 'Dispatcherul trebuie să păstreze modul măsurilor preventive.');
+assert.ok(!pedepseOperational.includes('stopImmediatePropagation'), 'Dispatcherul Pedepse nu trebuie să coordoneze modurile prin blocarea evenimentelor.');
 assert.ok(officerBootstrap.includes('dashboard-cockpit.js?v=1'), 'Bootstrap-ul Ofițer trebuie să încarce cockpit-ul din propriul runtime');
 assert.ok(officerBootstrap.includes('await loadScript(cockpitScript)'), 'Cockpit-ul Ofițer trebuie activat în runtime-ul aplicației');
 assert.ok(!version.includes('pedepse-ux.js') && !version.includes('dashboard-cockpit.js'), 'version.js trebuie să rămână identity-only');
 
-console.log('Maturity UX: Pedepse cu lifecycle unic și explicit, cockpit Ofițer în bootstrap propriu, CSS consolidat și runtime determinist verificate.');
+console.log('Maturity UX: Pedepse cu dispatcher unic pentru rapid/complet/preventiv, cockpit Ofițer în bootstrap propriu, CSS consolidat și runtime determinist verificate.');
