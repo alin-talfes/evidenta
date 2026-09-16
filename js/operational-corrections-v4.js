@@ -22,6 +22,11 @@
   }
 
   ensureStableController(
+    'script[data-evidenta-no-nonoptional-disclosures]',
+    './no-nonoptional-disclosures-v1.js?v=1',
+    'evidentaNoNonoptionalDisclosures'
+  );
+  ensureStableController(
     'script[data-evidenta-pedepse-modes-v5]',
     './pedepse-modes-v5.js?v=1',
     'evidentaPedepseModesV5'
