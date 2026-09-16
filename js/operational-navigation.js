@@ -16,6 +16,10 @@
       : '';
   }
 
+  function isOfficerPage() {
+    return String(document.body?.dataset.evPage || '').startsWith('ofiter') || location.pathname.includes('/ofiter/');
+  }
+
   function currentNavKey() {
     const p = page();
     if (!p || p === 'index.html' || p === 'pedepse') return 'pedepse';
@@ -27,8 +31,44 @@
     return '';
   }
 
-  function init() {
-    if (document.querySelector('.ev-mobile-nav')) return;
+  function normalizeDateInputs() {
+    document.querySelectorAll('.date-masked').forEach(input => {
+      if (!input.getAttribute('inputmode')) input.setAttribute('inputmode', 'numeric');
+      if (!input.getAttribute('autocomplete')) input.setAttribute('autocomplete', 'off');
+    });
+  }
+
+  function removeOfficerSuiteNav() {
+    if (!isOfficerPage()) return false;
+    document.querySelector('.ev-mobile-nav')?.remove();
+    document.querySelector('.ev-mobile-more-sheet')?.remove();
+    document.body.classList.remove('ev-mobile-more-open');
+    return true;
+  }
+
+  function normalizeGlobalNav() {
+    if (isOfficerPage()) return;
+    const nav = document.querySelector('.ev-shell__nav');
+    if (!nav) return;
+    const current = currentNavKey();
+    const items = [
+      ['pedepse', 'Pedepse', './'],
+      ['ai', 'AI · BETA', 'ai/'],
+      ['contopiri', 'Contopiri', 'contopiri/'],
+      ['transfer', 'Transfer', 'transfer/'],
+      ['instructaj', 'Instructaj', 'instructaj/'],
+      ['semnalmente', 'Semnalmente', 'semnalmente/']
+    ];
+    const signature = items.map(([key]) => key).join('|');
+    if (nav.dataset.evOperationalSignature === signature && nav.children.length === items.length) return;
+    nav.innerHTML = items.map(([key, label, href]) =>
+      `<a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''}>${label}</a>`
+    ).join('');
+    nav.dataset.evOperationalSignature = signature;
+  }
+
+  function initMobileNav() {
+    if (isOfficerPage() || document.querySelector('.ev-mobile-nav')) return;
     const current = currentNavKey();
     const direct = [
       ['pedepse', '⌁', 'Pedepse', './'],
@@ -68,6 +108,22 @@
     sheet.querySelector('[data-ev-more-close]')?.addEventListener('click', close);
     document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
     document.body.append(sheet, nav);
+  }
+
+  function refresh() {
+    normalizeDateInputs();
+    if (removeOfficerSuiteNav()) return;
+    normalizeGlobalNav();
+    initMobileNav();
+  }
+
+  function init() {
+    refresh();
+    document.addEventListener('click', event => {
+      if (event.target.closest?.('#addDeductionBtn, .btn, button')) requestAnimationFrame(normalizeDateInputs);
+    });
+    window.addEventListener('evidenta:shellready', refresh);
+    window.addEventListener('load', refresh, { once:true });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
