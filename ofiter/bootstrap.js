@@ -5,9 +5,10 @@
   const dataLoaderScript="heavy-data-loader.js?v=2";
   const runtimeScript="generated/runtime-bundle.js?v=3";
   const dataHealthScript="data-health.js?v=2";
+  const cockpitScript="dashboard-cockpit.js?v=1";
   const legislationControllerScript="generated/controllers/legislation.js?v=4";
   const requiredData=["legislation","official","interview"];
-  const preloadList=[persistenceScript,dataLoaderScript,runtimeScript,dataHealthScript,legislationControllerScript];
+  const preloadList=[persistenceScript,dataLoaderScript,runtimeScript,dataHealthScript,cockpitScript,legislationControllerScript];
   const $=selector=>document.querySelector(selector);
   const $$=selector=>[...document.querySelectorAll(selector)];
   const legalParagraphPattern=/^\(\d+(?:(?:\^\d+)|[¹²³⁴⁵⁶⁷⁸⁹⁰]+)?\)/;
@@ -143,6 +144,7 @@
       await loadScript(runtimeScript);
       if(directLegislation){try{history.replaceState(null,'','#legislation')}catch{}}
       await loadScript(dataHealthScript);
+      await loadScript(cockpitScript);
       document.documentElement.dataset.appReady='true';delete document.documentElement.dataset.appBooting;
       if(pendingView&&pendingView!=='legislation'&&typeof window.showView==='function')window.showView(pendingView);
       document.dispatchEvent(new CustomEvent('training:app-ready'));
