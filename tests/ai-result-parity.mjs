@@ -26,9 +26,13 @@ assert.match(ped,/CARANTINĂ — ZIUA 21/);
 assert.match(ped,/REGIM PROVIZORIU — DIN ZIUA 22/);
 assert.match(ped,/ziua primirii .* ZIUA 1/);
 
+const rootHtml=fs.readFileSync('index.html','utf8');
+const aiHtml=fs.readFileSync('ai/index.html','utf8');
 const version=fs.readFileSync('js/version.js','utf8');
-assert.match(version,/quarantine-rules\.js/);
-assert.match(version,/result-pedepse\.js/);
-assert.match(version,/quarantine-ui\.js/);
+assert.match(rootHtml,/quarantine-rules\.js/);
+assert.match(rootHtml,/quarantine-ui\.js/);
+assert.match(aiHtml,/quarantine-rules\.js/);
+assert.match(aiHtml,/result-pedepse\.js/);
+assert.doesNotMatch(version,/quarantine-rules\.js|result-pedepse\.js|quarantine-ui\.js/);
 
-console.log('Paritate rezultate AI/Pedepse: 1/5 afișat, rezultat pe secțiuni comune și carantină ziua 21/22.');
+console.log('Paritate rezultate AI/Pedepse: 1/5 afișat, controllere declarative și carantină ziua 21/22.');
