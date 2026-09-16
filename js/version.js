@@ -102,29 +102,29 @@
 
     function ensureModuleOperationalControllers() {
         ensureStyle('link[data-evidenta-operational-upgrades]', new URL('../css/operational-upgrades.css?v=1', scriptUrl).href, 'evidentaOperationalUpgrades');
-        ensureScript('script[data-evidenta-operational-navigation]', new URL('./operational-navigation.js?v=2', scriptUrl).href, 'evidentaOperationalNavigation');
+        ensureStyle('link[data-evidenta-mobile-modules]', new URL('../css/mobile-modules.css?v=1', scriptUrl).href, 'evidentaMobileModules');
+        ensureScript('script[data-evidenta-operational-navigation]', new URL('./operational-navigation.js?v=3', scriptUrl).href, 'evidentaOperationalNavigation');
 
         const p = operationalPage();
         if (isPedepsePage(p)) {
-            ensureScript('script[data-evidenta-operational-pedepse]', new URL('./operational-pedepse.js?v=2', scriptUrl).href, 'evidentaOperationalPedepse');
+            ensureScript('script[data-evidenta-operational-pedepse]', new URL('./operational-pedepse.js?v=3', scriptUrl).href, 'evidentaOperationalPedepse');
         } else if (p.startsWith('ai')) {
-            ensureScript('script[data-evidenta-operational-ai]', new URL('./operational-ai.js?v=2', scriptUrl).href, 'evidentaOperationalAi');
+            ensureScript('script[data-evidenta-operational-ai]', new URL('./operational-ai.js?v=3', scriptUrl).href, 'evidentaOperationalAi');
         } else if (p.startsWith('contopiri')) {
-            ensureScript('script[data-evidenta-operational-contopiri]', new URL('./operational-contopiri.js?v=1', scriptUrl).href, 'evidentaOperationalContopiri');
+            ensureScript('script[data-evidenta-operational-contopiri]', new URL('./operational-contopiri.js?v=2', scriptUrl).href, 'evidentaOperationalContopiri');
         } else if (p === 'transfer' || p === 'transfer/index.html') {
-            ensureScript('script[data-evidenta-operational-transfer]', new URL('./operational-transfer.js?v=1', scriptUrl).href, 'evidentaOperationalTransfer');
+            ensureScript('script[data-evidenta-operational-transfer]', new URL('./operational-transfer.js?v=2', scriptUrl).href, 'evidentaOperationalTransfer');
         } else if (p.startsWith('instructaj')) {
             ensureScript('script[data-evidenta-operational-instructaj]', new URL('./operational-instructaj.js?v=1', scriptUrl).href, 'evidentaOperationalInstructaj');
         } else if (p.startsWith('semnalmente')) {
-            ensureScript('script[data-evidenta-operational-semnalmente]', new URL('./operational-semnalmente.js?v=1', scriptUrl).href, 'evidentaOperationalSemnalmente');
+            ensureScript('script[data-evidenta-operational-semnalmente]', new URL('./operational-semnalmente.js?v=2', scriptUrl).href, 'evidentaOperationalSemnalmente');
         }
         return p;
     }
 
-    function ensureOperationalUpgrades() {
+    function ensureOperationalRuntime() {
         const p = ensureModuleOperationalControllers();
         if (isPedepsePage(p)) ensurePedepseOperationalControllers();
-        ensureScript('script[data-evidenta-mobile-operational-v2]', new URL('./mobile-operational-v2.js?v=2', scriptUrl).href, 'evidentaMobileOperationalV2');
         ensureGlobalOperationalControllers();
         ensureScript('script[data-evidenta-pwa-register]', new URL('./pwa-register.js?v=2', scriptUrl).href, 'evidentaPwaRegister');
     }
@@ -193,21 +193,21 @@
     ensureLegalReleaseGuards();
     ensurePageControllers();
     ensureCalculationParity();
-    ensureOperationalUpgrades();
+    ensureOperationalRuntime();
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             ensureLegalReleaseGuards();
             ensurePageControllers();
             ensureCalculationParity();
-            ensureOperationalUpgrades();
+            ensureOperationalRuntime();
             initVersionIdentity();
         }, { once: true });
     } else {
         ensureLegalReleaseGuards();
         ensurePageControllers();
         ensureCalculationParity();
-        ensureOperationalUpgrades();
+        ensureOperationalRuntime();
         initVersionIdentity();
     }
 })();
