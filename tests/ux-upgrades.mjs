@@ -9,6 +9,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const version = read('js/version.js');
 const ux = read('js/ux-upgrades.js');
+const pedepseUx = read('js/pedepse-ux.js');
 const finalLayer = read('css/final-layer.css');
 
 assert.ok(version.includes('ux-upgrades.js?v=3'), 'Controllerul de versiune trebuie să încarce controllerul UX consolidat curent');
@@ -37,6 +38,19 @@ assert.ok(ux.includes('observer.disconnect()'), 'Observerul Transfer trebuie sus
 assert.ok(!ux.includes('new MutationObserver(normalizeTransferResults)'), 'Observerul Transfer nu trebuie să invoce direct o funcție care își mută propriul subtree');
 
 for (const marker of [
+  'beforeCalculation',
+  'afterCalculation',
+  'bindCalculationLifecycle',
+  'window.EvidentaPedepseUx',
+  "new Set(['NCP99', 'VCP551'])"
+]) {
+  assert.ok(pedepseUx.includes(marker), `Controllerul Pedepse UX trebuie să includă ${marker}`);
+}
+assert.ok(!pedepseUx.includes('installCalculationGuard'), 'Pedepse UX nu trebuie să instaleze wrapper peste calculateAll');
+assert.ok(!pedepseUx.includes('window.calculateAll ='), 'Pedepse UX nu trebuie să suprascrie calculateAll');
+assert.ok(!pedepseUx.includes('__evEnhanced'), 'Pedepse UX nu trebuie să folosească marcaje de monkey-patch');
+
+for (const marker of [
   '.ev-shell__menu',
   '.ev-optional-tools',
   '.ev-match-why',
@@ -50,4 +64,4 @@ for (const marker of [
 }
 
 assert.ok(!ux.includes("href='../ofiter"), 'Upgrade-urile publice nu trebuie să expună ruta Ofițer');
-console.log('UX upgrades: controller fără CSS injectat la runtime; stilurile sunt consolidate în final-layer.css.');
+console.log('UX upgrades: Pedepse fără calculateAll monkey-patch; controller UX fără CSS injectat la runtime.');
