@@ -109,38 +109,25 @@
     document.querySelectorAll('[data-ev-bottom-nav-scroll-root]').forEach(node => node.removeAttribute('data-ev-bottom-nav-scroll-root'));
   }
 
-  function normalizeMobileMoreSheet() {
-    const nav = document.querySelector('.ev-mobile-nav');
-    const sheet = document.querySelector('.ev-mobile-more-sheet');
-    if (nav && sheet && sheet.parentElement !== nav) nav.appendChild(sheet);
-  }
-
   function syncBottomNavLayout() {
     const root = document.documentElement;
     const mobile = window.matchMedia?.('(max-width: 760px)').matches ?? window.innerWidth <= 760;
     const nav = document.querySelector('.ev-mobile-nav');
     clearLegacyBottomNavState();
-    normalizeMobileMoreSheet();
     root.classList.toggle('ev-mobile-nav-layout', Boolean(mobile && nav));
     return Boolean(mobile && nav);
   }
 
   function initBottomNavLayout() {
-    syncBottomNavLayout();
-    [0, 80, 240, 700, 1600].forEach(delay => window.setTimeout(() => {
-      hardenMobileHead();
-      syncBottomNavLayout();
-    }, delay));
-    window.addEventListener('resize', syncBottomNavLayout, { passive:true });
-    window.addEventListener('orientationchange', syncBottomNavLayout, { passive:true });
-    window.addEventListener('evidenta:shellready', () => {
-      hardenMobileHead();
-      syncBottomNavLayout();
-    });
-    window.addEventListener('load', () => {
-      hardenMobileHead();
-      syncBottomNavLayout();
-    }, { once:true });
+    const media = window.matchMedia?.('(max-width: 760px)');
+    const sync = () => syncBottomNavLayout();
+    sync();
+    media?.addEventListener?.('change', sync);
+    window.addEventListener('resize', sync, { passive:true });
+    window.addEventListener('orientationchange', sync, { passive:true });
+    window.addEventListener('evidenta:mobile-nav-ready', sync);
+    window.addEventListener('evidenta:shellready', sync);
+    window.addEventListener('load', sync, { once:true });
   }
 
   function monitorViewport() {
@@ -204,11 +191,13 @@
     onlineState();
     window.addEventListener('online', onlineState);
     window.addEventListener('offline', onlineState);
-    window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change', () => {
+
+    const displayMode = window.matchMedia?.('(display-mode: standalone)');
+    displayMode?.addEventListener?.('change', () => {
       platformClass();
-      hardenMobileHead();
       syncBottomNavLayout();
     });
+
     const registration = await registerRootWorker();
     warmImportantModules(registration);
   }
