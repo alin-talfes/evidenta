@@ -27,6 +27,9 @@ for (const marker of [
   'operational-contopiri.js?v=1', 'operational-transfer.js?v=1',
   'operational-instructaj.js?v=1', 'operational-semnalmente.js?v=1'
 ]) assert.ok(version.includes(marker), `Lipsește ${marker}`);
+assert.ok(version.includes('ensureGlobalOperationalControllers'));
+assert.ok(version.includes('ensurePedepseOperationalControllers'));
+assert.ok(version.includes('if (isPedepsePage(p)) ensurePedepseOperationalControllers();'));
 
 for (const retired of ['operational-upgrades.js', 'operational-finalize.js', 'operational-corrections-v4']) {
   assert.ok(!version.includes(retired), `${retired} nu trebuie încărcat`);
@@ -63,15 +66,21 @@ assert.ok(pwa.includes('css/mobile.css?v=1'));
 assert.ok(pwa.includes('css/mobile-modules.css'));
 assert.ok(!pwa.includes('new ResizeObserver'));
 
-assert.ok(sw.includes("const VERSION = 'v28'"));
+assert.ok(sw.includes("const VERSION = 'v29'"));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
   assert.ok(sw.includes(`./js/${file}.js`), `SW trebuie să includă ${file}`);
 }
 assert.ok(!sw.includes('operational-finalize'));
-assert.ok(aiSw.includes('evidenta-ai-shell-v15'));
-assert.ok(aiSw.includes('evidenta-ai-runtime-v15'));
+
+assert.ok(aiSw.includes('evidenta-ai-shell-v16'));
+assert.ok(aiSw.includes('evidenta-ai-runtime-v16'));
 assert.ok(aiSw.includes('../js/operational-navigation.js'));
 assert.ok(aiSw.includes('../js/operational-ai.js'));
+assert.ok(aiSw.includes('../js/no-nonoptional-disclosures-v1.js'));
+assert.ok(aiSw.includes('../js/disclosure-hardening-v2.js'));
+for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-fix-v2.js', '../css/pedepse-modes-v3.css']) {
+  assert.ok(!aiSw.includes(pedepseOnly), `AI SW nu trebuie să precache-uiască ${pedepseOnly}`);
+}
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: controllere modulare fără finalizer global și numai bottom nav fixed.');
+console.log('Mobile/PWA audit: controllere modulare, Pedepse încărcat doar pe ruta sa și numai bottom nav fixed.');
