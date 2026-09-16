@@ -110,7 +110,10 @@
     });
     sheet.querySelector('[data-ev-more-close]')?.addEventListener('click', close);
     document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
-    document.body.append(sheet, nav);
+
+    nav.appendChild(sheet);
+    document.body.appendChild(nav);
+    window.dispatchEvent(new CustomEvent('evidenta:mobile-nav-ready'));
   }
 
   function refresh() {
