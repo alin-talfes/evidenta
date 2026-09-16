@@ -53,6 +53,9 @@
     const mode = document.querySelector('.ev-calc-mode');
 
     const lc = detailsShell('ev-mobile-lc-details', 'Liberare condiționată și date PPL');
+    // În modul complet, secțiunea LC/PPL este informație principală și trebuie să fie
+    // vizibilă imediat. Utilizatorul o poate plia manual ulterior dacă dorește.
+    lc.details.open = true;
     if (general) lc.body.appendChild(general);
     if (lcGrid) {
       const card = document.createElement('section');
