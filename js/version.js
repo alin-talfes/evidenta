@@ -38,7 +38,7 @@
         if (document.getElementById('resultsCard') && document.getElementById('birthDate')) {
             ensureScript(
                 'script[data-evidenta-pedepse-controller]',
-                new URL('./pedepse-ux.js?v=1', scriptUrl).href,
+                new URL('./pedepse-ux.js?v=2', scriptUrl).href,
                 'evidentaPedepseController'
             );
         }
