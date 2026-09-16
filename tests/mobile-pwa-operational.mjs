@@ -47,7 +47,7 @@ for (const marker of ['bootstrap()', 'initVersionIdentity()', 'renderBrandIdenti
 }
 assert.equal((version.match(/initVersionIdentity\(\);/g) || []).length, 1, 'Identitatea versiunii trebuie pornită o singură dată din bootstrap.');
 
-const sharedStyles = ['operational-upgrades.css?v=1', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=2'];
+const sharedStyles = ['operational-upgrades.css?v=1', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=2', 'mobile.css?v=1'];
 const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=4', 'no-nonoptional-disclosures-v1.js?v=3', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
 for (const [file, html] of [
   ['index.html', rootHtml],
@@ -185,14 +185,18 @@ assert.ok(!quarantineUi.includes('bindCalculationLifecycle'), 'Carantina nu treb
 assert.ok(!quarantineUi.includes("closest('#calcBtn')"), 'Carantina nu trebuie să intercepteze butonul CALCULEAZĂ.');
 assert.ok(!quarantineUi.includes('setTimeout'), 'Carantina nu trebuie să folosească timere pentru calcul.');
 
-for (const marker of ['css/mobile.css?v=1', 'css/mobile-modules.css', 'initBottomNavLayout', 'evidenta:mobile-nav-ready', "matchMedia?.('(max-width: 760px)')", "matchMedia?.('(display-mode: standalone)')"]) {
+for (const marker of ['css/mobile.css', 'css/mobile-modules.css', 'initBottomNavLayout', 'evidenta:mobile-nav-ready', "matchMedia?.('(max-width: 760px)')", "matchMedia?.('(display-mode: standalone)')"]) {
   assert.ok(pwa.includes(marker), `PWA lifecycle trebuie să includă ${marker}`);
 }
+assert.ok(!pwa.includes('ensureMobileStyle'), 'PWA runtime nu trebuie să injecteze css/mobile.css.');
+assert.ok(!pwa.includes('LEGACY_MOBILE_STYLE_NAMES'), 'Curățarea stylesheet-urilor legacy nu mai trebuie ținută în runtime.');
+assert.ok(!pwa.includes('data-evidenta-mobile-policy'), 'Proprietatea stylesheet-ului mobil trebuie să fie declarativă, nu marcată din JS.');
+assert.ok(!pwa.includes("link.rel = 'stylesheet'"), 'PWA runtime nu trebuie să construiască link-uri de stylesheet.');
 assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v41'"));
+assert.ok(sw.includes("const VERSION = 'v42'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
 assert.ok(!sw.includes('pedepse-prison-date'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
@@ -201,17 +205,18 @@ for (const file of ['operational-navigation', 'operational-pedepse', 'operationa
 assert.ok(!sw.includes('mobile-operational-v2'));
 assert.ok(!sw.includes('operational-finalize'));
 
-assert.ok(aiSw.includes('evidenta-ai-shell-v20'));
-assert.ok(aiSw.includes('evidenta-ai-runtime-v20'));
+assert.ok(aiSw.includes('evidenta-ai-shell-v21'));
+assert.ok(aiSw.includes('evidenta-ai-runtime-v21'));
 assert.ok(aiSw.includes('../js/operational-navigation.js'));
 assert.ok(aiSw.includes('../js/operational-ai.js'));
 assert.ok(aiSw.includes('../js/no-nonoptional-disclosures-v1.js'));
 assert.ok(aiSw.includes('../js/disclosure-hardening-v2.js'));
 assert.ok(aiSw.includes('../css/disclosure-hardening.css'));
+assert.ok(aiSw.includes('../css/mobile.css'));
 assert.ok(!aiSw.includes('mobile-operational-v2'));
 for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-fix-v2.js', '../css/pedepse-modes-v3.css']) {
   assert.ok(!aiSw.includes(pedepseOnly), `AI SW nu trebuie să precache-uiască ${pedepseOnly}`);
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: controllere declarative per pagină, dependențe strict route-owned, UI deduceri cu proprietar unic, controale Pedepse statice, moduri fără timere și un singur flux explicit de calcul, version.js identity-only și lifecycle PWA determinist.');
+console.log('Mobile/PWA audit: controllere declarative per pagină, dependențe route-owned, css/mobile.css declarat static, UI deduceri cu proprietar unic, controale Pedepse statice, moduri fără timere și lifecycle PWA fără injectare CSS.');
