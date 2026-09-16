@@ -125,15 +125,15 @@
         );
         ensureScript(
             'script[data-evidenta-operational-navigation]',
-            new URL('./operational-navigation.js?v=1', scriptUrl).href,
+            new URL('./operational-navigation.js?v=2', scriptUrl).href,
             'evidentaOperationalNavigation'
         );
 
         const p = operationalPage();
         if (!p || p === 'index.html' || p === 'pedepse') {
-            ensureScript('script[data-evidenta-operational-pedepse]', new URL('./operational-pedepse.js?v=1', scriptUrl).href, 'evidentaOperationalPedepse');
+            ensureScript('script[data-evidenta-operational-pedepse]', new URL('./operational-pedepse.js?v=2', scriptUrl).href, 'evidentaOperationalPedepse');
         } else if (p.startsWith('ai')) {
-            ensureScript('script[data-evidenta-operational-ai]', new URL('./operational-ai.js?v=1', scriptUrl).href, 'evidentaOperationalAi');
+            ensureScript('script[data-evidenta-operational-ai]', new URL('./operational-ai.js?v=2', scriptUrl).href, 'evidentaOperationalAi');
         } else if (p.startsWith('contopiri')) {
             ensureScript('script[data-evidenta-operational-contopiri]', new URL('./operational-contopiri.js?v=1', scriptUrl).href, 'evidentaOperationalContopiri');
         } else if (p === 'transfer' || p === 'transfer/index.html') {
@@ -149,11 +149,6 @@
         ensureModuleOperationalControllers();
         ensureStableOperationalControllers();
         ensureScript(
-            'script[data-evidenta-operational-finalize]',
-            new URL('./operational-finalize.js?v=1', scriptUrl).href,
-            'evidentaOperationalFinalize'
-        );
-        ensureScript(
             'script[data-evidenta-mobile-operational-v2]',
             new URL('./mobile-operational-v2.js?v=2', scriptUrl).href,
             'evidentaMobileOperationalV2'
@@ -163,22 +158,6 @@
             new URL('./pwa-register.js?v=2', scriptUrl).href,
             'evidentaPwaRegister'
         );
-    }
-
-    function ensureAiNavigation() {
-        const nav = document.querySelector('.ev-shell__nav');
-        if (!nav || [...nav.querySelectorAll('a')].some(a => {
-            try { return /\/ai\/?$/.test(new URL(a.href, location.href).pathname); }
-            catch (_) { return false; }
-        })) return;
-        const link = document.createElement('a');
-        link.href = new URL('../ai/', scriptUrl).href;
-        link.textContent = 'AI · BETA';
-        link.dataset.aiDocumentsLink = 'true';
-        if (/\/ai(?:\/|\/index\.html)?$/.test(location.pathname)) link.setAttribute('aria-current', 'page');
-        const contopiri = [...nav.querySelectorAll('a')].find(a => /\/contopiri\/?$/.test(new URL(a.href, location.href).pathname));
-        if (contopiri) nav.insertBefore(link, contopiri);
-        else nav.appendChild(link);
     }
 
     function removeLegacyFooters() {
@@ -244,10 +223,7 @@
         renderBrandIdentity(currentVersion);
     }
 
-    window.addEventListener('evidenta:shellready', () => {
-        ensureAiNavigation();
-        renderBrandIdentity(currentVersion);
-    });
+    window.addEventListener('evidenta:shellready', () => renderBrandIdentity(currentVersion));
     ensureUxUpgrades();
     ensureLegalReleaseGuards();
     ensurePageControllers();
@@ -260,7 +236,6 @@
             ensurePageControllers();
             ensureCalculationParity();
             ensureOperationalUpgrades();
-            ensureAiNavigation();
             initVersionIdentity();
         }, { once: true });
     } else {
@@ -268,7 +243,6 @@
         ensurePageControllers();
         ensureCalculationParity();
         ensureOperationalUpgrades();
-        ensureAiNavigation();
         initVersionIdentity();
     }
 })();
