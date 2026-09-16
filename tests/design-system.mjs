@@ -8,7 +8,7 @@ const repoDir = path.dirname(testDir);
 const read = relative => fs.readFileSync(path.join(repoDir, relative), "utf8");
 
 const design = read("css/design-system.css");
-const consistency = read("css/consistency.css");
+const finalLayer = read("css/final-layer.css");
 const themeController = read("js/theme.js");
 
 for (const token of [
@@ -62,20 +62,20 @@ for (const marker of [
   "--ev-page-gap:",
   "--ev-panel-pad:",
   "body.ev-unified",
-  ".page-heading",
-  ".section-heading",
   ".learning-module-card",
   ".section-hub-card",
   ".upload-zone",
   ".benchmark-drop",
   ".access-card",
-  "@media (max-width: 620px)"
+  ".ev-officer-mobile-nav"
 ]) {
-  assert.ok(consistency.includes(marker), `Stratul de consistență trebuie să conțină ${marker}`);
+  assert.ok(finalLayer.includes(marker), `Stratul structural consolidat trebuie să conțină ${marker}`);
 }
-assert.ok(consistency.includes("var(--ev-surface)"), "Consistența trebuie să folosească suprafețele din design system");
-assert.ok(consistency.includes("var(--ev-border)"), "Consistența trebuie să folosească bordurile din design system");
-assert.ok(consistency.includes("var(--ev-accent)"), "Consistența trebuie să folosească accentul comun");
+assert.ok(finalLayer.includes("var(--ev-surface)"), "Stratul final trebuie să folosească suprafețele din design system");
+assert.ok(finalLayer.includes("var(--ev-border)"), "Stratul final trebuie să folosească bordurile din design system");
+assert.ok(finalLayer.includes("var(--ev-accent"), "Stratul final trebuie să folosească accentul comun");
+assert.ok(!fs.existsSync(path.join(repoDir, "css/consistency.css")), "consistency.css trebuie eliminat după consolidarea în final-layer.css");
+assert.ok(!fs.existsSync(path.join(repoDir, "css/hotfix.css")), "hotfix.css trebuie eliminat după consolidarea în final-layer.css");
 
 assert.ok(themeController.includes("const THEME_STORAGE_KEY = 'evidenta-theme'"), "Tema trebuie salvată într-o singură cheie universală");
 assert.ok(themeController.includes("'anpTheme'"), "Controllerul trebuie să migreze cheia veche a nucleului");
@@ -96,11 +96,14 @@ for (const [module, source] of Object.entries(visualEntries)) {
   assert.ok(source.includes("design-system.css"), `${module} trebuie să încarce design-system.css`);
   assert.ok(source.includes("unified-shell.css"), `${module} trebuie să încarce unified-shell.css`);
   assert.ok(source.includes("visual-audit.css"), `${module} trebuie să încarce visual-audit.css`);
-  assert.ok(source.includes("consistency.css"), `${module} trebuie să încarce consistency.css`);
+  assert.ok(source.includes("final-layer.css"), `${module} trebuie să încarce final-layer.css`);
   assert.ok(
-    source.lastIndexOf("consistency.css") > source.lastIndexOf("visual-audit.css"),
-    `${module} trebuie să încarce consistency.css după auditul vizual`
+    source.lastIndexOf("final-layer.css") > source.lastIndexOf("visual-audit.css"),
+    `${module} trebuie să încarce final-layer.css după auditul vizual`
   );
+  assert.ok(!source.includes("consistency.css"), `${module} nu trebuie să mai refere consistency.css`);
+  assert.ok(!source.includes("hotfix.css"), `${module} nu trebuie să mai refere hotfix.css`);
+  assert.ok(!source.includes("ux-upgrades.css"), `${module} nu trebuie să mai refere ux-upgrades.css`);
 }
 
 const themeBridges = {
@@ -161,4 +164,4 @@ assert.deepEqual(
 assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css"), "Redirectul vechi Semnalmente trebuie să folosească direct design system-ul");
 assert.ok(!fs.existsSync(path.join(repoDir, "termene.html")), "Pagina Termene trebuie eliminată din inventarul repo-ului");
 
-console.log(`Design system: ${htmlFiles.length} pagini HTML folosesc aceeași temă, același shell și același strat structural.`);
+console.log(`Design system: ${htmlFiles.length} pagini HTML folosesc aceeași temă, același shell și stratul final consolidat.`);
