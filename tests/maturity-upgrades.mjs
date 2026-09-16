@@ -60,6 +60,9 @@ for (const marker of [
   'validateCalculation',
   'runCalculation',
   'afterCalculation',
+  'ManualDeductionRules?.syncRowsForCalculation?.()',
+  'ManualDeductionRules?.enrichLastCalculation?.()',
+  'QuarantineUi?.enhance?.()',
   'Rezultat operațional',
   'confruntat cu mandatul'
 ]) {
@@ -82,10 +85,10 @@ for (const marker of [
   assert.ok(officer.includes(marker), `Cockpit-ul Ofițer trebuie să conțină ${marker}`);
 }
 
-assert.ok(rootHtml.includes('js/pedepse-ux.js?v=3'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
+assert.ok(rootHtml.includes('js/pedepse-ux.js?v=4'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
 assert.ok(rootHtml.includes('EvidentaPedepseUx.runCalculation(calculateAll)'), 'Pagina Pedepse trebuie să lege explicit validarea, calculul și post-procesarea');
 assert.ok(officerBootstrap.includes('dashboard-cockpit.js?v=1'), 'Bootstrap-ul Ofițer trebuie să încarce cockpit-ul din propriul runtime');
 assert.ok(officerBootstrap.includes('await loadScript(cockpitScript)'), 'Cockpit-ul Ofițer trebuie activat în runtime-ul aplicației');
 assert.ok(!version.includes('pedepse-ux.js') && !version.includes('dashboard-cockpit.js'), 'version.js trebuie să rămână identity-only');
 
-console.log('Maturity UX: Pedepse cu flux explicit, cockpit Ofițer în bootstrap propriu, CSS consolidat și lifecycle determinist verificate.');
+console.log('Maturity UX: Pedepse cu lifecycle unic și explicit, cockpit Ofițer în bootstrap propriu, CSS consolidat și runtime determinist verificate.');
