@@ -8,6 +8,18 @@
   const rootUrl = new URL('../', scriptUrl);
   const swUrl = new URL('../sw.js', scriptUrl);
 
+  const LEGACY_MOBILE_STYLE_NAMES = [
+    'pwa-mobile.css',
+    'mobile-no-floating-v1.css',
+    'mobile-no-floating-v2.css',
+    'mobile-bottom-nav-clearance-v2.css',
+    'mobile-bottom-nav-clearance-v3.css',
+    'mobile-bottom-nav-clearance-v4.css',
+    'mobile-bottom-nav-clearance-v5.css',
+    'mobile-bottom-nav-clearance-v6.css',
+    'mobile-runtime-fixes-v2.css'
+  ];
+
   function ensureMeta(name, content, attr = 'name') {
     let meta = document.head.querySelector(`meta[${attr}="${name}"]`);
     if (!meta) {
@@ -43,30 +55,26 @@
     }
   }
 
-  function ensureRuntimeStyle(datasetKey, relativeHref) {
-    let link = document.querySelector(`link[data-${datasetKey}]`);
-    const href = new URL(relativeHref, scriptUrl).href;
+  function removeLegacyMobileStyles() {
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+      let pathname = '';
+      try { pathname = new URL(link.href, document.baseURI).pathname; }
+      catch (_) { return; }
+      if (LEGACY_MOBILE_STYLE_NAMES.some(name => pathname.endsWith(`/css/${name}`))) link.remove();
+    });
+  }
+
+  function ensureMobileStyle() {
+    removeLegacyMobileStyles();
+    let link = document.querySelector('link[data-evidenta-mobile-policy]');
+    const href = new URL('../css/mobile.css?v=1', scriptUrl).href;
     if (!link) {
       link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.setAttribute(`data-${datasetKey}`, 'true');
-      document.head.appendChild(link);
+      link.dataset.evidentaMobilePolicy = 'true';
     }
     if (link.href !== href) link.href = href;
-    /* Keep runtime policy styles at the end of <head>, after legacy module CSS. */
     document.head.appendChild(link);
-  }
-
-  function ensureStyleSheet() {
-    ensureRuntimeStyle('evidenta-pwa-mobile', '../css/pwa-mobile.css?v=3');
-  }
-
-  function ensureBottomNavClearance() {
-    ensureRuntimeStyle('evidenta-bottom-nav-clearance', '../css/mobile-bottom-nav-clearance-v6.css?v=1');
-  }
-
-  function ensureNoFloatingPolicy() {
-    ensureRuntimeStyle('evidenta-no-floating', '../css/mobile-no-floating-v2.css?v=1');
   }
 
   function platformClass() {
@@ -89,9 +97,7 @@
     ensureMeta('apple-mobile-web-app-title', 'Evidență');
     ensureMeta('format-detection', 'telephone=no');
     ensureLink('manifest', new URL('../manifest.json', scriptUrl).href);
-    ensureStyleSheet();
-    ensureBottomNavClearance();
-    ensureNoFloatingPolicy();
+    ensureMobileStyle();
   }
 
   function clearLegacyBottomNavState() {
@@ -167,7 +173,7 @@
       badge.className = 'ev-offline-badge';
       badge.setAttribute('role', 'status');
       badge.textContent = 'OFFLINE · calculele locale rămân disponibile';
-      document.body.appendChild(badge);
+      document.body.prepend(badge);
     }
   }
 
@@ -177,7 +183,7 @@
       type:'PRECACHE_OPTIONAL',
       paths:[
         './','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/',
-        './css/mobile-bottom-nav-clearance-v6.css','./css/mobile-no-floating-v2.css'
+        './css/mobile.css'
       ]
     });
   }
