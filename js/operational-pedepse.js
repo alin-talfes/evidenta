@@ -215,42 +215,6 @@
     return true;
   }
 
-  function detailsShell(className, summaryText) {
-    const details = document.createElement('details');
-    details.className = className;
-    const summary = document.createElement('summary');
-    summary.textContent = summaryText;
-    const body = document.createElement('div');
-    body.className = `${className}__body`;
-    details.append(summary, body);
-    return { details, body };
-  }
-
-  function buildMobileDisclosure() {
-    if (document.querySelector('.ev-mobile-lc-details')) return;
-    const sentence = document.getElementById('sentence-heading')?.closest('.card');
-    if (!sentence) return;
-    const general = document.getElementById('date-ppl-heading')?.closest('.card');
-    const lcGrid = document.getElementById('liberationArticle')?.closest('.form-grid');
-    const mode = document.querySelector('.ev-calc-mode');
-
-    const lc = detailsShell('ev-mobile-lc-details', 'Liberare condiționată și date PPL');
-    lc.details.open = true;
-    if (general) lc.body.appendChild(general);
-    if (lcGrid) {
-      const card = document.createElement('section');
-      card.className = 'card ev-lc-controls-card';
-      const title = document.createElement('h3');
-      title.textContent = 'ALGORITM LIBERARE CONDIȚIONATĂ';
-      card.append(title, lcGrid);
-      lc.body.appendChild(card);
-    }
-    if (lc.body.children.length) (mode || sentence).insertAdjacentElement(mode ? 'afterend' : 'beforebegin', lc.details);
-
-    window.EvidentaDisclosurePolicy?.normalize?.(document);
-    window.EvidentaDisclosureA11y?.scan?.(document);
-  }
-
   function normalizedMode(value) {
     return value === 'preventive' ? 'preventive' : value === 'full' ? 'full' : 'quick';
   }
@@ -278,16 +242,12 @@
       button.setAttribute('aria-pressed', String(active));
     });
 
-    const generalCard = document.getElementById('date-ppl-heading')?.closest('.card');
-    const lcGrid = document.getElementById('liberationArticle')?.closest('.form-grid');
     const datesGrid = document.getElementById('startDate')?.closest('.form-grid');
     const sentenceHeading = document.getElementById('sentence-heading');
     const lcDetails = document.querySelector('.ev-mobile-lc-details');
     const preventivePanel = document.querySelector('.ev-preventive-mode-panel');
     const calcBtn = document.getElementById('calcBtn');
 
-    if (generalCard) generalCard.hidden = requested !== 'full';
-    if (lcGrid) lcGrid.hidden = requested !== 'full';
     if (lcDetails) lcDetails.hidden = requested !== 'full';
     if (preventivePanel) preventivePanel.hidden = requested !== 'preventive';
     datesGrid?.classList.toggle('ev-quick-dates', requested === 'quick');
@@ -331,7 +291,6 @@
     });
 
     fillPedepseFromPrefill();
-    buildMobileDisclosure();
     setMode(mode.querySelector('[data-mode].is-active')?.dataset.mode || 'quick');
   }
 
