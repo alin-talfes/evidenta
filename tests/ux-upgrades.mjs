@@ -15,6 +15,7 @@ const transferHtml = read('transfer/index.html');
 const transferRulesHtml = read('transfer/rules/index.html');
 const ux = read('js/ux-upgrades.js');
 const pedepseUx = read('js/pedepse-ux.js');
+const pedepseOperational = read('js/operational-pedepse.js');
 const finalLayer = read('css/final-layer.css');
 
 for (const [file, html] of [
@@ -28,7 +29,8 @@ for (const [file, html] of [
   assert.equal((html.match(/ux-upgrades\.js\?v=3/g) || []).length, 1, `${file} trebuie să declare controllerul UX o singură dată`);
 }
 assert.ok(rootHtml.includes('pedepse-ux.js?v=4'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
-assert.ok(rootHtml.includes('EvidentaPedepseUx.runCalculation(calculateAll)'), 'Fluxul de calcul Pedepse trebuie declarat explicit în markup.');
+assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Fluxul de calcul Pedepse trebuie să intre prin dispatcherul operațional unic.');
+assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Dispatcherul operațional trebuie să delege calculul complet către fluxul UX explicit.');
 assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
 assert.ok(!fs.existsSync(path.join(root, 'css/ux-upgrades.css')), 'CSS-ul UX separat trebuie eliminat după consolidarea în final-layer.css');
 assert.ok(!ux.includes('loadStylesheet'), 'Controllerul UX nu trebuie să mai injecteze un stylesheet la runtime');
@@ -85,4 +87,4 @@ for (const marker of [
 }
 
 assert.ok(!ux.includes("href='../ofiter"), 'Upgrade-urile publice nu trebuie să expună ruta Ofițer');
-console.log('UX upgrades: controller declarat per pagină, flux Pedepse unic și explicit, fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
+console.log('UX upgrades: dispatcher Pedepse unic, controller UX explicit și fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
