@@ -247,15 +247,6 @@
     }
     if (lc.body.children.length) (mode || sentence).insertAdjacentElement(mode ? 'afterend' : 'beforebegin', lc.details);
 
-    const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];
-    const rareCards = rareIds.map(id => document.getElementById(id)?.closest('.card')).filter(Boolean);
-    if (rareCards.length) {
-      const advanced = detailsShell('ev-mobile-advanced-details', 'Opțiuni avansate');
-      const deductionsCard = document.getElementById('deductions-heading')?.closest('.card');
-      rareCards.forEach(card => advanced.body.appendChild(card));
-      (deductionsCard || sentence).insertAdjacentElement('afterend', advanced.details);
-    }
-
     window.EvidentaDisclosurePolicy?.normalize?.(document);
     window.EvidentaDisclosureA11y?.scan?.(document);
   }
@@ -268,8 +259,7 @@
     requestAnimationFrame(() => {
       const lc = document.querySelector('.ev-mobile-lc-details');
       if (lc?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) lc.open = true;
-      const advanced = document.querySelector('.ev-mobile-advanced-details');
-      if (advanced?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) advanced.open = true;
+      window.EvidentaPedepseOptional?.revealInvalid?.();
     });
   }
 
