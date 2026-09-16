@@ -7,6 +7,9 @@
   const scriptUrl = new URL(document.currentScript?.src || 'js/pwa-register.js', document.baseURI);
   const rootUrl = new URL('../', scriptUrl);
   const swUrl = new URL('../sw.js', scriptUrl);
+  let navResizeObserver = null;
+  let navResizeTarget = null;
+  let navMetricRaf = 0;
 
   function ensureMeta(name, content, attr = 'name') {
     let meta = document.head.querySelector(`meta[${attr}="${name}"]`);
@@ -56,7 +59,7 @@
     if (document.querySelector('link[data-evidenta-bottom-nav-clearance]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/mobile-bottom-nav-clearance-v2.css?v=1', scriptUrl).href;
+    link.href = new URL('../css/mobile-bottom-nav-clearance-v3.css?v=1', scriptUrl).href;
     link.dataset.evidentaBottomNavClearance = 'true';
     document.head.appendChild(link);
   }
@@ -85,6 +88,88 @@
     ensureBottomNavClearance();
   }
 
+  function candidateScrollRoots() {
+    return [...document.querySelectorAll([
+      'main',
+      'body > .container',
+      '.ai-page',
+      '.app-main',
+      '.main-content',
+      '.content-area',
+      '.dashboard-content',
+      '.module-content'
+    ].join(','))];
+  }
+
+  function syncNestedScrollRoots() {
+    candidateScrollRoots().forEach(node => {
+      if (!(node instanceof HTMLElement)) return;
+      const style = getComputedStyle(node);
+      const ownsVerticalScroll = /^(auto|scroll|overlay)$/.test(style.overflowY)
+        && node.clientHeight > 0
+        && node.scrollHeight > node.clientHeight + 4;
+      node.toggleAttribute('data-ev-bottom-nav-scroll-root', ownsVerticalScroll);
+    });
+  }
+
+  function ensureBottomNavSpacer(nav) {
+    let spacer = document.querySelector('.ev-mobile-nav-clearance-spacer');
+    if (!spacer) {
+      spacer = document.createElement('div');
+      spacer.className = 'ev-mobile-nav-clearance-spacer';
+      spacer.setAttribute('aria-hidden', 'true');
+      spacer.dataset.evBottomNavSpacer = 'true';
+    }
+    if (nav?.parentElement && spacer.parentElement !== nav.parentElement) {
+      nav.insertAdjacentElement('beforebegin', spacer);
+    } else if (!spacer.isConnected && document.body) {
+      document.body.appendChild(spacer);
+    }
+    return spacer;
+  }
+
+  function syncBottomNavMetricsNow() {
+    const root = document.documentElement;
+    const mobile = window.matchMedia?.('(max-width: 760px)').matches ?? window.innerWidth <= 760;
+    const nav = document.querySelector('.ev-mobile-nav');
+
+    if (!mobile || !nav) {
+      root.style.removeProperty('--ev-mobile-nav-live-height');
+      if (!mobile) document.querySelectorAll('[data-ev-bottom-nav-scroll-root]').forEach(node => node.removeAttribute('data-ev-bottom-nav-scroll-root'));
+      return false;
+    }
+
+    const height = Math.ceil(nav.getBoundingClientRect().height);
+    if (height > 0) root.style.setProperty('--ev-mobile-nav-live-height', `${height}px`);
+    ensureBottomNavSpacer(nav);
+    syncNestedScrollRoots();
+
+    if ('ResizeObserver' in window && navResizeTarget !== nav) {
+      navResizeObserver?.disconnect();
+      navResizeObserver = new ResizeObserver(() => scheduleBottomNavMetrics());
+      navResizeObserver.observe(nav);
+      navResizeTarget = nav;
+    }
+    return height > 0;
+  }
+
+  function scheduleBottomNavMetrics() {
+    if (navMetricRaf) cancelAnimationFrame(navMetricRaf);
+    navMetricRaf = requestAnimationFrame(() => {
+      navMetricRaf = 0;
+      syncBottomNavMetricsNow();
+    });
+  }
+
+  function initBottomNavMetrics() {
+    scheduleBottomNavMetrics();
+    [0, 60, 180, 500, 1200, 2500].forEach(delay => window.setTimeout(scheduleBottomNavMetrics, delay));
+    window.addEventListener('resize', scheduleBottomNavMetrics, { passive:true });
+    window.addEventListener('orientationchange', scheduleBottomNavMetrics, { passive:true });
+    window.addEventListener('evidenta:shellready', scheduleBottomNavMetrics);
+    window.addEventListener('load', scheduleBottomNavMetrics, { once:true });
+  }
+
   function monitorViewport() {
     const viewport = window.visualViewport;
     if (!viewport) return;
@@ -92,6 +177,7 @@
       document.documentElement.style.setProperty('--ev-visual-height', `${Math.round(viewport.height)}px`);
       const keyboardOpen = window.innerHeight - viewport.height > 150;
       document.documentElement.classList.toggle('ev-virtual-keyboard-open', keyboardOpen);
+      scheduleBottomNavMetrics();
     };
     viewport.addEventListener('resize', update, { passive:true });
     viewport.addEventListener('scroll', update, { passive:true });
@@ -142,10 +228,14 @@
     hardenMobileHead();
     platformClass();
     monitorViewport();
+    initBottomNavMetrics();
     onlineState();
     window.addEventListener('online', onlineState);
     window.addEventListener('offline', onlineState);
-    window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change', platformClass);
+    window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change', event => {
+      platformClass();
+      scheduleBottomNavMetrics();
+    });
     const registration = await registerRootWorker();
     warmImportantModules(registration);
   }
