@@ -16,6 +16,17 @@
     scroll-padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px));
   }
 
+  /*
+   * Selectorul de mod (Calcul rapid / Calcul complet LC / Măsuri preventive)
+   * trebuie să rămână în fluxul normal. Regula veche din operational-upgrades.css
+   * îl făcea sticky la top:0 și ajungea să acopere conținutul la scroll pe mobil.
+   */
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode {
+    position:static !important;
+    top:auto !important;
+    z-index:auto !important;
+  }
+
   #main-content > :last-child,
   main > :last-child {
     margin-bottom:20px !important;
