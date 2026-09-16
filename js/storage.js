@@ -2,7 +2,8 @@
 
 function getCases() {
     try {
-        return JSON.parse(localStorage.getItem('anpCases') || '{}');
+        const parsed = JSON.parse(localStorage.getItem('anpCases') || '{}');
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
     } catch (e) {
         return {};
     }
