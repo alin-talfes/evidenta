@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="theme-color" content="#0b1220">
+  <title>Analytics — Evidență PPL</title>
+  <link rel="icon" href="../favicon-ev-2.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=1">
+  <script src="app.js?v=1" defer></script>
+</head>
+<body>
+  <main class="analytics-shell">
+    <header class="analytics-head">
+      <div>
+        <p class="eyebrow">EVIDENȚĂ PPL · ADMIN</p>
+        <h1>Analytics</h1>
+        <p>Statistici anonime pentru dispozitive, sesiuni și module. Sunt numărate numai dispozitivele care au acceptat analytics.</p>
+      </div>
+      <a href="../" class="back-link">Înapoi la aplicație</a>
+    </header>
+
+    <section id="loginView" class="panel login-panel" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">Autentificare administrator</h2>
+      <p>Folosește contul Supabase existent din proiectul „regim”. Accesul la statistici este permis numai profilurilor active cu rol <strong>admin</strong>.</p>
+      <form id="loginForm" autocomplete="on">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username" required>
+        <label for="password">Parolă</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button type="submit" class="primary">AUTENTIFICARE</button>
+      </form>
+      <p id="loginError" class="error" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section id="dashboardView" class="dashboard hidden" aria-live="polite">
+      <div class="dashboard-toolbar">
+        <label for="periodSelect">Perioadă
+          <select id="periodSelect">
+            <option value="7">7 zile</option>
+            <option value="30" selected>30 zile</option>
+            <option value="90">90 zile</option>
+            <option value="365">365 zile</option>
+          </select>
+        </label>
+        <div class="toolbar-actions">
+          <button id="refreshBtn" type="button">REÎNCARCĂ</button>
+          <button id="logoutBtn" type="button">IEȘIRE</button>
+        </div>
+      </div>
+
+      <div id="status" class="status" role="status"></div>
+
+      <section class="metrics" aria-label="Indicatori principali">
+        <article><span>Dispozitive totale</span><strong id="metricTotalDevices">—</strong><small>de la activarea analytics</small></article>
+        <article><span>Dispozitive active</span><strong id="metricActiveDevices">—</strong><small id="metricActiveLabel">în ultimele 30 zile</small></article>
+        <article><span>Active azi</span><strong id="metricTodayDevices">—</strong><small>dispozitive distincte</small></article>
+        <article><span>Accesări</span><strong id="metricPageViews">—</strong><small id="metricViewsLabel">în ultimele 30 zile</small></article>
+        <article><span>Sesiuni</span><strong id="metricSessions">—</strong><small>fereastră de 30 minute</small></article>
+        <article><span>PWA</span><strong id="metricPwa">—</strong><small>din dispozitivele active</small></article>
+      </section>
+
+      <section class="panel chart-panel" aria-labelledby="dailyTitle">
+        <div class="section-head">
+          <div><h2 id="dailyTitle">Evoluție zilnică</h2><p>Accesări și dispozitive distincte pe zi.</p></div>
+        </div>
+        <div id="dailyChart" class="daily-chart"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="modulesTitle">
+        <div class="section-head">
+          <div><h2 id="modulesTitle">Module accesate</h2><p>Ordinate după numărul de accesări din perioada selectată.</p></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Modul</th><th>Accesări</th><th>Dispozitive</th><th>Sesiuni</th></tr></thead>
+            <tbody id="modulesBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel breakdown-panel" aria-labelledby="breakdownTitle">
+        <div class="section-head">
+          <div><h2 id="breakdownTitle">Tipuri de dispozitive</h2><p>Clasificare aproximativă după lățimea ecranului, fără fingerprinting.</p></div>
+        </div>
+        <div class="breakdown-grid">
+          <div><span>Mobil</span><strong id="mobileCount">—</strong></div>
+          <div><span>Tabletă</span><strong id="tabletCount">—</strong></div>
+          <div><span>Desktop</span><strong id="desktopCount">—</strong></div>
+          <div><span>Noi în perioadă</span><strong id="newDevicesCount">—</strong></div>
+        </div>
+      </section>
+
+      <p class="privacy-note">Analytics folosește un UUID aleatoriu salvat local numai după consimțământ. Nu sunt stocate în tabelele analytics IP-ul, user-agentul, numele dispozitivului, documentele sau datele introduse în aplicație.</p>
+    </section>
+  </main>
+</body>
+</html>
