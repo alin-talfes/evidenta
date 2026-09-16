@@ -133,7 +133,7 @@ root.addDedRow = function(initial = {}){
 
     const refresh = () => {
         syncDeductionRow(r);
-        setTimeout(() => syncDeductionRow(r), 0);
+        queueMicrotask(() => syncDeductionRow(r));
     };
     typeSelect.addEventListener('change', refresh);
     startInput.addEventListener('input', refresh);
@@ -151,19 +151,6 @@ function enrichLastCalculation(){
     if (root.lastCalculation.inputData) {
         root.lastCalculation.inputData.dedRows = typedRows.map(({type, start, end}) => ({type, start, end}));
     }
-}
-
-function bindCalculationLifecycle(){
-    document.addEventListener('click', event => {
-        if (!event.target.closest('#calcBtn')) return;
-        syncRowsForCalculation();
-
-        if (document.body.classList.contains('ev-quick-mode') || document.body.classList.contains('ev-preventive-mode')) return;
-        const previousCalculation = root.lastCalculation;
-        setTimeout(() => {
-            if (root.lastCalculation && root.lastCalculation !== previousCalculation) enrichLastCalculation();
-        }, 0);
-    }, true);
 }
 
 Object.assign(root.ManualDeductionRules, {
@@ -184,7 +171,6 @@ function addRulesNote(){
 
 function init(){
     addRulesNote();
-    bindCalculationLifecycle();
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
