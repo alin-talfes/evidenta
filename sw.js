@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v17';
+const VERSION = 'v18';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -11,8 +11,9 @@ const CORE_PATHS = [
   './', './index.html', './manifest.json', './version.json', './favicon-ev-2.svg',
   './contopiri/', './transfer/', './transfer/rules/', './instructaj/', './semnalmente/', './ai/',
   './css/style.css', './css/design-system.css', './css/operational-upgrades.css', './css/mobile-operational-v2.css',
-  './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/pwa-mobile.css', './css/mobile-no-floating-v1.css',
-  './css/mobile-bottom-nav-clearance-v2.css', './css/mobile-bottom-nav-clearance-v3.css', './css/mobile-bottom-nav-clearance-v4.css', './css/mobile-bottom-nav-clearance-v5.css', './css/mobile-runtime-fixes-v2.css',
+  './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/pwa-mobile.css',
+  './css/mobile-no-floating-v1.css', './css/mobile-no-floating-v2.css',
+  './css/mobile-bottom-nav-clearance-v2.css', './css/mobile-bottom-nav-clearance-v3.css', './css/mobile-bottom-nav-clearance-v4.css', './css/mobile-bottom-nav-clearance-v5.css', './css/mobile-bottom-nav-clearance-v6.css', './css/mobile-runtime-fixes-v2.css',
   './js/theme.js', './js/version.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
   './js/export.js', './js/ui.js', './js/app.js', './js/deduction-ui.js', './js/contopiri-core.js', './js/contopiri.js',
   './js/operational-upgrades.js', './js/operational-corrections.js', './js/operational-corrections-v4.js',
@@ -121,7 +122,7 @@ async function staticResponse(request) {
 function isCriticalRuntime(url) {
   return /\/js\/(?:version|operational-upgrades|operational-corrections(?:-v4)?|no-nonoptional-disclosures-v1|operational-finalize|mobile-operational-v2|pedepse-modes-v3-kill|pedepse-modes-v[45]|pedepse-optional-fix-v2|disclosure-hardening(?:-v2)?|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
-    || /\/css\/(?:operational-upgrades|mobile-operational-v2|pwa-mobile|mobile-no-floating-v1|mobile-bottom-nav-clearance-v[2345]|mobile-runtime-fixes-v2)\.css$/i.test(url.pathname);
+    || /\/css\/(?:operational-upgrades|mobile-operational-v2|pwa-mobile|mobile-no-floating-v[12]|mobile-bottom-nav-clearance-v[23456]|mobile-runtime-fixes-v2)\.css$/i.test(url.pathname);
 }
 
 self.addEventListener('fetch', event => {
