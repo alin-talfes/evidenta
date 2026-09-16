@@ -54,7 +54,7 @@ assert.ok(mobile.includes('lc.details.open = true'));
 assert.ok(mobile.includes("const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];"));
 assert.ok(!index.includes('regime-reanalysis.js'));
 
-for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE',"button.dataset.mode = 'preventive'",'movePreventiveCard','evPreventiveCard']) {
+for (const marker of ['Calcul rapid','Calcul complet LC','Măsuri preventive','CALCUL MĂSURI PREVENTIVE',"button.dataset.mode = 'preventive'",'movePreventiveCard','evPreventiveCard','ensurePreventiveDayPresets','data-masuri-days','[30, 60]']) {
   assert.ok(modes.includes(marker), `Modurile Pedepse trebuie să includă ${marker}`);
 }
 assert.ok(!index.includes('pedepse-modes-v3-kill.js'));
@@ -69,6 +69,7 @@ assert.ok(corrections.includes('disclosure-hardening-v2.js?v=1'));
 assert.ok(corrections.includes('no-nonoptional-disclosures-v1.js?v=2'));
 assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(index));
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'));
+assert.ok(modesCss.includes('.ev-preventive-days-control'));
 assert.ok(modesCss.includes('@media (max-width:600px)'));
 
 for (const marker of ['OPTIONAL_DETAILS_SELECTOR','details.ev-mobile-advanced-details','.ev-optional-tools details','details[data-ev-optional="true"]','details.open = true','neutralizeSummary','evStaticDisclosure','::-webkit-details-marker','pointer-events:none']) {
@@ -127,4 +128,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: un singur loader global, numai bottom nav fixed, fără controllere duplicate în index.html.');
+console.log('Mobile/PWA audit: un singur loader global, numai bottom nav fixed, preseturi 30/60 pentru măsuri preventive și fără controllere duplicate în index.html.');
