@@ -15,16 +15,23 @@ for (const marker of [
   "const OPTIONAL_IDS = ['recurs-heading', 'nonExec-heading', 'rest-heading'];",
   'removePreventiveFromOptionalTools',
   'unwrapOptionalCards',
-  'stopImmediatePropagation',
-  'card.hidden = !open',
-  'evOptionalFixV2Bound',
-  'initDeterministically',
-  'evidenta:shellready'
+  'preventiveCard.hidden = false',
+  "document.addEventListener('DOMContentLoaded', repair, { once: true })"
 ]) {
-  assert.ok(fix.includes(marker), `Controllerul v2 al opțiunilor suplimentare trebuie să includă ${marker}`);
+  assert.ok(fix.includes(marker), `Controllerul opțiunilor suplimentare trebuie să includă ${marker}`);
 }
 
-assert.ok(!fix.includes('new MutationObserver'), 'Controllerul v2 nu trebuie să folosească observer global pentru opțiunile Pedepse.');
+for (const forbidden of [
+  'new MutationObserver',
+  'setTimeout',
+  'stopImmediatePropagation',
+  'bindOptionalTools',
+  'evOptionalFixV2Bound',
+  "window.addEventListener('load'",
+  'evidenta:shellready'
+]) {
+  assert.ok(!fix.includes(forbidden), `Controllerul opțiunilor suplimentare nu trebuie să mai conțină ${forbidden}`);
+}
 assert.ok(!fix.includes("OPTIONAL_IDS = ['recurs-heading', 'nonExec-heading', 'rest-heading', 'masuri-preventive-heading']"), 'Măsurile preventive nu trebuie tratate ca opțiune suplimentară.');
 
 assert.ok(page.includes('js/pedepse-optional-fix-v2.js?v=1'), 'Pagina Pedepse trebuie să declare optional-fix-v2 direct.');
@@ -35,4 +42,4 @@ assert.ok(!version.includes('operational-corrections-v4'), 'Runtime-ul nu trebui
 assert.ok(!page.includes('pedepse-optional-fix.js?v=1'), 'Pagina nu trebuie să mai încarce controllerul legacy.');
 assert.ok(!fs.existsSync(path.join(root, 'js/operational-corrections-v4.js')), 'Controllerul intermediar operational-corrections-v4 trebuie să rămână eliminat.');
 
-console.log('Pedepse optional runtime: optional-fix-v2 este declarat direct pe ruta Pedepse, fără loader dinamic, observer global sau măsuri preventive în opțiunile suplimentare.');
+console.log('Pedepse optional runtime: optional-fix-v2 este structural și determinist, fără listener duplicat, timer, observer global sau blocarea propagării.');
