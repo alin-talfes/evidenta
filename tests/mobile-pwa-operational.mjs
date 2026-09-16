@@ -12,6 +12,9 @@ const operational = read('js/operational-upgrades.js');
 const operationalCss = read('css/operational-upgrades.css');
 const corrections = read('js/operational-corrections-v4.js');
 const prisonDate = read('js/pedepse-prison-date.js');
+const rules = read('js/rules.js');
+const app = read('js/app.js');
+const pedepseUx = read('js/pedepse-ux.js');
 const noSpoilers = read('js/no-nonoptional-disclosures-v1.js');
 const finalize = read('js/operational-finalize.js');
 const mobile = read('js/mobile-operational-v2.js');
@@ -37,9 +40,24 @@ for (const legacy of ['pedepse-modes-v4.js','pedepse-optional-fix.js','disclosur
 for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToPedepse','addContopiriTransferButton','initTransfer','initInstructajSearch','initSemnalmente']) {
   assert.ok(operational.includes(marker), `Fluxul operațional trebuie să includă ${marker}`);
 }
+assert.ok(!operational.includes('overrideDeductionSummation'), 'Politica de însumare trebuie definită în rules.js, nu suprascrisă la runtime.');
+assert.ok(!operational.includes('replaceOverlapCopy'), 'Copy-ul pentru suprapuneri trebuie definit la sursă, nu corectat după randare.');
 assert.ok(!operationalCss.includes('position:sticky'), 'Stratul operațional nu trebuie să mai creeze suprafețe sticky pe mobil.');
 assert.ok(!operationalCss.includes('position:fixed'), 'Poziționarea fixed trebuie să fie definită exclusiv în politica canonică mobile.css.');
 assert.ok(operationalCss.includes('.ev-mobile-more-sheet {\n    position:absolute;'), 'Meniul Mai multe trebuie ancorat absolut de bottom nav, nu de viewport.');
+
+assert.ok(rules.includes('Suprapunerile nu sunt deduplicate'));
+assert.ok(rules.includes('return sum + daysBetween(start, end) + 1'));
+assert.ok(!rules.includes('currentEnd'), 'Motorul nu trebuie să deduplicate suprapunerile în sumIntervals.');
+assert.ok(app.includes('însumarea integrală a intervalelor introduse'));
+assert.ok(app.includes('Intervalele sunt calculate integral, inclusiv porțiunile suprapuse'));
+assert.ok(app.includes('Intervalele efective sunt calculate integral, inclusiv porțiunile suprapuse'));
+assert.ok(!app.includes('după unificarea suprapunerilor'));
+assert.ok(!app.includes('după eliminarea dublării suprapunerilor'));
+assert.ok(!app.includes('Zilele comune au fost numărate o singură dată'));
+assert.ok(pedepseUx.includes('Intervalele sunt calculate integral; verifică dacă suprapunerea este intenționată.'));
+assert.ok(pedepseUx.includes('Intervalele efective sunt calculate integral; verifică dacă suprapunerea este intenționată.'));
+assert.ok(!pedepseUx.includes('Zilele comune vor fi numărate o singură dată.'));
 
 assert.ok(finalize.includes('openEndedOmitted'));
 assert.ok(finalize.includes('normalizeGlobalNav'));
@@ -64,6 +82,9 @@ assert.ok(!index.includes('operational-corrections-v4.js'), 'index.html nu trebu
 assert.ok(!index.includes('no-nonoptional-disclosures-v1.js'), 'index.html nu trebuie să dubleze politica disclosure încărcată de controllerul stabil.');
 assert.ok(!corrections.includes('new MutationObserver'));
 assert.ok(!corrections.includes('bodyObserver'));
+assert.ok(!corrections.includes('patchText'));
+assert.ok(!corrections.includes('patchOverlapNotices'));
+assert.ok(!corrections.includes('createTreeWalker'));
 assert.ok(corrections.includes('pedepse-modes-v5.js?v=1'));
 assert.ok(corrections.includes('pedepse-optional-fix-v2.js?v=1'));
 assert.ok(corrections.includes('disclosure-hardening-v2.js?v=1'));
@@ -125,10 +146,10 @@ for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport',
 assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('scheduleBottomNavMetrics'));
 
-for (const marker of ['service worker',"const VERSION = 'v22'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
+for (const marker of ['service worker',"const VERSION = 'v23'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./js/rules.js','./js/app.js','./js/pedepse-ux.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
-assert.ok(sw.includes('(?:version|ux-upgrades|operational-upgrades'));
+assert.ok(sw.includes('(?:version|ux-upgrades|rules|app|pedepse-ux|operational-upgrades'));
 assert.ok(sw.includes('pedepse-prison-date'));
 for (const legacy of ['mobile-bottom-nav-clearance-v5.css','mobile-no-floating-v2.css','pwa-mobile.css','mobile-runtime-fixes-v2.css','mobile-operational-v2.css','pedepse-modes-v4.js','pedepse-modes-v3-kill.js']) {
   assert.ok(!sw.includes(legacy), `Service Worker-ul principal nu trebuie să precache-uiască ${legacy}`);
@@ -145,4 +166,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: prison-date fără monkey patch, un singur loader global, preseturi 30/60 și numai bottom nav fixed.');
+console.log('Mobile/PWA audit: overlap policy canonică în sursă, prison-date fără monkey patch, numai bottom nav fixed.');
