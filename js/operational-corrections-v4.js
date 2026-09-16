@@ -23,7 +23,7 @@
 
   ensureStableController(
     'script[data-evidenta-no-nonoptional-disclosures]',
-    './no-nonoptional-disclosures-v1.js?v=1',
+    './no-nonoptional-disclosures-v1.js?v=2',
     'evidentaNoNonoptionalDisclosures'
   );
   ensureStableController(
