@@ -378,23 +378,17 @@
       !document.body.classList.contains('ev-preventive-mode');
   }
 
-  function beforeCalculation(event) {
-    if (!isFullCalculationMode()) return true;
+  function validateCalculation() {
+    if (!isFullCalculationMode()) return false;
 
     const engineError = $('#errorContainer');
     engineError?.classList.remove('visible');
 
     const issues = validateBeforeCalculation();
     renderValidationSummary(issues);
-    if (!issues.some(issue => issue.severity === 'error')) return true;
-
-    $('#resultsCard')?.classList.add('hidden');
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-    }
-    return false;
+    const valid = !issues.some(issue => issue.severity === 'error');
+    if (!valid) $('#resultsCard')?.classList.add('hidden');
+    return valid;
   }
 
   function afterCalculation() {
@@ -402,18 +396,16 @@
     if (!$('#errorContainer')?.classList.contains('visible')) enhanceCalculationResult();
   }
 
-  function bindCalculationLifecycle() {
-    document.addEventListener('click', event => {
-      if (!event.target.closest('#calcBtn') || !isFullCalculationMode()) return;
-      if (!beforeCalculation(event)) return;
-      window.setTimeout(afterCalculation, 0);
-    }, true);
+  function runCalculation(calculate) {
+    if (!isFullCalculationMode() || typeof calculate !== 'function') return;
+    if (!validateCalculation()) return;
+    calculate();
+    afterCalculation();
   }
 
   function init() {
     ensureValidationSummary();
     updateTechnicalFootnote();
-    bindCalculationLifecycle();
 
     document.addEventListener('input', event => {
       if (!event.target.matches('input, select, textarea')) return;
@@ -424,7 +416,8 @@
   }
 
   window.EvidentaPedepseUx = Object.freeze({
-    beforeCalculation,
+    validateCalculation,
+    runCalculation,
     afterCalculation,
     clearFieldState,
     enhanceCalculationResult
