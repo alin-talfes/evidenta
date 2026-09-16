@@ -11,6 +11,8 @@ const finalLayer = read('css/final-layer.css');
 const coreStyle = read('css/style.css');
 const pedepse = read('js/pedepse-ux.js');
 const officer = read('ofiter/dashboard-cockpit.js');
+const officerBootstrap = read('ofiter/bootstrap.js');
+const rootHtml = read('index.html');
 const version = read('js/version.js');
 
 for (const obsolete of ['css/consistency.css', 'css/hotfix.css']) {
@@ -78,7 +80,9 @@ for (const marker of [
   assert.ok(officer.includes(marker), `Cockpit-ul Ofițer trebuie să conțină ${marker}`);
 }
 
-assert.ok(version.includes('pedepse-ux.js?v=2'), 'Version controller trebuie să încarce UX-ul Pedepse curent');
-assert.ok(version.includes('dashboard-cockpit.js?v=1'), 'Version controller trebuie să încarce cockpit-ul Ofițer');
+assert.ok(rootHtml.includes('js/pedepse-ux.js?v=2'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
+assert.ok(officerBootstrap.includes('dashboard-cockpit.js?v=1'), 'Bootstrap-ul Ofițer trebuie să încarce cockpit-ul din propriul runtime');
+assert.ok(officerBootstrap.includes('await loadScript(cockpitScript)'), 'Cockpit-ul Ofițer trebuie activat în runtime-ul aplicației');
+assert.ok(!version.includes('pedepse-ux.js') && !version.includes('dashboard-cockpit.js'), 'version.js trebuie să rămână identity-only');
 
-console.log('Maturity UX: Pedepse pe lifecycle explicit, CSS consolidat, rânduri fără suprapuneri și cockpit Ofițer verificate.');
+console.log('Maturity UX: Pedepse declarat direct, cockpit Ofițer în bootstrap propriu, CSS consolidat și lifecycle explicit verificate.');
