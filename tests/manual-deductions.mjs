@@ -8,6 +8,7 @@ const here=path.dirname(fileURLToPath(import.meta.url));
 const root=path.dirname(here);
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 const source=read('js/deduction-ui.js');
+const storage=read('js/storage.js');
 const context={console,Date,Math,Number,String,Array,Object,Set,JSON,globalThis:null};
 context.globalThis=context;
 vm.createContext(context);
@@ -36,12 +37,20 @@ assert(source.includes('Arest preventiv'),'Opțiunea Arest preventiv lipsește')
 assert(source.includes('Arest la domiciliu'),'Opțiunea Arest la domiciliu lipsește');
 assert(source.includes("endWrap.classList.toggle('hidden', retention)"),'La reținere trebuie ascuns câmpul de sfârșit');
 assert(source.includes('endInput.disabled = retention'),'La reținere câmpul de sfârșit trebuie dezactivat');
-assert(source.includes('root.collectStoredCaseData'),'Tipul deducerii trebuie păstrat în spețele salvate/autosave');
-assert(source.includes('root.populateStoredCase'),'Tipul deducerii trebuie restaurat la încărcarea speței');
-assert(source.includes('root.calculateAll'),'Calculul manual trebuie pregătit cu intervalul efectiv înainte de motor');
+assert(source.includes('collectRows: collectTypedDedRows'),'API-ul deducerilor trebuie să expună colectarea tipizată');
+assert(source.includes('syncRowsForCalculation'),'API-ul deducerilor trebuie să sincronizeze reținerea înainte de calcul');
+assert(source.includes('bindCalculationLifecycle'),'Deducerile trebuie integrate prin lifecycle, nu prin wrapper de motor');
+assert(!source.includes('root.collectStoredCaseData ='),'deduction-ui nu trebuie să suprascrie stocarea');
+assert(!source.includes('root.populateStoredCase ='),'deduction-ui nu trebuie să suprascrie restaurarea spețelor');
+assert(!source.includes('root.getInputData ='),'deduction-ui nu trebuie să suprascrie exportul');
+assert(!source.includes('root.calculateAll ='),'deduction-ui nu trebuie să suprascrie motorul de calcul');
+
+assert(storage.includes('ManualDeductionRules?.collectRows?.()'),'Storage trebuie să folosească direct API-ul deducerilor');
+assert(storage.includes("type: r.type || 'generic'"),'Spețele legacy fără tip trebuie restaurate ca perioadă generică');
+assert(storage.includes('addDedRow({'),'Restaurarea trebuie să transmită direct tipul și intervalul către addDedRow');
 
 const index=read('index.html');
 assert(index.includes('js/deduction-ui.js?v=1'),'Pedepse trebuie să încarce regulile manuale de deducere');
-assert(index.indexOf('js/deduction-ui.js?v=1')>index.indexOf('js/app.js?v=37'),'Regulile de deducere trebuie încărcate după modulele existente pentru a extinde comportamentul fără duplicarea motorului');
+assert(index.indexOf('js/deduction-ui.js?v=1')>index.indexOf('js/app.js?v=37'),'Regulile de deducere trebuie încărcate după motor, fără să îl suprascrie');
 
-console.log('Pedepse manual: reținere 24h = 1 zi; arest preventiv și arest la domiciliu = interval inclusiv.');
+console.log('Pedepse manual: API explicit pentru deduceri, fără monkey-patch; reținere 24h = 1 zi.');
