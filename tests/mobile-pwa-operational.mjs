@@ -22,7 +22,7 @@ const disclosure = read('js/disclosure-hardening.js');
 const disclosureCss = read('css/disclosure-hardening.css');
 const pwa = read('js/pwa-register.js');
 const pwaCss = read('css/pwa-mobile.css');
-const navClearanceCss = read('css/mobile-bottom-nav-clearance-v2.css');
+const navClearanceCss = read('css/mobile-bottom-nav-clearance-v3.css');
 const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
 const index = read('index.html');
@@ -94,24 +94,25 @@ for (const marker of ['--ev-quick-sticky-action-height','.ev-mobile-advanced-det
   assert.ok(mobileRuntimeFix.includes(marker), `Fixul de suprapunere Opțiuni avansate trebuie să includă ${marker}`);
 }
 
-for (const marker of ['ensureViewportFit','viewport-fit=cover','apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine','pwa-mobile.css?v=2','ensureBottomNavClearance','mobile-bottom-nav-clearance-v2.css?v=1']) {
+for (const marker of ['ensureViewportFit','viewport-fit=cover','apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine','pwa-mobile.css?v=2','ensureBottomNavClearance','mobile-bottom-nav-clearance-v3.css?v=1','syncBottomNavMetricsNow','ResizeObserver','ev-mobile-nav-clearance-spacer','data-ev-bottom-nav-scroll-root']) {
   assert.ok(pwa.includes(marker), `Controllerul PWA trebuie să includă auditul/platforma ${marker}`);
 }
 assert.ok(pwaCss.includes('ev-offline-badge'), 'Starea offline trebuie comunicată vizual.');
 assert.ok(pwaCss.includes('.ev-shell__brand-home'), 'Identitatea din header trebuie stilizată fără linkuri imbricate.');
 assert.ok(pwaCss.includes('white-space:normal'), 'Metadatele versiunii/copyright trebuie să poată coborî pe rândul doi pe telefoane mici.');
-for (const marker of ['--ev-mobile-nav-safe-height','--ev-mobile-content-clearance','padding-bottom: var(--ev-mobile-content-clearance)','scroll-padding-bottom: var(--ev-mobile-content-clearance)','env(safe-area-inset-bottom']) {
-  assert.ok(navClearanceCss.includes(marker), `Clearance-ul bottom-nav trebuie să includă ${marker}`);
+for (const marker of ['--ev-mobile-nav-effective-height','--ev-mobile-content-clearance','.ev-mobile-nav-clearance-spacer','[data-ev-bottom-nav-scroll-root="true"]','scroll-margin-bottom','bottom: calc(var(--ev-mobile-nav-effective-height) + 10px)','env(safe-area-inset-bottom']) {
+  assert.ok(navClearanceCss.includes(marker), `Clearance-ul bottom-nav măsurat trebuie să includă ${marker}`);
 }
 
-for (const marker of ['service worker',"const VERSION = 'v13'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/no-nonoptional-disclosures-v1.js','./js/pedepse-modes-v4.js','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js','./semnalmente/enhancements.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v2.css','./css/mobile-runtime-fixes-v2.css']) {
+for (const marker of ['service worker',"const VERSION = 'v14'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/no-nonoptional-disclosures-v1.js','./js/pedepse-modes-v4.js','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js','./semnalmente/enhancements.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v3.css','./css/mobile-runtime-fixes-v2.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
+assert.ok(sw.includes('mobile-bottom-nav-clearance-v[23]'), 'Clearance-ul bottom-nav trebuie servit network-first, nu stale-while-revalidate.');
 assert.ok(sw.includes('no-nonoptional-disclosures-v1'), 'Politica anti-spoiler trebuie servită network-first, nu din cache stale.');
 assert.ok(sw.includes('/\\/semnalmente\\/enhancements\\.js$/i') || sw.includes('semnalmente\\/enhancements'), 'Semnalmente enhancements trebuie servit network-first pentru a evita codul stale care poate bloca UI-ul.');
 assert.ok(sw.includes('mobile-runtime-fixes-v2'), 'Fixul sticky pentru calcul rapid trebuie servit network-first, nu stale-while-revalidate.');
 assert.ok(!sw.includes('./js/regime-reanalysis.js'), 'Service Worker-ul nu trebuie să mai păstreze în cache modulul retras.');
-for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v6','evidenta-ai-runtime-v6','tessdata-best/ron.traineddata.gz','navigationResponse','../js/operational-corrections-v4.js','../js/pedepse-modes-v4.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v7','evidenta-ai-runtime-v7','tessdata-best/ron.traineddata.gz','navigationResponse','networkFirstStatic','isCriticalSharedRuntime','../css/mobile-bottom-nav-clearance-v3.css','../js/operational-corrections-v4.js','../js/pedepse-modes-v4.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să păstreze securitatea și offline-ul: ${marker}`);
 }
 
@@ -119,4 +120,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: moduri Pedepse, doar opționalele pot fi collapsable, fără fallback Safari „Details”, LC/PPL static, măsuri preventive separate, Opțiuni avansate fără suprapunere cu acțiunea sticky, corecții fără observer global, bottom-nav fără suprapunere, runtime critic network-first, cache guard, viewport iPhone/Android, camere, prefill și offline verificate.');
+console.log('Mobile/PWA audit: moduri Pedepse, doar opționalele pot fi collapsable, fără fallback Safari „Details”, LC/PPL static, măsuri preventive separate, Opțiuni avansate fără suprapunere cu acțiunea sticky, corecții fără observer global, bottom-nav măsurat dinamic și fără suprapunere, runtime critic network-first, cache guard, viewport iPhone/Android, camere, prefill și offline verificate.');
