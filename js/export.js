@@ -28,6 +28,11 @@ function buildNarrativeText() {
     const duration = calc.life
         ? 'Detențiune pe viață'
         : `${calc.duration?.y || 0} ani, ${calc.duration?.m || 0} luni, ${calc.duration?.d || 0} zile`;
+    const lifeThresholdText = calc.life
+        ? (calc.art === 'VCP551'
+            ? `prag VCP art. 55¹ ${calc.lifeThresholdYears || (calc.vcpLifeElderlyApplied ? 15 : 20)} ani`
+            : 'prag LC 20 ani')
+        : '';
 
     const fractionText = (ratio) => {
         if (!Number.isFinite(ratio)) return '—';
@@ -55,8 +60,8 @@ function buildNarrativeText() {
     const outputLines = [
         'OUTPUT',
         `EXPIRARE REALĂ: ${calc.realExp ? fmtDate(calc.realExp) : '—'}`,
-        `FRACȚIE MINIMĂ: ${calc.life ? 'prag LC 20 ani' : fractionText(calc.mR)} = ${calc.mDays ?? '—'} zile fără deduceri | DATA: ${calc.mDate ? fmtDate(calc.mDate) : '—'}`,
-        `FRACȚIE TOTALĂ / PROPOZABILĂ: ${calc.life ? 'prag LC 20 ani' : fractionText(calc.tR)} = ${calc.tDays ?? '—'} zile fără deduceri | DATA: ${calc.tDate ? fmtDate(calc.tDate) : '—'}`,
+        `FRACȚIE MINIMĂ: ${calc.life ? lifeThresholdText : fractionText(calc.mR)} = ${calc.mDays ?? '—'} zile fără deduceri | DATA: ${calc.mDate ? fmtDate(calc.mDate) : '—'}`,
+        `FRACȚIE TOTALĂ / PROPOZABILĂ: ${calc.life ? lifeThresholdText : fractionText(calc.tR)} = ${calc.tDays ?? '—'} zile fără deduceri | DATA: ${calc.tDate ? fmtDate(calc.tDate) : '—'}`,
         `PROPOZABILĂ DUPĂ ZILE MUNCITE: ${calc.life ? '—' : (calc.workDaysResult || fmtDate(calc.tDate) || '—')}${calc.life ? '' : ` | ZILE MUNCITE APLICATE: ${calc.workDaysApplied || 0}`}`,
         `REANALIZARE REGIM: ${reanalysisText}`,
         `CARANTINĂ: ${calc.quarantineEnd ? fmtDate(calc.quarantineEnd) : '— (necalculată fără data primirii în penitenciar/centru)'}`
