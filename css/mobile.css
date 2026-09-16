@@ -167,8 +167,9 @@ html.ev-offline .ev-shell__brand::after {
     z-index:10000 !important;
     padding-bottom:calc(5px + env(safe-area-inset-bottom, 0px)) !important;
   }
-  .ev-mobile-nav a,
-  .ev-mobile-nav button { min-height:50px !important; }
+  .ev-mobile-nav > a,
+  .ev-mobile-nav > button { min-height:50px !important; }
+  .ev-mobile-nav > .ev-mobile-more-sheet { position:absolute !important; }
   .ev-mobile-nav-clearance-spacer { display:none !important; }
 
   :where(button, a, input, select, textarea, [tabindex]):not(.ev-mobile-nav *) {
