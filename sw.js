@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v26';
+const VERSION = 'v27';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -14,8 +14,8 @@ const CORE_PATHS = [
   './css/mobile.css', './css/mobile-modules.css', './css/pedepse-modes-v3.css', './css/disclosure-hardening.css',
   './js/theme.js', './js/version.js', './js/ux-upgrades.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
   './js/export.js', './js/ui.js', './js/app.js', './js/pedepse-ux.js', './js/deduction-ui.js', './js/quarantine-rules.js', './js/quarantine-ui.js', './js/contopiri-core.js', './js/contopiri.js',
-  './js/operational-upgrades.js', './js/operational-navigation.js', './js/operational-pedepse.js', './js/operational-ai.js',
-  './js/operational-contopiri.js', './js/operational-transfer.js', './js/operational-instructaj.js', './js/operational-semnalmente.js',
+  './js/operational-navigation.js', './js/operational-pedepse.js', './js/operational-ai.js', './js/operational-contopiri.js',
+  './js/operational-transfer.js', './js/operational-instructaj.js', './js/operational-semnalmente.js',
   './js/no-nonoptional-disclosures-v1.js', './js/operational-finalize.js', './js/mobile-operational-v2.js', './js/pedepse-modes-v5.js', './js/pedepse-prison-date.js',
   './js/pedepse-optional-fix-v2.js', './js/disclosure-hardening-v2.js', './js/pwa-register.js',
   './transfer/app.js', './transfer/rules.js',
@@ -121,7 +121,7 @@ async function staticResponse(request) {
 }
 
 function isCriticalRuntime(url) {
-  return /\/js\/(?:version|ux-upgrades|rules|app|pedepse-ux|deduction-ui|quarantine-rules|quarantine-ui|operational-upgrades|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|operational-finalize|mobile-operational-v2|pedepse-modes-v5|pedepse-prison-date|pedepse-optional-fix-v2|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
+  return /\/js\/(?:version|ux-upgrades|rules|app|pedepse-ux|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|operational-finalize|mobile-operational-v2|pedepse-modes-v5|pedepse-prison-date|pedepse-optional-fix-v2|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
     || /\/css\/(?:operational-upgrades|mobile|mobile-modules)\.css$/i.test(url.pathname);
 }
