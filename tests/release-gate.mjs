@@ -8,6 +8,8 @@ const releaseGate = read('RELEASE_GATE.md');
 const packageJson = JSON.parse(read('package.json'));
 const manifest = JSON.parse(read('manifest.json'));
 const versionSource = read('js/version.js');
+const rootHtml = read('index.html');
+const aiHtml = read('ai/index.html');
 const manualRules = read('js/deduction-ui.js');
 const storageSource = read('js/storage.js');
 
@@ -20,7 +22,9 @@ assert.ok(packageJson.scripts.test.includes('tests/release-gate.mjs'), 'Release 
 for (const route of ['./', './contopiri/', './ai/', './transfer/']) {
   assert.ok(manifest.shortcuts.some(item => item.url === route), `Manifestul nu expune ruta ${route}`);
 }
-assert.ok(versionSource.includes('release-guards.js'), 'Protecțiile juridice de release trebuie încărcate în runtime');
+assert.ok(rootHtml.includes('js/release-guards.js?v=1'), 'Protecțiile juridice de release trebuie declarate pe ruta Pedepse');
+assert.ok(aiHtml.includes('js/release-guards.js?v=1'), 'Protecțiile juridice de release trebuie declarate pe ruta AI cât timp paritatea folosește același motor');
+assert.ok(!versionSource.includes('release-guards.js'), 'version.js trebuie să rămână identity-only și să nu încarce protecțiile dinamic');
 
 const ctx = { console, Date, Math, Number, String, Array, Object, Set, JSON, globalThis:null };
 ctx.globalThis = ctx;
