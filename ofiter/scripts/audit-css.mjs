@@ -9,10 +9,14 @@ const sharedStyles=new Set([
   path.resolve(root,'../css/design-system.css'),
   path.resolve(root,'../css/unified-shell.css'),
   path.resolve(root,'../css/visual-audit.css'),
-  path.resolve(root,'../css/consistency.css'),
   path.resolve(root,'../css/responsive.css'),
   path.resolve(root,'../css/final-layer.css')
 ]);
+const removedSharedStyles=[
+  path.resolve(root,'../css/consistency.css'),
+  path.resolve(root,'../css/hotfix.css'),
+  path.resolve(root,'../css/ux-upgrades.css')
+];
 const importedCss=new Set();
 
 function walk(dir){
@@ -76,6 +80,9 @@ for(const file of cssFiles){
 for(const shared of sharedStyles){
   if(!fs.existsSync(shared))fail.push(`Lipsește stylesheet-ul comun ${path.relative(root,shared).replaceAll('\\','/')}`);
 }
+for(const removed of removedSharedStyles){
+  if(fs.existsSync(removed))fail.push(`Stylesheet legacy încă prezent după consolidare: ${path.relative(root,removed).replaceAll('\\','/')}`);
+}
 
 const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const fastLoader=fs.readFileSync(path.join(root,'fast-loader.js'),'utf8');
@@ -111,5 +118,5 @@ if(fail.length){
   for(const item of fail)console.error(`- ${item}`);
   process.exit(1);
 }
-console.log(`CSS audit OK: ${cssFiles.length} fișiere, ${direct.size} directe, ${lazy.size} lazy, ${bundled.size} surse bundle, ${importedCss.size} importuri CSS, fără excepții dormant, resursele comune validate.`);
+console.log(`CSS audit OK: ${cssFiles.length} fișiere, ${direct.size} directe, ${lazy.size} lazy, ${bundled.size} surse bundle, ${importedCss.size} importuri CSS; shared CSS consolidat în final-layer.css.`);
 for(const item of note)console.log(`- ${item}`);
