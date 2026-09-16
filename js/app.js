@@ -143,13 +143,27 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
         PRE140604: 'Anterior L. 140/1996 – art. 60 alin. (4) v'
     };
 
-    if (life) return {
-        article: labels[art] || art,
-        sentenceBand: 'Detențiune pe viață',
-        age: 'Se aplică configurația algoritmului de liberare condiționată aferentă articolului selectat; pragul temporal utilizat de motor este 20 ani / 7.305 zile.',
-        minimum: `Prag efectiv: ${schedule.mDays} zile. Zilele muncite nu reduc acest prag.`,
-        proposed: `Data de împlinire a pragului: ${fmtDate(schedule.tDate)}.`
-    };
+    if (life) {
+        if (art === 'VCP551') {
+            const years = schedule.vcpLifeElderlyApplied ? 15 : 20;
+            return {
+                article: labels[art] || art,
+                sentenceBand: 'Detențiune pe viață · VCP',
+                age: schedule.vcpLifeElderlyApplied
+                    ? `Pragul de ${years} ani se aplică după împlinirea vârstei de ${schedule.ageThresholdYears} ani.`
+                    : `Se aplică pragul de ${years} ani; pragul favorabil de vârstă nu este incident înaintea acestei date.`,
+                minimum: `Prag efectiv: ${schedule.mDays} zile. Zilele muncite nu reduc acest prag.`,
+                proposed: `Data de împlinire a pragului: ${fmtDate(schedule.tDate)}.`
+            };
+        }
+        return {
+            article: labels[art] || art,
+            sentenceBand: 'Detențiune pe viață',
+            age: 'Se aplică configurația NCP art. 99, cu prag temporal de 20 ani / 7.305 zile.',
+            minimum: `Prag efectiv: ${schedule.mDays} zile. Zilele muncite nu reduc acest prag.`,
+            proposed: `Data de împlinire a pragului: ${fmtDate(schedule.tDate)}.`
+        };
+    }
 
     const threshold = schedule.ageThresholdYears;
     let age;
@@ -161,6 +175,8 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
         age = schedule.ageRegime === 'elderly'
             ? `Sunt aplicate condițiile aferente pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}) de la data împlinirii acestuia.`
             : `Sunt aplicate condițiile anterioare pragului de ${threshold} ani (${sex === 'F' ? 'femei' : 'bărbați'}).`;
+    } else if (VCP_AGE_GUARDED_ARTICLES.has(art) && schedule.ageTransitionApplied) {
+        age = `Efectele configurației favorabile nu sunt plasate înainte de împlinirea pragului de ${schedule.ageThresholdYears} ani (${sex === 'F' ? 'femei' : 'bărbați'}).`;
     } else {
         age = `Categoria de vârstă este verificată pentru configurația algoritmului de liberare condiționată ${labels[art] || art}.`;
     }
@@ -199,7 +215,7 @@ function calculateAll() {
 
     if (life) {
         totalDays = LC_TWENTY_YEAR_CAP_DAYS;
-        steps.push(`Detențiune pe viață: fără expirare teoretică. Pentru configurația algoritmului de liberare condiționată selectată se utilizează pragul de ${LC_TWENTY_YEAR_CAP_DAYS} zile.`);
+        steps.push('Detențiune pe viață: fără expirare teoretică. Pragul pentru liberarea condiționată se stabilește după articolul selectat și condiția de vârstă aplicabilă.');
     } else {
         theorExp = addCalendarSafe(startDate, y, m, d);
         theorExp.setDate(theorExp.getDate() - 1);
@@ -268,9 +284,11 @@ function calculateAll() {
 
     const { mR, tR, mDays, tDays, mDate, tDate, articleInfo } = schedule;
     const lcDetails = buildLcDetails({ life, art, schedule, sentenceOver10, sex: currentSex });
+    const lifeThresholdYears = life && art === 'VCP551' ? (schedule.vcpLifeElderlyApplied ? 15 : 20) : 20;
+    const lifeThresholdName = art === 'VCP551' ? 'Prag VCP art. 55¹' : 'Prag LC';
     steps.push(`Configurația aplicabilă: ${articleInfo}.`);
     if (life) {
-        steps.push(`Pragul minim și data propozabilă coincid la ${LC_TWENTY_YEAR_CAP_DAYS} zile; zilele muncite nu reduc acest prag.`);
+        steps.push(`${lifeThresholdName}: pragul minim și data propozabilă coincid la ${lifeThresholdYears} ani (${mDays} zile); zilele muncite nu reduc acest prag.`);
     } else {
         steps.push(`Fracția obligatorie: ${fracStr(mR)} = ${mDays} zile. Fracția totală: ${fracStr(tR)} = ${tDays} zile.`);
         if (schedule.ageTransitionApplied) {
@@ -384,7 +402,7 @@ function calculateAll() {
 
     html += life
         ? `<div class="result-section"><h4>DETALII PEDEAPSĂ</h4><div class="result-grid">
-            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. prag LC: ${LC_TWENTY_YEAR_CAP_DAYS} zile.</div></div>
+            <div class="result-item important"><div class="result-label">Detențiune pe viață</div><div class="result-value">Fără dată de expirare. ${lifeThresholdName}: ${lifeThresholdYears} ani / ${mDays} zile.</div></div>
             <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
             <div class="result-item"><div class="result-label">Zile neexecutate</div><div class="result-value">${non} zile</div></div>
             <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
@@ -401,12 +419,12 @@ function calculateAll() {
     html += `<div class="result-section"><h4>FRACȚII LIBERARE CONDIȚIONATĂ</h4><div class="result-grid">
         <div class="result-item">
             <div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div>
-            <div class="result-value">${life ? `prag LC ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
+            <div class="result-value">${life ? `${lifeThresholdName}: ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div>
         </div>
         <div class="result-item">
             <div class="result-label">DATA ÎMPLINIRII FRACȚIEI TOTALE / PROPOZABILĂ</div>
-            <div class="result-value">${life ? `prag LC ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
+            <div class="result-value">${life ? `${lifeThresholdName}: ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
             <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div>
         </div>
     </div></div>`;
@@ -449,7 +467,7 @@ function calculateAll() {
         <div class="result-item"><div class="result-label">Condiția de vârstă aplicată</div><div class="result-value result-value-small">${lcDetails.age}</div></div>
         <div class="result-item"><div class="result-label">Fracția / pragul minim</div><div class="result-value result-value-small">${lcDetails.minimum}</div></div>
         <div class="result-item"><div class="result-label">Fracția / data propozabilă</div><div class="result-value result-value-small">${lcDetails.proposed}</div></div>
-        <div class="result-item"><div class="result-label">${life ? 'prag LC' : 'Mandat total'}</div><div class="result-value">${life ? `${LC_TWENTY_YEAR_CAP_DAYS} zile` : `${totalDays} zile`}</div></div>
+        <div class="result-item"><div class="result-label">${life ? lifeThresholdName : 'Mandat total'}</div><div class="result-value">${life ? `${mDays} zile` : `${totalDays} zile`}</div></div>
         ${reanalysisLabel ? `<div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>` : ''}
         ${quarantineEnd ? `<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div><div class="result-note">calculată de la primirea în penitenciar/centru</div></div>` : ''}
     </div></div>`;
@@ -491,6 +509,12 @@ function calculateAll() {
         fDate,
         mDate,
         isEducationalMeasure,
+        ageRegime: schedule.ageRegime || null,
+        ageThresholdYears: schedule.ageThresholdYears ?? null,
+        ageTransitionApplied: Boolean(schedule.ageTransitionApplied),
+        vcpLifeElderlyApplied: Boolean(schedule.vcpLifeElderlyApplied),
+        lifeThresholdYears,
+        lifeThresholdName,
         workReductionFloorDate: new Date(window.lastWorkReductionFloorDate),
         duration: { y, m, d },
         art,
