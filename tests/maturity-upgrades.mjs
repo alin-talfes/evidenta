@@ -55,12 +55,16 @@ for (const marker of [
   'validateBeforeCalculation',
   'renderValidationSummary',
   'enhanceCalculationResult',
+  'beforeCalculation',
+  'afterCalculation',
+  'bindCalculationLifecycle',
   'Rezultat operațional',
   'confruntat cu mandatul'
 ]) {
   assert.ok(pedepse.includes(marker), `Controllerul Pedepse trebuie să conțină ${marker}`);
 }
-assert.ok(pedepse.includes('const result = original.apply'), 'Motorul de calcul existent trebuie apelat, nu duplicat');
+assert.ok(!pedepse.includes('window.calculateAll ='), 'Controllerul Pedepse nu trebuie să suprascrie motorul de calcul');
+assert.ok(!pedepse.includes('original.apply'), 'Controllerul Pedepse nu trebuie să învelească motorul de calcul');
 
 for (const marker of [
   'evidenta-training',
@@ -74,7 +78,7 @@ for (const marker of [
   assert.ok(officer.includes(marker), `Cockpit-ul Ofițer trebuie să conțină ${marker}`);
 }
 
-assert.ok(version.includes('pedepse-ux.js?v=1'), 'Version controller trebuie să încarce UX-ul Pedepse');
+assert.ok(version.includes('pedepse-ux.js?v=2'), 'Version controller trebuie să încarce UX-ul Pedepse curent');
 assert.ok(version.includes('dashboard-cockpit.js?v=1'), 'Version controller trebuie să încarce cockpit-ul Ofițer');
 
-console.log('Maturity UX: CSS consolidat fără straturi consistency/hotfix, fără FOUC, rezultat Pedepse, rânduri fără suprapuneri și cockpit Ofițer verificate.');
+console.log('Maturity UX: Pedepse pe lifecycle explicit, CSS consolidat, rânduri fără suprapuneri și cockpit Ofițer verificate.');
