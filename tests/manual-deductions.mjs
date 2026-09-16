@@ -39,7 +39,11 @@ assert(source.includes("endWrap.classList.toggle('hidden', retention)"),'La reț
 assert(source.includes('endInput.disabled = retention'),'La reținere câmpul de sfârșit trebuie dezactivat');
 assert(source.includes('collectRows: collectTypedDedRows'),'API-ul deducerilor trebuie să expună colectarea tipizată');
 assert(source.includes('syncRowsForCalculation'),'API-ul deducerilor trebuie să sincronizeze reținerea înainte de calcul');
-assert(source.includes('bindCalculationLifecycle'),'Deducerile trebuie integrate prin lifecycle, nu prin wrapper de motor');
+assert(source.includes('enrichLastCalculation'),'API-ul deducerilor trebuie să expună îmbogățirea rezultatului explicit');
+assert(source.includes('queueMicrotask(() => syncDeductionRow(r))'),'Sincronizarea după masca de dată trebuie făcută fără timer');
+assert(!source.includes('bindCalculationLifecycle'),'Deducerile nu trebuie să intercepteze global butonul de calcul');
+assert(!source.includes("closest('#calcBtn')"),'Deducerile nu trebuie să depindă de event delegation pentru calcul');
+assert(!source.includes('setTimeout'),'Deducerile nu trebuie să folosească timere pentru sincronizarea calculului');
 assert(!source.includes('root.collectStoredCaseData ='),'deduction-ui nu trebuie să suprascrie stocarea');
 assert(!source.includes('root.populateStoredCase ='),'deduction-ui nu trebuie să suprascrie restaurarea spețelor');
 assert(!source.includes('root.getInputData ='),'deduction-ui nu trebuie să suprascrie exportul');
@@ -50,7 +54,7 @@ assert(storage.includes("type: r.type || 'generic'"),'Spețele legacy fără tip
 assert(storage.includes('addDedRow({'),'Restaurarea trebuie să transmită direct tipul și intervalul către addDedRow');
 
 const index=read('index.html');
-assert(index.includes('js/deduction-ui.js?v=1'),'Pedepse trebuie să încarce regulile manuale de deducere');
-assert(index.indexOf('js/deduction-ui.js?v=1')>index.indexOf('js/app.js?v=37'),'Regulile de deducere trebuie încărcate după motor, fără să îl suprascrie');
+assert(index.includes('js/deduction-ui.js?v=2'),'Pedepse trebuie să încarce versiunea curentă a regulilor manuale de deducere');
+assert(index.indexOf('js/deduction-ui.js?v=2')>index.indexOf('js/app.js?v=39'),'Regulile de deducere trebuie încărcate după motor, fără să îl suprascrie');
 
-console.log('Pedepse manual: API explicit pentru deduceri, fără monkey-patch; reținere 24h = 1 zi.');
+console.log('Pedepse manual: API explicit pentru deduceri, fără listener de calcul, monkey-patch sau timer; reținere 24h = 1 zi.');
