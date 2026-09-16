@@ -103,6 +103,8 @@ function sumIntervals(intervals) {
 
 // ========== CALIBRARE OPERAȚIONALĂ LC 2026 ==========
 const LC_TWENTY_YEAR_CAP_DAYS = 7305;
+const VCP_LIFE_ARTICLE = 'VCP551';
+const VCP_AGE_GUARDED_ARTICLES = new Set(['VCP602', 'VCP603', 'PRE140604']);
 
 function thresholdDate(startDate, thresholdDays, dedDays = 0, nonExecDays = 0) {
     const d = new Date(startDate);
@@ -136,6 +138,12 @@ function laterDate(a, b) {
     return a > b ? new Date(a) : new Date(b);
 }
 
+function calendarThresholdDays(startDate, years) {
+    const end = addCalendarSafe(startDate, years, 0, 0);
+    end.setDate(end.getDate() - 1);
+    return daysBetween(startDate, end) + 1;
+}
+
 function resolveAgeTransitionThreshold(startDate, birthday, youngDays, elderDays, dedDays, nonExecDays) {
     const youngDate = thresholdDate(startDate, youngDays, dedDays, nonExecDays);
     const elderDate = thresholdDate(startDate, elderDays, dedDays, nonExecDays);
@@ -149,22 +157,103 @@ function resolveAgeTransitionThreshold(startDate, birthday, youngDays, elderDays
     };
 }
 
-function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, birthDate, startDate, currentSex, theorExp, dedDays = 0, nonExecDays = 0 }) {
-    if (life) {
-        const date = thresholdDate(startDate, LC_TWENTY_YEAR_CAP_DAYS, dedDays, nonExecDays);
-        const label = art === 'VCP551' ? 'VCP art. 55¹' : 'NCP art. 99';
+function buildLifeSchedule({ art, birthDate, startDate, currentSex, dedDays, nonExecDays }) {
+    const twentyYearDate = thresholdDate(startDate, LC_TWENTY_YEAR_CAP_DAYS, dedDays, nonExecDays);
+
+    if (art !== VCP_LIFE_ARTICLE) {
         return {
             mR: 1/2, tR: 1/2,
             mDays: LC_TWENTY_YEAR_CAP_DAYS, tDays: LC_TWENTY_YEAR_CAP_DAYS,
-            mDate: date, tDate: new Date(date),
+            mDate: twentyYearDate, tDate: new Date(twentyYearDate),
             pM: LC_TWENTY_YEAR_CAP_DAYS, pT: LC_TWENTY_YEAR_CAP_DAYS,
-            articleInfo: `${label} (detențiune pe viață — prag 20 ani / 7.305 zile)`,
+            articleInfo: 'NCP art. 99 (detențiune pe viață — prag 20 ani / 7.305 zile)',
             lifeThreshold: true,
             ageTransitionApplied: false,
             ageRegime: 'life',
             ageThresholdYears: null,
-            workReductionFloorDate: new Date(date)
+            vcpLifeElderlyApplied: false,
+            workReductionFloorDate: new Date(twentyYearDate)
         };
+    }
+
+    const birthday = vcpElderlyBirthday(birthDate, currentSex);
+    const elderDays = calendarThresholdDays(startDate, 15);
+    const elderDateRaw = thresholdDate(startDate, elderDays, dedDays, nonExecDays);
+    const validBirthday = birthday instanceof Date && !Number.isNaN(birthday.getTime());
+    const ageThresholdYears = currentSex === 'F' ? 55 : 60;
+
+    let useElder = false;
+    let finalDate = new Date(twentyYearDate);
+    if (validBirthday && startDate >= birthday) {
+        useElder = true;
+        finalDate = elderDateRaw;
+    } else if (validBirthday && twentyYearDate >= birthday) {
+        useElder = true;
+        finalDate = elderDateRaw < birthday ? new Date(birthday) : elderDateRaw;
+    }
+
+    if (!useElder) {
+        return {
+            mR: 1/2, tR: 1/2,
+            mDays: LC_TWENTY_YEAR_CAP_DAYS, tDays: LC_TWENTY_YEAR_CAP_DAYS,
+            mDate: twentyYearDate, tDate: new Date(twentyYearDate),
+            pM: LC_TWENTY_YEAR_CAP_DAYS, pT: LC_TWENTY_YEAR_CAP_DAYS,
+            articleInfo: 'VCP art. 55¹ · prag efectiv 20 ani',
+            lifeThreshold: true,
+            ageTransitionApplied: false,
+            ageRegime: 'young',
+            ageThresholdYears,
+            elderlyBirthday: validBirthday ? new Date(birthday) : null,
+            vcpLifeElderlyApplied: false,
+            workReductionFloorDate: new Date(twentyYearDate)
+        };
+    }
+
+    return {
+        mR: 1/2, tR: 1/2,
+        mDays: elderDays, tDays: elderDays,
+        mDate: new Date(finalDate), tDate: new Date(finalDate),
+        pM: elderDays, pT: elderDays,
+        articleInfo: `VCP art. 55¹ · prag efectiv 15 ani după împlinirea vârstei de ${ageThresholdYears} ani`,
+        lifeThreshold: true,
+        ageTransitionApplied: validBirthday && startDate < birthday,
+        ageRegime: 'elderly',
+        ageThresholdYears,
+        elderlyBirthday: validBirthday ? new Date(birthday) : null,
+        vcpLifeElderlyApplied: true,
+        workReductionFloorDate: new Date(finalDate)
+    };
+}
+
+function applyVcpAgeFloor(result, { art, birthDate, startDate, currentSex }) {
+    if (!result || result.error || !VCP_AGE_GUARDED_ARTICLES.has(art)) return result;
+    const birthday = vcpElderlyBirthday(birthDate, currentSex);
+    if (!(birthday instanceof Date) || Number.isNaN(birthday.getTime())) return result;
+    if (!(startDate instanceof Date) || startDate >= birthday) return result;
+
+    let clamped = false;
+    if (result.mDate instanceof Date && result.mDate < birthday) {
+        result.mDate = new Date(birthday);
+        clamped = true;
+    }
+    if (result.tDate instanceof Date && result.tDate < birthday) {
+        result.tDate = new Date(birthday);
+        clamped = true;
+    }
+    if (!clamped) return result;
+
+    result.elderlyBirthday = new Date(birthday);
+    result.ageRegime = 'elderly';
+    result.ageThresholdYears = currentSex === 'F' ? 55 : 60;
+    result.ageTransitionApplied = true;
+    result.workReductionFloorDate = laterDate(result.mDate, birthday);
+    result.articleInfo = `${result.articleInfo || art} · efecte nu mai devreme de pragul de vârstă`;
+    return result;
+}
+
+function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, birthDate, startDate, currentSex, theorExp, dedDays = 0, nonExecDays = 0 }) {
+    if (life) {
+        return buildLifeSchedule({ art, birthDate, startDate, currentSex, dedDays, nonExecDays });
     }
 
     if (art === 'NCP100') {
@@ -248,7 +337,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
     const mDays = cappedFractionDays(totalDays, fractions.mR, fractions.pM);
     const tDays = cappedFractionDays(totalDays, fractions.tR, fractions.pT);
     const mDate = thresholdDate(startDate, mDays, dedDays, nonExecDays);
-    return {
+    const result = {
         ...fractions,
         mDays,
         tDays,
@@ -257,6 +346,7 @@ function calculateLiberationSchedule({ life, art, sentenceOver10, totalDays, bir
         ageTransitionApplied: false,
         workReductionFloorDate: new Date(mDate)
     };
+    return applyVcpAgeFloor(result, { art, birthDate, startDate, currentSex });
 }
 
 function findIntervalOverlaps(intervals) {
