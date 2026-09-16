@@ -135,23 +135,6 @@
     document.body.append(sheet, nav);
   }
 
-  function replaceOverlapCopy() {
-    const replace = node => {
-      if (!node?.textContent) return;
-      const old = 'Zilele comune vor fi numărate o singură dată.';
-      if (node.textContent.includes(old)) node.textContent = node.textContent.replace(old, 'Intervalele sunt calculate integral; verifică dacă suprapunerea este intenționată.');
-    };
-    document.querySelectorAll('.ev-field-message, #ev-validation-summary li').forEach(replace);
-  }
-
-  function overrideDeductionSummation() {
-    window.sumIntervals = intervals => (intervals || []).reduce((sum, interval) => {
-      const [start, end] = interval || [];
-      if (!(start instanceof Date) || !(end instanceof Date) || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return sum;
-      return sum + daysBetweenSafe(start, end) + 1;
-    }, 0);
-  }
-
   function overlapPairs(intervals) {
     const pairs = [];
     for (let i = 0; i < intervals.length; i += 1) {
@@ -300,8 +283,6 @@
 
   function initPedepseQuickMode() {
     if (!document.getElementById('calcBtn') || document.querySelector('.ev-calc-mode')) return;
-    overrideDeductionSummation();
-    replaceOverlapCopy();
 
     const main = document.getElementById('main-content');
     const mode = document.createElement('div');
