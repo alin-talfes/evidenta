@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css?v=43">
     <link rel="stylesheet" href="css/operational-upgrades.css?v=1">
     <link rel="stylesheet" href="css/mobile-modules.css?v=1">
+    <link rel="stylesheet" href="css/pedepse-modes-v3.css?v=5">
     <link rel="stylesheet" href="css/disclosure-hardening.css?v=2">
     <script src="js/theme.js?v=40" defer></script>
     <script src="js/ux-upgrades.js?v=3" defer></script>
@@ -15,9 +16,8 @@
     <script src="js/quarantine-ui.js?v=2" defer></script>
     <script src="js/operational-navigation.js?v=4" defer></script>
     <script src="js/operational-pedepse.js?v=3" defer></script>
-    <script src="js/pedepse-modes-v5.js?v=1" defer></script>
+    <script src="js/pedepse-modes-v5.js?v=2" defer></script>
     <script src="js/pedepse-optional-fix-v2.js?v=1" defer></script>
-    <script src="js/pedepse-prison-date.js?v=1" defer></script>
     <script src="js/no-nonoptional-disclosures-v1.js?v=3" defer></script>
     <script src="js/disclosure-hardening-v2.js?v=2" defer></script>
     <script src="js/pwa-register.js?v=3" defer></script>
@@ -117,13 +117,19 @@
                             <button type="button" class="btn-today" data-target="startDate" onclick="setToday('startDate')">AZI</button>
                         </div>
                     </div>
-                    <div>
-                        <label for="prisonReceivedDate">Data primirii în penitenciar/centru (opțional)</label>
-                        <div class="date-wrapper">
-                            <input type="text" id="prisonReceivedDate" class="date-masked" placeholder="zz.ll.aaaa">
-                            <button type="button" class="btn-today" data-target="prisonReceivedDate" onclick="setToday('prisonReceivedDate')">AZI</button>
+                    <div id="prisonReceivedControl">
+                        <label class="ev-prison-same-check" for="prisonReceivedSameAsStart">
+                            <input type="checkbox" id="prisonReceivedSameAsStart" checked aria-controls="prisonReceivedDateField" aria-expanded="false">
+                            <span>DATA INTRĂRII ÎN PENITENCIAR ESTE ACEEAȘI CU DATA ÎNCEPERII PEDEPSEI</span>
+                        </label>
+                        <div id="prisonReceivedDateField" hidden>
+                            <label for="prisonReceivedDate">DATA INTRĂRII ÎN PENITENCIAR/CENTRU</label>
+                            <div class="date-wrapper">
+                                <input type="text" id="prisonReceivedDate" class="date-masked" placeholder="zz.ll.aaaa">
+                                <button type="button" class="btn-today" data-target="prisonReceivedDate" onclick="setToday('prisonReceivedDate')">AZI</button>
+                            </div>
+                            <p class="help-text">Debifează opțiunea numai dacă data intrării diferă de data începerii executării. Data este folosită separat pentru termenul de 21 zile de carantină.</p>
                         </div>
-                        <p class="help-text">Folosită numai pentru termenul de 21 zile de carantină; nu înlocuiește data începerii executării.</p>
                     </div>
                 </div>
             </div>
@@ -167,8 +173,15 @@
                             <button type="button" class="btn-today" data-target="masuriRefDate" onclick="setToday('masuriRefDate')">AZI</button>
                         </div>
                     </div>
-                    <div><label for="masuriDays">Adaugă zile</label><input type="number" id="masuriDays" value="0" min="0" oninput="calcMasuriPreventive()"></div>
-                    <div><label>Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
+                    <div>
+                        <label for="masuriDays">Adaugă zile</label>
+                        <div class="ev-preventive-days-control" role="group" aria-label="Durată măsură preventivă">
+                            <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="30" aria-pressed="false">30 zile</button>
+                            <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="60" aria-pressed="false">60 zile</button>
+                            <input type="number" id="masuriDays" value="0" min="0" placeholder="Manual" inputmode="numeric" aria-label="Număr de zile — valoare manuală">
+                        </div>
+                    </div>
+                    <div><label for="masuriResult">Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
                 </div>
                 <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
             </div>
@@ -201,10 +214,10 @@
     <script src="js/utils.js?v=36"></script>
     <script src="js/rules.js?v=38"></script>
     <script src="js/legal.js?v=36"></script>
-    <script src="js/storage.js?v=37"></script>
+    <script src="js/storage.js?v=38"></script>
     <script src="js/export.js?v=38"></script>
-    <script src="js/ui.js?v=37"></script>
-    <script src="js/app.js?v=38"></script>
+    <script src="js/ui.js?v=38"></script>
+    <script src="js/app.js?v=39"></script>
     <script src="js/deduction-ui.js?v=1"></script>
 </body>
 </html>
