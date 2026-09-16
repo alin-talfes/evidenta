@@ -21,10 +21,27 @@
     resultArea.appendChild(button);
   }
 
+  function compactTransfer(card) {
+    if (!card) return;
+    card.classList.add('ev-transfer-compact');
+    const help = card.querySelector('.section-help');
+    if (!help || help.closest('.ev-transfer-help-details')) return;
+    const details = document.createElement('details');
+    details.className = 'ev-transfer-help-details';
+    const summary = document.createElement('summary');
+    summary.textContent = 'Cum se folosește';
+    help.insertAdjacentElement('beforebegin', details);
+    details.append(summary, help);
+    window.EvidentaDisclosurePolicy?.normalize?.(details);
+    window.EvidentaDisclosureA11y?.scan?.(details);
+  }
+
   function init() {
     const form = document.getElementById('transferForm');
     const search = document.getElementById('cautaBtn');
     if (!form || !search) return;
+    const card = form.closest('.card');
+    compactTransfer(card);
     document.body.classList.add('ev-transfer-auto');
     let timer;
     const run = () => {
