@@ -130,7 +130,8 @@
       primary.querySelector('.ev-ai-primary__deductions')?.insertAdjacentElement('afterend', note);
     }
     const dates = [...new Set(openRows.map(row => row.querySelector('.d-start')?.value.trim()).filter(Boolean))];
-    note.textContent = `Deducerea „la zi”${dates.length ? ` (${dates.join(', ')})` : ''} stabilește data începerii. La transferul în Pedepse se trimit numai deducerile închise, pentru a evita dublarea scăderii.`;
+    const text = `Deducerea „la zi”${dates.length ? ` (${dates.join(', ')})` : ''} stabilește data începerii. La transferul în Pedepse se trimit numai deducerile închise, pentru a evita dublarea scăderii.`;
+    if (note.textContent !== text) note.textContent = text;
   }
 
   function syncQuickResultControls() {
@@ -156,25 +157,30 @@
     banner.setAttribute('aria-live', 'polite');
   }
 
-  function monitor() {
-    const observer = new MutationObserver(records => {
-      let shouldNav = false;
-      let shouldQuick = false;
-      let shouldAi = false;
-      for (const record of records) {
-        if (record.type === 'attributes' && record.target === document.body) shouldQuick = true;
-        for (const node of record.addedNodes || []) {
-          if (node.nodeType !== 1) continue;
-          if (node.matches?.('.ev-shell, .ev-shell__nav') || node.querySelector?.('.ev-shell__nav')) shouldNav = true;
-          if (node.matches?.('.ev-quick-result, .ev-prefill-banner') || node.querySelector?.('.ev-quick-result, .ev-prefill-banner')) shouldQuick = true;
-          if (node.matches?.('.ev-ai-primary, #deductionRows, tr') || node.querySelector?.('.ev-ai-primary, #deductionRows')) shouldAi = true;
-        }
+  function scheduleRefresh(kind = 'all') {
+    window.requestAnimationFrame(() => {
+      if (kind === 'all' || kind === 'nav') normalizeGlobalNav();
+      if (kind === 'all' || kind === 'quick') {
+        syncQuickResultControls();
+        improvePrefillBanner();
       }
-      if (shouldNav) normalizeGlobalNav();
-      if (shouldQuick) { syncQuickResultControls(); improvePrefillBanner(); }
-      if (shouldAi) annotateAiOpenEndedDeductions();
+      if (kind === 'all' || kind === 'ai') annotateAiOpenEndedDeductions();
     });
-    observer.observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['class'] });
+  }
+
+  function bindDeterministicRefreshes() {
+    document.addEventListener('click', event => {
+      if (event.target.closest?.('[data-mode], #calcBtn, #addDeductionBtn, .d-remove, [data-ai-to-pedepse]')) {
+        scheduleRefresh(pageKey() === 'ai' ? 'ai' : 'quick');
+      }
+    });
+    document.addEventListener('input', event => {
+      if (event.target.closest?.('#deductionRows, #startDate')) scheduleRefresh('ai');
+    });
+    document.addEventListener('change', event => {
+      if (event.target.closest?.('#deductionRows, #startDate')) scheduleRefresh('ai');
+    });
+    window.addEventListener('load', () => scheduleRefresh('all'), { once: true });
   }
 
   function init() {
@@ -183,10 +189,8 @@
     annotateAiOpenEndedDeductions();
     syncQuickResultControls();
     improvePrefillBanner();
-    monitor();
-    window.addEventListener('evidenta:shellready', normalizeGlobalNav);
-    document.addEventListener('input', annotateAiOpenEndedDeductions);
-    document.addEventListener('change', annotateAiOpenEndedDeductions);
+    bindDeterministicRefreshes();
+    window.addEventListener('evidenta:shellready', () => scheduleRefresh('nav'));
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
