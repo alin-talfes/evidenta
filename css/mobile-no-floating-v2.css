@@ -1,0 +1,59 @@
+/* Evidență PPL — mobile no-floating policy v2.
+ * Pe telefon, toate elementele persistente ale paginii rămân în flux normal.
+ * Excepție: .ev-mobile-nav, tratată separat ca singurul element fix.
+ */
+@media (max-width: 760px) {
+  .ev-shell,
+  .ev-shell__bar,
+  .ev-shell__module,
+  body > .site-header,
+  body > .topbar,
+  body > .app-shell > .topbar,
+  .ev-operational-search,
+  .ev-calc-mode,
+  body.ev-quick-mode .btn-row,
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel,
+  body.ev-unified[data-ev-page="instructaj"] .sidebar,
+  body.ev-unified[data-ev-page^="ofiter"] .quiz-top,
+  body.ev-unified[data-ev-page^="contopiri"] .legal-box h4,
+  body.ev-unified[data-ev-page="ai"] .ai-table th,
+  .category-viewbar,
+  .workflow,
+  .filters,
+  .page-actions {
+    position: static !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  /* Pedepse: acțiunea de calcul este un buton normal, nu o bară persistentă. */
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    margin: 12px 0 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Instructaj: căutarea este conținut normal și dispare în sus la scroll. */
+  body.ev-unified[data-ev-page="instructaj"] .ev-operational-search {
+    margin: 8px auto 12px !important;
+  }
+
+  /* Semnalmente: elimină orice accelerare/compositing rămasă de la bara sticky. */
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel,
+  html.ev-ios .analysis-panel,
+  html.ev-ios .btn-row {
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+}
