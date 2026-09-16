@@ -29,10 +29,12 @@ for(const f of ['index.html','contopiri/index.html','transfer/index.html','trans
 assert(!fs.existsSync('termene.html'),'retired Termene page still exists');
 assert(!fs.existsSync('js/termene.js'),'retired Termene UI code still exists');
 assert(!fs.existsSync('js/termene-core.js'),'retired Termene calculation core still exists');
+assert(!fs.existsSync('js/pedepse-prison-date.js'),'dynamic prison date controller still exists');
 
 const storage=fs.readFileSync('js/storage.js','utf8');
 assert(!/function\s+(applyTheme|toggleTheme)\s*\(/.test(storage),'duplicate theme functions');
 assert(storage.includes('prisonReceived'),'saved cases must preserve prison receipt date');
+assert(storage.includes('prisonReceivedSameAsStart'),'saved cases must preserve prison receipt sync state');
 const css=fs.readFileSync('css/style.css','utf8');
 const designCss=fs.readFileSync('css/design-system.css','utf8');
 assert(!/fonts\.googleapis\.com/.test(css+designCss),'external font import');
@@ -77,8 +79,14 @@ assert(appSource.includes('EDUCATIONAL_ARTICLES.has(art)'),'educational-measure 
 assert(appSource.includes('else if (!isEducationalMeasure)'),'1/5 must not be applied automatically to NCP 124/125');
 assert(appSource.includes('lastWorkReductionFloorDate'),'age/work-day floor missing');
 assert(appSource.includes('quarantineEnd = new Date(prisonReceivedDate)'),'quarantine must be anchored to prison receipt date');
+assert(appSource.includes('syncPrisonReceivedControl'),'static prison receipt synchronization missing');
+assert(appSource.includes('syncPreventiveDayPresets'),'static preventive presets synchronization missing');
+assert(appSource.includes('setPreventiveDays'),'static preventive preset action missing');
+assert(appSource.includes('Introduceți data intrării în penitenciar/centru.'),'manual prison receipt validation missing');
 assert(appSource.includes("article.value = 'NCP99'"));
 assert(appSource.includes('article.disabled = false'));
+const uiSource=fs.readFileSync('js/ui.js','utf8');
+assert(uiSource.includes("dispatchEvent(new Event('input', { bubbles: true }))"),'setToday must emit input');
 
 let vcpMale=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:2200,birthDate:new Date(1968,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2032,0,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpMale.mR,1/100); assert.equal(vcpMale.tR,1/3); assert(vcpMale.ageTransitionApplied); assert(vcpMale.articleInfo.includes('VCP art. 59'));
@@ -92,7 +100,10 @@ assert(/style\.css\?v=43/.test(indexSource),'index.html stale css cache version'
 assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
 assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 algoritm liberare condiționată options missing');
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
-assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/app.js?v=38'),'Pedepse cache version not bumped');
+assert(indexSource.includes('id="prisonReceivedSameAsStart"'),'static prison receipt checkbox missing');
+assert(indexSource.includes('data-masuri-days="30"') && indexSource.includes('data-masuri-days="60"'),'static preventive presets missing');
+assert(indexSource.includes('css/pedepse-modes-v3.css?v=5'),'Pedepse mode CSS must be declared statically');
+assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/storage.js?v=38') && indexSource.includes('js/ui.js?v=38') && indexSource.includes('js/app.js?v=39'),'Pedepse cache version not bumped');
 const styleVersions={
   'contopiri/index.html':42,
   'transfer/index.html':43,
