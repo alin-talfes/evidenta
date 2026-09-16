@@ -1,0 +1,178 @@
+/* Evidență PPL — module-specific mobile layouts.
+ * Politica globală de scroll/fixed/sticky este în css/mobile.css.
+ * Acest fișier conține numai prezentarea modulelor pe ecrane mici.
+ */
+
+.ev-mobile-lc-details,
+.ev-mobile-advanced-details,
+.ev-ai-evidence-details,
+.ev-contopiri-result-details,
+.ev-transfer-help-details {
+  margin:10px 0;
+  border:1px solid var(--ev-border, rgba(148,163,184,.22));
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--ev-surface, rgba(15,23,42,.72));
+}
+
+.ev-mobile-lc-details > summary,
+.ev-mobile-advanced-details > summary,
+.ev-ai-evidence-details > summary,
+.ev-contopiri-result-details > summary,
+.ev-transfer-help-details > summary {
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  padding:11px 14px;
+  cursor:pointer;
+  font-weight:850;
+  user-select:none;
+}
+
+.ev-mobile-lc-details__body,
+.ev-mobile-advanced-details__body {
+  display:grid;
+  gap:10px;
+  padding:0 10px 10px;
+}
+
+.ev-mobile-lc-details__body > .card,
+.ev-mobile-advanced-details__body > .card {
+  margin:0 !important;
+}
+
+.ev-lc-controls-card { margin:0 !important; }
+.ev-ai-evidence-details > .ai-card { margin:0 !important; border:0 !important; border-radius:0 !important; }
+.ev-contopiri-result-details .detail { padding:0 12px 12px; }
+.ev-transfer-help-details .section-help { padding:0 12px 12px; margin:0; }
+
+.ev-ai-camera-actions {
+  display:grid;
+  gap:6px;
+  margin:0 0 10px;
+}
+
+.ev-ai-camera-button {
+  width:100%;
+  min-height:52px;
+  font-size:.94rem;
+  font-weight:900;
+}
+
+.ev-ai-camera-actions p,
+.ev-ai-open-ended-note {
+  margin:0;
+  color:var(--ev-text-secondary, #94a3b8);
+  font-size:.76rem;
+  line-height:1.4;
+}
+
+.ev-ai-open-ended-note {
+  padding:9px 10px;
+  border-left:3px solid var(--ev-accent, #4f8cff);
+  background:rgba(127,127,127,.06);
+  border-radius:8px;
+}
+
+@media (max-width:600px) {
+  #main-content { padding-bottom:18px; }
+
+  body.ev-unified[data-ev-page="pedepse"] #main-content { display:block; }
+  body.ev-unified[data-ev-page="pedepse"] .card {
+    margin-bottom:10px !important;
+    padding:12px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .card h3 {
+    margin-bottom:9px !important;
+    font-size:.84rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #deductionsContainer {
+    display:grid;
+    gap:8px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) 54px 44px;
+    gap:7px !important;
+    align-items:end;
+    padding:10px !important;
+    margin:0 !important;
+    border:1px solid var(--ev-border, rgba(148,163,184,.22));
+    border-radius:12px;
+    background:rgba(127,127,127,.045);
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:first-child { grid-column:1/-1; }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row .ded-start-label,
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row label { font-size:.68rem; }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row .ded-end-wrap { grid-column:2; }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div[style*="min-width"] { grid-column:3; }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > .btn-danger {
+    grid-column:4;
+    width:44px !important;
+    min-width:44px !important;
+    padding-inline:0 !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row .hidden { display:none !important; }
+  #addDedBtn { width:100%; }
+
+  body.ev-quick-mode .ev-mobile-advanced-details { margin-top:8px; }
+  body.ev-quick-mode .ev-mobile-advanced-details > summary { min-height:44px; }
+
+  .ev-ai-primary { margin-top:8px !important; padding:11px !important; }
+  .ev-ai-primary__grid { grid-template-columns:1fr 1fr !important; }
+  .ev-ai-primary__grid strong { font-size:.94rem; }
+  .ev-ai-primary__deductions ul { padding-left:16px; }
+  .ev-ai-primary__actions { display:grid !important; grid-template-columns:1fr !important; }
+  .ev-ai-warning-list:empty { display:none; }
+  .ev-ai-secondary,
+  .ev-ai-components,
+  .ev-ai-evidence-details { margin:8px 0 !important; }
+
+  /* Tabelele operaționale devin carduri; fără scroll orizontal. */
+  .ai-table { display:block !important; width:100% !important; overflow:visible !important; }
+  .ai-table thead { display:none !important; }
+  .ai-table tbody { display:grid !important; gap:8px; width:100%; }
+  .ai-table tr {
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:7px;
+    width:100% !important;
+    padding:10px !important;
+    margin:0 !important;
+    border:1px solid var(--ev-border, rgba(148,163,184,.2));
+    border-radius:12px;
+  }
+  .ai-table td { display:block !important; width:100% !important; padding:0 !important; border:0 !important; }
+  .ai-table td.ai-source { grid-column:1/-1; font-size:.72rem; }
+  .ai-table td:last-child { grid-column:2; justify-self:end; }
+  .ai-table input,
+  .ai-table select { width:100% !important; }
+
+  body.ev-unified[data-ev-page^="contopiri"] .card { padding:12px !important; }
+  body.ev-unified[data-ev-page^="contopiri"] #penaltyRowsContainer { display:grid; gap:8px; }
+  body.ev-unified[data-ev-page^="contopiri"] .big-result {
+    font-size:clamp(1.2rem,6vw,1.8rem) !important;
+    line-height:1.15;
+  }
+  .ev-contopiri-result-details { margin:10px 0 0; }
+
+  body.ev-unified[data-ev-page="transfer"] .ev-transfer-compact { padding:12px !important; }
+  body.ev-unified[data-ev-page="transfer"] .form-grid { gap:10px !important; }
+  body.ev-unified[data-ev-page="transfer"] .radio-group { gap:6px !important; }
+  body.ev-unified[data-ev-page="transfer"] .radio-btn { min-height:44px; }
+  .ev-transfer-help-details { margin:0 0 10px; }
+
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone { min-height:160px !important; }
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone strong,
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone h3,
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone h4 { font-size:.9rem !important; }
+
+  @supports (height:100dvh) {
+    .ev-mobile-more-sheet { max-height:min(70dvh,520px); overflow:auto; }
+  }
+}
+
+@media (display-mode:standalone) and (max-width:600px) {
+  .ev-shell__bar { padding-top:max(4px, env(safe-area-inset-top, 0px)); }
+}
