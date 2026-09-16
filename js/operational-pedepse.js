@@ -112,6 +112,19 @@
     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  function syncQuickResultControls() {
+    const quick = document.body.classList.contains('ev-quick-mode');
+    const toggleSteps = document.getElementById('toggleStepsBtn');
+    const timeline = document.getElementById('timelineContainer');
+    if (toggleSteps) toggleSteps.hidden = quick;
+    if (quick) {
+      document.getElementById('stepsContainer')?.classList.add('hidden');
+      timeline?.classList.add('hidden');
+    } else if (window.lastCalculation && !window.lastCalculation.quick) {
+      toggleSteps?.removeAttribute('hidden');
+    }
+  }
+
   function quickCalculate() {
     const error = document.getElementById('errorContainer');
     error?.classList.remove('visible');
@@ -168,6 +181,7 @@
           alerts.classList.add('hidden');
         }
       }
+      syncQuickResultControls();
       card?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (err) {
       renderQuickError(err?.message || 'Datele nu pot fi calculate.');
@@ -193,6 +207,8 @@
     }
     const banner = document.createElement('div');
     banner.className = 'ev-prefill-banner';
+    banner.setAttribute('role', 'status');
+    banner.setAttribute('aria-live', 'polite');
     banner.textContent = `Date preluate din ${data.source === 'contopiri' ? 'Contopiri' : 'AI Documente'}. Verifică-le înainte de calcul.`;
     document.querySelector('#main-content')?.prepend(banner);
     return true;
@@ -227,6 +243,7 @@
       const heading = document.getElementById('sentence-heading');
       if (heading) heading.textContent = current === 'quick' ? 'CALCUL RAPID PEDEAPSĂ' : 'DETALII PEDEAPSĂ PPL';
       datesGrid?.classList.toggle('ev-quick-dates', current === 'quick');
+      syncQuickResultControls();
     };
 
     mode.addEventListener('click', event => {
@@ -239,6 +256,7 @@
       event.stopImmediatePropagation();
       quickCalculate();
     }, true);
+    calcBtn?.addEventListener('click', () => requestAnimationFrame(syncQuickResultControls));
 
     fillPedepseFromPrefill();
     setMode('quick');
