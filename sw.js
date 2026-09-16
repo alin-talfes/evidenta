@@ -1,7 +1,7 @@
 /* Evidență PPL — root PWA service worker */
 'use strict';
 
-const VERSION = 'v45';
+const VERSION = 'v46';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -9,10 +9,10 @@ const SCOPE = new URL(self.registration.scope);
 
 const CORE_PATHS = [
   './', './index.html', './manifest.json', './version.json', './favicon-ev-2.svg',
-  './contopiri/', './transfer/', './transfer/rules/', './instructaj/', './semnalmente/', './ai/',
+  './contopiri/', './transfer/', './transfer/rules/', './instructaj/', './semnalmente/', './ai/', './analytics/',
   './css/style.css', './css/design-system.css', './css/operational-upgrades.css',
-  './css/mobile.css', './css/mobile-modules.css', './css/pedepse-modes-v3.css', './css/disclosure-hardening.css',
-  './js/theme.js', './js/version.js', './js/ux-upgrades.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
+  './css/mobile.css', './css/mobile-modules.css', './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/analytics-consent.css',
+  './js/theme.js', './js/version.js', './js/ux-upgrades.js', './js/analytics.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
   './js/export.js', './js/ui.js', './js/app.js', './js/pedepse-ux.js', './js/pedepse-optional.js', './js/deduction-ui.js', './js/quarantine-rules.js', './js/quarantine-ui.js', './js/contopiri-core.js', './js/contopiri.js',
   './js/operational-navigation.js', './js/operational-pedepse.js', './js/operational-ai.js', './js/operational-contopiri.js',
   './js/operational-transfer.js', './js/operational-instructaj.js', './js/operational-semnalmente.js',
@@ -21,6 +21,7 @@ const CORE_PATHS = [
   './instructaj/styles.css', './instructaj/audit-enhancements.css', './instructaj/data.js', './instructaj/app.js',
   './instructaj/omj2188-completari.js', './instructaj/verificare-dosar-transfer.js',
   './semnalmente/enhancements.js',
+  './analytics/index.html', './analytics/styles.css', './analytics/app.js',
   './ai/index.html', './ai/styles.css', './ai/security.css', './ai/source-preview.css',
   './ai/core.js', './ai/safety.js', './ai/ocr-ro.js', './ai/real-doc-deductions.js', './ai/real-doc-hardening.js',
   './ai/beta-lot2-hardening.js', './ai/beta-lot2-postprocess.js', './ai/beta-lot3-hardening.js', './ai/beta-lot3-postprocess.js',
@@ -73,6 +74,7 @@ async function navigationResponse(request) {
     if (cached) return cached;
     const url = new URL(request.url);
     const candidates = [
+      url.pathname.endsWith('/analytics/') ? './analytics/index.html' : null,
       url.pathname.endsWith('/ai/') ? './ai/index.html' : null,
       url.pathname.endsWith('/contopiri/') ? './contopiri/' : null,
       url.pathname.endsWith('/transfer/') ? './transfer/' : null,
@@ -120,9 +122,9 @@ async function staticResponse(request) {
 }
 
 function isCriticalRuntime(url) {
-  return /\/js\/(?:version|ux-upgrades|rules|storage|ui|app|pedepse-ux|pedepse-optional|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
+  return /\/js\/(?:version|ux-upgrades|analytics|rules|storage|ui|app|pedepse-ux|pedepse-optional|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
-    || /\/css\/(?:operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening)\.css$/i.test(url.pathname);
+    || /\/css\/(?:operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening|analytics-consent)\.css$/i.test(url.pathname);
 }
 
 self.addEventListener('fetch', event => {
