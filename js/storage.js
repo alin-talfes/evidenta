@@ -24,6 +24,18 @@ function updateCaseBadge() {
     }
 }
 
+function collectStoredDeductionRows() {
+    const typed = window.ManualDeductionRules?.collectRows?.();
+    if (Array.isArray(typed)) {
+        return typed.map(({ type, start, end }) => ({ type, start, end }));
+    }
+    return Array.from(document.querySelectorAll('.deduction-row')).map(r => ({
+        type: r.querySelector('.ded-type')?.value || 'generic',
+        start: r.querySelector('.ded-start')?.value || '',
+        end: r.querySelector('.ded-end')?.value || ''
+    }));
+}
+
 function collectStoredCaseData() {
     return {
         sex: currentSex,
@@ -39,10 +51,7 @@ function collectStoredCaseData() {
         condRelease: document.getElementById('conditionalReleaseDate').value,
         masuriRefDate: document.getElementById('masuriRefDate')?.value || '',
         masuriDays: document.getElementById('masuriDays')?.value || '0',
-        dedRows: Array.from(document.querySelectorAll('.deduction-row')).map(r => ({
-            start: r.querySelector('.ded-start')?.value || '',
-            end: r.querySelector('.ded-end')?.value || ''
-        })),
+        dedRows: collectStoredDeductionRows(),
         manDed: Array.from(document.querySelectorAll('.manual-days')).map(i => i.value),
         nonRows: Array.from(document.querySelectorAll('.non-exec-row')).map(r => ({
             type: r.querySelector('.ne-type')?.value || 'escape',
@@ -91,13 +100,11 @@ function populateStoredCase(d) {
 
     document.getElementById('deductionsContainer').innerHTML = '';
     (d.dedRows || []).forEach(r => {
-        addDedRow();
-        const last = document.querySelector('.deduction-row:last-child');
-        if (last) {
-            last.querySelector('.ded-start').value = r.start || '';
-            last.querySelector('.ded-end').value = r.end || '';
-            updDed(last);
-        }
+        addDedRow({
+            type: r.type || 'generic',
+            start: r.start || '',
+            end: r.end || ''
+        });
     });
 
     document.getElementById('manualDeductionsContainer').innerHTML = '';
