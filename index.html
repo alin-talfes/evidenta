@@ -17,7 +17,7 @@
     <script src="js/quarantine-rules.js?v=1" defer></script>
     <script src="js/quarantine-ui.js?v=3" defer></script>
     <script src="js/operational-navigation.js?v=4" defer></script>
-    <script src="js/operational-pedepse.js?v=5" defer></script>
+    <script src="js/operational-pedepse.js?v=6" defer></script>
     <script src="js/no-nonoptional-disclosures-v1.js?v=3" defer></script>
     <script src="js/disclosure-hardening-v2.js?v=2" defer></script>
     <script src="js/pwa-register.js?v=3" defer></script>
@@ -54,62 +54,71 @@
                 <button type="button" data-mode="preventive" aria-pressed="false">Măsuri preventive</button>
             </div>
 
-            <div class="card" aria-labelledby="date-ppl-heading">
-                <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
-                <div class="form-grid">
-                    <div>
-                        <label>Sex</label>
-                        <div class="sex-toggle-wrapper">
-                            <span class="sex-label" id="sexLabelF">FEMININ</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="sexToggle" checked>
-                                <span class="toggle-slider" aria-hidden="true"></span>
-                            </label>
-                            <span class="sex-label active" id="sexLabelM">MASCULIN</span>
+            <details class="ev-mobile-lc-details" open>
+                <summary>Liberare condiționată și date PPL</summary>
+                <div class="ev-mobile-lc-details__body">
+                    <div class="card" aria-labelledby="date-ppl-heading">
+                        <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label>Sex</label>
+                                <div class="sex-toggle-wrapper">
+                                    <span class="sex-label" id="sexLabelF">FEMININ</span>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="sexToggle" checked>
+                                        <span class="toggle-slider" aria-hidden="true"></span>
+                                    </label>
+                                    <span class="sex-label active" id="sexLabelM">MASCULIN</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="birthDate">Data nașterii</label>
+                                <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa">
+                            </div>
+                            <div id="ageTag" class="age-tag" aria-live="polite"></div>
+                        </div>
+                        <div class="mt-12">
+                            <label for="observations">OBSERVAȚII (OPȚIONAL)</label>
+                            <textarea id="observations" rows="2" placeholder=""></textarea>
                         </div>
                     </div>
-                    <div>
-                        <label for="birthDate">Data nașterii</label>
-                        <input type="text" id="birthDate" class="date-masked" placeholder="zz.ll.aaaa">
-                    </div>
-                    <div id="ageTag" class="age-tag" aria-live="polite"></div>
+
+                    <section class="card ev-lc-controls-card" aria-labelledby="lc-controls-heading">
+                        <h3 id="lc-controls-heading">ALGORITM LIBERARE CONDIȚIONATĂ</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label for="liberationArticle">ALGORITM LIBERARE CONDIȚIONATĂ</label>
+                                <select id="liberationArticle" aria-required="true">
+                                    <option value="">—</option>
+                                    <option value="NCP100">NCP art. 100</option>
+                                    <option value="NCP99">NCP art. 99 (viață)</option>
+                                    <option value="NCP124">NCP art. 124</option>
+                                    <option value="NCP125">NCP art. 125</option>
+                                    <option value="VCP59">VCP art. 59</option>
+                                    <option value="VCP591">VCP art. 59¹</option>
+                                    <option value="VCP602">VCP art. 60 alin. 2</option>
+                                    <option value="VCP603">VCP art. 60 alin. 3</option>
+                                    <option value="VCP551">VCP art. 55¹ (viață)</option>
+                                    <option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option>
+                                    <option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option>
+                                    <option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. 4 v</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="lifeSentence">Detențiune pe viață</label>
+                                <label class="toggle-switch" style="margin-top:8px;">
+                                    <input type="checkbox" id="lifeSentence">
+                                    <span class="toggle-slider" aria-hidden="true"></span>
+                                    <span class="life-label">Bifați dacă este cazul</span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-                <div class="mt-12">
-                    <label for="observations">OBSERVAȚII (OPȚIONAL)</label>
-                    <textarea id="observations" rows="2" placeholder=""></textarea>
-                </div>
-            </div>
+            </details>
 
             <div class="card" aria-labelledby="sentence-heading">
                 <h3 id="sentence-heading">DETALII PEDEAPSĂ PPL</h3>
-                <div class="form-grid">
-                    <div>
-                        <label for="liberationArticle">ALGORITM LIBERARE CONDIȚIONATĂ</label>
-                        <select id="liberationArticle" aria-required="true">
-                            <option value="">—</option>
-                            <option value="NCP100">NCP art. 100</option>
-                            <option value="NCP99">NCP art. 99 (viață)</option>
-                            <option value="NCP124">NCP art. 124</option>
-                            <option value="NCP125">NCP art. 125</option>
-                            <option value="VCP59">VCP art. 59</option>
-                            <option value="VCP591">VCP art. 59¹</option>
-                            <option value="VCP602">VCP art. 60 alin. 2</option>
-                            <option value="VCP603">VCP art. 60 alin. 3</option>
-                            <option value="VCP551">VCP art. 55¹ (viață)</option>
-                            <option value="PRE14059">Anterior L. 140/1996 – art. 59 v</option>
-                            <option value="PRE14060">Anterior L. 140/1996 – art. 60 v</option>
-                            <option value="PRE140604">Anterior L. 140/1996 – art. 60 alin. 4 v</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="lifeSentence">Detențiune pe viață</label>
-                        <label class="toggle-switch" style="margin-top:8px;">
-                            <input type="checkbox" id="lifeSentence">
-                            <span class="toggle-slider" aria-hidden="true"></span>
-                            <span class="life-label">Bifați dacă este cazul</span>
-                        </label>
-                    </div>
-                </div>
                 <div id="sentenceDuration" class="form-grid mt-8">
                     <div><label for="durYears">Ani</label><input type="number" id="durYears" value="0" min="0"></div>
                     <div><label for="durMonths">Luni</label><input type="number" id="durMonths" value="0" min="0"></div>
