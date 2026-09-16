@@ -227,7 +227,7 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v45'"));
+assert.ok(sw.includes("const VERSION = 'v46'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
 assert.ok(sw.includes('./js/pedepse-optional.js'));
 assert.ok(sw.includes('pedepse-optional|deduction-ui'));
@@ -240,8 +240,8 @@ for (const file of ['operational-navigation', 'operational-pedepse', 'operationa
 assert.ok(!sw.includes('mobile-operational-v2'));
 assert.ok(!sw.includes('operational-finalize'));
 
-assert.ok(aiSw.includes('evidenta-ai-shell-v21'));
-assert.ok(aiSw.includes('evidenta-ai-runtime-v21'));
+assert.ok(aiSw.includes('evidenta-ai-shell-v22'));
+assert.ok(aiSw.includes('evidenta-ai-runtime-v22'));
 assert.ok(aiSw.includes('../js/operational-navigation.js'));
 assert.ok(aiSw.includes('../js/operational-ai.js'));
 assert.ok(aiSw.includes('../js/no-nonoptional-disclosures-v1.js'));
