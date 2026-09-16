@@ -8,6 +8,7 @@
     const versionUrl = new URL('../version.json', scriptUrl).href;
     const homeUrl = new URL('../', scriptUrl).href;
     let currentVersion = '—';
+    let bootstrapped = false;
 
     function ensureScript(selector, src, datasetKey) {
         if (document.querySelector(selector)) return;
@@ -188,26 +189,18 @@
         renderBrandIdentity(currentVersion);
     }
 
-    window.addEventListener('evidenta:shellready', () => renderBrandIdentity(currentVersion));
-    ensureUxUpgrades();
-    ensureLegalReleaseGuards();
-    ensurePageControllers();
-    ensureCalculationParity();
-    ensureOperationalRuntime();
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            ensureLegalReleaseGuards();
-            ensurePageControllers();
-            ensureCalculationParity();
-            ensureOperationalRuntime();
-            initVersionIdentity();
-        }, { once: true });
-    } else {
+    function bootstrap() {
+        if (bootstrapped) return;
+        bootstrapped = true;
+        ensureUxUpgrades();
         ensureLegalReleaseGuards();
         ensurePageControllers();
         ensureCalculationParity();
         ensureOperationalRuntime();
-        initVersionIdentity();
+        void initVersionIdentity();
     }
+
+    window.addEventListener('evidenta:shellready', () => renderBrandIdentity(currentVersion));
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
+    else bootstrap();
 })();
