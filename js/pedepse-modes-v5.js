@@ -4,17 +4,6 @@
   if (window.__EVIDENTA_PEDEPSE_MODES_V5__) return;
   window.__EVIDENTA_PEDEPSE_MODES_V5__ = true;
 
-  const scriptUrl = new URL(document.currentScript?.src || 'js/pedepse-modes-v5.js', document.baseURI);
-
-  function ensureStyles() {
-    if (document.querySelector('link[data-evidenta-pedepse-modes-v3]')) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = new URL('../css/pedepse-modes-v3.css?v=4', scriptUrl).href;
-    link.dataset.evidentaPedepseModesV3 = 'true';
-    document.head.appendChild(link);
-  }
-
   function isPedepse() {
     return document.body?.dataset.evPage === 'pedepse' || Boolean(
       document.getElementById('calcBtn') && document.getElementById('masuri-preventive-heading')
@@ -51,59 +40,6 @@
     });
   }
 
-  function syncPreventiveDayPresets() {
-    const input = document.getElementById('masuriDays');
-    const controls = document.querySelector('.ev-preventive-days-control');
-    if (!input || !controls) return;
-    const value = Number(input.value);
-    controls.querySelectorAll('[data-masuri-days]').forEach(button => {
-      const active = Number(button.dataset.masuriDays) === value;
-      button.classList.toggle('is-active', active);
-      button.setAttribute('aria-pressed', String(active));
-    });
-  }
-
-  function ensurePreventiveDayPresets() {
-    const input = document.getElementById('masuriDays');
-    if (!input) return null;
-
-    let controls = document.querySelector('.ev-preventive-days-control');
-    if (!controls) {
-      controls = document.createElement('div');
-      controls.className = 'ev-preventive-days-control';
-      controls.setAttribute('role', 'group');
-      controls.setAttribute('aria-label', 'Durată măsură preventivă');
-
-      [30, 60].forEach(days => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'btn btn-outline btn-sm ev-preventive-days-preset';
-        button.dataset.masuriDays = String(days);
-        button.textContent = `${days} zile`;
-        button.setAttribute('aria-pressed', 'false');
-        button.addEventListener('click', () => {
-          input.value = String(days);
-          input.dispatchEvent(new Event('input', { bubbles: true }));
-          input.focus({ preventScroll: true });
-        });
-        controls.appendChild(button);
-      });
-
-      input.placeholder = 'Manual';
-      input.inputMode = 'numeric';
-      input.setAttribute('aria-label', 'Număr de zile — valoare manuală');
-      input.insertAdjacentElement('beforebegin', controls);
-      controls.appendChild(input);
-
-      input.addEventListener('input', syncPreventiveDayPresets);
-      input.addEventListener('change', syncPreventiveDayPresets);
-      document.getElementById('resetBtn')?.addEventListener('click', () => window.setTimeout(syncPreventiveDayPresets, 0));
-    }
-
-    syncPreventiveDayPresets();
-    return controls;
-  }
-
   function ensurePreventivePanel(mode) {
     let panel = document.querySelector('.ev-preventive-mode-panel');
     if (!panel) {
@@ -132,7 +68,6 @@
     card.classList.remove('ev-optional-card');
     if (card.hidden) card.hidden = false;
     if (card.parentElement !== body) body.appendChild(card);
-    ensurePreventiveDayPresets();
     removeEmptyAdvancedDisclosure();
     return panel;
   }
@@ -162,7 +97,8 @@
 
     const panel = movePreventiveCard(mode);
     if (panel && panel.hidden === (requested === 'preventive')) panel.hidden = requested !== 'preventive';
-    if (requested === 'preventive') syncPreventiveDayPresets();
+    if (requested === 'preventive') window.syncPreventiveDayPresets?.();
+    window.syncPrisonReceivedControl?.();
   }
 
   function currentMode(mode) {
@@ -217,12 +153,10 @@
   }
 
   function initDeterministically() {
-    ensureStyles();
     if (tryInit()) return;
     [0, 40, 120, 300, 700].forEach(delay => window.setTimeout(tryInit, delay));
   }
 
-  ensureStyles();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initDeterministically, { once: true });
   } else {
