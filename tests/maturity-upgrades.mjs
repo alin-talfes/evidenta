@@ -57,16 +57,18 @@ for (const marker of [
   'validateBeforeCalculation',
   'renderValidationSummary',
   'enhanceCalculationResult',
-  'beforeCalculation',
+  'validateCalculation',
+  'runCalculation',
   'afterCalculation',
-  'bindCalculationLifecycle',
   'Rezultat operațional',
   'confruntat cu mandatul'
 ]) {
   assert.ok(pedepse.includes(marker), `Controllerul Pedepse trebuie să conțină ${marker}`);
 }
+assert.ok(!pedepse.includes('bindCalculationLifecycle'), 'Controllerul Pedepse nu trebuie să intercepteze global butonul de calcul');
 assert.ok(!pedepse.includes('window.calculateAll ='), 'Controllerul Pedepse nu trebuie să suprascrie motorul de calcul');
 assert.ok(!pedepse.includes('original.apply'), 'Controllerul Pedepse nu trebuie să învelească motorul de calcul');
+assert.ok(!pedepse.includes('setTimeout(afterCalculation'), 'Post-procesarea rezultatului trebuie apelată explicit');
 
 for (const marker of [
   'evidenta-training',
@@ -80,9 +82,10 @@ for (const marker of [
   assert.ok(officer.includes(marker), `Cockpit-ul Ofițer trebuie să conțină ${marker}`);
 }
 
-assert.ok(rootHtml.includes('js/pedepse-ux.js?v=2'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
+assert.ok(rootHtml.includes('js/pedepse-ux.js?v=3'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
+assert.ok(rootHtml.includes('EvidentaPedepseUx.runCalculation(calculateAll)'), 'Pagina Pedepse trebuie să lege explicit validarea, calculul și post-procesarea');
 assert.ok(officerBootstrap.includes('dashboard-cockpit.js?v=1'), 'Bootstrap-ul Ofițer trebuie să încarce cockpit-ul din propriul runtime');
 assert.ok(officerBootstrap.includes('await loadScript(cockpitScript)'), 'Cockpit-ul Ofițer trebuie activat în runtime-ul aplicației');
 assert.ok(!version.includes('pedepse-ux.js') && !version.includes('dashboard-cockpit.js'), 'version.js trebuie să rămână identity-only');
 
-console.log('Maturity UX: Pedepse declarat direct, cockpit Ofițer în bootstrap propriu, CSS consolidat și lifecycle explicit verificate.');
+console.log('Maturity UX: Pedepse cu flux explicit, cockpit Ofițer în bootstrap propriu, CSS consolidat și lifecycle determinist verificate.');
