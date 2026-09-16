@@ -49,6 +49,10 @@ for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToP
 }
 assert.ok(!operational.includes('overrideDeductionSummation'), 'Politica de însumare trebuie definită în rules.js, nu suprascrisă la runtime.');
 assert.ok(!operational.includes('replaceOverlapCopy'), 'Copy-ul pentru suprapuneri trebuie definit la sursă, nu corectat după randare.');
+assert.ok(!operational.includes('window.calculateMergedPenalties ='), 'Contopiri nu trebuie să suprascrie calculateMergedPenalties.');
+assert.ok(!operational.includes('__evOperationalWrapped'), 'Contopiri nu trebuie să păstreze wrapper-ul legacy al motorului.');
+assert.ok(operational.includes('removeContopiriTransferButton'), 'Transferul Contopiri → Pedepse trebuie invalidat când se schimbă componentele.');
+assert.ok(operational.includes('resultObserver.observe(result, { childList:true })'), 'Rezultatul Contopiri trebuie observat local, fără monkey-patch pe motor.');
 assert.ok(!operationalCss.includes('position:sticky'), 'Stratul operațional nu trebuie să mai creeze suprafețe sticky pe mobil.');
 assert.ok(!operationalCss.includes('position:fixed'), 'Poziționarea fixed trebuie să fie definită exclusiv în politica canonică mobile.css.');
 assert.ok(operationalCss.includes('.ev-mobile-more-sheet {\n    position:absolute;'), 'Meniul Mai multe trebuie ancorat absolut de bottom nav, nu de viewport.');
@@ -170,4 +174,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: controllere stabile și carantină pe lifecycle explicit, fără corrections loader sau monkey-patch, numai bottom nav fixed.');
+console.log('Mobile/PWA audit: Contopiri fără monkey-patch, controllere stabile încărcate direct și numai bottom nav fixed.');
