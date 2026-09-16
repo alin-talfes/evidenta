@@ -16,8 +16,7 @@
     <script src="js/quarantine-rules.js?v=1" defer></script>
     <script src="js/quarantine-ui.js?v=3" defer></script>
     <script src="js/operational-navigation.js?v=4" defer></script>
-    <script src="js/operational-pedepse.js?v=3" defer></script>
-    <script src="js/pedepse-modes-v5.js?v=3" defer></script>
+    <script src="js/operational-pedepse.js?v=4" defer></script>
     <script src="js/pedepse-optional-fix-v2.js?v=1" defer></script>
     <script src="js/no-nonoptional-disclosures-v1.js?v=3" defer></script>
     <script src="js/disclosure-hardening-v2.js?v=2" defer></script>
@@ -49,6 +48,12 @@
         </div>
 
         <main id="main-content">
+            <div class="ev-calc-mode" data-ev-three-modes="true" role="group" aria-label="Tip calcul">
+                <button type="button" data-mode="quick" class="is-active" aria-pressed="true">Calcul rapid</button>
+                <button type="button" data-mode="full" aria-pressed="false">Calcul complet LC</button>
+                <button type="button" data-mode="preventive" aria-pressed="false">Măsuri preventive</button>
+            </div>
+
             <div class="card" aria-labelledby="date-ppl-heading">
                 <h3 id="date-ppl-heading">DATE GENERALE PPL</h3>
                 <div class="form-grid">
@@ -164,33 +169,37 @@
                 </div></div>
             </div>
 
-            <div class="card" aria-labelledby="masuri-preventive-heading">
-                <h3 id="masuri-preventive-heading">PRELUNGIRI MĂSURI PREVENTIVE (OPȚIONAL)</h3>
-                <div class="form-grid">
-                    <div>
-                        <label for="masuriRefDate">Dată referință</label>
-                        <div class="date-wrapper">
-                            <input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa">
-                            <button type="button" class="btn-today" data-target="masuriRefDate" onclick="setToday('masuriRefDate')">AZI</button>
+            <section class="ev-preventive-mode-panel" hidden aria-labelledby="masuri-preventive-heading">
+                <div class="ev-preventive-mode-panel__body">
+                    <div class="card" aria-labelledby="masuri-preventive-heading" data-ev-preventive-card="true">
+                        <h3 id="masuri-preventive-heading">CALCUL MĂSURI PREVENTIVE</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label for="masuriRefDate">Dată referință</label>
+                                <div class="date-wrapper">
+                                    <input type="text" id="masuriRefDate" class="date-masked" placeholder="zz.ll.aaaa">
+                                    <button type="button" class="btn-today" data-target="masuriRefDate" onclick="setToday('masuriRefDate')">AZI</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="masuriDays">Adaugă zile</label>
+                                <div class="ev-preventive-days-control" role="group" aria-label="Durată măsură preventivă">
+                                    <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="30" aria-pressed="false">30 zile</button>
+                                    <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="60" aria-pressed="false">60 zile</button>
+                                    <input type="number" id="masuriDays" value="0" min="0" placeholder="Manual" inputmode="numeric" aria-label="Număr de zile — valoare manuală">
+                                </div>
+                            </div>
+                            <div><label for="masuriResult">Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
                         </div>
+                        <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
                     </div>
-                    <div>
-                        <label for="masuriDays">Adaugă zile</label>
-                        <div class="ev-preventive-days-control" role="group" aria-label="Durată măsură preventivă">
-                            <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="30" aria-pressed="false">30 zile</button>
-                            <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="60" aria-pressed="false">60 zile</button>
-                            <input type="number" id="masuriDays" value="0" min="0" placeholder="Manual" inputmode="numeric" aria-label="Număr de zile — valoare manuală">
-                        </div>
-                    </div>
-                    <div><label for="masuriResult">Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
                 </div>
-                <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
-            </div>
+            </section>
 
             <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
 
             <div class="btn-row">
-                <button class="btn btn-gold" id="calcBtn" onclick="EvidentaPedepseUx.runCalculation(calculateAll)">CALCULEAZĂ</button>
+                <button class="btn btn-gold" id="calcBtn" onclick="EvidentaPedepseOperational.calculate()">CALCULEAZĂ</button>
                 <button class="btn btn-outline" id="copyResultsBtn" onclick="copyResults()">COPIAZĂ REZULTATELE</button>
                 <button class="btn btn-outline" id="exportPdfBtn" onclick="exportPDF()">EXPORTĂ PDF</button>
             </div>
