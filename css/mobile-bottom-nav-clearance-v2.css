@@ -1,0 +1,49 @@
+/*
+ * Mobile bottom-navigation clearance.
+ * Keep the final page content fully scrollable above the fixed bottom nav,
+ * including iOS safe-area space. Loaded globally by js/pwa-register.js.
+ */
+@media (max-width: 760px) {
+  :root {
+    --ev-mobile-nav-bar-height: 60px;
+    --ev-mobile-nav-safe-height: calc(var(--ev-mobile-nav-bar-height) + env(safe-area-inset-bottom, 0px));
+    --ev-mobile-content-clearance: calc(var(--ev-mobile-nav-safe-height) + 32px);
+  }
+
+  /* Body padding alone is unreliable in iOS standalone mode. Reserve the
+     clearance inside the actual scrolling content as well. */
+  body {
+    padding-bottom: var(--ev-mobile-nav-safe-height) !important;
+  }
+
+  main,
+  #main-content {
+    box-sizing: border-box;
+    padding-bottom: var(--ev-mobile-content-clearance) !important;
+    scroll-padding-bottom: var(--ev-mobile-content-clearance);
+  }
+
+  /* Sticky actions must sit above the navigation bar rather than underneath it. */
+  body.ev-quick-mode .btn-row {
+    bottom: calc(var(--ev-mobile-nav-safe-height) + 8px) !important;
+  }
+
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel {
+    bottom: calc(var(--ev-mobile-nav-safe-height) + 8px) !important;
+  }
+
+  /* Give the final visible control/card a little breathing room when the user
+     reaches the end of the page. */
+  main > :last-child,
+  #main-content > :last-child {
+    margin-bottom: 16px !important;
+  }
+}
+
+/* The keyboard changes the visual viewport, but the content clearance remains
+   on main so the fixed nav cannot cover the active field or last control. */
+@media (max-width: 760px) {
+  html.ev-virtual-keyboard-open body {
+    padding-bottom: 0 !important;
+  }
+}
