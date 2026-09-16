@@ -23,6 +23,31 @@
 .ev-preventive-mode-panel__body { padding:0; }
 .ev-preventive-mode-panel__body > .card { margin:0 !important; }
 
+.ev-preventive-days-control {
+  display:grid;
+  grid-template-columns:auto auto minmax(92px,1fr);
+  align-items:stretch;
+  gap:8px;
+}
+.ev-preventive-days-control .ev-preventive-days-preset {
+  min-width:78px;
+  min-height:44px;
+  margin:0;
+  white-space:nowrap;
+}
+.ev-preventive-days-control .ev-preventive-days-preset.is-active,
+.ev-preventive-days-control .ev-preventive-days-preset[aria-pressed="true"] {
+  border-color:var(--ev-accent, #4f8cff) !important;
+  color:var(--ev-accent-strong, #7aa7ff) !important;
+  background:var(--ev-accent-soft, rgba(79,140,255,.12)) !important;
+}
+.ev-preventive-days-control #masuriDays {
+  width:100%;
+  min-width:0;
+  margin:0;
+  text-align:center;
+}
+
 body.ev-preventive-mode #main-content > *:not(.ev-calc-mode):not(.ev-preventive-mode-panel) {
   display:none !important;
 }
@@ -47,6 +72,18 @@ body.ev-preventive-mode .ev-preventive-mode-panel { display:block !important; }
   .ev-preventive-mode-panel__body .form-grid {
     grid-template-columns:1fr !important;
     gap:9px !important;
+  }
+  .ev-preventive-days-control {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .ev-preventive-days-control #masuriDays {
+    grid-column:1 / -1;
+    min-height:46px;
+  }
+  .ev-preventive-days-control .ev-preventive-days-preset {
+    width:100%;
+    min-width:0;
+    min-height:46px;
   }
 }
 
