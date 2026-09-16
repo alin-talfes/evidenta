@@ -2,6 +2,16 @@
  * Pe telefon, toate elementele persistente ale paginii rămân în flux normal.
  * Excepție: .ev-mobile-nav, tratată separat ca singurul element fix.
  */
+
+/* Perioade deduse: păstrăm un singur flux de adăugare.
+ * „+ Adaugă” creează implicit Arest preventiv, iar tipul se schimbă din selector.
+ * Scurtătura separată „+ Reținere 24H” nu mai este afișată.
+ */
+[data-add-retention],
+.ev-retention-preset {
+  display: none !important;
+}
+
 @media (max-width: 760px) {
   .ev-shell,
   .ev-shell__bar,
