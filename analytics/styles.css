@@ -1,0 +1,68 @@
+:root {
+  color-scheme: dark;
+  --bg:#0b1220;
+  --surface:#111c2f;
+  --surface-2:#17233a;
+  --border:rgba(148,163,184,.22);
+  --text:#e7edf7;
+  --muted:#94a3b8;
+  --accent:#4f8cff;
+  --accent-strong:#7aa7ff;
+  --danger:#ff8b99;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+button,a{touch-action:manipulation}
+.analytics-shell{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:28px 0 48px}
+.analytics-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:20px}
+.analytics-head h1{margin:2px 0 4px;font-size:clamp(2rem,5vw,3.4rem);line-height:1}
+.analytics-head p{margin:0;color:var(--muted);max-width:720px}
+.eyebrow{color:var(--accent-strong)!important;font-size:.76rem;font-weight:900;letter-spacing:.1em}
+.back-link{color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-weight:800}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px}
+.login-panel{width:min(520px,100%);margin:8vh auto 0}
+.login-panel h2,.panel h2{margin:0 0 5px}
+.login-panel>p,.section-head p{margin:0 0 14px;color:var(--muted)}
+#loginForm{display:grid;gap:8px}
+#loginForm label{font-weight:800;margin-top:4px}
+input,select{width:100%;min-height:44px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);padding:9px 11px}
+button{min-height:42px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text);font-weight:850;cursor:pointer;padding:8px 12px}
+button.primary{margin-top:8px;background:var(--accent);border-color:var(--accent);color:#fff}
+.error{min-height:1.4em;color:var(--danger)!important;margin-top:10px!important}
+.hidden{display:none!important}
+.dashboard-toolbar{display:flex;justify-content:space-between;gap:14px;align-items:end;margin-bottom:14px}
+.dashboard-toolbar label{display:grid;gap:5px;font-weight:800;min-width:180px}
+.toolbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.status{min-height:1.4em;color:var(--muted);margin:0 0 10px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.metrics article{padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.metrics span,.metrics small{display:block;color:var(--muted)}
+.metrics strong{display:block;margin:5px 0 2px;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1;color:var(--accent-strong)}
+.section-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.daily-chart{display:grid;grid-template-columns:repeat(auto-fit,minmax(18px,1fr));gap:4px;align-items:end;min-height:230px;padding-top:12px;border-top:1px solid var(--border)}
+.daily-item{display:grid;grid-template-rows:1fr auto;gap:6px;min-width:0;height:210px}
+.daily-bars{display:flex;gap:2px;align-items:end;height:180px}
+.daily-bar{flex:1;min-height:2px;border-radius:5px 5px 0 0;background:var(--accent)}
+.daily-bar.devices{background:var(--accent-strong);opacity:.52}
+.daily-label{font-size:.64rem;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--border);text-align:left}
+th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}
+td:nth-child(n+2),th:nth-child(n+2){text-align:right}
+.breakdown-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.breakdown-grid>div{padding:13px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2)}
+.breakdown-grid span{display:block;color:var(--muted);font-size:.82rem}
+.breakdown-grid strong{display:block;margin-top:3px;font-size:1.45rem}
+.privacy-note{color:var(--muted);font-size:.8rem;margin:14px 2px 0}
+@media(max-width:760px){
+  .analytics-shell{width:min(100% - 20px,1180px);padding-top:18px}
+  .analytics-head,.dashboard-toolbar{display:grid;grid-template-columns:1fr}
+  .back-link{justify-self:start}
+  .toolbar-actions{display:grid;grid-template-columns:1fr 1fr}
+  .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .breakdown-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .daily-chart{overflow-x:auto;grid-auto-flow:column;grid-auto-columns:minmax(24px,1fr);grid-template-columns:none}
+}
+@media(max-width:420px){.metrics{grid-template-columns:1fr}.panel{padding:14px}}
