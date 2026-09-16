@@ -4,24 +4,6 @@
   if (window.__EVIDENTA_UX_UPGRADES__) return;
   window.__EVIDENTA_UX_UPGRADES__ = true;
 
-  const scriptUrl = new URL(document.currentScript?.src || 'js/ux-upgrades.js', document.baseURI);
-  const stylesheetUrl = new URL('../css/ux-upgrades.css?v=1', scriptUrl).href;
-
-  function loadStylesheet() {
-    if ([...document.styleSheets].some(sheet => sheet.href === stylesheetUrl) || document.querySelector('link[data-evidenta-ux]')) {
-      return Promise.resolve();
-    }
-    return new Promise(resolve => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = stylesheetUrl;
-      link.dataset.evidentaUx = 'true';
-      link.onload = resolve;
-      link.onerror = resolve;
-      document.head.appendChild(link);
-    });
-  }
-
   function pageName() {
     return document.body?.dataset.evPage || '';
   }
@@ -394,14 +376,10 @@
     initOfficerMobileNav();
   }
 
-  function start() {
-    loadStylesheet().finally(initAll);
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
+    document.addEventListener('DOMContentLoaded', initAll, { once: true });
   } else {
-    start();
+    initAll();
   }
   window.addEventListener('evidenta:shellready', initAll);
 })();
