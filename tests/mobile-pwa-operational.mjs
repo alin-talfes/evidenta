@@ -40,6 +40,7 @@ assert.ok(finalize.includes('normalizeGlobalNav'), 'Navigarea globală trebuie n
 for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture','compactContopiriResult','compactTransfer','compactSemnalmente']) {
   assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
 }
+assert.ok(mobile.includes('lc.details.open = true'), 'Secțiunea „Liberare condiționată și date PPL” trebuie afișată deschis implicit în modul complet.');
 assert.ok(
   mobile.includes("const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];"),
   'Opțiunile avansate trebuie să conțină numai funcțiile păstrate.'
@@ -100,4 +101,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: moduri Pedepse, măsuri preventive separate, corecții fără observer global, bottom-nav fără suprapunere, runtime critic network-first, cache guard, disclosure-uri, viewport iPhone/Android, camere, prefill și offline verificate.');
+console.log('Mobile/PWA audit: moduri Pedepse, LC/PPL deschis implicit, măsuri preventive separate, corecții fără observer global, bottom-nav fără suprapunere, runtime critic network-first, cache guard, disclosure-uri, viewport iPhone/Android, camere, prefill și offline verificate.');
