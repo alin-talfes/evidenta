@@ -20,6 +20,7 @@ const disclosure = read('js/disclosure-hardening.js');
 const disclosureCss = read('css/disclosure-hardening.css');
 const pwa = read('js/pwa-register.js');
 const pwaCss = read('css/pwa-mobile.css');
+const navClearanceCss = read('css/mobile-bottom-nav-clearance-v2.css');
 const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
 const index = read('index.html');
@@ -77,14 +78,17 @@ assert.ok(mobileCss.includes('.deduction-row'), 'Deducerile trebuie să aibă la
 assert.ok(mobileCss.includes('env(safe-area-inset-bottom'), 'Layout-ul mobil trebuie să respecte safe-area iPhone.');
 assert.ok(mobileCss.includes('font-size:16px'), 'Inputurile mobile trebuie să evite zoom-ul automat Safari iOS.');
 
-for (const marker of ['ensureViewportFit','viewport-fit=cover','apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine','pwa-mobile.css?v=2']) {
+for (const marker of ['ensureViewportFit','viewport-fit=cover','apple-mobile-web-app-capable','mobile-web-app-capable','visualViewport','ev-ios','ev-android','navigator.onLine','pwa-mobile.css?v=2','ensureBottomNavClearance','mobile-bottom-nav-clearance-v2.css?v=1']) {
   assert.ok(pwa.includes(marker), `Controllerul PWA trebuie să includă auditul/platforma ${marker}`);
 }
 assert.ok(pwaCss.includes('ev-offline-badge'), 'Starea offline trebuie comunicată vizual.');
 assert.ok(pwaCss.includes('.ev-shell__brand-home'), 'Identitatea din header trebuie stilizată fără linkuri imbricate.');
 assert.ok(pwaCss.includes('white-space:normal'), 'Metadatele versiunii/copyright trebuie să poată coborî pe rândul doi pe telefoane mici.');
+for (const marker of ['--ev-mobile-nav-safe-height','--ev-mobile-content-clearance','padding-bottom: var(--ev-mobile-content-clearance)','scroll-padding-bottom: var(--ev-mobile-content-clearance)','env(safe-area-inset-bottom']) {
+  assert.ok(navClearanceCss.includes(marker), `Clearance-ul bottom-nav trebuie să includă ${marker}`);
+}
 
-for (const marker of ['service worker',"const VERSION = 'v8'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/pedepse-modes-v4.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css']) {
+for (const marker of ['service worker',"const VERSION = 'v9'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/pedepse-modes-v4.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v2.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
 assert.ok(!sw.includes('./js/regime-reanalysis.js'), 'Service Worker-ul nu trebuie să mai păstreze în cache modulul retras.');
@@ -96,4 +100,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: moduri Pedepse, măsuri preventive separate, corecții fără observer global, runtime critic network-first, cache guard, disclosure-uri, viewport iPhone/Android, camere, prefill și offline verificate.');
+console.log('Mobile/PWA audit: moduri Pedepse, măsuri preventive separate, corecții fără observer global, bottom-nav fără suprapunere, runtime critic network-first, cache guard, disclosure-uri, viewport iPhone/Android, camere, prefill și offline verificate.');
