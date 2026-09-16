@@ -27,7 +27,10 @@
       ) button.remove();
     });
 
-    if (preventiveCard) preventiveCard.classList.remove('ev-optional-card');
+    if (preventiveCard) {
+      preventiveCard.classList.remove('ev-optional-card');
+      preventiveCard.hidden = false;
+    }
     return true;
   }
 
@@ -50,56 +53,15 @@
     return true;
   }
 
-  function syncButton(button, card, open) {
-    if (card.hidden === open) card.hidden = !open;
-    button.classList.toggle('is-active', open);
-    button.setAttribute('aria-expanded', String(open));
-    const icon = button.querySelector('span[aria-hidden="true"]');
-    if (icon && icon.textContent !== (open ? '−' : '+')) icon.textContent = open ? '−' : '+';
-  }
-
-  function bindOptionalTools() {
-    const optional = document.querySelector('.ev-optional-tools');
-    if (!optional) return false;
-    if (optional.dataset.evOptionalFixV2Bound === 'true') return true;
-
-    optional.dataset.evOptionalFixV2Bound = 'true';
-    optional.addEventListener('click', event => {
-      const button = event.target.closest('.ev-optional-toggle');
-      if (!button || !optional.contains(button)) return;
-
-      const targetId = button.getAttribute('aria-controls') || '';
-      const card = targetId ? document.getElementById(targetId) : null;
-      if (!card || !OPTIONAL_IDS.some(id => card.querySelector(`#${id}`))) return;
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      unwrapOptionalCards();
-      const open = card.hidden;
-      syncButton(button, card, open);
-      if (open) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, true);
-    return true;
-  }
-
   function repair() {
     if (!document.body) return false;
     removePreventiveFromOptionalTools();
-    const hasOptional = unwrapOptionalCards();
-    const bound = bindOptionalTools();
-    return hasOptional && bound;
-  }
-
-  function initDeterministically() {
-    const delays = [0, 40, 120, 300, 700];
-    delays.forEach(delay => window.setTimeout(repair, delay));
+    return unwrapOptionalCards();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDeterministically, { once: true });
+    document.addEventListener('DOMContentLoaded', repair, { once: true });
   } else {
-    initDeterministically();
+    repair();
   }
-  window.addEventListener('evidenta:shellready', repair);
-  window.addEventListener('load', repair, { once: true });
 })();
