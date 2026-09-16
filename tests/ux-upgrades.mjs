@@ -8,12 +8,26 @@ const root = path.dirname(here);
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const version = read('js/version.js');
+const rootHtml = read('index.html');
+const aiHtml = read('ai/index.html');
+const contopiriHtml = read('contopiri/index.html');
+const transferHtml = read('transfer/index.html');
+const transferRulesHtml = read('transfer/rules/index.html');
 const ux = read('js/ux-upgrades.js');
 const pedepseUx = read('js/pedepse-ux.js');
 const finalLayer = read('css/final-layer.css');
 
-assert.ok(version.includes('ux-upgrades.js?v=3'), 'Controllerul de versiune trebuie să încarce controllerul UX consolidat curent');
-assert.ok(version.includes('data-evidenta-ux-controller') || version.includes('evidentaUxController'), 'Loaderul UX trebuie să prevină dublarea controllerului');
+for (const [file, html] of [
+  ['index.html', rootHtml],
+  ['ai/index.html', aiHtml],
+  ['contopiri/index.html', contopiriHtml],
+  ['transfer/index.html', transferHtml],
+  ['transfer/rules/index.html', transferRulesHtml]
+]) {
+  assert.ok(html.includes('ux-upgrades.js?v=3'), `${file} trebuie să declare controllerul UX consolidat curent`);
+  assert.equal((html.match(/ux-upgrades\.js\?v=3/g) || []).length, 1, `${file} trebuie să declare controllerul UX o singură dată`);
+}
+assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
 assert.ok(!fs.existsSync(path.join(root, 'css/ux-upgrades.css')), 'CSS-ul UX separat trebuie eliminat după consolidarea în final-layer.css');
 assert.ok(!ux.includes('loadStylesheet'), 'Controllerul UX nu trebuie să mai injecteze un stylesheet la runtime');
 assert.ok(!ux.includes('ux-upgrades.css'), 'Controllerul UX nu trebuie să mai depindă de stylesheet-ul legacy');
@@ -64,4 +78,4 @@ for (const marker of [
 }
 
 assert.ok(!ux.includes("href='../ofiter"), 'Upgrade-urile publice nu trebuie să expună ruta Ofițer');
-console.log('UX upgrades: Pedepse fără calculateAll monkey-patch; controller UX fără CSS injectat la runtime.');
+console.log('UX upgrades: controller declarat per pagină, fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
