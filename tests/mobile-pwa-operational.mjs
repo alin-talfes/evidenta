@@ -13,6 +13,9 @@ const contopiriHtml = read('contopiri/index.html');
 const transferHtml = read('transfer/index.html');
 const transferRulesHtml = read('transfer/rules/index.html');
 const rules = read('js/rules.js');
+const app = read('js/app.js');
+const ui = read('js/ui.js');
+const storage = read('js/storage.js');
 const nav = read('js/operational-navigation.js');
 const pedepse = read('js/operational-pedepse.js');
 const ai = read('js/operational-ai.js');
@@ -29,7 +32,6 @@ const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
 const pwa = read('js/pwa-register.js');
 const modes = read('js/pedepse-modes-v5.js');
-const prison = read('js/pedepse-prison-date.js');
 
 // version.js este exclusiv identitate/versionare, nu loader de controllere.
 for (const retiredLoader of [
@@ -55,9 +57,11 @@ for (const [file, html] of [
   for (const script of sharedScripts) assert.ok(html.includes(script), `${file} trebuie să declare ${script}`);
 }
 
-for (const marker of ['operational-pedepse.js?v=3', 'pedepse-modes-v5.js?v=1', 'pedepse-optional-fix-v2.js?v=1', 'pedepse-prison-date.js?v=1', 'pedepse-ux.js?v=2', 'quarantine-ui.js?v=2']) {
+for (const marker of ['operational-pedepse.js?v=3', 'pedepse-modes-v5.js?v=2', 'pedepse-optional-fix-v2.js?v=1', 'pedepse-ux.js?v=2', 'quarantine-ui.js?v=2']) {
   assert.ok(rootHtml.includes(marker), `Pedepse trebuie să declare ${marker}`);
 }
+assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=5'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
+assert.ok(!rootHtml.includes('pedepse-prison-date.js'), 'Controllerul dinamic pentru data intrării trebuie eliminat.');
 assert.ok(aiHtml.includes('operational-ai.js?v=3'));
 assert.ok(aiHtml.includes('ai/result-pedepse.js?v=1'));
 assert.ok(contopiriHtml.includes('operational-contopiri.js?v=2'));
@@ -122,9 +126,20 @@ assert.equal([...mobile.matchAll(/position\s*:\s*fixed\s*!important/gi)].length,
 assert.ok(!modules.includes('position:fixed'));
 assert.ok(!modules.includes('position:sticky'));
 
-for (const marker of ['Calcul rapid', 'Calcul complet LC', 'Măsuri preventive', 'data-masuri-days', '[30, 60]']) assert.ok(modes.includes(marker));
-for (const marker of ['setupControl', 'validateBeforeCalculation', 'prisonReceivedSameAsStart']) assert.ok(prison.includes(marker));
-assert.ok(!prison.includes('window.calculateAll ='));
+for (const marker of ['Calcul rapid', 'Calcul complet LC', 'Măsuri preventive']) assert.ok(modes.includes(marker));
+assert.ok(!modes.includes('ensureStyles'));
+assert.ok(!modes.includes("document.createElement('link')"));
+assert.ok(!modes.includes('[30, 60]'), 'Preseturile 30/60 trebuie să existe în markup, nu să fie construite dinamic.');
+for (const marker of ['id="prisonReceivedControl"', 'id="prisonReceivedSameAsStart"', 'id="prisonReceivedDateField"', 'data-masuri-days="30"', 'data-masuri-days="60"']) {
+  assert.ok(rootHtml.includes(marker), `Markup-ul static Pedepse trebuie să includă ${marker}`);
+}
+assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-prison-date.js')), 'Controllerul prison-date trebuie eliminat după staticizarea markup-ului.');
+for (const marker of ['syncPrisonReceivedControl', 'isFullPedepseMode', 'syncPreventiveDayPresets', 'setPreventiveDays', 'Introduceți data intrării în penitenciar/centru.']) {
+  assert.ok(app.includes(marker), `app.js trebuie să dețină logica statică ${marker}`);
+}
+assert.ok(ui.includes("dispatchEvent(new Event('input', { bubbles: true }))"), 'setToday trebuie să emită input pentru recalculări și sincronizare.');
+assert.ok(storage.includes('prisonReceivedSameAsStart'), 'Stocarea trebuie să păstreze explicit starea datei intrării.');
+assert.ok(storage.includes('syncPrisonReceivedControl'), 'Încărcarea spețelor trebuie să sincronizeze controlul static al datei intrării.');
 
 for (const marker of ['css/mobile.css?v=1', 'css/mobile-modules.css', 'initBottomNavLayout', 'evidenta:mobile-nav-ready', "matchMedia?.('(max-width: 760px)')", "matchMedia?.('(display-mode: standalone)')"]) {
   assert.ok(pwa.includes(marker), `PWA lifecycle trebuie să includă ${marker}`);
@@ -133,8 +148,9 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v35'"));
-assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|disclosure-hardening'));
+assert.ok(sw.includes("const VERSION = 'v36'"));
+assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
+assert.ok(!sw.includes('pedepse-prison-date'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
   assert.ok(sw.includes(`./js/${file}.js`), `SW trebuie să includă ${file}`);
 }
@@ -154,4 +170,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: controllere declarative per pagină, release guards integrate în core, version.js identity-only și lifecycle PWA determinist.');
+console.log('Mobile/PWA audit: controllere declarative per pagină, controale Pedepse statice, version.js identity-only și lifecycle PWA determinist.');
