@@ -8,6 +8,7 @@ const here=path.dirname(fileURLToPath(import.meta.url));
 const root=path.dirname(here);
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 const source=read('js/deduction-ui.js');
+const ui=read('js/ui.js');
 const storage=read('js/storage.js');
 const context={console,Date,Math,Number,String,Array,Object,Set,JSON,globalThis:null};
 context.globalThis=context;
@@ -49,12 +50,15 @@ assert(!source.includes('root.populateStoredCase ='),'deduction-ui nu trebuie s�
 assert(!source.includes('root.getInputData ='),'deduction-ui nu trebuie să suprascrie exportul');
 assert(!source.includes('root.calculateAll ='),'deduction-ui nu trebuie să suprascrie motorul de calcul');
 
+assert(!ui.includes('function addDedRow()'),'ui.js nu trebuie să păstreze o a doua implementare pentru rândurile de deducere');
+assert(!ui.includes('function updDed('),'ui.js nu trebuie să păstreze calculatorul legacy al deducerilor');
 assert(storage.includes('ManualDeductionRules?.collectRows?.()'),'Storage trebuie să folosească direct API-ul deducerilor');
 assert(storage.includes("type: r.type || 'generic'"),'Spețele legacy fără tip trebuie restaurate ca perioadă generică');
 assert(storage.includes('addDedRow({'),'Restaurarea trebuie să transmită direct tipul și intervalul către addDedRow');
 
 const index=read('index.html');
+assert(index.includes('js/ui.js?v=39'),'Pedepse trebuie să încarce versiunea curentă a controllerului UI general');
 assert(index.includes('js/deduction-ui.js?v=2'),'Pedepse trebuie să încarce versiunea curentă a regulilor manuale de deducere');
 assert(index.indexOf('js/deduction-ui.js?v=2')>index.indexOf('js/app.js?v=39'),'Regulile de deducere trebuie încărcate după motor, fără să îl suprascrie');
 
-console.log('Pedepse manual: API explicit pentru deduceri, fără listener de calcul, monkey-patch sau timer; reținere 24h = 1 zi.');
+console.log('Pedepse manual: deduction-ui este proprietarul unic al rândurilor tipizate; fără listener de calcul, monkey-patch sau timer; reținere 24h = 1 zi.');
