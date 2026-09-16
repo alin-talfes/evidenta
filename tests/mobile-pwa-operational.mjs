@@ -60,7 +60,7 @@ for (const [file, html] of [
   for (const script of sharedScripts) assert.ok(html.includes(script), `${file} trebuie să declare ${script}`);
 }
 
-for (const marker of ['operational-pedepse.js?v=5', 'pedepse-optional.js?v=1', 'pedepse-ux.js?v=4', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
+for (const marker of ['operational-pedepse.js?v=6', 'pedepse-optional.js?v=1', 'pedepse-ux.js?v=4', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
   assert.ok(rootHtml.includes(marker), `Pedepse trebuie să declare ${marker}`);
 }
 assert.ok(!rootHtml.includes('pedepse-optional-fix-v2.js'), 'Pedepse nu trebuie să mai încarce controllerul optional de compatibilitate.');
@@ -80,6 +80,9 @@ for (const marker of [
   'Calcul complet LC',
   'Măsuri preventive',
   'class="ev-preventive-mode-panel"',
+  'class="ev-mobile-lc-details"',
+  'Liberare condiționată și date PPL',
+  'class="card ev-lc-controls-card"',
   'class="ev-optional-tools card"',
   'id="recursCard"',
   'id="nonExecCard"',
@@ -127,13 +130,13 @@ for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOffic
 }
 for (const marker of [
   'quickCalculate', 'setMode', 'function calculate()', 'EvidentaPedepseOperational',
-  'syncQuickResultControls', 'buildMobileDisclosure', 'Liberare condiționată și date PPL',
-  'EvidentaPedepseOptional?.revealInvalid?.()', 'ev-prefill-banner', 'aria-live'
+  'syncQuickResultControls', 'EvidentaPedepseOptional?.revealInvalid?.()', 'ev-prefill-banner', 'aria-live'
 ]) {
   assert.ok(pedepse.includes(marker), `Pedepse trebuie să includă ${marker}`);
 }
-assert.ok(!pedepse.includes('Opțiuni avansate'), 'Pedepse nu trebuie să mai construiască wrapper-ul mobil redundant al opțiunilor.');
-assert.ok(!pedepse.includes('ev-mobile-advanced-details'), 'Pedepse nu trebuie să mai mute Situațiile suplimentare într-un al doilea disclosure.');
+for (const forbidden of ['buildMobileDisclosure', 'detailsShell', "document.createElement('details')", 'Opțiuni avansate', 'ev-mobile-advanced-details']) {
+  assert.ok(!pedepse.includes(forbidden), `Pedepse nu trebuie să mai reconstruiască disclosure-uri la runtime: ${forbidden}`);
+}
 assert.ok(!pedepse.includes('stopImmediatePropagation'), 'Modurile Pedepse nu trebuie să coopereze prin blocarea propagării evenimentului.');
 assert.ok(!pedepse.includes("document.createElement('div');\n    mode.className = 'ev-calc-mode'"), 'Selectorul de mod trebuie să existe în HTML, nu să fie construit de controller.');
 assert.ok(!pedepse.includes('observe(document.body'));
@@ -191,6 +194,7 @@ assert.ok(!ui.includes('function addDedRow()'), 'ui.js nu trebuie să dubleze im
 assert.ok(!ui.includes('function updDed('), 'ui.js nu trebuie să dubleze calculatorul deducerilor.');
 assert.ok(storage.includes('prisonReceivedSameAsStart'), 'Stocarea trebuie să păstreze explicit starea datei intrării.');
 assert.ok(storage.includes('syncPrisonReceivedControl'), 'Încărcarea spețelor trebuie să sincronizeze controlul static al datei intrării.');
+assert.ok(storage.includes('EvidentaPedepseOptional?.syncFromValues?.()'), 'Încărcarea spețelor trebuie să sincronizeze explicit Situațiile suplimentare.');
 
 for (const marker of ['validateCalculation', 'runCalculation', 'afterCalculation', 'enhanceCalculationResult']) {
   assert.ok(pedepseUx.includes(marker), `pedepse-ux trebuie să expună fluxul explicit ${marker}`);
@@ -250,4 +254,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional.
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: modurile și Situațiile suplimentare Pedepse au controllere unice, markup declarativ și fără compatibilitate legacy; lifecycle-ul PWA rămâne route-owned.');
+console.log('Mobile/PWA audit: LC și Situațiile suplimentare Pedepse sunt declarative, controllerele nu reconstruiesc DOM-ul, iar lifecycle-ul PWA rămâne route-owned.');
