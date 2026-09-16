@@ -10,6 +10,7 @@
 
   const LEGACY_MOBILE_STYLE_NAMES = [
     'pwa-mobile.css',
+    'mobile-operational-v2.css',
     'mobile-no-floating-v1.css',
     'mobile-no-floating-v2.css',
     'mobile-bottom-nav-clearance-v2.css',
@@ -183,7 +184,7 @@
       type:'PRECACHE_OPTIONAL',
       paths:[
         './','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/',
-        './css/mobile.css'
+        './css/mobile.css','./css/mobile-modules.css'
       ]
     });
   }
