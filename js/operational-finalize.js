@@ -22,6 +22,21 @@
     return '';
   }
 
+  function normalizeDateInputs() {
+    document.querySelectorAll('.date-masked').forEach(input => {
+      if (!input.getAttribute('inputmode')) input.setAttribute('inputmode', 'numeric');
+      if (!input.getAttribute('autocomplete')) input.setAttribute('autocomplete', 'off');
+    });
+  }
+
+  function removeOfficerSuiteNav() {
+    const officerPage = String(document.body?.dataset.evPage || '').startsWith('ofiter') || location.pathname.includes('/ofiter/');
+    if (!officerPage) return;
+    document.querySelector('.ev-mobile-nav')?.remove();
+    document.querySelector('.ev-mobile-more-sheet')?.remove();
+    document.body.classList.remove('ev-mobile-more-open');
+  }
+
   function normalizeGlobalNav() {
     if (String(document.body?.dataset.evPage || '').startsWith('ofiter')) return;
     const nav = document.querySelector('.ev-shell__nav');
@@ -165,6 +180,10 @@
         improvePrefillBanner();
       }
       if (kind === 'all' || kind === 'ai') annotateAiOpenEndedDeductions();
+      if (kind === 'all') {
+        normalizeDateInputs();
+        removeOfficerSuiteNav();
+      }
     });
   }
 
@@ -184,6 +203,8 @@
   }
 
   function init() {
+    normalizeDateInputs();
+    removeOfficerSuiteNav();
     normalizeGlobalNav();
     installAiToPedepseGuard();
     annotateAiOpenEndedDeductions();
