@@ -229,7 +229,7 @@ function calculateAll() {
         errC.classList.add('visible');
         return;
     }
-    steps.push(`Perioadele deduse însumează ${ded} zile, după unificarea suprapunerilor.`);
+    steps.push(`Perioadele deduse însumează ${ded} zile prin însumarea integrală a intervalelor introduse; eventualele suprapuneri sunt semnalate separat.`);
 
     const nonRawRows = [];
     const nonRowsData = [];
@@ -246,7 +246,7 @@ function calculateAll() {
     });
     const nonOverlapInfo = findIntervalOverlaps(nonRawRows.map(r => [r.start, r.end]));
     const non = sumNonExecutedPeriods(nonRawRows);
-    steps.push(`Perioadele care nu se consideră executate însumează ${non} zile după eliminarea dublării suprapunerilor.`);
+    steps.push(`Perioadele care nu se consideră executate însumează ${non} zile prin însumarea integrală a intervalelor efective; eventualele suprapuneri sunt semnalate separat.`);
 
     let realExp = null;
     if (!life) {
@@ -413,8 +413,8 @@ function calculateAll() {
 
     if (dedOverlapInfo.length || nonOverlapInfo.length) {
         html += `<div class="result-section overlap-notice"><h4>INFORMARE SUPRAPUNERI</h4>
-            ${dedOverlapInfo.length ? `<p>Există ${dedOverlapInfo.length} suprapunere(i) între perioadele deduse. Zilele comune au fost numărate o singură dată.</p>` : ''}
-            ${nonOverlapInfo.length ? `<p>Există ${nonOverlapInfo.length} suprapunere(i) între perioadele neexecutate. Zilele comune au fost numărate o singură dată.</p>` : ''}
+            ${dedOverlapInfo.length ? `<p>Există ${dedOverlapInfo.length} suprapunere(i) între perioadele deduse. Intervalele sunt calculate integral, inclusiv porțiunile suprapuse. Verifică dacă suprapunerea este intenționată.</p>` : ''}
+            ${nonOverlapInfo.length ? `<p>Există ${nonOverlapInfo.length} suprapunere(i) între perioadele neexecutate. Intervalele efective sunt calculate integral, inclusiv porțiunile suprapuse. Verifică dacă suprapunerea este intenționată.</p>` : ''}
         </div>`;
     }
 
