@@ -62,16 +62,17 @@ assert.ok(index.includes('pedepse-modes-v4.js?v=1'), 'Pagina Pedepse trebuie să
 assert.ok(index.includes('operational-corrections-v4.js?v=1'), 'Pagina Pedepse trebuie să încarce direct corecțiile fără observer înainte de loader-ele posibil cache-uite.');
 assert.ok(!corrections.includes('new MutationObserver'), 'Corecțiile operaționale Pedepse nu trebuie să instaleze MutationObserver permanent.');
 assert.ok(!corrections.includes('bodyObserver'), 'Corecțiile operaționale nu trebuie să observe întreg document.body.');
-assert.ok(corrections.includes('no-nonoptional-disclosures-v1.js?v=1'), 'Corecțiile operaționale trebuie să încarce politica globală fără spoilere ne-opționale.');
+assert.ok(corrections.includes('no-nonoptional-disclosures-v1.js?v=2'), 'Corecțiile operaționale trebuie să încarce versiunea curentă a politicii fără spoilere ne-opționale.');
 assert.ok(corrections.includes('if (next !== text) paragraph.textContent = next'), 'Rescrierea mesajelor trebuie să fie idempotentă și să evite mutații DOM identice.');
 assert.ok(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(index), 'index.html nu trebuie să conțină script inline.');
 assert.ok(modesCss.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), 'Cele trei moduri trebuie aliniate în trei coloane egale.');
 assert.ok(modesCss.includes('@media (max-width:600px)'), 'Cele trei moduri trebuie să aibă layout dedicat pe telefon.');
 assert.ok(modesCss.includes('@media (max-width:380px)'), 'Etichetele celor trei moduri trebuie să rămână lizibile și pe telefoane înguste.');
 
-for (const marker of ['OPTIONAL_DETAILS_SELECTOR','details.ev-mobile-advanced-details','.ev-optional-tools details','details[data-ev-optional="true"]','details.open = true','replaceSummary','evStaticDisclosure','[data-notice-toggle], [data-saved-toggle]']) {
+for (const marker of ['OPTIONAL_DETAILS_SELECTOR','details.ev-mobile-advanced-details','.ev-optional-tools details','details[data-ev-optional="true"]','details.open = true','neutralizeSummary','evStaticDisclosure','::-webkit-details-marker','pointer-events:none','[data-notice-toggle], [data-saved-toggle]']) {
   assert.ok(noSpoilers.includes(marker), `Politica optional-only pentru carduri collapsable trebuie să includă ${marker}`);
 }
+assert.ok(!noSpoilers.includes('replaceSummary'), 'Un summary ne-opțional nu trebuie eliminat: Safari afișează fallback-ul „Details” dacă <details> rămâne fără <summary>.');
 assert.ok(!noSpoilers.includes('new MutationObserver'), 'Politica anti-spoiler nu trebuie să introducă MutationObserver global.');
 assert.ok(noSpoilers.includes("document.addEventListener('click'"), 'Cardurile dinamice trebuie normalizate după interacțiuni fără observer permanent.');
 
@@ -103,7 +104,7 @@ for (const marker of ['--ev-mobile-nav-safe-height','--ev-mobile-content-clearan
   assert.ok(navClearanceCss.includes(marker), `Clearance-ul bottom-nav trebuie să includă ${marker}`);
 }
 
-for (const marker of ['service worker',"const VERSION = 'v12'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/no-nonoptional-disclosures-v1.js','./js/pedepse-modes-v4.js','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js','./semnalmente/enhancements.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v2.css','./css/mobile-runtime-fixes-v2.css']) {
+for (const marker of ['service worker',"const VERSION = 'v13'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/no-nonoptional-disclosures-v1.js','./js/pedepse-modes-v4.js','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js','./semnalmente/enhancements.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v2.css','./css/mobile-runtime-fixes-v2.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
 assert.ok(sw.includes('no-nonoptional-disclosures-v1'), 'Politica anti-spoiler trebuie servită network-first, nu din cache stale.');
@@ -118,4 +119,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'), 'Manifestul trebuie să păstreze shortcut-ul AI.');
 
-console.log('Mobile/PWA audit: moduri Pedepse, doar opționalele pot fi collapsable, LC/PPL static, măsuri preventive separate, Opțiuni avansate fără suprapunere cu acțiunea sticky, corecții fără observer global, bottom-nav fără suprapunere, runtime critic network-first, cache guard, viewport iPhone/Android, camere, prefill și offline verificate.');
+console.log('Mobile/PWA audit: moduri Pedepse, doar opționalele pot fi collapsable, fără fallback Safari „Details”, LC/PPL static, măsuri preventive separate, Opțiuni avansate fără suprapunere cu acțiunea sticky, corecții fără observer global, bottom-nav fără suprapunere, runtime critic network-first, cache guard, viewport iPhone/Android, camere, prefill și offline verificate.');
