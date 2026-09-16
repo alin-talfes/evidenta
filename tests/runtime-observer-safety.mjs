@@ -16,7 +16,6 @@ const operationalControllers = [
   'js/operational-instructaj.js',
   'js/operational-semnalmente.js'
 ].map(file => [file, read(file)]);
-const finalize = read('js/operational-finalize.js');
 const mobile = read('js/mobile-operational-v2.js');
 const semnalmente = read('semnalmente/enhancements.js');
 
@@ -25,9 +24,8 @@ const broadBodyChildObserver = /\.observe\(document\.body\s*,\s*\{[^}]*childList
 for (const [file, source] of operationalControllers) {
   assert.ok(!broadBodyChildObserver.test(source), `${file} nu trebuie să observe permanent întreg document.body pentru childList/subtree.`);
 }
-assert.ok(!broadBodyChildObserver.test(finalize), 'Operational finalizer nu trebuie să observe permanent întreg document.body pentru childList/subtree.');
 assert.ok(!broadBodyChildObserver.test(mobile), 'Controllerul mobil nu trebuie să observe childList/subtree pe întreg document.body.');
-assert.ok(!finalize.includes('new MutationObserver'), 'Finalizerul trebuie să folosească refresh-uri determinate de evenimente, nu MutationObserver global.');
+assert.ok(!fs.existsSync(path.join(root, 'js/operational-finalize.js')), 'Finalizerul operațional intermediar trebuie eliminat.');
 
 const contopiri = read('js/operational-contopiri.js');
 const transfer = read('js/operational-transfer.js');
@@ -46,4 +44,4 @@ assert.ok(
   'Observerul Semnalmente, dacă există, trebuie să rămână limitat la results-grid.'
 );
 
-console.log('Runtime observer safety: controllere modulare fără observatori globali și observatori locali limitați la containerele lor.');
+console.log('Runtime observer safety: controllere modulare fără finalizer global și observatori locali limitați la containerele lor.');
