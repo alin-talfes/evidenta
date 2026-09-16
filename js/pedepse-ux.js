@@ -398,8 +398,16 @@
 
   function runCalculation(calculate) {
     if (!isFullCalculationMode() || typeof calculate !== 'function') return;
+
+    window.ManualDeductionRules?.syncRowsForCalculation?.();
     if (!validateCalculation()) return;
+
+    const previousCalculation = window.lastCalculation;
     calculate();
+    if (!window.lastCalculation || window.lastCalculation === previousCalculation || $('#errorContainer')?.classList.contains('visible')) return;
+
+    window.ManualDeductionRules?.enrichLastCalculation?.();
+    window.QuarantineUi?.enhance?.();
     afterCalculation();
   }
 
