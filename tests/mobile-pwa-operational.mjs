@@ -13,16 +13,14 @@ const corrections = read('js/operational-corrections-v4.js');
 const noSpoilers = read('js/no-nonoptional-disclosures-v1.js');
 const finalize = read('js/operational-finalize.js');
 const mobile = read('js/mobile-operational-v2.js');
-const mobileCss = read('css/mobile-operational-v2.css');
-const mobileRuntimeFix = read('css/mobile-runtime-fixes-v2.css');
+const mobilePolicy = read('css/mobile.css');
+const mobileModules = read('css/mobile-modules.css');
 const modes = read('js/pedepse-modes-v4.js');
 const kill = read('js/pedepse-modes-v3-kill.js');
 const modesCss = read('css/pedepse-modes-v3.css');
 const disclosure = read('js/disclosure-hardening.js');
 const disclosureCss = read('css/disclosure-hardening.css');
 const pwa = read('js/pwa-register.js');
-const pwaCss = read('css/pwa-mobile.css');
-const navClearanceCss = read('css/mobile-bottom-nav-clearance-v5.css');
 const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
 const index = read('index.html');
@@ -39,9 +37,13 @@ for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToP
 assert.ok(finalize.includes('openEndedOmitted'));
 assert.ok(finalize.includes('normalizeGlobalNav'));
 
-for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','+ REȚINERE 24H','FOTOGRAFIAZĂ MANDATUL','capture','compactContopiriResult','compactTransfer','compactSemnalmente']) {
+for (const marker of ['Liberare condiționată și date PPL','Opțiuni avansate','FOTOGRAFIAZĂ MANDATUL','capture','compactContopiriResult','compactTransfer','compactSemnalmente']) {
   assert.ok(mobile.includes(marker), `Controllerul mobil trebuie să includă ${marker}`);
 }
+assert.ok(!mobile.includes('+ REȚINERE 24H'), 'Controllerul mobil nu trebuie să recreeze scurtătura pentru reținere.');
+assert.ok(!mobile.includes('addRetentionPreset'), 'Fluxul pentru deduceri trebuie să rămână unic prin + Adaugă.');
+assert.ok(mobile.includes('css/mobile-modules.css'));
+assert.ok(!mobile.includes('css/mobile-operational-v2.css'));
 assert.ok(mobile.includes('lc.details.open = true'));
 assert.ok(mobile.includes("const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];"));
 assert.ok(!mobile.includes('regime-multiple-heading'));
@@ -72,40 +74,53 @@ for (const marker of ['DETAILS_SELECTOR','aria-expanded','aria-controls','repair
   assert.ok(disclosure.includes(marker));
 }
 assert.ok(disclosureCss.includes('.ev-mobile-advanced-details:not([open])'));
-assert.ok(mobileCss.includes('@media (max-width:600px)'));
-assert.ok(mobileCss.includes('font-size:16px'));
 
-assert.ok(index.includes('mobile-runtime-fixes-v2.css?v=1'));
-for (const marker of ['--ev-quick-sticky-action-height','.ev-mobile-advanced-details:not([open])','scroll-margin-bottom:calc(150px + env(safe-area-inset-bottom, 0px))']) {
-  assert.ok(mobileRuntimeFix.includes(marker));
+/* Politica mobilă canonică: un singur scroll; numai bottom nav este persistent. */
+for (const marker of ['html.ev-mobile-nav-layout','overflow-y:auto !important','overflow:visible !important','.ev-operational-search','.ev-calc-mode','.analysis-panel','.sidebar','.quiz-top','.page-actions','.ev-mobile-nav','position:fixed !important','bottom:0 !important']) {
+  assert.ok(mobilePolicy.includes(marker), `css/mobile.css trebuie să includă ${marker}`);
 }
+assert.ok(mobilePolicy.includes('#sentenceDuration'));
+assert.ok(mobilePolicy.includes('grid-template-columns:repeat(3, minmax(0, 1fr))'));
+assert.ok(mobilePolicy.includes('body.ev-unified[data-ev-page="pedepse"] .btn-row'));
+assert.ok(mobilePolicy.includes('position:static !important'));
+assert.ok(!mobilePolicy.includes('position:sticky'), 'Politica mobilă canonică nu trebuie să conțină sticky.');
 
-for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport','ev-ios','ev-android','navigator.onLine','ensureBottomNavClearance','mobile-bottom-nav-clearance-v5.css?v=1','ev-mobile-nav-layout','clearLegacyBottomNavState','syncBottomNavLayout']) {
+const fixedDeclarations = [...mobilePolicy.matchAll(/position\s*:\s*fixed\s*!important/gi)];
+assert.equal(fixedDeclarations.length, 1, 'În css/mobile.css numai bottom nav trebuie să aibă position:fixed.');
+
+assert.ok(mobileModules.includes('@media (max-width:600px)'));
+assert.ok(mobileModules.includes('.deduction-row'));
+assert.ok(mobileModules.includes('.ai-table'));
+assert.ok(!mobileModules.includes('position:fixed'));
+assert.ok(!mobileModules.includes('position:sticky'));
+assert.ok(!mobileModules.includes('.ev-retention-preset'));
+assert.ok(!mobileModules.includes('bottom:calc(66px'));
+
+assert.ok(!index.includes('mobile-runtime-fixes-v2.css'), 'index.html nu trebuie să încarce vechiul hotfix mobil.');
+
+for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport','ev-ios','ev-android','navigator.onLine','ensureMobileStyle','css/mobile.css?v=1','mobile-operational-v2.css','ev-mobile-nav-layout','clearLegacyBottomNavState','syncBottomNavLayout','css/mobile-modules.css']) {
   assert.ok(pwa.includes(marker), `Controllerul PWA trebuie să includă ${marker}`);
 }
-assert.ok(!pwa.includes('new ResizeObserver'), 'Bottom-nav nu trebuie să reinstaleze un ResizeObserver care își poate auto-declanșa relayout-ul.');
-assert.ok(!pwa.includes('scheduleBottomNavMetrics'), 'Controllerul v5 nu trebuie să păstreze bucla de măsurare din v4.');
-assert.ok(pwaCss.includes('ev-offline-badge'));
+assert.ok(!pwa.includes('new ResizeObserver'));
+assert.ok(!pwa.includes('scheduleBottomNavMetrics'));
 
-for (const marker of ['html.ev-mobile-nav-layout','display: flex !important','flex-direction: column !important','body > .container','body > main','body > .app-shell','overflow-y: auto !important','position: relative !important','padding-bottom: 0 !important','.ev-mobile-nav-clearance-spacer']) {
-  assert.ok(navClearanceCss.includes(marker), `Layout-ul bottom-nav v5 trebuie să includă ${marker}`);
-}
-assert.ok(!navClearanceCss.includes('var(--ev-mobile-nav-live-height)'), 'v5 nu trebuie să calculeze înălțimea layout-ului din măsurători runtime ale nav-ului.');
-assert.ok(!navClearanceCss.includes('position: fixed'), 'v5 trebuie să scoată bottom-nav-ul din overlay-ul fixed.');
-
-for (const marker of ['service worker',"const VERSION = 'v16'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./css/mobile-bottom-nav-clearance-v5.css']) {
+for (const marker of ['service worker',"const VERSION = 'v19'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./css/mobile.css','./css/mobile-modules.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
-assert.ok(sw.includes('mobile-bottom-nav-clearance-v[2345]'));
+for (const legacy of ['mobile-bottom-nav-clearance-v5.css','mobile-no-floating-v2.css','pwa-mobile.css','mobile-runtime-fixes-v2.css','mobile-operational-v2.css']) {
+  assert.ok(!sw.includes(`./css/${legacy}`), `Service Worker-ul principal nu trebuie să precache-uiască ${legacy}`);
+}
 assert.ok(!sw.includes('./js/regime-reanalysis.js'));
 
-for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v9','evidenta-ai-runtime-v9','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pwa-register.js','../css/mobile-bottom-nav-clearance-v5.css','isCriticalSharedRuntime']) {
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v10','evidenta-ai-runtime-v10','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pwa-register.js','../css/mobile.css','../css/mobile-modules.css','isCriticalSharedRuntime']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să includă ${marker}`);
 }
-assert.ok(aiSw.includes('(?:version|pwa-register)'));
+assert.ok(aiSw.includes('(?:version|pwa-register|mobile-operational-v2)'));
+assert.ok(!aiSw.includes('../css/mobile-bottom-nav-clearance-v5.css'));
+assert.ok(!aiSw.includes('../css/mobile-operational-v2.css'));
 
 assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: bottom-nav este rând de layout, nu overlay fixed; nu există buclă ResizeObserver de măsurare; modulele scroll-ează deasupra nav-ului și cache-ul critic este network-first.');
+console.log('Mobile/PWA audit: un singur stylesheet de politică mobilă, module responsive separate, un singur scroll și numai bottom nav persistent.');
