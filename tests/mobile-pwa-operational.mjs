@@ -14,6 +14,9 @@ const contopiri = read('js/operational-contopiri.js');
 const transfer = read('js/operational-transfer.js');
 const instructaj = read('js/operational-instructaj.js');
 const semnalmente = read('js/operational-semnalmente.js');
+const noSpoilers = read('js/no-nonoptional-disclosures-v1.js');
+const disclosure = read('js/disclosure-hardening-v2.js');
+const disclosureCss = read('css/disclosure-hardening.css');
 const mobile = read('css/mobile.css');
 const modules = read('css/mobile-modules.css');
 const sw = read('sw.js');
@@ -30,6 +33,9 @@ for (const marker of [
 assert.ok(version.includes('ensureGlobalOperationalControllers'));
 assert.ok(version.includes('ensurePedepseOperationalControllers'));
 assert.ok(version.includes('if (isPedepsePage(p)) ensurePedepseOperationalControllers();'));
+assert.ok(version.includes('css/disclosure-hardening.css?v=2'));
+assert.ok(version.includes('no-nonoptional-disclosures-v1.js?v=3'));
+assert.ok(version.includes('disclosure-hardening-v2.js?v=2'));
 
 for (const retired of ['operational-upgrades.js', 'operational-finalize.js', 'operational-corrections-v4']) {
   assert.ok(!version.includes(retired), `${retired} nu trebuie încărcat`);
@@ -53,6 +59,19 @@ assert.ok(transfer.includes('addTransferCopy'));
 assert.ok(instructaj.includes('CĂUTARE OPERATIVĂ'));
 assert.ok(semnalmente.includes("setAttribute('capture', 'environment')"));
 
+assert.ok(noSpoilers.includes('queueMicrotask'));
+assert.ok(noSpoilers.includes('EvidentaDisclosurePolicy'));
+assert.ok(!noSpoilers.includes('document.createElement(\'style\')'));
+assert.ok(!noSpoilers.includes('setTimeout'));
+assert.ok(!noSpoilers.includes('scheduleNormalize'));
+assert.ok(disclosure.includes('queueMicrotask'));
+assert.ok(disclosure.includes('EvidentaDisclosureA11y'));
+assert.ok(!disclosure.includes('setTimeout'));
+assert.ok(!disclosure.includes('document.createElement(\'link\')'));
+for (const marker of ['data-ev-static-disclosure', 'ev-static-disclosure-title', 'pointer-events:none', '::-webkit-details-marker']) {
+  assert.ok(disclosureCss.includes(marker), `CSS disclosure trebuie să includă ${marker}`);
+}
+
 assert.ok(!mobile.includes('position:sticky'));
 assert.equal([...mobile.matchAll(/position\s*:\s*fixed\s*!important/gi)].length, 1, 'Numai bottom nav trebuie să fie fixed');
 assert.ok(!modules.includes('position:fixed'));
@@ -66,7 +85,8 @@ assert.ok(pwa.includes('css/mobile.css?v=1'));
 assert.ok(pwa.includes('css/mobile-modules.css'));
 assert.ok(!pwa.includes('new ResizeObserver'));
 
-assert.ok(sw.includes("const VERSION = 'v29'"));
+assert.ok(sw.includes("const VERSION = 'v30'"));
+assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|disclosure-hardening'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
   assert.ok(sw.includes(`./js/${file}.js`), `SW trebuie să includă ${file}`);
 }
@@ -78,9 +98,10 @@ assert.ok(aiSw.includes('../js/operational-navigation.js'));
 assert.ok(aiSw.includes('../js/operational-ai.js'));
 assert.ok(aiSw.includes('../js/no-nonoptional-disclosures-v1.js'));
 assert.ok(aiSw.includes('../js/disclosure-hardening-v2.js'));
+assert.ok(aiSw.includes('../css/disclosure-hardening.css'));
 for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-fix-v2.js', '../css/pedepse-modes-v3.css']) {
   assert.ok(!aiSw.includes(pedepseOnly), `AI SW nu trebuie să precache-uiască ${pedepseOnly}`);
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: controllere modulare, Pedepse încărcat doar pe ruta sa și numai bottom nav fixed.');
+console.log('Mobile/PWA audit: disclosure determinist fără CSS injectat/timer retries, controllere modulare și numai bottom nav fixed.');
