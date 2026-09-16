@@ -105,8 +105,8 @@ for (const file of ['operational-navigation', 'operational-pedepse', 'operationa
 assert.ok(!sw.includes('mobile-operational-v2'));
 assert.ok(!sw.includes('operational-finalize'));
 
-assert.ok(aiSw.includes('evidenta-ai-shell-v17'));
-assert.ok(aiSw.includes('evidenta-ai-runtime-v17'));
+assert.ok(aiSw.includes('evidenta-ai-shell-v18'));
+assert.ok(aiSw.includes('evidenta-ai-runtime-v18'));
 assert.ok(aiSw.includes('../js/operational-navigation.js'));
 assert.ok(aiSw.includes('../js/operational-ai.js'));
 assert.ok(aiSw.includes('../js/no-nonoptional-disclosures-v1.js'));
