@@ -47,7 +47,7 @@ let lifeStart=new Date(2026,7,29), lifeBirth=new Date(1980,0,1);
 let lifeCalc=lr.__schedule({life:true,art:'NCP99',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
 assert.equal(lifeCalc.mDays,7305); assert.equal(lifeCalc.tDays,7305); assert.equal(lifeCalc.mDate.getFullYear(),2046); assert.equal(lifeCalc.mDate.getMonth(),7); assert.equal(lifeCalc.mDate.getDate(),28);
 let vcpLife=lr.__schedule({life:true,art:'VCP551',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
-let vcp15End=lr.__add(lifeStart,15,0,0); vcp15End.setDate(vcp15End.getDate()-1); let vcp15Days=lr.__days(lifeStart,vcp15End)+1;
+let vcp15End=u.__add(lifeStart,15,0,0); vcp15End.setDate(vcp15End.getDate()-1); let vcp15Days=u.__days(lifeStart,vcp15End)+1;
 assert.equal(vcpLife.mDays,vcp15Days); assert.equal(vcpLife.tDays,vcp15Days); assert(vcpLife.vcpLifeElderlyApplied); assert(vcpLife.articleInfo.includes('VCP art. 55¹'));
 
 let transitionStart=new Date(2026,0,1), transitionBirth=new Date(1968,0,1), transitionEnd=new Date(2030,11,31);
