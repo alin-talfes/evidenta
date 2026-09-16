@@ -66,6 +66,10 @@ function syncRowForCalculation(r){
     if (type === TYPE_RETENTION_24H && startInput && endInput) endInput.value = startInput.value;
 }
 
+function syncRowsForCalculation(){
+    document.querySelectorAll('.deduction-row').forEach(syncRowForCalculation);
+}
+
 function syncDeductionRow(r){
     if (!r) return;
     const type = normalizeType(r.querySelector('.ded-type')?.value || TYPE_GENERIC);
@@ -140,56 +144,33 @@ root.addDedRow = function(initial = {}){
 
 root.updDed = syncDeductionRow;
 
-const originalCollectStoredCaseData = typeof root.collectStoredCaseData === 'function' ? root.collectStoredCaseData : null;
-if (originalCollectStoredCaseData) {
-    root.collectStoredCaseData = function(){
-        const data = originalCollectStoredCaseData();
-        data.dedRows = collectTypedDedRows().map(({type, start, end}) => ({type, start, end}));
-        return data;
-    };
+function enrichLastCalculation(){
+    if (!root.lastCalculation) return;
+    const typedRows = collectTypedDedRows();
+    root.lastCalculation.dedRowsData = typedRows.map(row => ({...row, label:getTypeLabel(row.type)}));
+    if (root.lastCalculation.inputData) {
+        root.lastCalculation.inputData.dedRows = typedRows.map(({type, start, end}) => ({type, start, end}));
+    }
 }
 
-const originalPopulateStoredCase = typeof root.populateStoredCase === 'function' ? root.populateStoredCase : null;
-if (originalPopulateStoredCase) {
-    root.populateStoredCase = function(data){
-        originalPopulateStoredCase(data);
-        const savedRows = Array.isArray(data?.dedRows) ? data.dedRows : [];
-        document.querySelectorAll('.deduction-row').forEach((row, index) => {
-            const saved = savedRows[index] || {};
-            const type = normalizeType(saved.type || TYPE_GENERIC);
-            const select = row.querySelector('.ded-type');
-            if (select) select.value = type;
-            if (row.querySelector('.ded-start')) row.querySelector('.ded-start').value = saved.start || '';
-            if (row.querySelector('.ded-end')) row.querySelector('.ded-end').value = saved.end || '';
-            syncDeductionRow(row);
-        });
-    };
+function bindCalculationLifecycle(){
+    document.addEventListener('click', event => {
+        if (!event.target.closest('#calcBtn')) return;
+        syncRowsForCalculation();
+
+        if (document.body.classList.contains('ev-quick-mode') || document.body.classList.contains('ev-preventive-mode')) return;
+        const previousCalculation = root.lastCalculation;
+        setTimeout(() => {
+            if (root.lastCalculation && root.lastCalculation !== previousCalculation) enrichLastCalculation();
+        }, 0);
+    }, true);
 }
 
-const originalGetInputData = typeof root.getInputData === 'function' ? root.getInputData : null;
-if (originalGetInputData) {
-    root.getInputData = function(){
-        const data = originalGetInputData();
-        data.dedRows = collectTypedDedRows().map(({type, start, end}) => ({type, start, end}));
-        return data;
-    };
-}
-
-const originalCalculateAll = typeof root.calculateAll === 'function' ? root.calculateAll : null;
-if (originalCalculateAll) {
-    root.calculateAll = function(...args){
-        document.querySelectorAll('.deduction-row').forEach(syncRowForCalculation);
-        const result = originalCalculateAll.apply(this, args);
-        if (root.lastCalculation) {
-            const typedRows = collectTypedDedRows();
-            root.lastCalculation.dedRowsData = typedRows.map(row => ({...row, label:getTypeLabel(row.type)}));
-            if (root.lastCalculation.inputData) {
-                root.lastCalculation.inputData.dedRows = typedRows.map(({type, start, end}) => ({type, start, end}));
-            }
-        }
-        return result;
-    };
-}
+Object.assign(root.ManualDeductionRules, {
+    collectRows: collectTypedDedRows,
+    syncRowsForCalculation,
+    enrichLastCalculation
+});
 
 function addRulesNote(){
     const container = document.getElementById('deductionsContainer');
@@ -201,7 +182,12 @@ function addRulesNote(){
     container.insertAdjacentElement('afterend', note);
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addRulesNote, { once:true });
-else addRulesNote();
+function init(){
+    addRulesNote();
+    bindCalculationLifecycle();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
+else init();
 
 })(typeof window !== 'undefined' ? window : globalThis);
