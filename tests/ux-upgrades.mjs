@@ -27,7 +27,7 @@ for (const [file, html] of [
   assert.ok(html.includes('ux-upgrades.js?v=3'), `${file} trebuie să declare controllerul UX consolidat curent`);
   assert.equal((html.match(/ux-upgrades\.js\?v=3/g) || []).length, 1, `${file} trebuie să declare controllerul UX o singură dată`);
 }
-assert.ok(rootHtml.includes('pedepse-ux.js?v=3'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
+assert.ok(rootHtml.includes('pedepse-ux.js?v=4'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
 assert.ok(rootHtml.includes('EvidentaPedepseUx.runCalculation(calculateAll)'), 'Fluxul de calcul Pedepse trebuie declarat explicit în markup.');
 assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
 assert.ok(!fs.existsSync(path.join(root, 'css/ux-upgrades.css')), 'CSS-ul UX separat trebuie eliminat după consolidarea în final-layer.css');
@@ -57,6 +57,9 @@ for (const marker of [
   'validateCalculation',
   'runCalculation',
   'afterCalculation',
+  'ManualDeductionRules?.syncRowsForCalculation?.()',
+  'ManualDeductionRules?.enrichLastCalculation?.()',
+  'QuarantineUi?.enhance?.()',
   'window.EvidentaPedepseUx',
   "new Set(['NCP99', 'VCP551'])"
 ]) {
@@ -82,4 +85,4 @@ for (const marker of [
 }
 
 assert.ok(!ux.includes("href='../ofiter"), 'Upgrade-urile publice nu trebuie să expună ruta Ofițer');
-console.log('UX upgrades: controller declarat per pagină, flux Pedepse explicit, fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
+console.log('UX upgrades: controller declarat per pagină, flux Pedepse unic și explicit, fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
