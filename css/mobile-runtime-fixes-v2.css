@@ -1,0 +1,46 @@
+/* Runtime mobile fixes v2 — sticky quick-action clearance.
+ * Separate filename intentionally bypasses stale PWA caches on first load.
+ */
+@media (max-width:760px) {
+  :root {
+    --ev-quick-sticky-action-height: 62px;
+    --ev-quick-sticky-action-gap: 14px;
+  }
+
+  body {
+    padding-bottom:calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  #main-content,
+  main {
+    scroll-padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  #main-content > :last-child,
+  main > :last-child {
+    margin-bottom:20px !important;
+  }
+
+  body.ev-quick-mode .btn-row {
+    bottom:calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height:var(--ev-quick-sticky-action-height);
+  }
+
+  /*
+   * Când „Opțiuni avansate” este pliat, summary-ul are doar ~44px.
+   * Bara sticky „CALCULEAZĂ EXPIRAREA” se poate deplasa vizual peste el.
+   * Rezervăm explicit în flow înălțimea barei + un gap, exclusiv în starea pliată.
+   */
+  body.ev-quick-mode .ev-mobile-advanced-details:not([open]) {
+    margin-bottom:calc(var(--ev-quick-sticky-action-height) + var(--ev-quick-sticky-action-gap)) !important;
+  }
+
+  body.ev-quick-mode .ev-mobile-advanced-details[open] {
+    margin-bottom:18px !important;
+    scroll-margin-bottom:calc(150px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+html.ev-virtual-keyboard-open body {
+  padding-bottom:12px !important;
+}
