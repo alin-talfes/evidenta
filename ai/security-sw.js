@@ -2,8 +2,8 @@
 'use strict';
 
 const SECURE_CACHE = 'evidenta-ai-secure-deps-v5';
-const SHELL_CACHE = 'evidenta-ai-shell-v16';
-const RUNTIME_CACHE = 'evidenta-ai-runtime-v16';
+const SHELL_CACHE = 'evidenta-ai-shell-v17';
+const RUNTIME_CACHE = 'evidenta-ai-runtime-v17';
 const PREFIX = '/_secure/';
 const SCOPE = new URL(self.registration.scope);
 
@@ -63,7 +63,7 @@ const SHELL_PATHS = [
   '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile.css', '../css/mobile-modules.css', '../css/disclosure-hardening.css',
   '../js/theme.js', '../js/version.js', '../js/ux-upgrades.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
   '../js/operational-navigation.js', '../js/operational-ai.js', '../js/no-nonoptional-disclosures-v1.js', '../js/disclosure-hardening-v2.js',
-  '../js/mobile-operational-v2.js', '../js/pwa-register.js'
+  '../js/pwa-register.js'
 ];
 
 function hex(buffer) {
@@ -159,7 +159,7 @@ async function staticResponse(request) {
 }
 
 function isCriticalSharedRuntime(url) {
-  return /\/js\/(?:version|ux-upgrades|operational-navigation|operational-ai|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register|mobile-operational-v2)\.js$/i.test(url.pathname)
+  return /\/js\/(?:version|ux-upgrades|operational-navigation|operational-ai|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/css\/(?:mobile|mobile-modules|operational-upgrades|disclosure-hardening)\.css$/i.test(url.pathname);
 }
 
