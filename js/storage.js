@@ -133,6 +133,7 @@ function populateStoredCase(d) {
         }
     });
 
+    window.EvidentaPedepseOptional?.syncFromValues?.();
     updAgeTag();
 }
 
