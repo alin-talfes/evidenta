@@ -91,6 +91,25 @@
         document.head.appendChild(script);
     }
 
+    function ensureAnalyticsRuntime() {
+        const styleHref = new URL('../css/analytics-consent.css?v=1', scriptUrl).href;
+        if (![...document.styleSheets].some(sheet => sheet.href === styleHref) && !document.querySelector('link[data-evidenta-analytics-style]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = styleHref;
+            link.dataset.evidentaAnalyticsStyle = 'true';
+            document.head.appendChild(link);
+        }
+
+        const analyticsHref = new URL('../js/analytics.js?v=1', scriptUrl).href;
+        if ([...document.scripts].some(script => script.src === analyticsHref || /\/js\/analytics\.js(?:\?|$)/.test(script.src))) return;
+        const analytics = document.createElement('script');
+        analytics.src = analyticsHref;
+        analytics.defer = true;
+        analytics.dataset.evidentaAnalyticsController = 'true';
+        document.head.appendChild(analytics);
+    }
+
     function relativePage() {
         const rootPath = rootUrl.pathname.endsWith('/') ? rootUrl.pathname : `${rootUrl.pathname}/`;
         const pathname = location.pathname;
@@ -273,6 +292,7 @@
             pruneEditorialNoise();
             updateThemeButtons(readTheme());
             ensureVersionController();
+            ensureAnalyticsRuntime();
 
             let scheduled = false;
             const observer = new MutationObserver(() => {
