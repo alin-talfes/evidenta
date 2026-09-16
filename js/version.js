@@ -21,7 +21,7 @@
     function ensureUxUpgrades() {
         ensureScript(
             'script[data-evidenta-ux-controller]',
-            new URL('./ux-upgrades.js?v=2', scriptUrl).href,
+            new URL('./ux-upgrades.js?v=3', scriptUrl).href,
             'evidentaUxController'
         );
     }
