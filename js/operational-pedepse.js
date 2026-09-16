@@ -5,6 +5,7 @@
   window.__EVIDENTA_OPERATIONAL_PEDEPSE__ = true;
 
   const PREFILL_PEDEPSE = 'evidenta:prefill:pedepse';
+  let activeMode = 'quick';
 
   function parseDateSafe(value) {
     if (typeof window.parseDate === 'function') return window.parseDate(String(value || '').trim());
@@ -230,8 +231,7 @@
     const sentence = document.getElementById('sentence-heading')?.closest('.card');
     if (!sentence) return;
     const general = document.getElementById('date-ppl-heading')?.closest('.card');
-    const directSentenceGrids = [...sentence.querySelectorAll(':scope > .form-grid')];
-    const lcGrid = directSentenceGrids.find(grid => grid.querySelector('#liberationArticle')) || null;
+    const lcGrid = document.getElementById('liberationArticle')?.closest('.form-grid');
     const mode = document.querySelector('.ev-calc-mode');
 
     const lc = detailsShell('ev-mobile-lc-details', 'Liberare condiționată și date PPL');
@@ -256,75 +256,101 @@
       (deductionsCard || sentence).insertAdjacentElement('afterend', advanced.details);
     }
 
-    const syncMode = () => {
-      const quick = document.body.classList.contains('ev-quick-mode');
-      lc.details.hidden = quick;
-      if (!quick && lc.details.querySelector('.ev-field-invalid,[aria-invalid="true"]')) lc.details.open = true;
-    };
-    syncMode();
-
-    document.getElementById('calcBtn')?.addEventListener('click', () => {
-      if (document.body.classList.contains('ev-quick-mode')) return;
-      requestAnimationFrame(() => {
-        if (lc.details.querySelector('.ev-field-invalid,[aria-invalid="true"]')) lc.details.open = true;
-        const advanced = document.querySelector('.ev-mobile-advanced-details');
-        if (advanced?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) advanced.open = true;
-      });
-    });
-
     window.EvidentaDisclosurePolicy?.normalize?.(document);
     window.EvidentaDisclosureA11y?.scan?.(document);
   }
 
-  function init() {
-    if (!document.getElementById('calcBtn') || document.querySelector('.ev-calc-mode')) return;
+  function normalizedMode(value) {
+    return value === 'preventive' ? 'preventive' : value === 'full' ? 'full' : 'quick';
+  }
 
-    const main = document.getElementById('main-content');
-    const mode = document.createElement('div');
-    mode.className = 'ev-calc-mode';
-    mode.innerHTML = '<button type="button" data-mode="quick" class="is-active">Calcul rapid</button><button type="button" data-mode="full">Calcul complet · LC</button>';
-    main?.prepend(mode);
+  function revealValidationDetails() {
+    requestAnimationFrame(() => {
+      const lc = document.querySelector('.ev-mobile-lc-details');
+      if (lc?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) lc.open = true;
+      const advanced = document.querySelector('.ev-mobile-advanced-details');
+      if (advanced?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) advanced.open = true;
+    });
+  }
+
+  function setMode(value) {
+    const requested = normalizedMode(value);
+    const mode = document.querySelector('.ev-calc-mode');
+    if (!mode) return;
+    activeMode = requested;
+
+    document.body.classList.toggle('ev-quick-mode', requested === 'quick');
+    document.body.classList.toggle('ev-preventive-mode', requested === 'preventive');
+
+    mode.querySelectorAll('[data-mode]').forEach(button => {
+      const active = button.dataset.mode === requested;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
 
     const generalCard = document.getElementById('date-ppl-heading')?.closest('.card');
-    const sentenceCard = document.getElementById('sentence-heading')?.closest('.card');
-    const sentenceGrids = sentenceCard ? [...sentenceCard.querySelectorAll(':scope > .form-grid')] : [];
-    const lcGrid = sentenceGrids[0] || null;
-    const datesGrid = sentenceGrids.find(grid => grid.querySelector('#startDate')) || null;
-    const receivedWrap = document.getElementById('prisonReceivedDate')?.closest('div');
+    const lcGrid = document.getElementById('liberationArticle')?.closest('.form-grid');
+    const datesGrid = document.getElementById('startDate')?.closest('.form-grid');
+    const sentenceHeading = document.getElementById('sentence-heading');
+    const lcDetails = document.querySelector('.ev-mobile-lc-details');
+    const preventivePanel = document.querySelector('.ev-preventive-mode-panel');
     const calcBtn = document.getElementById('calcBtn');
-    let current = 'quick';
 
-    const setMode = value => {
-      current = value === 'full' ? 'full' : 'quick';
-      document.body.classList.toggle('ev-quick-mode', current === 'quick');
-      mode.querySelectorAll('button').forEach(button => button.classList.toggle('is-active', button.dataset.mode === current));
-      if (generalCard) generalCard.hidden = current === 'quick';
-      if (lcGrid) lcGrid.hidden = current === 'quick';
-      if (receivedWrap) receivedWrap.hidden = current === 'quick';
-      if (calcBtn) calcBtn.textContent = current === 'quick' ? 'CALCULEAZĂ EXPIRAREA' : 'CALCULEAZĂ';
-      const heading = document.getElementById('sentence-heading');
-      if (heading) heading.textContent = current === 'quick' ? 'CALCUL RAPID PEDEAPSĂ' : 'DETALII PEDEAPSĂ PPL';
-      datesGrid?.classList.toggle('ev-quick-dates', current === 'quick');
-      syncQuickResultControls();
-      requestAnimationFrame(() => window.EvidentaDisclosureA11y?.scan?.(document));
-    };
+    if (generalCard) generalCard.hidden = requested !== 'full';
+    if (lcGrid) lcGrid.hidden = requested !== 'full';
+    if (lcDetails) lcDetails.hidden = requested !== 'full';
+    if (preventivePanel) preventivePanel.hidden = requested !== 'preventive';
+    datesGrid?.classList.toggle('ev-quick-dates', requested === 'quick');
+
+    if (sentenceHeading) sentenceHeading.textContent = requested === 'quick' ? 'CALCUL RAPID PEDEAPSĂ' : 'DETALII PEDEAPSĂ PPL';
+    if (calcBtn) calcBtn.textContent = requested === 'quick' ? 'CALCULEAZĂ EXPIRAREA' : 'CALCULEAZĂ';
+
+    if (requested === 'preventive') window.syncPreventiveDayPresets?.();
+    window.syncPrisonReceivedControl?.();
+    syncQuickResultControls();
+    requestAnimationFrame(() => window.EvidentaDisclosureA11y?.scan?.(document));
+  }
+
+  function calculate() {
+    if (activeMode === 'preventive') {
+      window.calcMasuriPreventive?.();
+      return;
+    }
+    if (activeMode === 'quick') {
+      quickCalculate();
+      return;
+    }
+    if (window.EvidentaPedepseUx?.runCalculation && typeof window.calculateAll === 'function') {
+      window.EvidentaPedepseUx.runCalculation(window.calculateAll);
+      revealValidationDetails();
+      return;
+    }
+    window.calculateAll?.();
+    revealValidationDetails();
+  }
+
+  function init() {
+    const mode = document.querySelector('.ev-calc-mode');
+    if (!document.getElementById('calcBtn') || !mode) return;
+    if (mode.dataset.evOperationalBound === 'true') return;
+    mode.dataset.evOperationalBound = 'true';
 
     mode.addEventListener('click', event => {
       const button = event.target.closest('[data-mode]');
-      if (button) setMode(button.dataset.mode);
+      if (button && mode.contains(button)) setMode(button.dataset.mode);
     });
-    calcBtn?.addEventListener('click', event => {
-      if (current !== 'quick') return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      quickCalculate();
-    }, true);
-    calcBtn?.addEventListener('click', () => requestAnimationFrame(syncQuickResultControls));
 
     fillPedepseFromPrefill();
-    setMode('quick');
-    requestAnimationFrame(buildMobileDisclosure);
+    buildMobileDisclosure();
+    setMode(mode.querySelector('[data-mode].is-active')?.dataset.mode || 'quick');
   }
+
+  window.EvidentaPedepseOperational = Object.freeze({
+    calculate,
+    quickCalculate,
+    setMode,
+    get mode() { return activeMode; }
+  });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
   else init();
