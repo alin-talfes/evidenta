@@ -146,9 +146,75 @@
     go('contopiri/');
   }
 
+  function makeCameraFirst() {
+    if (document.querySelector('[data-ai-camera]')) return;
+    const input = document.getElementById('fileInput');
+    const drop = document.getElementById('dropZone');
+    if (!input || !drop) return;
+
+    const actions = document.createElement('div');
+    actions.className = 'ev-ai-camera-actions';
+    actions.innerHTML = `
+      <button type="button" class="btn btn-primary ev-ai-camera-button" data-ai-camera>
+        <span aria-hidden="true">▣</span> FOTOGRAFIAZĂ MANDATUL
+      </button>
+      <p>Camera din spate · fotografia rămâne pe dispozitiv</p>`;
+    drop.insertAdjacentElement('beforebegin', actions);
+
+    const strong = drop.querySelector('strong');
+    const hint = drop.querySelector('span');
+    if (strong) strong.textContent = 'ALEGE DIN TELEFON / PDF';
+    if (hint) hint.textContent = 'Fotografii existente, PDF sau mai multe pagini';
+
+    actions.querySelector('[data-ai-camera]')?.addEventListener('click', () => {
+      const previous = {
+        accept: input.getAttribute('accept'),
+        multiple: input.hasAttribute('multiple'),
+        capture: input.getAttribute('capture')
+      };
+      const restore = () => {
+        if (previous.accept === null) input.removeAttribute('accept'); else input.setAttribute('accept', previous.accept);
+        if (previous.multiple) input.setAttribute('multiple', ''); else input.removeAttribute('multiple');
+        if (previous.capture === null) input.removeAttribute('capture'); else input.setAttribute('capture', previous.capture);
+      };
+      input.setAttribute('accept', 'image/*');
+      input.removeAttribute('multiple');
+      input.setAttribute('capture', 'environment');
+      input.addEventListener('change', () => setTimeout(restore, 0), { once:true });
+      window.addEventListener('focus', () => setTimeout(restore, 1200), { once:true });
+      input.click();
+    });
+  }
+
+  function makeReviewOperational(review) {
+    if (!review || review.dataset.evMobileOperational === 'true') return;
+    review.dataset.evMobileOperational = 'true';
+    document.getElementById('warningList')?.classList.add('ev-ai-warning-list');
+    const evidence = document.getElementById('evidenceCard');
+    if (evidence && !evidence.closest('.ev-ai-evidence-details')) {
+      const details = document.createElement('details');
+      details.className = 'ev-ai-evidence-details';
+      const summary = document.createElement('summary');
+      summary.textContent = 'Surse și dovezi OCR';
+      evidence.insertAdjacentElement('beforebegin', details);
+      details.append(summary, evidence);
+      const syncEvidenceVisibility = () => {
+        const hidden = evidence.classList.contains('ai-hidden');
+        details.hidden = hidden;
+        if (hidden) details.open = false;
+      };
+      new MutationObserver(syncEvidenceVisibility).observe(evidence, { attributes:true, attributeFilter:['class'] });
+      syncEvidenceVisibility();
+    }
+  }
+
   function init() {
+    makeCameraFirst();
     const review = document.getElementById('reviewCard');
-    if (!review || review.querySelector('.ev-ai-primary')) return;
+    if (!review) return;
+    makeReviewOperational(review);
+    if (review.querySelector('.ev-ai-primary')) return;
+
     const heading = document.getElementById('review-title');
     const box = document.createElement('section');
     box.className = 'ev-ai-primary';
@@ -196,6 +262,8 @@
     const deductionRows = document.getElementById('deductionRows');
     if (deductionRows) new MutationObserver(syncAiPrimary).observe(deductionRows, { childList:true, subtree:true });
     syncAiPrimary();
+    window.EvidentaDisclosurePolicy?.normalize?.(document);
+    window.EvidentaDisclosureA11y?.scan?.(document);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
