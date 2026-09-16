@@ -57,76 +57,6 @@
     });
   }
 
-  function cardHasMeaningfulValue(card) {
-    if (!card) return false;
-    return [...card.querySelectorAll('input, select, textarea')].some(control => {
-      if (control.type === 'checkbox' || control.type === 'radio') return control.checked;
-      if (control.type === 'number') return Number(control.value || 0) !== 0;
-      if (control.tagName === 'SELECT') return Boolean(control.value && !['escape', '0'].includes(control.value));
-      return Boolean(String(control.value || '').trim());
-    });
-  }
-
-  function initPedepseDisclosure() {
-    if (pageName() !== 'pedepse' || document.querySelector('.ev-optional-tools')) return;
-
-    const items = [
-      ['recurs-heading', 'Recurs compensatoriu'],
-      ['nonExec-heading', 'Perioade adăugate'],
-      ['rest-heading', 'Rest rămas'],
-      ['masuri-preventive-heading', 'Măsuri preventive']
-    ].map(([headingId, label]) => {
-      const heading = document.getElementById(headingId);
-      const card = heading?.closest('.card');
-      return card ? { headingId, label, card } : null;
-    }).filter(Boolean);
-
-    if (!items.length) return;
-
-    const section = document.createElement('section');
-    section.className = 'ev-optional-tools card';
-    section.setAttribute('aria-labelledby', 'ev-optional-tools-title');
-    section.innerHTML = `
-      <div class="ev-optional-tools__head">
-        <div>
-          <h3 id="ev-optional-tools-title">Situații suplimentare</h3>
-          <p>Deschide numai elementele aplicabile speței curente.</p>
-        </div>
-      </div>
-      <div class="ev-optional-tools__buttons"></div>`;
-
-    const buttons = section.querySelector('.ev-optional-tools__buttons');
-    items[0].card.insertAdjacentElement('beforebegin', section);
-
-    items.forEach(({ headingId, label, card }) => {
-      const expandedInitially = cardHasMeaningfulValue(card);
-      card.classList.add('ev-optional-card');
-      card.hidden = !expandedInitially;
-
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = `ev-optional-toggle${expandedInitially ? ' is-active' : ''}`;
-      button.setAttribute('aria-controls', card.id || `ev-card-${headingId}`);
-      button.setAttribute('aria-expanded', String(expandedInitially));
-      if (!card.id) card.id = `ev-card-${headingId}`;
-
-      const renderLabel = open => {
-        button.innerHTML = `<span aria-hidden="true">${open ? '−' : '+'}</span><span>${label}</span>`;
-      };
-      renderLabel(expandedInitially);
-
-      button.addEventListener('click', () => {
-        const open = card.hidden;
-        card.hidden = !open;
-        button.classList.toggle('is-active', open);
-        button.setAttribute('aria-expanded', String(open));
-        renderLabel(open);
-        if (open) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
-      buttons.appendChild(button);
-    });
-  }
-
   function transferCriteriaText() {
     const judet = document.getElementById('judet')?.value;
     const sex = document.querySelector('input[name="sex"]:checked')?.closest('label')?.textContent?.trim();
@@ -369,7 +299,6 @@
     if (!document.body) return;
     initDateInputs();
     initMobileSuiteMenu();
-    initPedepseDisclosure();
     initTransferExplainability();
     initTransferRulesTabs();
     initSemnalmenteUx();
