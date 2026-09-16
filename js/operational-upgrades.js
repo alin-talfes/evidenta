@@ -142,14 +142,6 @@
       if (node.textContent.includes(old)) node.textContent = node.textContent.replace(old, 'Intervalele sunt calculate integral; verifică dacă suprapunerea este intenționată.');
     };
     document.querySelectorAll('.ev-field-message, #ev-validation-summary li').forEach(replace);
-    const observer = new MutationObserver(records => {
-      for (const record of records) for (const node of record.addedNodes) {
-        if (node.nodeType !== 1) continue;
-        replace(node);
-        node.querySelectorAll?.('.ev-field-message, #ev-validation-summary li').forEach(replace);
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
   }
 
   function overrideDeductionSummation() {
