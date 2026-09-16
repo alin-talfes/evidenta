@@ -23,6 +23,15 @@ async function processFiles(files){
   if(!window.AIFileDedup?.dedupeExactFiles) return {files:Array.from(files||[]),duplicates:[],available:false};
   return window.AIFileDedup.dedupeExactFiles(files);
 }
+function dispatchFiles(input,files){
+  input.files=makeFileList(files);
+  redispatching=true;
+  try{
+    input.dispatchEvent(new Event('change',{bubbles:true}));
+  }finally{
+    redispatching=false;
+  }
+}
 
 async function onChange(event){
   if(redispatching || event.target?.id!=='fileInput') return;
@@ -34,16 +43,10 @@ async function onChange(event){
   event.stopImmediatePropagation();
   try{
     const result=await processFiles(files);
-    input.files=makeFileList(result.files);
-    redispatching=true;
-    input.dispatchEvent(new Event('change',{bubbles:true}));
-    redispatching=false;
+    dispatchFiles(input,result.files);
     if(result.duplicates.length) duplicateStatus(result.files.length,result.duplicates.length);
   }catch(_){
-    redispatching=true;
-    input.files=makeFileList(files);
-    input.dispatchEvent(new Event('change',{bubbles:true}));
-    redispatching=false;
+    dispatchFiles(input,files);
   }
 }
 
@@ -57,16 +60,18 @@ async function onDrop(event){
   event.preventDefault();
   event.stopImmediatePropagation();
   target.classList.remove('dragover');
+  const input=document.getElementById('fileInput');
+  if(!input) return;
   try{
     const result=await processFiles(files);
-    const input=document.getElementById('fileInput');
-    if(!input) return;
-    input.files=makeFileList(result.files);
-    redispatching=true;
-    input.dispatchEvent(new Event('change',{bubbles:true}));
-    redispatching=false;
+    dispatchFiles(input,result.files);
     if(result.duplicates.length) duplicateStatus(result.files.length,result.duplicates.length);
-  }catch(_){ /* fail-open pentru selectarea locală; validările existente rămân active */ }
+  }catch(_){
+    /* Drop-ul original a fost deja oprit pentru deduplicarea asincronă.
+       Reintroducem selecția originală, astfel încât o eroare de hashing să nu
+       transforme un drop valid într-o operațiune pierdută. */
+    try{ dispatchFiles(input,files); }catch(__){ /* validările/UI existente rămân intacte */ }
+  }
 }
 
 document.addEventListener('change',event=>{ void onChange(event); },true);
