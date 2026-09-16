@@ -469,9 +469,15 @@
       result.appendChild(button);
     }
     button.onclick = () => {
-      setSessionJson(PREFILL_PEDEPSE, { source:'contopiri', duration:final, startDate:'', deductions:[] });
+      const currentFinal = currentContopiriFinal();
+      if (!currentFinal) return;
+      setSessionJson(PREFILL_PEDEPSE, { source:'contopiri', duration:currentFinal, startDate:'', deductions:[] });
       go('./');
     };
+  }
+
+  function removeContopiriTransferButton() {
+    document.querySelector('#mergeResult [data-contopiri-to-pedepse]')?.remove();
   }
 
   function fillContopiriFromPrefill() {
@@ -503,19 +509,21 @@
   }
 
   function initContopiri() {
-    if (!document.getElementById('penaltyRowsContainer')) return;
+    const rows = document.getElementById('penaltyRowsContainer');
+    const result = document.getElementById('mergeResult');
+    if (!rows || !result) return;
     compactLegalBox();
     fillContopiriFromPrefill();
-    const original = window.calculateMergedPenalties;
-    if (typeof original === 'function' && !original.__evOperationalWrapped) {
-      const wrapped = function(...args) {
-        const out = original.apply(this, args);
-        setTimeout(addContopiriTransferButton, 0);
-        return out;
-      };
-      wrapped.__evOperationalWrapped = true;
-      window.calculateMergedPenalties = wrapped;
-    }
+
+    const resultObserver = new MutationObserver(() => addContopiriTransferButton());
+    resultObserver.observe(result, { childList:true });
+
+    const rowsObserver = new MutationObserver(removeContopiriTransferButton);
+    rowsObserver.observe(rows, { childList:true });
+    rows.addEventListener('input', removeContopiriTransferButton);
+    rows.addEventListener('change', removeContopiriTransferButton);
+
+    addContopiriTransferButton();
   }
 
   function addTransferCopy() {
