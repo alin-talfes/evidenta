@@ -13,11 +13,11 @@
     <script src="js/theme.js?v=40" defer></script>
     <script src="js/ux-upgrades.js?v=3" defer></script>
     <script src="js/pedepse-ux.js?v=4" defer></script>
+    <script src="js/pedepse-optional.js?v=1" defer></script>
     <script src="js/quarantine-rules.js?v=1" defer></script>
     <script src="js/quarantine-ui.js?v=3" defer></script>
     <script src="js/operational-navigation.js?v=4" defer></script>
-    <script src="js/operational-pedepse.js?v=4" defer></script>
-    <script src="js/pedepse-optional-fix-v2.js?v=1" defer></script>
+    <script src="js/operational-pedepse.js?v=5" defer></script>
     <script src="js/no-nonoptional-disclosures-v1.js?v=3" defer></script>
     <script src="js/disclosure-hardening-v2.js?v=2" defer></script>
     <script src="js/pwa-register.js?v=3" defer></script>
@@ -146,19 +146,33 @@
                 <button class="btn btn-outline btn-sm" id="addDedBtn" onclick="addDedRow()">+ Adaugă</button>
             </div>
 
-            <div class="card" aria-labelledby="recurs-heading">
+            <section class="ev-optional-tools card" aria-labelledby="ev-optional-tools-title">
+                <div class="ev-optional-tools__head">
+                    <div>
+                        <h3 id="ev-optional-tools-title">Situații suplimentare</h3>
+                        <p>Deschide numai elementele aplicabile speței curente.</p>
+                    </div>
+                </div>
+                <div class="ev-optional-tools__buttons">
+                    <button type="button" class="ev-optional-toggle" aria-controls="recursCard" aria-expanded="true"><span aria-hidden="true">−</span><span>Recurs compensatoriu</span></button>
+                    <button type="button" class="ev-optional-toggle" aria-controls="nonExecCard" aria-expanded="true"><span aria-hidden="true">−</span><span>Perioade adăugate</span></button>
+                    <button type="button" class="ev-optional-toggle" aria-controls="restCard" aria-expanded="true"><span aria-hidden="true">−</span><span>Rest rămas</span></button>
+                </div>
+            </section>
+
+            <div class="card ev-optional-card" id="recursCard" aria-labelledby="recurs-heading">
                 <h3 id="recurs-heading">ZILE RECURS COMPENSATORIU (L. 169/2017)</h3>
                 <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
                 <button class="btn btn-outline btn-sm" id="addManDedBtn" onclick="addManDedRow()">+ Adaugă</button>
             </div>
 
-            <div class="card" aria-labelledby="nonExec-heading">
+            <div class="card ev-optional-card" id="nonExecCard" aria-labelledby="nonExec-heading">
                 <h3 id="nonExec-heading">PERIOADE CARE NU SE CONSIDERĂ EXECUTATE</h3>
                 <div id="nonExecContainer" role="list" aria-label="Listă perioade neexecutate"></div>
                 <button class="btn btn-outline btn-sm" id="addNonExecBtn" onclick="addNonExecRow()">+ Adaugă</button>
             </div>
 
-            <div class="card" id="restCard" aria-labelledby="rest-heading">
+            <div class="card ev-optional-card" id="restCard" aria-labelledby="rest-heading">
                 <h3 id="rest-heading">CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
                 <div class="form-grid"><div>
                     <label for="conditionalReleaseDate">Data liberării condiționate</label>
@@ -224,7 +238,7 @@
     <script src="js/utils.js?v=36"></script>
     <script src="js/rules.js?v=38"></script>
     <script src="js/legal.js?v=36"></script>
-    <script src="js/storage.js?v=38"></script>
+    <script src="js/storage.js?v=39"></script>
     <script src="js/export.js?v=38"></script>
     <script src="js/ui.js?v=39"></script>
     <script src="js/app.js?v=39"></script>
