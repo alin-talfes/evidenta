@@ -40,6 +40,14 @@ assert.ok(version.includes('disclosure-hardening-v2.js?v=2'));
 assert.ok(!version.includes('mobile-operational-v2.js'));
 assert.ok(!fs.existsSync(path.join(root, 'js/mobile-operational-v2.js')), 'Controllerul mobil monolitic trebuie eliminat.');
 
+for (const marker of ['let bootstrapped = false;', 'function bootstrap()', 'void initVersionIdentity();', "document.addEventListener('DOMContentLoaded', bootstrap, { once: true })"]) {
+  assert.ok(version.includes(marker), `Bootstrap-ul unic trebuie să includă ${marker}`);
+}
+for (const call of ['ensureUxUpgrades();', 'ensureLegalReleaseGuards();', 'ensurePageControllers();', 'ensureCalculationParity();', 'ensureOperationalRuntime();']) {
+  assert.equal([...version.matchAll(new RegExp(call.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'))].length, 1, `${call} trebuie apelat o singură dată din bootstrap.`);
+}
+assert.ok(!version.includes("document.addEventListener('DOMContentLoaded', () => {"), 'Nu trebuie să existe al doilea bloc de inițializare DOMContentLoaded.');
+
 for (const retired of ['operational-upgrades.js', 'operational-finalize.js', 'operational-corrections-v4']) {
   assert.ok(!version.includes(retired), `${retired} nu trebuie încărcat`);
   assert.ok(!fs.existsSync(path.join(root, 'js', retired)), `${retired} trebuie eliminat`);
@@ -97,7 +105,7 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v32'"));
+assert.ok(sw.includes("const VERSION = 'v33'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|disclosure-hardening'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
   assert.ok(sw.includes(`./js/${file}.js`), `SW trebuie să includă ${file}`);
@@ -105,8 +113,8 @@ for (const file of ['operational-navigation', 'operational-pedepse', 'operationa
 assert.ok(!sw.includes('mobile-operational-v2'));
 assert.ok(!sw.includes('operational-finalize'));
 
-assert.ok(aiSw.includes('evidenta-ai-shell-v18'));
-assert.ok(aiSw.includes('evidenta-ai-runtime-v18'));
+assert.ok(aiSw.includes('evidenta-ai-shell-v19'));
+assert.ok(aiSw.includes('evidenta-ai-runtime-v19'));
 assert.ok(aiSw.includes('../js/operational-navigation.js'));
 assert.ok(aiSw.includes('../js/operational-ai.js'));
 assert.ok(aiSw.includes('../js/no-nonoptional-disclosures-v1.js'));
@@ -118,4 +126,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: lifecycle determinist fără retry timers, more sheet deținut de bottom nav și controllere mobile modulare.');
+console.log('Mobile/PWA audit: bootstrap runtime unic, lifecycle mobil determinist și controllere modulare.');
