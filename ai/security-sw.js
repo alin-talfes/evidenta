@@ -2,8 +2,8 @@
 'use strict';
 
 const SECURE_CACHE = 'evidenta-ai-secure-deps-v5';
-const SHELL_CACHE = 'evidenta-ai-shell-v9';
-const RUNTIME_CACHE = 'evidenta-ai-runtime-v9';
+const SHELL_CACHE = 'evidenta-ai-shell-v10';
+const RUNTIME_CACHE = 'evidenta-ai-runtime-v10';
 const PREFIX = '/_secure/';
 const SCOPE = new URL(self.registration.scope);
 
@@ -60,7 +60,7 @@ const SHELL_PATHS = [
   './beta-lot7-start-date.js', './beta-lot7-duration.js', './contopire-audit.js', './dependencies.js', './security-runtime.js',
   './date-mask.js', './deduction-rules.js', './file-dedup.js', './file-dedup-runtime.js', './app.js', './source-preview.js', './result-pedepse.js',
   '../manifest.json', '../version.json', '../favicon-ev-2.svg',
-  '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile-operational-v2.css', '../css/pedepse-modes-v3.css', '../css/disclosure-hardening.css', '../css/pwa-mobile.css', '../css/mobile-bottom-nav-clearance-v5.css',
+  '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile.css', '../css/mobile-modules.css', '../css/pedepse-modes-v3.css', '../css/disclosure-hardening.css',
   '../js/theme.js', '../js/version.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
   '../js/operational-upgrades.js', '../js/operational-corrections-v4.js', '../js/operational-finalize.js', '../js/mobile-operational-v2.js', '../js/pedepse-modes-v4.js', '../js/disclosure-hardening.js', '../js/pwa-register.js'
 ];
@@ -158,8 +158,8 @@ async function staticResponse(request) {
 }
 
 function isCriticalSharedRuntime(url) {
-  return /\/js\/(?:version|pwa-register)\.js$/i.test(url.pathname)
-    || /\/css\/mobile-bottom-nav-clearance-v5\.css$/i.test(url.pathname);
+  return /\/js\/(?:version|pwa-register|mobile-operational-v2)\.js$/i.test(url.pathname)
+    || /\/css\/(?:mobile|mobile-modules)\.css$/i.test(url.pathname);
 }
 
 self.addEventListener('install', event => {
