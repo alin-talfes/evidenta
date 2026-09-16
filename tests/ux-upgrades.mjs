@@ -11,7 +11,7 @@ const version = read('js/version.js');
 const ux = read('js/ux-upgrades.js');
 const finalLayer = read('css/final-layer.css');
 
-assert.ok(version.includes('ux-upgrades.js?v=2'), 'Controllerul de versiune trebuie să încarce versiunea reparată a upgrade-urilor UX comune');
+assert.ok(version.includes('ux-upgrades.js?v=3'), 'Controllerul de versiune trebuie să încarce controllerul UX consolidat curent');
 assert.ok(version.includes('data-evidenta-ux-controller') || version.includes('evidentaUxController'), 'Loaderul UX trebuie să prevină dublarea controllerului');
 assert.ok(!fs.existsSync(path.join(root, 'css/ux-upgrades.css')), 'CSS-ul UX separat trebuie eliminat după consolidarea în final-layer.css');
 assert.ok(!ux.includes('loadStylesheet'), 'Controllerul UX nu trebuie să mai injecteze un stylesheet la runtime');
