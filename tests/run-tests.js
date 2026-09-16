@@ -47,7 +47,8 @@ let lifeStart=new Date(2026,7,29), lifeBirth=new Date(1980,0,1);
 let lifeCalc=lr.__schedule({life:true,art:'NCP99',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
 assert.equal(lifeCalc.mDays,7305); assert.equal(lifeCalc.tDays,7305); assert.equal(lifeCalc.mDate.getFullYear(),2046); assert.equal(lifeCalc.mDate.getMonth(),7); assert.equal(lifeCalc.mDate.getDate(),28);
 let vcpLife=lr.__schedule({life:true,art:'VCP551',sentenceOver10:false,totalDays:7305,birthDate:lifeBirth,startDate:lifeStart,currentSex:'M',theorExp:null,dedDays:0,nonExecDays:0});
-assert.equal(vcpLife.mDays,7305); assert(vcpLife.articleInfo.includes('VCP art. 55¹'));
+let vcp15End=lr.__add(lifeStart,15,0,0); vcp15End.setDate(vcp15End.getDate()-1); let vcp15Days=lr.__days(lifeStart,vcp15End)+1;
+assert.equal(vcpLife.mDays,vcp15Days); assert.equal(vcpLife.tDays,vcp15Days); assert(vcpLife.vcpLifeElderlyApplied); assert(vcpLife.articleInfo.includes('VCP art. 55¹'));
 
 let transitionStart=new Date(2026,0,1), transitionBirth=new Date(1968,0,1), transitionEnd=new Date(2030,11,31);
 let transition=lr.__schedule({life:false,art:'NCP100',sentenceOver10:false,totalDays:1826,birthDate:transitionBirth,startDate:transitionStart,currentSex:'M',theorExp:transitionEnd,dedDays:0,nonExecDays:0});
@@ -91,7 +92,7 @@ assert(/style\.css\?v=43/.test(indexSource),'index.html stale css cache version'
 assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
 assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 algoritm liberare condiționată options missing');
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
-assert(indexSource.includes('js/rules.js?v=37') && indexSource.includes('js/app.js?v=37'),'Pedepse cache version not bumped');
+assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/app.js?v=38'),'Pedepse cache version not bumped');
 const styleVersions={
   'contopiri/index.html':42,
   'transfer/index.html':43,
