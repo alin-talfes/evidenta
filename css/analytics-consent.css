@@ -1,0 +1,99 @@
+.ev-analytics-consent {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: end center;
+  padding: 18px;
+  background: rgba(2, 6, 23, .56);
+  backdrop-filter: blur(8px);
+}
+.ev-analytics-consent__card {
+  width: min(680px, 100%);
+  padding: 18px;
+  border: 1px solid var(--ev-border, rgba(148,163,184,.28));
+  border-radius: 18px;
+  background: var(--ev-surface, #0f172a);
+  color: var(--ev-text, #e5edf8);
+  box-shadow: 0 20px 60px rgba(0,0,0,.34);
+}
+.ev-analytics-consent__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+.ev-analytics-consent__head span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ev-accent-strong, #7aa7ff);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.ev-analytics-consent__head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.ev-analytics-consent__card p {
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+.ev-analytics-consent__privacy,
+.ev-analytics-consent__state {
+  color: var(--ev-text-secondary, #94a3b8);
+  font-size: .86rem;
+}
+.ev-analytics-consent__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+.ev-analytics-consent__actions button,
+.ev-analytics-consent__close,
+.ev-analytics-settings button {
+  min-height: 44px;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+.ev-analytics-consent__accept {
+  border: 1px solid var(--ev-accent, #4f8cff);
+  background: var(--ev-accent, #4f8cff);
+  color: #fff;
+}
+.ev-analytics-consent__decline {
+  border: 1px solid var(--ev-border, rgba(148,163,184,.28));
+  background: transparent;
+  color: inherit;
+}
+.ev-analytics-consent__close {
+  min-width: 44px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.4rem;
+}
+.ev-analytics-settings {
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+}
+.ev-analytics-settings button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--ev-text-secondary, #64748b);
+  font-size: .75rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .ev-analytics-consent { padding: 10px; }
+  .ev-analytics-consent__card { padding: 15px; border-radius: 16px; }
+  .ev-analytics-consent__actions { grid-template-columns: 1fr; }
+}
