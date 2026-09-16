@@ -9,6 +9,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
 const version = read('js/version.js');
 const operational = read('js/operational-upgrades.js');
+const operationalCss = read('css/operational-upgrades.css');
 const corrections = read('js/operational-corrections-v4.js');
 const noSpoilers = read('js/no-nonoptional-disclosures-v1.js');
 const finalize = read('js/operational-finalize.js');
@@ -35,6 +36,9 @@ for (const legacy of ['pedepse-modes-v4.js','pedepse-optional-fix.js','disclosur
 for (const marker of ['ev-mobile-nav','Calcul rapid','quickCalculate','sendAiToPedepse','addContopiriTransferButton','initTransfer','initInstructajSearch','initSemnalmente']) {
   assert.ok(operational.includes(marker), `Fluxul operațional trebuie să includă ${marker}`);
 }
+assert.ok(!operationalCss.includes('position:sticky'), 'Stratul operațional nu trebuie să mai creeze suprafețe sticky pe mobil.');
+assert.ok(!operationalCss.includes('position:fixed'), 'Poziționarea fixed trebuie să fie definită exclusiv în politica canonică mobile.css.');
+assert.ok(operationalCss.includes('.ev-mobile-more-sheet {\n    position:absolute;'), 'Meniul Mai multe trebuie ancorat absolut de bottom nav, nu de viewport.');
 
 assert.ok(finalize.includes('openEndedOmitted'));
 assert.ok(finalize.includes('normalizeGlobalNav'));
@@ -86,6 +90,7 @@ assert.ok(mobilePolicy.includes('body.ev-unified[data-ev-page="pedepse"] .btn-ro
 assert.ok(mobilePolicy.includes('position:static !important'));
 assert.ok(!mobilePolicy.includes('position:sticky'));
 assert.equal([...mobilePolicy.matchAll(/position\s*:\s*fixed\s*!important/gi)].length, 1, 'În css/mobile.css numai bottom nav trebuie să fie fixed.');
+assert.ok(mobilePolicy.includes('.ev-mobile-nav > .ev-mobile-more-sheet { position:absolute !important; }'));
 
 assert.ok(mobileModules.includes('@media (max-width:600px)'));
 assert.ok(mobileModules.includes('.deduction-row'));
@@ -96,7 +101,7 @@ assert.ok(!mobileModules.includes('.ev-retention-preset'));
 assert.ok(!mobileModules.includes('bottom:calc(66px'));
 assert.ok(!index.includes('mobile-runtime-fixes-v2.css'));
 
-for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport','ev-ios','ev-android','navigator.onLine','ensureMobileStyle','css/mobile.css?v=1','mobile-operational-v2.css','ev-mobile-nav-layout','clearLegacyBottomNavState','syncBottomNavLayout','css/mobile-modules.css']) {
+for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport','ev-ios','ev-android','navigator.onLine','ensureMobileStyle','css/mobile.css?v=1','mobile-operational-v2.css','ev-mobile-nav-layout','clearLegacyBottomNavState','normalizeMobileMoreSheet','nav.appendChild(sheet)','syncBottomNavLayout','css/mobile-modules.css']) {
   assert.ok(pwa.includes(marker), `Controllerul PWA trebuie să includă ${marker}`);
 }
 assert.ok(!pwa.includes('new ResizeObserver'));
@@ -121,4 +126,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: CSS mobil consolidat, controller UX network-first, controllere Pedepse stabile și numai bottom nav persistent.');
+console.log('Mobile/PWA audit: numai bottom nav este fixed; restul suprafețelor mobile rămân în fluxul paginii.');
