@@ -76,12 +76,26 @@ assert.ok(transferRulesHtml.includes('operational-transfer.js?v=2'));
 assert.ok(!fs.existsSync(path.join(root, 'js/release-guards.js')), 'release-guards trebuie eliminat după integrarea protecțiilor în rules.js.');
 assert.ok(rules.includes('buildLifeSchedule'));
 assert.ok(rules.includes('applyVcpAgeFloor'));
-for (const html of [rootHtml, aiHtml]) {
-  assert.ok(!html.includes('release-guards.js'), 'Rutele care folosesc motorul LC trebuie să consume direct rules.js, fără release-guards.');
+for (const [file, html] of [
+  ['index.html', rootHtml],
+  ['ai/index.html', aiHtml],
+  ['contopiri/index.html', contopiriHtml],
+  ['transfer/index.html', transferHtml],
+  ['transfer/rules/index.html', transferRulesHtml]
+]) {
+  assert.ok(!html.includes('release-guards.js'), `${file} nu trebuie să mai refere controllerul release-guards eliminat.`);
 }
-for (const html of [rootHtml, aiHtml, contopiriHtml, transferHtml, transferRulesHtml]) {
-  assert.ok(html.includes('quarantine-rules.js?v=1'), 'Regulile de carantină trebuie păstrate declarativ până la integrarea în motorul core.');
+for (const [file, html] of [['index.html', rootHtml], ['ai/index.html', aiHtml]]) {
+  assert.ok(html.includes('quarantine-rules.js?v=1'), `${file} trebuie să păstreze regulile de carantină.`);
 }
+for (const [file, html] of [
+  ['contopiri/index.html', contopiriHtml],
+  ['transfer/index.html', transferHtml],
+  ['transfer/rules/index.html', transferRulesHtml]
+]) {
+  assert.ok(!html.includes('quarantine-rules.js'), `${file} nu trebuie să încarce reguli de carantină pe o rută care nu le consumă.`);
+}
+assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-legacy-observer-kill.js')), 'Shim-ul legacy pentru observere trebuie eliminat după ștergerea controllerelor vechi.');
 
 assert.ok(!version.includes('mobile-operational-v2.js'));
 assert.ok(!fs.existsSync(path.join(root, 'js/mobile-operational-v2.js')), 'Controllerul mobil monolitic trebuie eliminat.');
@@ -178,7 +192,7 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v40'"));
+assert.ok(sw.includes("const VERSION = 'v41'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
 assert.ok(!sw.includes('pedepse-prison-date'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
@@ -200,4 +214,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: controllere declarative per pagină, UI deduceri cu proprietar unic, controale Pedepse statice, moduri fără timere și un singur flux explicit de calcul, version.js identity-only și lifecycle PWA determinist.');
+console.log('Mobile/PWA audit: controllere declarative per pagină, dependențe strict route-owned, UI deduceri cu proprietar unic, controale Pedepse statice, moduri fără timere și un singur flux explicit de calcul, version.js identity-only și lifecycle PWA determinist.');
