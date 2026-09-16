@@ -87,6 +87,8 @@ assert(appSource.includes("article.value = 'NCP99'"));
 assert(appSource.includes('article.disabled = false'));
 const uiSource=fs.readFileSync('js/ui.js','utf8');
 assert(uiSource.includes("dispatchEvent(new Event('input', { bubbles: true }))"),'setToday must emit input');
+assert(!uiSource.includes('function addDedRow()'),'ui.js must not duplicate the typed deduction row implementation');
+assert(!uiSource.includes('function updDed('),'ui.js must not duplicate the legacy deduction calculator');
 
 let vcpMale=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDays:2200,birthDate:new Date(1968,0,1),startDate:new Date(2026,0,1),currentSex:'M',theorExp:new Date(2032,0,1),dedDays:0,nonExecDays:0});
 assert.equal(vcpMale.mR,1/100); assert.equal(vcpMale.tR,1/3); assert(vcpMale.ageTransitionApplied); assert(vcpMale.articleInfo.includes('VCP art. 59'));
@@ -103,7 +105,7 @@ assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date inpu
 assert(indexSource.includes('id="prisonReceivedSameAsStart"'),'static prison receipt checkbox missing');
 assert(indexSource.includes('data-masuri-days="30"') && indexSource.includes('data-masuri-days="60"'),'static preventive presets missing');
 assert(indexSource.includes('css/pedepse-modes-v3.css?v=5'),'Pedepse mode CSS must be declared statically');
-assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/storage.js?v=38') && indexSource.includes('js/ui.js?v=38') && indexSource.includes('js/app.js?v=39'),'Pedepse cache version not bumped');
+assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/storage.js?v=38') && indexSource.includes('js/ui.js?v=39') && indexSource.includes('js/app.js?v=39'),'Pedepse cache version not bumped');
 const styleVersions={
   'contopiri/index.html':42,
   'transfer/index.html':43,
