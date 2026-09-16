@@ -48,6 +48,31 @@
   text-align:center;
 }
 
+#prisonReceivedControl { min-width:0; }
+#prisonReceivedControl .ev-prison-same-check {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  min-height:44px;
+  margin:0;
+  cursor:pointer;
+  font-weight:800;
+  line-height:1.35;
+}
+#prisonReceivedControl .ev-prison-same-check input {
+  flex:0 0 auto;
+  width:20px !important;
+  min-width:20px !important;
+  height:20px !important;
+  min-height:20px !important;
+  margin:2px 0 0 !important;
+  padding:0 !important;
+}
+#prisonReceivedDateField { margin-top:8px; }
+#prisonReceivedDateField[hidden] { display:none !important; }
+body.ev-quick-mode #prisonReceivedControl,
+body.ev-preventive-mode #prisonReceivedControl { display:none !important; }
+
 body.ev-preventive-mode #main-content > *:not(.ev-calc-mode):not(.ev-preventive-mode-panel) {
   display:none !important;
 }
