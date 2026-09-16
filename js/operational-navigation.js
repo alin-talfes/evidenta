@@ -31,10 +31,13 @@
     return '';
   }
 
-  function normalizeDateInputs() {
+  function normalizeTouchInputs() {
     document.querySelectorAll('.date-masked').forEach(input => {
       if (!input.getAttribute('inputmode')) input.setAttribute('inputmode', 'numeric');
       if (!input.getAttribute('autocomplete')) input.setAttribute('autocomplete', 'off');
+    });
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      if (!input.getAttribute('inputmode')) input.setAttribute('inputmode', 'numeric');
     });
   }
 
@@ -111,7 +114,7 @@
   }
 
   function refresh() {
-    normalizeDateInputs();
+    normalizeTouchInputs();
     if (removeOfficerSuiteNav()) return;
     normalizeGlobalNav();
     initMobileNav();
@@ -120,7 +123,7 @@
   function init() {
     refresh();
     document.addEventListener('click', event => {
-      if (event.target.closest?.('#addDeductionBtn, .btn, button')) requestAnimationFrame(normalizeDateInputs);
+      if (event.target.closest?.('#addDeductionBtn, .btn, button')) requestAnimationFrame(normalizeTouchInputs);
     });
     window.addEventListener('evidenta:shellready', refresh);
     window.addEventListener('load', refresh, { once:true });
