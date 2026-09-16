@@ -41,6 +41,47 @@ window.addEventListener('unhandledrejection', function (event) {
 const LIFE_ARTICLES = new Set(['NCP99', 'VCP551']);
 const EDUCATIONAL_ARTICLES = new Set(['NCP124', 'NCP125']);
 
+function isFullPedepseMode() {
+    return !document.body.classList.contains('ev-quick-mode') &&
+        !document.body.classList.contains('ev-preventive-mode');
+}
+
+function syncPrisonReceivedControl({ infer = false } = {}) {
+    const checkbox = document.getElementById('prisonReceivedSameAsStart');
+    const field = document.getElementById('prisonReceivedDateField');
+    const input = document.getElementById('prisonReceivedDate');
+    const start = document.getElementById('startDate');
+    if (!checkbox || !field || !input || !start) return;
+
+    const startValue = start.value.trim();
+    const receivedValue = input.value.trim();
+    if (infer) checkbox.checked = !receivedValue || receivedValue === startValue;
+    if (checkbox.checked) input.value = startValue;
+
+    field.hidden = checkbox.checked;
+    checkbox.setAttribute('aria-expanded', String(!checkbox.checked));
+}
+
+function syncPreventiveDayPresets() {
+    const input = document.getElementById('masuriDays');
+    if (!input) return;
+    const value = Number(input.value);
+    document.querySelectorAll('[data-masuri-days]').forEach(button => {
+        const active = Number(button.dataset.masuriDays) === value;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+    });
+}
+
+function setPreventiveDays(days) {
+    const input = document.getElementById('masuriDays');
+    const value = Number(days);
+    if (!input || !Number.isSafeInteger(value) || value < 0) return;
+    input.value = String(value);
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.focus({ preventScroll: true });
+}
+
 function validateInputs(birthDate, startDate, life, art, y, m, d) {
     const err = [];
     if (!birthDate) err.push('Data nașterii este invalidă sau incompletă.');
@@ -56,7 +97,10 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
     if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.');
 
     const prisonReceivedRaw = document.getElementById('prisonReceivedDate')?.value.trim() || '';
-    if (prisonReceivedRaw && !parseDate(prisonReceivedRaw)) {
+    const prisonSameAsStart = document.getElementById('prisonReceivedSameAsStart');
+    if (isFullPedepseMode() && prisonSameAsStart && !prisonSameAsStart.checked && !prisonReceivedRaw) {
+        err.push('Introduceți data intrării în penitenciar/centru.');
+    } else if (prisonReceivedRaw && !parseDate(prisonReceivedRaw)) {
         err.push('Data primirii în penitenciar/centru este invalidă sau incompletă.');
     }
 
@@ -193,6 +237,7 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
 function calculateAll() {
     const errC = document.getElementById('errorContainer');
     errC.classList.remove('visible');
+    syncPrisonReceivedControl();
 
     const birthDate = parseDate(document.getElementById('birthDate').value.trim());
     const startDate = parseDate(document.getElementById('startDate').value.trim());
@@ -589,6 +634,7 @@ document.addEventListener('DOMContentLoaded', function() {
     applyTheme();
     updateCaseBadge();
     restoreAutoSave();
+    syncPrisonReceivedControl();
 
     sexToggle.addEventListener('change', updateSexUI);
 
@@ -604,8 +650,27 @@ document.addEventListener('DOMContentLoaded', function() {
         syncLifeArticleUI('life');
     });
 
+    document.getElementById('startDate').addEventListener('input', function() {
+        syncPrisonReceivedControl();
+    });
+    document.getElementById('prisonReceivedSameAsStart')?.addEventListener('change', function() {
+        syncPrisonReceivedControl();
+    });
+
     document.getElementById('masuriRefDate').addEventListener('input', calcMasuriPreventive);
+    const masuriDays = document.getElementById('masuriDays');
+    masuriDays?.addEventListener('input', function() {
+        calcMasuriPreventive();
+        syncPreventiveDayPresets();
+    });
+    masuriDays?.addEventListener('change', syncPreventiveDayPresets);
+    document.querySelectorAll('[data-masuri-days]').forEach(button => {
+        button.addEventListener('click', function() {
+            setPreventiveDays(Number(button.dataset.masuriDays));
+        });
+    });
     calcMasuriPreventive();
+    syncPreventiveDayPresets();
 
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
