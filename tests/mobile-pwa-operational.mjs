@@ -11,6 +11,7 @@ const version = read('js/version.js');
 const operational = read('js/operational-upgrades.js');
 const operationalCss = read('css/operational-upgrades.css');
 const prisonDate = read('js/pedepse-prison-date.js');
+const quarantineUi = read('js/quarantine-ui.js');
 const rules = read('js/rules.js');
 const app = read('js/app.js');
 const pedepseUx = read('js/pedepse-ux.js');
@@ -30,7 +31,7 @@ const aiSw = read('ai/security-sw.js');
 const index = read('index.html');
 const manifest = JSON.parse(read('manifest.json'));
 
-for (const marker of ['ux-upgrades.js?v=3','operational-upgrades.js?v=1','operational-finalize.js?v=1','mobile-operational-v2.js?v=2','pwa-register.js?v=2']) {
+for (const marker of ['ux-upgrades.js?v=3','operational-upgrades.js?v=1','operational-finalize.js?v=1','mobile-operational-v2.js?v=2','pwa-register.js?v=2','quarantine-ui.js?v=2']) {
   assert.ok(version.includes(marker), `Loaderul global trebuie să includă ${marker}`);
 }
 for (const marker of ['no-nonoptional-disclosures-v1.js?v=2','pedepse-modes-v5.js?v=1','pedepse-optional-fix-v2.js?v=1','disclosure-hardening-v2.js?v=1','pedepse-prison-date.js?v=1']) {
@@ -68,6 +69,10 @@ assert.ok(!pedepseUx.includes('window.calculateAll ='));
 assert.ok(!deductionUi.includes('root.calculateAll ='));
 assert.ok(!deductionUi.includes('root.collectStoredCaseData ='));
 assert.ok(!deductionUi.includes('root.populateStoredCase ='));
+assert.ok(quarantineUi.includes('bindCalculationLifecycle'));
+assert.ok(quarantineUi.includes('root.QuarantineUi = Object.freeze'));
+assert.ok(!quarantineUi.includes('root.calculateAll ='), 'Quarantine UI nu trebuie să suprascrie calculateAll.');
+assert.ok(!quarantineUi.includes('base.apply'), 'Quarantine UI nu trebuie să învelească motorul de calcul.');
 
 for (const marker of ['openEndedOmitted','normalizeGlobalNav','normalizeDateInputs','removeOfficerSuiteNav']) {
   assert.ok(finalize.includes(marker), `Finalizerul operațional trebuie să includă ${marker}`);
@@ -144,10 +149,10 @@ for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport',
 assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('scheduleBottomNavMetrics'));
 
-for (const marker of ['service worker',"const VERSION = 'v24'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./js/rules.js','./js/app.js','./js/pedepse-ux.js','./js/deduction-ui.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
+for (const marker of ['service worker',"const VERSION = 'v25'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./js/rules.js','./js/app.js','./js/pedepse-ux.js','./js/deduction-ui.js','./js/quarantine-rules.js','./js/quarantine-ui.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-prison-date.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
-assert.ok(sw.includes('(?:version|ux-upgrades|rules|app|pedepse-ux|deduction-ui|operational-upgrades'));
+assert.ok(sw.includes('(?:version|ux-upgrades|rules|app|pedepse-ux|deduction-ui|quarantine-rules|quarantine-ui|operational-upgrades'));
 assert.ok(sw.includes('pedepse-prison-date'));
 assert.ok(!sw.includes('operational-corrections-v4'));
 for (const legacy of ['mobile-bottom-nav-clearance-v5.css','mobile-no-floating-v2.css','pwa-mobile.css','mobile-runtime-fixes-v2.css','mobile-operational-v2.css','pedepse-modes-v4.js','pedepse-modes-v3-kill.js']) {
@@ -165,4 +170,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: controllere stabile încărcate direct, fără corrections loader sau monkey-patch, numai bottom nav fixed.');
+console.log('Mobile/PWA audit: controllere stabile și carantină pe lifecycle explicit, fără corrections loader sau monkey-patch, numai bottom nav fixed.');
