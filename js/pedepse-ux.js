@@ -129,7 +129,7 @@
         addIssue(
           issues,
           interval.control,
-          'Există perioade deduse care se suprapun. Zilele comune vor fi numărate o singură dată.',
+          'Există perioade deduse care se suprapun. Intervalele sunt calculate integral; verifică dacă suprapunerea este intenționată.',
           'warning'
         );
       }
@@ -171,7 +171,7 @@
         addIssue(
           issues,
           interval.control,
-          'Există perioade adăugate care se suprapun. Zilele comune vor fi numărate o singură dată.',
+          'Există perioade adăugate care se suprapun. Intervalele efective sunt calculate integral; verifică dacă suprapunerea este intenționată.',
           'warning'
         );
       }
