@@ -31,18 +31,72 @@
     location.href = new URL(path, rootUrl).href;
   }
 
+  function aiRowSource(row) {
+    return row.querySelector('.ai-source')?.textContent?.toLocaleLowerCase('ro') || '';
+  }
+
+  function aiRowType(row) {
+    const source = aiRowSource(row);
+    if (source.includes('reținere 24') || source.includes('retinere 24')) return 'retention24h';
+    if (source.includes('domiciliu')) return 'home_arrest';
+    if (source.includes('preventiv')) return 'preventive';
+    return 'generic';
+  }
+
+  function aiRowIsOpenEnded(row) {
+    const source = aiRowSource(row);
+    const start = row.querySelector('.d-start')?.value.trim() || '';
+    const end = row.querySelector('.d-end')?.value.trim() || '';
+    if (!start || aiRowType(row) === 'retention24h') return false;
+    if (!end) return true;
+    return /(?:la\s+zi|„la\s+zi”|până\s+la\s+zi|pana\s+la\s+zi)/i.test(source);
+  }
+
   function aiDeductions() {
     return [...document.querySelectorAll('#deductionRows tr')].map(row => ({
       start: row.querySelector('.d-start')?.value.trim() || '',
       end: row.querySelector('.d-end')?.value.trim() || '',
-      type: (() => {
-        const source = row.querySelector('.ai-source')?.textContent?.toLocaleLowerCase('ro') || '';
-        if (source.includes('reținere 24') || source.includes('retinere 24')) return 'retention24h';
-        if (source.includes('domiciliu')) return 'home_arrest';
-        if (source.includes('preventiv')) return 'preventive';
-        return 'generic';
-      })()
+      type: aiRowType(row),
+      openEnded: aiRowIsOpenEnded(row)
     })).filter(item => item.start || item.end);
+  }
+
+  function transferDeductions() {
+    const deductions = [];
+    let openEndedOmitted = 0;
+    document.querySelectorAll('#deductionRows tr').forEach(row => {
+      const start = row.querySelector('.d-start')?.value.trim() || '';
+      let end = row.querySelector('.d-end')?.value.trim() || '';
+      if (!start && !end) return;
+      const type = aiRowType(row);
+      if (type === 'retention24h' && start && !end) end = start;
+      if (aiRowIsOpenEnded(row) || !start || !end) {
+        openEndedOmitted += 1;
+        return;
+      }
+      deductions.push({ start, end, type });
+    });
+    return { deductions, openEndedOmitted };
+  }
+
+  function annotateAiOpenEndedDeductions() {
+    const primary = document.querySelector('.ev-ai-primary');
+    if (!primary) return;
+    const rows = [...document.querySelectorAll('#deductionRows tr')];
+    const openRows = rows.filter(aiRowIsOpenEnded);
+    let note = primary.querySelector('.ev-ai-open-ended-note');
+    if (!openRows.length) {
+      note?.remove();
+      return;
+    }
+    if (!note) {
+      note = document.createElement('p');
+      note.className = 'ev-ai-open-ended-note';
+      primary.querySelector('.ev-ai-primary__deductions')?.insertAdjacentElement('afterend', note);
+    }
+    const dates = [...new Set(openRows.map(row => row.querySelector('.d-start')?.value.trim()).filter(Boolean))];
+    const text = `Deducerea „la zi”${dates.length ? ` (${dates.join(', ')})` : ''} stabilește data începerii. La transferul în Pedepse se trimit numai deducerile închise, pentru a evita dublarea scăderii.`;
+    if (note.textContent !== text) note.textContent = text;
   }
 
   function syncAiPrimary() {
@@ -55,15 +109,17 @@
     const deductions = aiDeductions();
     const list = deductions.length ? deductions.map(item => {
       const a = parseDateSafe(item.start), b = parseDateSafe(item.end || item.start);
-      const days = a && b && b >= a ? (item.type === 'retention24h' ? 1 : daysBetweenSafe(a,b)+1) : null;
-      return `<li><strong>${item.start || '—'}${item.end && item.end !== item.start ? ` – ${item.end}` : ''}</strong>${days ? ` · ${days} zile` : ''}</li>`;
+      const days = !item.openEnded && a && b && b >= a ? (item.type === 'retention24h' ? 1 : daysBetweenSafe(a,b)+1) : null;
+      return `<li><strong>${item.start || '—'}${item.end && item.end !== item.start ? ` – ${item.end}` : ''}</strong>${item.openEnded ? ' · la zi' : (days ? ` · ${days} zile` : '')}</li>`;
     }).join('') : '<li>Nu au fost identificate deduceri.</li>';
     box.querySelector('[data-ai-duration]').textContent = `${y} ani · ${m} luni · ${d} zile`;
     box.querySelector('[data-ai-start]').textContent = start;
     box.querySelector('[data-ai-deductions]').innerHTML = list;
+    annotateAiOpenEndedDeductions();
   }
 
   function sendAiToPedepse() {
+    const transfer = transferDeductions();
     setSessionJson(PREFILL_PEDEPSE, {
       source: 'ai',
       duration: {
@@ -72,7 +128,8 @@
         days: Number(document.getElementById('finalDays')?.value || 0)
       },
       startDate: document.getElementById('startDate')?.value.trim() || '',
-      deductions: aiDeductions()
+      deductions: transfer.deductions,
+      openEndedOmitted: transfer.openEndedOmitted
     });
     go('./');
   }
