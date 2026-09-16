@@ -2,8 +2,8 @@
 'use strict';
 
 const SECURE_CACHE = 'evidenta-ai-secure-deps-v5';
-const SHELL_CACHE = 'evidenta-ai-shell-v21';
-const RUNTIME_CACHE = 'evidenta-ai-runtime-v21';
+const SHELL_CACHE = 'evidenta-ai-shell-v22';
+const RUNTIME_CACHE = 'evidenta-ai-runtime-v22';
 const PREFIX = '/_secure/';
 const SCOPE = new URL(self.registration.scope);
 
@@ -60,8 +60,8 @@ const SHELL_PATHS = [
   './beta-lot7-start-date.js', './beta-lot7-duration.js', './contopire-audit.js', './dependencies.js', './security-runtime.js',
   './date-mask.js', './deduction-rules.js', './file-dedup.js', './file-dedup-runtime.js', './app.js', './source-preview.js', './result-pedepse.js',
   '../manifest.json', '../version.json', '../favicon-ev-2.svg',
-  '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile.css', '../css/mobile-modules.css', '../css/disclosure-hardening.css',
-  '../js/theme.js', '../js/version.js', '../js/ux-upgrades.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
+  '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile.css', '../css/mobile-modules.css', '../css/disclosure-hardening.css', '../css/analytics-consent.css',
+  '../js/theme.js', '../js/version.js', '../js/ux-upgrades.js', '../js/analytics.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
   '../js/operational-navigation.js', '../js/operational-ai.js', '../js/no-nonoptional-disclosures-v1.js', '../js/disclosure-hardening-v2.js',
   '../js/pwa-register.js'
 ];
@@ -159,8 +159,8 @@ async function staticResponse(request) {
 }
 
 function isCriticalSharedRuntime(url) {
-  return /\/js\/(?:version|ux-upgrades|operational-navigation|operational-ai|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
-    || /\/css\/(?:mobile|mobile-modules|operational-upgrades|disclosure-hardening)\.css$/i.test(url.pathname);
+  return /\/js\/(?:version|ux-upgrades|analytics|operational-navigation|operational-ai|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
+    || /\/css\/(?:mobile|mobile-modules|operational-upgrades|disclosure-hardening|analytics-consent)\.css$/i.test(url.pathname);
 }
 
 self.addEventListener('install', event => {
