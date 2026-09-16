@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/disclosure-hardening.css?v=2">
     <script src="js/theme.js?v=40" defer></script>
     <script src="js/ux-upgrades.js?v=3" defer></script>
-    <script src="js/pedepse-ux.js?v=2" defer></script>
+    <script src="js/pedepse-ux.js?v=3" defer></script>
     <script src="js/quarantine-rules.js?v=1" defer></script>
     <script src="js/quarantine-ui.js?v=2" defer></script>
     <script src="js/operational-navigation.js?v=4" defer></script>
@@ -189,7 +189,7 @@
             <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
 
             <div class="btn-row">
-                <button class="btn btn-gold" id="calcBtn" onclick="calculateAll()">CALCULEAZĂ</button>
+                <button class="btn btn-gold" id="calcBtn" onclick="EvidentaPedepseUx.runCalculation(calculateAll)">CALCULEAZĂ</button>
                 <button class="btn btn-outline" id="copyResultsBtn" onclick="copyResults()">COPIAZĂ REZULTATELE</button>
                 <button class="btn btn-outline" id="exportPdfBtn" onclick="exportPDF()">EXPORTĂ PDF</button>
             </div>
