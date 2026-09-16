@@ -13,6 +13,10 @@ const pedepse = read('js/pedepse-ux.js');
 const officer = read('ofiter/dashboard-cockpit.js');
 const version = read('js/version.js');
 
+for (const obsolete of ['css/consistency.css', 'css/hotfix.css']) {
+  assert.ok(!fs.existsSync(path.join(root, obsolete)), `${obsolete} trebuie eliminat după consolidarea în final-layer.css`);
+}
+
 for (const wrapper of ['css/style.css', 'instructaj/styles.css', 'semnalmente/style.css', 'ofiter/styles.css']) {
   const source = read(wrapper);
   assert.ok(source.includes('final-layer.css?v=1'), `${wrapper} trebuie să încarce stratul final consolidat`);
@@ -73,4 +77,4 @@ for (const marker of [
 assert.ok(version.includes('pedepse-ux.js?v=1'), 'Version controller trebuie să încarce UX-ul Pedepse');
 assert.ok(version.includes('dashboard-cockpit.js?v=1'), 'Version controller trebuie să încarce cockpit-ul Ofițer');
 
-console.log('Maturity UX: CSS consolidat fără FOUC, rezultat Pedepse, rânduri fără suprapuneri și cockpit Ofițer verificate.');
+console.log('Maturity UX: CSS consolidat fără straturi consistency/hotfix, fără FOUC, rezultat Pedepse, rânduri fără suprapuneri și cockpit Ofițer verificate.');
