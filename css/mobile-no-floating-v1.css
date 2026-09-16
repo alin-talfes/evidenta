@@ -1,0 +1,47 @@
+/*
+ * Evidență PPL — mobile no-floating policy.
+ * Pe telefon, controalele operaționale obișnuite rămân în fluxul documentului.
+ * Bottom navigation și overlay-urile tranzitorii (modal, sheet, toast) nu sunt atinse.
+ */
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode,
+  body.ev-unified[data-ev-page="pedepse"] .btn-row,
+  body.ev-unified[data-ev-page="instructaj"] .ev-operational-search,
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel,
+  body.ev-unified[data-ev-page="contopiri"] .legal-box h4,
+  body.ev-unified[data-ev-page="ai"] .ai-table th,
+  body.ev-unified[data-ev-page^="ofiter"] .quiz-top {
+    position: static !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  /* Instructaj: nici sidebar-ul intern nu trebuie să rămână lipit de viewport. */
+  body.ev-unified[data-ev-page="instructaj"] .sidebar {
+    position: static !important;
+    top: auto !important;
+  }
+
+  /* Pedepse: elimină tratamentul vizual de bară flotantă. */
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    margin: 12px 0 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Căutarea din Instructaj este o secțiune normală, nu un toolbar persistent. */
+  body.ev-unified[data-ev-page="instructaj"] .ev-operational-search {
+    margin-top: 8px !important;
+  }
+}
