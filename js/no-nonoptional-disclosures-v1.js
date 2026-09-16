@@ -19,7 +19,7 @@
     const style = document.createElement('style');
     style.id = 'ev-no-nonoptional-disclosures-style';
     style.textContent = `
-      details[data-ev-static-disclosure="true"] > .ev-static-disclosure-title {
+      details[data-ev-static-disclosure="true"] > summary.ev-static-disclosure-title {
         display:flex;
         align-items:center;
         min-height:42px;
@@ -30,8 +30,16 @@
         line-height:1.35;
         cursor:default;
         user-select:text;
+        list-style:none;
+        pointer-events:none;
       }
-      .ev-match-why > .ev-static-disclosure-title {
+      details[data-ev-static-disclosure="true"] > summary.ev-static-disclosure-title::-webkit-details-marker {
+        display:none;
+      }
+      details[data-ev-static-disclosure="true"] > summary.ev-static-disclosure-title::marker {
+        content:'';
+      }
+      .ev-match-why > summary.ev-static-disclosure-title {
         min-height:0;
         padding:0;
         color:var(--ev-accent-strong, #7aa7ff);
@@ -42,21 +50,20 @@
     document.head.appendChild(style);
   }
 
-  function replaceSummary(details) {
+  function neutralizeSummary(details) {
     const summary = details.querySelector(':scope > summary');
     if (!summary) return;
-    const title = document.createElement('div');
-    title.className = 'ev-static-disclosure-title';
-    if (summary.id) title.id = summary.id;
-    while (summary.firstChild) title.appendChild(summary.firstChild);
-    summary.replaceWith(title);
+    summary.classList.add('ev-static-disclosure-title');
+    summary.setAttribute('tabindex', '-1');
+    summary.setAttribute('aria-disabled', 'true');
+    summary.removeAttribute('aria-expanded');
   }
 
   function freezeDetails(details) {
     if (!(details instanceof HTMLElement) || details.tagName !== 'DETAILS' || isOptionalDisclosure(details)) return;
     details.dataset.evStaticDisclosure = 'true';
     details.open = true;
-    replaceSummary(details);
+    neutralizeSummary(details);
 
     if (details.dataset.evStaticDisclosureBound === 'true') return;
     details.dataset.evStaticDisclosureBound = 'true';
