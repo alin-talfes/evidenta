@@ -56,12 +56,15 @@
   }
 
   function ensureBottomNavClearance() {
-    if (document.querySelector('link[data-evidenta-bottom-nav-clearance]')) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = new URL('../css/mobile-bottom-nav-clearance-v3.css?v=1', scriptUrl).href;
-    link.dataset.evidentaBottomNavClearance = 'true';
-    document.head.appendChild(link);
+    let link = document.querySelector('link[data-evidenta-bottom-nav-clearance]');
+    const href = new URL('../css/mobile-bottom-nav-clearance-v4.css?v=1', scriptUrl).href;
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.dataset.evidentaBottomNavClearance = 'true';
+      document.head.appendChild(link);
+    }
+    if (link.href !== href) link.href = href;
   }
 
   function platformClass() {
@@ -132,10 +135,16 @@
     const root = document.documentElement;
     const mobile = window.matchMedia?.('(max-width: 760px)').matches ?? window.innerWidth <= 760;
     const nav = document.querySelector('.ev-mobile-nav');
+    const shouldInset = Boolean(mobile && nav);
 
-    if (!mobile || !nav) {
+    root.classList.toggle('ev-mobile-nav-inset', shouldInset);
+
+    if (!shouldInset) {
       root.style.removeProperty('--ev-mobile-nav-live-height');
-      if (!mobile) document.querySelectorAll('[data-ev-bottom-nav-scroll-root]').forEach(node => node.removeAttribute('data-ev-bottom-nav-scroll-root'));
+      document.querySelectorAll('[data-ev-bottom-nav-scroll-root]').forEach(node => node.removeAttribute('data-ev-bottom-nav-scroll-root'));
+      navResizeObserver?.disconnect();
+      navResizeObserver = null;
+      navResizeTarget = null;
       return false;
     }
 
@@ -172,15 +181,17 @@
 
   function monitorViewport() {
     const viewport = window.visualViewport;
-    if (!viewport) return;
     const update = () => {
-      document.documentElement.style.setProperty('--ev-visual-height', `${Math.round(viewport.height)}px`);
-      const keyboardOpen = window.innerHeight - viewport.height > 150;
+      if (viewport) document.documentElement.style.setProperty('--ev-visual-height', `${Math.round(viewport.height)}px`);
+      else document.documentElement.style.setProperty('--ev-visual-height', `${window.innerHeight}px`);
+      const keyboardOpen = viewport ? window.innerHeight - viewport.height > 150 : false;
       document.documentElement.classList.toggle('ev-virtual-keyboard-open', keyboardOpen);
       scheduleBottomNavMetrics();
     };
-    viewport.addEventListener('resize', update, { passive:true });
-    viewport.addEventListener('scroll', update, { passive:true });
+    if (viewport) {
+      viewport.addEventListener('resize', update, { passive:true });
+      viewport.addEventListener('scroll', update, { passive:true });
+    }
     update();
   }
 
@@ -232,7 +243,7 @@
     onlineState();
     window.addEventListener('online', onlineState);
     window.addEventListener('offline', onlineState);
-    window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change', event => {
+    window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change', () => {
       platformClass();
       scheduleBottomNavMetrics();
     });
