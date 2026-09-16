@@ -59,7 +59,9 @@ function applyDateMask(e) {
 
 function setToday(inputId) {
     const input = document.getElementById(inputId);
-    if (input) input.value = fmtDate(today());
+    if (!input) return;
+    input.value = fmtDate(today());
+    input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
 function updAgeTag() {
@@ -210,7 +212,9 @@ function resetAll() {
     const errorContainer = document.getElementById('errorContainer');
     if (errorContainer) errorContainer.classList.remove('visible');
     localStorage.removeItem('anpLastCase');
+    if (typeof syncPrisonReceivedControl === 'function') syncPrisonReceivedControl({ infer: true });
     if (typeof calcMasuriPreventive === 'function') calcMasuriPreventive();
+    if (typeof syncPreventiveDayPresets === 'function') syncPreventiveDayPresets();
 }
 
 function toggleSteps() {
