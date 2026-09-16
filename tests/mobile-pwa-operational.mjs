@@ -25,7 +25,7 @@ const aiSw = read('ai/security-sw.js');
 const index = read('index.html');
 const manifest = JSON.parse(read('manifest.json'));
 
-for (const marker of ['operational-upgrades.js?v=1','operational-corrections-v4.js?v=2','operational-finalize.js?v=1','mobile-operational-v2.js?v=2','pwa-register.js?v=2']) {
+for (const marker of ['ux-upgrades.js?v=3','operational-upgrades.js?v=1','operational-corrections-v4.js?v=2','operational-finalize.js?v=1','mobile-operational-v2.js?v=2','pwa-register.js?v=2']) {
   assert.ok(version.includes(marker), `Loaderul global trebuie să includă ${marker}`);
 }
 for (const legacy of ['pedepse-modes-v4.js','pedepse-optional-fix.js','disclosure-hardening.js?v=1']) {
@@ -102,16 +102,18 @@ for (const marker of ['ensureViewportFit','viewport-fit=cover','visualViewport',
 assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('scheduleBottomNavMetrics'));
 
-for (const marker of ['service worker',"const VERSION = 'v20'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
+for (const marker of ['service worker',"const VERSION = 'v21'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/pwa-register.js','./js/ux-upgrades.js','./css/mobile.css','./css/mobile-modules.css','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
+assert.ok(sw.includes('(?:version|ux-upgrades|operational-upgrades'));
 for (const legacy of ['mobile-bottom-nav-clearance-v5.css','mobile-no-floating-v2.css','pwa-mobile.css','mobile-runtime-fixes-v2.css','mobile-operational-v2.css','pedepse-modes-v4.js','pedepse-modes-v3-kill.js']) {
   assert.ok(!sw.includes(legacy), `Service Worker-ul principal nu trebuie să precache-uiască ${legacy}`);
 }
 
-for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v11','evidenta-ai-runtime-v11','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pwa-register.js','../css/mobile.css','../css/mobile-modules.css','../js/pedepse-modes-v5.js','../js/pedepse-optional-fix-v2.js','../js/disclosure-hardening-v2.js','isCriticalSharedRuntime']) {
+for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v12','evidenta-ai-runtime-v12','tessdata-best/ron.traineddata.gz','navigationResponse','../js/pwa-register.js','../js/ux-upgrades.js','../css/mobile.css','../css/mobile-modules.css','../js/pedepse-modes-v5.js','../js/pedepse-optional-fix-v2.js','../js/disclosure-hardening-v2.js','isCriticalSharedRuntime']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să includă ${marker}`);
 }
+assert.ok(aiSw.includes('(?:version|ux-upgrades|pwa-register'));
 assert.ok(!aiSw.includes('../js/pedepse-modes-v4.js'));
 assert.ok(!aiSw.includes('../js/disclosure-hardening.js'));
 
@@ -119,4 +121,4 @@ assert.equal(manifest.display, 'standalone');
 assert.equal(manifest.scope, './');
 assert.ok(Array.isArray(manifest.shortcuts) && manifest.shortcuts.some(item => item.url === './ai/'));
 
-console.log('Mobile/PWA audit: CSS mobil consolidat, controllere Pedepse stabile și numai bottom nav persistent.');
+console.log('Mobile/PWA audit: CSS mobil consolidat, controller UX network-first, controllere Pedepse stabile și numai bottom nav persistent.');
