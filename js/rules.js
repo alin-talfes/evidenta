@@ -90,26 +90,15 @@ function getLiberationFractions(life, art, ageAtExpiry, sentenceOver10, totalDay
 }
 
 /**
- * Unifică intervalele de perioade deduse și calculează totalul de zile.
+ * Însumează integral intervalele introduse, cu ambele capete incluse.
+ * Suprapunerile nu sunt deduplicate: sunt calculate integral și semnalate separat în UI.
  */
 function sumIntervals(intervals) {
-    if (!intervals.length) return 0;
-    const sorted = intervals.slice().sort((a, b) => a[0].getTime() - b[0].getTime());
-    let total = daysBetween(sorted[0][0], sorted[0][1]) + 1;
-    let currentEnd = sorted[0][1];
-    for (let i = 1; i < sorted.length; i++) {
-        const [start, end] = sorted[i];
-        if (start <= currentEnd) {
-            if (end > currentEnd) {
-                total += daysBetween(currentEnd, end);
-                currentEnd = end;
-            }
-        } else {
-            total += daysBetween(start, end) + 1;
-            currentEnd = end;
-        }
-    }
-    return total;
+    return (intervals || []).reduce((sum, interval) => {
+        const [start, end] = interval || [];
+        if (!(start instanceof Date) || !(end instanceof Date) || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return sum;
+        return sum + daysBetween(start, end) + 1;
+    }, 0);
 }
 
 // ========== CALIBRARE OPERAȚIONALĂ LC 2026 ==========
