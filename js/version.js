@@ -99,6 +99,13 @@
             new URL('./pedepse-modes-v4.js?v=1', scriptUrl).href,
             'evidentaPedepseModesV4'
         );
+        if (document.getElementById('masuri-preventive-heading')) {
+            ensureScript(
+                'script[data-evidenta-pedepse-optional-fix]',
+                new URL('./pedepse-optional-fix.js?v=1', scriptUrl).href,
+                'evidentaPedepseOptionalFix'
+            );
+        }
         ensureScript(
             'script[data-evidenta-disclosure-hardening]',
             new URL('./disclosure-hardening.js?v=1', scriptUrl).href,
