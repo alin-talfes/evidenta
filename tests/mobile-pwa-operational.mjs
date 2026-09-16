@@ -89,9 +89,10 @@ for (const marker of ['--ev-mobile-nav-safe-height','--ev-mobile-content-clearan
   assert.ok(navClearanceCss.includes(marker), `Clearance-ul bottom-nav trebuie să includă ${marker}`);
 }
 
-for (const marker of ['service worker',"const VERSION = 'v9'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/pedepse-modes-v4.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v2.css']) {
+for (const marker of ['service worker',"const VERSION = 'v10'",'networkFirstStatic','isCriticalRuntime','PRECACHE_OPTIONAL','./contopiri/','./transfer/','./instructaj/','./semnalmente/','./ai/','./js/operational-corrections-v4.js','./js/pedepse-modes-v4.js','./js/pedepse-modes-v5.js','./js/pedepse-optional-fix-v2.js','./js/disclosure-hardening-v2.js','./semnalmente/enhancements.js','./css/pedepse-modes-v3.css','./js/disclosure-hardening.js','./css/disclosure-hardening.css','./css/mobile-bottom-nav-clearance-v2.css']) {
   assert.ok(sw.includes(marker), `Service Worker-ul principal trebuie să includă ${marker}`);
 }
+assert.ok(sw.includes('/\\/semnalmente\\/enhancements\\.js$/i') || sw.includes('semnalmente\\/enhancements'), 'Semnalmente enhancements trebuie servit network-first pentru a evita codul stale care poate bloca UI-ul.');
 assert.ok(!sw.includes('./js/regime-reanalysis.js'), 'Service Worker-ul nu trebuie să mai păstreze în cache modulul retras.');
 for (const marker of ['verifiedResponse','SHA-256','evidenta-ai-shell-v6','evidenta-ai-runtime-v6','tessdata-best/ron.traineddata.gz','navigationResponse','../js/operational-corrections-v4.js','../js/pedepse-modes-v4.js','../css/pedepse-modes-v3.css','../js/disclosure-hardening.js','../css/disclosure-hardening.css']) {
   assert.ok(aiSw.includes(marker), `Service Worker-ul AI trebuie să păstreze securitatea și offline-ul: ${marker}`);
