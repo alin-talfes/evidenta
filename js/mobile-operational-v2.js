@@ -8,11 +8,11 @@
   const rootUrl = new URL('../', scriptUrl);
 
   function ensureStyles() {
-    if (document.querySelector('link[data-evidenta-mobile-operational-v2]')) return;
+    if (document.querySelector('link[data-evidenta-mobile-modules]')) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = new URL('../css/mobile-operational-v2.css?v=1', scriptUrl).href;
-    link.dataset.evidentaMobileOperationalV2 = 'true';
+    link.href = new URL('../css/mobile-modules.css?v=1', scriptUrl).href;
+    link.dataset.evidentaMobileModules = 'true';
     document.head.appendChild(link);
   }
 
@@ -53,8 +53,6 @@
     const mode = document.querySelector('.ev-calc-mode');
 
     const lc = detailsShell('ev-mobile-lc-details', 'Liberare condiționată și date PPL');
-    // În modul complet, secțiunea LC/PPL este informație principală și trebuie să fie
-    // vizibilă imediat. Utilizatorul o poate plia manual ulterior dacă dorește.
     lc.details.open = true;
     if (general) lc.body.appendChild(general);
     if (lcGrid) {
@@ -69,7 +67,6 @@
       (mode || sentence).insertAdjacentElement(mode ? 'afterend' : 'beforebegin', lc.details);
     }
 
-    // Măsurile preventive au categorie/mod propriu și nu intră în opțiunile avansate.
     const rareIds = ['recurs-heading', 'nonExec-heading', 'rest-heading'];
     const rareCards = rareIds.map(id => document.getElementById(id)?.closest('.card')).filter(Boolean);
     if (rareCards.length) {
@@ -97,25 +94,6 @@
         if (advanced?.querySelector('.ev-field-invalid,[aria-invalid="true"]')) advanced.open = true;
       });
     });
-  }
-
-  function addRetentionPreset() {
-    if (pageKey() !== 'pedepse') return;
-    const add = document.getElementById('addDedBtn');
-    if (!add || document.querySelector('[data-add-retention]')) return;
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'btn btn-outline btn-sm ev-retention-preset';
-    button.dataset.addRetention = 'true';
-    button.textContent = '+ REȚINERE 24H';
-    button.addEventListener('click', () => {
-      if (typeof window.addDedRow !== 'function') return;
-      window.addDedRow({ type:'retention24h' });
-      const row = document.querySelector('#deductionsContainer .deduction-row:last-child');
-      row?.querySelector('.ded-start')?.focus();
-      row?.scrollIntoView({ behavior:'smooth', block:'center' });
-    });
-    add.insertAdjacentElement('afterend', button);
   }
 
   function makeAiCameraFirst() {
@@ -154,8 +132,7 @@
       input.removeAttribute('multiple');
       input.setAttribute('capture', 'environment');
       input.addEventListener('change', () => setTimeout(restore, 0), { once:true });
-      const onFocus = () => setTimeout(restore, 1200);
-      window.addEventListener('focus', onFocus, { once:true });
+      window.addEventListener('focus', () => setTimeout(restore, 1200), { once:true });
       input.click();
     });
   }
@@ -247,7 +224,6 @@
   function init() {
     ensureStyles();
     buildPedepseDisclosure();
-    addRetentionPreset();
     makeAiCameraFirst();
     makeAiReviewOperational();
     compactContopiriResult();
