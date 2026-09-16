@@ -17,6 +17,7 @@ const app = read('js/app.js');
 const ui = read('js/ui.js');
 const storage = read('js/storage.js');
 const pedepseUx = read('js/pedepse-ux.js');
+const pedepseOptional = read('js/pedepse-optional.js');
 const deductionUi = read('js/deduction-ui.js');
 const quarantineUi = read('js/quarantine-ui.js');
 const nav = read('js/operational-navigation.js');
@@ -59,9 +60,11 @@ for (const [file, html] of [
   for (const script of sharedScripts) assert.ok(html.includes(script), `${file} trebuie să declare ${script}`);
 }
 
-for (const marker of ['operational-pedepse.js?v=4', 'pedepse-optional-fix-v2.js?v=1', 'pedepse-ux.js?v=4', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
+for (const marker of ['operational-pedepse.js?v=5', 'pedepse-optional.js?v=1', 'pedepse-ux.js?v=4', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
   assert.ok(rootHtml.includes(marker), `Pedepse trebuie să declare ${marker}`);
 }
+assert.ok(!rootHtml.includes('pedepse-optional-fix-v2.js'), 'Pedepse nu trebuie să mai încarce controllerul optional de compatibilitate.');
+assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-optional-fix-v2.js')), 'Controllerul optional de compatibilitate trebuie eliminat.');
 assert.ok(!rootHtml.includes('pedepse-modes-v5.js'), 'Pedepse nu trebuie să mai încarce controllerul stratificat de moduri.');
 assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-modes-v5.js')), 'Controllerul stratificat pedepse-modes-v5 trebuie eliminat.');
 assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare controllerul UI general curent.');
@@ -76,8 +79,12 @@ for (const marker of [
   'Calcul rapid',
   'Calcul complet LC',
   'Măsuri preventive',
-  'class="ev-preventive-mode-panel"'
-]) assert.ok(rootHtml.includes(marker), `Markup-ul declarativ al modurilor trebuie să includă ${marker}`);
+  'class="ev-preventive-mode-panel"',
+  'class="ev-optional-tools card"',
+  'id="recursCard"',
+  'id="nonExecCard"',
+  'id="restCard"'
+]) assert.ok(rootHtml.includes(marker), `Markup-ul declarativ Pedepse trebuie să includă ${marker}`);
 assert.ok(aiHtml.includes('operational-ai.js?v=3'));
 assert.ok(aiHtml.includes('ai/result-pedepse.js?v=1'));
 assert.ok(contopiriHtml.includes('operational-contopiri.js?v=2'));
@@ -121,13 +128,23 @@ for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOffic
 for (const marker of [
   'quickCalculate', 'setMode', 'function calculate()', 'EvidentaPedepseOperational',
   'syncQuickResultControls', 'buildMobileDisclosure', 'Liberare condiționată și date PPL',
-  'Opțiuni avansate', 'ev-prefill-banner', 'aria-live'
+  'EvidentaPedepseOptional?.revealInvalid?.()', 'ev-prefill-banner', 'aria-live'
 ]) {
   assert.ok(pedepse.includes(marker), `Pedepse trebuie să includă ${marker}`);
 }
+assert.ok(!pedepse.includes('Opțiuni avansate'), 'Pedepse nu trebuie să mai construiască wrapper-ul mobil redundant al opțiunilor.');
+assert.ok(!pedepse.includes('ev-mobile-advanced-details'), 'Pedepse nu trebuie să mai mute Situațiile suplimentare într-un al doilea disclosure.');
 assert.ok(!pedepse.includes('stopImmediatePropagation'), 'Modurile Pedepse nu trebuie să coopereze prin blocarea propagării evenimentului.');
 assert.ok(!pedepse.includes("document.createElement('div');\n    mode.className = 'ev-calc-mode'"), 'Selectorul de mod trebuie să existe în HTML, nu să fie construit de controller.');
 assert.ok(!pedepse.includes('observe(document.body'));
+
+for (const marker of ['syncFromValues', 'revealInvalid', 'window.EvidentaPedepseOptional = Object.freeze']) {
+  assert.ok(pedepseOptional.includes(marker), `Controllerul opțiunilor trebuie să includă ${marker}`);
+}
+for (const forbidden of ['setTimeout', 'new MutationObserver', 'stopImmediatePropagation']) {
+  assert.ok(!pedepseOptional.includes(forbidden), `Controllerul opțiunilor nu trebuie să conțină ${forbidden}`);
+}
+
 for (const marker of ['sendAiToPedepse', 'sendAiToContopiri', 'aiRowIsOpenEnded', 'transferDeductions', 'openEndedOmitted', 'ev-ai-open-ended-note', 'FOTOGRAFIAZĂ MANDATUL', 'ev-ai-evidence-details']) {
   assert.ok(ai.includes(marker), `AI trebuie să includă ${marker}`);
 }
@@ -206,8 +223,11 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v43'"));
+assert.ok(sw.includes("const VERSION = 'v44'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
+assert.ok(sw.includes('./js/pedepse-optional.js'));
+assert.ok(sw.includes('pedepse-optional|deduction-ui'));
+assert.ok(!sw.includes('pedepse-optional-fix-v2'));
 assert.ok(!sw.includes('pedepse-prison-date'));
 assert.ok(!sw.includes('pedepse-modes-v5'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
@@ -225,9 +245,9 @@ assert.ok(aiSw.includes('../js/disclosure-hardening-v2.js'));
 assert.ok(aiSw.includes('../css/disclosure-hardening.css'));
 assert.ok(aiSw.includes('../css/mobile.css'));
 assert.ok(!aiSw.includes('mobile-operational-v2'));
-for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-fix-v2.js', '../css/pedepse-modes-v3.css']) {
+for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional.js', '../js/pedepse-optional-fix-v2.js', '../css/pedepse-modes-v3.css']) {
   assert.ok(!aiSw.includes(pedepseOnly), `AI SW nu trebuie să precache-uiască ${pedepseOnly}`);
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: modurile Pedepse au un singur controller și markup declarativ, dependențele sunt route-owned, css/mobile.css este static, iar lifecycle-ul PWA nu injectează CSS.');
+console.log('Mobile/PWA audit: modurile și Situațiile suplimentare Pedepse au controllere unice, markup declarativ și fără compatibilitate legacy; lifecycle-ul PWA rămâne route-owned.');
