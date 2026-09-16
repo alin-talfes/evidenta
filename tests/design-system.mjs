@@ -62,11 +62,17 @@ for (const marker of [
   "--ev-page-gap:",
   "--ev-panel-pad:",
   "body.ev-unified",
-  ".learning-module-card",
-  ".section-hub-card",
   ".upload-zone",
   ".benchmark-drop",
   ".access-card",
+  ".ev-shell__menu",
+  ".ev-optional-tools",
+  ".ev-validation-summary",
+  ".ev-result-overview",
+  ".ev-match-why",
+  ".ev-anexa-tabs",
+  ".ev-verification-banner",
+  ".learning-cockpit",
   ".ev-officer-mobile-nav"
 ]) {
   assert.ok(finalLayer.includes(marker), `Stratul structural consolidat trebuie să conțină ${marker}`);
@@ -76,6 +82,7 @@ assert.ok(finalLayer.includes("var(--ev-border)"), "Stratul final trebuie să fo
 assert.ok(finalLayer.includes("var(--ev-accent"), "Stratul final trebuie să folosească accentul comun");
 assert.ok(!fs.existsSync(path.join(repoDir, "css/consistency.css")), "consistency.css trebuie eliminat după consolidarea în final-layer.css");
 assert.ok(!fs.existsSync(path.join(repoDir, "css/hotfix.css")), "hotfix.css trebuie eliminat după consolidarea în final-layer.css");
+assert.ok(!fs.existsSync(path.join(repoDir, "css/ux-upgrades.css")), "ux-upgrades.css trebuie eliminat după consolidarea în final-layer.css");
 
 assert.ok(themeController.includes("const THEME_STORAGE_KEY = 'evidenta-theme'"), "Tema trebuie salvată într-o singură cheie universală");
 assert.ok(themeController.includes("'anpTheme'"), "Controllerul trebuie să migreze cheia veche a nucleului");
@@ -101,9 +108,9 @@ for (const [module, source] of Object.entries(visualEntries)) {
     source.lastIndexOf("final-layer.css") > source.lastIndexOf("visual-audit.css"),
     `${module} trebuie să încarce final-layer.css după auditul vizual`
   );
-  assert.ok(!source.includes("consistency.css"), `${module} nu trebuie să mai refere consistency.css`);
-  assert.ok(!source.includes("hotfix.css"), `${module} nu trebuie să mai refere hotfix.css`);
-  assert.ok(!source.includes("ux-upgrades.css"), `${module} nu trebuie să mai refere ux-upgrades.css`);
+  for (const legacy of ["consistency.css", "hotfix.css", "ux-upgrades.css"]) {
+    assert.ok(!new RegExp(`@import\\s+url\\([^)]*${legacy.replace('.', '\\.')}[^)]*\\)`, 'i').test(source), `${module} nu trebuie să mai încarce activ ${legacy}`);
+  }
 }
 
 const themeBridges = {
