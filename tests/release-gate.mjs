@@ -8,6 +8,9 @@ const releaseGate = read('RELEASE_GATE.md');
 const packageJson = JSON.parse(read('package.json'));
 const manifest = JSON.parse(read('manifest.json'));
 const versionSource = read('js/version.js');
+const rulesSource = read('js/rules.js');
+const appSource = read('js/app.js');
+const exportSource = read('js/export.js');
 const rootHtml = read('index.html');
 const aiHtml = read('ai/index.html');
 const manualRules = read('js/deduction-ui.js');
@@ -22,16 +25,37 @@ assert.ok(packageJson.scripts.test.includes('tests/release-gate.mjs'), 'Release 
 for (const route of ['./', './contopiri/', './ai/', './transfer/']) {
   assert.ok(manifest.shortcuts.some(item => item.url === route), `Manifestul nu expune ruta ${route}`);
 }
-assert.ok(rootHtml.includes('js/release-guards.js?v=1'), 'Protecțiile juridice de release trebuie declarate pe ruta Pedepse');
-assert.ok(aiHtml.includes('js/release-guards.js?v=1'), 'Protecțiile juridice de release trebuie declarate pe ruta AI cât timp paritatea folosește același motor');
-assert.ok(!versionSource.includes('release-guards.js'), 'version.js trebuie să rămână identity-only și să nu încarce protecțiile dinamic');
+
+assert.ok(!fs.existsSync('js/release-guards.js'), 'Controllerul release-guards trebuie eliminat după integrarea regulilor în motorul principal');
+assert.ok(!rootHtml.includes('release-guards.js'), 'Ruta Pedepse nu trebuie să mai încarce release-guards');
+assert.ok(!aiHtml.includes('release-guards.js'), 'Ruta AI nu trebuie să mai încarce release-guards');
+assert.ok(!versionSource.includes('release-guards.js'), 'version.js trebuie să rămână identity-only');
+for (const marker of [
+  "const VCP_LIFE_ARTICLE = 'VCP551'",
+  'VCP_AGE_GUARDED_ARTICLES',
+  'calendarThresholdDays',
+  'buildLifeSchedule',
+  'applyVcpAgeFloor',
+  'vcpLifeElderlyApplied'
+]) {
+  assert.ok(rulesSource.includes(marker), `Motorul juridic principal trebuie să includă ${marker}`);
+}
+for (const marker of [
+  'lifeThresholdYears',
+  'lifeThresholdName',
+  'vcpLifeElderlyApplied',
+  'Prag VCP art. 55¹'
+]) {
+  assert.ok(appSource.includes(marker), `UI-ul Pedepse trebuie să derive pragul de viață din schedule: ${marker}`);
+}
+assert.ok(exportSource.includes('lifeThresholdText'), 'Exportul trebuie să folosească pragul de viață calculat, nu un text fix de 20 ani');
+assert.ok(!exportSource.includes("calc.life ? 'prag LC 20 ani'"), 'Exportul nu trebuie să forțeze 20 ani pentru toate cazurile de detențiune pe viață');
 
 const ctx = { console, Date, Math, Number, String, Array, Object, Set, JSON, globalThis:null };
 ctx.globalThis = ctx;
 vm.createContext(ctx);
 vm.runInContext(read('js/utils.js'), ctx, { filename:'js/utils.js' });
-vm.runInContext(read('js/rules.js'), ctx, { filename:'js/rules.js' });
-vm.runInContext(read('js/release-guards.js'), ctx, { filename:'js/release-guards.js' });
+vm.runInContext(rulesSource, ctx, { filename:'js/rules.js' });
 
 const schedule = ctx.calculateLiberationSchedule;
 const start = new Date(2026,0,1);
@@ -116,7 +140,7 @@ assert.ok(storageSource.includes('ManualDeductionRules?.collectRows?.()'), 'Salv
 assert.ok(storageSource.includes('dedRows: collectStoredDeductionRows()'), 'Spețele salvate trebuie să persiste rândurile tipizate');
 assert.ok(storageSource.includes("type: r.type || 'generic'"), 'Încărcarea spețelor trebuie să restaureze tipul deducerii și să păstreze compatibilitatea legacy');
 assert.ok(aiRules.includes('TYPE_RETENTION_24H'), 'AI trebuie să păstreze regula reținerii');
-assert.ok(read('js/app.js').includes('EDUCATIONAL_ARTICLES.has(art)'), 'Măsurile educative nu trebuie să primească automat reanalizarea 1/5');
+assert.ok(appSource.includes('EDUCATIONAL_ARTICLES.has(art)'), 'Măsurile educative nu trebuie să primească automat reanalizarea 1/5');
 assert.ok(read('transfer/rules.js').includes("consolidatedAt: '30.03.2026'"), 'Baseline-ul profilării transfer trebuie păstrat explicit');
 
-console.log('Release gate 1.0: LC, VCP 55¹ 20/15 ani, praguri de vârstă, contopiri, deduceri, persistență și rute verificate.');
+console.log('Release gate 1.0: LC integrat în motorul principal, VCP 55¹ 20/15 ani, praguri de vârstă, contopiri, deduceri, persistență și rute verificate.');
