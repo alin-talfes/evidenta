@@ -26,9 +26,9 @@ const modes = read('js/pedepse-modes-v5.js');
 const prison = read('js/pedepse-prison-date.js');
 
 for (const marker of [
-  'operational-navigation.js?v=3', 'operational-pedepse.js?v=3', 'operational-ai.js?v=3',
+  'operational-navigation.js?v=4', 'operational-pedepse.js?v=3', 'operational-ai.js?v=3',
   'operational-contopiri.js?v=2', 'operational-transfer.js?v=2',
-  'operational-instructaj.js?v=1', 'operational-semnalmente.js?v=2'
+  'operational-instructaj.js?v=1', 'operational-semnalmente.js?v=2', 'pwa-register.js?v=3'
 ]) assert.ok(version.includes(marker), `Lipsește ${marker}`);
 assert.ok(version.includes('ensureGlobalOperationalControllers'));
 assert.ok(version.includes('ensurePedepseOperationalControllers'));
@@ -45,7 +45,7 @@ for (const retired of ['operational-upgrades.js', 'operational-finalize.js', 'op
   assert.ok(!fs.existsSync(path.join(root, 'js', retired)), `${retired} trebuie eliminat`);
 }
 
-for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOfficerSuiteNav', 'input[type="number"]', 'ev-mobile-nav', 'evidenta:shellready']) {
+for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOfficerSuiteNav', 'input[type="number"]', 'ev-mobile-nav', 'evidenta:shellready', 'nav.appendChild(sheet)', 'evidenta:mobile-nav-ready']) {
   assert.ok(nav.includes(marker), `Navigația trebuie să includă ${marker}`);
 }
 for (const marker of ['quickCalculate', 'syncQuickResultControls', 'buildMobileDisclosure', 'Liberare condiționată și date PPL', 'Opțiuni avansate', 'ev-prefill-banner', 'aria-live']) {
@@ -90,11 +90,14 @@ for (const marker of ['Calcul rapid', 'Calcul complet LC', 'Măsuri preventive',
 for (const marker of ['setupControl', 'validateBeforeCalculation', 'prisonReceivedSameAsStart']) assert.ok(prison.includes(marker));
 assert.ok(!prison.includes('window.calculateAll ='));
 
-assert.ok(pwa.includes('css/mobile.css?v=1'));
-assert.ok(pwa.includes('css/mobile-modules.css'));
+for (const marker of ['css/mobile.css?v=1', 'css/mobile-modules.css', 'initBottomNavLayout', 'evidenta:mobile-nav-ready', "matchMedia?.('(max-width: 760px)')", "matchMedia?.('(display-mode: standalone)')"]) {
+  assert.ok(pwa.includes(marker), `PWA lifecycle trebuie să includă ${marker}`);
+}
 assert.ok(!pwa.includes('new ResizeObserver'));
+assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
+assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v31'"));
+assert.ok(sw.includes("const VERSION = 'v32'"));
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|disclosure-hardening'));
 for (const file of ['operational-navigation', 'operational-pedepse', 'operational-ai', 'operational-contopiri', 'operational-transfer', 'operational-instructaj', 'operational-semnalmente']) {
   assert.ok(sw.includes(`./js/${file}.js`), `SW trebuie să includă ${file}`);
@@ -115,4 +118,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional-
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: comportamente mobile deținute de controllerele modulelor, fără monolit mobil și numai bottom nav fixed.');
+console.log('Mobile/PWA audit: lifecycle determinist fără retry timers, more sheet deținut de bottom nav și controllere mobile modulare.');
