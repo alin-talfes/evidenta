@@ -15,6 +15,7 @@ const transferHtml = read('transfer/index.html');
 const transferRulesHtml = read('transfer/rules/index.html');
 const ux = read('js/ux-upgrades.js');
 const pedepseUx = read('js/pedepse-ux.js');
+const pedepseOptional = read('js/pedepse-optional.js');
 const pedepseOperational = read('js/operational-pedepse.js');
 const finalLayer = read('css/final-layer.css');
 
@@ -29,6 +30,7 @@ for (const [file, html] of [
   assert.equal((html.match(/ux-upgrades\.js\?v=3/g) || []).length, 1, `${file} trebuie să declare controllerul UX o singură dată`);
 }
 assert.ok(rootHtml.includes('pedepse-ux.js?v=4'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
+assert.ok(rootHtml.includes('pedepse-optional.js?v=1'), 'Ruta Pedepse trebuie să declare controllerul unic pentru Situații suplimentare.');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Fluxul de calcul Pedepse trebuie să intre prin dispatcherul operațional unic.');
 assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Dispatcherul operațional trebuie să delege calculul complet către fluxul UX explicit.');
 assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
@@ -38,18 +40,24 @@ assert.ok(!ux.includes('ux-upgrades.css'), 'Controllerul UX nu trebuie să mai d
 
 for (const marker of [
   'initMobileSuiteMenu',
-  'initPedepseDisclosure',
   'initTransferExplainability',
   'initTransferRulesTabs',
   'initSemnalmenteUx',
   'initOfficerMobileNav',
-  'Situații suplimentare',
   'Unități compatibile',
   'Prima potrivire tehnică',
   'Pasul 3 · Verificare umană'
 ]) {
   assert.ok(ux.includes(marker), `Upgrade-ul UX trebuie să conțină ${marker}`);
 }
+assert.ok(!ux.includes('initPedepseDisclosure'), 'Controllerul UX global nu trebuie să mai dețină disclosure-ul Pedepse.');
+assert.ok(!ux.includes('Situații suplimentare'), 'Markup-ul Pedepse trebuie să fie declarativ și route-owned.');
+
+for (const marker of ['cardHasMeaningfulValue', 'syncFromValues', 'revealInvalid', 'EvidentaPedepseOptional']) {
+  assert.ok(pedepseOptional.includes(marker), `Controllerul Pedepse optional trebuie să includă ${marker}`);
+}
+assert.ok(!pedepseOptional.includes('setTimeout'), 'Controllerul Pedepse optional nu trebuie să folosească retry-uri temporizate.');
+assert.ok(!pedepseOptional.includes('new MutationObserver'), 'Controllerul Pedepse optional nu trebuie să observe DOM-ul global.');
 
 assert.ok(ux.includes('function setTextIfChanged(node, value)'), 'Normalizarea Transfer trebuie să evite mutațiile DOM redundante');
 assert.ok(ux.includes('observer.disconnect()'), 'Observerul Transfer trebuie suspendat în timpul normalizării pentru a preveni recursia');
@@ -87,4 +95,4 @@ for (const marker of [
 }
 
 assert.ok(!ux.includes("href='../ofiter"), 'Upgrade-urile publice nu trebuie să expună ruta Ofițer');
-console.log('UX upgrades: dispatcher Pedepse unic, controller UX explicit și fără loader dinamic, CSS injectat sau calculateAll monkey-patch.');
+console.log('UX upgrades: ownership Pedepse optional separat, dispatcher Pedepse unic și controller UX global fără markup route-specific.');
