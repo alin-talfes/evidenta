@@ -77,11 +77,21 @@ function syncDeductionRow(r){
     if (!startInput || !endInput || !daysInput) return;
 
     const retention = type === TYPE_RETENTION_24H;
+    const wasRetention = r.dataset.dedRetention === 'true';
     if (startLabel) startLabel.textContent = retention ? 'Data reținerii' : 'Început';
     if (endWrap) endWrap.classList.toggle('hidden', retention);
     endInput.disabled = retention;
     endInput.setAttribute('aria-hidden', retention ? 'true' : 'false');
-    if (retention) endInput.value = startInput.value;
+    if (retention) {
+        if (!wasRetention && endInput.value && endInput.value !== startInput.value) {
+            r.dataset.dedPreviousEnd = endInput.value;
+        }
+        endInput.value = startInput.value;
+    } else if (wasRetention && r.dataset.dedPreviousEnd) {
+        endInput.value = r.dataset.dedPreviousEnd;
+        delete r.dataset.dedPreviousEnd;
+    }
+    r.dataset.dedRetention = String(retention);
 
     const start = typeof parseDate === 'function' ? parseDate(startInput.value.trim()) : null;
     const end = retention ? start : (typeof parseDate === 'function' ? parseDate(endInput.value.trim()) : null);
