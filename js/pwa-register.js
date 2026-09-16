@@ -109,11 +109,18 @@
     document.querySelectorAll('[data-ev-bottom-nav-scroll-root]').forEach(node => node.removeAttribute('data-ev-bottom-nav-scroll-root'));
   }
 
+  function normalizeMobileMoreSheet() {
+    const nav = document.querySelector('.ev-mobile-nav');
+    const sheet = document.querySelector('.ev-mobile-more-sheet');
+    if (nav && sheet && sheet.parentElement !== nav) nav.appendChild(sheet);
+  }
+
   function syncBottomNavLayout() {
     const root = document.documentElement;
     const mobile = window.matchMedia?.('(max-width: 760px)').matches ?? window.innerWidth <= 760;
     const nav = document.querySelector('.ev-mobile-nav');
     clearLegacyBottomNavState();
+    normalizeMobileMoreSheet();
     root.classList.toggle('ev-mobile-nav-layout', Boolean(mobile && nav));
     return Boolean(mobile && nav);
   }
