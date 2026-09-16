@@ -139,7 +139,7 @@
           return;
         }
 
-        window.setTimeout(() => setActiveMode(mode, requested), 0);
+        queueMicrotask(() => setActiveMode(mode, requested));
       }, true);
     }
 
@@ -152,15 +152,10 @@
     return initMode(document.querySelector('.ev-calc-mode'));
   }
 
-  function initDeterministically() {
-    if (tryInit()) return;
-    [0, 40, 120, 300, 700].forEach(delay => window.setTimeout(tryInit, delay));
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDeterministically, { once: true });
+    document.addEventListener('DOMContentLoaded', tryInit, { once: true });
   } else {
-    initDeterministically();
+    tryInit();
   }
   window.addEventListener('evidenta:shellready', tryInit);
   window.addEventListener('load', tryInit, { once: true });
