@@ -18,6 +18,15 @@
         document.head.appendChild(script);
     }
 
+    function ensureStyle(selector, href, datasetKey) {
+        if (document.querySelector(selector)) return;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        if (datasetKey) link.dataset[datasetKey] = 'true';
+        document.head.appendChild(link);
+    }
+
     function ensureUxUpgrades() {
         ensureScript(
             'script[data-evidenta-ux-controller]',
@@ -101,12 +110,43 @@
         );
     }
 
-    function ensureOperationalUpgrades() {
-        ensureScript(
-            'script[data-evidenta-operational-upgrades]',
-            new URL('./operational-upgrades.js?v=1', scriptUrl).href,
+    function operationalPage() {
+        const base = new URL('../', scriptUrl);
+        const rootPath = base.pathname.endsWith('/') ? base.pathname : `${base.pathname}/`;
+        if (!location.pathname.startsWith(rootPath)) return '';
+        return location.pathname.slice(rootPath.length).replace(/^\/+|\/+$/g, '');
+    }
+
+    function ensureModuleOperationalControllers() {
+        ensureStyle(
+            'link[data-evidenta-operational-upgrades]',
+            new URL('../css/operational-upgrades.css?v=1', scriptUrl).href,
             'evidentaOperationalUpgrades'
         );
+        ensureScript(
+            'script[data-evidenta-operational-navigation]',
+            new URL('./operational-navigation.js?v=1', scriptUrl).href,
+            'evidentaOperationalNavigation'
+        );
+
+        const p = operationalPage();
+        if (!p || p === 'index.html' || p === 'pedepse') {
+            ensureScript('script[data-evidenta-operational-pedepse]', new URL('./operational-pedepse.js?v=1', scriptUrl).href, 'evidentaOperationalPedepse');
+        } else if (p.startsWith('ai')) {
+            ensureScript('script[data-evidenta-operational-ai]', new URL('./operational-ai.js?v=1', scriptUrl).href, 'evidentaOperationalAi');
+        } else if (p.startsWith('contopiri')) {
+            ensureScript('script[data-evidenta-operational-contopiri]', new URL('./operational-contopiri.js?v=1', scriptUrl).href, 'evidentaOperationalContopiri');
+        } else if (p === 'transfer' || p === 'transfer/index.html') {
+            ensureScript('script[data-evidenta-operational-transfer]', new URL('./operational-transfer.js?v=1', scriptUrl).href, 'evidentaOperationalTransfer');
+        } else if (p.startsWith('instructaj')) {
+            ensureScript('script[data-evidenta-operational-instructaj]', new URL('./operational-instructaj.js?v=1', scriptUrl).href, 'evidentaOperationalInstructaj');
+        } else if (p.startsWith('semnalmente')) {
+            ensureScript('script[data-evidenta-operational-semnalmente]', new URL('./operational-semnalmente.js?v=1', scriptUrl).href, 'evidentaOperationalSemnalmente');
+        }
+    }
+
+    function ensureOperationalUpgrades() {
+        ensureModuleOperationalControllers();
         ensureStableOperationalControllers();
         ensureScript(
             'script[data-evidenta-operational-finalize]',
