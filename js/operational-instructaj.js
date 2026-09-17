@@ -4,13 +4,10 @@
   if (window.__EVIDENTA_OPERATIONAL_INSTRUCTAJ__) return;
   window.__EVIDENTA_OPERATIONAL_INSTRUCTAJ__ = true;
 
-  function init(attempt = 0) {
+  function init() {
     const search = document.getElementById('search');
-    if (!search) {
-      if (attempt < 20) setTimeout(() => init(attempt + 1), 150);
-      return;
-    }
-    if (document.querySelector('.ev-operational-search')) return;
+    if (!search || document.querySelector('.ev-operational-search')) return;
+
     const originalParent = search.parentElement;
     const section = document.createElement('section');
     section.className = 'ev-operational-search';
@@ -33,15 +30,19 @@
       const procedures = document.getElementById('proceduri');
       if (procedures) procedures.hidden = false;
     };
-    search.addEventListener('input', () => { if (search.value.trim()) openProcedures(); });
+
+    search.addEventListener('input', () => {
+      if (search.value.trim()) openProcedures();
+    });
+
     section.querySelectorAll('[data-q]').forEach(button => button.addEventListener('click', () => {
       search.value = button.dataset.q;
       search.dispatchEvent(new Event('input', { bubbles:true }));
       openProcedures();
-      setTimeout(() => document.getElementById('workflow-list')?.scrollIntoView({ behavior:'smooth', block:'start' }), 0);
+      requestAnimationFrame(() => document.getElementById('workflow-list')?.scrollIntoView({ behavior:'smooth', block:'start' }));
     }));
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => init(), { once:true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
   else init();
 })();
