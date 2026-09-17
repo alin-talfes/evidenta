@@ -224,12 +224,6 @@ html.ev-offline .ev-shell__brand::after {
     margin:8px auto 12px !important;
   }
 
-  body.ev-quick-mode .ev-mobile-advanced-details:not([open]) { margin-bottom:14px !important; }
-  body.ev-quick-mode .ev-mobile-advanced-details[open] {
-    margin-bottom:18px !important;
-    scroll-margin-bottom:96px;
-  }
-
   #main-content > :last-child,
   main > :last-child { margin-bottom:20px !important; }
 }
