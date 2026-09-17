@@ -53,21 +53,6 @@
         copy.append(home, meta);
     }
 
-    function ensureInstructajNavigationRuntime() {
-        const page = String(document.body?.dataset.evPage || '');
-        const isInstructaj = page.startsWith('instructaj') || location.pathname.includes('/instructaj/');
-        if (!isInstructaj || window.__EVIDENTA_OPERATIONAL_NAVIGATION__) return;
-
-        const expected = new URL('./operational-navigation.js?v=4', scriptUrl).href;
-        if ([...document.scripts].some(script => script.src === expected || /\/js\/operational-navigation\.js(?:\?|$)/.test(script.src))) return;
-
-        const navigation = document.createElement('script');
-        navigation.src = expected;
-        navigation.defer = true;
-        navigation.dataset.evidentaOperationalNavigation = 'true';
-        document.head.appendChild(navigation);
-    }
-
     async function initVersionIdentity() {
         removeLegacyFooters();
         try {
@@ -87,14 +72,10 @@
     function bootstrap() {
         if (bootstrapped) return;
         bootstrapped = true;
-        ensureInstructajNavigationRuntime();
         initVersionIdentity();
     }
 
-    window.addEventListener('evidenta:shellready', () => {
-        renderBrandIdentity(currentVersion);
-        ensureInstructajNavigationRuntime();
-    });
+    window.addEventListener('evidenta:shellready', () => renderBrandIdentity(currentVersion));
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
