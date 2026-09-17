@@ -1,7 +1,7 @@
 /* Inmate Pocket Calculator — root PWA service worker */
 'use strict';
 
-const VERSION = 'v47';
+const VERSION = 'v46';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
@@ -124,6 +124,7 @@ async function staticResponse(request) {
 function isCriticalRuntime(url) {
   return /\/js\/(?:version|ux-upgrades|analytics|rules|storage|ui|app|pedepse-ux|pedepse-optional|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
+    || /\/instructaj\/styles\.css$/i.test(url.pathname)
     || /\/css\/(?:design-system|unified-shell|visual-audit|responsive|final-layer|operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening|analytics-consent)\.css$/i.test(url.pathname);
 }
 
