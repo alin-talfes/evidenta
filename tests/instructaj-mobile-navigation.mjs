@@ -28,9 +28,12 @@ assert.match(navigation, /className = 'ev-mobile-nav'/, 'The shared controller m
 assert.match(mobile, /\.ev-mobile-nav,[\s\S]*position:fixed\s*!important/i, 'The canonical mobile policy must keep bottom navigation fixed.');
 assert.match(mobile, /bottom:0\s*!important/i, 'The canonical mobile navigation must be anchored to the bottom edge.');
 
-assert.match(serviceWorker, /const VERSION = 'v48'/, 'PWA cache must be invalidated after removing the legacy Instructaj navigation markup.');
-assert.match(serviceWorker, /'\.\/instructaj\/'/, 'Instructaj must remain precached for offline navigation.');
+const cacheVersion = serviceWorker.match(/const VERSION = ['"](v\d+)['"]/);
+assert.ok(cacheVersion, 'PWA service worker must expose a numeric cache version.');
+assert.match(serviceWorker, /const STATIC_CACHE = `evidenta-static-\$\{VERSION\}`/, 'Static cache must derive from the shared PWA version.');
+assert.match(serviceWorker, /const RUNTIME_CACHE = `evidenta-runtime-\$\{VERSION\}`/, 'Runtime cache must derive from the shared PWA version.');
+assert.match(serviceWorker, /['"]\.\/instructaj\/['"]/, 'Instructaj must remain precached for offline navigation.');
 assert.match(serviceWorker, /operational-navigation\.js/, 'The shared navigation runtime must remain in the PWA core cache.');
 assert.match(serviceWorker, /instructaj\/styles\.css/, 'The Instructaj mobile style entry point must remain a critical runtime resource.');
 
-console.log('Instructaj mobile navigation policy: OK');
+console.log(`Instructaj mobile navigation policy: OK (${cacheVersion[1]})`);
