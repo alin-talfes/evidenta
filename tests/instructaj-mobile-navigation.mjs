@@ -28,7 +28,7 @@ assert.match(navigation, /className = 'ev-mobile-nav'/, 'The shared controller m
 assert.match(mobile, /\.ev-mobile-nav,[\s\S]*position:fixed\s*!important/i, 'The canonical mobile policy must keep bottom navigation fixed.');
 assert.match(mobile, /bottom:0\s*!important/i, 'The canonical mobile navigation must be anchored to the bottom edge.');
 
-assert.match(serviceWorker, /const VERSION = 'v47'/, 'PWA cache must be invalidated after the Instructaj navigation migration.');
+assert.match(serviceWorker, /const VERSION = 'v48'/, 'PWA cache must be invalidated after removing the legacy Instructaj navigation markup.');
 assert.match(serviceWorker, /'\.\/instructaj\/'/, 'Instructaj must remain precached for offline navigation.');
 assert.match(serviceWorker, /operational-navigation\.js/, 'The shared navigation runtime must remain in the PWA core cache.');
 assert.match(serviceWorker, /instructaj\/styles\.css/, 'The Instructaj mobile style entry point must remain a critical runtime resource.');
