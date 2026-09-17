@@ -119,3 +119,48 @@ html:not(.auth-pending) .access-gate {
   color: #c13e50;
   font-size: 12px;
 }
+
+.access-submit {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #7468e8, #594bc6);
+  box-shadow: 0 9px 22px rgba(101, 88, 217, .23);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.access-submit:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.access-card small {
+  display: block;
+  margin-top: 15px;
+  color: #7a8295;
+  text-align: center;
+}
+
+.access-logout {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 7px 10px;
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .access-gate { padding: 15px; }
+  .access-card { padding: 27px 21px; border-radius: 20px; }
+  .access-logout { padding: 7px 9px; font-size: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .access-submit { transition: none; }
+}
