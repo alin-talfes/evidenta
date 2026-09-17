@@ -1,16 +1,16 @@
-/* Evidență PPL — root PWA service worker */
+/* Inmate Pocket Calculator — root PWA service worker */
 'use strict';
 
-const VERSION = 'v46';
+const VERSION = 'v47';
 const STATIC_CACHE = `evidenta-static-${VERSION}`;
 const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
 const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
 const SCOPE = new URL(self.registration.scope);
 
 const CORE_PATHS = [
-  './', './index.html', './manifest.json', './version.json', './favicon-ev-2.svg',
+  './', './index.html', './manifest.json', './version.json', './favicon-ipc.svg',
   './contopiri/', './transfer/', './transfer/rules/', './instructaj/', './semnalmente/', './ai/', './analytics/',
-  './css/style.css', './css/design-system.css', './css/operational-upgrades.css',
+  './css/style.css', './css/design-system.css', './css/unified-shell.css', './css/visual-audit.css', './css/responsive.css', './css/final-layer.css', './css/operational-upgrades.css',
   './css/mobile.css', './css/mobile-modules.css', './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/analytics-consent.css',
   './js/theme.js', './js/version.js', './js/ux-upgrades.js', './js/analytics.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
   './js/export.js', './js/ui.js', './js/app.js', './js/pedepse-ux.js', './js/pedepse-optional.js', './js/deduction-ui.js', './js/quarantine-rules.js', './js/quarantine-ui.js', './js/contopiri-core.js', './js/contopiri.js',
@@ -124,7 +124,7 @@ async function staticResponse(request) {
 function isCriticalRuntime(url) {
   return /\/js\/(?:version|ux-upgrades|analytics|rules|storage|ui|app|pedepse-ux|pedepse-optional|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
-    || /\/css\/(?:operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening|analytics-consent)\.css$/i.test(url.pathname);
+    || /\/css\/(?:design-system|unified-shell|visual-audit|responsive|final-layer|operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening|analytics-consent)\.css$/i.test(url.pathname);
 }
 
 self.addEventListener('fetch', event => {
