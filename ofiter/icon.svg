@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="IPC">
   <rect width="512" height="512" rx="108" fill="#10233f"/>
-  <path d="M154 126h204v54H218v49h126v53H218v50h145v54H154z" fill="#19b6c9"/>
+  <rect x="82" y="96" width="348" height="320" rx="72" fill="#0b1a30" stroke="#19b6c9" stroke-width="14"/>
+  <rect x="124" y="138" width="264" height="74" rx="18" fill="#eef8fa"/>
+  <text x="256" y="190" text-anchor="middle" fill="#10233f" font-family="Inter,Arial,sans-serif" font-size="48" font-weight="900" letter-spacing="7">IPC</text>
+  <g fill="#19b6c9">
+    <circle cx="154" cy="278" r="18"/><circle cx="222" cy="278" r="18"/><circle cx="290" cy="278" r="18"/><circle cx="358" cy="278" r="18"/>
+    <circle cx="154" cy="346" r="18"/><circle cx="222" cy="346" r="18"/><circle cx="290" cy="346" r="18"/><circle cx="358" cy="346" r="18"/>
+  </g>
 </svg>

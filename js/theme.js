@@ -1,4 +1,4 @@
-// Shared theme + universal product shell for the entire Evidență PPL application.
+// Shared theme + universal product shell for the entire Inmate Pocket Calculator application.
 (function () {
     'use strict';
 
@@ -140,7 +140,7 @@
             'ofiter': [null, 'Ofițer evidență', 'Pregătire pentru concursul de ofițer evidență.'],
             'ofiter/index.html': [null, 'Ofițer evidență', 'Pregătire pentru concursul de ofițer evidență.']
         };
-        const [navKey, title, description] = contexts[page] || [null, document.title || 'Evidență PPL', 'Evidență PPL'];
+        const [navKey, title, description] = contexts[page] || [null, document.title || 'Inmate Pocket Calculator', 'Inmate Pocket Calculator'];
         return { page, navKey, title, description, isOfficer: page === 'ofiter' || page === 'ofiter/index.html' };
     }
 
@@ -155,6 +155,7 @@
     }
 
     function updateDescription(context) {
+        document.title = context.title ? `${context.title} — Inmate Pocket Calculator` : 'Inmate Pocket Calculator';
         let description = document.querySelector('meta[name="description"]');
         if (!description) {
             description = document.createElement('meta');
@@ -162,6 +163,8 @@
             document.head.appendChild(description);
         }
         description.content = context.description;
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.content = document.title;
         const ogDescription = document.querySelector('meta[property="og:description"]');
         if (ogDescription) ogDescription.content = context.description;
     }
@@ -245,11 +248,11 @@
 
         shell.innerHTML = `
             <div class="ev-shell__bar">
-                <a class="ev-shell__brand" href="${rootUrl.href}" aria-label="Evidență PPL — pagina principală">
-                    <span class="ev-shell__mark" aria-hidden="true">EV</span>
-                    <span class="ev-shell__brand-copy"><strong>Evidență PPL</strong></span>
+                <a class="ev-shell__brand" href="${rootUrl.href}" aria-label="Inmate Pocket Calculator — pagina principală">
+                    <span class="ev-shell__mark" aria-hidden="true">IPC</span>
+                    <span class="ev-shell__brand-copy"><strong>Inmate Pocket Calculator</strong></span>
                 </a>
-                <nav class="ev-shell__nav" aria-label="Modulele Evidență PPL">${navItems}</nav>
+                <nav class="ev-shell__nav" aria-label="Modulele Inmate Pocket Calculator">${navItems}</nav>
                 <div class="ev-shell__actions">
                     <button type="button" id="evidenta-theme-toggle" class="ev-shell__theme" aria-label="Schimbă tema"></button>
                 </div>

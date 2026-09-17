@@ -81,7 +81,7 @@
     ];
     const nav = document.createElement('nav');
     nav.className = 'ev-mobile-nav';
-    nav.setAttribute('aria-label', 'Navigare rapidă Evidență PPL');
+    nav.setAttribute('aria-label', 'Navigare rapidă Inmate Pocket Calculator');
     nav.innerHTML = direct.map(([key, icon, label, href]) => `
       <a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''}>
         <span aria-hidden="true">${icon}</span><small>${label}</small>

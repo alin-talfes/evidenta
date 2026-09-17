@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Evidență — Ofițer",
-  "short_name": "Evidență",
-  "description": "Pregătire pentru concursul de ofițer evidență din poliția penitenciară",
+  "name": "Inmate Pocket Calculator — Ofițer",
+  "short_name": "IPC Ofițer",
+  "description": "Modul de pregătire profesională din Inmate Pocket Calculator pentru concursul de ofițer evidență din poliția penitenciară",
   "lang": "ro",
   "start_url": "./",
   "scope": "./",

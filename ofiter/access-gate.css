@@ -45,8 +45,9 @@ html:not(.auth-pending) .access-gate {
   background: linear-gradient(145deg, #7468e8, #5144bd);
   box-shadow: 0 10px 25px rgba(101, 88, 217, .3);
   color: #fff;
-  font-size: 25px;
-  font-weight: 850;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .08em;
 }
 
 .access-eyebrow {
