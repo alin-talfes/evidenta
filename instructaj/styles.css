@@ -16,39 +16,97 @@ body *::after {
   text-transform: none !important;
 }
 
-/* PWA / iOS: modulul Instructaj nu încarcă bara mobilă operațională folosită
-   de celelalte module. Păstrăm navigarea suitei disponibilă pe ecrane mici,
-   compactă și scrollabilă, fără a sacrifica spațiul vertical. */
-@media (max-width: 680px) {
-  body.ev-unified[data-ev-page^="instructaj"] .ev-shell__nav {
-    display: flex !important;
-    grid-column: 1 / -1 !important;
+/* Mobile: navigarea modulului rămâne bottom-nav, la fel ca în restul suitei.
+   Headerul existent este reutilizat ca bară persistentă; nu mai mutăm meniul
+   suitei în partea de sus a paginii. */
+@media (max-width: 760px) {
+  body {
+    padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .site-header {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    z-index: 10000 !important;
     width: 100% !important;
-    justify-content: flex-start !important;
-    gap: 4px !important;
     margin: 0 !important;
-    padding: 2px 0 8px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    padding: 0 !important;
+    border-top: 1px solid var(--line, #263853) !important;
+    border-bottom: 0 !important;
+    background: rgba(11, 21, 37, .96) !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, .24) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
-  body.ev-unified[data-ev-page^="instructaj"] .ev-shell__nav::-webkit-scrollbar {
-    display: none;
+  .site-header .app-nav {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 58px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 2px !important;
+    margin: 0 !important;
+    padding: 5px 6px calc(5px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow: visible !important;
   }
 
-  body.ev-unified[data-ev-page^="instructaj"] .ev-shell__nav a {
-    flex: 0 0 auto !important;
-    width: auto !important;
+  .site-header .app-nav .brand {
+    display: none !important;
+  }
+
+  .site-header .app-nav > a:not(.brand) {
     min-width: 0 !important;
-    min-height: 38px !important;
-    padding-inline: 10px !important;
-    justify-content: center !important;
-    font-size: 11px !important;
+    min-height: 48px !important;
+    display: grid !important;
+    grid-template-rows: 18px auto !important;
+    place-items: center !important;
+    gap: 2px !important;
+    padding: 4px 2px !important;
+    border: 0 !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    color: var(--muted, #aab8cb) !important;
+    text-decoration: none !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
-  body.ev-unified[data-ev-page^="instructaj"] main {
-    padding-bottom: max(24px, env(safe-area-inset-bottom, 0px)) !important;
+  .site-header .app-nav > a:not(.brand)::before {
+    display: block;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 800;
+  }
+
+  .site-header .app-nav > a[href="../"]::before { content: "⌁"; }
+  .site-header .app-nav > a[href="../contopiri/"]::before { content: "∑"; }
+  .site-header .app-nav > a[href="../transfer/"]::before { content: "⇄"; }
+  .site-header .app-nav > a[href="./"]::before { content: "☰"; }
+  .site-header .app-nav > a[href="../semnalmente/"]::before { content: "◎"; }
+
+  .site-header .app-nav > a[aria-current="page"] {
+    color: var(--accent-strong, #87b8ff) !important;
+    background: var(--accent-soft, rgba(110, 168, 255, .12)) !important;
+  }
+
+  /* Dacă shell-ul comun este prezent, navigarea desktop rămâne ascunsă pe
+     mobil; nu trebuie să apară o a doua bară în partea de sus. */
+  body.ev-unified[data-ev-page^="instructaj"] .ev-shell__nav,
+  body.ev-unified[data-ev-page^="instructaj"] #ev-suite-menu-toggle {
+    display: none !important;
+  }
+
+  main {
+    padding-bottom: 18px !important;
+  }
+
+  :where(button, a, input, select, textarea, summary):not(.app-nav *) {
+    scroll-margin-bottom: 88px;
   }
 }
