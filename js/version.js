@@ -19,7 +19,7 @@
         if (!brand || brand.tagName !== 'A') return brand;
         const replacement = document.createElement('div');
         replacement.className = brand.className;
-        replacement.setAttribute('aria-label', 'Identitate Evidență PPL');
+        replacement.setAttribute('aria-label', 'Identitate Inmate Pocket Calculator');
         while (brand.firstChild) replacement.appendChild(brand.firstChild);
         brand.replaceWith(replacement);
         return replacement;
@@ -35,9 +35,9 @@
         const home = document.createElement('a');
         home.className = 'ev-shell__brand-home';
         home.href = homeUrl;
-        home.setAttribute('aria-label', 'Evidență PPL — pagina principală');
+        home.setAttribute('aria-label', 'Inmate Pocket Calculator — pagina principală');
         const title = document.createElement('strong');
-        title.textContent = 'Evidență PPL';
+        title.textContent = 'Inmate Pocket Calculator';
         home.appendChild(title);
 
         const meta = document.createElement('span');
