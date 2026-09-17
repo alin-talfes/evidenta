@@ -3,16 +3,21 @@ import { readFileSync } from 'node:fs';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
+const html = read('instructaj/index.html');
 const styles = read('instructaj/styles.css');
 const version = read('js/version.js');
 const navigation = read('js/operational-navigation.js');
 const mobile = read('css/mobile.css');
 const serviceWorker = read('sw.js');
 
+assert.doesNotMatch(html, /class=["']site-header["']/, 'Instructaj must not keep the retired top navigation markup.');
+assert.doesNotMatch(html, /class=["']app-nav["']/, 'Instructaj must not own a parallel suite navigation implementation.');
+assert.match(html, /styles\.css\?v=6/, 'Instructaj must bust the module stylesheet after the navigation cleanup.');
+
 assert.match(styles, /operational-upgrades\.css/, 'Instructaj must load the shared operational mobile styles.');
 assert.match(styles, /mobile\.css/, 'Instructaj must load the canonical mobile positioning policy.');
 assert.doesNotMatch(styles, /site-header\s*\{[\s\S]*position:\s*fixed/i, 'Instructaj must not own a second custom fixed navigation bar.');
-assert.match(styles, /body\s*>\s*\.site-header\s*\{[\s\S]*display:\s*none\s*!important/i, 'The legacy Instructaj top navigation must be suppressed before shared shell initialization.');
+assert.doesNotMatch(styles, /body\s*>\s*\.site-header/, 'Instructaj must not retain CSS for removed legacy navigation markup.');
 
 assert.match(version, /ensureInstructajNavigationRuntime/, 'The shared runtime loader must explicitly support Instructaj.');
 assert.match(version, /operational-navigation\.js/, 'Instructaj must load the shared operational navigation controller.');
