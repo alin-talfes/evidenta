@@ -65,19 +65,10 @@
     ensureLink('manifest', new URL('../manifest.json', scriptUrl).href);
   }
 
-  function clearLegacyBottomNavState() {
-    const root = document.documentElement;
-    root.classList.remove('ev-mobile-nav-inset');
-    root.style.removeProperty('--ev-mobile-nav-live-height');
-    document.querySelectorAll('.ev-mobile-nav-clearance-spacer').forEach(node => node.remove());
-    document.querySelectorAll('[data-ev-bottom-nav-scroll-root]').forEach(node => node.removeAttribute('data-ev-bottom-nav-scroll-root'));
-  }
-
   function syncBottomNavLayout() {
     const root = document.documentElement;
     const mobile = window.matchMedia?.('(max-width: 760px)').matches ?? window.innerWidth <= 760;
     const nav = document.querySelector('.ev-mobile-nav');
-    clearLegacyBottomNavState();
     root.classList.toggle('ev-mobile-nav-layout', Boolean(mobile && nav));
     return Boolean(mobile && nav);
   }
