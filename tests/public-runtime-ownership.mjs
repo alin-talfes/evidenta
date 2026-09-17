@@ -38,8 +38,11 @@ assert.match(navigation, /className = 'ev-mobile-nav'/, 'Bottom-nav trebuie să 
 assert.equal((navigation.match(/className = 'ev-mobile-nav'/g) || []).length, 1, 'Controllerul comun trebuie să aibă un singur constructor bottom-nav.');
 
 const mobile = read('css/mobile.css');
+const mobileModules = read('css/mobile-modules.css');
 assert.equal((mobile.match(/position\s*:\s*fixed\s*!important/gi) || []).length, 1, 'Politica mobilă trebuie să aibă un singur element fixed: bottom-nav.');
 assert.match(mobile, /\.ev-mobile-nav,[\s\S]*bottom:0\s*!important/i, 'Bottom-nav trebuie ancorat la marginea inferioară.');
+assert.ok(!mobile.includes('ev-mobile-advanced-details'), 'Politica mobilă nu trebuie să păstreze wrapperul retras Opțiuni avansate.');
+assert.ok(!mobileModules.includes('ev-mobile-advanced-details'), 'Layout-urile modulelor nu trebuie să păstreze wrapperul retras Opțiuni avansate.');
 
 const version = read('js/version.js');
 for (const routeController of modules.map(module => module.controller).concat('operational-navigation.js')) {
