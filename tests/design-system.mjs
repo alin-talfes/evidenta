@@ -95,7 +95,7 @@ assert.ok(themeController.includes("window.addEventListener('storage'"), "Tema t
 const visualEntries = {
   "nucleu și Transfer": read("css/style.css"),
   "Instructaj": read("instructaj/styles.css"),
-  "Semnalmente și Benchmark": read("semnalmente/style.css"),
+  "Semnalmente și Benchmark": `${read("semnalmente/index.html")}\n${read("semnalmente/style.css")}`,
   "Ofițer": read("ofiter/styles.css")
 };
 
