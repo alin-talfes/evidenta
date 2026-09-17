@@ -43,6 +43,12 @@ assert.equal((mobile.match(/position\s*:\s*fixed\s*!important/gi) || []).length,
 assert.match(mobile, /\.ev-mobile-nav,[\s\S]*bottom:0\s*!important/i, 'Bottom-nav trebuie ancorat la marginea inferioară.');
 assert.ok(!mobile.includes('ev-mobile-advanced-details'), 'Politica mobilă nu trebuie să păstreze wrapperul retras Opțiuni avansate.');
 assert.ok(!mobileModules.includes('ev-mobile-advanced-details'), 'Layout-urile modulelor nu trebuie să păstreze wrapperul retras Opțiuni avansate.');
+assert.ok(!mobile.includes('ev-mobile-nav-clearance-spacer'), 'Politica mobilă nu trebuie să păstreze spacerul legacy pentru bottom-nav.');
+
+const pwa = read('js/pwa-register.js');
+for (const legacyState of ['clearLegacyBottomNavState', 'ev-mobile-nav-inset', '--ev-mobile-nav-live-height', 'ev-mobile-nav-clearance-spacer']) {
+  assert.ok(!pwa.includes(legacyState), `PWA runtime nu trebuie să păstreze starea legacy ${legacyState}.`);
+}
 
 const version = read('js/version.js');
 for (const routeController of modules.map(module => module.controller).concat('operational-navigation.js')) {
