@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="IPC — Inmate Pocket Calculator">
+  <defs>
+    <linearGradient id="bg" x1="72" y1="56" x2="440" y2="456" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#182844"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4f8cff"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+  </defs>
+  <rect x="28" y="28" width="456" height="456" rx="112" fill="url(#bg)"/>
+  <rect x="49" y="49" width="414" height="414" rx="93" fill="none" stroke="url(#ring)" stroke-width="14"/>
+  <rect x="112" y="130" width="288" height="252" rx="48" fill="#101c31" stroke="#4f8cff" stroke-width="10"/>
+  <rect x="142" y="160" width="228" height="54" rx="16" fill="#f4f7fb" opacity=".96"/>
+  <g fill="#2dd4bf" opacity=".95">
+    <circle cx="164" cy="270" r="15"/><circle cx="220" cy="270" r="15"/><circle cx="276" cy="270" r="15"/><circle cx="332" cy="270" r="15"/>
+    <circle cx="164" cy="326" r="15"/><circle cx="220" cy="326" r="15"/><circle cx="276" cy="326" r="15"/><circle cx="332" cy="326" r="15"/>
+  </g>
+  <text x="256" y="202" text-anchor="middle" fill="#0b1220" font-family="Inter,Arial,sans-serif" font-size="39" font-weight="900" letter-spacing="5">IPC</text>
+</svg>
