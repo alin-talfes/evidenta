@@ -4,7 +4,6 @@
  */
 
 .ev-mobile-lc-details,
-.ev-mobile-advanced-details,
 .ev-ai-evidence-details,
 .ev-contopiri-result-details,
 .ev-transfer-help-details {
@@ -16,7 +15,6 @@
 }
 
 .ev-mobile-lc-details > summary,
-.ev-mobile-advanced-details > summary,
 .ev-ai-evidence-details > summary,
 .ev-contopiri-result-details > summary,
 .ev-transfer-help-details > summary {
@@ -29,15 +27,13 @@
   user-select:none;
 }
 
-.ev-mobile-lc-details__body,
-.ev-mobile-advanced-details__body {
+.ev-mobile-lc-details__body {
   display:grid;
   gap:10px;
   padding:0 10px 10px;
 }
 
-.ev-mobile-lc-details__body > .card,
-.ev-mobile-advanced-details__body > .card {
+.ev-mobile-lc-details__body > .card {
   margin:0 !important;
 }
 
@@ -115,9 +111,6 @@
   }
   body.ev-unified[data-ev-page="pedepse"] .deduction-row .hidden { display:none !important; }
   #addDedBtn { width:100%; }
-
-  body.ev-quick-mode .ev-mobile-advanced-details { margin-top:8px; }
-  body.ev-quick-mode .ev-mobile-advanced-details > summary { min-height:44px; }
 
   .ev-ai-primary { margin-top:8px !important; padding:11px !important; }
   .ev-ai-primary__grid { grid-template-columns:1fr 1fr !important; }
