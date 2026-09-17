@@ -86,12 +86,15 @@
       <a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''}>
         <span aria-hidden="true">${icon}</span><small>${label}</small>
       </a>`).join('') + `
-      <button type="button" data-ev-more${['instructaj','semnalmente'].includes(current) ? ' class="is-active"' : ''} aria-expanded="false">
+      <button type="button" data-ev-more${['instructaj','semnalmente'].includes(current) ? ' class="is-active"' : ''} aria-expanded="false" aria-controls="ev-mobile-more-sheet">
         <span aria-hidden="true">•••</span><small>Mai multe</small>
       </button>`;
 
     const sheet = document.createElement('div');
+    sheet.id = 'ev-mobile-more-sheet';
     sheet.className = 'ev-mobile-more-sheet';
+    sheet.setAttribute('role', 'dialog');
+    sheet.setAttribute('aria-modal', 'false');
     sheet.setAttribute('aria-label', 'Mai multe module');
     sheet.innerHTML = `
       <div class="ev-mobile-more-sheet__head"><strong>Mai multe module</strong><button type="button" data-ev-more-close aria-label="Închide">×</button></div>
@@ -109,10 +112,21 @@
       more.setAttribute('aria-expanded', String(open));
     });
     sheet.querySelector('[data-ev-more-close]')?.addEventListener('click', close);
+    document.addEventListener('click', event => {
+      if (!document.body.classList.contains('ev-mobile-more-open')) return;
+      if (event.target.closest?.('[data-ev-more], .ev-mobile-more-sheet')) return;
+      close();
+    });
     document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
 
-    nav.appendChild(sheet);
-    document.body.appendChild(nav);
+    // Sheet-ul este sibling al barei fixe. Safari iOS poate decupa descendenții poziționați
+    // în afara unui element fixed care folosește backdrop-filter.
+    if (document.body) {
+      document.body.append(sheet, nav);
+    } else {
+      nav.appendChild(sheet);
+      document.documentElement.appendChild(nav);
+    }
     window.dispatchEvent(new CustomEvent('evidenta:mobile-nav-ready'));
   }
 
