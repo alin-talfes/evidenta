@@ -227,7 +227,10 @@ assert.ok(!pwa.includes('new ResizeObserver'));
 assert.ok(!pwa.includes('setTimeout'), 'PWA layout nu trebuie să folosească retry-uri temporizate.');
 assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să aparțină direct bottom nav, fără reparentare PWA.');
 
-assert.ok(sw.includes("const VERSION = 'v46'"));
+const rootCacheVersion = sw.match(/const VERSION = ['"](v\d+)['"]/);
+assert.ok(rootCacheVersion, 'Root service worker trebuie să declare o versiune numerică de cache.');
+assert.ok(sw.includes('const STATIC_CACHE = `evidenta-static-${VERSION}`'), 'Cache-ul static trebuie să derive din VERSION.');
+assert.ok(sw.includes('const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`'), 'Cache-ul runtime trebuie să derive din VERSION.');
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
 assert.ok(sw.includes('./js/pedepse-optional.js'));
 assert.ok(sw.includes('pedepse-optional|deduction-ui'));
@@ -254,4 +257,4 @@ for (const pedepseOnly of ['../js/pedepse-modes-v5.js', '../js/pedepse-optional.
 }
 assert.ok(!aiSw.includes('operational-finalize'));
 
-console.log('Mobile/PWA audit: LC și Situațiile suplimentare Pedepse sunt declarative, controllerele nu reconstruiesc DOM-ul, iar lifecycle-ul PWA rămâne route-owned.');
+console.log(`Mobile/PWA audit: cache ${rootCacheVersion[1]}, LC și Situațiile suplimentare Pedepse declarative, lifecycle PWA route-owned.`);
