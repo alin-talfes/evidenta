@@ -76,7 +76,7 @@ for (const marker of [
   "document.querySelectorAll('footer').forEach",
   'normalizeBrandContainer',
   'renderBrandIdentity',
-  'Evidență PPL',
+  'Inmate Pocket Calculator',
   'copyright (c)',
   'https://wa.me/alin.talfes',
   "author.textContent = 'Alin Talfeș'"
@@ -128,4 +128,4 @@ assert.ok(!fs.existsSync(path.join(root, 'termene.html')), 'termene.html trebuie
 assert.ok(!fs.existsSync(path.join(root, 'js/termene.js')), 'js/termene.js trebuie eliminat');
 assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-core.js trebuie eliminat');
 
-console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea versiune/copyright mutată în header.');
+console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea IPC versiune/copyright mutată în header.');
