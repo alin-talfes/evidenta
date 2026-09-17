@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Evidență PPL",
-  "short_name": "Evidență",
-  "description": "Instrument local pentru evidența pedepselor, liberare condiționată, contopiri, AI documente și transfer.",
+  "name": "Inmate Pocket Calculator",
+  "short_name": "IPC",
+  "description": "Instrument operațional pentru calculul pedepselor, liberării condiționate, contopirilor, transferului și modulelor auxiliare.",
   "lang": "ro-RO",
   "dir": "ltr",
   "start_url": "./",
