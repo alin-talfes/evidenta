@@ -1,21 +1,28 @@
-# Evidență — suită de instrumente
+# Inmate Pocket Calculator
 
-**Versiune stabilă: 1.0.0.** Modulul AI Documente este disponibil separat în versiunea **BETA 0.9**.
+**Versiune stabilă: 1.1.0.** Modulul AI Documente este disponibil separat în versiunea **BETA 0.9**.
 
-Aplicație web statică pentru activități de evidență, calcule juridice, pregătire profesională și descriere asistată a semnalmentelor. Toate modulele sunt publicate prin GitHub Pages din același repository.
+**Inmate Pocket Calculator (IPC)** este o suită web operațională pentru calcule juridice și activități auxiliare specifice evidenței persoanelor private de libertate. Aplicația include calculul pedepselor și al liberării condiționate, contopiri, analiză asistată a documentelor, transfer/profilare, instruire și semnalmente. Toate modulele sunt publicate prin GitHub Pages din același repository.
 
 ## Module publice
 
 | Modul | Rol | Adresă |
 |---|---|---|
-| Evidență pedepse | Expirare, deduceri, fracții și liberare condiționată | [Deschide](https://alin-talfes.github.io/evidenta/) |
+| Pedepse și liberare condiționată | Expirare, deduceri, fracții și liberare condiționată | [Deschide](https://alin-talfes.github.io/evidenta/) |
 | Contopiri | Calcul aritmetic pentru pedepse rezultante | [Deschide](https://alin-talfes.github.io/evidenta/contopiri/) |
 | AI Documente (BETA 0.9) | OCR și extragere asistată din mandate/hotărâri, cu reutilizarea motoarelor Pedepse și Contopiri | [Deschide](https://alin-talfes.github.io/evidenta/ai/) |
 | Transfer și profilare | Filtrarea unităților și regulile de transfer | [Deschide](https://alin-talfes.github.io/evidenta/transfer/) |
-| Instructaj evidență | Moduri de lucru explicate pe baza actelor normative și instrucțiunilor relevante | [Deschide](https://alin-talfes.github.io/evidenta/instructaj/) |
+| Instructaj | Moduri de lucru explicate pe baza actelor normative și instrucțiunilor relevante | [Deschide](https://alin-talfes.github.io/evidenta/instructaj/) |
 | Semnalmente | Fișă descriptivă facială asistată și verificabilă | [Deschide](https://alin-talfes.github.io/evidenta/semnalmente/) |
 
 Ruta `/descriere-semnalmente/` este păstrată în acest repository numai ca redirecționare de compatibilitate către `/semnalmente/`.
+
+## Identitate și compatibilitate
+
+- Numele produsului este **Inmate Pocket Calculator**.
+- Numele scurt PWA este **IPC**.
+- Ruta GitHub Pages rămâne `/evidenta/` pentru compatibilitate cu linkurile și instalările existente.
+- Identificatorii interni legacy `EVIDENTA_*` și cheile locale existente sunt păstrate pentru a evita migrații distructive ale datelor și preferințelor din browser.
 
 ## Structură
 
