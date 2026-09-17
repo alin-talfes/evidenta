@@ -7,6 +7,13 @@
 @import url("../css/operational-upgrades.css?v=1");
 @import url("../css/mobile.css?v=1");
 
+/* Headerul legacy există încă în HTML pentru compatibilitate cu versiuni vechi,
+   dar shell-ul comun îl înlocuiește. Îl ascundem din primul paint pentru a
+   elimina orice flash al meniului în partea de sus înainte de inițializarea JS. */
+body > .site-header {
+  display: none !important;
+}
+
 /* Instructaj păstrează capitalizarea sursei, inclusiv în controalele și
    pseudo-elementele stilizate de foile comune ale aplicației. */
 body,
