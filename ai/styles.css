@@ -1,4 +1,4 @@
-/* AI Documente — strat vizual aliniat cu design-system-ul Evidență PPL */
+/* AI Documente — strat vizual aliniat cu design-system-ul Inmate Pocket Calculator */
 body.ev-unified[data-ev-page="ai"] > main.ai-page {width:100%;max-width:var(--ev-shell-max);margin-inline:auto}
 .ai-page{display:grid;gap:var(--ev-page-gap,18px)}
 .ai-beta-banner,.ai-card{color:var(--ev-text);background:var(--ev-surface);border:1px solid var(--ev-border);border-radius:var(--ev-radius-lg);box-shadow:var(--ev-shadow-soft)}

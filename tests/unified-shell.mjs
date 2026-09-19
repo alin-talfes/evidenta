@@ -95,7 +95,7 @@ const loaders = {
   'nucleu': read('index.html'),
   'transfer': read('transfer/index.html'),
   'instructaj': read('instructaj/app.js'),
-  'semnalmente': read('semnalmente/enhancements.js'),
+  'semnalmente': read('semnalmente/index.html'),
   'benchmark': read('semnalmente/benchmark/index.html'),
   'ofiter': read('ofiter/access-gate.js')
 };

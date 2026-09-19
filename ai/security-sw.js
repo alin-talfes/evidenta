@@ -59,7 +59,7 @@ const SHELL_PATHS = [
   './beta-lot3-metadata.js', './beta-lot3-measures.js', './beta-lot4-hardening.js', './beta-lot5-hardening.js',
   './beta-lot7-start-date.js', './beta-lot7-duration.js', './contopire-audit.js', './dependencies.js', './security-runtime.js',
   './date-mask.js', './deduction-rules.js', './file-dedup.js', './file-dedup-runtime.js', './app.js', './source-preview.js', './result-pedepse.js',
-  '../manifest.json', '../version.json', '../favicon-ev-2.svg',
+  '../manifest.json', '../version.json', '../favicon-ipc.svg',
   '../css/style.css', '../css/design-system.css', '../css/operational-upgrades.css', '../css/mobile.css', '../css/mobile-modules.css', '../css/disclosure-hardening.css', '../css/analytics-consent.css',
   '../js/theme.js', '../js/version.js', '../js/ux-upgrades.js', '../js/analytics.js', '../js/utils.js', '../js/rules.js', '../js/contopiri-core.js',
   '../js/operational-navigation.js', '../js/operational-ai.js', '../js/no-nonoptional-disclosures-v1.js', '../js/disclosure-hardening-v2.js',

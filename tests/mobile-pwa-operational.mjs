@@ -47,7 +47,7 @@ for (const marker of ['bootstrap()', 'initVersionIdentity()', 'renderBrandIdenti
 }
 assert.equal((version.match(/initVersionIdentity\(\);/g) || []).length, 1, 'Identitatea versiunii trebuie pornită o singură dată din bootstrap.');
 
-const sharedStyles = ['operational-upgrades.css?v=1', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=2', 'mobile.css?v=1'];
+const sharedStyles = ['operational-upgrades.css?v=2', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=2', 'mobile.css?v=1'];
 const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=4', 'no-nonoptional-disclosures-v1.js?v=3', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
 for (const [file, html] of [
   ['index.html', rootHtml],
@@ -229,8 +229,11 @@ assert.ok(!pwa.includes('normalizeMobileMoreSheet'), 'More sheet trebuie să apa
 
 const rootCacheVersion = sw.match(/const VERSION = ['"](v\d+)['"]/);
 assert.ok(rootCacheVersion, 'Root service worker trebuie să declare o versiune numerică de cache.');
-assert.ok(sw.includes('const STATIC_CACHE = `evidenta-static-${VERSION}`'), 'Cache-ul static trebuie să derive din VERSION.');
-assert.ok(sw.includes('const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`'), 'Cache-ul runtime trebuie să derive din VERSION.');
+assert.ok(sw.includes('const STATIC_CACHE = `ipc-static-${VERSION}`'), 'Cache-ul static trebuie să derive din VERSION.');
+assert.ok(sw.includes('const RUNTIME_CACHE = `ipc-runtime-${VERSION}`'), 'Cache-ul runtime trebuie să derive din VERSION.');
+assert.ok(sw.includes("['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-']"), 'Activarea trebuie să curețe și cache-urile cu prefixul legacy.');
+assert.ok(sw.includes("isCriticalRuntime(url) || ['script', 'style'].includes(request.destination)"), 'Scripturile și stilurile trebuie revalidate din rețea înainte de folosirea cache-ului.');
+assert.ok(sw.includes('const cached = await caches.match(request);'), 'Potrivirea normală din cache trebuie să respecte cheia de versiune din URL.');
 assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
 assert.ok(sw.includes('./js/pedepse-optional.js'));
 assert.ok(sw.includes('pedepse-optional|deduction-ui'));
