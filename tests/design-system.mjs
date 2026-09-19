@@ -115,14 +115,14 @@ for (const [module, source] of Object.entries(visualEntries)) {
 
 const themeBridges = {
   "Instructaj": read("instructaj/app.js"),
-  "Semnalmente": read("semnalmente/enhancements.js"),
+  "Semnalmente": read("semnalmente/index.html"),
   "Semnalmente Benchmark": read("semnalmente/benchmark/index.html"),
   "Ofițer": read("ofiter/access-gate.js")
 };
 for (const [module, source] of Object.entries(themeBridges)) {
   assert.ok(source.includes("theme.js"), `${module} trebuie să încarce controllerul universal de temă`);
 }
-assert.ok(read("semnalmente/enhancements.js").includes("const THEME_KEY = 'evidenta-theme'"), "Semnalmente trebuie să folosească direct cheia universală");
+assert.ok(!read("semnalmente/enhancements.js").includes("const THEME_KEY"), "Semnalmente nu trebuie să dubleze cheia controllerului universal de temă");
 
 function walk(directory) {
   const found = [];

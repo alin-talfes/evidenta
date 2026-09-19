@@ -35,8 +35,8 @@ assert.match(mobile, /bottom:0\s*!important/i, 'The canonical mobile navigation 
 
 const cacheVersion = serviceWorker.match(/const VERSION = ['"](v\d+)['"]/);
 assert.ok(cacheVersion, 'PWA service worker must expose a numeric cache version.');
-assert.match(serviceWorker, /const STATIC_CACHE = `evidenta-static-\$\{VERSION\}`/, 'Static cache must derive from the shared PWA version.');
-assert.match(serviceWorker, /const RUNTIME_CACHE = `evidenta-runtime-\$\{VERSION\}`/, 'Runtime cache must derive from the shared PWA version.');
+assert.match(serviceWorker, /const STATIC_CACHE = `ipc-static-\$\{VERSION\}`/, 'Static cache must derive from the shared PWA version.');
+assert.match(serviceWorker, /const RUNTIME_CACHE = `ipc-runtime-\$\{VERSION\}`/, 'Runtime cache must derive from the shared PWA version.');
 assert.match(serviceWorker, /['"]\.\/instructaj\/['"]/, 'Instructaj must remain precached for offline navigation.');
 assert.match(serviceWorker, /operational-navigation\.js/, 'The shared navigation runtime must remain in the PWA core cache.');
 assert.match(serviceWorker, /operational-instructaj\.js/, 'The Instructaj operational runtime must remain in the PWA core cache.');

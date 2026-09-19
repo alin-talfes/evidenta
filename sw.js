@@ -1,10 +1,10 @@
 /* Inmate Pocket Calculator — root PWA service worker */
 'use strict';
 
-const VERSION = 'v49';
-const STATIC_CACHE = `evidenta-static-${VERSION}`;
-const RUNTIME_CACHE = `evidenta-runtime-${VERSION}`;
-const PREFIXES = ['evidenta-static-', 'evidenta-runtime-'];
+const VERSION = 'v50';
+const STATIC_CACHE = `ipc-static-${VERSION}`;
+const RUNTIME_CACHE = `ipc-runtime-${VERSION}`;
+const PREFIXES = ['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-'];
 const SCOPE = new URL(self.registration.scope);
 
 const CORE_PATHS = [
@@ -109,8 +109,8 @@ async function networkFirstStatic(request) {
 
 async function staticResponse(request) {
   const cache = await caches.open(RUNTIME_CACHE);
-  const cached = await caches.match(request, { ignoreSearch:true });
-  const update = fetch(request).then(async response => {
+  const cached = await caches.match(request);
+  const update = fetch(request, { cache:'no-store' }).then(async response => {
     if (response.ok && response.type !== 'opaque') await cache.put(request, response.clone());
     return response;
   }).catch(() => null);
@@ -118,7 +118,9 @@ async function staticResponse(request) {
     void update;
     return cached;
   }
-  return (await update) || new Response('', { status:504, statusText:'Offline' });
+  return (await update)
+    || (await caches.match(request, { ignoreSearch:true }))
+    || new Response('', { status:504, statusText:'Offline' });
 }
 
 function isCriticalRuntime(url) {
@@ -138,7 +140,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(navigationResponse(request));
     return;
   }
-  if (isCriticalRuntime(url)) {
+  if (isCriticalRuntime(url) || ['script', 'style'].includes(request.destination)) {
     event.respondWith(networkFirstStatic(request));
     return;
   }
