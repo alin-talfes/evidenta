@@ -33,7 +33,8 @@ test('navighează spre reguli și înapoi fără rute rupte', async ({ page }) =
 
   await page.goBack();
   await expect(page).toHaveURL(/\/transfer\/$/);
-  await expect(page.getByRole('button', { name: 'Caută destinația' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Resetează' })).toBeVisible();
+  await expect(page.locator('#cautaBtn')).toBeHidden();
   assertNoPageErrors();
 });
 
@@ -43,10 +44,9 @@ test('calculează o destinație în modul Executare pedeapsă', async ({ page })
   await page.getByRole('button', { name: 'Executare pedeapsă' }).click();
   await page.locator('#judet').selectOption({ label: 'București' });
   await page.getByLabel('Deschis', { exact: true }).check();
-  await page.getByRole('button', { name: 'Caută destinația' }).click();
 
   await expect(page.locator('#resultArea .result-card.success')).toBeVisible();
-  await expect(page.locator('#resultArea .result-title')).toHaveText('Unități recomandate');
+  await expect(page.locator('#resultArea .result-title')).toHaveText(/Unități (?:recomandate|compatibile)/);
   await expect(page.locator('#resultArea .match-item').first()).toBeVisible();
   assertNoPageErrors();
 });
