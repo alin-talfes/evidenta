@@ -192,7 +192,7 @@ html.ev-offline .ev-shell__brand::after {
   /* Pedepse: calculul este acțiune normală, nu bară sticky. */
   body.ev-unified[data-ev-page="pedepse"] .btn-row {
     min-height:0 !important;
-    margin:12px 0 0 !important;
+    margin:12px 0 16px !important;
     padding:0 !important;
     border:0 !important;
     border-radius:0 !important;
