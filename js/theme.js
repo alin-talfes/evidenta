@@ -91,6 +91,16 @@
         document.head.appendChild(script);
     }
 
+    function ensureLegalFooter() {
+        const footerHref = new URL('../js/legal-footer.js?v=1', scriptUrl).href;
+        if ([...document.scripts].some(script => script.src === footerHref || /\/js\/legal-footer\.js(?:\?|$)/.test(script.src))) return;
+        const script = document.createElement('script');
+        script.src = footerHref;
+        script.defer = true;
+        script.dataset.evidentaLegalFooter = 'true';
+        document.head.appendChild(script);
+    }
+
     function ensureAnalyticsRuntime() {
         const styleHref = new URL('../css/analytics-consent.css?v=1', scriptUrl).href;
         if (![...document.styleSheets].some(sheet => sheet.href === styleHref) && !document.querySelector('link[data-evidenta-analytics-style]')) {
@@ -296,6 +306,7 @@
             updateThemeButtons(readTheme());
             ensureVersionController();
             ensureAnalyticsRuntime();
+            ensureLegalFooter();
 
             let scheduled = false;
             const observer = new MutationObserver(() => {
