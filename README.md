@@ -69,3 +69,14 @@ Criteriile pentru versiunea stabilă sunt urmărite în `RELEASE_GATE.md`. Istor
 ## Licență
 
 Copyright © Alin Talfeș. Toate drepturile rezervate.
+
+
+## Confidențialitate și conformitate
+
+- [Politica de confidențialitate](https://alin-talfes.github.io/evidenta/privacy-policy.html)
+- [Termeni și condiții](https://alin-talfes.github.io/evidenta/terms.html)
+- [Politica privind cookie-urile și stocarea locală](https://alin-talfes.github.io/evidenta/cookie-policy.html)
+- [Politica de rambursare și retragere](https://alin-talfes.github.io/evidenta/refund-policy.html)
+- [Declarație de accesibilitate](https://alin-talfes.github.io/evidenta/accessibility.html)
+
+Înainte de lansare, consultă [COMPLIANCE_RELEASE_CHECKLIST.md](COMPLIANCE_RELEASE_CHECKLIST.md). Paginile juridice conțin câmpuri marcate pentru completarea datelor reale ale operatorului; acestea trebuie completate înainte de o lansare comercială sau instituțională.
