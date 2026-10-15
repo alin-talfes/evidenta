@@ -59,4 +59,23 @@ assert.ok(c.deductions.some(d=>d.start==='30.07.2025'&&d.end==='13.01.2026'));
 assert.ok(c.deductions.some(d=>d.start==='14.01.2026'));
 assert.equal(c.numericReviewRequired,true,'Perioadele mixte/„la zi” trebuie să rămână sub confirmare umană.');
 
+
+const contestSixMonthsOneYear=`[mandat-concurs-retinere-24h-anonimizat.jpg — imagine — OCR 92%]
+MANDAT DE EXECUTARE A PEDEPSEI ÎNCHISORII Nr. 903/2026 din 16.09.2026.
+Persoana născută la data de 01.01.1990.
+Condamnă inculpatul la pedeapsa de 6 luni închisoare pentru fapta A.
+Condamnă inculpatul la pedeapsa de 1 an închisoare pentru fapta B.
+Constată că faptele au fost săvârșite în concurs real.
+Aplică pedeapsa cea mai grea de 1 an închisoare, la care adaugă o treime din cealaltă pedeapsă de 6 luni, pedeapsa rezultantă fiind de 1 an și 2 luni închisoare.
+Deduce perioada reținerii inculpatului în perioada 22.06.2023 orele 21:00 - 23.06.2023 orele 21:00.`;
+const d=analyze(contestSixMonthsOneYear);
+assert.deepEqual(json(d.finalSentence),{years:1,months:2,days:0},'1 an + 1/3 din 6 luni = 1 an și 2 luni.');
+assert.equal(d.primaryDocumentType,'MEPI/mandat');
+assert.equal(d.startDate,'16.09.2026','Reținerea închisă de 24 h nu schimbă data începerii executării din mandat.');
+assert.equal(d.startDateBasis,'mandate_date');
+assert.ok(d.penalties.some(p=>p.years===1&&p.months===0&&p.group==='concurs'),'Trebuie extrasă pedeapsa componentă de 1 an.');
+assert.ok(d.penalties.some(p=>p.years===0&&p.months===6&&p.group==='concurs'),'Trebuie extrasă pedeapsa componentă de 6 luni.');
+assert.ok(d.deductions.some(x=>x.start==='22.06.2023'&&x.end==='23.06.2023'),'Reținerea de 24 h trebuie extrasă ca interval 22.06.2023–23.06.2023.');
+
+
 console.log('AI BETA benchmark lot 7: start-date precedence, durate scrise în litere și mandate real-world anonimizate.');
