@@ -42,6 +42,22 @@ for (const route of routes) {
       await expect(page).toHaveTitle(route.title);
       await expect(page.locator('html')).toHaveAttribute('data-theme-mode', theme);
 
+      if (route.name === 'instructaj') {
+        const shortcuts = page.locator('.ev-operational-search__chips button');
+        await expect(shortcuts).toHaveCount(4);
+        const chipRects = await shortcuts.evaluateAll(buttons => {
+          const container = buttons[0].parentElement.getBoundingClientRect();
+          return buttons.map(button => {
+            const rect = button.getBoundingClientRect();
+            return { left: rect.left, right: rect.right, containerLeft: container.left, containerRight: container.right };
+          });
+        });
+        for (const rect of chipRects) {
+          expect(rect.left, 'Scurtătura Instructaj este tăiată la stânga').toBeGreaterThanOrEqual(rect.containerLeft - 1);
+          expect(rect.right, 'Scurtătura Instructaj este tăiată la dreapta').toBeLessThanOrEqual(rect.containerRight + 1);
+        }
+      }
+
       await page.evaluate(() => document.fonts?.ready);
       const layout = await page.evaluate(() => ({
         viewportWidth: document.documentElement.clientWidth,
