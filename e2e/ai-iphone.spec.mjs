@@ -14,7 +14,7 @@ test('AI Documente păstrează shell-ul și layout-ul pe iPhone', async ({ page 
     const html = await response.text();
     await route.fulfill({
       response,
-      body: html.replace(/<meta http-equiv="Content-Security-Policy" content="[^"]*"\\s*\\/?\s*>/i, '')
+      body: html.replace(/<meta http-equiv="Content-Security-Policy" content="[^"]*"\s*\/?\s*>/i, '')
     });
   });
 
