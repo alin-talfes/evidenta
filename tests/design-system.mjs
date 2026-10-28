@@ -184,3 +184,20 @@ assert.ok(finalLayer.includes('grid-template-columns: repeat(3, minmax(0, 1fr))'
 assert.ok(finalLayer.includes('@media (max-width: 640px)'), "Redesignul Pedepse trebuie să includă reguli mobile");
 
 console.log(`Design system: ${htmlFiles.length} pagini HTML folosesc aceeași temă, același shell și stratul final consolidat.`);
+
+
+const pedepseVisual = read("css/final-layer.css");
+for (const marker of [
+  "component refinement tranche",
+  ".top-bar .btn-utility",
+  "#deductionsContainer",
+  ".ev-optional-tools__buttons",
+  "#resultsCard .result-section",
+  "@media (max-width: 760px)",
+  "@media (prefers-reduced-motion: reduce)"
+]) {
+  assert.ok(pedepseVisual.includes(marker), `Redesignul operațional Pedepse trebuie să conțină ${marker}`);
+}
+assert.ok(pedepseHtml.includes('id="calcBtn"'), "Acțiunea principală de calcul trebuie păstrată");
+assert.ok(pedepseHtml.includes('id="resultsCard"'), "Containerul rezultatelor trebuie păstrat");
+assert.ok(pedepseHtml.includes('id="deductionsContainer"'), "Containerul deducerilor trebuie păstrat");

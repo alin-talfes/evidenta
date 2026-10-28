@@ -1234,3 +1234,325 @@ body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
     transition: none;
   }
 }
+
+
+/* Pedepse — component refinement tranche: operational toolbar, fields and result hierarchy. */
+body.ev-unified[data-ev-page="pedepse"] .top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px;
+  border: 1px solid var(--ev-border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--ev-surface) 92%, transparent);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--ev-bg) 8%, transparent);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .top-bar .hamburger {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  margin-right: auto;
+  padding: 10px;
+  border: 1px solid var(--ev-border-strong);
+  border-radius: 11px;
+  background: var(--ev-surface-2);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .top-bar .hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ev-text-secondary);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility {
+  min-width: 86px;
+  min-height: 44px;
+  padding: 9px 13px;
+  border: 1px solid var(--ev-border-strong);
+  border-radius: 10px;
+  background: var(--ev-surface-2);
+  color: var(--ev-text);
+  font-size: .72rem;
+  font-weight: 820;
+  letter-spacing: .025em;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility.primary {
+  border-color: var(--ev-accent);
+  background: var(--ev-accent);
+  color: #fff;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -5px 0 14px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .top-actions .btn-big {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid var(--ev-border);
+  border-radius: 10px;
+  background: var(--ev-surface-2);
+  color: var(--ev-text-secondary);
+  font-size: .78rem;
+  font-weight: 760;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content .form-grid > div {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content .form-grid > div > label:not(.toggle-switch):not(.ev-prison-same-check) {
+  color: var(--ev-text-secondary);
+  font-size: .76rem;
+  font-weight: 760;
+  line-height: 1.4;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content :is(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  background-color: var(--ev-input-bg);
+  color: var(--ev-text);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content .date-wrapper {
+  gap: 7px !important;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content .btn-today {
+  min-width: 54px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--ev-border-strong);
+  border-radius: 10px;
+  background: var(--ev-accent-soft);
+  color: var(--ev-accent-strong);
+  font-size: .72rem;
+  font-weight: 850;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #deductionsContainer,
+body.ev-unified[data-ev-page="pedepse"] #manualDeductionsContainer,
+body.ev-unified[data-ev-page="pedepse"] #nonExecContainer {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) {
+  padding: 12px;
+  border: 1px solid var(--ev-border);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--ev-surface-2) 72%, var(--ev-surface));
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools {
+  border-style: solid !important;
+  background: color-mix(in srgb, var(--ev-surface) 86%, var(--ev-accent) 14%) !important;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__buttons {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-optional-toggle {
+  min-width: 0;
+  min-height: 46px;
+  font-size: .75rem;
+  line-height: 1.35;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-optional-card {
+  border-left: 3px solid color-mix(in srgb, var(--ev-accent) 62%, var(--ev-border)) !important;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .btn-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin: 16px 0 20px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .btn-row > button {
+  min-width: 0;
+  min-height: 48px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: .78rem;
+  font-weight: 820;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #errorContainer:not(:empty) {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, var(--ev-danger) 45%, var(--ev-border));
+  border-radius: 12px;
+  background: var(--ev-danger-soft);
+  color: var(--ev-danger);
+  line-height: 1.5;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard {
+  padding: clamp(16px, 2.5vw, 26px);
+  border-width: 1px;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--ev-bg) 12%, transparent);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard > h3 {
+  margin-bottom: 18px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--ev-border);
+  letter-spacing: .025em;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsContent {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard .result-section {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--ev-border);
+  border-radius: 13px;
+  background: var(--ev-surface-2);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard .result-section > h4 {
+  color: var(--ev-text);
+  font-size: .86rem;
+  font-weight: 830;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard .result-label {
+  color: var(--ev-muted);
+  font-size: .68rem;
+  font-weight: 780;
+  letter-spacing: .025em;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard .result-value {
+  color: var(--ev-text);
+  font-size: .95rem;
+  font-weight: 820;
+  overflow-wrap: anywhere;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #timelineList {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+  padding: 9px 11px;
+  border-left: 2px solid var(--ev-accent);
+  border-radius: 0 9px 9px 0;
+  background: var(--ev-surface-2);
+  color: var(--ev-text-secondary);
+}
+
+@media (min-width: 761px) {
+  body.ev-unified[data-ev-page="pedepse"] #main-content {
+    max-width: 1080px;
+    margin-inline: auto;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card {
+    height: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    display: grid;
+    grid-template-columns: 44px repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    padding: 8px;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar .hamburger {
+    margin-right: 0;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 6px;
+    font-size: .67rem;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar #resetBtn {
+    grid-column: 2 / 4;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__buttons {
+    grid-template-columns: 1fr;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-toggle {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    grid-template-columns: 1fr;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard .result-section {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 430px) {
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar #resetBtn {
+    grid-column: 1 / -1;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility {
+    font-size: .64rem;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__buttons {
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ev-unified[data-ev-page="pedepse"] .top-bar *,
+  body.ev-unified[data-ev-page="pedepse"] #main-content button {
+    transition: none !important;
+    animation: none !important;
+  }
+}
