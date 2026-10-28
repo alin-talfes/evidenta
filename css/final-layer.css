@@ -1732,7 +1732,7 @@ body.ev-unified[data-ev-page="contopiri"] .legal-box p strong { color: var(--ev-
 }
 
 
-/* Transfer — criteria de profilare, selecții și rezultate cu ierarhie operațională. */
+/* Transfer — criterii de profilare, selecții și rezultate cu ierarhie operațională. */
 body.ev-unified[data-ev-page="transfer"] > .container { width: min(100% - 28px, 1120px); margin-inline: auto; }
 body.ev-unified[data-ev-page="transfer"] .transfer-page-actions { display: flex; justify-content: flex-end; margin: 0 0 12px; }
 body.ev-unified[data-ev-page="transfer"] .transfer-page-actions .btn {
