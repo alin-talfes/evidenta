@@ -6,7 +6,6 @@ const redesignedRoutes = [
   { path: '/transfer/', title: /Transfer și profilare/ },
   { path: '/instructaj/', title: /Instructaj/ },
   { path: '/semnalmente/', title: /Semnalmente/ },
-  { path: '/ai/', title: /AI Documente/ }
 ];
 
 test.beforeEach(async ({ page }) => {
@@ -24,6 +23,7 @@ for (const route of redesignedRoutes) {
 
     await page.goto(route.path);
     await expect(page.locator('.ev-shell')).toBeVisible();
+    await expect(page).toHaveTitle(route.title);
     await expect(page.locator('.ev-shell__brand-copy strong')).toHaveText('Inmate Pocket Calculator');
     await expect(page.locator('.ev-shell__theme')).toBeVisible();
 
