@@ -10,6 +10,7 @@
     window.__EVIDENTA_THEME_CONTROLLER__ = true;
 
     const THEME_STORAGE_KEY = 'evidenta-theme';
+    const THEME_MODE_STORAGE_KEY = 'evidenta-theme-mode';
     const LEGACY_KEYS = ['anpTheme', 'descriere-semnalmente-theme'];
     const THEME_CONTROL_SELECTOR = '#themeToggle, #btn-theme, #theme-btn, #evidenta-theme-toggle';
     const scriptUrl = new URL(document.currentScript?.src || location.href, location.href);
@@ -19,24 +20,43 @@
         return value === 'light' || value === 'dark' ? value : null;
     }
 
-    function readTheme() {
+    function validThemeMode(value) {
+        return value === 'system' || value === 'light' || value === 'dark' ? value : null;
+    }
+
+    function readThemeMode() {
+        const savedMode = validThemeMode(localStorage.getItem(THEME_MODE_STORAGE_KEY));
+        if (savedMode) return savedMode;
+
+        // Migration: a previously saved light/dark value remains an explicit user preference.
         const canonical = validTheme(localStorage.getItem(THEME_STORAGE_KEY));
         if (canonical) return canonical;
 
         for (const key of LEGACY_KEYS) {
             const legacy = validTheme(localStorage.getItem(key));
-            if (legacy) {
-                localStorage.setItem(THEME_STORAGE_KEY, legacy);
-                return legacy;
-            }
+            if (legacy) return legacy;
         }
 
+        return 'system';
+    }
+
+    function resolveTheme(mode = readThemeMode()) {
+        if (mode === 'light' || mode === 'dark') return mode;
         return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+
+    function readTheme() {
+        return resolveTheme(readThemeMode());
     }
 
     function persistTheme(theme) {
         localStorage.setItem(THEME_STORAGE_KEY, theme);
         for (const key of LEGACY_KEYS) localStorage.setItem(key, theme);
+    }
+
+    function persistThemeMode(mode, theme) {
+        localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
+        persistTheme(theme);
     }
 
     function updateThemeMeta(theme) {
@@ -50,17 +70,22 @@
     }
 
     function updateThemeButtons(theme) {
-        const isLight = theme === 'light';
+        const mode = validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode();
+        const labels = { system: 'Sistem', light: 'Luminos', dark: 'Întunecat' };
+        const icons = { system: '◐', light: '☀️', dark: '🌙' };
         document.querySelectorAll(THEME_CONTROL_SELECTOR).forEach(button => {
-            button.textContent = isLight ? '☀️' : '🌙';
-            button.setAttribute('aria-pressed', String(isLight));
-            button.setAttribute('aria-label', isLight ? 'Activează tema întunecată' : 'Activează tema luminoasă');
-            button.setAttribute('title', isLight ? 'Temă întunecată' : 'Temă luminoasă');
+            button.textContent = icons[mode];
+            button.dataset.themeMode = mode;
+            button.setAttribute('aria-pressed', String(theme === 'light'));
+            button.setAttribute('aria-label', `Tema: ${labels[mode]}. Apasă pentru următoarea opțiune.`);
+            button.setAttribute('title', `Temă: ${labels[mode]}`);
         });
     }
 
-    function applyTheme(theme = readTheme(), { persist = false } = {}) {
+    function applyTheme(theme = readTheme(), { persist = false, mode = null } = {}) {
         const resolved = validTheme(theme) || 'dark';
+        const selectedMode = validThemeMode(mode);
+        if (selectedMode) document.documentElement.dataset.themeMode = selectedMode;
         document.documentElement.dataset.theme = resolved;
         document.documentElement.style.colorScheme = resolved;
 
@@ -69,16 +94,31 @@
             document.body.classList.toggle('dark', resolved === 'dark');
         }
 
-        if (persist) persistTheme(resolved);
+        if (persist) {
+            const preference = selectedMode || validTheme(theme) || readThemeMode();
+            document.documentElement.dataset.themeMode = preference;
+            persistThemeMode(preference, resolved);
+        }
         updateThemeMeta(resolved);
         updateThemeButtons(resolved);
-        window.dispatchEvent(new CustomEvent('evidenta:themechange', { detail: { theme: resolved } }));
+        window.dispatchEvent(new CustomEvent('evidenta:themechange', {
+            detail: { theme: resolved, mode: validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode() }
+        }));
         return resolved;
     }
 
+    function setThemeMode(mode, { persist = true } = {}) {
+        const preference = validThemeMode(mode) || 'system';
+        const resolved = resolveTheme(preference);
+        document.documentElement.dataset.themeMode = preference;
+        if (persist) persistThemeMode(preference, resolved);
+        return applyTheme(resolved, { mode: preference });
+    }
+
     function toggleTheme() {
-        const current = validTheme(document.documentElement.dataset.theme) || readTheme();
-        return applyTheme(current === 'light' ? 'dark' : 'light', { persist: true });
+        const current = validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode();
+        const next = { system: 'light', light: 'dark', dark: 'system' }[current];
+        return setThemeMode(next);
     }
 
     function ensureVersionController() {
@@ -141,6 +181,8 @@
             'transfer/rules': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
             'transfer/rules/index.html': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
             'instructaj': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
+            'ai': ['ai', 'AI Documente', 'OCR românesc și analiză asistată a documentelor de executare.'],
+            'ai/index.html': ['ai', 'AI Documente', 'OCR românesc și analiză asistată a documentelor de executare.'],
             'instructaj/index.html': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
             'semnalmente': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
             'semnalmente/index.html': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
@@ -298,7 +340,9 @@
 
     function initThemeAndShell() {
         try {
-            applyTheme(readTheme());
+            const mode = readThemeMode();
+            document.documentElement.dataset.themeMode = mode;
+            applyTheme(resolveTheme(mode), { mode });
             removeRetiredModuleLinks();
             pruneEditorialNoise();
             buildUniversalShell();
@@ -324,20 +368,39 @@
     }
 
     window.addEventListener('storage', event => {
-        if (event.key !== THEME_STORAGE_KEY && !LEGACY_KEYS.includes(event.key)) return;
-        applyTheme(readTheme());
+        if (![THEME_MODE_STORAGE_KEY, THEME_STORAGE_KEY, ...LEGACY_KEYS].includes(event.key)) return;
+        const mode = readThemeMode();
+        document.documentElement.dataset.themeMode = mode;
+        applyTheme(resolveTheme(mode), { mode });
     });
+
+    const colorSchemeQuery = window.matchMedia?.('(prefers-color-scheme: light)');
+    const handleSystemThemeChange = () => {
+        if (readThemeMode() !== 'system') return;
+        document.documentElement.dataset.themeMode = 'system';
+        applyTheme(resolveTheme('system'), { mode: 'system' });
+    };
+    if (colorSchemeQuery?.addEventListener) colorSchemeQuery.addEventListener('change', handleSystemThemeChange);
+    else colorSchemeQuery?.addListener?.(handleSystemThemeChange);
 
     window.applyTheme = theme => applyTheme(theme || readTheme());
     window.toggleTheme = toggleTheme;
     window.EVIDENTA_THEME_STORAGE_KEY = THEME_STORAGE_KEY;
-    window.EVIDENTA_THEME = { get: readTheme, set: theme => applyTheme(theme, { persist: true }), toggle: toggleTheme };
+    window.EVIDENTA_THEME_MODE_STORAGE_KEY = THEME_MODE_STORAGE_KEY;
+    window.EVIDENTA_THEME = {
+        get: readTheme,
+        getMode: readThemeMode,
+        set: theme => setThemeMode(theme, { persist: true }),
+        setMode: (mode, options) => setThemeMode(mode, options),
+        toggle: toggleTheme
+    };
     window.EVIDENTA_SHELL = { rebuild: buildUniversalShell, context: pageContext };
 
-    const initialTheme = readTheme();
+    const initialMode = readThemeMode();
+    const initialTheme = resolveTheme(initialMode);
+    document.documentElement.dataset.themeMode = initialMode;
     document.documentElement.dataset.theme = initialTheme;
     document.documentElement.style.colorScheme = initialTheme;
-    persistTheme(initialTheme);
     updateThemeMeta(initialTheme);
 
     if (document.readyState === 'loading') {

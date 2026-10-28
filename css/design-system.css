@@ -522,3 +522,62 @@ footer a { color: var(--ev-text-secondary); }
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* Mobile-first polish: shared tokens and predictable touch controls. */
+:root {
+  --ev-page-gutter: clamp(12px, 3vw, 28px);
+  --ev-section-gap: clamp(12px, 2.4vw, 22px);
+  --ev-card-padding: clamp(14px, 2.4vw, 22px);
+  --ev-control-radius: 10px;
+  --ev-motion-fast: 140ms;
+}
+
+body.ev-unified :is(
+  button, .btn, .primary, .secondary, .icon-btn, .text-btn,
+  .filter, .toggle-btn, .nav-item, .access-submit, .access-logout,
+  input[type="text"], input[type="search"], input[type="number"],
+  input[type="date"], input[type="time"], input[type="password"],
+  select, textarea
+) {
+  border-radius: var(--ev-control-radius);
+}
+
+body.ev-unified :is(
+  input[type="text"], input[type="search"], input[type="number"],
+  input[type="date"], input[type="time"], input[type="password"],
+  select, textarea
+) {
+  min-height: var(--ev-control-height);
+}
+
+body.ev-unified .ev-shell__theme {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  body.ev-unified {
+    font-size: 15px !important;
+  }
+
+  body.ev-unified :is(.card, .panel, .analysis-panel, .results-section, .legal-box) {
+    padding: var(--ev-panel-pad-mobile, 14px) !important;
+  }
+
+  body.ev-unified :is(.page-heading, .section-heading, .panel-head) {
+    gap: 10px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ev-unified *,
+  body.ev-unified *::before,
+  body.ev-unified *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

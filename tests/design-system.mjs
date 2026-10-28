@@ -85,6 +85,11 @@ assert.ok(!fs.existsSync(path.join(repoDir, "css/hotfix.css")), "hotfix.css treb
 assert.ok(!fs.existsSync(path.join(repoDir, "css/ux-upgrades.css")), "ux-upgrades.css trebuie eliminat după consolidarea în final-layer.css");
 
 assert.ok(themeController.includes("const THEME_STORAGE_KEY = 'evidenta-theme'"), "Tema trebuie salvată într-o singură cheie universală");
+assert.ok(themeController.includes("const THEME_MODE_STORAGE_KEY = 'evidenta-theme-mode'"), "Preferința sistem/luminos/întunecat trebuie păstrată separat de tema rezolvată");
+assert.ok(themeController.includes("function validThemeMode(value)"), "Controllerul trebuie să valideze cele trei moduri de temă");
+assert.ok(themeController.includes("function resolveTheme(mode = readThemeMode())"), "Tema sistemului trebuie rezolvată prin preferința OS");
+assert.ok(themeController.includes("handleSystemThemeChange"), "Modul Sistem trebuie să urmărească schimbările de temă ale sistemului de operare");
+
 assert.ok(themeController.includes("'anpTheme'"), "Controllerul trebuie să migreze cheia veche a nucleului");
 assert.ok(themeController.includes("'descriere-semnalmente-theme'"), "Controllerul trebuie să migreze cheia veche Semnalmente");
 assert.ok(themeController.includes("document.documentElement.dataset.theme"), "Tema universală trebuie aplicată pe elementul html");
@@ -171,4 +176,89 @@ assert.deepEqual(
 assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css"), "Redirectul vechi Semnalmente trebuie să folosească direct design system-ul");
 assert.ok(!fs.existsSync(path.join(repoDir, "termene.html")), "Pagina Termene trebuie eliminată din inventarul repo-ului");
 
+const pedepseHtml = read("index.html");
+assert.ok(pedepseHtml.includes('class="ev-page-intro"'), "Pedepse trebuie să aibă o introducere vizuală proprie");
+assert.ok(pedepseHtml.includes('id="page-title"'), "Titlul principal Pedepse trebuie să fie semantic");
+assert.ok(finalLayer.includes('.ev-page-intro__copy'), "Redesignul Pedepse trebuie să definească hero-ul");
+assert.ok(finalLayer.includes('grid-template-columns: repeat(3, minmax(0, 1fr))'), "Modurile Pedepse trebuie să rămână într-o grilă adaptivă");
+assert.ok(finalLayer.includes('@media (max-width: 640px)'), "Redesignul Pedepse trebuie să includă reguli mobile");
+
 console.log(`Design system: ${htmlFiles.length} pagini HTML folosesc aceeași temă, același shell și stratul final consolidat.`);
+
+
+const pedepseVisual = read("css/final-layer.css");
+for (const marker of [
+  "component refinement tranche",
+  ".top-bar .btn-utility",
+  "#deductionsContainer",
+  ".ev-optional-tools__buttons",
+  "#resultsCard .result-section",
+  "@media (max-width: 760px)",
+  "@media (prefers-reduced-motion: reduce)"
+]) {
+  assert.ok(pedepseVisual.includes(marker), `Redesignul operațional Pedepse trebuie să conțină ${marker}`);
+}
+assert.ok(pedepseHtml.includes('id="calcBtn"'), "Acțiunea principală de calcul trebuie păstrată");
+assert.ok(pedepseHtml.includes('id="resultsCard"'), "Containerul rezultatelor trebuie păstrat");
+assert.ok(pedepseHtml.includes('id="deductionsContainer"'), "Containerul deducerilor trebuie păstrat");
+
+
+const contopiriHtml = read("contopiri/index.html");
+assert.ok(contopiriHtml.includes('class="ev-module-intro"'), "Contopiri trebuie să aibă un titlu vizibil și semantic");
+for (const marker of [
+  'data-ev-page="contopiri"] .ev-module-intro',
+  'data-ev-page="transfer"] .header',
+  'data-ev-page="instructaj"] .hero',
+  'data-ev-page^="semnalmente"] .workflow-step',
+  'data-ev-page="ai"] #analyzeFilesBtn'
+]) {
+  assert.ok(finalLayer.includes(marker), `Stratul comun trebuie să includă rafinamentul vizual pentru ${marker}`);
+}
+
+
+const contopiriVisual = read("css/final-layer.css");
+for (const marker of [
+  "Contopiri — introducere pedeapsă",
+  'data-ev-page="contopiri"] .penalty-row',
+  'data-ev-page="contopiri"] .result-box',
+  'data-ev-page="contopiri"] .legal-box h4',
+  "@media (max-width: 380px)"
+]) assert.ok(contopiriVisual.includes(marker), `Redesignul Contopiri trebuie să conțină ${marker}`);
+assert.ok(read("contopiri/index.html").includes('id="penaltyRowsContainer"'), "Containerul pedepselor Contopiri trebuie păstrat");
+assert.ok(read("contopiri/index.html").includes('id="mergeResult"'), "Containerul rezultantei Contopiri trebuie păstrat");
+
+
+const transferVisual = read("css/final-layer.css");
+for (const marker of [
+  "Transfer — criterii de profilare",
+  'data-ev-page="transfer"] .header',
+  'data-ev-page="transfer"] .radio-btn:has(input:checked)',
+  'data-ev-page="transfer"] #resultArea .empty-state',
+  "@media (max-width: 380px)"
+]) assert.ok(transferVisual.includes(marker), `Redesignul Transfer trebuie să conțină ${marker}`);
+assert.ok(read("transfer/index.html").includes('id="transferForm"'), "Formularul Transfer trebuie păstrat");
+assert.ok(read("transfer/index.html").includes('id="resultArea"'), "Zona de rezultate Transfer trebuie păstrată");
+
+
+const moduleVisuals = read("css/final-layer.css");
+for (const marker of [
+  "Instructaj — traseu de învățare",
+  'data-ev-page="instructaj"] .hero',
+  "Semnalmente — upload states",
+  'data-ev-page^="semnalmente"] .upload-zone',
+  "AI Documente — secure local processing",
+  'data-ev-page="ai"] .ai-review-grid',
+  "@media (max-width: 760px)"
+]) assert.ok(moduleVisuals.includes(marker), `Redesignul modulelor auxiliare trebuie să conțină ${marker}`);
+assert.ok(read("instructaj/index.html").includes('id="learning-progress"'), "Progresul local din Instructaj trebuie păstrat");
+assert.ok(read("semnalmente/index.html").includes('id="drop-frontal"'), "Zona de încărcare frontală trebuie păstrată");
+assert.ok(read("ai/index.html").includes('id="analyzeFilesBtn"'), "Acțiunea de analiză AI trebuie păstrată");
+
+
+for (const marker of [
+  "Accesibilitate transversală",
+  ":focus-visible",
+  "[aria-disabled=\"true\"]",
+  "@media (forced-colors: active)",
+  "prefers-reduced-motion"
+]) assert.ok(finalLayer.includes(marker), `Stratul final trebuie să includă suportul de accesibilitate ${marker}`);
