@@ -47,6 +47,24 @@ for (const route of routes) {
       await expect.poll(() => compatibilityStylesheetRequested, { message: 'Stratul de compatibilitate CSS trebuie încărcat în fiecare modul' }).toBe(true);
       await expect(page.locator('html')).toHaveAttribute('data-theme-mode', theme);
 
+      if (route.name === 'pedepse' && (await page.evaluate(() => window.innerWidth)) <= 640) {
+        const spacing = await page.locator('#main-content').evaluate(main => {
+          const intro = main.querySelector('.ev-page-intro');
+          const mode = main.querySelector('.ev-calc-mode');
+          const introRect = intro.getBoundingClientRect();
+          const modeRect = mode.getBoundingClientRect();
+          return {
+            display: getComputedStyle(main).display,
+            gap: parseFloat(getComputedStyle(main).rowGap),
+            distance: modeRect.top - introRect.bottom
+          };
+        });
+        expect(spacing.display, 'Conținutul principal trebuie să păstreze un flux vertical controlat').toBe('flex');
+        expect(spacing.gap, 'Spațierea dintre secțiunile principale trebuie să fie compactă').toBeGreaterThanOrEqual(8);
+        expect(spacing.gap, 'Spațierea dintre secțiunile principale nu trebuie să fie excesivă').toBeLessThanOrEqual(16);
+        expect(spacing.distance, 'Selectorul de mod trebuie separat vizual de antet').toBeGreaterThanOrEqual(8);
+      }
+
       if (route.name === 'instructaj') {
         const shortcuts = page.locator('.ev-operational-search__chips button');
         await expect(shortcuts).toHaveCount(4);
