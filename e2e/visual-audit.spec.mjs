@@ -15,7 +15,11 @@ for (const route of routes) {
   for (const theme of themes) {
     test(`captură vizuală ${route.name} / ${theme}`, async ({ page }, testInfo) => {
       const pageErrors = [];
+      let compatibilityStylesheetRequested = false;
       page.on('pageerror', error => pageErrors.push(error.message));
+      page.on('request', request => {
+        if (request.url().includes('/css/browser-compat.css')) compatibilityStylesheetRequested = true;
+      });
 
       await page.addInitScript(mode => {
         localStorage.removeItem('evidenta-theme');
@@ -40,6 +44,7 @@ for (const route of routes) {
       await expect(page.locator('.ev-shell__brand-copy strong')).toHaveText('Inmate Pocket Calculator');
       await expect(page.locator('.ev-shell__theme')).toBeVisible();
       await expect(page).toHaveTitle(route.title);
+      await expect.poll(() => compatibilityStylesheetRequested, { message: 'Stratul de compatibilitate CSS trebuie încărcat în fiecare modul' }).toBe(true);
       await expect(page.locator('html')).toHaveAttribute('data-theme-mode', theme);
 
       if (route.name === 'instructaj') {
