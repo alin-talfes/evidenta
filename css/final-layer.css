@@ -914,3 +914,33 @@ body.ev-unified :is(input, select, textarea).ev-field-warning {
     transition: none !important;
   }
 }
+
+
+/* Final responsive guardrails: keep shared surfaces legible without changing module behavior. */
+body.ev-unified :is(.card, .panel, .analysis-panel, .results-section, .legal-box, .notice-panel) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+body.ev-unified :is(button, .btn, .primary, .secondary, .icon-btn, .text-btn) {
+  max-width: 100%;
+  white-space: normal;
+}
+
+body.ev-unified :is(input, select, textarea) {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell > main {
+    padding-left: max(var(--ev-page-gutter, 14px), env(safe-area-inset-left)) !important;
+    padding-right: max(var(--ev-page-gutter, 14px), env(safe-area-inset-right)) !important;
+  }
+
+  body.ev-unified .ev-shell__theme {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

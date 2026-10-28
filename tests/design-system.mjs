@@ -85,6 +85,11 @@ assert.ok(!fs.existsSync(path.join(repoDir, "css/hotfix.css")), "hotfix.css treb
 assert.ok(!fs.existsSync(path.join(repoDir, "css/ux-upgrades.css")), "ux-upgrades.css trebuie eliminat după consolidarea în final-layer.css");
 
 assert.ok(themeController.includes("const THEME_STORAGE_KEY = 'evidenta-theme'"), "Tema trebuie salvată într-o singură cheie universală");
+assert.ok(themeController.includes("const THEME_MODE_STORAGE_KEY = 'evidenta-theme-mode'"), "Preferința sistem/luminos/întunecat trebuie păstrată separat de tema rezolvată");
+assert.ok(themeController.includes("function validThemeMode(value)"), "Controllerul trebuie să valideze cele trei moduri de temă");
+assert.ok(themeController.includes("function resolveTheme(mode = readThemeMode())"), "Tema sistemului trebuie rezolvată prin preferința OS");
+assert.ok(themeController.includes("handleSystemThemeChange"), "Modul Sistem trebuie să urmărească schimbările de temă ale sistemului de operare");
+
 assert.ok(themeController.includes("'anpTheme'"), "Controllerul trebuie să migreze cheia veche a nucleului");
 assert.ok(themeController.includes("'descriere-semnalmente-theme'"), "Controllerul trebuie să migreze cheia veche Semnalmente");
 assert.ok(themeController.includes("document.documentElement.dataset.theme"), "Tema universală trebuie aplicată pe elementul html");

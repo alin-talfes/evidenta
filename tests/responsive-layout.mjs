@@ -78,4 +78,13 @@ for (const [module, source] of Object.entries(wrappers)) {
 const officerAudit = read('ofiter/scripts/audit-css.mjs');
 assert.ok(officerAudit.includes("../css/responsive.css"), 'Auditul CSS Ofițer trebuie să permită responsive.css');
 
+
+assert.ok(
+  responsive.includes('/* Pe telefoane, navigarea principală este bara inferioară; evităm un al doilea meniu în antet. */') &&
+  responsive.includes('@media (max-width: 760px)') &&
+  responsive.includes('body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav') &&
+  responsive.includes('display: none !important'),
+  'Pe telefoane trebuie să existe o singură navigare principală, fără meniu duplicat în antet.'
+);
+
 console.log('Responsive: desktop, tabletă, mobil, safe-area, overflow și Ofițer ascuns verificate.');
