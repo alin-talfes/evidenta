@@ -226,3 +226,15 @@ for (const marker of [
 ]) assert.ok(contopiriVisual.includes(marker), `Redesignul Contopiri trebuie să conțină ${marker}`);
 assert.ok(read("contopiri/index.html").includes('id="penaltyRowsContainer"'), "Containerul pedepselor Contopiri trebuie păstrat");
 assert.ok(read("contopiri/index.html").includes('id="mergeResult"'), "Containerul rezultantei Contopiri trebuie păstrat");
+
+
+const transferVisual = read("css/final-layer.css");
+for (const marker of [
+  "Transfer — criterii de profilare",
+  'data-ev-page="transfer"] .header',
+  'data-ev-page="transfer"] .radio-btn:has(input:checked)',
+  'data-ev-page="transfer"] #resultArea .empty-state',
+  "@media (max-width: 380px)"
+]) assert.ok(transferVisual.includes(marker), `Redesignul Transfer trebuie să conțină ${marker}`);
+assert.ok(read("transfer/index.html").includes('id="transferForm"'), "Formularul Transfer trebuie păstrat");
+assert.ok(read("transfer/index.html").includes('id="resultArea"'), "Zona de rezultate Transfer trebuie păstrată");
