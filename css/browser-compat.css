@@ -1,0 +1,93 @@
+/*
+ * Cross-browser visual enforcement for Inmate Pocket Calculator.
+ * Plain-CSS fallbacks are intentionally independent of :is(), :where(), :has(),
+ * color-mix(), backdrop-filter, CSS custom properties and dvh units.
+ * Modern browsers keep the full design-system styles; these rules cover gaps.
+ */
+
+/* Browsers without CSS custom properties: provide a complete readable baseline. */
+@supports not (color: var(--ev-text)) {
+  html, body { background: #0b1220; color: #f4f7fb; }
+  body.ev-unified { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-size: 15px; line-height: 1.55; }
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell,
+  body.ev-unified > .app-shell > main { width: 100%; max-width: 1240px; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px; }
+  .ev-shell { display: block; width: 100%; background: #0f1929; color: #f4f7fb; border-bottom: 1px solid #405674; }
+  .ev-shell__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; max-width: 1240px; min-height: 64px; margin: 0 auto; padding: 10px 16px; }
+  .ev-shell__brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+  .ev-shell__mark { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: #21334d; border: 1px solid #405674; border-radius: 10px; color: #7aa7ff; font-weight: 900; }
+  .ev-shell__nav { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+  .ev-shell__nav a { display: inline-flex; align-items: center; min-height: 38px; padding: 6px 10px; border: 1px solid #405674; border-radius: 9px; color: #c7d2e1; text-decoration: none; }
+  .ev-shell__nav a[aria-current="page"] { color: #fff; background: #2563eb; border-color: #2563eb; }
+  .ev-shell__actions { display: flex; align-items: center; gap: 8px; }
+  .ev-shell__theme, .ev-shell__actions button { min-width: 44px; min-height: 44px; color: #f4f7fb; background: #1a2940; border: 1px solid #405674; border-radius: 9px; }
+  .ev-shell__module { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; max-width: 1240px; margin: 0 auto; padding: 16px; border-top: 1px solid #293a53; }
+  .ev-shell__module h1 { margin: 0; color: #f4f7fb; font-size: 28px; line-height: 1.2; }
+  body.ev-unified .card, body.ev-unified .panel, body.ev-unified .detail, body.ev-unified .notice-panel, body.ev-unified .legal-strip, body.ev-unified .workflow-card, body.ev-unified .basic-card { color: #f4f7fb; background: #142033; border: 1px solid #293a53; border-radius: 14px; }
+  body.ev-unified button, body.ev-unified input, body.ev-unified select, body.ev-unified textarea { max-width: 100%; font: inherit; }
+  body.ev-unified input, body.ev-unified select, body.ev-unified textarea { min-height: 44px; color: #f4f7fb; background: #0f1b2d; border: 1px solid #405674; border-radius: 8px; }
+  body.ev-unified button, body.ev-unified .btn, body.ev-unified .primary, body.ev-unified .secondary { min-height: 40px; padding: 8px 12px; border: 1px solid #405674; border-radius: 9px; color: #f4f7fb; background: #1a2940; cursor: pointer; }
+  body.ev-unified .primary, body.ev-unified .btn-primary, body.ev-unified .access-submit { color: #fff; background: #2563eb; border-color: #2563eb; }
+  body.ev-unified a { color: #7aa7ff; }
+  body.ev-unified :focus { outline: 2px solid #7aa7ff; outline-offset: 2px; }
+  body.ev-unified .ev-footer { margin-top: 24px; padding: 16px; color: #94a5bb; background: #0b1220; border-top: 1px solid #293a53; }
+  html[data-theme="light"] body, body.light { color: #172033; background: #f3f6fa; }
+  html[data-theme="light"] .ev-shell, body.light .ev-shell { color: #172033; background: #fff; border-color: #d5dfeb; }
+  html[data-theme="light"] .ev-shell__module h1, body.light .ev-shell__module h1 { color: #172033; }
+  html[data-theme="light"] body.ev-unified .card, html[data-theme="light"] body.ev-unified .panel, html[data-theme="light"] body.ev-unified .detail, body.light.ev-unified .card, body.light.ev-unified .panel, body.light.ev-unified .detail { color: #172033; background: #fff; border-color: #d5dfeb; }
+  html[data-theme="light"] body.ev-unified input, html[data-theme="light"] body.ev-unified select, html[data-theme="light"] body.ev-unified textarea, body.light.ev-unified input, body.light.ev-unified select, body.light.ev-unified textarea { color: #172033; background: #fff; border-color: #aebed1; }
+  @media (max-width: 760px) {
+    .ev-shell__bar { align-items: flex-start; }
+    .ev-shell__nav { width: 100%; }
+    .ev-shell__nav a { flex: 1 1 auto; justify-content: center; }
+    .ev-shell__module h1 { font-size: 23px; }
+    body.ev-unified .form-grid, body.ev-unified .upload-grid, body.ev-unified .section-hub-grid, body.ev-unified .learning-modules-grid { display: block; }
+    body.ev-unified .form-grid > *, body.ev-unified .upload-grid > *, body.ev-unified .section-hub-grid > *, body.ev-unified .learning-modules-grid > * { margin-bottom: 12px; }
+  }
+}
+
+/* color-mix fallback for browsers with variables but without color-mix(). */
+@supports (color: var(--ev-text)) and (not (color: color-mix(in srgb, black, white))) {
+  .ev-shell { background: var(--ev-bg); }
+  .ev-shell__nav a[aria-current="page"] { box-shadow: none; }
+  .ev-shell__module { border-top-color: var(--ev-border); }
+  body.ev-unified .ev-validation-summary { background: var(--ev-surface); }
+  body.ev-unified .ev-validation-summary.has-errors { background: var(--ev-surface); }
+  body.ev-unified .ev-result-overview__primary { background: var(--ev-surface); }
+  body.ev-unified .ev-result-check { background: var(--ev-surface); }
+}
+
+/* If blur effects are unsupported, retain opaque surfaces and contrast. */
+@supports not (backdrop-filter: blur(1px)) {
+  .ev-shell { background: var(--ev-bg, #0b1220); }
+  body.ev-unified .app-nav, body.ev-unified .topbar { background: var(--ev-surface, #142033); }
+}
+
+/* Older Safari versions do not implement dvh; vh remains the fallback. */
+@supports (height: 100vh) {
+  @supports not (height: 100dvh) {
+    html.ev-standalone body { min-height: 100vh; }
+    @media (max-width: 760px) {
+      body, html.ev-mobile-nav-layout body { min-height: 100vh !important; }
+    }
+  }
+}
+
+/* Accessibility and forced-colors overrides should win over decorative styling. */
+@media (forced-colors: active) {
+  .ev-shell, .ev-shell__nav a, .ev-shell__theme, body.ev-unified .card, body.ev-unified .panel, body.ev-unified button {
+    border: 1px solid ButtonText !important;
+    box-shadow: none !important;
+    forced-color-adjust: auto;
+  }
+  .ev-shell__nav a[aria-current="page"], body.ev-unified .primary, body.ev-unified .btn-primary {
+    color: HighlightText !important;
+    background: Highlight !important;
+    border-color: Highlight !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
