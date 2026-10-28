@@ -13,7 +13,7 @@ const serviceWorker = read('sw.js');
 
 assert.doesNotMatch(html, /class=["']site-header["']/, 'Instructaj must not keep the retired top navigation markup.');
 assert.doesNotMatch(html, /class=["']app-nav["']/, 'Instructaj must not own a parallel suite navigation implementation.');
-assert.match(html, /styles\.css\?v=6/, 'Instructaj must load the current module stylesheet.');
+assert.match(html, /styles\.css\?v=7/, 'Instructaj must load the current module stylesheet.');
 assert.match(html, /\.\.\/js\/theme\.js\?v=40/, 'Instructaj must declare the shared theme controller.');
 assert.match(html, /\.\.\/js\/operational-navigation\.js\?v=4/, 'Instructaj must declare the shared navigation controller.');
 assert.match(html, /\.\.\/js\/operational-instructaj\.js\?v=1/, 'Instructaj must declare its operational controller.');
