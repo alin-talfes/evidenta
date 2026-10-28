@@ -5,7 +5,7 @@
 /* Surse consolidate în final-layer.css: "./consistency.css?v=1" */
 @import url("./responsive.css?v=2");
 /* Compatibilitate/audit: "./hotfix.css?v=1" "./ux-upgrades.css?v=1" */
-@import url("./final-layer.css?v=4");
+@import url("./final-layer.css?v=5");
 @import url("./browser-compat.css?v=1");
 
 /* Pedepse — ritm vertical uniform în rezultatul operațional. */
