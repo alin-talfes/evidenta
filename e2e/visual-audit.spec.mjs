@@ -52,7 +52,8 @@ for (const route of routes) {
       }));
 
       expect(layout.documentWidth - layout.viewportWidth, `Overflow orizontal în ${route.path} (${layout.documentWidth}px vs ${layout.viewportWidth}px)`).toBeLessThanOrEqual(1);
-      expect(layout.theme).toBe(theme === 'system' ? expect.any(String) : theme);
+      if (theme === 'system') expect(['light', 'dark']).toContain(layout.theme);
+      else expect(layout.theme).toBe(theme);
       expect(layout.mode).toBe(theme);
       expect(pageErrors, `Erori JavaScript în ${route.path}: ${pageErrors.join(' | ')}`).toEqual([]);
 
