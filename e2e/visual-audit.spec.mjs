@@ -15,7 +15,11 @@ for (const route of routes) {
   for (const theme of themes) {
     test(`captură vizuală ${route.name} / ${theme}`, async ({ page }, testInfo) => {
       const pageErrors = [];
+      let compatibilityStylesheetRequested = false;
       page.on('pageerror', error => pageErrors.push(error.message));
+      page.on('request', request => {
+        if (request.url().includes('/css/browser-compat.css')) compatibilityStylesheetRequested = true;
+      });
 
       await page.addInitScript(mode => {
         localStorage.removeItem('evidenta-theme');
@@ -40,7 +44,22 @@ for (const route of routes) {
       await expect(page.locator('.ev-shell__brand-copy strong')).toHaveText('Inmate Pocket Calculator');
       await expect(page.locator('.ev-shell__theme')).toBeVisible();
       await expect(page).toHaveTitle(route.title);
+      await expect.poll(() => compatibilityStylesheetRequested, { message: 'Stratul de compatibilitate CSS trebuie încărcat în fiecare modul' }).toBe(true);
       await expect(page.locator('html')).toHaveAttribute('data-theme-mode', theme);
+
+      if (route.name === 'pedepse' && (await page.evaluate(() => window.innerWidth)) <= 640) {
+        const spacing = await page.locator('#main-content').evaluate(main => {
+          const intro = main.querySelector('.ev-page-intro');
+          const mode = main.querySelector('.ev-calc-mode');
+          const introRect = intro.getBoundingClientRect();
+          const modeRect = mode.getBoundingClientRect();
+          return {
+            distance: modeRect.top - introRect.bottom
+          };
+        });
+        expect(spacing.distance, 'Selectorul de mod trebuie separat vizual de antet').toBeGreaterThanOrEqual(8);
+        expect(spacing.distance, 'Spațiul dintre antet și selector nu trebuie să fie excesiv').toBeLessThanOrEqual(32);
+      }
 
       if (route.name === 'instructaj') {
         const shortcuts = page.locator('.ev-operational-search__chips button');
