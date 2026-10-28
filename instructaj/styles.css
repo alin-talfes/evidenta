@@ -6,6 +6,7 @@
 @import url("../css/final-layer.css?v=3");
 @import url("../css/operational-upgrades.css?v=3");
 @import url("../css/mobile.css?v=1");
+@import url("../css/browser-compat.css?v=1");
 
 /* Instructaj păstrează capitalizarea sursei, inclusiv în controalele și
    pseudo-elementele stilizate de foile comune ale aplicației. */
