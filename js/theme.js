@@ -181,6 +181,8 @@
             'transfer/rules': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
             'transfer/rules/index.html': ['transfer', 'Reguli transfer', 'Anexele și regulile utilizate pentru transfer și profilare.'],
             'instructaj': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
+            'ai': ['ai', 'AI Documente', 'OCR românesc și analiză asistată a documentelor de executare.'],
+            'ai/index.html': ['ai', 'AI Documente', 'OCR românesc și analiză asistată a documentelor de executare.'],
             'instructaj/index.html': ['instructaj', 'Instructaj', 'Fundamente juridice și proceduri de evidență.'],
             'semnalmente': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],
             'semnalmente/index.html': ['semnalmente', 'Semnalmente', 'Analiză facială asistată pentru fișe descriptive.'],

@@ -33,3 +33,13 @@ assert.ok(responsive.includes('/* Pe telefoane, navigarea principală este bara 
 assert.ok(mobile.includes('.ev-mobile-nav'), 'The existing mobile navigation remains available.');
 
 console.log('Adaptive theme: system/light/dark preference and mobile design tokens verified.');
+
+
+const contextStart = theme.indexOf("function pageContext()");
+const contextEnd = theme.indexOf("function publicModules()");
+const contextSource = theme.slice(contextStart, contextEnd);
+assert.ok(contextSource.includes("'ai': ['ai', 'AI Documente'"), 'AI Documente must receive its own page context so its scoped visual system activates.');
+assert.ok(read('instructaj/index.html').includes('../css/final-layer.css?v=3'), 'Instructaj must load the shared final visual layer.');
+assert.ok(read('semnalmente/index.html').includes('../css/final-layer.css?v=3'), 'Semnalmente must load the shared final visual layer.');
+assert.ok(read('css/style.css').includes('final-layer.css?v=3'), 'Shared pages must refresh the final visual layer URL.');
+assert.ok(read('ai/index.html').includes('js/theme.js?v=42'), 'AI Documente must load the updated page-context controller.');
