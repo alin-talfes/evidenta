@@ -29,13 +29,16 @@ jobs:
         with:
           node-version: '22'
       - run: npm install
-      - run: npx playwright install --with-deps webkit
+      - run: npx playwright install --with-deps webkit chromium
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
-          name: playwright-report-webkit
-          path: playwright-report/
+          name: mobile-visual-audit-${{ github.run_id }}
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
           retention-days: 7
 
   ofiter:
