@@ -6,6 +6,7 @@
 @import url("./responsive.css?v=2");
 /* Compatibilitate/audit: "./hotfix.css?v=1" "./ux-upgrades.css?v=1" */
 @import url("./final-layer.css?v=3");
+@import url("./browser-compat.css?v=1");
 
 /* Pedepse — ritm vertical uniform în rezultatul operațional. */
 .ev-result-overview > .result-section {
