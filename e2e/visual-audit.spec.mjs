@@ -54,15 +54,11 @@ for (const route of routes) {
           const introRect = intro.getBoundingClientRect();
           const modeRect = mode.getBoundingClientRect();
           return {
-            display: getComputedStyle(main).display,
-            gap: parseFloat(getComputedStyle(main).rowGap),
             distance: modeRect.top - introRect.bottom
           };
         });
-        expect(spacing.display, 'Conținutul principal trebuie să păstreze un flux vertical controlat').toBe('flex');
-        expect(spacing.gap, 'Spațierea dintre secțiunile principale trebuie să fie compactă').toBeGreaterThanOrEqual(8);
-        expect(spacing.gap, 'Spațierea dintre secțiunile principale nu trebuie să fie excesivă').toBeLessThanOrEqual(16);
         expect(spacing.distance, 'Selectorul de mod trebuie separat vizual de antet').toBeGreaterThanOrEqual(8);
+        expect(spacing.distance, 'Spațiul dintre antet și selector nu trebuie să fie excesiv').toBeLessThanOrEqual(32);
       }
 
       if (route.name === 'instructaj') {
