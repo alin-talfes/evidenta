@@ -944,3 +944,293 @@ body.ev-unified :is(input, select, textarea) {
     min-height: 44px;
   }
 }
+
+
+/* Pedepse — redesign de pagină: ierarhie clară, suprafețe calme, mobil-first. */
+body.ev-unified[data-ev-page="pedepse"] #main-content {
+  min-width: 0;
+  gap: clamp(12px, 1.8vw, 18px);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(20px, 3.2vw, 34px);
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 28%, var(--ev-border));
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 88% 8%, color-mix(in srgb, var(--ev-accent) 19%, transparent), transparent 42%),
+    linear-gradient(135deg, var(--ev-surface), color-mix(in srgb, var(--ev-surface-2) 72%, var(--ev-bg)));
+  box-shadow: var(--ev-shadow-soft);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro::after {
+  position: absolute;
+  z-index: -1;
+  right: -42px;
+  bottom: -92px;
+  width: 220px;
+  height: 220px;
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 18%, transparent);
+  border-radius: 50%;
+  content: "";
+  box-shadow: 0 0 0 24px color-mix(in srgb, var(--ev-accent) 4%, transparent),
+              0 0 0 48px color-mix(in srgb, var(--ev-accent) 3%, transparent);
+  pointer-events: none;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__copy {
+  min-width: 0;
+  max-width: 760px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__eyebrow {
+  margin: 0 0 10px;
+  color: var(--ev-accent-strong);
+  font-size: .7rem;
+  font-weight: 850;
+  letter-spacing: .13em;
+  line-height: 1.4;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+  max-width: 18ch;
+  margin: 0;
+  color: var(--ev-text);
+  font-size: clamp(1.55rem, 3.1vw, 2.35rem);
+  font-weight: 850;
+  letter-spacing: -.045em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+  max-width: 58ch;
+  margin: 12px 0 0;
+  color: var(--ev-text-secondary);
+  font-size: clamp(.9rem, 1.2vw, 1rem);
+  line-height: 1.6;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 7px;
+  justify-items: start;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--ev-border-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ev-surface) 78%, transparent);
+  color: var(--ev-text-secondary);
+  font-size: .72rem;
+  font-weight: 750;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--ev-border);
+  border-radius: 16px;
+  background: var(--ev-surface-2);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ev-text) 3%, transparent);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button {
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ev-text-secondary);
+  font-size: .84rem;
+  font-weight: 780;
+  line-height: 1.25;
+  transition: background-color var(--ev-motion-fast, 160ms ease), border-color var(--ev-motion-fast, 160ms ease), color var(--ev-motion-fast, 160ms ease);
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button.is-active,
+body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--ev-accent) 42%, var(--ev-border));
+  background: var(--ev-surface);
+  color: var(--ev-text);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--ev-bg) 16%, transparent);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content > .card,
+body.ev-unified[data-ev-page="pedepse"] #main-content > .ev-mobile-lc-details,
+body.ev-unified[data-ev-page="pedepse"] .ev-preventive-mode-panel .card {
+  min-width: 0;
+  border: 1px solid var(--ev-border);
+  border-radius: 18px;
+  background: var(--ev-surface);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--ev-bg) 9%, transparent);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content > .card {
+  padding: clamp(15px, 2.2vw, 22px);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content > .card > h3,
+body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details .card > h3,
+body.ev-unified[data-ev-page="pedepse"] .ev-preventive-mode-panel .card > h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  color: var(--ev-text);
+  font-size: .83rem;
+  font-weight: 850;
+  letter-spacing: .045em;
+  line-height: 1.4;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content > .card > h3::before,
+body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details .card > h3::before,
+body.ev-unified[data-ev-page="pedepse"] .ev-preventive-mode-panel .card > h3::before {
+  width: 4px;
+  height: 20px;
+  flex: 0 0 4px;
+  border-radius: 4px;
+  background: var(--ev-accent);
+  content: "";
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content :is(input, select, textarea) {
+  border-radius: 11px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #main-content :is(input, select, textarea):focus-visible,
+body.ev-unified[data-ev-page="pedepse"] #main-content button:focus-visible,
+body.ev-unified[data-ev-page="pedepse"] #main-content summary:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--ev-accent) 55%, transparent);
+  outline-offset: 2px;
+}
+
+body.ev-unified[data-ev-page="pedepse"] #calcBtn {
+  min-height: 52px;
+  border-radius: 13px;
+  font-weight: 850;
+  letter-spacing: .035em;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--ev-warning) 15%, transparent);
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard {
+  border-color: color-mix(in srgb, var(--ev-accent) 40%, var(--ev-border));
+}
+
+body.ev-unified[data-ev-page="pedepse"] #resultsCard > h3 {
+  font-size: 1rem;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details > summary {
+  min-height: 48px;
+  padding: 15px 18px;
+  color: var(--ev-text);
+  font-size: .88rem;
+  font-weight: 800;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+  display: grid;
+  gap: 12px;
+  padding: 0 12px 12px;
+}
+
+@media (max-width: 640px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+    display: block;
+    padding: 20px 17px;
+    border-radius: 18px;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__eyebrow {
+    max-width: 30ch;
+    font-size: .62rem;
+    letter-spacing: .105em;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+    max-width: 16ch;
+    font-size: clamp(1.65rem, 7vw, 2.15rem);
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+    max-width: 38ch;
+    margin-top: 10px;
+    font-size: .88rem;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 15px;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta span {
+    min-height: 28px;
+    font-size: .66rem;
+    white-space: normal;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] {
+    gap: 4px;
+    padding: 4px;
+    border-radius: 14px;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button {
+    min-height: 50px;
+    padding: 8px 5px;
+    font-size: clamp(.65rem, 2.8vw, .76rem);
+    overflow-wrap: normal;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    padding: 0 10px 10px;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #calcBtn {
+    min-height: 54px;
+  }
+}
+
+@media (max-width: 370px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta span {
+    font-size: .62rem;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button {
+    padding-inline: 3px;
+    font-size: .62rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button {
+    transition: none;
+  }
+}
