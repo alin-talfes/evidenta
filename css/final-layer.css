@@ -1643,3 +1643,90 @@ body.ev-unified[data-ev-page="ai"] #resultCard { border-color: color-mix(in srgb
   body.ev-unified[data-ev-page="transfer"] .toggle-group { grid-template-columns: 1fr; }
   body.ev-unified[data-ev-page^="semnalmente"] .workflow-step { border-radius: 10px; }
 }
+
+
+/* Contopiri — introducere pedeapsă și rezultat cu ierarhie vizuală mobil-first. */
+body.ev-unified[data-ev-page="contopiri"] > .container { width: min(100% - 28px, 1080px); margin-inline: auto; }
+body.ev-unified[data-ev-page="contopiri"] > .container > .card {
+  padding: clamp(16px, 2.4vw, 26px); border: 1px solid var(--ev-border);
+  border-radius: 18px; background: var(--ev-surface); box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="contopiri"] > .container > .card > h3 {
+  display: flex; align-items: center; gap: 10px; margin: 0 0 8px;
+  color: var(--ev-text); font-size: 1rem; font-weight: 850; letter-spacing: -.015em;
+}
+body.ev-unified[data-ev-page="contopiri"] > .container > .card > h3::before {
+  width: 4px; height: 22px; flex: 0 0 4px; border-radius: 4px; background: var(--ev-accent); content: "";
+}
+body.ev-unified[data-ev-page="contopiri"] .section-help {
+  max-width: 68ch; margin: 0 0 18px; color: var(--ev-text-secondary); font-size: .88rem; line-height: 1.6;
+}
+body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer { display: grid; gap: 10px; margin: 14px 0; }
+body.ev-unified[data-ev-page="contopiri"] .penalty-row {
+  display: grid; grid-template-columns: repeat(3, minmax(0, .58fr)) minmax(230px, 1.8fr) 44px;
+  align-items: end; gap: 10px; min-width: 0; padding: 14px;
+  border: 1px solid var(--ev-border); border-radius: 14px; background: var(--ev-surface-2);
+}
+body.ev-unified[data-ev-page="contopiri"] .penalty-row > div { display: grid; gap: 6px; min-width: 0; }
+body.ev-unified[data-ev-page="contopiri"] .penalty-row label { color: var(--ev-text-secondary); font-size: .73rem; font-weight: 780; }
+body.ev-unified[data-ev-page="contopiri"] .penalty-row :is(input, select) {
+  width: 100%; min-width: 0; min-height: 46px; padding: 10px;
+  border: 1px solid var(--ev-border-strong); border-radius: 10px; background: var(--ev-input-bg); color: var(--ev-text);
+}
+body.ev-unified[data-ev-page="contopiri"] .penalty-row .btn-danger {
+  width: 44px; min-width: 44px; min-height: 44px; padding: 0; border-radius: 11px; font-weight: 850;
+}
+body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer + .btn,
+body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer + .btn + .btn {
+  min-height: 48px; margin: 4px 6px 0 0; padding: 11px 16px; border-radius: 11px; font-size: .8rem; font-weight: 820;
+}
+body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer + .btn {
+  border: 1px solid var(--ev-border-strong); background: var(--ev-surface-2); color: var(--ev-text);
+}
+body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer + .btn + .btn {
+  border: 1px solid var(--ev-warning); background: var(--ev-warning); color: #172033;
+}
+body.ev-unified[data-ev-page="contopiri"] .result-box {
+  margin-top: 16px; padding: clamp(14px, 2.4vw, 22px);
+  border: 1px solid color-mix(in srgb, var(--ev-success) 42%, var(--ev-border));
+  border-left: 4px solid var(--ev-success); border-radius: 14px;
+  background: color-mix(in srgb, var(--ev-surface) 90%, var(--ev-success) 10%);
+  color: var(--ev-text); line-height: 1.65; overflow-wrap: anywhere;
+}
+body.ev-unified[data-ev-page="contopiri"] .result-box :is(h3, h4, strong) { color: var(--ev-text); }
+body.ev-unified[data-ev-page="contopiri"] .legal-box {
+  margin-top: 18px; padding: clamp(16px, 2.4vw, 26px); border: 1px solid var(--ev-border);
+  border-radius: 18px; background: var(--ev-surface); color: var(--ev-text-secondary);
+  box-shadow: var(--ev-shadow-soft); line-height: 1.72;
+}
+body.ev-unified[data-ev-page="contopiri"] .legal-box h4 {
+  margin: 0 0 14px; padding: 12px 14px; border-left: 4px solid var(--ev-accent);
+  border-radius: 0 10px 10px 0; background: var(--ev-accent-soft); color: var(--ev-text);
+  font-size: .94rem; font-weight: 850; line-height: 1.4;
+}
+body.ev-unified[data-ev-page="contopiri"] .legal-box p {
+  max-width: 86ch; margin: 0 0 12px; color: var(--ev-text-secondary); font-size: .86rem; line-height: 1.75;
+}
+body.ev-unified[data-ev-page="contopiri"] .legal-box p strong { color: var(--ev-text); }
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="contopiri"] > .container { width: 100%; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns: repeat(3, minmax(0, 1fr)) 44px; gap: 8px; padding: 11px; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(-n+3) { grid-row: 1; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(4) { grid-column: 1 / 4; grid-row: 2; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > .btn-danger { grid-column: 4; grid-row: 2; align-self: end; }
+  body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer + .btn,
+  body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer + .btn + .btn { width: 100%; margin: 6px 0 0; }
+  body.ev-unified[data-ev-page="contopiri"] .legal-box { padding: 14px; }
+}
+@media (max-width: 380px) {
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns: repeat(2, minmax(0, 1fr)) 44px; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(1),
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(2),
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(3) { grid-row: auto; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(3) { grid-column: 1 / 3; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div:nth-child(4) { grid-column: 1 / 3; grid-row: auto; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > .btn-danger { grid-column: 3; grid-row: 3; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.ev-unified[data-ev-page="contopiri"] :is(button, input, select, .penalty-row, .legal-box) { transition: none !important; animation: none !important; }
+}

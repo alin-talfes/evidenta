@@ -214,3 +214,15 @@ for (const marker of [
 ]) {
   assert.ok(finalLayer.includes(marker), `Stratul comun trebuie să includă rafinamentul vizual pentru ${marker}`);
 }
+
+
+const contopiriVisual = read("css/final-layer.css");
+for (const marker of [
+  "Contopiri — introducere pedeapsă",
+  'data-ev-page="contopiri"] .penalty-row',
+  'data-ev-page="contopiri"] .result-box',
+  'data-ev-page="contopiri"] .legal-box h4',
+  "@media (max-width: 380px)"
+]) assert.ok(contopiriVisual.includes(marker), `Redesignul Contopiri trebuie să conțină ${marker}`);
+assert.ok(read("contopiri/index.html").includes('id="penaltyRowsContainer"'), "Containerul pedepselor Contopiri trebuie păstrat");
+assert.ok(read("contopiri/index.html").includes('id="mergeResult"'), "Containerul rezultantei Contopiri trebuie păstrat");
