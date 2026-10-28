@@ -2106,15 +2106,13 @@ body.ev-unified :is(.card, .panel, .upload-panel, .legal-box, .result-box, .ai-c
 
 /* Pedepse — cronologie lizibilă și ritm vertical compact pe ecrane înguste. */
 #main-content {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  min-width: 0;
 }
 .ev-page-intro {
-  margin: 0 !important;
+  margin: 0 0 12px !important;
 }
 .ev-calc-mode[data-ev-three-modes="true"] {
-  margin: 0 !important;
+  margin: 0 0 12px !important;
 }
 #timelineContainer {
   margin-top: 18px !important;
