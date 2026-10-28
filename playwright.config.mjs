@@ -6,6 +6,7 @@ export default defineConfig({
   workers: 1,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['line'], ['html', { open: 'never' }]] : 'list',
+  outputDir: 'test-results',
   use: {
     baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
@@ -17,6 +18,14 @@ export default defineConfig({
       use: {
         ...devices['iPhone 13'],
         browserName: 'webkit'
+      }
+    },
+    {
+      name: 'android-chromium',
+      testMatch: '**/visual-audit.spec.mjs',
+      use: {
+        ...devices['Pixel 7'],
+        browserName: 'chromium'
       }
     }
   ],
