@@ -107,9 +107,9 @@ assert(indexSource.includes('data-masuri-days="30"') && indexSource.includes('da
 assert(indexSource.includes('css/pedepse-modes-v3.css?v=5'),'Pedepse mode CSS must be declared statically');
 assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/storage.js?v=39') && indexSource.includes('js/ui.js?v=39') && indexSource.includes('js/app.js?v=39'),'Pedepse cache version not bumped');
 const styleVersions={
-  'contopiri/index.html':42,
-  'transfer/index.html':43,
-  'transfer/rules/index.html':42
+  'contopiri/index.html':44,
+  'transfer/index.html':44,
+  'transfer/rules/index.html':44
 };
 for(const [f,version] of Object.entries(styleVersions)){
   assert(new RegExp(`style\\.css\\?v=${version}`).test(fs.readFileSync(f,'utf8')),f+' stale css cache version');
