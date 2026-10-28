@@ -1834,3 +1834,227 @@ body.ev-unified[data-ev-page="transfer"] #resultArea .empty-state p { margin: 0;
 @media (prefers-reduced-motion: reduce) {
   body.ev-unified[data-ev-page="transfer"] :is(button, input, select, .radio-btn, .toggle-btn) { transition: none !important; animation: none !important; }
 }
+
+
+/* Instructaj — traseu de învățare, reguli de siguranță și progres local. */
+body.ev-unified[data-ev-page="instructaj"] #continut { width: min(100% - 32px, 1180px); margin-inline: auto; }
+body.ev-unified[data-ev-page="instructaj"] .hero {
+  display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .8fr);
+  align-items: stretch; gap: clamp(18px, 3vw, 30px); padding: clamp(20px, 3.5vw, 38px);
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 30%, var(--ev-border)); border-radius: 22px;
+  background: radial-gradient(ellipse at 90% 0%, color-mix(in srgb, var(--ev-accent) 17%, transparent), transparent 45%),
+    linear-gradient(135deg, var(--ev-surface), color-mix(in srgb, var(--ev-surface-2) 72%, var(--ev-bg)));
+  box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="instructaj"] .hero h1 {
+  max-width: 15ch; margin: 0; color: var(--ev-text); font-size: clamp(2rem, 4.2vw, 3.5rem);
+  font-weight: 900; letter-spacing: -.055em; line-height: 1.02; text-wrap: balance;
+}
+body.ev-unified[data-ev-page="instructaj"] .hero h1 span { color: var(--ev-accent-strong); }
+body.ev-unified[data-ev-page="instructaj"] .hero .lead {
+  max-width: 62ch; margin: 16px 0 0; color: var(--ev-text-secondary); font-size: .98rem; line-height: 1.7;
+}
+body.ev-unified[data-ev-page="instructaj"] .course-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+body.ev-unified[data-ev-page="instructaj"] .course-nav a {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 42px; padding: 8px 11px;
+  border: 1px solid var(--ev-border); border-radius: 10px; background: var(--ev-surface-2);
+  color: var(--ev-text-secondary); font-size: .76rem; font-weight: 780; text-decoration: none;
+}
+body.ev-unified[data-ev-page="instructaj"] .course-nav a span { color: var(--ev-accent-strong); font-weight: 900; }
+body.ev-unified[data-ev-page="instructaj"] .hero-panel {
+  display: flex; flex-direction: column; justify-content: center; gap: 14px; min-width: 0;
+  padding: 18px; border: 1px solid var(--ev-border); border-radius: 16px; background: color-mix(in srgb, var(--ev-surface) 86%, transparent);
+}
+body.ev-unified[data-ev-page="instructaj"] .hero-panel-head { display: flex; align-items: center; gap: 9px; color: var(--ev-text-secondary); font-size: .8rem; font-weight: 800; }
+body.ev-unified[data-ev-page="instructaj"] .hero-panel-head .status-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ev-success); box-shadow: 0 0 0 4px var(--ev-success-soft); }
+body.ev-unified[data-ev-page="instructaj"] .learning-progress {
+  display: grid; grid-template-columns: auto minmax(0,1fr); gap: 5px 12px; align-items: center;
+  padding: 13px; border-radius: 12px; background: var(--ev-surface-2);
+}
+body.ev-unified[data-ev-page="instructaj"] .learning-progress > strong { color: var(--ev-accent-strong); font-size: 1.55rem; font-weight: 900; letter-spacing: -.04em; }
+body.ev-unified[data-ev-page="instructaj"] .learning-progress > span { color: var(--ev-text-secondary); font-size: .75rem; line-height: 1.45; }
+body.ev-unified[data-ev-page="instructaj"] .progress-track { grid-column: 1 / -1; height: 7px; overflow: hidden; border-radius: 99px; background: var(--ev-border); }
+body.ev-unified[data-ev-page="instructaj"] .progress-track i { display: block; height: 100%; border-radius: inherit; background: var(--ev-accent); }
+body.ev-unified[data-ev-page="instructaj"] .hero-actions { display: grid; gap: 8px; }
+body.ev-unified[data-ev-page="instructaj"] .hero-actions :is(.button, button) {
+  display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 13px;
+  border: 1px solid var(--ev-border-strong); border-radius: 11px; font-size: .78rem; font-weight: 820; text-align: center;
+}
+body.ev-unified[data-ev-page="instructaj"] .notice {
+  display: grid; grid-template-columns: 42px minmax(0,1fr); gap: 14px; margin: 16px 0;
+  padding: 18px; border: 1px solid color-mix(in srgb, var(--ev-warning) 38%, var(--ev-border));
+  border-radius: 16px; background: var(--ev-warning-soft);
+}
+body.ev-unified[data-ev-page="instructaj"] .notice h2 { margin: 3px 0 8px; color: var(--ev-text); font-size: 1rem; line-height: 1.35; }
+body.ev-unified[data-ev-page="instructaj"] .notice p { color: var(--ev-text-secondary); font-size: .85rem; line-height: 1.7; }
+body.ev-unified[data-ev-page="instructaj"] .legal-strip {
+  display: grid; grid-template-columns: minmax(190px, .7fr) minmax(0, 2fr); gap: 14px;
+  padding: 16px; border: 1px solid var(--ev-border); border-radius: 15px; background: var(--ev-surface);
+}
+body.ev-unified[data-ev-page="instructaj"] .source-links { display: flex; flex-wrap: wrap; gap: 7px; }
+body.ev-unified[data-ev-page="instructaj"] .source-links a {
+  display: inline-flex; align-items: center; min-height: 36px; padding: 7px 10px; border: 1px solid var(--ev-border);
+  border-radius: 9px; background: var(--ev-surface-2); font-size: .73rem; font-weight: 750; text-decoration: none;
+}
+body.ev-unified[data-ev-page="instructaj"] .learning-section { margin-top: 24px; }
+body.ev-unified[data-ev-page="instructaj"] .section-heading { gap: 15px; margin-bottom: 16px; }
+body.ev-unified[data-ev-page="instructaj"] .section-number {
+  display: grid; place-items: center; width: 44px; height: 44px; flex: 0 0 44px;
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 45%, var(--ev-border)); border-radius: 13px;
+  background: var(--ev-accent-soft); color: var(--ev-accent-strong); font-weight: 900;
+}
+body.ev-unified[data-ev-page="instructaj"] .legal-flow > div {
+  min-width: 0; padding: 14px; border: 1px solid var(--ev-border); border-radius: 13px; background: var(--ev-surface);
+}
+body.ev-unified[data-ev-page="instructaj"] .legal-flow > div > span {
+  display: grid; place-items: center; width: 30px; height: 30px; margin-bottom: 10px;
+  border-radius: 9px; background: var(--ev-accent-soft); color: var(--ev-accent-strong); font-size: .76rem; font-weight: 900;
+}
+body.ev-unified[data-ev-page="instructaj"] .legal-flow strong { display: block; color: var(--ev-text); line-height: 1.35; }
+body.ev-unified[data-ev-page="instructaj"] .legal-flow small { display: block; margin-top: 6px; color: var(--ev-text-secondary); line-height: 1.5; }
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="instructaj"] #continut { width: 100%; }
+  body.ev-unified[data-ev-page="instructaj"] .hero { grid-template-columns: 1fr; padding: 19px 15px; border-radius: 17px; }
+  body.ev-unified[data-ev-page="instructaj"] .hero h1 { font-size: clamp(2rem, 9vw, 2.7rem); }
+  body.ev-unified[data-ev-page="instructaj"] .hero-panel { padding: 14px; }
+  body.ev-unified[data-ev-page="instructaj"] .course-nav { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); }
+  body.ev-unified[data-ev-page="instructaj"] .course-nav a { min-width: 0; font-size: .7rem; }
+  body.ev-unified[data-ev-page="instructaj"] .legal-strip { grid-template-columns: 1fr; }
+  body.ev-unified[data-ev-page="instructaj"] .notice { grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 14px; }
+}
+@media (max-width: 380px) {
+  body.ev-unified[data-ev-page="instructaj"] .course-nav { grid-template-columns: 1fr; }
+}
+
+/* Semnalmente — upload states, workflow and photo guidance. */
+body.ev-unified[data-ev-page^="semnalmente"] .workflow {
+  display: flex; align-items: center; justify-content: center; gap: 10px; margin: 16px 0;
+  padding: 13px; border: 1px solid var(--ev-border); border-radius: 15px; background: var(--ev-surface);
+}
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step {
+  display: flex; align-items: center; gap: 9px; min-width: 0; padding: 6px 9px; border-radius: 10px;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step > span {
+  display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 32px;
+  border-radius: 10px; background: var(--ev-surface-2); color: var(--ev-text-secondary); font-weight: 900;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step.is-active { background: var(--ev-accent-soft); }
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step.is-active > span { background: var(--ev-accent); color: #fff; }
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step strong { display: block; color: var(--ev-text); font-size: .8rem; }
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step small { display: block; color: var(--ev-text-secondary); font-size: .68rem; }
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-line { width: clamp(12px, 5vw, 60px); height: 1px; flex: 0 1 60px; background: var(--ev-border-strong); }
+body.ev-unified[data-ev-page^="semnalmente"] .notice-panel {
+  display: grid; grid-template-columns: 42px minmax(0,1fr); gap: 14px; padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--ev-warning) 36%, var(--ev-border)); border-radius: 15px;
+  background: var(--ev-warning-soft); box-shadow: none;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .notice-panel h2 { margin: 0 0 7px; color: var(--ev-text); font-size: .9rem; }
+body.ev-unified[data-ev-page^="semnalmente"] .notice-panel p { margin: 0; color: var(--ev-text-secondary); font-size: .8rem; line-height: 1.65; }
+body.ev-unified[data-ev-page^="semnalmente"] .upload-panel,
+body.ev-unified[data-ev-page^="semnalmente"] .panel {
+  padding: clamp(14px, 2.3vw, 22px); border: 1px solid var(--ev-border); border-radius: 17px;
+  background: var(--ev-surface); box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page^="semnalmente"] .section-heading {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .section-heading h2 { margin: 0 0 8px; color: var(--ev-text); font-size: .96rem; font-weight: 850; }
+body.ev-unified[data-ev-page^="semnalmente"] .section-heading p { max-width: 65ch; margin: 0; color: var(--ev-text-secondary); font-size: .82rem; line-height: 1.6; }
+body.ev-unified[data-ev-page^="semnalmente"] .quality-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+body.ev-unified[data-ev-page^="semnalmente"] .quality-legend span {
+  padding: 6px 8px; border: 1px solid var(--ev-border); border-radius: 8px;
+  background: var(--ev-surface-2); color: var(--ev-text-secondary); font-size: .66rem; font-weight: 760;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone {
+  position: relative; min-height: 220px; padding: 18px; border: 1.5px dashed var(--ev-border-strong);
+  border-radius: 15px; background: var(--ev-surface-2); transition: border-color .15s ease, background .15s ease;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone:focus-visible,
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone:focus-within { border-color: var(--ev-accent); outline: 3px solid var(--ev-accent-soft); outline-offset: 2px; }
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .upload-symbol {
+  display: grid; place-items: center; width: 48px; height: 48px; margin: 0 auto 12px;
+  border: 1px solid var(--ev-border); border-radius: 14px; background: var(--ev-surface); color: var(--ev-accent-strong); font-size: 1.6rem;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .upload-type {
+  display: inline-flex; padding: 5px 8px; border-radius: 999px; background: var(--ev-accent-soft);
+  color: var(--ev-accent-strong); font-size: .64rem; font-weight: 900; letter-spacing: .06em;
+}
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .label { display: block; margin: 8px 0; color: var(--ev-text); font-size: .92rem; font-weight: 850; }
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .hint { color: var(--ev-text-secondary); font-size: .75rem; line-height: 1.5; }
+body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .remove-btn {
+  position: absolute; top: 8px; right: 8px; min-width: 40px; min-height: 40px;
+  border: 1px solid var(--ev-border); border-radius: 10px; background: var(--ev-surface); color: var(--ev-text);
+}
+body.ev-unified[data-ev-page^="semnalmente"] .file-meta { margin-top: 8px; color: var(--ev-text-secondary); font-size: .74rem; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page^="semnalmente"] .workflow { justify-content: space-between; gap: 3px; padding: 8px 4px; }
+  body.ev-unified[data-ev-page^="semnalmente"] .workflow-step { flex-direction: column; gap: 4px; padding: 5px 2px; text-align: center; }
+  body.ev-unified[data-ev-page^="semnalmente"] .workflow-step small { font-size: .62rem; }
+  body.ev-unified[data-ev-page^="semnalmente"] .workflow-line { width: 12px; flex-basis: 12px; }
+  body.ev-unified[data-ev-page^="semnalmente"] .notice-panel { grid-template-columns: 30px minmax(0,1fr); gap: 10px; padding: 13px; }
+  body.ev-unified[data-ev-page^="semnalmente"] .section-heading { flex-direction: column; }
+  body.ev-unified[data-ev-page^="semnalmente"] .quality-legend { justify-content: flex-start; }
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone { min-height: 190px; padding: 14px; }
+}
+
+/* AI Documente — secure local processing, review and result hierarchy. */
+body.ev-unified[data-ev-page="ai"] .ai-page { width: min(100% - 32px, 1200px); margin-inline: auto; }
+body.ev-unified[data-ev-page="ai"] .ai-beta-banner {
+  display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 12px;
+  padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--ev-warning) 38%, var(--ev-border));
+  border-radius: 15px; background: var(--ev-warning-soft);
+}
+body.ev-unified[data-ev-page="ai"] .ai-beta-banner p { margin: 0; color: var(--ev-text-secondary); font-size: .82rem; line-height: 1.6; }
+body.ev-unified[data-ev-page="ai"] .ai-beta-badge {
+  display: inline-flex; align-items: center; min-height: 30px; padding: 5px 9px;
+  border: 1px solid var(--ev-warning); border-radius: 8px; color: var(--ev-warning); font-size: .68rem; font-weight: 900;
+}
+body.ev-unified[data-ev-page="ai"] .ai-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 14px; }
+body.ev-unified[data-ev-page="ai"] .ai-card {
+  min-width: 0; padding: clamp(15px, 2.2vw, 22px); border: 1px solid var(--ev-border);
+  border-radius: 17px; background: var(--ev-surface); box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="ai"] .ai-card h2 {
+  display: flex; align-items: center; gap: 9px; margin: 0 0 14px; color: var(--ev-text);
+  font-size: .9rem; font-weight: 850; letter-spacing: .025em;
+}
+body.ev-unified[data-ev-page="ai"] .ai-card h2::before { width: 4px; height: 19px; flex: 0 0 4px; border-radius: 4px; background: var(--ev-accent); content: ""; }
+body.ev-unified[data-ev-page="ai"] .ai-dropzone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  min-height: 190px; padding: 18px; border: 1.5px dashed var(--ev-border-strong); border-radius: 14px;
+  background: var(--ev-surface-2); color: var(--ev-text-secondary); text-align: center; cursor: pointer;
+}
+body.ev-unified[data-ev-page="ai"] .ai-dropzone strong { color: var(--ev-text); font-size: 1rem; }
+body.ev-unified[data-ev-page="ai"] .ai-dropzone span { font-size: .8rem; line-height: 1.5; }
+body.ev-unified[data-ev-page="ai"] .ai-ocr-profile { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+body.ev-unified[data-ev-page="ai"] .ai-ocr-profile span {
+  padding: 5px 8px; border: 1px solid var(--ev-border); border-radius: 8px;
+  background: var(--ev-surface-2); color: var(--ev-text-secondary); font-size: .68rem; font-weight: 760;
+}
+body.ev-unified[data-ev-page="ai"] .ai-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+body.ev-unified[data-ev-page="ai"] .ai-actions button { flex: 1 1 180px; min-height: 46px; padding: 10px 12px; border-radius: 11px; font-size: .76rem; font-weight: 830; }
+body.ev-unified[data-ev-page="ai"] .ai-status { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--ev-border); border-radius: 10px; background: var(--ev-surface-2); color: var(--ev-text-secondary); font-size: .78rem; line-height: 1.5; }
+body.ev-unified[data-ev-page="ai"] .ai-progress { height: 7px; margin-top: 8px; overflow: hidden; border-radius: 99px; background: var(--ev-border); }
+body.ev-unified[data-ev-page="ai"] .ai-progress span { display: block; height: 100%; border-radius: inherit; background: var(--ev-accent); }
+body.ev-unified[data-ev-page="ai"] .ai-textarea { min-height: 260px; width: 100%; padding: 13px; border: 1px solid var(--ev-border-strong); border-radius: 12px; background: var(--ev-input-bg); color: var(--ev-text); line-height: 1.65; }
+body.ev-unified[data-ev-page="ai"] .ai-review-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+body.ev-unified[data-ev-page="ai"] .ai-review-grid > div { display: grid; align-content: start; gap: 6px; min-width: 0; }
+body.ev-unified[data-ev-page="ai"] .ai-review-grid .wide { grid-column: 1 / -1; }
+body.ev-unified[data-ev-page="ai"] .ai-review-grid label { color: var(--ev-text-secondary); font-size: .75rem; font-weight: 780; }
+body.ev-unified[data-ev-page="ai"] .ai-review-grid :is(input,select) { width: 100%; min-width: 0; min-height: 46px; padding: 10px; border-radius: 10px; }
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="instructaj"] #continut { width: 100%; }
+  body.ev-unified[data-ev-page="ai"] .ai-page { width: 100%; }
+  body.ev-unified[data-ev-page="ai"] .ai-grid { grid-template-columns: 1fr; }
+  body.ev-unified[data-ev-page="ai"] .ai-beta-banner { grid-template-columns: 1fr; }
+  body.ev-unified[data-ev-page="ai"] .ai-actions { display: grid; grid-template-columns: 1fr; }
+  body.ev-unified[data-ev-page="ai"] .ai-review-grid { grid-template-columns: 1fr; }
+  body.ev-unified[data-ev-page="ai"] .ai-review-grid .wide { grid-column: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.ev-unified[data-ev-page="instructaj"] :is(.hero, .hero-panel, .course-nav a),
+  body.ev-unified[data-ev-page^="semnalmente"] :is(.workflow, .upload-zone),
+  body.ev-unified[data-ev-page="ai"] :is(.ai-card, .ai-dropzone, .ai-actions button) {
+    transition: none !important; animation: none !important;
+  }
+}

@@ -238,3 +238,18 @@ for (const marker of [
 ]) assert.ok(transferVisual.includes(marker), `Redesignul Transfer trebuie să conțină ${marker}`);
 assert.ok(read("transfer/index.html").includes('id="transferForm"'), "Formularul Transfer trebuie păstrat");
 assert.ok(read("transfer/index.html").includes('id="resultArea"'), "Zona de rezultate Transfer trebuie păstrată");
+
+
+const moduleVisuals = read("css/final-layer.css");
+for (const marker of [
+  "Instructaj — traseu de învățare",
+  'data-ev-page="instructaj"] .hero',
+  "Semnalmente — upload states",
+  'data-ev-page^="semnalmente"] .upload-zone',
+  "AI Documente — secure local processing",
+  'data-ev-page="ai"] .ai-review-grid',
+  "@media (max-width: 760px)"
+]) assert.ok(moduleVisuals.includes(marker), `Redesignul modulelor auxiliare trebuie să conțină ${marker}`);
+assert.ok(read("instructaj/index.html").includes('id="learning-progress"'), "Progresul local din Instructaj trebuie păstrat");
+assert.ok(read("semnalmente/index.html").includes('id="drop-frontal"'), "Zona de încărcare frontală trebuie păstrată");
+assert.ok(read("ai/index.html").includes('id="analyzeFilesBtn"'), "Acțiunea de analiză AI trebuie păstrată");
