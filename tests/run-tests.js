@@ -98,7 +98,7 @@ let vcpYoung=lr.__schedule({life:false,art:'VCP59',sentenceOver10:false,totalDay
 assert.equal(vcpYoung.mR,1/2); assert.equal(vcpYoung.tR,2/3); assert(!vcpYoung.ageTransitionApplied);
 
 const indexSource=fs.readFileSync('index.html','utf8');
-assert(/style\\.css\\?v=47/.test(indexSource),'index.html stale css cache version');
+assert(/style\.css\?v=47/.test(indexSource),'index.html stale css cache version');
 assert(indexSource.includes('value="VCP551"'),'VCP art. 55¹ option missing');
 assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="PRE14060"') && indexSource.includes('value="PRE140604"'),'pre-L140/1996 algoritm liberare condiționată options missing');
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
