@@ -253,3 +253,12 @@ for (const marker of [
 assert.ok(read("instructaj/index.html").includes('id="learning-progress"'), "Progresul local din Instructaj trebuie păstrat");
 assert.ok(read("semnalmente/index.html").includes('id="drop-frontal"'), "Zona de încărcare frontală trebuie păstrată");
 assert.ok(read("ai/index.html").includes('id="analyzeFilesBtn"'), "Acțiunea de analiză AI trebuie păstrată");
+
+
+for (const marker of [
+  "Accesibilitate transversală",
+  ":focus-visible",
+  "[aria-disabled=\"true\"]",
+  "@media (forced-colors: active)",
+  "prefers-reduced-motion"
+]) assert.ok(finalLayer.includes(marker), `Stratul final trebuie să includă suportul de accesibilitate ${marker}`);

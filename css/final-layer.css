@@ -2058,3 +2058,47 @@ body.ev-unified[data-ev-page="ai"] .ai-review-grid :is(input,select) { width: 10
     transition: none !important; animation: none !important;
   }
 }
+
+
+/* Accesibilitate transversală — focus vizibil, stări inactive și contrast forțat. */
+body.ev-unified :is(
+  a, button, input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  outline: 3px solid var(--ev-accent-strong);
+  outline-offset: 3px;
+}
+body.ev-unified :is(button, input[type="button"], input[type="submit"], input[type="reset"], select):disabled,
+body.ev-unified [aria-disabled="true"] {
+  cursor: not-allowed !important;
+  opacity: .58;
+  box-shadow: none !important;
+}
+body.ev-unified :is(input, select, textarea)::placeholder {
+  color: var(--ev-muted);
+  opacity: 1;
+}
+body.ev-unified :is(input, select, textarea):invalid:not(:placeholder-shown) {
+  border-color: color-mix(in srgb, var(--ev-danger) 72%, var(--ev-border));
+}
+body.ev-unified :is(.card, .panel, .upload-panel, .legal-box, .result-box, .ai-card) {
+  scroll-margin-top: 18px;
+}
+@media (hover: hover) and (pointer: fine) {
+  body.ev-unified :is(button, .btn, .btn-utility, .btn-big, .toggle-btn, .radio-btn):not(:disabled) {
+    transition: border-color var(--ev-motion-fast, 160ms ease), background-color var(--ev-motion-fast, 160ms ease), color var(--ev-motion-fast, 160ms ease);
+  }
+}
+@media (forced-colors: active) {
+  body.ev-unified :is(button, input, select, textarea, summary, a):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+  }
+  body.ev-unified :is(.card, .panel, .upload-panel, .legal-box, .result-box, .ai-card, .upload-zone) {
+    border: 1px solid CanvasText;
+  }
+  body.ev-unified .ev-calc-mode button[aria-pressed="true"],
+  body.ev-unified .toggle-group .toggle-btn.active,
+  body.ev-unified .radio-btn:has(input:checked) {
+    outline: 1px solid Highlight;
+  }
+}
