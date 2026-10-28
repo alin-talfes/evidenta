@@ -201,3 +201,16 @@ for (const marker of [
 assert.ok(pedepseHtml.includes('id="calcBtn"'), "Acțiunea principală de calcul trebuie păstrată");
 assert.ok(pedepseHtml.includes('id="resultsCard"'), "Containerul rezultatelor trebuie păstrat");
 assert.ok(pedepseHtml.includes('id="deductionsContainer"'), "Containerul deducerilor trebuie păstrat");
+
+
+const contopiriHtml = read("contopiri/index.html");
+assert.ok(contopiriHtml.includes('class="ev-module-intro"'), "Contopiri trebuie să aibă un titlu vizibil și semantic");
+for (const marker of [
+  'data-ev-page="contopiri"] .ev-module-intro',
+  'data-ev-page="transfer"] .header',
+  'data-ev-page="instructaj"] .hero',
+  'data-ev-page^="semnalmente"] .workflow-step',
+  'data-ev-page="ai"] #analyzeFilesBtn'
+]) {
+  assert.ok(finalLayer.includes(marker), `Stratul comun trebuie să includă rafinamentul vizual pentru ${marker}`);
+}

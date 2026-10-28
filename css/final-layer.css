@@ -1556,3 +1556,90 @@ body.ev-unified[data-ev-page="pedepse"] #timelineList li {
     animation: none !important;
   }
 }
+
+
+/* Module complementare — aceeași ierarhie vizuală, fără a schimba fluxurile de lucru. */
+body.ev-unified[data-ev-page="contopiri"] .ev-module-intro {
+  margin: 0 0 clamp(14px, 2vw, 20px);
+  padding: clamp(20px, 3vw, 30px);
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 28%, var(--ev-border));
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 90% 0%, color-mix(in srgb, var(--ev-accent) 16%, transparent), transparent 44%), linear-gradient(135deg, var(--ev-surface), var(--ev-surface-2));
+  box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="contopiri"] .ev-module-intro__eyebrow {
+  margin: 0 0 8px; color: var(--ev-accent-strong); font-size: .68rem; font-weight: 850; letter-spacing: .12em;
+}
+body.ev-unified[data-ev-page="contopiri"] .ev-module-intro h1 {
+  margin: 0; color: var(--ev-text); font-size: clamp(1.55rem, 3vw, 2.2rem); font-weight: 850; letter-spacing: -.04em; line-height: 1.1; text-wrap: balance;
+}
+body.ev-unified[data-ev-page="contopiri"] .ev-module-intro > p:last-child {
+  max-width: 64ch; margin: 10px 0 0; color: var(--ev-text-secondary); font-size: .92rem; line-height: 1.6;
+}
+body.ev-unified[data-ev-page="contopiri"] .container > .card,
+body.ev-unified[data-ev-page="contopiri"] .container > .legal-box {
+  border-radius: 18px; box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="contopiri"] .container > .card { padding: clamp(16px, 2.4vw, 24px); }
+body.ev-unified[data-ev-page="contopiri"] .container > .card > h3,
+body.ev-unified[data-ev-page="contopiri"] .legal-box > h4 { color: var(--ev-text); letter-spacing: .035em; }
+body.ev-unified[data-ev-page="contopiri"] .penalty-row { padding: 12px; border-radius: 14px; background: var(--ev-surface-2); }
+body.ev-unified[data-ev-page="contopiri"] #mergeResult {
+  margin-top: 16px; padding: clamp(14px, 2vw, 20px); border: 1px solid color-mix(in srgb, var(--ev-accent) 35%, var(--ev-border)); border-radius: 14px; background: var(--ev-accent-soft); overflow-wrap: anywhere;
+}
+
+body.ev-unified[data-ev-page="transfer"] .header {
+  overflow: hidden; border: 1px solid color-mix(in srgb, var(--ev-accent) 28%, var(--ev-border)); border-radius: 20px;
+  background: radial-gradient(ellipse at 92% 0%, color-mix(in srgb, var(--ev-accent) 16%, transparent), transparent 45%), var(--ev-surface);
+  box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="transfer"] .header-inner { padding: clamp(20px, 3vw, 32px); }
+body.ev-unified[data-ev-page="transfer"] .header h1 {
+  max-width: 24ch; margin: 0; color: var(--ev-text); font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 850; letter-spacing: -.04em; line-height: 1.12; text-wrap: balance;
+}
+body.ev-unified[data-ev-page="transfer"] .header .module-intro { max-width: 62ch; margin: 12px 0; color: var(--ev-text-secondary); font-size: .93rem; line-height: 1.6; }
+body.ev-unified[data-ev-page="transfer"] .header .subtitle {
+  display: inline-flex; align-items: center; max-width: 100%; padding: 7px 10px; border: 1px solid var(--ev-border); border-radius: 9px;
+  background: var(--ev-surface-2); color: var(--ev-muted); font-size: .7rem; font-weight: 800; line-height: 1.4; overflow-wrap: anywhere;
+}
+body.ev-unified[data-ev-page="transfer"] .container > .card,
+body.ev-unified[data-ev-page="transfer"] #resultsCard { border-radius: 18px; box-shadow: var(--ev-shadow-soft); }
+body.ev-unified[data-ev-page="transfer"] .toggle-group {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; padding: 5px; border: 1px solid var(--ev-border); border-radius: 14px; background: var(--ev-surface-2);
+}
+body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn { min-width: 0; min-height: 46px; border-radius: 10px; line-height: 1.3; }
+body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn.active {
+  border-color: color-mix(in srgb, var(--ev-accent) 45%, var(--ev-border)); background: var(--ev-surface); color: var(--ev-text); box-shadow: 0 2px 8px color-mix(in srgb, var(--ev-bg) 14%, transparent);
+}
+
+body.ev-unified[data-ev-page="instructaj"] .hero {
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 24%, var(--ev-border)); border-radius: 22px;
+  background: radial-gradient(ellipse at 84% 5%, color-mix(in srgb, var(--ev-accent) 15%, transparent), transparent 40%), var(--ev-surface); box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page="instructaj"] .hero h1 { letter-spacing: -.045em; line-height: 1.08; text-wrap: balance; }
+body.ev-unified[data-ev-page="instructaj"] .course-nav a { border-color: var(--ev-border); background: var(--ev-surface-2); }
+body.ev-unified[data-ev-page="instructaj"] .course-nav a:focus-visible,
+body.ev-unified[data-ev-page="instructaj"] .hero-actions :is(a, button):focus-visible { outline: 3px solid color-mix(in srgb, var(--ev-accent) 55%, transparent); outline-offset: 2px; }
+
+body.ev-unified[data-ev-page^="semnalmente"] .notice-panel {
+  border: 1px solid color-mix(in srgb, var(--ev-accent) 28%, var(--ev-border)); border-radius: 18px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--ev-accent) 7%, var(--ev-surface)), var(--ev-surface)); box-shadow: var(--ev-shadow-soft);
+}
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step { min-width: 0; border: 1px solid var(--ev-border); border-radius: 13px; background: var(--ev-surface); }
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-step.is-active { border-color: color-mix(in srgb, var(--ev-accent) 52%, var(--ev-border)); background: var(--ev-accent-soft); }
+body.ev-unified[data-ev-page^="semnalmente"] .panel,
+body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel { border-radius: 18px; box-shadow: var(--ev-shadow-soft); }
+
+body.ev-unified[data-ev-page="ai"] .ai-beta-banner { border-color: color-mix(in srgb, var(--ev-accent) 34%, var(--ev-border)); background: linear-gradient(115deg, var(--ev-accent-soft), var(--ev-surface)); }
+body.ev-unified[data-ev-page="ai"] .ai-card:focus-within { border-color: color-mix(in srgb, var(--ev-accent) 48%, var(--ev-border)); }
+body.ev-unified[data-ev-page="ai"] #analyzeFilesBtn:not(:disabled),
+body.ev-unified[data-ev-page="ai"] #calculateBtn:not(:disabled) { min-height: 48px; border-radius: 12px; font-weight: 850; }
+body.ev-unified[data-ev-page="ai"] #resultCard { border-color: color-mix(in srgb, var(--ev-accent) 42%, var(--ev-border)); }
+
+@media (max-width: 640px) {
+  body.ev-unified[data-ev-page="contopiri"] .ev-module-intro { padding: 20px 17px; border-radius: 17px; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row { padding: 10px; }
+  body.ev-unified[data-ev-page="transfer"] .header-inner { padding: 19px 16px; }
+  body.ev-unified[data-ev-page="transfer"] .toggle-group { grid-template-columns: 1fr; }
+  body.ev-unified[data-ev-page^="semnalmente"] .workflow-step { border-radius: 10px; }
+}
