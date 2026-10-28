@@ -2102,3 +2102,161 @@ body.ev-unified :is(.card, .panel, .upload-panel, .legal-box, .result-box, .ai-c
     outline: 1px solid Highlight;
   }
 }
+
+
+/* Pedepse — cronologie lizibilă și ritm vertical compact pe ecrane înguste. */
+body.ev-unified[data-ev-page="pedepse"] #main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+  margin: 0 !important;
+}
+body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] {
+  margin: 0 !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineContainer {
+  margin-top: 18px !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timeline-heading {
+  margin: 0 0 12px !important;
+  color: var(--ev-accent-strong) !important;
+  font-size: .95rem !important;
+  font-weight: 850 !important;
+  letter-spacing: .035em;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList::before,
+body.ev-unified[data-ev-page="pedepse"] #timelineList li::before {
+  display: none !important;
+  content: none !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+  display: grid;
+  grid-template-columns: minmax(92px, 112px) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px 12px;
+  min-width: 0;
+  min-height: 54px;
+  margin: 0;
+  padding: 10px 13px !important;
+  border: 1px solid var(--ev-border) !important;
+  border-left: 3px solid var(--ev-accent) !important;
+  border-radius: 12px !important;
+  background: var(--ev-surface-2) !important;
+  color: var(--ev-text-secondary);
+  font-size: .84rem;
+  line-height: 1.4;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: var(--ev-accent-strong) !important;
+  font-size: .8rem;
+  font-weight: 820;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-label {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--ev-text-secondary);
+  text-decoration: none;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed {
+  opacity: .66;
+  border-left-color: var(--ev-border-strong) !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed .tl-date {
+  color: var(--ev-muted) !important;
+}
+@media (max-width: 640px) {
+  body.ev-unified[data-ev-page="pedepse"] #main-content {
+    gap: 12px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+    padding: 16px 15px !important;
+    border-radius: 16px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__eyebrow {
+    margin-bottom: 7px !important;
+    font-size: .59rem !important;
+    line-height: 1.35;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+    max-width: 19ch;
+    font-size: clamp(1.5rem, 6.2vw, 1.9rem) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -.035em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+    margin-top: 8px !important;
+    font-size: .84rem !important;
+    line-height: 1.48 !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta {
+    gap: 6px !important;
+    margin-top: 11px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta span {
+    min-height: 26px !important;
+    padding: 4px 8px !important;
+    font-size: .62rem !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] {
+    gap: 3px !important;
+    padding: 4px !important;
+    border-radius: 13px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode[data-ev-three-modes="true"] button {
+    min-height: 46px !important;
+    padding: 7px 4px !important;
+    font-size: clamp(.63rem, 2.65vw, .72rem) !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineContainer {
+    margin-top: 14px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timeline-heading {
+    margin-bottom: 10px !important;
+    font-size: .88rem !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList {
+    gap: 7px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+    grid-template-columns: minmax(86px, 96px) minmax(0, 1fr);
+    gap: 6px 9px;
+    min-height: 48px;
+    padding: 9px 10px !important;
+    border-radius: 10px !important;
+    font-size: .78rem;
+    line-height: 1.35;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+    font-size: .72rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-width: 360px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+    grid-template-columns: 1fr;
+    gap: 3px;
+    align-items: start;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+    font-size: .7rem;
+  }
+}
