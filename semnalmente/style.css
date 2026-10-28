@@ -2,7 +2,7 @@
 @import url("../css/unified-shell.css?v=2");
 @import url("../css/visual-audit.css?v=3");
 @import url("../css/responsive.css?v=2");
-@import url("../css/final-layer.css?v=2");
+@import url("../css/final-layer.css?v=3");
 
 /* Convenție unitară pentru toate controalele cu rol vizual de buton. */
 :where(
