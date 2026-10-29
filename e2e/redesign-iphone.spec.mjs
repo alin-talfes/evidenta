@@ -64,7 +64,7 @@ test('navigația mobilă indică modul activ și deschide/închide meniul Mai mu
   const sheet = page.locator('#ev-mobile-more-sheet');
 
   await expect(nav).toBeVisible();
-  await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute('href', /instructaj\//);
+  await expect(more).toHaveClass(/is-active/);
   await expect(more).toHaveAttribute('aria-expanded', 'false');
   await expect(sheet).toBeHidden();
 
