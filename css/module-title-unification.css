@@ -1,0 +1,56 @@
+/* Shared module chrome: one title scale, alignment and rhythm across the suite. */
+body.ev-unified .ev-shell__module {
+  box-sizing: border-box;
+  min-height: 70px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 14px max(var(--ev-shell-pad, 20px), env(safe-area-inset-left, 0px)) !important;
+  border-top: 1px solid var(--ev-border, #d7e0ed) !important;
+  border-bottom: 1px solid var(--ev-border, #d7e0ed) !important;
+  background: var(--ev-surface, #fff) !important;
+  box-shadow: none !important;
+}
+body.ev-unified .ev-shell__module h1 {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
+  color: var(--ev-text, #182033) !important;
+  font-family: var(--ev-font, system-ui, sans-serif) !important;
+  font-size: clamp(22px, 2.4vw, 28px) !important;
+  font-weight: 850 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.035em !important;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+body.ev-unified .ev-shell__module .ev-shell__badge {
+  flex: 0 0 auto;
+  align-self: center;
+}
+body.ev-unified :is(.page-heading, .section-heading, .panel-head, .learning-modules-head, .exam-path-head) h1,
+body.ev-unified main > h1,
+body.ev-unified .container > h1 {
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.2;
+  letter-spacing: -.03em;
+}
+body.ev-unified :is(.card, .panel, .analysis-panel, .results-section, .legal-box, .detail) {
+  border-radius: 20px !important;
+}
+@media (max-width: 760px) {
+  body.ev-unified .ev-shell__module {
+    min-height: 58px !important;
+    padding: 11px 14px !important;
+  }
+  body.ev-unified .ev-shell__module h1 {
+    font-size: 22px !important;
+    line-height: 1.2 !important;
+    letter-spacing: -.025em !important;
+  }
+  body.ev-unified .ev-shell__module .ev-shell__badge {
+    font-size: 9px;
+    padding: 5px 8px;
+  }
+}
