@@ -35,6 +35,7 @@ const modules = read('css/mobile-modules.css');
 const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
 const pwa = read('js/pwa-register.js');
+const manifest = read('manifest.json');
 
 // version.js este exclusiv identitate/versionare, nu loader de controllere.
 for (const retiredLoader of [
@@ -128,9 +129,23 @@ for (const retired of ['operational-upgrades.js', 'operational-finalize.js', 'op
   assert.ok(!fs.existsSync(path.join(root, 'js', retired)), `${retired} trebuie eliminat`);
 }
 
-for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOfficerSuiteNav', 'input[type="number"]', 'ev-mobile-nav', 'evidenta:shellready', 'evidenta:mobile-nav-ready', 'Navigare principală', 'Semnalmente']) {
+for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOfficerSuiteNav', 'input[type="number"]', 'ev-mobile-nav', 'evidenta:shellready', 'evidenta:mobile-nav-ready', 'Navigare principală', 'Semnalmente', '⚖', '∑', '⇄', '▤', '◎']) {
   assert.ok(nav.includes(marker), `Navigația trebuie să includă ${marker}`);
 }
+const globalNavBlock = nav.match(/const items = \[([\s\S]*?)\n    \];/)?.[1] || '';
+assert.ok(globalNavBlock, 'Navigația globală trebuie să definească explicit lista modulelor.');
+for (const label of ['Pedepse', 'Contopiri', 'Transfer', 'Instructaj', 'Semnalmente']) {
+  assert.ok(globalNavBlock.includes(label), `Navigația globală trebuie să includă ${label}.`);
+}
+assert.equal((globalNavBlock.match(/\['/g) || []).length, 5, 'Navigația globală trebuie să conțină exact cinci module.');
+assert.ok(!globalNavBlock.toLowerCase().includes('ai'), 'AI nu trebuie expus în meniul global.');
+const mobileNavBlock = nav.match(/function initMobileNav\(\) \{([\s\S]*?)\n  \}\n\n  function refresh/)?.[1] || '';
+assert.ok(mobileNavBlock, 'Navbar-ul mobil trebuie construit într-un singur controller.');
+assert.ok(!mobileNavBlock.includes('Mai multe') && !mobileNavBlock.includes('ev-mobile-more-sheet'), 'Navbar-ul mobil nu trebuie să aibă meniu secundar.');
+assert.ok(!mobileNavBlock.includes("'ai'") && !mobileNavBlock.includes("'ai/"), 'Navbar-ul mobil nu trebuie să expună AI.');
+assert.ok(manifest.includes('"name": "Instructaj"') && manifest.includes('"name": "Semnalmente"'), 'Shortcuts PWA trebuie să includă toate modulele publice.');
+assert.ok(!manifest.includes('AI Documente') && !manifest.includes('"url": "./ai/"'), 'Shortcut-ul AI trebuie ascuns și din meniul PWA.');
+
 for (const marker of [
   'quickCalculate', 'setMode', 'function calculate()', 'EvidentaPedepseOperational',
   'syncQuickResultControls', 'EvidentaPedepseOptional?.revealInvalid?.()', 'ev-prefill-banner', 'aria-live'
