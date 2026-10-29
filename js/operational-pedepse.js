@@ -5,7 +5,7 @@
   window.__EVIDENTA_OPERATIONAL_PEDEPSE__ = true;
 
   const PREFILL_PEDEPSE = 'evidenta:prefill:pedepse';
-  let activeMode = 'quick';
+  let activeMode = 'full';
 
   function parseDateSafe(value) {
     if (typeof window.parseDate === 'function') return window.parseDate(String(value || '').trim());
@@ -222,7 +222,7 @@
   }
 
   function normalizedMode(value) {
-    return value === 'preventive' ? 'preventive' : value === 'full' ? 'full' : 'quick';
+    return value === 'preventive' ? 'preventive' : 'full';
   }
 
   function revealValidationDetails() {
@@ -258,8 +258,8 @@
     if (preventivePanel) preventivePanel.hidden = requested !== 'preventive';
     datesGrid?.classList.toggle('ev-quick-dates', requested === 'quick');
 
-    if (sentenceHeading) sentenceHeading.textContent = requested === 'quick' ? 'CALCUL RAPID PEDEAPSĂ' : 'DETALII PEDEAPSĂ PPL';
-    if (calcBtn) calcBtn.textContent = requested === 'quick' ? 'CALCULEAZĂ EXPIRAREA' : 'CALCULEAZĂ';
+    if (sentenceHeading) sentenceHeading.textContent = 'DETALII PEDEAPSĂ PPL';
+    if (calcBtn) calcBtn.textContent = 'CALCULEAZĂ';
 
     if (requested === 'preventive') window.syncPreventiveDayPresets?.();
     window.syncPrisonReceivedControl?.();
@@ -298,7 +298,7 @@
     });
 
     fillPedepseFromPrefill();
-    setMode(mode.querySelector('[data-mode].is-active')?.dataset.mode || 'quick');
+    setMode(mode.querySelector('[data-mode].is-active')?.dataset.mode || 'full');
   }
 
   window.EvidentaPedepseOperational = Object.freeze({
