@@ -11,6 +11,10 @@ assert.ok(exp.includes('function exportPvIncarcerarePDF()'), 'PV exporter missin
 assert.ok(exp.includes('PROCES-VERBAL DE CONFIRMARE'), 'PV title missing');
 assert.ok(exp.includes('art. 557 alin. (7) și (8)'), 'legal reference missing');
 assert.ok(exp.includes('ȘEF STRUCTURĂ EVIDENȚĂ DEȚINUȚI') && exp.includes('DIRECTOR'), 'signature fields missing');
+assert.ok(exp.includes('function buildNotaInternaHTML()'), 'internal note builder missing');
+assert.ok(exp.includes('Către Compartimentul Organizarea Muncii'), 'internal note addressee missing');
+assert.ok(exp.includes('AM PRIMIT') && exp.includes('AM PREDAT'), 'receipt/hand-over fields missing');
+assert.ok(exp.includes('grid-template-columns:39% 61%'), 'two-column internal note layout missing');
 assert.ok(app.includes('dedRowsData: (window.ManualDeductionRules?.collectRows?.() || [])'), 'typed deduction data missing');
-assert.ok(sw.includes("const VERSION = 'v59'"), 'service-worker cache version missing');
+assert.ok(sw.includes("const VERSION = 'v60'"), 'service-worker cache version missing');
 console.log('PV incarceration export checks passed');
