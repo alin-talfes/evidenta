@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Pedepse și liberare condiționată — Inmate Pocket Calculator</title>
-    <link rel="stylesheet" href="css/style.css?v=48">
+    <link rel="stylesheet" href="css/style.css?v=49">
     <link rel="stylesheet" href="css/operational-upgrades.css?v=2">
     <link rel="stylesheet" href="css/mobile-modules.css?v=1">
     <link rel="stylesheet" href="css/pedepse-modes-v3.css?v=5">
-    <link rel="stylesheet" href="css/disclosure-hardening.css?v=2">
+    <link rel="stylesheet" href="css/disclosure-hardening.css?v=3">
     <link rel="stylesheet" href="css/mobile.css?v=5">
     <script src="js/theme.js?v=40" defer></script>
     <script src="js/ux-upgrades.js?v=3" defer></script>
     <script src="js/pedepse-ux.js?v=4" defer></script>
-    <script src="js/pedepse-optional.js?v=1" defer></script>
+    <script src="js/pedepse-optional.js?v=2" defer></script>
     <script src="js/quarantine-rules.js?v=1" defer></script>
     <script src="js/quarantine-ui.js?v=3" defer></script>
     <script src="js/operational-navigation.js?v=4" defer></script>
-    <script src="js/operational-pedepse.js?v=6" defer></script>
+    <script src="js/operational-pedepse.js?v=7" defer></script>
     <script src="js/no-nonoptional-disclosures-v1.js?v=3" defer></script>
     <script src="js/disclosure-hardening-v2.js?v=2" defer></script>
     <script src="js/pwa-register.js?v=3" defer></script>
@@ -175,25 +175,25 @@
                     </div>
                 </div>
                 <div class="ev-optional-tools__buttons">
-                    <button type="button" class="ev-optional-toggle" aria-controls="recursCard" aria-expanded="true"><span aria-hidden="true">−</span><span>Recurs compensatoriu</span></button>
-                    <button type="button" class="ev-optional-toggle" aria-controls="nonExecCard" aria-expanded="true"><span aria-hidden="true">−</span><span>Perioade adăugate</span></button>
-                    <button type="button" class="ev-optional-toggle" aria-controls="restCard" aria-expanded="true"><span aria-hidden="true">−</span><span>Rest rămas</span></button>
+                    <button type="button" class="ev-optional-toggle" aria-controls="recursCard" aria-expanded="false"><span aria-hidden="true">+</span><span>Recurs compensatoriu</span></button>
+                    <button type="button" class="ev-optional-toggle" aria-controls="nonExecCard" aria-expanded="false"><span aria-hidden="true">+</span><span>Perioade adăugate</span></button>
+                    <button type="button" class="ev-optional-toggle" aria-controls="restCard" aria-expanded="false"><span aria-hidden="true">+</span><span>Rest rămas</span></button>
                 </div>
             </section>
 
-            <div class="card ev-optional-card" id="recursCard" aria-labelledby="recurs-heading">
+            <div class="card ev-optional-card" id="recursCard" hidden aria-labelledby="recurs-heading">
                 <h3 id="recurs-heading">ZILE RECURS COMPENSATORIU (L. 169/2017)</h3>
                 <div id="manualDeductionsContainer" role="list" aria-label="Listă recurs compensatoriu"></div>
                 <button class="btn btn-outline btn-sm" id="addManDedBtn" onclick="addManDedRow()">+ Adaugă</button>
             </div>
 
-            <div class="card ev-optional-card" id="nonExecCard" aria-labelledby="nonExec-heading">
+            <div class="card ev-optional-card" id="nonExecCard" hidden aria-labelledby="nonExec-heading">
                 <h3 id="nonExec-heading">PERIOADE CARE NU SE CONSIDERĂ EXECUTATE</h3>
                 <div id="nonExecContainer" role="list" aria-label="Listă perioade neexecutate"></div>
                 <button class="btn btn-outline btn-sm" id="addNonExecBtn" onclick="addNonExecRow()">+ Adaugă</button>
             </div>
 
-            <div class="card ev-optional-card" id="restCard" aria-labelledby="rest-heading">
+            <div class="card ev-optional-card" id="restCard" hidden aria-labelledby="rest-heading">
                 <h3 id="rest-heading">CALCUL REST RĂMAS DE EXECUTAT (OPȚIONAL)</h3>
                 <div class="form-grid"><div>
                     <label for="conditionalReleaseDate">Data liberării condiționate</label>
@@ -243,16 +243,16 @@
                 <h3 id="results-heading">REZULTATE</h3>
                 <div id="resultsContent"></div>
                 <div id="alertsContainer" class="alerts-container hidden" role="alert" aria-live="polite"></div>
-                <div id="timelineContainer" class="hidden mt-16">
+                <details id="timelineDetails" class="ev-result-details hidden mt-16"><summary>AFIȘEAZĂ CRONOLOGIA TERMENELOR</summary><div id="timelineContainer" class="mt-16">
                     <h4 style="color:var(--accent-strong);" id="timeline-heading">CRONOLOGIE TERMENE</h4>
                     <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
-                </div>
-                <button class="btn btn-outline btn-sm mt-12" id="toggleStepsBtn" onclick="toggleSteps()" aria-expanded="false" aria-controls="stepsContainer">AFIȘEAZĂ PAȘII CALCULULUI</button>
-                <div id="stepsContainer" class="steps-container hidden" aria-labelledby="steps-heading">
+                </div></details>
+                <button class="btn btn-outline btn-sm mt-12" id="toggleStepsBtn onclick="toggleSteps()" aria-expanded="false" aria-controls="stepsContainer">AFIȘEAZĂ PAȘII CALCULULUI</button>
+                <details id="stepsDetails" class="ev-result-details hidden"><summary>AFIȘEAZĂ PAȘII CALCULULUI</summary><div id="stepsContainer" class="steps-container" aria-labelledby="steps-heading">
                     <h4 id="steps-heading">PAȘII CALCULULUI</h4>
                     <ol id="stepsList"></ol>
                     <p class="footnote">Notă: la fracțiile de liberare condiționată se utilizează cifra întreagă rezultată; partea zecimală nu se ridică la următoarea zi.</p>
-                </div>
+                </div></details>
             </div>
         </main>
     </div>
