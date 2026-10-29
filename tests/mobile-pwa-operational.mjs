@@ -60,7 +60,7 @@ for (const [file, html] of [
   for (const script of sharedScripts) assert.ok(html.includes(script), `${file} trebuie să declare ${script}`);
 }
 
-for (const marker of ['operational-pedepse.js?v=7', 'pedepse-optional.js?v=2', 'pedepse-ux.js?v=5', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
+for (const marker of ['operational-pedepse.js?v=8', 'pedepse-optional.js?v=2', 'pedepse-ux.js?v=6', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
   assert.ok(rootHtml.includes(marker), `Pedepse trebuie să declare ${marker}`);
 }
 assert.ok(!rootHtml.includes('pedepse-optional-fix-v2.js'), 'Pedepse nu trebuie să mai încarce controllerul optional de compatibilitate.');
@@ -69,16 +69,14 @@ assert.ok(!rootHtml.includes('pedepse-modes-v5.js'), 'Pedepse nu trebuie să mai
 assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-modes-v5.js')), 'Controllerul stratificat pedepse-modes-v5 trebuie eliminat.');
 assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare controllerul UI general curent.');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Butonul de calcul trebuie să intre printr-un singur dispatcher operațional.');
-assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=5'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
+assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=6'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
 assert.ok(!rootHtml.includes('pedepse-prison-date.js'), 'Controllerul dinamic pentru data intrării trebuie eliminat.');
 for (const marker of [
-  'class="ev-calc-mode" data-ev-three-modes="true"',
-  'data-mode="quick"',
+  'class="ev-calc-mode" data-ev-two-modes="true"',
   'data-mode="full"',
   'data-mode="preventive"',
-  'Calcul rapid',
-  'Calcul complet LC',
-  'Măsuri preventive',
+  'CALCUL PEDEAPSĂ',
+  'MĂSURI PREVENTIVE',
   'class="ev-preventive-mode-panel"',
   'class="ev-mobile-lc-details"',
   'Liberare condiționată și date PPL',
