@@ -407,7 +407,6 @@ function calculateAll() {
         ...(reanalysisLabel ? [{ label: reanalysisLabel, date: fDate }] : []),
         { label: 'Fracție minimă obligatorie', date: mDate },
         { label: 'Data propusă (totală)', date: tDate },
-        { label: 'Expirare teoretică', date: theorExp },
         { label: 'Expirare reală', date: realExp }
     ];
     const condReleaseStr2 = document.getElementById('conditionalReleaseDate').value.trim();
@@ -424,8 +423,16 @@ function calculateAll() {
         const passed = diff < 0;
         timelineHtml += `<li class="${passed ? 'passed' : ''}"><span class="tl-date">${fmtDate(item.date)}</span> <span class="tl-label">${item.label}</span></li>`;
     });
-    document.getElementById('timelineList').innerHTML = timelineHtml;
-    document.getElementById('timelineContainer').classList.remove('hidden');
+    const timelineList = document.getElementById('timelineList');
+    const timelineContainer = document.getElementById('timelineContainer');
+    const timelineDetails = document.getElementById('timelineDetails');
+    if (timelineList) timelineList.innerHTML = timelineHtml;
+    if (timelineContainer) timelineContainer.classList.remove('hidden');
+    if (timelineDetails) {
+        timelineDetails.classList.remove('hidden');
+        timelineDetails.open = true;
+        timelineDetails.setAttribute('aria-expanded', 'true');
+    }
 
     let restHtml = '';
     const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
