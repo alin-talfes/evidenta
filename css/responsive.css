@@ -316,7 +316,7 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     grid-column: 1 / -1;
     width: 100%;
     display: flex !important;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
     gap: 6px !important;
@@ -328,19 +328,24 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
 
   body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
     display: inline-flex !important;
+    flex:1 1 0;
+    min-width:0;
+    gap:4px;
     align-items: center;
     justify-content: center;
     text-align: center;
     margin: 0;
+    padding-inline:5px !important;
+    font-size:clamp(10px, 1.15vw, 12px) !important;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1040px) {
   body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
-    flex: 0 1 116px;
-    min-width: 104px;
-    max-width: 132px;
-    padding-inline: 10px !important;
+    flex:1 1 0;
+    min-width:0;
+    max-width:none;
+    padding-inline:5px !important;
   }
 }
 
@@ -351,11 +356,11 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   }
 
   body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
-    flex: 0 0 calc((100% - 12px) / 3);
+    flex: 1 1 0;
     width: auto;
-    max-width: 150px;
+    max-width: none;
     min-width: 0;
-    padding-inline: 5px !important;
+    padding-inline: 4px !important;
   }
 }
 
