@@ -9,6 +9,10 @@ assert.ok(html.includes('onclick="exportPvIncarcerarePDF()"'), 'PV handler missi
 assert.ok(exp.includes('function buildPvIncarcerareHTML()'), 'PV builder missing');
 assert.ok(exp.includes('function exportPvIncarcerarePDF()'), 'PV exporter missing');
 assert.ok(exp.includes('PROCES-VERBAL DE CONFIRMARE'), 'PV title missing');
+assert.ok(exp.includes('Perioade deduse — defalcare completă'), 'PV trebuie să defalce toate perioadele deduse');
+assert.ok(exp.includes('Recurs compensatoriu — defalcare pe tranșele introduse'), 'PV trebuie să defalce separat fiecare tranșă de recurs compensatoriu');
+assert.ok(exp.includes('Perioade adăugate — perioade care nu se consideră executate'), 'PV trebuie să defalce perioadele adăugate');
+assert.ok(exp.includes('Instanța emitentă a mandatului de executare'), 'PV trebuie să păstreze adresarea către instanța emitentă');
 assert.ok(!exp.includes('expirarea teoretică') && !exp.includes('expirării teoretice'), 'PV și nota internă nu trebuie să menționeze expirarea teoretică');
 assert.ok(exp.includes('expiry=pvDate(c.realExp)'), 'Data expirării din PV trebuie să provină din expirarea reală, fără fallback teoretic');
 assert.ok(exp.includes('art. 557 alin. (7) și (8)'), 'legal reference missing');
