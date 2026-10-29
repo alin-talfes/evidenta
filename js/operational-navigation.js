@@ -55,17 +55,16 @@
     if (!nav) return;
     const current = currentNavKey();
     const items = [
-      ['pedepse', 'Pedepse', './'],
-      ['ai', 'AI · BETA', 'ai/'],
-      ['contopiri', 'Contopiri', 'contopiri/'],
-      ['transfer', 'Transfer', 'transfer/'],
-      ['instructaj', 'Instructaj', 'instructaj/'],
-      ['semnalmente', 'Semnalmente', 'semnalmente/']
+      ['pedepse', '⚖', 'Pedepse', './'],
+      ['contopiri', '∑', 'Contopiri', 'contopiri/'],
+      ['transfer', '⇄', 'Transfer', 'transfer/'],
+      ['instructaj', '▤', 'Instructaj', 'instructaj/'],
+      ['semnalmente', '◎', 'Semnalmente', 'semnalmente/']
     ];
     const signature = items.map(([key]) => key).join('|');
     if (nav.dataset.evOperationalSignature === signature && nav.children.length === items.length) return;
-    nav.innerHTML = items.map(([key, label, href]) =>
-      `<a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''}>${label}</a>`
+    nav.innerHTML = items.map(([key, icon, label, href]) =>
+      `<a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''} aria-label="${label}"><span class="ev-nav-icon" aria-hidden="true">${icon}</span><span class="ev-nav-label">${label}</span></a>`
     ).join('');
     nav.dataset.evOperationalSignature = signature;
   }
@@ -73,60 +72,23 @@
   function initMobileNav() {
     if (isOfficerPage() || document.querySelector('.ev-mobile-nav')) return;
     const current = currentNavKey();
-    const direct = [
-      ['pedepse', '⌁', 'Pedepse', './'],
-      ['ai', '▣', 'AI', 'ai/'],
+    const items = [
+      ['pedepse', '⚖', 'Pedepse', './'],
       ['contopiri', '∑', 'Contopiri', 'contopiri/'],
-      ['transfer', '⇄', 'Transfer', 'transfer/']
+      ['transfer', '⇄', 'Transfer', 'transfer/'],
+      ['instructaj', '▤', 'Instructaj', 'instructaj/'],
+      ['semnalmente', '◎', 'Semnalmente', 'semnalmente/']
     ];
     const nav = document.createElement('nav');
     nav.className = 'ev-mobile-nav';
-    nav.setAttribute('aria-label', 'Navigare rapidă Inmate Pocket Calculator');
-    nav.innerHTML = direct.map(([key, icon, label, href]) => `
-      <a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''}>
+    nav.setAttribute('aria-label', 'Navigare principală');
+    nav.innerHTML = items.map(([key, icon, label, href]) => `
+      <a href="${new URL(href, rootUrl).href}"${current === key ? ' aria-current="page"' : ''} aria-label="${label}">
         <span aria-hidden="true">${icon}</span><small>${label}</small>
-      </a>`).join('') + `
-      <button type="button" data-ev-more${['instructaj','semnalmente'].includes(current) ? ' class="is-active"' : ''} aria-expanded="false" aria-controls="ev-mobile-more-sheet">
-        <span aria-hidden="true">•••</span><small>Mai multe</small>
-      </button>`;
+      </a>`).join('');
 
-    const sheet = document.createElement('div');
-    sheet.id = 'ev-mobile-more-sheet';
-    sheet.className = 'ev-mobile-more-sheet';
-    sheet.setAttribute('role', 'dialog');
-    sheet.setAttribute('aria-modal', 'false');
-    sheet.setAttribute('aria-label', 'Mai multe module');
-    sheet.innerHTML = `
-      <div class="ev-mobile-more-sheet__head"><strong>Mai multe module</strong><button type="button" data-ev-more-close aria-label="Închide">×</button></div>
-      <a href="${new URL('instructaj/', rootUrl).href}"${current === 'instructaj' ? ' aria-current="page"' : ''}>Instructaj</a>
-      <a href="${new URL('semnalmente/', rootUrl).href}"${current === 'semnalmente' ? ' aria-current="page"' : ''}>Semnalmente</a>`;
-
-    const more = nav.querySelector('[data-ev-more]');
-    const close = () => {
-      document.body.classList.remove('ev-mobile-more-open');
-      more?.setAttribute('aria-expanded', 'false');
-    };
-    more?.addEventListener('click', () => {
-      const open = !document.body.classList.contains('ev-mobile-more-open');
-      document.body.classList.toggle('ev-mobile-more-open', open);
-      more.setAttribute('aria-expanded', String(open));
-    });
-    sheet.querySelector('[data-ev-more-close]')?.addEventListener('click', close);
-    document.addEventListener('click', event => {
-      if (!document.body.classList.contains('ev-mobile-more-open')) return;
-      if (event.target.closest?.('[data-ev-more], .ev-mobile-more-sheet')) return;
-      close();
-    });
-    document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
-
-    // Sheet-ul este sibling al barei fixe. Safari iOS poate decupa descendenții poziționați
-    // în afara unui element fixed care folosește backdrop-filter.
-    if (document.body) {
-      document.body.append(sheet, nav);
-    } else {
-      nav.appendChild(sheet);
-      document.documentElement.appendChild(nav);
-    }
+    if (document.body) document.body.append(nav);
+    else document.documentElement.appendChild(nav);
     window.dispatchEvent(new CustomEvent('evidenta:mobile-nav-ready'));
   }
 
