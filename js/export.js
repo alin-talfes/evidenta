@@ -236,7 +236,7 @@ function buildPvIncarcerareHTML(){
  const typed=Array.isArray(c.dedRowsData)?c.dedRowsData:(i.dedRows||[]).map(r=>({...r,label:pvType(r.type)}));
  const deductionRows=typed.filter(r=>r.start||r.end).map(r=>({label:r.label||pvType(r.type),start:r.start||'',end:r.type==='retention24h'?'':(r.end||''),days:Number(r.days||0)}));
  const arrestPeriods=deductionRows.filter(r=>/arest preventiv|reținere|arest la domiciliu/i.test(r.label));
- const arrestText=arrestPeriods.length?arrestPeriods.map(r=>pvEsc(r.start)+(r.end?' – '+pvEsc(r.end):'')+(r.days?' ('+pvEsc(r.days)+' zile)':'')).join('; '):'—';
+ const arrestText=deductionRows.length?deductionRows.map(r=>pvEsc(r.label)+': '+pvEsc(r.start)+(r.end?' – '+pvEsc(r.end):'')+(r.days?' ('+pvEsc(r.days)+' zile)':'')).join('; '):'—';
  const manualRows=(i.manDed||[]).map(v=>Math.max(0,parseInt(v,10)||0)).filter(v=>v>0);
  const recurs=manualRows.reduce((a,b)=>a+b,0),ded=Number(c.ded||0),nonDays=Number(c.non||0);
  const recursText=manualRows.length?manualRows.map((days,n)=>'tranșa '+(n+1)+': '+days+' zile').join('; '):'';
