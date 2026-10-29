@@ -504,3 +504,64 @@ html.ev-virtual-keyboard-open body { padding-bottom:12px !important; }
   body.ev-unified[data-ev-page^="contopiri"] .penalty-row select { font-size:.88rem !important; }
 }
 
+/* Priority 3 — consistent navigation states and accessible touch targets across modules. */
+.ev-shell__nav a:focus-visible,
+.ev-mobile-nav a:focus-visible,
+.ev-mobile-nav button:focus-visible,
+.ev-mobile-more-sheet a:focus-visible,
+.ev-mobile-more-sheet button:focus-visible {
+  outline:3px solid var(--ev-accent-strong,#7aa7ff);
+  outline-offset:2px;
+}
+.ev-shell__nav a[aria-current="page"] {
+  font-weight:850;
+  color:var(--ev-accent-strong,#7aa7ff);
+}
+@media (max-width:760px) {
+  .ev-mobile-nav > a[aria-current="page"] {
+    position:relative;
+    font-weight:900;
+  }
+  .ev-mobile-nav > a[aria-current="page"]::before {
+    content:"";
+    position:absolute;
+    top:2px;
+    left:50%;
+    width:20px;
+    height:3px;
+    border-radius:999px;
+    background:var(--ev-accent-strong,#7aa7ff);
+    transform:translateX(-50%);
+  }
+  .ev-mobile-nav > a,
+  .ev-mobile-nav > button {
+    min-height:50px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .ev-mobile-more-sheet {
+    max-height:min(70dvh,520px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  .ev-mobile-more-sheet > a {
+    min-height:46px;
+    display:flex;
+    align-items:center;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ev-mobile-nav > a,
+  .ev-mobile-nav > button,
+  .ev-mobile-more-sheet > a {
+    transition:background-color .15s ease,color .15s ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-mobile-nav *,
+  .ev-mobile-more-sheet * {
+    scroll-behavior:auto !important;
+    transition:none !important;
+    animation:none !important;
+  }
+}
+
