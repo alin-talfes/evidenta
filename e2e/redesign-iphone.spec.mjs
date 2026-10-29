@@ -54,3 +54,56 @@ test('comutatorul de temă parcurge sistem, luminos, întunecat și revine la si
   await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'system');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('evidenta-theme-mode'))).toBe('system');
 });
+
+
+test('navigația mobilă indică modul activ și deschide/închide meniul Mai multe', async ({ page }) => {
+  await page.goto('/instructaj/');
+
+  const nav = page.locator('.ev-mobile-nav');
+  const more = nav.locator('[data-ev-more]');
+  const sheet = page.locator('#ev-mobile-more-sheet');
+
+  await expect(nav).toBeVisible();
+  await expect(nav.locator('a[aria-current="page"]')).toHaveAttribute('href', /instructaj\//);
+  await expect(more).toHaveAttribute('aria-expanded', 'false');
+  await expect(sheet).toBeHidden();
+
+  await more.click();
+  await expect(more).toHaveAttribute('aria-expanded', 'true');
+  await expect(sheet).toBeVisible();
+  await expect(sheet.locator('a')).toHaveCount(2);
+  await expect(sheet.locator('a[aria-current="page"]')).toHaveText('Instructaj');
+
+  await page.keyboard.press('Escape');
+  await expect(more).toHaveAttribute('aria-expanded', 'false');
+  await expect(sheet).toBeHidden();
+
+  await more.click();
+  await expect(sheet).toBeVisible();
+  await sheet.locator('[data-ev-more-close]').click();
+  await expect(more).toHaveAttribute('aria-expanded', 'false');
+  await expect(sheet).toBeHidden();
+});
+
+test('bara fixă lasă spațiu de derulare pentru ultimul conținut pe mobil', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/contopiri/');
+
+  const metrics = await page.evaluate(() => {
+    const nav = document.querySelector('.ev-mobile-nav');
+    const style = getComputedStyle(document.body);
+    const navRect = nav.getBoundingClientRect();
+    return {
+      bodyPaddingBottom: parseFloat(style.paddingBottom),
+      navHeight: navRect.height,
+      navBottom: navRect.bottom,
+      viewportHeight: window.innerHeight,
+      documentHeight: document.documentElement.scrollHeight
+    };
+  });
+
+  expect(metrics.navBottom).toBeLessThanOrEqual(metrics.viewportHeight + 1);
+  expect(metrics.navHeight).toBeGreaterThanOrEqual(50);
+  expect(metrics.bodyPaddingBottom).toBeGreaterThanOrEqual(metrics.navHeight);
+  expect(metrics.documentHeight).toBeGreaterThan(metrics.viewportHeight);
+});
