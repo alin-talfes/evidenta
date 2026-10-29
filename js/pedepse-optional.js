@@ -25,9 +25,10 @@
     return document.querySelector(`.ev-optional-toggle[aria-controls="${cardId}"]`);
   }
 
-  function setOpen(card, open, { scroll = false } = {}) {
+  function setOpen(card, open, { scroll = false, manual = false } = {}) {
     if (!card) return;
     card.hidden = !open;
+    if (manual) card.dataset.evOptionalOverride = open ? 'open' : 'closed';
     const button = buttonForCard(card.id);
     if (button) {
       button.classList.toggle('is-active', open);
@@ -43,7 +44,8 @@
       const card = document.getElementById(cardId);
       if (!card) return;
       const populated = cardHasMeaningfulValue(card);
-      setOpen(card, populated || !card.dataset.evOptionalInitialized);
+      const override = card.dataset.evOptionalOverride;
+      setOpen(card, override ? override === 'open' : populated);
       card.dataset.evOptionalInitialized = 'true';
     });
   }
@@ -53,12 +55,13 @@
     card.querySelectorAll('input, select, textarea').forEach(control => {
       if (control.dataset.evOptionalSyncBound === 'true') return;
       control.dataset.evOptionalSyncBound = 'true';
-      control.addEventListener('input', () => {
-        if (cardHasMeaningfulValue(card)) setOpen(card, true);
-      });
-      control.addEventListener('change', () => {
-        if (cardHasMeaningfulValue(card)) setOpen(card, true);
-      });
+      const revealWhenPopulated = () => {
+        if (!cardHasMeaningfulValue(card)) return;
+        delete card.dataset.evOptionalOverride;
+        setOpen(card, true);
+      };
+      control.addEventListener('input', revealWhenPopulated);
+      control.addEventListener('change', revealWhenPopulated);
     });
   }
 
@@ -81,7 +84,7 @@
       if (!ITEMS.some(item => item.cardId === cardId)) return;
       const card = document.getElementById(cardId);
       if (!card) return;
-      setOpen(card, card.hidden, { scroll: card.hidden });
+      setOpen(card, card.hidden, { scroll: card.hidden, manual: true });
     });
 
     syncFromValues();
