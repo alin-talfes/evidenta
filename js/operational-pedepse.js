@@ -117,12 +117,18 @@
     const quick = document.body.classList.contains('ev-quick-mode');
     const toggleSteps = document.getElementById('toggleStepsBtn');
     const timeline = document.getElementById('timelineContainer');
-    if (toggleSteps) toggleSteps.hidden = quick;
+    const timelineDetails = document.getElementById('timelineDetails');
+    const stepsDetails = document.getElementById('stepsDetails');
+    if (toggleSteps) toggleSteps.hidden = true;
     if (quick) {
-      document.getElementById('stepsContainer')?.classList.add('hidden');
+      document.getElementById('stepsContainer')?.classList.remove('hidden');
       timeline?.classList.add('hidden');
+      if (timelineDetails) { timelineDetails.open = false; timelineDetails.classList.add('hidden'); }
+      if (stepsDetails) { stepsDetails.open = false; stepsDetails.classList.add('hidden'); }
     } else if (window.lastCalculation && !window.lastCalculation.quick) {
-      toggleSteps?.removeAttribute('hidden');
+      timeline?.classList.remove('hidden');
+      timelineDetails?.classList.remove('hidden');
+      stepsDetails?.classList.remove('hidden');
     }
   }
 
@@ -257,6 +263,7 @@
 
     if (requested === 'preventive') window.syncPreventiveDayPresets?.();
     window.syncPrisonReceivedControl?.();
+    window.EvidentaPedepseOptional?.syncFromValues?.();
     syncQuickResultControls();
     requestAnimationFrame(() => window.EvidentaDisclosureA11y?.scan?.(document));
   }
