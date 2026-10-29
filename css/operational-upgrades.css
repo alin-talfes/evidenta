@@ -125,7 +125,10 @@
     color:var(--ev-text-secondary, #94a3b8);
     text-decoration:none;
   }
-  .ev-mobile-nav > a > span,.ev-mobile-nav > button > span { font-size:1rem; line-height:1; }
+  .ev-mobile-nav > a > span,.ev-mobile-nav > button > span { font-size:1.05rem; line-height:1; }
+  .ev-mobile-nav > a { gap:3px; }
+  .ev-mobile-nav > a small { font-size:clamp(.5rem, 2.05vw, .62rem); letter-spacing:-.015em; }
+  .ev-mobile-nav > a > span { display:block; min-height:17px; }
   .ev-mobile-nav > a small,.ev-mobile-nav > button small { max-width:100%; overflow:hidden; text-overflow:ellipsis; font-size:.62rem; font-weight:800; white-space:nowrap; text-transform:none; }
   .ev-mobile-nav > a[aria-current="page"],.ev-mobile-nav > button.is-active,.ev-mobile-nav > button[data-ev-more][aria-expanded="true"] { color:var(--ev-accent-strong, #7aa7ff); background:var(--ev-accent-soft, rgba(79,140,255,.1)); }
   .ev-mobile-more-sheet {
