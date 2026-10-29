@@ -238,3 +238,131 @@ html.ev-virtual-keyboard-open body { padding-bottom:12px !important; }
     overflow:visible !important;
   }
 }
+
+/* Priority 1 — compact, readable mobile workflow for the sentence calculator. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+    gap:8px;
+    margin:8px 0 12px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+    max-width:18ch;
+    margin:0;
+    font-size:clamp(1.35rem, 5.2vw, 1.7rem);
+    line-height:1.16;
+    text-wrap:balance;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+    max-width:48ch;
+    margin:8px 0 0;
+    font-size:.88rem;
+    line-height:1.45;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta {
+    gap:6px;
+    margin-top:8px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode { margin:0 0 12px; }
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools {
+    margin-block:10px;
+    padding:14px;
+    border-radius:14px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #main-content .card > h3 {
+    margin:0 0 10px;
+    font-size:.82rem;
+    line-height:1.35;
+    letter-spacing:.035em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .form-grid { gap:10px; }
+  body.ev-unified[data-ev-page="pedepse"] .form-grid > div,
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div,
+  body.ev-unified[data-ev-page="pedepse"] .non-exec-row > div { min-width:0; }
+  body.ev-unified[data-ev-page="pedepse"] input:not([type="checkbox"]):not([type="radio"]),
+  body.ev-unified[data-ev-page="pedepse"] select,
+  body.ev-unified[data-ev-page="pedepse"] textarea {
+    max-width:100%;
+    border-radius:10px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row,
+  body.ev-unified[data-ev-page="pedepse"] .non-exec-row {
+    gap:8px;
+    margin:0 0 10px;
+    padding:10px;
+    border:1px solid var(--ev-border, rgba(148,163,184,.22));
+    border-radius:12px;
+    background:var(--ev-surface-raised, rgba(148,163,184,.045));
+  }
+  body.ev-unified[data-ev-page="pedepse"] #errorContainer.visible {
+    margin:10px 0;
+    padding:12px;
+    border-radius:12px;
+    line-height:1.45;
+    scroll-margin-block:16px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin:12px 0 14px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row > button {
+    width:100%;
+    min-width:0;
+    min-height:46px;
+    margin:0;
+    padding:10px 8px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    line-height:1.25;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row #calcBtn {
+    grid-column:1 / -1;
+    min-height:50px;
+    font-size:.95rem;
+    font-weight:800;
+    letter-spacing:.025em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard {
+    margin-top:12px;
+    padding:14px;
+    border-color:color-mix(in srgb, var(--ev-accent, #4f8cff) 30%, var(--ev-border, #334155));
+  }
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard > h3 { margin-bottom:12px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result { padding:14px; border-radius:12px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result > strong {
+    display:block;
+    margin:4px 0 12px;
+    font-size:clamp(1.7rem, 8vw, 2.15rem);
+    line-height:1.1;
+    overflow-wrap:anywhere;
+    font-variant-numeric:tabular-nums;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result__grid { gap:8px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result__grid > div {
+    min-width:0;
+    padding:10px;
+    border-radius:10px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result__grid b {
+    overflow-wrap:anywhere;
+    font-variant-numeric:tabular-nums;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #toggleStepsBtn {
+    width:100%;
+    min-height:46px;
+    white-space:normal;
+  }
+}
+@media (max-width:380px) {
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools,
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard { padding:12px; }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row > button { font-size:.76rem; }
+}
+
