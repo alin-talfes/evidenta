@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1 — 2026-10-29
+
+### Interfață — afișare progresivă
+- Situațiile suplimentare (recurs compensatoriu, perioade neexecutate și rest rămas) sunt restrânse implicit și se deschid la cerere sau când sunt completate.
+- Datele suplimentare pentru liberarea condiționată, cronologia și pașii calculului pot fi extinse la cerere.
+- Rezultatul complet păstrează o sinteză operațională, iar explicațiile detaliate rămân într-o zonă separată.
+- Logica de calcul nu este modificată.
+
+
 ## 1.0.5 — 2026-09-07
 
 Patch de robustețe pentru selecția documentelor din AI.
