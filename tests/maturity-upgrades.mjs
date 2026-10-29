@@ -22,7 +22,7 @@ for (const obsolete of ['css/consistency.css', 'css/hotfix.css']) {
 
 for (const wrapper of ['css/style.css', 'instructaj/styles.css', 'semnalmente/style.css', 'ofiter/styles.css']) {
   const source = read(wrapper);
-  assert.ok(/final-layer\.css\?v=[23456]/.test(source), `${wrapper} trebuie să încarce stratul final consolidat`);
+  assert.ok(/final-layer\\.css\\?v=[234567]\\/.test(source), `${wrapper} trebuie să încarce stratul final consolidat`);
   assert.ok(!/@import\s+url\([^)]*consistency\.css/i.test(source), `${wrapper} nu trebuie să mai încarce consistency.css activ`);
   assert.ok(!/@import\s+url\([^)]*hotfix\.css/i.test(source), `${wrapper} nu trebuie să mai încarce hotfix.css activ`);
   assert.ok(!/@import\s+url\([^)]*ux-upgrades\.css/i.test(source), `${wrapper} nu trebuie să mai încarce ux-upgrades.css activ`);
@@ -86,7 +86,7 @@ for (const marker of [
   assert.ok(officer.includes(marker), `Cockpit-ul Ofițer trebuie să conțină ${marker}`);
 }
 
-assert.ok(rootHtml.includes('js/pedepse-ux.js?v=4'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
+assert.ok(rootHtml.includes('js/pedepse-ux.js?v=5'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Pagina Pedepse trebuie să lege explicit toate modurile de calcul prin dispatcherul operațional');
 assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Modul complet trebuie să lege validarea, calculul și post-procesarea prin Pedepse UX.');
 assert.ok(pedepseOperational.includes('quickCalculate()'), 'Dispatcherul trebuie să păstreze modul rapid.');
