@@ -6,6 +6,7 @@
 
   const OPTIONAL_DETAILS_SELECTOR = [
     'details.ev-mobile-advanced-details',
+    'details.ev-result-details',
     '.ev-optional-tools details',
     'details[data-ev-optional="true"]'
   ].join(',');
