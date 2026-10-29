@@ -70,7 +70,7 @@ assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-optional-fix-v2.js')), 'Con
 assert.ok(!rootHtml.includes('pedepse-modes-v5.js'), 'Pedepse nu trebuie să mai încarce controllerul stratificat de moduri.');
 assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-modes-v5.js')), 'Controllerul stratificat pedepse-modes-v5 trebuie eliminat.');
 assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare controllerul UI general curent.');
-assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Butonul de calcul trebuie să intre printr-un singur dispatcher operațional.');
+assert.ok(rootHtml.includes('onclick="calculatePedepseSafely()"'), 'Butonul de calcul trebuie să intre prin dispatcherul sigur curent.');
 assert.ok(!rootHtml.includes('class="hamburger"'), 'Modul Pedepse nu trebuie să afișeze buton hamburger.');
 assert.ok(rootHtml.includes('class="top-actions" aria-label="Informații și legislație"'), 'Acțiunile Informații și OMJ trebuie să fie vizibile permanent sub toolbar.');
 assert.ok(rootHtml.includes('<h1 id="page-title">Calcul pedepse</h1>'), 'Titlul paginii trebuie să fie compact.');
