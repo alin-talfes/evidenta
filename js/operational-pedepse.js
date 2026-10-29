@@ -273,10 +273,8 @@
       window.calcMasuriPreventive?.();
       return;
     }
-    if (activeMode === 'quick') {
-      quickCalculate();
-      return;
-    }
+    // Compatibilitate cu starea legacy: orice „quick mode” este migrat la motorul complet actual.
+    if (activeMode === 'quick') setMode('full');
     if (window.EvidentaPedepseUx?.runCalculation && typeof window.calculateAll === 'function') {
       window.EvidentaPedepseUx.runCalculation(window.calculateAll);
       revealValidationDetails();
@@ -330,7 +328,6 @@
 
   window.EvidentaPedepseOperational = Object.freeze({
     calculate,
-    quickCalculate,
     setMode,
     get mode() { return activeMode; }
   });
