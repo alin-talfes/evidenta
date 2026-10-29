@@ -1,7 +1,7 @@
 @import url("./style-legacy.css?v=1");
-@import url("../css/unified-shell.css?v=2");
+@import url("../css/unified-shell.css?v=4");
 @import url("../css/visual-audit.css?v=3");
-@import url("../css/responsive.css?v=2");
+@import url("../css/responsive.css?v=3");
 @import url("../css/final-layer.css?v=7");
 
 /* Convenție unitară pentru toate controalele cu rol vizual de buton. */
