@@ -522,8 +522,11 @@ function calculateAll() {
     document.getElementById('resultsContent').innerHTML = html;
     document.getElementById('stepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
     document.getElementById('stepsContainer').classList.add('hidden');
-    document.getElementById('toggleStepsBtn').innerHTML = 'AFIȘEAZĂ PAȘII CALCULULUI';
-    document.getElementById('toggleStepsBtn').setAttribute('aria-expanded', 'false');
+    const toggleStepsBtn = document.getElementById('toggleStepsBtn');
+    if (toggleStepsBtn) {
+        toggleStepsBtn.innerHTML = 'AFIȘEAZĂ PAȘII CALCULULUI';
+        toggleStepsBtn.setAttribute('aria-expanded', 'false');
+    }
     document.getElementById('resultsCard').classList.remove('hidden');
 
     if (!life) updateProposedDateWithWorkDays();
