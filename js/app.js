@@ -529,6 +529,7 @@ function calculateAll() {
     if (!life) updateProposedDateWithWorkDays();
 
     window.lastCalculation = {
+        dedRowsData: (window.ManualDeductionRules?.collectRows?.() || []).map(row => ({ ...row, label: window.ManualDeductionRules?.getTypeLabel?.(row.type) || row.type || "Perioadă dedusă" })),
         life,
         sex: currentSex,
         birthDate,
