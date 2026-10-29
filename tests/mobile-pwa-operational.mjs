@@ -31,6 +31,7 @@ const noSpoilers = read('js/no-nonoptional-disclosures-v1.js');
 const disclosure = read('js/disclosure-hardening-v2.js');
 const disclosureCss = read('css/disclosure-hardening.css');
 const mobile = read('css/mobile.css');
+const navigationCss = read('css/operational-upgrades.css');
 const modules = read('css/mobile-modules.css');
 const sw = read('sw.js');
 const aiSw = read('ai/security-sw.js');
@@ -144,6 +145,8 @@ assert.ok(mobileNavBlock, 'Navbar-ul mobil trebuie construit într-un singur con
 assert.ok(!mobileNavBlock.includes('Mai multe') && !mobileNavBlock.includes('ev-mobile-more-sheet'), 'Navbar-ul mobil nu trebuie să aibă meniu secundar.');
 assert.ok(!mobileNavBlock.includes("'ai'") && !mobileNavBlock.includes("'ai/"), 'Navbar-ul mobil nu trebuie să expună AI.');
 assert.ok(manifest.includes('"name": "Instructaj"') && manifest.includes('"name": "Semnalmente"'), 'Shortcuts PWA trebuie să includă toate modulele publice.');
+assert.ok(navigationCss.includes('grid-template-columns:repeat(5,minmax(0,1fr))'), 'Navbar-ul mobil trebuie să aibă cinci coloane egale.');
+assert.ok(navigationCss.includes('ev-mobile-nav > a small'), 'Etichetele navbar-ului trebuie dimensionate pentru ecrane înguste.');
 assert.ok(!manifest.includes('AI Documente') && !manifest.includes('"url": "./ai/"'), 'Shortcut-ul AI trebuie ascuns și din meniul PWA.');
 
 for (const marker of [
