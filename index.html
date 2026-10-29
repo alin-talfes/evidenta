@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Pedepse și liberare condiționată — Inmate Pocket Calculator</title>
+    <title>Calcul pedepse — Inmate Pocket Calculator</title>
     <link rel="stylesheet" href="css/style.css?v=49">
     <link rel="stylesheet" href="css/operational-upgrades.css?v=2">
     <link rel="stylesheet" href="css/mobile-modules.css?v=1">
     <link rel="stylesheet" href="css/pedepse-modes-v3.css?v=6">
     <link rel="stylesheet" href="css/disclosure-hardening.css?v=3">
     <link rel="stylesheet" href="css/mobile.css?v=5">
+    <link rel="stylesheet" href="css/pedepse-header-v1.css?v=1">
     <script src="js/theme.js?v=40" defer></script>
     <script src="js/ux-upgrades.js?v=3" defer></script>
     <script src="js/pedepse-ux.js?v=6" defer></script>
@@ -27,22 +28,19 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b1220">
     <meta name="description" content="Calculul pedepsei, deducerilor, expirării și liberării condiționate.">
-    <meta property="og:title" content="Pedepse și liberare condiționată — Inmate Pocket Calculator">
-    <meta property="og:description" content="Calculul pedepsei, deducerilor, expirării și liberării condiționate.">
+    <meta property="og:title" content="Calcul pedepse — Inmate Pocket Calculator">
+    <meta property="og:description" content="Calcul pedepse, liberare condiționată, regim și prelungiri măsuri preventive.">
     <meta property="og:type" content="website">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Sari la conținutul principal</a>
     <div class="container">
         <div class="top-bar" role="toolbar" aria-label="Acțiuni principale">
-            <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('hidden')" aria-label="Meniu principal">
-                <span></span><span></span><span></span>
-            </button>
             <button class="btn-utility primary" id="saveBtn" onclick="saveCase()">SALVEAZĂ</button>
             <button class="btn-utility" id="loadBtn" onclick="openLoadModal()">ÎNCARCĂ <span class="badge hidden" id="caseCountBadge">0</span></button>
             <button class="btn-utility" id="resetBtn" onclick="confirmReset()">RESET</button>
         </div>
-        <div id="mainMenu" class="top-actions hidden">
+        <div id="mainMenu" class="top-actions" aria-label="Informații și legislație">
             <button class="btn-big" id="infoBtn" onclick="openInfoModal()">INFORMAȚII</button>
             <button class="btn-big" id="legalBtn" onclick="openLegalModal()">OMJ 2188/C/2022</button>
         </div>
@@ -50,13 +48,8 @@
         <main id="main-content">
             <section class="ev-page-intro" aria-labelledby="page-title">
                 <div class="ev-page-intro__copy">
-                    <p class="ev-page-intro__eyebrow">EVIDENȚĂ PERSOANE PRIVATE DE LIBERTATE</p>
-                    <h1 id="page-title">Pedepse și liberare condiționată</h1>
-                    <p class="ev-page-intro__description">Introdu datele de executare, verifică perioadele deduse și generează termenele relevante.</p>
-                </div>
-                <div class="ev-page-intro__meta" aria-label="Caracteristici modul">
-                    <span>Calcul operațional</span>
-                    <span>Rezultate și cronologie</span>
+                    <h1 id="page-title">Calcul pedepse</h1>
+                    <p class="ev-page-intro__description">Liberare condiționată · Regim · Prelungiri măsuri preventive</p>
                 </div>
             </section>
 
