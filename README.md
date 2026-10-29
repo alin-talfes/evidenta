@@ -1,6 +1,6 @@
 # Inmate Pocket Calculator
 
-**Versiune stabilă: 1.1.0.** Modulul AI Documente este disponibil separat în versiunea **BETA 0.9**.
+**Versiune stabilă: 1.2.0.** Modulul AI Documente este disponibil separat în versiunea **BETA 0.9**.
 
 **Inmate Pocket Calculator (IPC)** este o suită web operațională pentru calcule juridice și activități auxiliare specifice evidenței persoanelor private de libertate. Aplicația include calculul pedepselor și al liberării condiționate, contopiri, analiză asistată a documentelor, transfer/profilare, instruire și semnalmente. Toate modulele sunt publicate prin GitHub Pages din același repository.
 
