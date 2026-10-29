@@ -1,5 +1,5 @@
-const fs = require('node:fs');
-const assert = require('node:assert/strict');
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
 const html = fs.readFileSync('index.html', 'utf8');
 const exp = fs.readFileSync('js/export.js', 'utf8');
 const app = fs.readFileSync('js/app.js', 'utf8');
