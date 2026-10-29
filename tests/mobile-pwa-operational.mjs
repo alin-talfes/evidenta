@@ -47,8 +47,8 @@ for (const marker of ['bootstrap()', 'initVersionIdentity()', 'renderBrandIdenti
 }
 assert.equal((version.match(/initVersionIdentity\(\);/g) || []).length, 1, 'Identitatea versiunii trebuie pornită o singură dată din bootstrap.');
 
-const sharedStyles = ['operational-upgrades.css?v=2', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=2', 'mobile.css?v=5'];
-const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=4', 'no-nonoptional-disclosures-v1.js?v=3', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
+const sharedStyles = ['operational-upgrades.css?v=2', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=3', 'mobile.css?v=5'];
+const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=4', 'no-nonoptional-disclosures-v1.js?v=4', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
 for (const [file, html] of [
   ['index.html', rootHtml],
   ['ai/index.html', aiHtml],
@@ -60,7 +60,7 @@ for (const [file, html] of [
   for (const script of sharedScripts) assert.ok(html.includes(script), `${file} trebuie să declare ${script}`);
 }
 
-for (const marker of ['operational-pedepse.js?v=6', 'pedepse-optional.js?v=1', 'pedepse-ux.js?v=4', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
+for (const marker of ['operational-pedepse.js?v=7', 'pedepse-optional.js?v=2', 'pedepse-ux.js?v=5', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
   assert.ok(rootHtml.includes(marker), `Pedepse trebuie să declare ${marker}`);
 }
 assert.ok(!rootHtml.includes('pedepse-optional-fix-v2.js'), 'Pedepse nu trebuie să mai încarce controllerul optional de compatibilitate.');
