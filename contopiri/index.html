@@ -22,96 +22,11 @@
     <link rel="mask-icon" href="./favicon-ipc.svg" color="#4f8cff">
     <link rel="manifest" href="manifest.json">
 
-    <style>
-        .ev-contopiri-legal {
-            margin: 16px 0 24px;
-            padding: 0;
-            overflow: hidden;
-            border: 1px solid var(--ev-border, rgba(148,163,184,.24));
-            border-radius: 16px;
-            background: var(--ev-surface, rgba(15,23,42,.55));
-        }
-        .ev-contopiri-legal > .ev-contopiri-legal__summary {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            list-style: none;
-            cursor: pointer;
-            user-select: none;
-        }
-        .ev-contopiri-legal > .ev-contopiri-legal__summary::-webkit-details-marker,
-        .ev-contopiri-legal__group > summary::-webkit-details-marker { display: none; }
-        .ev-contopiri-legal__icon {
-            display: grid;
-            place-items: center;
-            flex: 0 0 40px;
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--ev-border, rgba(148,163,184,.25));
-            border-radius: 12px;
-            color: var(--ev-accent-strong, #7aa7ff);
-            font-size: 1.35rem;
-            font-weight: 800;
-        }
-        .ev-contopiri-legal__heading { display: grid; gap: 4px; min-width: 0; }
-        .ev-contopiri-legal__heading strong { font-size: .92rem; letter-spacing: .025em; }
-        .ev-contopiri-legal__heading small { color: var(--ev-text-secondary, #94a3b8); font-size: .78rem; font-weight: 500; }
-        .ev-contopiri-legal__chevron {
-            width: 9px; height: 9px; margin-left: auto; flex: 0 0 auto;
-            border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
-            transform: rotate(45deg); transition: transform .18s ease;
-        }
-        .ev-contopiri-legal[open] > .ev-contopiri-legal__summary .ev-contopiri-legal__chevron { transform: rotate(225deg); }
-        .ev-contopiri-legal__content { display: grid; gap: 10px; padding: 0 12px 12px; }
-        .ev-contopiri-legal__group {
-            margin: 0; overflow: hidden;
-            border: 1px solid var(--ev-border, rgba(148,163,184,.2));
-            border-radius: 12px;
-            background: var(--ev-card, rgba(127,127,127,.035));
-        }
-        .ev-contopiri-legal__group > summary {
-            display: flex; align-items: center; gap: 10px;
-            min-height: 52px; padding: 12px 14px; list-style: none; cursor: pointer;
-        }
-        .ev-contopiri-legal__group-title { font-size: .88rem; font-weight: 800; }
-        .ev-contopiri-legal__group-meta {
-            margin-left: auto; color: var(--ev-text-secondary, #94a3b8);
-            font-size: .72rem; font-weight: 700; white-space: nowrap;
-        }
-        .ev-contopiri-legal__group > summary::after {
-            content: '+'; display: grid; place-items: center; flex: 0 0 24px;
-            width: 24px; height: 24px; border-radius: 7px;
-            background: var(--ev-accent-soft, rgba(79,140,255,.1));
-            color: var(--ev-accent-strong, #7aa7ff); font-size: 1.1rem; font-weight: 500;
-        }
-        .ev-contopiri-legal__group[open] > summary::after { content: '−'; }
-        .ev-contopiri-legal__body { padding: 2px 14px 14px; }
-        .ev-contopiri-legal__body h4 {
-            margin: 10px 0 14px; padding-bottom: 9px;
-            border-bottom: 1px solid var(--ev-border, rgba(148,163,184,.18));
-            font-size: .92rem; line-height: 1.4;
-        }
-        .ev-contopiri-legal__body p {
-            margin: 0 0 10px; font-size: .84rem; line-height: 1.65;
-            color: var(--ev-text, inherit); overflow-wrap: anywhere;
-        }
-        .ev-contopiri-legal__body p:last-child { margin-bottom: 0; }
-        .ev-contopiri-legal__body p strong { color: var(--ev-text, inherit); }
-        @media (max-width: 600px) {
-            .ev-contopiri-legal > .ev-contopiri-legal__summary { padding: 13px; gap: 10px; }
-            .ev-contopiri-legal__icon { flex-basis: 36px; width: 36px; height: 36px; }
-            .ev-contopiri-legal__content { padding: 0 8px 8px; }
-            .ev-contopiri-legal__group > summary { padding: 11px 10px; }
-            .ev-contopiri-legal__body { padding: 2px 11px 12px; }
-            .ev-contopiri-legal__group-meta { font-size: .68rem; }
-        }
-    </style>
+yle>
     <meta name="description" content="Calcul contopiri pedepse.">
     <meta property="og:title" content="Calcul contopiri pedepse">
     <meta property="og:description" content="Calcul contopiri pedepse.">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="../css/module-title-unification.css?v=1">
     <link rel="stylesheet" href="css/module-title-unification.css?v=1">
 </head>
 <body>
