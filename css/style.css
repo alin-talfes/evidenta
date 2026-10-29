@@ -1,9 +1,9 @@
 @import url("./style-legacy.css?v=41");
 @import url("./design-system.css?v=4");
-@import url("./unified-shell.css?v=2");
+@import url("./unified-shell.css?v=4");
 @import url("./visual-audit.css?v=3");
 /* Surse consolidate în final-layer.css: "./consistency.css?v=1" */
-@import url("./responsive.css?v=2");
+@import url("./responsive.css?v=3");
 /* Compatibilitate/audit: "./hotfix.css?v=1" "./ux-upgrades.css?v=1" */
 @import url("./final-layer.css?v=7");
 @import url("./browser-compat.css?v=1");
