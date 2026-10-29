@@ -1,6 +1,5 @@
 /* Robust disclosure behavior across mobile-first operational cards. */
 
-.ev-mobile-lc-details:not([open]) > :not(summary),
 .ev-mobile-advanced-details:not([open]) > :not(summary),
 .ev-ai-evidence-details:not([open]) > :not(summary),
 .ev-contopiri-result-details:not([open]) > :not(summary),
@@ -17,6 +16,19 @@
 .ev-contopiri-result-details[hidden],
 .ev-transfer-help-details[hidden] {
   display:none !important;
+}
+
+/* Liberarea condiționată și datele PPL sunt permanent vizibile, nu un disclosure. */
+body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__title {
+  display:block;
+  margin:0 0 12px;
+  padding:12px 14px;
+  border:1px solid var(--ev-border, rgba(148,163,184,.24));
+  border-radius:12px;
+  color:var(--ev-text, inherit);
+  font-size:.9rem;
+  font-weight:800;
+  line-height:1.35;
 }
 
 /* Non-optional details are rendered as static sections, not interactive accordions. */
