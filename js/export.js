@@ -1,5 +1,20 @@
 // ========== EXPORT / COPIERE / PAGINĂ REZULTATE ==========
 
+function ensureCurrentCalculationForAction() {
+    // Exporturile trebuie să consume structura produsă de motorul curent, nu rezultatul legacy „quick”.
+    if (window.lastCalculation && !window.lastCalculation.quick) return true;
+    const controller = window.EvidentaPedepseOperational;
+    if (controller && controller.mode === 'quick' && typeof controller.setMode === 'function') {
+        controller.setMode('full');
+    }
+    if (typeof window.calculatePedepseSafely === 'function') {
+        window.calculatePedepseSafely();
+    } else if (typeof window.calculateAll === 'function') {
+        window.calculateAll();
+    }
+    return !!window.lastCalculation && !window.lastCalculation.quick;
+}
+
 function mapNonExecType(type) {
     switch (type) {
         case 'escape': return 'Evadare';
@@ -88,6 +103,10 @@ function fallbackCopy(text) {
 }
 
 function copyResults() {
+    if (!ensureCurrentCalculationForAction()) {
+        alert('Motorul actual nu a produs un rezultat valid. Verifică datele și apasă CALCULEAZĂ.');
+        return;
+    }
     const text = buildNarrativeText();
     if (!text) return;
     if (navigator.clipboard?.writeText) {
@@ -167,6 +186,10 @@ function buildResultsPageHTML() {
 }
 
 function exportPDF() {
+    if (!ensureCurrentCalculationForAction()) {
+        alert('Motorul actual nu a produs un rezultat valid. Verifică datele și apasă CALCULEAZĂ.');
+        return;
+    }
     let html;
     try {
         html = buildResultsPageHTML();
@@ -246,4 +269,4 @@ function buildNotaInternaHTML(){
  const ps=facts.map(p=>'<p>'+pvEsc(p)+'</p>').join('');
  return `<!DOCTYPE html><html lang="ro"><head><meta charset="UTF-8"><title>NOTĂ INTERNĂ</title><style>@page{size:A4 portrait;margin:13mm 14mm 12mm}*{box-sizing:border-box}body{margin:0;color:#111;font:9.4pt/1.25 "Times New Roman",serif}.toolbar{text-align:center;margin-bottom:12px;font:13px Arial}.toolbar button{padding:7px 12px;border:1px solid #555;background:white}.page{width:100%;min-height:268mm;display:flex;flex-direction:column}.heading{text-align:center;margin:0 0 5mm}.heading h1{font-size:13pt;letter-spacing:.4px;margin:0 0 2mm}.heading h2{font-size:11pt;margin:0;text-transform:uppercase}.to{font-weight:bold;margin:0 0 4mm}.columns{display:grid;grid-template-columns:39% 61%;border:1px solid #222;align-items:stretch}.left{border-right:1px solid #222}.left h3,.right h3{font-size:9.4pt;text-align:center;text-transform:uppercase;margin:0;padding:2mm;border-bottom:1px solid #222}.left table{width:100%;border-collapse:collapse;font-size:8.6pt}.left th,.left td{border-bottom:1px solid #aaa;padding:1.8mm 1.5mm;text-align:left;vertical-align:top}.left th{width:42%;font-weight:normal}.left td{height:7mm}.right{padding:0 2.5mm 2mm}.right h3{margin:0 -2.5mm 2.5mm}.right p{margin:0 0 2.5mm;text-align:justify}.right p:last-child{margin-bottom:0}.foot{margin-top:auto;padding-top:7mm;display:grid;grid-template-columns:1fr 1fr;gap:18mm}.footbox{font-weight:bold;border-top:1px solid #111;padding-top:2mm;min-height:18mm}.footline{margin-top:9mm;border-bottom:1px solid #111;height:5mm}@media screen{body{background:#eee;padding:16px}.page{background:white;max-width:210mm;min-height:297mm;margin:auto;padding:13mm 14mm 12mm;box-shadow:0 2px 14px #0002}}@media print{.toolbar{display:none}.page{min-height:268mm;break-after:avoid}.foot{break-inside:avoid}}</style></head><body><div class="toolbar"><button onclick="window.print()">Printează / Salvează PDF</button><button onclick="window.close()">Închide</button></div><main class="page"><header class="heading"><h1>NOTĂ INTERNĂ</h1><h2>Către Compartimentul Organizarea Muncii</h2></header><p class="to">Obiect: Situația juridică și datele de executare a pedepsei persoanei private de libertate</p><section class="columns"><div class="left"><h3>Date de stare civilă și identificare</h3><table>${trs}</table></div><div class="right"><h3>Situația juridică și executarea pedepsei</h3>${ps}</div></section><footer class="foot"><div class="footbox">AM PRIMIT<div class="footline"></div><div class="footline"></div></div><div class="footbox">AM PREDAT<div class="footline"></div><div class="footline"></div></div></footer></main></body></html>`;
 }
-function exportPvIncarcerarePDF(){let html;try{html=buildPvIncarcerareHTML();if(!html)return;const nota=buildNotaInternaHTML();if(!nota)return;const css=nota.match(/<style>([\\s\\S]*?)<\\/style>/);const page=nota.match(/<main class="page">([\\s\\S]*?)<\\/main>/);if(!css||!page)throw new Error('Structura notei interne este incompletă');html=html.replace('</head>','<style>'+css[1]+'</style></head>').replace('</main></body></html>','</main><main class="page" style="page-break-before:always;break-before:page">'+page[1]+'</main></body></html>');}catch(e){console.error(e);alert('Nu s-a putut pregăti procesul-verbal și nota internă.');return;}const w=window.open('','_blank');if(!w){alert('Permite ferestrele pop-up și reîncearcă.');return;}w.document.open();w.document.write(html);w.document.close();w.focus();}
+function exportPvIncarcerarePDF(){if(!ensureCurrentCalculationForAction()){alert('Motorul actual nu a produs un rezultat valid. Verifică datele și apasă CALCULEAZĂ.');return;}let html;try{html=buildPvIncarcerareHTML();if(!html)return;const nota=buildNotaInternaHTML();if(!nota)return;const css=nota.match(/<style>([\\s\\S]*?)<\\/style>/);const page=nota.match(/<main class="page">([\\s\\S]*?)<\\/main>/);if(!css||!page)throw new Error('Structura notei interne este incompletă');html=html.replace('</head>','<style>'+css[1]+'</style></head>').replace('</main></body></html>','</main><main class="page" style="page-break-before:always;break-before:page">'+page[1]+'</main></body></html>');}catch(e){console.error(e);alert('Nu s-a putut pregăti procesul-verbal și nota internă.');return;}const w=window.open('','_blank');if(!w){alert('Permite ferestrele pop-up și reîncearcă.');return;}w.document.open();w.document.write(html);w.document.close();w.focus();}
