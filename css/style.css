@@ -477,3 +477,95 @@ body.ev-unified[data-ev-page="transfer"] #resultArea .result-detail {
     margin-top: 0 !important;
   }
 }
+
+
+/* Cronologia termenelor – design compact și stare vizuală clară */
+.timeline {
+  list-style: none;
+  position: relative;
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0 !important;
+  padding: 0 0 0 22px !important;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--border-color, #34445d);
+}
+.timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(108px, 34%) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  margin: 0 !important;
+  padding: 12px 14px !important;
+  border: 1px solid var(--border-color, #34445d) !important;
+  border-left: 3px solid var(--accent, #638cff) !important;
+  border-radius: 12px !important;
+  background: var(--surface, #1c2940) !important;
+  color: var(--text-primary, #eef3ff);
+  box-shadow: none !important;
+  transition: background-color .18s ease, border-color .18s ease, opacity .18s ease;
+}
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%);
+  border: 2px solid var(--accent, #638cff);
+  border-radius: 50%;
+  background: var(--bg, #111a2b);
+  z-index: 1;
+}
+.timeline .tl-date {
+  color: var(--accent, #86a8ff);
+  font-size: .96rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.timeline .tl-label {
+  min-width: 0;
+  color: var(--text-primary, #eef3ff);
+  font-size: .96rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.timeline li.passed {
+  background: var(--surface-muted, #20242c) !important;
+  border-color: #4b515b !important;
+  border-left-color: #777e89 !important;
+  opacity: .78;
+}
+.timeline li.passed::before {
+  border-color: #858b95;
+  background: #858b95;
+}
+.timeline li.passed .tl-date,
+.timeline li.passed .tl-label {
+  color: #a6abb4 !important;
+}
+@media (max-width: 520px) {
+  .timeline { gap: 7px; padding-left: 18px !important; }
+  .timeline::before { left: 5px; }
+  .timeline li {
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 8px;
+    min-height: 58px;
+    padding: 10px 11px !important;
+    border-radius: 11px !important;
+  }
+  .timeline li::before { left: -18px; width: 8px; height: 8px; }
+  .timeline .tl-date, .timeline .tl-label { font-size: .88rem; }
+}
