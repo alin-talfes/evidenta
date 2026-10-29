@@ -47,8 +47,8 @@ for (const marker of ['bootstrap()', 'initVersionIdentity()', 'renderBrandIdenti
 }
 assert.equal((version.match(/initVersionIdentity\(\);/g) || []).length, 1, 'Identitatea versiunii trebuie pornită o singură dată din bootstrap.');
 
-const sharedStyles = ['operational-upgrades.css?v=2', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=4', 'mobile.css?v=5'];
-const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=4', 'no-nonoptional-disclosures-v1.js?v=4', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
+const sharedStyles = ['operational-upgrades.css?v=3', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=4', 'mobile.css?v=5'];
+const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=5', 'no-nonoptional-disclosures-v1.js?v=4', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
 for (const [file, html] of [
   ['index.html', rootHtml],
   ['ai/index.html', aiHtml],
@@ -128,7 +128,7 @@ for (const retired of ['operational-upgrades.js', 'operational-finalize.js', 'op
   assert.ok(!fs.existsSync(path.join(root, 'js', retired)), `${retired} trebuie eliminat`);
 }
 
-for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOfficerSuiteNav', 'input[type="number"]', 'ev-mobile-nav', 'evidenta:shellready', 'nav.appendChild(sheet)', 'evidenta:mobile-nav-ready']) {
+for (const marker of ['normalizeGlobalNav', 'normalizeTouchInputs', 'removeOfficerSuiteNav', 'input[type="number"]', 'ev-mobile-nav', 'evidenta:shellready', 'evidenta:mobile-nav-ready', 'Navigare principală', 'Semnalmente']) {
   assert.ok(nav.includes(marker), `Navigația trebuie să includă ${marker}`);
 }
 for (const marker of [
