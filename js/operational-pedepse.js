@@ -301,6 +301,33 @@
     setMode(mode.querySelector('[data-mode].is-active')?.dataset.mode || 'full');
   }
 
+  // Stable public entry point for the calculation button; surface failures in the page instead of silently doing nothing.
+  window.calculatePedepseSafely = function () {
+    const errorBox = document.getElementById('errorContainer');
+    if (errorBox) {
+      errorBox.textContent = '';
+      errorBox.classList.remove('visible');
+    }
+    try {
+      if (typeof window.EvidentaPedepseOperational?.calculate === 'function') {
+        return window.EvidentaPedepseOperational.calculate();
+      }
+      if (typeof window.calculateAll === 'function') {
+        return window.calculateAll();
+      }
+      throw new Error('Motorul de calcul nu s-a încărcat. Reîncarcă pagina și încearcă din nou.');
+    } catch (error) {
+      console.error('Eroare la calculul pedepsei:', error);
+      if (errorBox) {
+        errorBox.textContent = error?.message || 'Calculul nu a putut fi efectuat. Verifică datele și încearcă din nou.';
+        errorBox.classList.add('visible');
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        window.alert(error?.message || 'Calculul nu a putut fi efectuat.');
+      }
+    }
+  };
+
   window.EvidentaPedepseOperational = Object.freeze({
     calculate,
     quickCalculate,
