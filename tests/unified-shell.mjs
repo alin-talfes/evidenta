@@ -37,6 +37,8 @@ assert.ok(publicModulesBlock, 'Trebuie să existe lista comună de module public
 assert.equal((publicModulesBlock.match(/\['/g) || []).length, 5, 'Meniul global trebuie să aibă exact 5 module publice');
 assert.ok(!publicModulesBlock.toLowerCase().includes('termene'), 'Modulul Termene a fost retras și nu trebuie expus în meniul public');
 assert.ok(!publicModulesBlock.toLowerCase().includes('ofiter'), 'Ofițer nu trebuie expus în meniul public');
+assert.ok(!publicModulesBlock.toLowerCase().includes('ai'), 'AI trebuie să rămână închis în beta și ascuns din meniurile publice.');
+for (const symbol of ['⚖', '∑', '⇄', '▤', '◎']) assert.ok(publicModulesBlock.includes(symbol), `Modulul public trebuie să aibă simbolul ${symbol}`);
 assert.ok(theme.includes("'ofiter': [null"), 'Ofițer trebuie marcat explicit ca modul fără intrare în navigarea publică');
 assert.ok(theme.includes("'ofiter/index.html': [null"), 'Ruta explicită Ofițer trebuie să rămână fără intrare în navigarea publică');
 assert.ok(!theme.includes('instrumente de evidență'), 'Shell-ul nu trebuie să conțină slogan redundant');
