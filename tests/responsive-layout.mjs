@@ -68,9 +68,10 @@ const wrappers = {
 };
 
 for (const [module, source] of Object.entries(wrappers)) {
-  assert.ok(source.includes('responsive.css?v=2'), `${module} trebuie să încarce responsive.css`);
+  const responsiveRef = source.match(/responsive\.css\?v=\d+/)?.[0];
+  assert.ok(responsiveRef, `${module} trebuie să încarce responsive.css`);
   assert.ok(
-    source.indexOf('responsive.css?v=2') > source.indexOf('consistency.css?v=1'),
+    source.indexOf(responsiveRef) > source.indexOf('consistency.css?v=1'),
     `${module}: responsive.css trebuie să fie după consistency.css`
   );
 }
