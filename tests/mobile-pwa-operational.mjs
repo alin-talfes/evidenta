@@ -69,6 +69,11 @@ assert.ok(!rootHtml.includes('pedepse-modes-v5.js'), 'Pedepse nu trebuie să mai
 assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-modes-v5.js')), 'Controllerul stratificat pedepse-modes-v5 trebuie eliminat.');
 assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare controllerul UI general curent.');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Butonul de calcul trebuie să intre printr-un singur dispatcher operațional.');
+assert.ok(!rootHtml.includes('class="hamburger"'), 'Modul Pedepse nu trebuie să afișeze buton hamburger.');
+assert.ok(rootHtml.includes('class="top-actions" aria-label="Informații și legislație"'), 'Acțiunile Informații și OMJ trebuie să fie vizibile permanent sub toolbar.');
+assert.ok(rootHtml.includes('<h1 id="page-title">Calcul pedepse</h1>'), 'Titlul paginii trebuie să fie compact.');
+assert.ok(rootHtml.includes('Liberare condiționată · Regim · Prelungiri măsuri preventive'), 'Descrierea trebuie să enumere numai funcțiile principale.');
+assert.ok(rootHtml.includes('css/pedepse-header-v1.css?v=1'), 'CSS-ul compact al antetului trebuie declarat static.');
 assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=6'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
 assert.ok(!rootHtml.includes('pedepse-prison-date.js'), 'Controllerul dinamic pentru data intrării trebuie eliminat.');
 for (const marker of [
