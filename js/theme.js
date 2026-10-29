@@ -198,11 +198,11 @@
 
     function publicModules() {
         return [
-            ['pedepse', 'Pedepse', new URL('./', rootUrl).href],
-            ['contopiri', 'Contopiri', new URL('contopiri/', rootUrl).href],
-            ['transfer', 'Transfer', new URL('transfer/', rootUrl).href],
-            ['instructaj', 'Instructaj', new URL('instructaj/', rootUrl).href],
-            ['semnalmente', 'Semnalmente', new URL('semnalmente/', rootUrl).href]
+            ['pedepse', '⚖', 'Pedepse', new URL('./', rootUrl).href],
+            ['contopiri', '∑', 'Contopiri', new URL('contopiri/', rootUrl).href],
+            ['transfer', '⇄', 'Transfer', new URL('transfer/', rootUrl).href],
+            ['instructaj', '▤', 'Instructaj', new URL('instructaj/', rootUrl).href],
+            ['semnalmente', '◎', 'Semnalmente', new URL('semnalmente/', rootUrl).href]
         ];
     }
 
@@ -293,9 +293,9 @@
         shell.className = 'ev-shell';
         shell.dataset.evidentaShell = 'true';
 
-        const navItems = publicModules().map(([key, label, href]) => {
+        const navItems = publicModules().map(([key, icon, label, href]) => {
             const current = context.navKey === key ? ' aria-current="page"' : '';
-            return `<a href="${href}"${current}>${label}</a>`;
+            return `<a href="${href}"${current} aria-label="${label}"><span class="ev-nav-icon" aria-hidden="true">${icon}</span><span class="ev-nav-label">${label}</span></a>`;
         }).join('');
 
         shell.innerHTML = `
