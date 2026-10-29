@@ -22,9 +22,10 @@ const hasCoreBlockers = /^- \[ \]/m.test(coreSection);
 if (Number(version.split('.')[0]) >= 1) assert.equal(hasCoreBlockers, false, 'Nu se permite 1.x cu blocante 1.0 deschise');
 assert.ok(packageJson.scripts.test.includes('tests/release-gate.mjs'), 'Release gate trebuie să ruleze în CI');
 
-for (const route of ['./', './contopiri/', './ai/', './transfer/']) {
+for (const route of ['./', './contopiri/', './transfer/', './instructaj/', './semnalmente/']) {
   assert.ok(manifest.shortcuts.some(item => item.url === route), `Manifestul nu expune ruta ${route}`);
 }
+assert.ok(!manifest.shortcuts.some(item => item.url === './ai/'), 'AI trebuie să rămână accesibil doar prin ruta directă, nu prin shortcut public.');
 
 assert.ok(!fs.existsSync('js/release-guards.js'), 'Controllerul release-guards trebuie eliminat după integrarea regulilor în motorul principal');
 assert.ok(!rootHtml.includes('release-guards.js'), 'Ruta Pedepse nu trebuie să mai încarce release-guards');
