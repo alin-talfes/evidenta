@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 — 2026-10-29
+
+### Mentenanță și exporturi
+- Corecții pentru exportul Procesului-verbal de încarcerare și eliminarea footer-ului necerut din nota internă.
+- Actualizări ale cache-ului PWA pentru livrarea fișierelor statice curente.
+
 ## 1.1.1 — 2026-10-29
 
 ### Interfață — afișare progresivă
