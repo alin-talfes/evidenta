@@ -232,7 +232,7 @@ function pvDuration(c){if(c.life)return 'detențiune pe viață';const d=c.durat
 function pvType(t){return t==='retention24h'?'Reținere 24 h':t==='preventive'?'Arest preventiv':t==='houseArrest'?'Arest la domiciliu':'Altă perioadă dedusă';}
 function buildPvIncarcerareHTML(){
  const c=window.lastCalculation;if(!c){alert('Apasă întâi CALCULEAZĂ.');return null;}
- const i=c.inputData||getInputData(),life=!!c.life,duration=pvDuration(c),birth=pvDate(c.birthDate||i.birthDate),start=pvDate(c.startDate||i.start),received=pvDate(c.prisonReceivedDate||i.prisonReceived),theor=pvDate(c.theorExp),expiry=pvDate(c.realExp||c.theorExp),todayText=pvDate(new Date());
+ const i=c.inputData||getInputData(),life=!!c.life,duration=pvDuration(c),birth=pvDate(c.birthDate||i.birthDate),start=pvDate(c.startDate||i.start),received=pvDate(c.prisonReceivedDate||i.prisonReceived),expiry=pvDate(c.realExp),todayText=pvDate(new Date());
  const typed=Array.isArray(c.dedRowsData)?c.dedRowsData:(i.dedRows||[]).map(r=>({...r,label:pvType(r.type)}));
  const deductions=typed.filter(r=>r.start||r.end).map(r=>{const e=r.type==='retention24h'?r.start:(r.end||'');return '<li>'+pvEsc(r.label||pvType(r.type))+': '+pvEsc(r.start||'')+(e?' – '+pvEsc(e):'')+(r.days?' ('+pvEsc(r.days)+' zile)':'')+'.</li>';}).join('')||'<li>Nu sunt introduse perioade deduse.</li>';
  const manual=(i.manDed||[]).map(v=>Math.max(0,parseInt(v,10)||0)).filter(v=>v>0).reduce((a,b)=>a+b,0),recurs=Math.max(Number(c.recursDays||0),manual),ded=Number(c.ded||0),ordinary=Math.max(0,ded-recurs);
@@ -242,7 +242,7 @@ function buildPvIncarcerareHTML(){
 <p>Către,<br>${pvLine('', 'wide')}</p><p>Noi, directorul ${pvLine('', 'long')} asistat de șeful structurii evidență deținuți, astăzi ${pvLine(todayText,'medium')}, am primit la acest loc de deținere pe numitul(a) ${pvLine('', 'long')}, fiul/fiica lui ${pvLine('', 'medium')} și al(a) ${pvLine('', 'medium')}, născut(ă) la ${pvLine(birth,'medium')}, în ${pvLine('', 'long')}, CNP ${pvLine('', 'medium')}, cu domiciliul în:</p>${pvLine('', 'block')}
 <p>În baza mandatului de executare nr. ${pvLine('', 'medium')} din ${pvLine('', 'medium')}, emis de ${pvLine('', 'long')}, conform hotărârii penale nr. ${pvLine('', 'medium')} din data de ${pvLine('', 'medium')}, prin care a fost condamnat(ă) la ${pvLine(duration,'medium')} ${pvEsc(life?'detențiunii pe viață':'închisorii')}, pentru săvârșirea infracțiunii prevăzute de:</p>${pvLine('', 'block')}
 <p>Persoana a fost înregistrată sub numărul ${pvLine('', 'medium')}.</p>
-<p>A fost arestat(ă) la data de ${pvLine('', 'medium')} de către ${pvLine('', 'long')}. Pedeapsa a început la data de ${pvLine(start,'medium')} și urmează să expire în termen la data de ${pvLine(end,'medium')}. Durata pedepsei este ${pvLine(duration,'medium')}; expirarea teoretică rezultă la data de ${pvLine(theor,'medium')}.</p>
+<p>A fost arestat(ă) la data de ${pvLine('', 'medium')} de către ${pvLine('', 'long')}. Pedeapsa a început la data de ${pvLine(start,'medium')} și urmează să expire în termen la data de ${pvLine(end,'medium')}. Durata pedepsei este ${pvLine(duration,'medium')}.</p>
 <p>Se scad ${pvEsc(ded)} zile în total, dintre care ${pvEsc(ordinary)} zile aferente perioadelor calendaristice deduse și ${pvEsc(recurs)} zile considerate executate suplimentar cu titlu de recurs compensatoriu.</p>
 <div class="detail"><strong>Perioade deduse:</strong><ul>${deductions}</ul><strong>Perioade care nu se consideră executate și se adaugă:</strong><ul>${non}</ul><p>${pvEsc(addText)}</p><p>${pvEsc(recursText)}</p></div>
 <p>Data începerii executării pedepsei: ${pvLine(start,'medium')}. Data primirii în penitenciar/centru: ${pvLine(received==='—'?'':received,'medium')}. Data expirării după ajustările înregistrate: ${pvLine(end,'medium')}.</p>
@@ -252,13 +252,13 @@ function buildPvIncarcerareHTML(){
 
 function buildNotaInternaHTML(){
  const c=window.lastCalculation;if(!c){alert('Apasă întâi CALCULEAZĂ.');return null;}
- const i=c.inputData||getInputData(),life=!!c.life,fmt=(v)=>pvDate(v),start=fmt(c.startDate||i.start),theor=fmt(c.theorExp),expiry=fmt(c.realExp||c.theorExp),birth=fmt(c.birthDate||i.birthDate),duration=pvDuration(c),ded=Number(c.ded||0),manual=(i.manDed||[]).map(v=>Math.max(0,parseInt(v,10)||0)).filter(v=>v>0).reduce((a,b)=>a+b,0),recurs=Math.max(Number(c.recursDays||0),manual),nonDays=Number(c.non||0);
+ const i=c.inputData||getInputData(),life=!!c.life,fmt=(v)=>pvDate(v),start=fmt(c.startDate||i.start),expiry=fmt(c.realExp),birth=fmt(c.birthDate||i.birthDate),duration=pvDuration(c),ded=Number(c.ded||0),manual=(i.manDed||[]).map(v=>Math.max(0,parseInt(v,10)||0)).filter(v=>v>0).reduce((a,b)=>a+b,0),recurs=Math.max(Number(c.recursDays||0),manual),nonDays=Number(c.non||0);
  const rows=Array.isArray(c.dedRowsData)?c.dedRowsData:(i.dedRows||[]).map(r=>({...r,label:pvType(r.type)}));
  const deductionText=rows.filter(r=>r.start||r.end).map(r=>(r.label||pvType(r.type))+': '+(r.start||'dată necompletată')+(r.end?' – '+r.end:'')+(r.days?' ('+r.days+' zile)':'')).join('; ');
  const nonText=(c.nonRowsData||[]).map(r=>mapNonExecType(r.type)+': '+(r.start||'')+(r.end?' – '+r.end:'')+' ('+Number(r.days||0)+' zile)').join('; ');
  const facts=[
  'Persoana este condamnată la '+(life?'detențiune pe viață':duration)+'. Data începerii executării pedepsei înregistrată în calcul este '+(start||'necompletată')+'.',
- 'Expirarea teoretică a pedepsei este '+(theor||'necalculată')+', iar data expirării rezultată după ajustările introduse în aplicație este '+(expiry||'necalculată')+'.',
+ 'Data expirării pedepsei după aplicarea ajustărilor înregistrate în aplicație este '+(expiry||'necompletată')+'.',
  'În calcul sunt înregistrate '+ded+' zile deduse în total. Zile considerate executate suplimentar cu titlu compensatoriu: '+recurs+'.'+(deductionText?' Perioade deduse: '+deductionText+'.':' Nu sunt introduse detalii calendaristice pentru perioadele deduse.'),
  (nonDays?'Sunt înregistrate '+nonDays+' zile pentru perioade care nu se consideră executate.':'Nu sunt înregistrate zile pentru perioade care nu se consideră executate.')+(nonText?' Detalii: '+nonText+'.':''),
  'Data pragului minim pentru liberare condiționată indicată de calcul este '+(fmt(c.mDate)||'necalculată')+', iar data fracției totale/propozabile este '+(fmt(c.workDaysResult||c.tDate)||'necalculată')+'. Aceste rezultate trebuie confruntate cu mandatul, hotărârea penală, actele privind arestarea preventivă și celelalte înscrisuri din dosarul individual.',
