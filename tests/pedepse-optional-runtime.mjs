@@ -56,7 +56,8 @@ assert.ok(!page.includes('pedepse-optional-fix-v2.js'), 'Pagina Pedepse nu trebu
 assert.ok(!version.includes('pedepse-optional'), 'version.js trebuie să rămână identity-only.');
 assert.ok(!version.includes('ensurePedepseOperationalControllers'), 'version.js trebuie să rămână fără loader dinamic.');
 
-assert.ok(page.includes('<details class="ev-mobile-lc-details" data-ev-optional="true">'), 'Datele LC trebuie să fie colapsabile.');
+assert.ok(page.includes('<div class="ev-mobile-lc-details">'), 'Cardul LC și datele PPL trebuie să rămână permanent vizibile.');
+assert.ok(!page.includes('<details class="ev-mobile-lc-details"'), 'Cardul LC nu trebuie să fie collapsable.');
 assert.ok(page.includes('id="timelineDetails"') && page.includes('data-ev-optional="true"'), 'Cronologia trebuie colapsată și interactivă.');
 assert.ok(page.includes('id="stepsDetails"') && page.includes('data-ev-optional="true"'), 'Pașii calculului trebuie colapsați și interactivi.');
 assert.ok(page.includes('id="recursCard" hidden'), 'Recursul compensatoriu trebuie colapsat implicit.');
