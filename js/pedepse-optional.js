@@ -15,6 +15,7 @@
     return [...card.querySelectorAll('input, select, textarea')].some(control => {
       if (control.type === 'checkbox' || control.type === 'radio') return control.checked;
       if (control.type === 'number') return Number(control.value || 0) !== 0;
+      if (control.type === 'text' && control.classList.contains('ne-days')) return Boolean(control.value.trim() && control.value !== '0');
       if (control.tagName === 'SELECT') return Boolean(control.value && !['escape', '0'].includes(control.value));
       return Boolean(String(control.value || '').trim());
     });
@@ -40,7 +41,24 @@
   function syncFromValues() {
     ITEMS.forEach(({ cardId }) => {
       const card = document.getElementById(cardId);
-      if (card) setOpen(card, cardHasMeaningfulValue(card));
+      if (!card) return;
+      const populated = cardHasMeaningfulValue(card);
+      setOpen(card, populated || !card.dataset.evOptionalInitialized);
+      card.dataset.evOptionalInitialized = 'true';
+    });
+  }
+
+  function syncControlsForCard(card) {
+    if (!card) return;
+    card.querySelectorAll('input, select, textarea').forEach(control => {
+      if (control.dataset.evOptionalSyncBound === 'true') return;
+      control.dataset.evOptionalSyncBound = 'true';
+      control.addEventListener('input', () => {
+        if (cardHasMeaningfulValue(card)) setOpen(card, true);
+      });
+      control.addEventListener('change', () => {
+        if (cardHasMeaningfulValue(card)) setOpen(card, true);
+      });
     });
   }
 
@@ -67,11 +85,13 @@
     });
 
     syncFromValues();
+    ITEMS.forEach(({ cardId }) => syncControlsForCard(document.getElementById(cardId)));
   }
 
   window.EvidentaPedepseOptional = Object.freeze({
     syncFromValues,
-    revealInvalid
+    revealInvalid,
+    setOpen
   });
 
   if (document.readyState === 'loading') {
