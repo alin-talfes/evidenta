@@ -18,8 +18,8 @@
   "shortcuts": [
     {"name": "Pedepse", "short_name": "Pedepse", "url": "./"},
     {"name": "Contopiri", "short_name": "Contopiri", "url": "./contopiri/"},
+    {"name": "Transfer", "short_name": "Transfer", "url": "./transfer/"},
     {"name": "Instructaj", "short_name": "Instructaj", "url": "./instructaj/"},
-    {"name": "Semnalmente", "short_name": "Semnalmente", "url": "./semnalmente/"},
-    {"name": "Transfer", "short_name": "Transfer", "url": "./transfer/"}
+    {"name": "Semnalmente", "short_name": "Semnalmente", "url": "./semnalmente/"}
   ]
 }
