@@ -43,7 +43,7 @@ for (const marker of [
   assert.ok(page.includes(marker), `Markup-ul declarativ al opțiunilor trebuie să includă ${marker}`);
 }
 assert.ok(!page.includes('aria-controls="masuri-preventive'), 'Măsurile preventive nu trebuie să fie tratate ca situație suplimentară.');
-assert.equal((page.match(/pedepse-optional\.js\?v=1/g) || []).length, 1, 'Controllerul unic trebuie declarat o singură dată.');
+assert.equal((page.match(/pedepse-optional\\.js\\?v=2/g) || []).length, 1, 'Controllerul unic trebuie declarat o singură dată.');
 
 assert.ok(!ux.includes('initPedepseDisclosure'), 'ux-upgrades nu trebuie să mai dețină logica Situațiilor suplimentare.');
 assert.ok(!ux.includes('Situații suplimentare'), 'ux-upgrades nu trebuie să mai construiască markup Pedepse.');
