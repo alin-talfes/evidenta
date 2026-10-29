@@ -18,7 +18,7 @@
     <script src="js/quarantine-rules.js?v=1" defer></script>
     <script src="js/quarantine-ui.js?v=3" defer></script>
     <script src="js/operational-navigation.js?v=5" defer></script>
-    <script src="js/operational-pedepse.js?v=8" defer></script>
+    <script src="js/operational-pedepse.js?v=9" defer></script>
     <script src="js/no-nonoptional-disclosures-v1.js?v=4" defer></script>
     <script src="js/disclosure-hardening-v2.js?v=2" defer></script>
     <script src="js/pwa-register.js?v=3" defer></script>
@@ -223,7 +223,7 @@
             <div id="errorContainer" class="error-message" role="alert" aria-live="assertive"></div>
 
             <div class="btn-row">
-                <button class="btn btn-gold" id="calcBtn" onclick="EvidentaPedepseOperational.calculate()">CALCULEAZĂ</button>
+                <button class="btn btn-gold" id="calcBtn" type="button" onclick="calculatePedepseSafely()">CALCULEAZĂ</button>
                 <button class="btn btn-outline" id="copyResultsBtn" onclick="copyResults()">COPIAZĂ REZULTATELE</button>
                 <button class="btn btn-outline" id="exportPdfBtn" onclick="exportPDF()">EXPORTĂ PDF</button>
                 <button class="btn btn-outline" id="exportPvIncarcerareBtn" onclick="exportPvIncarcerarePDF()">EXPORT PV ÎNCARCERARE</button>
