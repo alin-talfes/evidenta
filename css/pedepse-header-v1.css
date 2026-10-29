@@ -1,0 +1,62 @@
+/* Pedepse: acțiuni vizibile permanent, în două rânduri compacte. */
+body.ev-unified[data-ev-page="pedepse"] .top-bar {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 7px;
+  overflow: visible;
+}
+body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 5px;
+  white-space: nowrap;
+  font-size: clamp(.62rem, 1.8vw, .74rem);
+  text-align: center;
+}
+body.ev-unified[data-ev-page="pedepse"] .top-bar #resetBtn {
+  grid-column: auto !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #mainMenu.top-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin: -6px 0 14px;
+}
+body.ev-unified[data-ev-page="pedepse"] #mainMenu .btn-big {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 9px 6px;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.2;
+  font-size: clamp(.66rem, 1.8vw, .78rem);
+}
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+  padding: clamp(14px, 2.2vw, 22px);
+}
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+  max-width: none;
+}
+body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+  margin-top: 6px;
+  font-size: clamp(.8rem, 1.3vw, .95rem);
+  line-height: 1.4;
+}
+@media (max-width: 380px) {
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    gap: 4px;
+    padding: 6px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility {
+    padding-inline: 2px;
+    font-size: .6rem;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #mainMenu .btn-big {
+    padding-inline: 3px;
+    font-size: .62rem;
+  }
+}
