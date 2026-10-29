@@ -89,7 +89,7 @@ for (const marker of [
 assert.ok(rootHtml.includes('js/pedepse-ux.js?v=6'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Pagina Pedepse trebuie să lege explicit toate modurile de calcul prin dispatcherul operațional');
 assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Modul complet trebuie să lege validarea, calculul și post-procesarea prin Pedepse UX.');
-assert.ok(pedepseOperational.includes('quickCalculate()'), 'Dispatcherul trebuie să păstreze modul rapid.');
+assert.ok(!rootHtml.includes('data-mode="quick"') && !rootHtml.includes('Calcul rapid'), 'Modul Calcul rapid trebuie eliminat din interfață.');
 assert.ok(pedepseOperational.includes('calcMasuriPreventive?.()'), 'Dispatcherul trebuie să păstreze modul măsurilor preventive.');
 assert.ok(!pedepseOperational.includes('stopImmediatePropagation'), 'Dispatcherul Pedepse nu trebuie să coordoneze modurile prin blocarea evenimentelor.');
 assert.ok(officerBootstrap.includes('dashboard-cockpit.js?v=1'), 'Bootstrap-ul Ofițer trebuie să încarce cockpit-ul din propriul runtime');
