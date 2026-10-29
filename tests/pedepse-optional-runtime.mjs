@@ -20,6 +20,7 @@ for (const marker of [
   'cardHasMeaningfulValue',
   'syncFromValues',
   'revealInvalid',
+  'evOptionalOverride',
   'window.EvidentaPedepseOptional = Object.freeze'
 ]) {
   assert.ok(optional.includes(marker), `Controllerul unic al opțiunilor trebuie să includă ${marker}`);
@@ -37,7 +38,7 @@ for (const marker of [
   'aria-controls="recursCard"',
   'aria-controls="nonExecCard"',
   'aria-controls="restCard"',
-  'js/pedepse-optional.js?v=1'
+  'js/pedepse-optional.js?v=2'
 ]) {
   assert.ok(page.includes(marker), `Markup-ul declarativ al opțiunilor trebuie să includă ${marker}`);
 }
@@ -55,4 +56,11 @@ assert.ok(!page.includes('pedepse-optional-fix-v2.js'), 'Pagina Pedepse nu trebu
 assert.ok(!version.includes('pedepse-optional'), 'version.js trebuie să rămână identity-only.');
 assert.ok(!version.includes('ensurePedepseOperationalControllers'), 'version.js trebuie să rămână fără loader dinamic.');
 
-console.log('Pedepse optional runtime: un singur controller, markup declarativ, fără fix-uri, timere, observer global sau wrapper mobil redundant.');
+assert.ok(page.includes('<details class="ev-mobile-lc-details" data-ev-optional="true">'), 'Datele LC trebuie să fie colapsabile.');
+assert.ok(page.includes('id="timelineDetails"') && page.includes('data-ev-optional="true"'), 'Cronologia trebuie colapsată și interactivă.');
+assert.ok(page.includes('id="stepsDetails"') && page.includes('data-ev-optional="true"'), 'Pașii calculului trebuie colapsați și interactivi.');
+assert.ok(page.includes('id="recursCard" hidden'), 'Recursul compensatoriu trebuie colapsat implicit.');
+assert.ok(page.includes('id="nonExecCard" hidden'), 'Perioadele neexecutate trebuie colapsate implicit.');
+assert.ok(page.includes('id="restCard" hidden'), 'Restul rămas trebuie colapsat implicit.');
+assert.ok(!page.includes('id="toggleStepsBtn"'), 'Butonul vechi pentru pași trebuie eliminat.');
+console.log('Pedepse optional runtime: progressive disclosure and optional cards collapsed by default.');
