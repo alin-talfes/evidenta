@@ -4,7 +4,7 @@
     <base href="../">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Calculator pedeapsă rezultantă</title>
+    <title>Calcul contopiri pedepse</title>
     <link rel="stylesheet" href="css/style.css?v=44">
     <link rel="stylesheet" href="css/operational-upgrades.css?v=3">
     <link rel="stylesheet" href="css/mobile-modules.css?v=1">
@@ -21,17 +21,15 @@
     <link rel="icon" href="./favicon-ipc.svg" sizes="any" type="image/svg+xml">
     <link rel="mask-icon" href="./favicon-ipc.svg" color="#4f8cff">
     <link rel="manifest" href="manifest.json">
-    <meta name="description" content="Calculul pedepsei rezultante pentru situații deja calificate juridic.">
-    <meta property="og:title" content="Calculator pedeapsă rezultantă">
-    <meta property="og:description" content="Calculul pedepsei rezultante pentru situații deja calificate juridic.">
+    <meta name="description" content="Calcul contopiri pedepse.">
+    <meta property="og:title" content="Calcul contopiri pedepse">
+    <meta property="og:description" content="Calcul contopiri pedepse.">
     <meta property="og:type" content="website">
 </head>
 <body>
     <div class="container">
         <header class="ev-module-intro" aria-labelledby="contopiri-title">
-            <p class="ev-module-intro__eyebrow">CALCUL JURIDIC OPERAȚIONAL</p>
-            <h1 id="contopiri-title">Contopiri de pedepse</h1>
-            <p>Introdu pedepsele componente și situațiile juridice aplicabile. Verifică rezultatul calculat și explicațiile din baza legală.</p>
+            <h1 id="contopiri-title">Calcul contopiri pedepse</h1>
         </header>
         <div class="card">
             <h3>ADAUGĂ PEDEPSE</h3>
@@ -42,10 +40,10 @@
             <div id="mergeResult" class="result-box" style="display:none;"></div>
         </div>
 
-        <div class="legal-box">
-            <h4>BAZA LEGALĂ ȘI MODUL DE CALCUL</h4>
+        <details class="legal-box">
+            <summary><h4>BAZA LEGALĂ ȘI EXPLICAȚII</h4></summary>
             <p><strong>Concurs de infracțiuni (calcul treime):</strong> Se aplică regula de la art. 39 alin. (1) lit. b) din Codul penal: se aplică pedeapsa cea mai grea, la care se adaugă un spor de o treime din totalul celorlalte pedepse stabilite.</p>
-            <p><strong>Recidivă postcondamnatorie (adaugare):</strong> Conform art. 43 alin. (1) și (2) din Codul penal, pedeapsa stabilită pentru noua infracțiune se adaugă integral la pedeapsa anterioară neexecutată sau la restul rămas neexecutat din aceasta.</p>
+            <p><strong>Recidivă postcondamnatorie (adăugare):</strong> Conform art. 43 alin. (1) și (2) din Codul penal, pedeapsa stabilită pentru noua infracțiune se adaugă integral la pedeapsa anterioară neexecutată sau la restul rămas neexecutat din aceasta.</p>
             <p><strong>Revocare rest:</strong> Restul rămas neexecutat se adaugă integral la cuantumul rezultat; afișarea finală este normalizată în ani, luni și zile, fără a modifica totalul aritmetic.</p>
 
             <h4>Capitolul V – Unitatea și pluralitatea de infracțiuni</h4>
@@ -110,12 +108,12 @@
             <p>(5) Dacă pe lângă pedepsele principale au fost stabilite una sau mai multe pedepse accesorii, se aplică dispozițiile alin. (1)-(3), pedeapsa accesorie rezultată executându-se până la executarea sau considerarea ca executată a pedepsei principale.</p>
             <p>(6) Măsurile de siguranță de natură diferită sau chiar de aceeași natură, dar cu un conținut diferit, luate în cazul infracțiunilor săvârșite, se cumulează.</p>
             <p>(7) Dacă s-au luat mai multe măsuri de siguranță de aceeași natură și cu același conținut, dar pe durate diferite, se aplică măsura de siguranță cu durata cea mai mare. Măsurile de siguranță luate conform art. 112 se cumulează.</p>
-        </div>
+        </details>
     </div>
 
     <script src="js/ui.js?v=29"></script>
     <script src="js/contopiri-core.js?v=34"></script>
     <script src="js/contopiri.js?v=34"></script>
-<script src="js/legal-footer.js?v=1" defer></script>
+    <script src="js/legal-footer.js?v=1" defer></script>
 </body>
 </html>
