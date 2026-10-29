@@ -30,7 +30,7 @@ for (const [file, html] of [
   assert.equal((html.match(/ux-upgrades\.js\?v=3/g) || []).length, 1, `${file} trebuie să declare controllerul UX o singură dată`);
 }
 assert.ok(rootHtml.includes('pedepse-ux.js?v=5'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
-assert.ok(rootHtml.includes('pedepse-optional.js?v=1'), 'Ruta Pedepse trebuie să declare controllerul unic pentru Situații suplimentare.');
+assert.ok(rootHtml.includes('pedepse-optional.js?v=2'), 'Ruta Pedepse trebuie să declare controllerul unic pentru Situații suplimentare.');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Fluxul de calcul Pedepse trebuie să intre prin dispatcherul operațional unic.');
 assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Dispatcherul operațional trebuie să delege calculul complet către fluxul UX explicit.');
 assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
