@@ -104,7 +104,7 @@ assert(indexSource.includes('value="PRE14059"') && indexSource.includes('value="
 assert(indexSource.includes('id="prisonReceivedDate"'),'prison receipt date input missing');
 assert(indexSource.includes('id="prisonReceivedSameAsStart"'),'static prison receipt checkbox missing');
 assert(indexSource.includes('data-masuri-days="30"') && indexSource.includes('data-masuri-days="60"'),'static preventive presets missing');
-assert(indexSource.includes('css/pedepse-modes-v3.css?v=5'),'Pedepse mode CSS must be declared statically');
+assert(indexSource.includes('css/pedepse-modes-v3.css?v=6'),'Pedepse mode CSS must be declared statically');
 assert(indexSource.includes('js/rules.js?v=38') && indexSource.includes('js/storage.js?v=39') && indexSource.includes('js/ui.js?v=39') && indexSource.includes('js/app.js?v=39'),'Pedepse cache version not bumped');
 const styleVersions={
   'contopiri/index.html':44,
