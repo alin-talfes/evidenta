@@ -116,9 +116,10 @@
     }
 
     function toggleTheme() {
-        const current = validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode();
-        const next = { system: 'light', light: 'dark', dark: 'system' }[current];
-        return setThemeMode(next);
+        // Butonul este un comutator vizual: fiecare apăsare trebuie să schimbe imediat
+        // tema afișată, fără o oprire intermediară în modul „system”.
+        const currentTheme = validTheme(document.documentElement.dataset.theme) || readTheme();
+        return setThemeMode(currentTheme === 'light' ? 'dark' : 'light');
     }
 
     function ensureVersionController() {
