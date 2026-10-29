@@ -359,7 +359,7 @@
         </div>
       </section>
 
-      <details class="ev-result-details">
+      <details class="ev-result-details" data-ev-optional="true">
         <summary>Vezi toate detaliile și explicațiile calculului</summary>
         <div class="ev-result-details__content">${detailsHtml}</div>
       </details>`;
