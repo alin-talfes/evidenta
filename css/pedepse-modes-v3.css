@@ -1,11 +1,11 @@
-/* Trei moduri de calcul: rapid, complet LC și măsuri preventive. */
-.ev-calc-mode[data-ev-three-modes="true"] {
+/* Două moduri principale, cu aceeași pondere vizuală. */
+.ev-calc-mode[data-ev-two-modes="true"] {
   display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(2,minmax(0,1fr));
   align-items:stretch;
   gap:5px;
 }
-.ev-calc-mode[data-ev-three-modes="true"] button {
+.ev-calc-mode[data-ev-two-modes="true"] button {
   width:100%;
   min-width:0;
   min-height:42px;
@@ -79,19 +79,16 @@ body.ev-preventive-mode #main-content > *:not(.ev-calc-mode):not(.ev-preventive-
 body.ev-preventive-mode .ev-preventive-mode-panel { display:block !important; }
 
 @media (max-width:600px) {
-  .ev-calc-mode[data-ev-three-modes="true"] {
+  .ev-calc-mode[data-ev-two-modes="true"] {
     gap:3px;
     padding:3px;
   }
-  .ev-calc-mode[data-ev-three-modes="true"] button {
+  .ev-calc-mode[data-ev-two-modes="true"] button {
     min-height:46px;
     padding:6px 4px;
     font-size:.68rem;
     line-height:1.12;
     letter-spacing:-.01em;
-  }
-  .ev-calc-mode[data-ev-three-modes="true"] button[data-mode="preventive"] {
-    font-size:.66rem;
   }
   .ev-preventive-mode-panel { margin-bottom:8px; }
   .ev-preventive-mode-panel__body .form-grid {
@@ -113,11 +110,8 @@ body.ev-preventive-mode .ev-preventive-mode-panel { display:block !important; }
 }
 
 @media (max-width:380px) {
-  .ev-calc-mode[data-ev-three-modes="true"] button {
+  .ev-calc-mode[data-ev-two-modes="true"] button {
     padding-inline:3px;
     font-size:.64rem;
-  }
-  .ev-calc-mode[data-ev-three-modes="true"] button[data-mode="preventive"] {
-    font-size:.62rem;
   }
 }
