@@ -47,7 +47,7 @@ for (const marker of ['bootstrap()', 'initVersionIdentity()', 'renderBrandIdenti
 }
 assert.equal((version.match(/initVersionIdentity\(\);/g) || []).length, 1, 'Identitatea versiunii trebuie pornită o singură dată din bootstrap.');
 
-const sharedStyles = ['operational-upgrades.css?v=2', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=3', 'mobile.css?v=5'];
+const sharedStyles = ['operational-upgrades.css?v=2', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=4', 'mobile.css?v=5'];
 const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=4', 'no-nonoptional-disclosures-v1.js?v=4', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
 for (const [file, html] of [
   ['index.html', rootHtml],
@@ -84,7 +84,7 @@ for (const marker of [
   'MĂSURI PREVENTIVE',
   'class="ev-preventive-mode-panel"',
   'class="ev-mobile-lc-details"',
-  'Liberare condiționată și date PPL',
+  '<h2 class="ev-mobile-lc-details__title">Liberare condiționată și date PPL</h2>',
   'class="card ev-lc-controls-card"',
   'class="ev-optional-tools card"',
   'id="recursCard"',
@@ -180,6 +180,7 @@ for (const marker of ['data-ev-static-disclosure', 'ev-static-disclosure-title',
   assert.ok(disclosureCss.includes(marker), `CSS disclosure trebuie să includă ${marker}`);
 }
 
+assert.ok(!disclosureCss.includes('.ev-mobile-lc-details:not([open])'), 'Secțiunea LC/PPL permanent vizibilă nu trebuie ascunsă printr-o regulă de disclosure.');
 assert.ok(!mobile.includes('position:sticky'));
 assert.equal([...mobile.matchAll(/position\s*:\s*fixed\s*!important/gi)].length, 1, 'Numai bottom nav trebuie să fie fixed');
 assert.ok(!modules.includes('position:fixed'));
