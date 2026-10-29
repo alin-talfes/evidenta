@@ -86,7 +86,7 @@ for (const marker of [
   assert.ok(officer.includes(marker), `Cockpit-ul Ofițer trebuie să conțină ${marker}`);
 }
 
-assert.ok(rootHtml.includes('js/pedepse-ux.js?v=5'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
+assert.ok(rootHtml.includes('js/pedepse-ux.js?v=6'), 'Pagina Pedepse trebuie să declare UX-ul Pedepse curent');
 assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Pagina Pedepse trebuie să lege explicit toate modurile de calcul prin dispatcherul operațional');
 assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Modul complet trebuie să lege validarea, calculul și post-procesarea prin Pedepse UX.');
 assert.ok(pedepseOperational.includes('quickCalculate()'), 'Dispatcherul trebuie să păstreze modul rapid.');
