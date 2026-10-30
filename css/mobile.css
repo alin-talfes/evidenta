@@ -102,6 +102,7 @@ html.ev-offline .ev-shell__brand::after {
     max-height:none !important;
     display:block !important;
     margin:0 !important;
+    padding-bottom:calc(96px + constant(safe-area-inset-bottom)) !important;
     padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px)) !important;
     overflow-x:hidden !important;
     overflow-y:visible !important;
@@ -165,6 +166,7 @@ html.ev-offline .ev-shell__brand::after {
     top:auto !important;
     width:100% !important;
     z-index:10000 !important;
+    padding-bottom:calc(5px + constant(safe-area-inset-bottom)) !important;
     padding-bottom:calc(5px + env(safe-area-inset-bottom, 0px)) !important;
   }
   .ev-mobile-nav > a,
