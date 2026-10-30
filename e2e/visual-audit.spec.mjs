@@ -49,6 +49,11 @@ for (const route of routes) {
       await expect.poll(() => compatibilityStylesheetRequested, { message: 'Stratul de compatibilitate CSS trebuie încărcat în fiecare modul' }).toBe(true);
       await expect(page.locator('html')).toHaveAttribute('data-theme-mode', theme);
 
+      const buttonCase = await page.locator('button:visible').evaluateAll(buttons =>
+        buttons.filter(button => (button.textContent || '').trim()).map(button => getComputedStyle(button).textTransform)
+      );
+      expect(buttonCase.every(value => value === 'uppercase'), `Butoanele trebuie să folosească majuscule în ${route.path}: ${buttonCase.join(', ')}`).toBe(true);
+
       if (route.name === 'pedepse' && (await page.evaluate(() => window.innerWidth)) <= 640) {
         const spacing = await page.locator('#main-content').evaluate(main => {
           const intro = main.querySelector('.ev-page-intro');
