@@ -89,7 +89,7 @@ function calculate() {
  }
  const base = addCalendarDays(start,30);
  const finalDate = addCalendarDays(base,extension);
- const now = parseDate(new Date().toISOString().slice(0,10));
+ const now = parseDate(new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0,10));
  const remaining = Math.ceil((finalDate-now)/86400000);
  result.className='committee-result ' + (remaining < 0 ? 'error' : remaining <= 5 ? 'warning' : 'success');
  result.innerHTML = '<div class="committee-kpis"><div class="committee-kpi"><strong>' + roDate(base) + '</strong><span>Termen standard (30 zile)</span></div><div class="committee-kpi"><strong>' + roDate(finalDate) + '</strong><span>Termen calculat</span></div><div class="committee-kpi"><strong>' + (remaining < 0 ? 'Depășit cu ' + Math.abs(remaining) : remaining===0 ? 'Astăzi' : remaining + ' zile') + '</strong><span>Raportat la data curentă</span></div></div><p>Data de referință: ' + roDate(start) + (useTransferred ? ' — înregistrarea la autoritatea competentă, conform art. 8 alin. (2).' : ' — înregistrarea petiției.') + '</p>' + (extension ? '<p>Prelungire: ' + extension + ' zile, cu notificare prealabilă indicată ca efectuată.</p>' : '<p>Nu a fost introdusă prelungire.</p>') + '<p><strong>Verifică ultima zi calendaristică și eventualele reguli generale de calcul al termenelor.</strong></p>';
