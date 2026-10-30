@@ -1,5 +1,5 @@
 {
-  "version": "1.2.10",
+  "version": "1.2.11",
   "updated": "2026-10-30",
   "changes": [
     "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
@@ -11,6 +11,7 @@
     "Corecție CSS: eliminarea cardurilor de titlu este limitată la containerele de titlu și nu afectează antetele funcționale.",
     "Corecție calcul amânări: dacă ziua corespondentă nu există în luna-țintă, rezultatul este ultima zi a lunii.",
     "Corecție cale CSS pentru uniformizarea titlului în pagina Reguli transfer, unde elementul base schimba rezolvarea URL-urilor relative.",
-    "Corecție layout Pedepse: titlul modulului este aliniat la aceeași ramă și la aceleași margini ca antetul global."
+    "Corecție layout Pedepse: titlul modulului este aliniat la aceeași ramă și la aceleași margini ca antetul global.",
+    "Optimizare WEB pentru Pedepse: container mai lat, carduri și spațieri compacte, controale și tipografie calibrate pentru reducerea scroll-ului vertical; regulile mobile sunt păstrate separat."
   ]
 }
