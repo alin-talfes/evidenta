@@ -222,8 +222,13 @@
   }
 
   function addDeferralMonths(date, months) {
-    // Adaugă luni calendaristice după logica de limitare a zilei din luna-țintă.
-    const result = addCalendarSafeLocal(date, 0, months, 0);
+    // Luni calendaristice, cu limitarea zilei la ultima zi a lunii-țintă.
+    const result = new Date(date);
+    const originalDay = result.getDate();
+    result.setDate(1);
+    result.setMonth(result.getMonth() + months);
+    const lastDay = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+    result.setDate(Math.min(originalDay, lastDay));
     result.setDate(result.getDate() - 1);
     return result;
   }
