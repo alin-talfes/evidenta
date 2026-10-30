@@ -221,8 +221,43 @@
     return true;
   }
 
+  function addDeferralMonths(date, months) {
+    const result = new Date(date.getFullYear(), date.getMonth(), 1);
+    result.setMonth(result.getMonth() + months);
+    const lastDay = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+    result.setDate(Math.min(date.getDate(), lastDay));
+    result.setDate(result.getDate() - 1);
+    return result;
+  }
+
+  function calculateDeferral() {
+    const dateInput = document.getElementById('lcDeferralCommitteeDate');
+    const monthsInput = document.getElementById('lcDeferralMonths');
+    const resultInput = document.getElementById('lcDeferralResult');
+    const error = document.getElementById('lcDeferralError');
+    if (!dateInput || !monthsInput || !resultInput) return;
+
+    const rawDate = dateInput.value.trim();
+    const rawMonths = monthsInput.value.trim();
+    resultInput.value = '';
+    if (error) error.textContent = '';
+    if (!rawDate && !rawMonths) return;
+
+    const date = parseDateSafe(rawDate);
+    if (!date) {
+      if (error) error.textContent = 'Introdu o dată validă a comisiei în format zz.ll.aaaa.';
+      return;
+    }
+    const months = Number(rawMonths);
+    if (!Number.isInteger(months) || months < 0 || months > 12) {
+      if (error) error.textContent = 'Numărul de luni de amânare trebuie să fie între 0 și 12.';
+      return;
+    }
+    resultInput.value = fmtDateSafe(addDeferralMonths(date, months));
+  }
+
   function normalizedMode(value) {
-    return value === 'preventive' ? 'preventive' : 'full';
+    return value === 'preventive' || value === 'other' ? 'preventive' : 'full';
   }
 
   function revealValidationDetails() {
@@ -296,6 +331,19 @@
     });
 
     fillPedepseFromPrefill();
+
+    const deferralDate = document.getElementById('lcDeferralCommitteeDate');
+    const deferralMonths = document.getElementById('lcDeferralMonths');
+    [deferralDate, deferralMonths].forEach(input => {
+      if (!input || input.dataset.evDeferralBound) return;
+      input.dataset.evDeferralBound = 'true';
+      input.addEventListener('input', calculateDeferral);
+      input.addEventListener('change', calculateDeferral);
+    });
+    document.querySelector('[data-target="lcDeferralCommitteeDate"]')?.addEventListener('click', () => {
+      requestAnimationFrame(calculateDeferral);
+    });
+
     setMode(mode.querySelector('[data-mode].is-active')?.dataset.mode || 'full');
   }
 
