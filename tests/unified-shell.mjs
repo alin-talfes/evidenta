@@ -92,6 +92,9 @@ assert.ok(!version.includes('Toate datele sunt stocate exclusiv local'), 'Identi
 assert.ok(!version.includes('footer-privacy'), 'Nu trebuie reintrodus conținut editorial în footer');
 
 assert.ok(shell.includes('@media (max-width: 680px)'), 'Shell-ul universal trebuie să aibă tratament mobil');
+assert.ok(shell.includes('.ev-shell__calculator'), 'Headerul comun trebuie să stilizeze pictograma calculatorului');
+assert.ok(theme.includes('ev-shell__calculator'), 'Headerul comun trebuie să afișeze pictograma calculatorului în loc de IPC');
+assert.ok(version.includes('ev-shell__calculator'), 'Controllerul de versiune trebuie să păstreze pictograma calculatorului');
 
 const loaders = {
   'nucleu': read('index.html'),
