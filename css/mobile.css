@@ -253,3 +253,43 @@
     --ev-card-pad-y: 12px;
   }
 }
+@media (max-width: 760px) {
+
+  /* Titlurile și antetele decorative sunt gestionate exclusiv de sistemul comun. */
+  body.ev-unified :is(.ev-shell__module, .ev-page-intro, .ev-module-intro),
+  body.ev-unified > .container > header.header,
+  body.ev-unified > main.committee-page > header.header {
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.ev-unified :is(.ev-page-intro, .ev-module-intro),
+  body.ev-unified > .container > header.header,
+  body.ev-unified > main.committee-page > header.header {
+    margin: 0 0 12px !important;
+    text-align: left !important;
+  }
+
+  body.ev-unified > main.committee-page > header.header .header-inner,
+  body.ev-unified > .container > header.header .header-inner {
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.ev-unified :is(.ev-page-intro, .ev-module-intro, .container > header.header, main.committee-page > header.header) h1 {
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  body.ev-unified :is(.ev-page-intro__description, .module-intro, .ev-module-intro > p, .container > header.header .subtitle) {
+    margin-top: 5px !important;
+  }
+}
