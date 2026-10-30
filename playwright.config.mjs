@@ -27,6 +27,14 @@ export default defineConfig({
         ...devices['Pixel 7'],
         browserName: 'chromium'
       }
+    },
+    {
+      name: 'desktop-chromium',
+      testMatch: '**/visual-audit.spec.mjs',
+      use: {
+        ...devices['Desktop Chrome'],
+        browserName: 'chromium'
+      }
     }
   ],
   webServer: {
