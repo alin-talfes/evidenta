@@ -1,38 +1,14 @@
 @import url("./styles-legacy.css?v=2");
 @import url("../css/design-system.css?v=4");
 @import url("../css/unified-shell.css?v=2");
-@import url("../css/visual-audit.css?v=3");
+@import url("../css/visual-audit.css?v=4");
 /* Surse consolidate în final-layer.css: "../css/consistency.css?v=1" */
 @import url("../css/responsive.css?v=2");
 /* Compatibilitate/audit: "../css/hotfix.css?v=1" "../css/ux-upgrades.css?v=1" */
 @import url("../css/final-layer.css?v=2");
 
-/*
- * Modul Ofițer: textul interfeței se afișează în forma în care este scris,
- * fără transformare forțată în majuscule.
- */
-:where(
-  button,
-  input[type="button"],
-  input[type="submit"],
-  input[type="reset"],
-  a.btn,
-  .btn,
-  .btn-utility,
-  .btn-big,
-  .toggle-btn,
-  .filter,
-  .access-submit,
-  .access-logout,
-  .text-btn,
-  .icon-btn,
-  .back-to-categories,
-  .eyebrow,
-  .section-kicker,
-  .panel-label
-) {
-  text-transform: none !important;
-}
+/* Butoanele și titlurile urmează convenția comună; textele de studiu păstrează capitalizarea naturală. */
+:where(.eyebrow, .section-kicker, .panel-label) { text-transform: uppercase !important; }
 
 :where(.eyebrow, .section-kicker, .panel-label, .access-eyebrow) {
   letter-spacing: .04em !important;
