@@ -2,7 +2,7 @@
 @import url("./style-legacy.css?v=1");
 @import url("../css/unified-shell.css?v=6");
 @import url("../css/visual-audit.css?v=4");
-@import url("../css/responsive.css?v=3");
+/* Responsive global este administrat exclusiv de desktop.css și mobile.css. */
 @import url("../css/final-layer.css?v=7");
 
 /* Convenție unitară pentru toate controalele cu rol vizual de buton. */
