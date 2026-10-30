@@ -302,7 +302,7 @@
         shell.innerHTML = `
             <div class="ev-shell__bar">
                 <a class="ev-shell__brand" href="${rootUrl.href}" aria-label="Inmate Pocket Calculator — pagina principală">
-                    <span class="ev-shell__mark" aria-hidden="true">IPC</span>
+                    <span class="ev-shell__mark" aria-hidden="true"><svg class="ev-shell__calculator" viewBox="0 0 24 24" focusable="false"><rect x="4" y="2.5" width="16" height="19" rx="2.5"></rect><rect x="7" y="5.5" width="10" height="4" rx="1"></rect><path d="M7.5 13h.01M12 13h.01M16.5 13h.01M7.5 16.5h.01M12 16.5h.01M16.5 16.5h.01"></path></svg></span>
                     <span class="ev-shell__brand-copy"><strong>Inmate Pocket Calculator</strong></span>
                 </a>
                 <nav class="ev-shell__nav" aria-label="Modulele Inmate Pocket Calculator">${navItems}</nav>
