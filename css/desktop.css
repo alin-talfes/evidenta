@@ -220,7 +220,7 @@
 @media (min-width: 761px) {
 
   /* Titlurile și antetele decorative sunt gestionate exclusiv de sistemul comun. */
-  body.ev-unified :is(.ev-shell__module, .ev-page-intro, .ev-module-intro),
+  body.ev-unified :is(.ev-page-intro, .ev-module-intro),
   body.ev-unified > .container > header.header,
   body.ev-unified > main.committee-page > header.header {
     min-height: 0 !important;
