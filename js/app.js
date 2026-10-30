@@ -654,6 +654,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
+    document.getElementById('birthDate').addEventListener('blur', function() {
+        this.dataset.touched = 'true';
+        updAgeTag();
+    });
     document.getElementById('liberationArticle').addEventListener('change', function() {
         syncLifeArticleUI('article');
     });
