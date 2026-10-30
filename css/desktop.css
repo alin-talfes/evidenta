@@ -1,0 +1,219 @@
+/* DESKTOP.CSS — sistemul vizual unic pentru toate modulele Evidență PPL.
+   Se încarcă ultimul în paginile aplicației; exclusiv desktop/tabletă. */
+@media (min-width: 761px) {
+  :root {
+    --ev-shell-max: 1240px;
+    --ev-shell-pad: clamp(18px, 2vw, 26px);
+    --ev-layout-gap: 12px;
+    --ev-card-pad-x: 18px;
+    --ev-card-pad-y: 16px;
+  }
+
+  body.ev-unified {
+    box-sizing: border-box;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  body.ev-unified *,
+  body.ev-unified *::before,
+  body.ev-unified *::after {
+    box-sizing: border-box;
+  }
+
+  /* O singură axă și o singură lățime pentru antet, conținut și footer. */
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell {
+    width: min(100%, var(--ev-shell-max)) !important;
+    max-width: var(--ev-shell-max) !important;
+    margin-inline: auto !important;
+  }
+
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell > main {
+    padding: 18px var(--ev-shell-pad) 30px !important;
+  }
+
+  body.ev-unified > .app-shell {
+    padding: 0 !important;
+  }
+
+  body.ev-unified > .app-shell > main {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  body.ev-unified .ev-shell__bar,
+  body.ev-unified .ev-shell__module,
+  body.ev-unified .ev-footer__inner {
+    width: 100% !important;
+    max-width: var(--ev-shell-max) !important;
+    margin-inline: auto !important;
+    padding-inline: var(--ev-shell-pad) !important;
+  }
+
+  body.ev-unified .ev-shell__module {
+    display: block !important;
+    min-height: 0 !important;
+    margin-bottom: 12px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-align: left !important;
+  }
+
+  body.ev-unified .ev-shell__module h1 {
+    width: 100% !important;
+    margin: 0 !important;
+    color: var(--ev-text) !important;
+    font-family: var(--ev-font) !important;
+    font-size: clamp(1.35rem, 1.8vw, 1.65rem) !important;
+    font-weight: 850 !important;
+    line-height: 1.18 !important;
+    letter-spacing: -.035em !important;
+    text-align: left !important;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  /* Titlurile interne pornesc pe aceeași axă în toate modulele. */
+  body.ev-unified :is(.ev-page-intro, .ev-module-intro, .page-heading) {
+    margin: 0 0 12px !important;
+    padding: 0 !important;
+  }
+
+  body.ev-unified :is(.ev-page-intro, .ev-module-intro, .page-heading) h1,
+  body.ev-unified main > h1,
+  body.ev-unified .container > h1 {
+    margin: 0 0 6px !important;
+    color: var(--ev-text) !important;
+    font-size: clamp(1.55rem, 2.1vw, 1.95rem) !important;
+    font-weight: 850 !important;
+    line-height: 1.12 !important;
+    letter-spacing: -.035em !important;
+  }
+
+  body.ev-unified :is(.ev-page-intro__description, .module-intro, .ev-module-intro > p, .page-heading > p) {
+    margin-top: 4px !important;
+    color: var(--ev-text-secondary) !important;
+    font-size: .84rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Geometrie comună pentru suprafețe funcționale. */
+  body.ev-unified :is(
+    .card, .panel, .analysis-panel, .results-section, .question-card,
+    .law-card, .official-set, .workflow-card, .metric-card,
+    .basic-card, .notice-panel
+  ) {
+    min-width: 0;
+    margin-bottom: var(--ev-layout-gap) !important;
+    padding: var(--ev-card-pad-y) var(--ev-card-pad-x) !important;
+    border-radius: 14px !important;
+  }
+
+  body.ev-unified .legal-box {
+    min-width: 0;
+    padding: 16px 18px !important;
+    border-radius: 12px !important;
+  }
+
+  body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) > :is(h2, h3),
+  body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) .section-heading > h2 {
+    margin: 0 0 9px !important;
+    font-size: .96rem !important;
+    font-weight: 820 !important;
+    line-height: 1.28 !important;
+  }
+
+  body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) > p {
+    margin-top: 0;
+    margin-bottom: 9px;
+    font-size: .86rem;
+    line-height: 1.45;
+  }
+
+  /* Formulare: etichete, câmpuri și distanțe cu aceeași scară. */
+  body.ev-unified .form-grid {
+    gap: 10px 12px !important;
+  }
+
+  body.ev-unified label:not(
+    .toggle-switch, .radio-btn, .builder-check, .ai-check-row,
+    .ev-prison-same-check, .sex-label, .life-label
+  ) {
+    margin-bottom: 4px !important;
+    font-size: .70rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: .045em !important;
+  }
+
+  body.ev-unified :is(
+    input[type="text"], input[type="search"], input[type="number"],
+    input[type="date"], input[type="time"], input[type="password"],
+    select, textarea
+  ) {
+    min-width: 0;
+    min-height: 40px !important;
+    padding: 8px 10px !important;
+    border-radius: 8px !important;
+    font-family: var(--ev-font) !important;
+    font-size: .86rem !important;
+    line-height: 1.3 !important;
+  }
+
+  body.ev-unified textarea {
+    min-height: 72px !important;
+  }
+
+  body.ev-unified :is(
+    button, .btn, .btn-utility, .btn-big, .btn-today,
+    .button, .primary, .secondary, .toggle-btn, .filter
+  ) {
+    min-height: 40px !important;
+    padding: 8px 12px !important;
+    border-radius: 9px !important;
+    font-size: .76rem !important;
+    line-height: 1.2 !important;
+  }
+
+  body.ev-unified :is(.top-bar, .page-actions, .workflow, .filters, .category-viewbar) {
+    margin-bottom: 12px !important;
+    padding: 8px !important;
+    border-radius: 12px !important;
+  }
+
+  body.ev-unified :is(.btn-row, .btn-group, .compact-actions, .setup-actions) {
+    gap: 8px !important;
+  }
+
+  body.ev-unified :is(.help-text, .hint, .section-help, .source-note) {
+    font-size: .76rem !important;
+    line-height: 1.42 !important;
+  }
+
+  body.ev-unified :is(.rules-container, .table-scroll) {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+}
+
+/* Desktop compact mediu: grile fluide, fără comprimarea controalelor. */
+@media (min-width: 761px) and (max-width: 1050px) {
+  body.ev-unified {
+    --ev-shell-pad: 18px;
+    --ev-card-pad-x: 15px;
+    --ev-card-pad-y: 14px;
+  }
+
+  body.ev-unified :is(.form-grid, .upload-grid, .reference-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
