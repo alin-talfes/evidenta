@@ -1,7 +1,7 @@
 /* Inmate Pocket Calculator — root PWA service worker */
 'use strict';
 
-const VERSION = 'v87';
+const VERSION = 'v88';
 const STATIC_CACHE = `ipc-static-${VERSION}`;
 const RUNTIME_CACHE = `ipc-runtime-${VERSION}`;
 const PREFIXES = ['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-'];
@@ -11,7 +11,7 @@ const CORE_PATHS = [
   './', './index.html', './manifest.json', './version.json', './favicon-ipc.svg',
   './contopiri/', './transfer/', './transfer/rules/', './instructaj/', './semnalmente/', './ai/', './analytics/',
   './css/style.css', './css/design-system.css', './css/unified-shell.css', './css/visual-audit.css', './css/responsive.css', './css/final-layer.css', './css/operational-upgrades.css',
-  './css/mobile.css', './css/mobile-modules.css', './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/analytics-consent.css', './css/pedepse-layout-fix.css',
+  './css/mobile.css', './css/mobile-modules.css', './css/pedepse-modes-v3.css', './css/disclosure-hardening.css', './css/analytics-consent.css', './css/pedepse-layout-fix.css', './css/contopiri-desktop.css',
   './js/theme.js', './js/version.js', './js/ux-upgrades.js', './js/analytics.js', './js/utils.js', './js/rules.js', './js/legal.js', './js/storage.js',
   './js/export.js', './js/ui.js', './js/app.js', './js/pedepse-ux.js', './js/pedepse-optional.js', './js/deduction-ui.js', './js/quarantine-rules.js', './js/quarantine-ui.js', './js/contopiri-core.js', './js/contopiri.js',
   './js/operational-navigation.js', './js/operational-pedepse.js', './js/operational-ai.js', './js/operational-contopiri.js',
@@ -128,7 +128,7 @@ function isCriticalRuntime(url) {
   return /\/js\/(?:version|ux-upgrades|analytics|rules|storage|ui|app|pedepse-ux|pedepse-optional|deduction-ui|quarantine-rules|quarantine-ui|operational-navigation|operational-pedepse|operational-ai|operational-contopiri|operational-transfer|operational-instructaj|operational-semnalmente|no-nonoptional-disclosures-v1|disclosure-hardening-v2|pwa-register)\.js$/i.test(url.pathname)
     || /\/semnalmente\/enhancements\.js$/i.test(url.pathname)
     || /\/instructaj\/styles\.css$/i.test(url.pathname)
-    || /\/css\/(?:design-system|unified-shell|visual-audit|responsive|final-layer|operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening|analytics-consent|pedepse-layout-fix)\.css$/i.test(url.pathname);
+    || /\/css\/(?:design-system|unified-shell|visual-audit|responsive|final-layer|operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening|analytics-consent|pedepse-layout-fix|contopiri-desktop)\.css$/i.test(url.pathname);
 }
 
 self.addEventListener('fetch', event => {
