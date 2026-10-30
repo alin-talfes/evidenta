@@ -72,7 +72,7 @@ assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-modes-v5.js')), 'Controller
 assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare controllerul UI general curent.');
 assert.ok(rootHtml.includes('onclick="calculatePedepseSafely()"'), 'Butonul de calcul trebuie să intre prin dispatcherul sigur curent.');
 assert.ok(!rootHtml.includes('class="hamburger"'), 'Modul Pedepse nu trebuie să afișeze buton hamburger.');
-assert.ok(rootHtml.includes('class="top-actions" aria-label="Informații și legislație"'), 'Acțiunile Informații și OMJ trebuie să fie vizibile permanent sub toolbar.');
+assert.ok(['id="saveBtn"','id="loadBtn"','id="resetBtn"'].every(marker => rootHtml.includes(marker)), 'Toolbar-ul Pedepse trebuie să păstreze acțiunile SALVEAZĂ, ÎNCARCĂ și RESET.');
 assert.ok(rootHtml.includes('<h1 id="page-title">Calcul pedepse</h1>'), 'Titlul paginii trebuie să fie compact.');
 assert.ok(rootHtml.includes('Liberare condiționată · Regim · Prelungiri măsuri preventive'), 'Descrierea trebuie să enumere numai funcțiile principale.');
 assert.ok(rootHtml.includes('css/pedepse-header-v1.css?v=1'), 'CSS-ul compact al antetului trebuie declarat static.');
