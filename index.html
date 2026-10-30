@@ -201,15 +201,20 @@
                                     <button type="button" class="btn-today" data-target="masuriRefDate" onclick="setToday('masuriRefDate')">AZI</button>
                                 </div>
                             </div>
-                            <div>
-                                <label for="masuriDays">Adaugă zile</label>
+                            <div class="ev-preventive-days-field">
+                                <label>Adaugă zile</label>
                                 <div class="ev-preventive-days-control" role="group" aria-label="Durată măsură preventivă">
-                                    <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="30" aria-pressed="false">30 zile</button>
-                                    <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="60" aria-pressed="false">60 zile</button>
-                                    <input type="number" id="masuriDays" value="0" min="0" placeholder="Manual" inputmode="numeric" aria-label="Număr de zile — valoare manuală">
+                                    <div class="ev-preventive-days-quick">
+                                        <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="30" aria-pressed="false">30 zile</button>
+                                        <button type="button" class="btn btn-outline btn-sm ev-preventive-days-preset" data-masuri-days="60" aria-pressed="false">60 zile</button>
+                                    </div>
+                                    <div class="ev-preventive-days-custom">
+                                        <label for="masuriDays">Zile personalizate</label>
+                                        <input type="number" id="masuriDays" value="0" min="0" placeholder="0" inputmode="numeric" aria-label="Număr de zile personalizat">
+                                    </div>
                                 </div>
                             </div>
-                            <div><label for="masuriResult">Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
+                            <div class="ev-preventive-result-field"><label for="masuriResult">Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
                         </div>
                         <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
                     </div>
