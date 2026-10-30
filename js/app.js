@@ -645,6 +645,8 @@ document.addEventListener('DOMContentLoaded', function() {
     applyTheme();
     updateCaseBadge();
     restoreAutoSave();
+    const birthDateInput = document.getElementById('birthDate');
+    if (birthDateInput) birthDateInput.dataset.touched = 'false';
     syncPrisonReceivedControl();
 
     sexToggle.addEventListener('change', updateSexUI);
@@ -654,6 +656,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('birthDate').addEventListener('input', updAgeTag);
+    document.getElementById('birthDate').addEventListener('change', function() {
+        this.dataset.touched = 'true';
+        updAgeTag();
+    });
     document.getElementById('birthDate').addEventListener('blur', function() {
         this.dataset.touched = 'true';
         updAgeTag();
