@@ -1,0 +1,664 @@
+/* Inmate Pocket Calculator — canonical mobile policy.
+ * Principiu: pagina se derulează normal; singurul element persistent este bottom nav.
+ * Acest fișier înlocuiește straturile legacy pwa-mobile / no-floating / bottom-nav-clearance / runtime-fixes.
+ */
+
+.ev-shell__brand-copy {
+  display:flex;
+  align-items:baseline;
+  gap:0;
+  min-width:0;
+  white-space:nowrap;
+}
+.ev-shell__brand-home {
+  color:inherit;
+  text-decoration:none;
+  flex:0 0 auto;
+}
+.ev-shell__brand-home:hover,
+.ev-shell__brand-home:focus-visible {
+  color:var(--ev-accent-strong, #7aa7ff);
+}
+.ev-shell__brand-meta {
+  margin-left:2px;
+  color:var(--ev-text-secondary, #94a3b8);
+  font-size:.66rem;
+  font-weight:650;
+}
+.ev-shell__brand-meta a {
+  color:inherit;
+  text-decoration:none;
+}
+.ev-shell__brand-meta a:hover,
+.ev-shell__brand-meta a:focus-visible {
+  color:var(--ev-accent-strong, #7aa7ff);
+  text-decoration:underline;
+}
+
+/* Offline status is ordinary content, not a floating overlay. */
+.ev-offline-badge {
+  position:static !important;
+  max-width:calc(100% - 24px);
+  margin:8px auto;
+  padding:7px 11px;
+  border:1px solid rgba(245,158,11,.5);
+  border-radius:10px;
+  background:rgba(15,23,42,.94);
+  color:#fbbf24;
+  box-shadow:none;
+  font-size:.7rem;
+  font-weight:850;
+  letter-spacing:.02em;
+  text-align:center;
+}
+html.ev-offline .ev-shell__brand::after {
+  content:'offline';
+  margin-left:6px;
+  font-size:.62rem;
+  font-weight:800;
+  color:#f59e0b;
+}
+
+@media (max-width:600px) {
+  html { -webkit-text-size-adjust:100%; }
+  .ev-shell__brand-copy {
+    display:grid;
+    align-items:center;
+    line-height:1.05;
+    white-space:normal;
+  }
+  .ev-shell__brand-home strong { font-size:.78rem; }
+  .ev-shell__brand-meta {
+    margin:2px 0 0;
+    max-width:56vw;
+    font-size:.57rem;
+    line-height:1.15;
+    white-space:normal;
+  }
+  html.ev-standalone body { min-height:100dvh; }
+  html.ev-ios.ev-standalone .ev-shell { padding-top:env(safe-area-inset-top, 0px); }
+  html.ev-ios input,
+  html.ev-ios select,
+  html.ev-ios textarea { font-size:16px !important; }
+}
+
+@media (max-width:760px) {
+  html,
+  html.ev-mobile-nav-layout {
+    width:100%;
+    height:auto !important;
+    min-height:100% !important;
+    max-height:none !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+  }
+
+  body,
+  html.ev-mobile-nav-layout body {
+    width:100%;
+    height:auto !important;
+    min-height:100vh !important;
+    min-height:100dvh !important;
+    max-height:none !important;
+    display:block !important;
+    margin:0 !important;
+    padding-bottom:calc(96px + constant(safe-area-inset-bottom)) !important;
+    padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow-x:hidden !important;
+    overflow-y:visible !important;
+  }
+
+  /* Fără viewport-uri de scroll interne. */
+  html.ev-mobile-nav-layout body > .container,
+  html.ev-mobile-nav-layout body > main,
+  html.ev-mobile-nav-layout body > .app-shell,
+  html.ev-mobile-nav-layout body > .app-shell > main,
+  #main-content,
+  main {
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    flex:none !important;
+    overflow:visible !important;
+    -webkit-overflow-scrolling:auto;
+    overscroll-behavior-y:auto;
+    scroll-padding-bottom:96px;
+  }
+
+  /* Toate suprafețele operaționale rămân în flux normal. */
+  .ev-shell,
+  .ev-shell__bar,
+  .ev-shell__module,
+  body > .site-header,
+  body > .topbar,
+  body > .app-shell > .topbar,
+  .ev-operational-search,
+  .ev-calc-mode,
+  body.ev-quick-mode .btn-row,
+  body.ev-unified[data-ev-page="pedepse"] .btn-row,
+  body.ev-unified[data-ev-page^="semnalmente"] .analysis-panel,
+  body.ev-unified[data-ev-page="instructaj"] .sidebar,
+  body.ev-unified[data-ev-page^="ofiter"] .quiz-top,
+  body.ev-unified[data-ev-page^="contopiri"] .legal-box h4,
+  body.ev-unified[data-ev-page="ai"] .ai-table th,
+  .category-viewbar,
+  .workflow,
+  .filters,
+  .page-actions {
+    position:static !important;
+    inset:auto !important;
+    top:auto !important;
+    right:auto !important;
+    bottom:auto !important;
+    left:auto !important;
+    z-index:auto !important;
+    transform:none !important;
+    -webkit-transform:none !important;
+  }
+
+  /* Singurul element persistent al aplicației. */
+  .ev-mobile-nav,
+  html.ev-mobile-nav-layout .ev-mobile-nav {
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    top:auto !important;
+    width:100% !important;
+    z-index:10000 !important;
+    padding-bottom:calc(5px + constant(safe-area-inset-bottom)) !important;
+    padding-bottom:calc(5px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .ev-mobile-nav > a,
+  .ev-mobile-nav > button { min-height:50px !important; }
+  .ev-mobile-nav > .ev-mobile-more-sheet { position:absolute !important; }
+
+  :where(button, a, input, select, textarea, [tabindex]):not(.ev-mobile-nav *) {
+    scroll-margin-bottom:92px;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  summary { touch-action:manipulation; }
+  button,
+  .btn,
+  input,
+  select { min-height:44px; }
+  input,
+  select,
+  textarea { font-size:16px !important; }
+
+  /* Pedepse: calculul este acțiune normală, nu bară sticky. */
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    min-height:0 !important;
+    margin:12px 0 16px !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row #calcBtn { width:100% !important; }
+
+  /* Pedepse: ANI / LUNI / ZILE pe un singur rând în toate modurile. */
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration {
+    display:grid !important;
+    grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+    gap:8px !important;
+    align-items:end !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration > * { min-width:0 !important; }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration label { font-size:.69rem !important; }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration input {
+    width:100% !important;
+    min-width:0 !important;
+    text-align:center !important;
+    padding-inline:5px !important;
+  }
+
+  body.ev-unified[data-ev-page="instructaj"] .ev-operational-search {
+    margin:8px auto 12px !important;
+  }
+
+  #main-content > :last-child,
+  main > :last-child { margin-bottom:20px !important; }
+}
+
+html.ev-virtual-keyboard-open .ev-mobile-nav { display:none !important; }
+html.ev-virtual-keyboard-open body { padding-bottom:12px !important; }
+
+@media (min-width:761px) {
+  html.ev-mobile-nav-layout,
+  html.ev-mobile-nav-layout body {
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+}
+
+/* Priority 1 — compact, readable mobile workflow for the sentence calculator. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+    gap:8px;
+    margin:8px 0 12px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+    max-width:18ch;
+    margin:0;
+    font-size:clamp(1.35rem, 5.2vw, 1.7rem);
+    line-height:1.16;
+    text-wrap:balance;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+    max-width:48ch;
+    margin:8px 0 0;
+    font-size:.88rem;
+    line-height:1.45;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__meta {
+    gap:6px;
+    margin-top:8px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode { margin:0 0 12px; }
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools {
+    margin-block:10px;
+    padding:14px;
+    border-radius:14px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #main-content .card > h3 {
+    margin:0 0 10px;
+    font-size:.82rem;
+    line-height:1.35;
+    letter-spacing:.035em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .form-grid { gap:10px; }
+  body.ev-unified[data-ev-page="pedepse"] .form-grid > div,
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div,
+  body.ev-unified[data-ev-page="pedepse"] .non-exec-row > div { min-width:0; }
+  body.ev-unified[data-ev-page="pedepse"] input:not([type="checkbox"]):not([type="radio"]),
+  body.ev-unified[data-ev-page="pedepse"] select,
+  body.ev-unified[data-ev-page="pedepse"] textarea {
+    max-width:100%;
+    border-radius:10px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row,
+  body.ev-unified[data-ev-page="pedepse"] .non-exec-row {
+    gap:8px;
+    margin:0 0 10px;
+    padding:10px;
+    border:1px solid var(--ev-border, rgba(148,163,184,.22));
+    border-radius:12px;
+    background:var(--ev-surface-raised, rgba(148,163,184,.045));
+  }
+  body.ev-unified[data-ev-page="pedepse"] #errorContainer.visible {
+    margin:10px 0;
+    padding:12px;
+    border-radius:12px;
+    line-height:1.45;
+    scroll-margin-block:16px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin:12px 0 14px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row > button {
+    width:100%;
+    min-width:0;
+    min-height:46px;
+    margin:0;
+    padding:10px 8px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    line-height:1.25;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row #calcBtn {
+    grid-column:1 / -1;
+    min-height:50px;
+    font-size:.95rem;
+    font-weight:800;
+    letter-spacing:.025em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard {
+    margin-top:12px;
+    padding:14px;
+    border-color:color-mix(in srgb, var(--ev-accent, #4f8cff) 30%, var(--ev-border, #334155));
+  }
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard > h3 { margin-bottom:12px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result { padding:14px; border-radius:12px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result > strong {
+    display:block;
+    margin:4px 0 12px;
+    font-size:clamp(1.7rem, 8vw, 2.15rem);
+    line-height:1.1;
+    overflow-wrap:anywhere;
+    font-variant-numeric:tabular-nums;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result__grid { gap:8px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result__grid > div {
+    min-width:0;
+    padding:10px;
+    border-radius:10px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-quick-result__grid b {
+    overflow-wrap:anywhere;
+    font-variant-numeric:tabular-nums;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #toggleStepsBtn {
+    width:100%;
+    min-height:46px;
+    white-space:normal;
+  }
+}
+@media (max-width:380px) {
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools,
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard { padding:12px; }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row > button { font-size:.76rem; }
+}
+
+/* Priority 2 — clearer mobile workflow for the sentence-merger module. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page^="contopiri"] .container {
+    width:100%;
+    max-width:100%;
+    padding-inline:10px !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-module-intro {
+    margin:8px 0 14px;
+    gap:7px;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-module-intro h1 {
+    margin:0;
+    font-size:clamp(1.45rem,5.5vw,1.85rem);
+    line-height:1.12;
+    text-wrap:balance;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-module-intro > p:last-child {
+    margin:5px 0 0;
+    font-size:.88rem;
+    line-height:1.45;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] #penaltyRowsContainer {
+    display:grid;
+    gap:10px;
+    margin:10px 0 12px;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row {
+    grid-template-columns:repeat(3,minmax(0,1fr)) 44px !important;
+    align-items:end;
+    min-width:0;
+    gap:8px !important;
+    padding:11px !important;
+    margin:0 !important;
+    background:var(--ev-surface-raised,rgba(148,163,184,.045));
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row > div { min-width:0; }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row label {
+    display:block;
+    margin-bottom:5px;
+    font-size:.7rem;
+    line-height:1.25;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row input,
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row select {
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100%;
+    padding-inline:6px;
+    border-radius:9px;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row > div:nth-child(4) {
+    grid-column:1 / -2;
+    grid-row:2;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row > .btn-danger {
+    grid-column:4;
+    grid-row:2;
+    width:44px !important;
+    min-width:44px !important;
+    min-height:44px;
+    padding:0 !important;
+    font-size:1rem;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] #penaltyRowsContainer + button,
+  body.ev-unified[data-ev-page^="contopiri"] #penaltyRowsContainer + button + button {
+    width:100%;
+    min-height:46px;
+    margin:4px 0;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] #mergeResult {
+    margin-top:14px;
+    padding:14px;
+    border-radius:14px;
+    overflow-wrap:anywhere;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] #mergeResult .big-result {
+    display:block;
+    margin:0 0 12px;
+    font-size:clamp(1.35rem,6.5vw,1.9rem) !important;
+    line-height:1.2;
+    font-weight:900;
+    font-variant-numeric:tabular-nums;
+    overflow-wrap:anywhere;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] #mergeResult .detail {
+    font-size:.87rem;
+    line-height:1.6;
+    overflow-wrap:anywhere;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-transfer {
+    min-height:48px;
+    white-space:normal;
+    line-height:1.3;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-result-details {
+    margin-top:10px;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-result-details > summary,
+  body.ev-unified[data-ev-page^="contopiri"] .ev-legal-details > summary {
+    min-height:46px;
+    display:flex;
+    align-items:center;
+    padding:12px 14px;
+    line-height:1.35;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-result-details .detail {
+    padding:0 12px 12px;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-legal-details {
+    margin:12px 0 22px;
+    overflow:visible;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-legal-details[open] > .legal-box {
+    max-height:none !important;
+    overflow:visible !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-legal-details .legal-box {
+    padding:12px;
+    font-size:.84rem;
+    line-height:1.55;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-legal-details .legal-box h4 {
+    margin:16px 0 8px;
+    font-size:.88rem;
+    line-height:1.4;
+  }
+}
+@media (max-width:380px) {
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row {
+    gap:6px !important;
+    padding:9px !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row label { font-size:.66rem; }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row input,
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row select { font-size:.88rem !important; }
+}
+
+/* Priority 3 — consistent navigation states and accessible touch targets across modules. */
+.ev-shell__nav a:focus-visible,
+.ev-mobile-nav a:focus-visible,
+.ev-mobile-nav button:focus-visible,
+.ev-mobile-more-sheet a:focus-visible,
+.ev-mobile-more-sheet button:focus-visible {
+  outline:3px solid var(--ev-accent-strong,#7aa7ff);
+  outline-offset:2px;
+}
+.ev-shell__nav a[aria-current="page"] {
+  font-weight:850;
+  color:var(--ev-accent-strong,#7aa7ff);
+}
+@media (max-width:760px) {
+  .ev-mobile-nav > a[aria-current="page"] {
+    position:relative;
+    font-weight:900;
+  }
+  .ev-mobile-nav > a[aria-current="page"]::before {
+    content:"";
+    position:absolute;
+    top:2px;
+    left:50%;
+    width:20px;
+    height:3px;
+    border-radius:999px;
+    background:var(--ev-accent-strong,#7aa7ff);
+    transform:translateX(-50%);
+  }
+  .ev-mobile-nav > a,
+  .ev-mobile-nav > button {
+    min-height:50px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .ev-mobile-more-sheet {
+    max-height:min(70dvh,520px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  .ev-mobile-more-sheet > a {
+    min-height:46px;
+    display:flex;
+    align-items:center;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ev-mobile-nav > a,
+  .ev-mobile-nav > button,
+  .ev-mobile-more-sheet > a {
+    transition:background-color .15s ease,color .15s ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-mobile-nav *,
+  .ev-mobile-more-sheet * {
+    scroll-behavior:auto !important;
+    transition:none !important;
+    animation:none !important;
+  }
+}
+
+
+/* Câmpuri pentru valori mari: perioade deduse, recurs compensatoriu și perioade neexecutate. */
+body.ev-unified[data-ev-page="pedepse"] :is(.ded-days, .ne-days, .manual-days) {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding-inline: 8px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:nth-child(4) {
+  min-width: 0 !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #manualDeductionsContainer .period-row > div:first-child {
+  min-width: 0;
+}
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:nth-child(4) {
+    grid-column: 1 / 3 !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > .btn-danger {
+    grid-column: 3 !important;
+    grid-row: 3 !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #manualDeductionsContainer .period-row {
+    grid-template-columns: minmax(0, 1fr) 44px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #manualDeductionsContainer .manual-days {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+
+/* Deduceri: câmpul Zile folosește aceeași lățime ca perioadele adăugate, cu X separat. */
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row {
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:nth-child(4) {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:nth-child(4) .ded-days {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > .btn-danger {
+    grid-column: 2 !important;
+    grid-row: 4 !important;
+    justify-self: end;
+  }
+}
+
+
+/* Spațiere uniformă în interiorul cardurilor cu perioade și câmpuri de zile. */
+body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) {
+  row-gap: 12px;
+  column-gap: 12px;
+  padding: 12px;
+}
+body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) > div {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+}
+body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) label {
+  display: block;
+  margin: 0;
+  min-height: 1.4em;
+  line-height: 1.4;
+}
+body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) input,
+body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) select {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) {
+    row-gap: 12px !important;
+    column-gap: 10px !important;
+    padding: 12px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] :is(.deduction-row, .non-exec-row, #manualDeductionsContainer .period-row) > div {
+    gap: 6px !important;
+  }
+}
