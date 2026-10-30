@@ -68,11 +68,19 @@ function updAgeTag() {
     const b = document.getElementById('birthDate');
     const tag = document.getElementById('ageTag');
     if (!b || !tag) return;
-    const bd = parseDate(b.value.trim());
-    if (!bd) {
-        tag.innerHTML = '<small>Format invalid</small>';
+    const raw = b.value.trim();
+    const bd = parseDate(raw);
+    if (!raw) {
+        tag.textContent = '';
+        tag.hidden = true;
         return;
     }
+    if (!bd) {
+        tag.innerHTML = b.dataset.touched === 'true' ? '<small>Format invalid</small>' : '';
+        tag.hidden = !tag.innerHTML;
+        return;
+    }
+    tag.hidden = false;
     const a = ageExact(bd, today());
     const articleValue = document.getElementById('liberationArticle')?.value || '';
     const cat = getAgeCategoryAtDate(bd, today(), currentSex, articleValue);
