@@ -1,0 +1,57 @@
+/* Titluri de modul — aliniere și tipografie comune, încărcat ultimul în fiecare pagină. */
+body.ev-unified .ev-shell__module {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: min(100%, var(--ev-shell-max, 1240px)) !important;
+  max-width: 1240px !important;
+  min-height: 0 !important;
+  margin: 0 auto 12px !important;
+  padding: 0 max(var(--ev-shell-pad, 18px), env(safe-area-inset-left, 0px)) !important;
+  text-align: left !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.ev-unified .ev-shell__module h1 {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--ev-text, #182033) !important;
+  font-family: var(--ev-font, system-ui, sans-serif) !important;
+  font-size: clamp(1.35rem, 1.9vw, 1.7rem) !important;
+  font-weight: 850 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.035em !important;
+  text-align: left !important;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+body.ev-unified .ev-shell__module .ev-shell__badge {
+  display: inline-flex;
+  margin-top: 6px;
+}
+
+@media (min-width: 761px) {
+  body.ev-unified[data-ev-page="contopiri"] .ev-shell__module {
+    width: min(calc(100% - 48px), 1240px) !important;
+    padding-inline: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.ev-unified .ev-shell__module {
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    padding-inline: max(14px, env(safe-area-inset-left, 0px)) !important;
+  }
+  body.ev-unified .ev-shell__module h1 {
+    font-size: clamp(1.25rem, 5vw, 1.5rem) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -.025em !important;
+  }
+}
