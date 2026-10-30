@@ -95,6 +95,9 @@ assert.ok(shell.includes('@media (max-width: 680px)'), 'Shell-ul universal trebu
 assert.ok(shell.includes('.ev-shell__calculator'), 'Headerul comun trebuie să stilizeze pictograma calculatorului');
 assert.ok(theme.includes('ev-shell__calculator'), 'Headerul comun trebuie să afișeze pictograma calculatorului în loc de IPC');
 assert.ok(version.includes('ev-shell__calculator'), 'Controllerul de versiune trebuie să păstreze pictograma calculatorului');
+assert.ok(shell.includes('.ev-shell__calculator'), 'Headerul comun trebuie să stilizeze pictograma calculatorului');
+assert.ok(theme.includes('ev-shell__calculator'), 'Headerul comun trebuie să afișeze pictograma calculatorului în loc de IPC');
+assert.ok(version.includes('ev-shell__calculator'), 'Controllerul de versiune trebuie să păstreze pictograma calculatorului');
 
 const loaders = {
   'nucleu': read('index.html'),
