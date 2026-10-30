@@ -1,7 +1,7 @@
 /* Inmate Pocket Calculator — root PWA service worker */
 'use strict';
 
-const VERSION = 'v78';
+const VERSION = 'v79';
 const STATIC_CACHE = `ipc-static-${VERSION}`;
 const RUNTIME_CACHE = `ipc-runtime-${VERSION}`;
 const PREFIXES = ['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-'];
