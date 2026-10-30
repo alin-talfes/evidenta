@@ -138,3 +138,25 @@
     gap: 7px !important;
   }
 }
+
+
+/* Desktop Web — formular contopiri: coloane proporționale și acțiuni clare. */
+@media (min-width: 761px) {
+ body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns:88px 88px 88px minmax(320px,1fr) 44px !important; align-items:end !important; gap:12px !important; }
+ body.ev-unified[data-ev-page="contopiri"] .penalty-row input[type="number"] { width:100% !important; max-width:88px !important; text-align:center; }
+ body.ev-unified[data-ev-page="contopiri"] .penalty-row select, body.ev-unified[data-ev-page="contopiri"] .penalty-row input { height:40px !important; }
+ body.ev-unified[data-ev-page="contopiri"] .penalty-row select { width:100% !important; min-width:0 !important; }
+ body.ev-unified[data-ev-page="contopiri"] .penalty-row .btn-danger { width:44px !important; min-width:44px !important; height:44px !important; min-height:44px !important; display:inline-flex !important; align-items:center; justify-content:center; color:#fff !important; background:#c62828 !important; border:1px solid #a91f1f !important; border-radius:9px !important; font-weight:850 !important; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-actions > button { min-width:170px; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-empty { min-height:170px; margin-top:20px; padding:28px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; text-align:center; border:1px dashed var(--ev-border-strong,#cbd5e1); border-radius:14px; background:var(--ev-surface-2,#f8fafc); color:var(--ev-text-secondary,#64748b); }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-empty[hidden] { display:none !important; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-empty strong { color:var(--ev-text); font-size:.92rem; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-empty p { max-width:620px; margin:0; line-height:1.5; font-size:.82rem; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-empty__mark { width:38px; height:38px; display:grid; place-items:center; border-radius:50%; background:var(--ev-accent-soft); color:var(--ev-accent-strong); font-size:1.15rem; font-weight:850; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-analytics-settings { position:static !important; inset:auto !important; transform:none !important; display:flex !important; width:min(calc(100% - 48px),1240px) !important; max-width:1240px; margin:22px auto 0 !important; padding:14px 0 10px !important; border-top:1px solid var(--ev-border,#dbe2ea); justify-content:flex-end !important; }
+ body.ev-unified[data-ev-page="contopiri"] .ev-analytics-settings button { color:var(--ev-accent-strong); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+}
+@media (min-width:761px) and (max-width:1050px) {
+ body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns:76px 76px 76px minmax(240px,1fr) 44px !important; gap:9px !important; }
+}
