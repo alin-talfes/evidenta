@@ -1158,3 +1158,55 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     margin:0 0 12px !important;
   }
 }
+
+
+/* Contopiri — stare inițială lizibilă, separată vizual de formular. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-empty {
+    box-sizing:border-box !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:9px !important;
+    width:100% !important;
+    min-height:0 !important;
+    margin:16px 0 0 !important;
+    padding:20px 16px !important;
+    border:1px solid var(--ev-border,#d6dfeb) !important;
+    border-radius:14px !important;
+    background:var(--ev-surface-2,#f7f9fc) !important;
+    color:var(--ev-text-secondary,#53647a) !important;
+    text-align:center !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-empty__mark {
+    display:grid !important;
+    place-items:center !important;
+    width:40px !important;
+    height:40px !important;
+    min-width:40px !important;
+    margin:0 0 2px !important;
+    border-radius:50% !important;
+    background:var(--ev-accent-soft,#eaf0ff) !important;
+    color:var(--ev-accent-strong,#2854d8) !important;
+    font-size:1.2rem !important;
+    font-weight:850 !important;
+    line-height:1 !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-empty strong {
+    display:block !important;
+    margin:0 !important;
+    color:var(--ev-text,#172033) !important;
+    font-size:1rem !important;
+    font-weight:800 !important;
+    line-height:1.35 !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .ev-contopiri-empty p {
+    max-width:34rem !important;
+    margin:0 !important;
+    color:var(--ev-text-secondary,#53647a) !important;
+    font-size:.9rem !important;
+    line-height:1.5 !important;
+    text-wrap:pretty;
+  }
+}
