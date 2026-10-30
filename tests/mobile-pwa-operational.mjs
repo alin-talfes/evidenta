@@ -257,7 +257,7 @@ assert.ok(sw.includes("if (url.pathname.endsWith('/version.json')) return true;"
 assert.ok(sw.includes("['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-']"), 'Activarea trebuie să curețe și cache-urile cu prefixul legacy.');
 assert.ok(sw.includes("isCriticalRuntime(url) || ['script', 'style'].includes(request.destination)"), 'Scripturile și stilurile trebuie revalidate din rețea înainte de folosirea cache-ului.');
 assert.ok(sw.includes('const cached = await caches.match(request);'), 'Potrivirea normală din cache trebuie să respecte cheia de versiune din URL.');
-assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
+for (const stylesheet of ['operational-upgrades','mobile','mobile-modules','pedepse-modes-v3','disclosure-hardening']) assert.ok(sw.includes(stylesheet), `SW trebuie să recunoască ${stylesheet}.css`);
 assert.ok(sw.includes('./js/pedepse-optional.js'));
 assert.ok(sw.includes('pedepse-optional|deduction-ui'));
 assert.ok(!sw.includes('pedepse-optional-fix-v2'));
