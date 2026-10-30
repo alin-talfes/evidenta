@@ -66,7 +66,7 @@ assert.ok(page.includes('id="restCard" hidden'), 'Restul rămas trebuie colapsat
 assert.ok(!page.includes('id="toggleStepsBtn"'), 'Butonul vechi pentru pași trebuie eliminat.');
 assert.ok(page.includes('data-ev-two-modes="true"'), 'Selectorul trebuie să conțină exact două moduri.');
 assert.ok(page.includes('data-mode="full" class="is-active" aria-pressed="true">CALCUL PEDEAPSĂ</button>'), 'Calculul pedepsei trebuie să fie modul implicit.');
-assert.ok(page.includes('data-mode="preventive" aria-pressed="false">MĂSURI PREVENTIVE</button>'), 'Măsurile preventive trebuie să fie al doilea mod.');
+assert.ok(page.includes('data-mode="preventive" aria-pressed="false">ALTE CALCULE</button>'), 'Măsurile preventive trebuie să fie al doilea mod.');
 assert.ok(!page.includes('Calcul rapid') && !page.includes('Calcul complet LC'), 'Etichetele vechi trebuie eliminate din interfață.');
 assert.ok(operational.includes("let activeMode = 'full';"), 'Modul inițial trebuie să fie calculul pedepsei.');
 assert.ok(operational.includes("return value === 'preventive' ? 'preventive' : 'full';"), 'Nu trebuie să mai existe un mod rapid selectabil.');
