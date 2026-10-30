@@ -2,7 +2,7 @@
   "use strict";
   const links = [
     ["Politica de confidențialitate", "privacy-policy.html"],
-    ["Termeni și condiții", "terms.html"],
+    ["Termeni de utilizare", "terms.html"],
     ["Politica privind cookie-urile", "cookie-policy.html"],
     ["Rambursări și retragere", "refund-policy.html"],
     ["Accesibilitate", "accessibility.html"],
