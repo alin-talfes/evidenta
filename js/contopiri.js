@@ -3,6 +3,10 @@ const { toDays, fromDays, formatDuration, calculate } = ContopiriCore;
         // ===== Gestionare rânduri =====
         function addPenaltyRow() {
             const container = document.getElementById('penaltyRowsContainer');
+            const emptyState = document.getElementById('contopiriEmptyState');
+            const resultBox = document.getElementById('mergeResult');
+            if (emptyState) emptyState.hidden = false;
+            if (resultBox) resultBox.style.display = 'none';
             const row = document.createElement('div');
             row.className = 'penalty-row';
             row.innerHTML = `
@@ -74,6 +78,8 @@ const { toDays, fromDays, formatDuration, calculate } = ContopiriCore;
 
             const resultDiv = document.getElementById('mergeResult');
             resultDiv.style.display = 'block';
+            const emptyState = document.getElementById('contopiriEmptyState');
+            if (emptyState) emptyState.hidden = true;
             resultDiv.innerHTML = `
                 <div class="big-result">PEDEAPSA FINALĂ: ${formatDuration(finalDuration)}</div>
                 <div class="detail">${details.join('<br>')}</div>
