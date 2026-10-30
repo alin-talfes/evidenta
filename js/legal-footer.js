@@ -1,5 +1,7 @@
 (() => {
   "use strict";
+  const scriptUrl = new URL(document.currentScript?.src || "js/legal-footer.js", location.href);
+  const rootUrl = new URL("../", scriptUrl);
   const links = [
     ["Politica de confidențialitate", "privacy-policy.html"],
     ["Termeni de utilizare", "terms.html"],
@@ -16,12 +18,10 @@
     const footer = document.createElement("footer");
     footer.className = "ev-legal-footer";
     footer.setAttribute("aria-label", "Informații juridice");
-    const here = new URL(document.currentScript?.src || location.href, location.href);
-    const root = new URL("../", here);
     for (const [label, href] of links) {
       const a = document.createElement("a");
       a.textContent = label;
-      a.href = new URL(href, root).href;
+      a.href = new URL(href, rootUrl).href;
       footer.appendChild(a);
     }
     const settings = document.createElement("button");
@@ -29,7 +29,7 @@
     settings.textContent = "Setări statistici";
     settings.addEventListener("click", () => {
       if (window.EvidentaAnalytics?.openSettings) window.EvidentaAnalytics.openSettings();
-      else window.location.href = new URL("index.html#analytics-settings", root).href;
+      else window.location.href = new URL("index.html#analytics-settings", rootUrl).href;
     });
     settings.setAttribute("aria-label", "Deschide setările de consimțământ pentru statistici");
     footer.appendChild(settings);
