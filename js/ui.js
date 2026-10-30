@@ -325,3 +325,40 @@ function formatDateWithWarning(date) {
     else if (diff <= 30) warning = ' <span class="result-warning soon">(Atenție)</span>';
     return `${fmtDate(date)}${warning}`;
 }
+
+
+// Păstrează lizibilitatea valorilor de zile cu patru sau mai multe cifre.
+(function improveLargeDayFields() {
+    if (window.__EVIDENTA_LARGE_DAY_FIELDS__) return;
+    window.__EVIDENTA_LARGE_DAY_FIELDS__ = true;
+
+    const selector = '.ded-days, .ne-days, .manual-days';
+    const sync = (root = document) => {
+        const fields = [];
+        if (root.matches?.(selector)) fields.push(root);
+        root.querySelectorAll?.(selector).forEach(field => fields.push(field));
+        fields.forEach(field => {
+            const value = String(field.value || '').trim();
+            field.classList.toggle('has-large-day-value', /^\\d{4,}$/.test(value));
+            field.setAttribute('size', String(Math.max(5, Math.min(value.length || 5, 9))));
+        });
+    };
+
+    document.addEventListener('input', event => {
+        if (event.target.matches(selector)) sync(event.target);
+    });
+    document.addEventListener('change', event => {
+        if (event.target.matches(selector)) sync(event.target);
+    });
+    const observer = new MutationObserver(records => {
+        records.forEach(record => record.addedNodes.forEach(node => {
+            if (node.nodeType === 1) sync(node);
+        }));
+    });
+    const start = () => {
+        sync();
+        observer.observe(document.body, { childList: true, subtree: true });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
+    else start();
+})();
