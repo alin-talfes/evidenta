@@ -17,5 +17,5 @@
     <circle cx="164" cy="270" r="15"/><circle cx="220" cy="270" r="15"/><circle cx="276" cy="270" r="15"/><circle cx="332" cy="270" r="15"/>
     <circle cx="164" cy="326" r="15"/><circle cx="220" cy="326" r="15"/><circle cx="276" cy="326" r="15"/><circle cx="332" cy="326" r="15"/>
   </g>
-  <text x="256" y="202" text-anchor="middle" fill="#0b1220" font-family="Inter,Arial,sans-serif" font-size="39" font-weight="900" letter-spacing="5">IPC</text>
+  
 </svg>
