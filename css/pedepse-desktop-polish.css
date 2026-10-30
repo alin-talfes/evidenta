@@ -1,0 +1,67 @@
+/* Corecții de interfață pentru calculatorul de pedepse — exclusiv desktop. */
+@media (min-width: 761px) {
+  body.ev-unified[data-ev-page="pedepse"] .sex-toggle-wrapper {
+    display:flex !important; align-items:center; justify-content:flex-start;
+    gap:12px !important; min-width:0; flex-wrap:nowrap;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .sex-label {
+    flex:0 0 auto; white-space:nowrap !important; word-break:normal !important;
+    overflow-wrap:normal !important; min-width:max-content; font-size:.72rem;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .toggle-switch { flex:0 0 auto; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card:first-child .form-grid {
+    grid-template-columns:minmax(190px,1fr) minmax(190px,1fr) minmax(0,.7fr) !important;
+    column-gap:18px !important; row-gap:12px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #ageTag { align-self:end; min-height:38px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-lc-controls-card .form-grid {
+    grid-template-columns:minmax(0,1.3fr) minmax(220px,.7fr) !important;
+    align-items:end !important; gap:16px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-lc-controls-card .toggle-switch {
+    display:flex !important; align-items:center !important; gap:12px !important;
+    min-height:40px; margin:0 !important; white-space:nowrap;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .life-label {
+    display:inline-block; font-size:.78rem !important; line-height:1.35;
+    white-space:nowrap; margin-left:2px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration {
+    display:grid !important; grid-template-columns:repeat(3,minmax(80px,100px)) !important;
+    justify-content:start; gap:14px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration input { width:100% !important; max-width:100px; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-start-date-field {
+    display:flex; flex-direction:column; align-items:stretch; gap:8px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #prisonReceivedControl { align-self:start; padding-top:0; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-prison-same-check {
+    display:flex; align-items:flex-start; gap:9px; margin:2px 0 0 !important;
+    max-width:100%; font-size:.7rem !important; line-height:1.35;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-prison-same-check span { white-space:normal; }
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .top-bar > button { width:100% !important; }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    align-items:stretch; gap:10px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .btn-row > button {
+    width:100% !important; min-width:0; white-space:normal; min-height:42px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools {
+    background:var(--ev-surface, #fff) !important;
+    border:1px solid var(--ev-border, #dbe2ea) !important;
+    border-style:solid !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #main-content .card > h3 {
+    display:flex; align-items:center; min-height:1.3em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .date-wrapper {
+    display:flex !important; align-items:stretch; gap:8px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .date-wrapper input { flex:1 1 auto; min-width:0; }
+  body.ev-unified[data-ev-page="pedepse"] .date-wrapper .btn-today { flex:0 0 58px; }
+}
