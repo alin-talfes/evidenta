@@ -879,3 +879,97 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     text-wrap: balance;
   }
 }
+
+/* Remedieri UX mobile — layout predictibil pentru durata măsurilor preventive și câmpuri tactile. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-control {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    align-items:stretch !important;
+    gap:8px !important;
+    min-width:0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-quick {
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-quick .ev-preventive-days-preset {
+    width:100% !important;
+    min-width:0 !important;
+    min-height:44px !important;
+    white-space:nowrap !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 96px !important;
+    align-items:center !important;
+    gap:8px !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom label,
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-field > label {
+    margin:0 !important;
+    font-size:13px !important;
+    line-height:1.35 !important;
+    letter-spacing:0 !important;
+    text-transform:none !important;
+    white-space:normal !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom #masuriDays {
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:96px !important;
+    min-width:0 !important;
+    min-height:44px !important;
+    font-size:16px !important;
+    text-align:center !important;
+  }
+
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row input,
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row select {
+    font-size:16px !important;
+  }
+
+  body.ev-unified .ev-shell__theme {
+    box-sizing:border-box !important;
+    width:44px !important;
+    min-width:44px !important;
+    min-height:44px !important;
+    padding-inline:0 !important;
+  }
+
+  body.ev-unified .ev-analytics-settings :is(a,button) {
+    box-sizing:border-box !important;
+    min-height:44px !important;
+    padding:10px 12px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+}
+
+@media (max-width:380px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom {
+    grid-template-columns:minmax(0,1fr) 88px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom #masuriDays {
+    max-width:88px !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row label {
+    font-size:12px !important;
+  }
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row input,
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row select {
+    font-size:16px !important;
+  }
+}
+
