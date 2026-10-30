@@ -52,7 +52,7 @@
 
             <div class="ev-calc-mode" data-ev-two-modes="true" role="group" aria-label="Tip calcul">
                 <button type="button" data-mode="full" class="is-active" aria-pressed="true">CALCUL PEDEAPSĂ</button>
-                <button type="button" data-mode="preventive" aria-pressed="false">MĂSURI PREVENTIVE</button>
+                <button type="button" data-mode="preventive" aria-pressed="false">ALTE CALCULE</button>
             </div>
 
             <div class="ev-mobile-lc-details">
@@ -216,6 +216,28 @@
                             <div><label for="masuriResult">Rezultat</label><input type="text" id="masuriResult" readonly class="result-input" tabindex="-1"></div>
                         </div>
                         <p class="help-text">Ziua nr. 1 o reprezintă ziua de referință.</p>
+                    </div>
+                    <div class="card ev-deferral-calculator" aria-labelledby="lc-deferral-heading">
+                        <h3 id="lc-deferral-heading">CALCULATOR AMÂNĂRI LIBERARE CONDIȚIONATĂ</h3>
+                        <div class="form-grid">
+                            <div>
+                                <label for="lcDeferralCommitteeDate">Data comisiei de liberare condiționată</label>
+                                <div class="date-wrapper">
+                                    <input type="text" id="lcDeferralCommitteeDate" class="date-masked" placeholder="zz.ll.aaaa" inputmode="numeric" autocomplete="off">
+                                    <button type="button" class="btn-today" data-target="lcDeferralCommitteeDate" onclick="setToday('lcDeferralCommitteeDate')">AZI</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="lcDeferralMonths">Număr luni amânare (maximum 12)</label>
+                                <input type="number" id="lcDeferralMonths" value="0" min="0" max="12" step="1" inputmode="numeric">
+                            </div>
+                            <div>
+                                <label for="lcDeferralResult">Data rezultat</label>
+                                <input type="text" id="lcDeferralResult" readonly class="result-input" tabindex="-1" aria-live="polite">
+                            </div>
+                        </div>
+                        <p id="lcDeferralError" class="help-text" role="alert" aria-live="polite"></p>
+                        <p class="help-text">Data calculată este cu o zi înaintea datei rezultate prin adăugarea lunilor calendaristice la data comisiei.</p>
                     </div>
                 </div>
             </section>
