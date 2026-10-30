@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Comisie transfer — Evidență PPL</title>
+<link rel="stylesheet" href="../css/style.css?v=44">
+<link rel="stylesheet" href="../css/operational-upgrades.css?v=3">
+<link rel="stylesheet" href="../css/mobile-modules.css?v=1">
+<link rel="stylesheet" href="../css/disclosure-hardening.css?v=4">
+<link rel="stylesheet" href="../css/mobile.css?v=5">
+<link rel="stylesheet" href="../css/module-title-unification.css?v=1">
+<link rel="stylesheet" href="./committee.css?v=1">
+<script src="../js/theme.js?v=47" defer></script>
+<script src="../js/ux-upgrades.js?v=3" defer></script>
+<script src="../js/operational-navigation.js?v=5" defer></script>
+<script src="../js/operational-transfer.js?v=2" defer></script>
+<script src="../js/no-nonoptional-disclosures-v1.js?v=4" defer></script>
+<script src="../js/disclosure-hardening-v2.js?v=2" defer></script>
+<script src="../js/pwa-register.js?v=3" defer></script>
+<script src="../js/version.js?v=46" defer></script>
+<meta name="description" content="Asistent operațional pentru comisia care avizează cererile de transfer ale persoanelor private de libertate.">
+</head>
+<body>
+<main class="container committee-page">
+  <div class="page-actions transfer-page-actions">
+    <a class="btn btn-outline" href="./">ÎNAPOI LA TRANSFER</a>
+    <a class="btn btn-outline" href="../rules/">REGULI TRANSFER</a>
+  </div>
+  <header class="header">
+    <div class="header-inner">
+      <h1>COMISIE TRANSFER</h1>
+      <p class="module-intro">Asistent de lucru pentru încadrarea cererii, verificări, aviz consultativ și urmărirea termenului de răspuns.</p>
+      <div class="subtitle">COMISIA PREVĂZUTĂ LA ART. 32 DIN LEGEA NR. 254/2013</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <h3>ÎNCADRAREA PROCEDURII</h3>
+    <p class="section-help">Alege situația exactă înainte de analiză. Procedurile de mai jos nu sunt interschimbabile.</p>
+    <div class="committee-grid">
+      <div class="committee-field full"><label for="caseType">Tipul situației</label>
+        <select id="caseType">
+          <option value="request">Cerere de transfer formulată de persoana condamnată</option>
+          <option value="admin">Propunere de transfer inițiată de administrație</option>
+          <option value="provisional">Transfer după stabilirea provizorie a regimului</option>
+          <option value="judicial">Transfer solicitat pentru activitatea unui organ judiciar</option>
+          <option value="third">Cerere formulată de aparținător / altă persoană</option>
+          <option value="legal">Persoană arestată preventiv / măsură educativă / altă situație specială</option>
+        </select>
+      </div>
+    </div>
+    <div id="caseGuidance" class="committee-result" style="margin-top:12px" aria-live="polite"></div>
+  </div>
+
+  <div class="card">
+    <h3>GHID OPERAȚIONAL</h3>
+    <div class="committee-tabs" role="tablist" aria-label="Secțiuni comisie transfer">
+      <button type="button" data-tab="workflow" aria-selected="true">Flux de lucru</button>
+      <button type="button" data-tab="criteria" aria-selected="false">Criterii și verificări</button>
+      <button type="button" data-tab="opinions" aria-selected="false">Avize / consultări</button>
+      <button type="button" data-tab="deadline" aria-selected="false">Termen petiție</button>
+      <button type="button" data-tab="templates" aria-selected="false">Modele</button>
+    </div>
+
+    <section class="committee-pane" id="pane-workflow">
+      <h4>Flux pentru cererea de transfer formulată de PPL</h4>
+      <div class="committee-step"><span class="committee-step-number">1</span><div><strong>Primire și înregistrare</strong><p>Înregistrează petiția/cererea, data primirii, petentul, obiectul, destinatarul și termenul. Identifică autorul real și semnătura.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">2</span><div><strong>Verificarea voinței PPL</strong><p>Dacă cererea este formulată de un terț, verifică însușirea expresă. Pentru avocat, verifică reprezentarea și dacă voința clientului rezultă neechivoc; cere clarificări doar când este necesar.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">3</span><div><strong>Pregătirea materialului</strong><p>Centralizează cererea, situația juridică, regimul, domiciliul și motivul invocat, profilarea unității solicitate, datele de capacitate disponibile și informațiile strict relevante de la structurile competente.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">4</span><div><strong>Transmiterea listei către membrii comisiei</strong><p>Lista și tabelul nominal se transmit electronic membrilor cu două zile lucrătoare înaintea ședinței, potrivit art. 75 alin. (1)–(3) din Instrucțiunile OMJ nr. 2.188/C/2022.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">5</span><div><strong>Analiză individualizată și aviz</strong><p>Comisia consemnează explicit avizul favorabil sau negativ și îl motivează prin fapte actuale, verificabile, raportate la criteriile legale. Se utilizează anexa nr. 16 pentru cererile PPL.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">6</span><div><strong>Transmitere și urmărire</strong><p>Tabelul nominal și documentele justificative se înaintează ANP; cererea PPL se transmite numai la solicitarea ANP. După transmitere, cererea intră în mapa de așteptare. Se urmărește soluția finală și termenul petiției.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">7</span><div><strong>Comunicare către PPL</strong><p>Stadiul se comunică fără a prezenta avizul comisiei drept decizie definitivă. Răspunsul/dispoziția finală se aduce la cunoștință potrivit art. 77 din Instrucțiuni.</p></div></div>
+      <div class="anexa-box"><strong>Termen de pregătire:</strong> două zile lucrătoare înaintea ședinței pentru transmiterea listei către membri. <strong>Frecvență:</strong> potrivit art. 32 din Legea nr. 254/2013, activitatea comisiei se desfășoară, de regulă, săptămânal.</div>
+    </section>
+
+    <section class="committee-pane" id="pane-criteria" hidden>
+      <h4>Criterii de analiză individualizată</h4>
+      <p>Art. 71 din Instrucțiuni indică analiza cumulativă și individualizată a elementelor relevante. Apropierea de domiciliu este un criteriu important, dar formularea „de regulă” nu conferă un drept absolut la unitatea aleasă.</p>
+      <div class="committee-checklist" id="criteriaChecklist">
+        <label class="committee-choice"><input type="checkbox">Profilarea penitenciarului solicitată, potrivit deciziei ANP aplicabile</label>
+        <label class="committee-choice"><input type="checkbox">Capacitatea / posibilitatea de primire – numai pe baza datelor actuale disponibile</label>
+        <label class="committee-choice"><input type="checkbox">Sexul, vârsta și categoria persoanei</label>
+        <label class="committee-choice"><input type="checkbox">Situația juridică și regimul de executare</label>
+        <label class="committee-choice"><input type="checkbox">Domiciliul și legătura familială invocată</label>
+        <label class="committee-choice"><input type="checkbox">Motivul concret al solicitării și documentele/datele care îl susțin</label>
+        <label class="committee-choice"><input type="checkbox">Motivele transferurilor anterioare și eventuale schimbări intervenite</label>
+        <label class="committee-choice"><input type="checkbox">Impactul asupra cursurilor, muncii, tratamentului și siguranței</label>
+        <label class="committee-choice"><input type="checkbox">Alte elemente individuale relevante, inclusiv date contradictorii</label>
+      </div>
+      <div class="committee-result warning" style="margin-top:12px"><strong>Regulă de motivare:</strong> nu utiliza formule precum „nu se impune” sau „nu sunt motive întemeiate” fără descrierea faptelor verificate și legătura lor logică cu concluzia comisiei.</div>
+    </section>
+
+    <section class="committee-pane" id="pane-opinions" hidden>
+      <h4>Avize, consultări și date interstructurale</h4>
+      <p>Materialul procedural furnizat nu stabilește o listă universală de avize consultative obligatorii (de tipul unui aviz separat pentru fiecare compartiment). El indică informații relevante care pot fi solicitate structurilor competente, în funcție de motivul cererii și de situația concretă.</p>
+      <div class="committee-grid">
+        <div class="committee-result"><strong>Educație / asistență psihosocială</strong><p>Continuitatea programelor, cursurilor, intervențiilor și legăturilor familiale invocate, în măsura relevanței.</p><span class="committee-muted">Consultare punctuală, nu aviz universal impus de acest material.</span></div>
+        <div class="committee-result"><strong>Muncă / activități profesionale</strong><p>Participarea la activități de muncă sau profesionale și consecințele transferului asupra continuității.</p><span class="committee-muted">Se cere numai când situația o justifică.</span></div>
+        <div class="committee-result"><strong>Siguranța deținerii și regim</strong><p>Date operative actuale relevante pentru compatibilitatea, riscurile și regimul persoanei.</p><span class="committee-muted">Se solicită structurii competente; nu se substituie deciziei comisiei.</span></div>
+        <div class="committee-result"><strong>Medical</strong><p>Date medicale strict necesare atunci când motivul transferului implică sănătatea ori continuitatea tratamentului.</p><span class="committee-muted">Minimizarea datelor și respectarea confidențialității medicale.</span></div>
+        <div class="committee-result"><strong>Evidență / situație juridică</strong><p>Statut juridic actual, regim, termene ori solicitări judiciare și motivele transferurilor anterioare.</p><span class="committee-muted">Date de dosar și evidență, nu un aviz de oportunitate.</span></div>
+        <div class="committee-result"><strong>Profilare / capacitate</strong><p>Compatibilitatea unității solicitate cu profilul aplicabil și date disponibile privind posibilitatea de primire.</p><span class="committee-muted">Nu se afirmă „nu sunt locuri” fără informație oficială actuală.</span></div>
+      </div>
+      <div class="anexa-box" style="margin-top:12px"><strong>Important:</strong> avizul comisiei prevăzute la art. 32 este consultativ și motivat. Pentru cererea PPL, transferul prevăzut de art. 45 alin. (2) din Legea nr. 254/2013 este dispus de directorul general ANP. Consultările interstructurale nu înlocuiesc avizul comisiei și nici competența autorității de decizie.</div>
+    </section>
+
+    <section class="committee-pane" id="pane-deadline" hidden>
+      <h4>Calculator termen petiție — OG nr. 27/2002</h4>
+      <p>Termen standard: 30 de zile de la înregistrare. Prelungirea este de maximum 15 zile, pentru informare/cercetare mai amănunțită, dispusă de conducătorul autorității și cu notificarea prealabilă a petentului. Pentru petițiile transmise de la altă autoritate potrivit art. 6¹, termenul începe de la înregistrarea la autoritatea competentă.</p>
+      <div class="committee-grid">
+        <div class="committee-field"><label for="receivedDate">Data înregistrării la unitatea competentă</label><input type="date" id="receivedDate"></div>
+        <div class="committee-field"><label for="extensionDays">Zile de prelungire aprobate (0–15)</label><input type="number" id="extensionDays" min="0" max="15" step="1" value="0"></div>
+        <div class="committee-field"><label for="extensionNotified">Prelungirea a fost notificată în prealabil?</label><select id="extensionNotified"><option value="no">Nu</option><option value="yes">Da</option></select></div>
+        <div class="committee-field"><label for="wronglyForwarded">Petiție transmisă de altă autoritate conform art. 6¹?</label><select id="wronglyForwarded"><option value="no">Nu</option><option value="yes">Da</option></select></div>
+        <div class="committee-field full"><label for="competentDate">Data înregistrării la autoritatea competentă (dacă e transferată)</label><input type="date" id="competentDate"></div>
+      </div>
+      <div class="committee-actions"><button class="btn btn-primary" type="button" id="calculateDeadline">Calculează termenul</button><button class="btn btn-secondary" type="button" id="todayDeadline">Data de astăzi</button></div>
+      <div id="deadlineResult" class="committee-result" style="margin-top:12px" aria-live="polite">Introdu data înregistrării pentru calcul.</div>
+      <p class="committee-muted">Calculatorul adaugă zile calendaristice și nu mută automat termenul pentru zile nelucrătoare. Verifică regulile generale de calcul al termenelor și programul instituției înainte de stabilirea ultimei zile efective.</p>
+      <div class="committee-result warning"><strong>Alte situații:</strong> petiție greșit îndreptată — transmitere către autoritatea competentă în 5 zile și înștiințarea petentului (art. 6¹); petiție anonimă/neidentificată — art. 7, cu excepțiile introduse prin lege; petiții multiple pe aceeași problemă — conexare (art. 10 alin. (1)); repetare cu același conținut după răspuns — clasare cu mențiune la numărul inițial (art. 10 alin. (2)).</div>
+    </section>
+
+    <section class="committee-pane" id="pane-templates" hidden>
+      <h4>Formulări de bază pentru aviz</h4>
+      <div class="committee-field"><label for="opinionType">Tipul avizului</label><select id="opinionType"><option value="positive">Favorabil</option><option value="negative">Negativ</option></select></div>
+      <div class="committee-field" style="margin-top:10px"><label for="reasons">Motivare individualizată (completează doar fapte verificate)</label><textarea id="reasons" placeholder="Descrie motivul solicitat, datele verificate, compatibilitatea profilării și elementele contrare relevante..."></textarea></div>
+      <div class="committee-field" style="margin-top:10px"><label for="destination">Unitatea / zona solicitată</label><input id="destination" type="text" placeholder="Ex.: Penitenciarul ... / zona ..."></div>
+      <div class="committee-actions"><button class="btn btn-primary" type="button" id="generateOpinion">Generează formularea</button><button class="btn btn-secondary" type="button" id="copyOpinion">Copiază textul</button></div>
+      <textarea id="opinionOutput" rows="8" readonly aria-label="Text generat pentru aviz" style="margin-top:10px"></textarea>
+      <h4 style="margin-top:22px">Repere pentru răspuns</h4>
+      <ul>
+        <li>Aviz favorabil și soluția ANP în așteptare: informează asupra emiterii și transmiterii avizului, precizând caracterul consultativ.</li>
+        <li>Aviz negativ și soluția ANP în așteptare: comunică stadiul și motivarea relevantă, fără a afirma că transferul a fost definitiv respins.</li>
+        <li>Soluția finală ANP a fost primită: redă exact dispoziția/adresa, fără interpretări suplimentare.</li>
+        <li>Cerere de la aparținător neînsușită: comunică lipsa condiției procedurale; nu formula un aviz negativ pe fond.</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="card">
+    <h3>LISTĂ DE CONTROL PENTRU SECRETARIAT</h3>
+    <div class="committee-checklist" id="secretariatChecklist">
+      <label class="committee-choice"><input type="checkbox">Cererea este înregistrată; termenul de răspuns este stabilit.</label>
+      <label class="committee-choice"><input type="checkbox">Solicitantul și însușirea cererii de către PPL au fost verificate, când este cazul.</label>
+      <label class="committee-choice"><input type="checkbox">Obiectul este un transfer efectiv, nu simpla menținere în unitatea actuală.</label>
+      <label class="committee-choice"><input type="checkbox">A fost identificat circuitul: cerere PPL, propunere administrativă, provizoriu sau judiciar.</label>
+      <label class="committee-choice"><input type="checkbox">Situația juridică, regimul și profilarea au fost verificate.</label>
+      <label class="committee-choice"><input type="checkbox">Au fost cerute doar consultările interstructurale relevante pentru motiv.</label>
+      <label class="committee-choice"><input type="checkbox">Lista a fost comunicată membrilor cu două zile lucrătoare înainte, potrivit procedurii.</label>
+      <label class="committee-choice"><input type="checkbox">Anexa utilizată este corectă: nr. 16 pentru cereri PPL; nr. 15 pentru propuneri comisie art. 68–70.</label>
+      <label class="committee-choice"><input type="checkbox">Avizul este motivat concret și semnat de membrii comisiei și secretar.</label>
+      <label class="committee-choice"><input type="checkbox">Tabelul/documentele au fost transmise ANP; cererea originală doar la solicitarea ANP.</label>
+      <label class="committee-choice"><input type="checkbox">Cererea a fost trecută în mapa de așteptare; stadiul este urmărit.</label>
+      <label class="committee-choice"><input type="checkbox">Răspunsul este comunicat în termen și nu confundă avizul cu dispoziția finală.</label>
+    </div>
+  </div>
+  <div class="card">
+    <h3>BAZĂ NORMATIVĂ INDICATĂ ÎN MATERIALUL DE LUCRU</h3>
+    <ul>
+      <li>Legea nr. 254/2013 — art. 32 și art. 45.</li>
+      <li>HG nr. 157/2016 — art. 108.</li>
+      <li>Instrucțiunile aprobate prin OMJ nr. 2.188/C/2022 — art. 68–78, în special art. 71 și art. 73–77.</li>
+      <li>OG nr. 27/2002 — art. 6, art. 6¹, art. 7, art. 8–10. Art. 9 atribuie conducătorului autorității competența de prelungire.</li>
+    </ul>
+    <p class="committee-muted">Material orientativ bazat pe procedura de lucru încărcată, verificată în document la 29.10.2026. Înainte de utilizarea instituțională, verifică forma consolidată în vigoare, decizia ANP de profilare, procedurile și circuitul intern. Modulul nu emite acte administrative și nu substituie analiza comisiei sau decizia ANP.</p>
+    <p><a href="https://legislatie.just.ro/Public/FormaPrintabila/00000G2D6GPC695OJKX1EXX6K2W0RT1P" target="_blank" rel="noopener">Legea nr. 254/2013 — Portal Legislativ</a> · <a href="https://legislatie.just.ro/Public/DetaliiDocumentAfis/290817" target="_blank" rel="noopener">OG nr. 27/2002 — Portal Legislativ</a></p>
+  </div>
+</main>
+<script src="./committee.js?v=1" defer></script>
+</body>
+</html>
