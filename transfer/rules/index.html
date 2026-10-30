@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../css/mobile-modules.css?v=1" />
     <link rel="stylesheet" href="../../css/disclosure-hardening.css?v=4" />
     <link rel="stylesheet" href="../../css/module-responsive.css?v=3" />
-    <link rel="stylesheet" href="../../css/transfer-rules.css?v=1" />
+    <link rel="stylesheet" href="../../css/transfer-rules.css?v=2" />
     <script src="../../js/theme.js?v=48" defer></script>
     <script src="../../js/ux-upgrades.js?v=3" defer></script>
     <script src="../../js/operational-navigation.js?v=5" defer></script>
@@ -26,8 +26,8 @@
     <meta property="og:title" content="Regulile de transfer – Decizia 360/2020">
     <meta property="og:description" content="Anexele și regulile utilizate pentru transfer și profilare.">
     <meta property="og:type" content="website">
-  <link rel="stylesheet" href="../../css/desktop.css?v=7">
-  <link rel="stylesheet" href="../../css/mobile.css?v=7">
+    <link rel="stylesheet" href="../../css/desktop.css?v=7">
+    <link rel="stylesheet" href="../../css/mobile.css?v=7">
 </head>
 <body>
 <div class="container">
@@ -39,10 +39,10 @@
         <h3>FILTRARE RAPIDĂ</h3>
         <div class="filter-container">
             <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon" aria-hidden="true">🔍</span>
                 <input type="search" id="filterInput" placeholder="Caută unitate, județ, regim, categorie..." aria-label="Caută în toate anexele" autocomplete="off" />
             </div>
-            <button class="filter-clear" id="filterClear">✕ Resetează</button>
+            <button class="filter-clear" id="filterClear" type="button">✕ Resetează</button>
             <span class="filter-stats" id="filterStats" role="status" aria-live="polite">Se încarcă anexele…</span>
         </div>
     </div>
@@ -52,15 +52,9 @@
     <div class="card" id="anexa1Card">
         <h3>Anexa 1 – Profilarea unităților</h3>
         <p>Arondarea unităților pe județe și regimuri de custodie pentru persoanele de sex masculin majore.</p>
-        <div class="rules-container" style="overflow-x:auto;">
+        <div class="rules-container">
             <table class="rules-table" id="anexa1Table">
-                <thead>
-                    <tr>
-                        <th>Unitate</th>
-                        <th>Județe deservite</th>
-                        <th>Regimuri de custodie (masculin / major)</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Unitate</th><th>Județe deservite</th><th>Regimuri de custodie (masculin / major)</th></tr></thead>
                 <tbody id="anexa1Body"></tbody>
             </table>
         </div>
@@ -74,15 +68,9 @@
     <div class="card" id="anexa3Card">
         <h3>Anexa 3 – Arondarea pentru primirea de la poliție</h3>
         <p>Unitățile și organele de poliție care depun persoane private de libertate, conform Anexei 3.</p>
-        <div class="rules-container" style="overflow-x:auto;">
+        <div class="rules-container">
             <table class="rules-table" id="anexa3Table">
-                <thead>
-                    <tr>
-                        <th>Unitatea</th>
-                        <th>Organul de poliție care depune</th>
-                        <th>Categorii primite</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Unitatea</th><th>Organul de poliție care depune</th><th>Categorii primite</th></tr></thead>
                 <tbody id="anexa3Body"></tbody>
             </table>
         </div>
