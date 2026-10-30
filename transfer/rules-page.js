@@ -270,7 +270,7 @@
         const filterClear = document.getElementById('filterClear');
         const filterStats = document.getElementById('filterStats');
         const filterEmpty = document.getElementById('filterEmpty');
-        const cards = Array.from(document.querySelectorAll('.card[id^="anexa"][id$="Card"]));
+        const cards = Array.from(document.querySelectorAll('.card[id^="anexa"][id$="Card"]'));
 
         function normalizeSearch(value) {
             return String(value || '')
