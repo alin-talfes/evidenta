@@ -56,13 +56,11 @@ body.ev-unified :is(.card, .panel, .analysis-panel, .results-section, .legal-box
 }
 
 
-/* Remove decorative title cards across all application modules.
-   Keep the headings and supporting text as normal page content. */
+/* Remove decorative title cards without flattening functional headers or panels. */
 body.ev-unified .ev-shell__module,
 body .ev-page-intro,
 body .ev-module-intro,
-body .header,
-body .header-inner {
+body > .container > header.header {
   min-height: 0 !important;
   padding: 0 !important;
   border: 0 !important;
@@ -76,26 +74,26 @@ body.ev-unified .ev-shell__module {
 }
 body .ev-page-intro,
 body .ev-module-intro,
-body .header {
+body > .container > header.header {
   margin: 0 0 16px !important;
 }
 body .ev-page-intro::before,
 body .ev-page-intro::after,
 body .ev-module-intro::before,
 body .ev-module-intro::after,
-body .header::before,
-body .header::after {
+body > .container > header.header::before,
+body > .container > header.header::after {
   content: none !important;
   display: none !important;
 }
 body .ev-page-intro h1,
 body .ev-module-intro h1,
-body .header h1,
+body > .container > header.header h1,
 body.ev-unified .ev-shell__module h1 {
   margin: 0 !important;
 }
 body .ev-page-intro__description,
 body .module-intro,
-body .header .subtitle {
+body > .container > header.header .subtitle {
   margin-top: 6px !important;
 }
