@@ -40,6 +40,11 @@
             mark.innerHTML = '<svg class="ev-shell__calculator" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"></rect><rect x="7" y="5.5" width="10" height="4" rx="1"></rect><path d="M7.5 13h.01M12 13h.01M16.5 13h.01M7.5 16.5h.01M12 16.5h.01M16.5 16.5h.01"></path></svg>';
             mark.setAttribute('aria-label', 'Calculator');
         }
+        const mark = brand?.querySelector('.ev-shell__mark');
+        if (mark) {
+            mark.innerHTML = '<svg class="ev-shell__calculator" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="2.5"></rect><rect x="7" y="5.5" width="10" height="4" rx="1"></rect><path d="M7.5 13h.01M12 13h.01M16.5 13h.01M7.5 16.5h.01M12 16.5h.01M16.5 16.5h.01"></path></svg>';
+            mark.setAttribute('aria-label', 'Calculator');
+        }
         copy.replaceChildren();
 
         const home = document.createElement('a');
