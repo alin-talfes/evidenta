@@ -1,0 +1,130 @@
+/* Contopiri — geometrie desktop și aliniere cu shell-ul aplicației.
+   Exclusiv desktop; regulile mobile existente rămân neschimbate. */
+@media (min-width: 761px) {
+  body.ev-unified[data-ev-page="contopiri"] > .container {
+    box-sizing: border-box !important;
+    width: min(calc(100% - 48px), 1240px) !important;
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 18px 0 24px !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .ev-shell__module {
+    box-sizing: border-box !important;
+    width: min(calc(100% - 48px), 1240px) !important;
+    max-width: 1240px !important;
+    margin: 0 auto 8px !important;
+    padding: 0 !important;
+    text-align: left !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .ev-shell__module h1 {
+    margin: 0 !important;
+    font-size: clamp(1.25rem, 1.7vw, 1.55rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .ev-module-intro {
+    margin: 0 0 12px !important;
+    padding: 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .ev-module-intro h1 {
+    font-size: clamp(1.65rem, 2.2vw, 2rem) !important;
+    line-height: 1.12 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] > .container > .card {
+    box-sizing: border-box !important;
+    margin: 0 0 12px !important;
+    padding: 17px 19px !important;
+    border-radius: 16px !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] > .container > .card > h3 {
+    margin: 0 0 7px !important;
+    font-size: .92rem !important;
+    line-height: 1.25 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .section-help {
+    max-width: none !important;
+    margin: 0 0 12px !important;
+    font-size: .82rem !important;
+    line-height: 1.4 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer {
+    gap: 8px !important;
+    margin: 10px 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row {
+    grid-template-columns: minmax(130px, .72fr) minmax(130px, .72fr) minmax(130px, .72fr) minmax(300px, 1.9fr) 40px !important;
+    align-items: end !important;
+    gap: 9px !important;
+    margin: 0 !important;
+    padding: 10px 11px !important;
+    border-radius: 11px !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row > div {
+    min-width: 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row label {
+    margin: 0 0 4px !important;
+    font-size: .66rem !important;
+    line-height: 1.2 !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row input,
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row select {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 37px !important;
+    padding: 6px 9px !important;
+    border-radius: 8px !important;
+    font-size: .8rem !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row .btn-danger {
+    position: static !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    min-height: 37px !important;
+    height: 37px !important;
+    align-self: end !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] > .container > .card > button {
+    min-height: 38px !important;
+    margin-top: 1px !important;
+    padding: 7px 12px !important;
+    font-size: .72rem !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] #mergeResult {
+    margin-top: 12px !important;
+    padding: 15px !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .ev-analytics-settings {
+    padding: 8px 12px 10px !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1050px) {
+  body.ev-unified[data-ev-page="contopiri"] > .container,
+  body.ev-unified[data-ev-page="contopiri"] .ev-shell__module {
+    width: calc(100% - 32px) !important;
+  }
+
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row {
+    grid-template-columns: repeat(3, minmax(75px, .65fr)) minmax(220px, 1.8fr) 38px !important;
+    gap: 7px !important;
+  }
+}
