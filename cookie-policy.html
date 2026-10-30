@@ -1,10 +1,51 @@
 <!doctype html>
-<html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Politica privind cookie-urile și stocarea locală pentru Evidență PPL."><title>Cookie-uri și stocare locală — Evidență PPL</title><link rel="stylesheet" href="css/style.css?v=43"><link rel="stylesheet" href="css/design-system.css"><link rel="stylesheet" href="css/legal-pages.css"></head>
-<body><a class="skip-link" href="#main">Sari la conținutul principal</a><main id="main" class="legal-page"><p class="eyebrow">EVIDENȚĂ PPL</p><h1>Politica privind cookie-urile și stocarea locală</h1><p class="updated">Ultima actualizare: 10 octombrie 2026</p>
-<h2>1. Cookie-uri</h2><p>În codul examinat nu am identificat folosirea directă a <code>document.cookie</code> de către runtime-ul analytics. Aceasta nu demonstrează că niciun furnizor de hosting sau browser nu poate seta cookie-uri tehnice; comportamentul trebuie verificat în browser și în infrastructura de producție.</p>
-<h2>2. Stocarea locală necesară funcționării</h2><p>Aplicația folosește mecanisme de stocare în browser, inclusiv <code>localStorage</code>, iar PWA folosește Cache Storage/Service Worker pentru resurse și funcționare offline. Sunt stocate preferințe precum tema și, în funcție de modulul folosit, date locale ale aplicației. Unele funcții de salvare a cazurilor pot păstra local informații introduse de utilizator. Aceste mecanisme nu sunt cookie-uri HTTP, dar intră în analiza privind stocarea/accesarea informațiilor de pe dispozitiv.</p>
-<h2>3. Analytics opțional</h2><p>Analytics folosește <code>localStorage</code> pentru a reține alegerea utilizatorului, un identificator aleatoriu de dispozitiv și informații de sesiune. În implementarea existentă, trackingul nu ar trebui să pornească până la acordul explicit. Refuzul dezactivează transmiterea evenimentelor; utilizatorul poate schimba alegerea din „Setări statistici”. Înainte de lansare, testați că niciun eveniment nu este trimis înainte de acceptare și că retragerea oprește transmiterea ulterioară.</p>
-<h2>4. Este necesar consimțământul?</h2><p>Pentru analytics neesențial și identificatori persistenti, abordarea prudentă este să nu se acceseze sau stocheze aceste informații până la o alegere afirmativă, să se ofere refuz la fel de ușor și să se explice scopul. Excepția pentru stocarea tehnică strict necesară nu se extinde automat la analytics. În lipsa unui inventar complet al resurselor din browser, nu afirmăm că analiza tehnică exhaustivă a fost încheiată. Bannerul analytics existent este menținut; nu se adaugă o a doua fereastră concurentă.</p>
-<h2>5. Servicii externe</h2><p>GitHub Pages furnizează hostingul. Modulul AI folosește un mecanism de încărcare controlată și verificare a unor dependențe externe, expuse paginii prin URL-uri same-origin. Dacă se schimbă dependențele, furnizorii sau domeniile accesate, această politică și verificările tehnice trebuie actualizate. Nu au fost identificate în paginile principale examinate încorporări de videoclipuri sau social media.</p>
-<h2>6. Cum ștergi stocarea</h2><p>Poți șterge datele site-ului din setările browserului. Ștergerea stocării locale poate elimina preferințele și cazurile salvate local. Retragerea consimțământului analytics elimină identificatorii analytics locali utilizați de implementarea curentă și oprește trackingul ulterior; nu șterge automat evenimentele deja trimise în backend.</p>
-<h2>7. Cadru legal</h2><p>Analiza este ghidată de art. 5 alin. (3) din Directiva 2002/58/CE și de legislația națională aplicabilă privind confidențialitatea comunicațiilor electronice, împreună cu regulile de protecție a datelor aplicabile. Aplicarea exactă trebuie verificată pentru toate scripturile, componentele și serviciile din versiunea publicată.</p><p><a href="./">Înapoi la aplicație</a></p></main><script src="js/legal-footer.js" defer></script></body></html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Informare privind cookie-urile și stocarea locală folosite de Evidență PPL.">
+  <title>Cookie-uri și stocare locală — Evidență PPL</title>
+  <link rel="stylesheet" href="css/style.css?v=43">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/legal-pages.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Sari la conținutul principal</a>
+  <main id="main" class="legal-page">
+    <p class="eyebrow">EVIDENȚĂ PPL</p>
+    <h1>Cookie-uri și stocare locală</h1>
+    <p class="updated">Ultima actualizare: 30 octombrie 2026</p>
+
+    <h2>1. Cookie-uri HTTP</h2>
+    <p>În fișierul frontend <code>js/analytics.js</code> nu este utilizată direct proprietatea <code>document.cookie</code>. Această constatare nu reprezintă o scanare exhaustivă a tuturor răspunsurilor serverului, resurselor externe, componentelor browserului sau infrastructurii de hosting. Nu afirmăm că site-ul nu poate primi cookie-uri tehnice de la furnizori.</p>
+
+    <h2>2. Stocare în browser</h2>
+    <p>Aplicația utilizează mecanisme de stocare ale browserului, care sunt diferite tehnic de cookie-urile HTTP. În funcție de modul și funcția folosită, acestea pot include:</p>
+    <ul>
+      <li><code>localStorage</code> pentru preferințe, opțiuni și unele date introduse sau salvate local de module;</li>
+      <li>stocare locală pentru alegerea privind statisticile și identificatorii analytics;</li>
+      <li>Cache Storage și Service Worker pentru resursele aplicației web progresive (PWA), atunci când funcția este activă.</li>
+    </ul>
+    <p>Ștergerea datelor site-ului din browser poate elimina preferințe, date salvate local și resurse cache necesare funcționării offline. Nu șterge automat datele care au fost deja transmise către un serviciu extern.</p>
+
+    <h2>3. Statistici opționale</h2>
+    <p>Modulul analytics păstrează în <code>localStorage</code> alegerea utilizatorului și, numai după acceptare, un identificator aleatoriu al dispozitivului și un identificator de sesiune. Sesiunea este reînnoită după 30 de minute de inactivitate. Aceste identificatoare sunt pseudonime și nu trebuie descrise ca anonimizare garantată.</p>
+    <p>La prima accesare, utilizatorul poate accepta sau refuza statisticile. Refuzul oprește transmiterea evenimentelor și elimină identificatorii analytics locali; alegerea de refuz este păstrată pentru a nu afișa repetat solicitarea. Opțiunea poate fi modificată ulterior din „Setări statistici”.</p>
+
+    <h2>4. Ce se transmite</h2>
+    <p>După acceptare, aplicația transmite către Supabase evenimente limitate la deschiderea aplicației și vizualizarea unei pagini, împreună cu identificatorii pseudonimi, ruta normalizată, versiunea aplicației, modul de afișare și categoria aproximativă a dispozitivului. Payload-ul frontend examinat nu include câmpurile completate în calculatoare, documentele selectate sau textul OCR.</p>
+    <p>Furnizorii de hosting, rețea și infrastructură pot prelucra date tehnice proprii pentru livrarea și securizarea serviciului. Configurația lor efectivă nu poate fi stabilită numai din codul frontend.</p>
+
+    <h2>5. Cum modifici opțiunea sau ștergi datele</h2>
+    <p>Folosește controlul „Setări statistici” din aplicație pentru a accepta sau refuza statistica. Retragerea opțiunii elimină identificatorii analytics din browser și oprește transmiterea ulterioară potrivit implementării curente, dar nu șterge automat evenimentele deja ajunse în backend.</p>
+    <p>Pentru ștergerea stocării locale, utilizează setările browserului pentru datele site-ului. Reține că această operațiune poate elimina și cazurile, preferințele sau resursele PWA salvate local.</p>
+
+    <h2>6. Consimțământ și cadru legal</h2>
+    <p>Regimul stocării sau accesării informațiilor din echipamentul terminal depinde de scopul operațiunii și de excepțiile legale aplicabile. Nu orice element din <code>localStorage</code> este automat un cookie HTTP și nici nu poate fi calificat automat drept strict necesar. Implementarea și toate resursele încărcate trebuie evaluate în contextul concret al versiunii publicate.</p>
+    <p>Ca repere normative sunt relevante <a href="https://legislatie.just.ro/Public/DetaliiDocument/56973">art. 4 din Legea nr. 506/2004</a> și, după caz, normele privind protecția datelor. Această pagină descrie implementarea observată, nu reprezintă o certificare a conformității.</p>
+
+    <p><a href="./">Înapoi la aplicație</a></p>
+  </main>
+  <script src="js/legal-footer.js" defer></script>
+</body>
+</html>
