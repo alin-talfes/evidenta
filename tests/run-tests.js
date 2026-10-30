@@ -128,7 +128,7 @@ assert(!versionSource.includes("footer.className = 'ev-footer'"),'version contro
 assert(!versionSource.includes('Toate datele sunt stocate exclusiv local'));
 assert(!versionSource.includes('footer-privacy'));
 const themeSource=fs.readFileSync('js/theme.js','utf8');
-assert(themeSource.includes("version.js?v=40"),'theme must load the current universal version/header controller');
+assert(themeSource.includes("version.js?v=47"),'theme must load the current universal version/header controller');
 assert(themeSource.includes("'footer:not(.ev-footer)'"),'theme must remove legacy footers');
 assert(!/0\.168/.test(versionSource),'version.js hardcodes the version number');
 for(const f of ['index.html','semnalmente/index.html','semnalmente/benchmark/index.html','transfer/rules/index.html']){
