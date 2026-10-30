@@ -401,3 +401,9 @@ body.ev-unified :is(
 ) {
   text-transform: uppercase;
 }
+
+
+/* Etichetele câmpurilor sunt compacte și consecvente; etichetele compuse/explicative rămân în capitalizare naturală. */
+body.ev-unified label:not(.toggle-switch):not(.radio-btn):not(.builder-check):not(.ai-check-row):not(.ev-prison-same-check):not(.sex-label):not(.life-label) {
+  text-transform: uppercase;
+}
