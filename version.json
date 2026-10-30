@@ -1,7 +1,8 @@
 {
-  "version": "1.2.1",
+  "version": "1.2.2",
   "updated": "2026-10-30",
   "changes": [
+    "Câmpul Zile din perioadele deduse are acum aceeași dimensiune ca la perioadele adăugate, cu butonul de ștergere separat.",
     "Câmpuri pentru numărul de zile extinse pentru valori de 4+ cifre la deduceri și zile suplimentare."
   ]
 }
