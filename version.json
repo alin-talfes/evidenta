@@ -1,7 +1,8 @@
 {
-  "version": "1.2.2",
+  "version": "1.2.3",
   "updated": "2026-10-30",
   "changes": [
+    "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
     "Câmpul Zile din perioadele deduse are acum aceeași dimensiune ca la perioadele adăugate, cu butonul de ștergere separat.",
     "Câmpuri pentru numărul de zile extinse pentru valori de 4+ cifre la deduceri și zile suplimentare."
   ]
