@@ -1,6 +1,6 @@
 @import url("./style-legacy.css?v=41");
 @import url("./design-system.css?v=4");
-@import url("./unified-shell.css?v=6");
+@import url("./unified-shell.css?v=7");
 @import url("./visual-audit.css?v=4");
 /* Surse consolidate în final-layer.css: "./consistency.css?v=1" */
 /* Regulile responsive globale sunt consolidate în desktop.css și mobile.css. */
