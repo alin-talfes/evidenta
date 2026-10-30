@@ -297,7 +297,7 @@
 
         const context = pageContext();
         document.body.classList.add('ev-unified');
-        document.body.dataset.evPage = context.page || context.navKey || 'evidenta';
+        document.body.dataset.evPage = context.page === 'index.html' ? 'pedepse' : (context.page || context.navKey || 'evidenta');
         updateDescription(context);
 
         const shell = document.createElement('header');
