@@ -1,7 +1,7 @@
 /* Inmate Pocket Calculator — root PWA service worker */
 'use strict';
 
-const VERSION = 'v77';
+const VERSION = 'v78';
 const STATIC_CACHE = `ipc-static-${VERSION}`;
 const RUNTIME_CACHE = `ipc-runtime-${VERSION}`;
 const PREFIXES = ['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-'];
@@ -20,7 +20,7 @@ const CORE_PATHS = [
   './transfer/app.js', './transfer/rules.js',
   './instructaj/styles.css', './instructaj/audit-enhancements.css', './instructaj/data.js', './instructaj/app.js',
   './instructaj/omj2188-completari.js', './instructaj/verificare-dosar-transfer.js',
-  './semnalmente/enhancements.js',
+  './semnalmente/enhancements.js', './semnalmente/style.css', './semnalmente/benchmark/index.html', './semnalmente/benchmark/style.css', './semnalmente/benchmark/benchmark.css',
   './analytics/index.html', './analytics/styles.css', './analytics/app.js',
   './ai/index.html', './ai/styles.css', './ai/security.css', './ai/source-preview.css',
   './ai/core.js', './ai/safety.js', './ai/ocr-ro.js', './ai/real-doc-deductions.js', './ai/real-doc-hardening.js',
