@@ -1,0 +1,81 @@
+/* Transfer & profilare — desktop layout refinement. Mobile rules remain untouched. */
+@media (min-width: 761px) {
+  body.ev-unified[data-ev-page="transfer"] .page-actions,
+  body.ev-transfer-auto .page-actions {
+    display:flex !important;
+    width:100% !important;
+    max-width:none !important;
+    justify-content:flex-end !important;
+    align-items:center !important;
+    gap:10px !important;
+    margin:0 0 12px !important;
+    padding:12px 16px !important;
+    border:1px solid var(--ev-border, #d8dee8) !important;
+    border-radius:14px !important;
+    background:var(--ev-card, #fff) !important;
+    box-shadow:0 3px 12px rgba(15,23,42,.06) !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] .page-actions > a,
+  body.ev-transfer-auto .page-actions > a { min-width:190px; text-align:center; }
+  body.ev-unified[data-ev-page="transfer"] .radio-group,
+  body.ev-transfer-auto .radio-group {
+    display:grid !important;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr)) !important;
+    align-items:stretch !important;
+    gap:8px !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] #sexGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  body.ev-transfer-auto #sexGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  body.ev-transfer-auto #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  body.ev-unified[data-ev-page="transfer"] .radio-btn,
+  body.ev-transfer-auto .radio-btn {
+    display:flex !important; align-items:center !important; justify-content:center !important;
+    min-height:42px !important; padding:9px 12px !important; text-align:center !important;
+    white-space:normal !important; border-radius:9px !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] .radio-btn:has(input:checked),
+  body.ev-transfer-auto .radio-btn:has(input:checked) {
+    background:#dbeafe !important; border:1px solid #2563eb !important;
+    color:#123d78 !important; box-shadow:inset 0 0 0 1px rgba(37,99,235,.12) !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] .toggle-btn.active,
+  body.ev-transfer-auto .toggle-btn.active {
+    background:#dbeafe !important; color:#123d78 !important;
+    border-color:#2563eb !important; box-shadow:inset 0 0 0 1px rgba(37,99,235,.14) !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] #regimGroupRadio,
+  body.ev-transfer-auto #regimGroupRadio {
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] #modeHint,
+  body.ev-transfer-auto #modeHint {
+    font-weight:400 !important; font-style:normal !important;
+    color:var(--ev-text-secondary,#64748b) !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] #riscGroup label,
+  body.ev-transfer-auto #riscGroup label { text-transform:none !important; }
+  body.ev-unified[data-ev-page="transfer"] #riscCheckbox,
+  body.ev-transfer-auto #riscCheckbox { width:21px !important; height:21px !important; flex:0 0 21px; }
+  body.ev-unified[data-ev-page="transfer"] .btn-group,
+  body.ev-transfer-auto .btn-group {
+    display:grid !important; grid-template-columns:2fr 1fr !important;
+    gap:12px !important; align-items:stretch !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] .btn-group > button,
+  body.ev-transfer-auto .btn-group > button { width:100% !important; min-width:0 !important; }
+  body.ev-unified[data-ev-page="transfer"] .empty-state,
+  body.ev-transfer-auto .empty-state {
+    min-height:190px !important; display:flex !important; flex-direction:column;
+    justify-content:center !important; align-items:center !important; gap:10px !important;
+    padding:26px !important; border:1px solid var(--ev-border,#e2e8f0) !important;
+    border-radius:12px !important; border-style:solid !important;
+    background:#f5f7fa !important; color:#64748b !important; text-align:center !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] .empty-state::before,
+  body.ev-transfer-auto .empty-state::before {
+    content:"⌕"; display:block; color:#64748b; font-size:30px; line-height:1;
+  }
+  body.ev-unified[data-ev-page="transfer"] .empty-state p,
+  body.ev-transfer-auto .empty-state p { margin:0 !important; font-weight:500 !important; }
+}
