@@ -973,3 +973,90 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   }
 }
 
+/* Corecții finale audit mobile: header compact, Instructaj fără overflow și tabletă îngustă. */
+@media (max-width:760px) {
+  body.ev-unified .ev-shell__bar {
+    min-height:50px !important;
+    padding-top:4px !important;
+    padding-bottom:4px !important;
+    row-gap:4px !important;
+  }
+  body.ev-unified .ev-shell__brand-meta {
+    display:none !important;
+  }
+  body.ev-unified .ev-shell__mark {
+    width:36px !important;
+    height:36px !important;
+    flex:0 0 36px !important;
+  }
+  body.ev-unified .ev-shell__calculator {
+    width:21px !important;
+    height:21px !important;
+  }
+  body.ev-unified .ev-shell__module {
+    margin-bottom:6px !important;
+    padding-top:7px !important;
+    padding-bottom:5px !important;
+  }
+  body.ev-unified .ev-shell__module h1 {
+    font-size:clamp(19px,5.5vw,23px) !important;
+    line-height:1.15 !important;
+  }
+
+  body.ev-unified[data-ev-page="instructaj"] .hero,
+  body.ev-unified[data-ev-page="instructaj"] .hero-panel,
+  body.ev-unified[data-ev-page="instructaj"] .hero-actions {
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+  body.ev-unified[data-ev-page="instructaj"] .hero-actions {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:8px !important;
+  }
+  body.ev-unified[data-ev-page="instructaj"] .hero-actions > :is(a,button) {
+    box-sizing:border-box !important;
+    display:flex !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    min-height:44px !important;
+    margin:0 !important;
+    align-items:center !important;
+    justify-content:center !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere !important;
+    text-align:center !important;
+  }
+}
+
+/* La tabletă îngustă nu folosim grila desktop cu trei coloane minime. */
+@media (min-width:761px) and (max-width:820px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-mode-panel__body .form-grid {
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:12px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-control {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:8px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-quick {
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 112px !important;
+    align-items:center !important;
+    gap:10px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom #masuriDays {
+    width:100% !important;
+    max-width:112px !important;
+  }
+}
+
