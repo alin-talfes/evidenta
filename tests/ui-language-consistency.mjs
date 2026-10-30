@@ -33,7 +33,7 @@ for (const [file, css] of uppercaseButtonStyles) {
 }
 
 assert.match(visualAuditCss, /text-transform:\s*uppercase\s*!important;/, 'Stratul vizual comun trebuie să normalizeze capitalizarea butoanelor.');
-assert.doesNotMatch(instructajCss, /text-transform:\\s*none\\s*!important;/, 'Instructaj nu trebuie să anuleze capitalizarea comună a butoanelor.');
-assert.doesNotMatch(officerCss, /text-transform:\\s*none\\s*!important;/, 'Ofițer nu trebuie să anuleze capitalizarea comună a butoanelor.');
+assert.doesNotMatch(instructajCss, /text-transform:\s*none\s*!important;/, 'Instructaj nu trebuie să anuleze capitalizarea comună a butoanelor.');
+assert.doesNotMatch(officerCss, /text-transform:\s*none\s*!important;/, 'Ofițer nu trebuie să anuleze capitalizarea comună a butoanelor.');
 
 console.log('Consistență UI: titluri, butoane AZI și capitalizarea comună a controalelor sunt verificate.');
