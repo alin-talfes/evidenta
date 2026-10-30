@@ -1,5 +1,5 @@
 {
-  "version": "1.2.14",
+  "version": "1.2.15",
   "updated": "2026-10-30",
   "changes": [
     "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
@@ -15,6 +15,7 @@
     "Optimizare WEB pentru Pedepse: container mai lat, carduri și spațieri compacte, controale și tipografie calibrate pentru reducerea scroll-ului vertical; regulile mobile sunt păstrate separat.",
     "Corecție WEB Contopiri: container și antet aliniate, lățime desktop optimizată, câmpuri și carduri compacte.",
     "Titlurile tuturor modulelor au fost uniformizate printr-un strat CSS comun prioritar: lățime, aliniere, tipografie și spațiere coerente.",
-    "Refactorizare CSS în curs: desktop.css și mobile.css devin straturile vizuale comune; vechiul CSS mobil specific componentelor este păstrat separat în module-responsive.css."
+    "Refactorizare CSS în curs: desktop.css și mobile.css devin straturile vizuale comune; vechiul CSS mobil specific componentelor este păstrat separat în module-responsive.css.",
+    "Arhitectură CSS separată: desktop.css și mobile.css sunt straturile vizuale comune, încărcate ultimele în module; vechile reguli mobile generale au fost mutate în mobile.css, iar module-responsive.css păstrează numai excepții de componente."
   ]
 }
