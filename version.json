@@ -1,5 +1,5 @@
 {
-  "version": "1.2.7",
+  "version": "1.2.8",
   "updated": "2026-10-30",
   "changes": [
     "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
@@ -8,6 +8,7 @@
     "Submodul Comisie transfer: ghid operațional, verificări, avize și calculator termene petiții.",
     "Modul Pedepse: redenumire Măsuri preventive în Alte calcule și calculator automat pentru amânarea liberării condiționate.",
     "Uniformizare vizuală pentru module: eliminarea cardurilor decorative de titlu și corectarea regulilor CSS comune.",
-    "Corecție CSS: eliminarea cardurilor de titlu este limitată la containerele de titlu și nu afectează antetele funcționale."
+    "Corecție CSS: eliminarea cardurilor de titlu este limitată la containerele de titlu și nu afectează antetele funcționale.",
+    "Corecție calcul amânări: dacă ziua corespondentă nu există în luna-țintă, rezultatul este ultima zi a lunii."
   ]
 }
