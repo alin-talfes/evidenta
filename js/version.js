@@ -4,7 +4,7 @@
     if (window.__EVIDENTA_VERSION_FOOTER__) return;
     window.__EVIDENTA_VERSION_FOOTER__ = true;
 
-    const scriptUrl = document.currentScript?.src || new URL('js/version.js', document.baseURI).href;
+    const scriptUrl = (document.currentScript && document.currentScript.src) ? document.currentScript.src : new URL('js/version.js', document.baseURI).href;
     const versionUrl = new URL('../version.json', scriptUrl).href;
     const homeUrl = new URL('../', scriptUrl).href;
     let currentVersion = '—';
@@ -28,9 +28,9 @@
     function renderBrandIdentity(versionText = currentVersion) {
         removeLegacyFooters();
         const brand = normalizeBrandContainer();
-        const copy = brand?.querySelector('.ev-shell__brand-copy') || document.querySelector('.ev-shell__brand-copy');
+        const copy = (brand && brand.querySelector('.ev-shell__brand-copy')) || document.querySelector('.ev-shell__brand-copy');
         if (!copy) return;
-        const mark = brand?.querySelector('.ev-shell__mark');
+        const mark = brand ? brand.querySelector('.ev-shell__mark') : null;
         if (mark) {
             mark.innerHTML = '<svg class="ev-shell__calculator" viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="2.5"></rect><rect x="7" y="5.5" width="10" height="4" rx="1"></rect><path d="M7.5 13h.01M12 13h.01M16.5 13h.01M7.5 16.5h.01M12 16.5h.01M16.5 16.5h.01"></path></svg>';
             mark.setAttribute('aria-label', 'Calculator');
@@ -64,7 +64,7 @@
             const response = await fetch(versionUrl, { cache: 'no-store' });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
-            const version = typeof data?.version === 'string' ? data.version.trim() : '';
+            const version = data && typeof data.version === 'string' ? data.version.trim() : '';
             if (!version) throw new Error('Versiune invalidă');
             currentVersion = version;
         } catch (error) {
