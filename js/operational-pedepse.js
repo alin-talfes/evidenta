@@ -257,7 +257,7 @@
   }
 
   function normalizedMode(value) {
-    return value === 'preventive' || value === 'other' ? 'preventive' : 'full';
+    return value === 'preventive' ? 'preventive' : 'full';
   }
 
   function revealValidationDetails() {
