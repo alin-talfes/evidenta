@@ -187,7 +187,59 @@ Motorul folosește componente de analiză vizuală și reguli de clasificare. Re
 
 **Fișiere principale:** semnalmente/index.html, semnalmente/script.js, semnalmente/engine-v2.js, semnalmente/engine-v3.js, semnalmente/classifier-rules.js, semnalmente/enhancements.js, semnalmente/result-audit.js, semnalmente/advanced-calibration.js, semnalmente/calibration-metrics.js, semnalmente/calibration-schema.json, semnalmente/style.css și semnalmente/editor.css. Documentația tehnică a motorului și a calibrării se află în semnalmente/docs/.
 
-### 6. Statistici de utilizare
+### 6. Pregătire Ofițer
+
+**Adresă:** [Modul Ofițer](https://alin-talfes.github.io/evidenta/ofiter/)
+
+Modul educațional destinat pregătirii pentru concursul de ofițer evidență din poliția penitenciară. Conținutul este organizat după structura probei scrise și include instrumente auxiliare pentru consolidarea cunoștințelor și pregătirea interviului.
+
+**Zone de pregătire:**
+- **Partea I – Grile:** întrebări de verificare a cunoștințelor și aplicării normelor, cu sesiuni aleatorii și sesiuni adaptive;
+- **Partea II – Sinteză:** exerciții de reproducere fidelă a textelor juridice integrate, cu compararea răspunsului și urmărirea progresului;
+- **Partea III – Calcule:** spețe și exerciții de calcul juridic, cu rezultate intermediare și raportare la baremele disponibile;
+- **Repetare:** reluarea întrebărilor greșite sau insuficient stăpânite, pe baza unui mecanism de repetare spațiată;
+- **Simulări:** sesiuni de antrenament în condiții de examen, inclusiv simulări pentru proba scrisă;
+- **Legislație și bibliografie:** căutare în materialele juridice integrate, delimitarea materiei și acces la formele oficiale consolidate;
+- **Subiecte ANP:** consultarea subiectelor și baremelor oficiale disponibile, cu evidențierea contextului juridic;
+- **Interviu:** spețe comportamentale și manageriale, exerciții de răspuns și simularea unei comisii de interviu.
+
+Modulul include tablou de bord, navigare pe secțiuni, urmărirea progresului, filtre de căutare și dificultate, precum și suport pentru temă vizuală și utilizarea pe dispozitive mobile. Conținutul de pregătire și răspunsurile-model sunt materiale de studiu; nu reprezintă bareme oficiale decât acolo unde sunt indicate expres ca atare.
+
+### 7. AI Documente
+
+**Adresă:** [AI Documente](https://alin-talfes.github.io/evidenta/ai/)
+
+Modul experimental (BETA) pentru extragerea și prelucrarea asistată a informațiilor din documente judiciare relevante pentru evidența executării pedepselor și pentru pregătirea datelor necesare calculelor.
+
+**Flux de lucru:**
+1. Încărcarea unuia sau mai multor documente PDF ori imagini;
+2. extragerea textului prin OCR cu suport pentru limba română;
+3. afișarea textului extras și posibilitatea corectării manuale;
+4. identificarea asistată a datelor relevante din documente;
+5. verificarea și corectarea câmpurilor propuse înainte de calcul;
+6. confirmarea explicită a datelor verificate;
+7. transmiterea datelor confirmate către etapa de verificare și calcul.
+
+**Date și operațiuni asistate:**
+- identificarea sexului și a datei nașterii;
+- extragerea datei începerii executării și a datei primirii în penitenciar/centru;
+- identificarea algoritmului de liberare condiționată, cu posibilitatea selectării/verificării manuale;
+- extragerea duratei pedepsei rezultante;
+- identificarea pedepselor componente și a resturilor, cu indicarea categoriei și a sursei;
+- identificarea perioadelor deduse, a intervalelor și a tipului acestora;
+- reanalizarea textului după corectarea manuală;
+- verificarea și calcularea datelor confirmate prin regulile aplicației;
+- prezentarea rezultatului și a surselor/documentelor asociate.
+
+**Controlul erorilor și al siguranței:** modulul afișează avertizări pentru extragerile incerte, tratează distinct valorile cu încredere redusă și solicită verificarea explicită a datelor înainte de calcul. OCR-ul și interpretarea automată pot produce omisiuni sau erori, în special pentru scanări neclare, tabele, scrisori neuniforme ori documente cu structură complexă. Datele propuse nu trebuie considerate corecte până la confruntarea lor cu documentul-sursă.
+
+**Prelucrarea documentelor:** pagina modulului indică procesare locală în browser și faptul că fișierele nu sunt încărcate pe un server și nu sunt salvate de modulul AI. Funcționarea folosește componente și resurse tehnice încărcate pentru OCR și analiză; consultați documentația tehnică și politicile resurselor externe relevante.
+
+Modulul este experimental și nu înlocuiește verificarea documentelor originale, interpretarea juridică de către personalul competent sau validarea rezultatului prin procedurile instituționale. Orice calcul trebuie verificat independent înainte de utilizare operațională.
+
+**Fișiere principale:** ai/index.html, ai/core.js, ai/app.js, ai/ocr-ro.js, ai/safety.js, ai/dependencies.js, ai/security-runtime.js, ai/deduction-rules.js, ai/real-doc-deductions.js, ai/contopire-audit.js și fișierele de validare/postprocesare din directorul ai/.
+
+### 8. Statistici de utilizare
 
 **Adresă:** [Panou statistici](https://alin-talfes.github.io/evidenta/analytics/)
 
@@ -250,12 +302,14 @@ Aplicația principală și modulele sale sunt livrate ca pagini statice prin Git
 
     evidenta/
     ├── .github/workflows/    # fluxuri automate GitHub Actions
+    ├── ai/                   # OCR și analiză asistată a documentelor
     ├── analytics/            # panou administrativ de statistici
     ├── contopiri/            # interfața modulului de contopiri
     ├── css/                  # stiluri comune, responsive și specifice
     ├── descriere-semnalmente/ # rută/pagină auxiliară pentru semnalmente
     ├── e2e/                  # scenarii de testare end-to-end în browser
     ├── instructaj/           # modul de instructaj și conținutul său
+    ├── ofiter/               # spațiu de pregătire pentru concursul de ofițer evidență
     ├── js/                   # logică și servicii JavaScript comune
     ├── semnalmente/          # modul descriptiv, motor, reguli și documentație
     ├── tests/                # teste automate de logică și interfață
