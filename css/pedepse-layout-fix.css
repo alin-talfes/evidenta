@@ -23,3 +23,181 @@ body.ev-unified[data-ev-page="pedepse"] .ev-shell__module h1 {
     margin-bottom: 12px !important;
   }
 }
+
+/* WEB desktop — densitate mai bună, fără scroll vertical inutil.
+   Regulile sunt limitate la modulul Pedepse; breakpoint-ul mobil rămâne neatins. */
+@media (min-width: 761px) {
+  body.ev-unified[data-ev-page="pedepse"] > .container {
+    width: 100% !important;
+    max-width: 1240px !important;
+    margin-inline: auto !important;
+    padding: 16px 28px 24px !important;
+    box-sizing: border-box !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #main-content {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.42 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    max-width: none !important;
+    margin: 0 0 12px !important;
+    padding: 7px !important;
+    gap: 7px !important;
+    border-radius: 12px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .top-bar .btn-utility {
+    min-height: 38px !important;
+    padding: 7px 10px !important;
+    font-size: .72rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro {
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1 {
+    font-size: clamp(1.55rem, 2vw, 1.9rem) !important;
+    line-height: 1.12 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-page-intro__description {
+    margin-top: 3px !important;
+    font-size: .82rem !important;
+    line-height: 1.35 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode {
+    margin: 0 0 10px !important;
+    padding: 3px !important;
+    gap: 4px !important;
+    border-radius: 12px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-calc-mode button {
+    min-height: 36px !important;
+    padding: 6px 10px !important;
+    font-size: .76rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details {
+    margin-bottom: 11px !important;
+    border-radius: 14px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools,
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-card,
+  body.ev-unified[data-ev-page="pedepse"] #resultsCard {
+    padding: 13px 15px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #main-content .card > h3 {
+    margin: 0 0 8px !important;
+    padding: 0 !important;
+    font-size: .9rem !important;
+    line-height: 1.25 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items: start !important;
+    gap: 10px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card {
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body .form-grid {
+    gap: 9px 12px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .form-grid {
+    gap: 9px 12px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] label:not(.toggle-switch):not(.ev-prison-same-check) {
+    margin-bottom: 4px !important;
+    font-size: .66rem !important;
+    line-height: 1.25 !important;
+    letter-spacing: .045em !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] input:not([type="checkbox"]):not([type="radio"]),
+  body.ev-unified[data-ev-page="pedepse"] select {
+    min-height: 38px !important;
+    padding: 7px 10px !important;
+    font-size: .82rem !important;
+    border-radius: 8px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] textarea {
+    min-height: 62px !important;
+    padding: 7px 10px !important;
+    font-size: .82rem !important;
+    border-radius: 8px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body .mt-12 {
+    margin-top: 8px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration {
+    margin-top: 5px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration + .form-grid {
+    margin-top: 8px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .btn-row {
+    gap: 7px !important;
+    margin: 10px 0 12px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .btn-row > button {
+    min-height: 38px !important;
+    padding: 7px 10px !important;
+    font-size: .72rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__head p {
+    margin: 2px 0 7px !important;
+    font-size: .76rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__buttons {
+    gap: 7px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-toggle {
+    min-height: 36px !important;
+    padding: 6px 9px !important;
+    font-size: .7rem !important;
+  }
+}
+
+/* Desktop compact mediu: păstrăm lizibilitatea pe ferestre de 761–1050 px. */
+@media (min-width: 761px) and (max-width: 1050px) {
+  body.ev-unified[data-ev-page="pedepse"] > .container {
+    padding-inline: 18px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
