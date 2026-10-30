@@ -291,7 +291,7 @@
             cards.forEach(card => {
                 const tables = Array.from(card.querySelectorAll('.rules-table'));
                 const staticText = Array.from(card.children)
-                    .filter(el => !el.matches('.rules-container, [data-filter-generated="true"]'))
+                    .filter(el => !el.querySelector('.rules-table') && !el.matches('[data-filter-generated="true"]'))
                     .map(el => el.textContent || '')
                     .join(' ');
                 const staticMatch = query !== '' && normalizeSearch(staticText).includes(query);
