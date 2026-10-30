@@ -1,0 +1,25 @@
+/* Pedepse — corecții de geometrie pentru antetul modulului și conținut. */
+/* Titlul de modul folosește exact aceeași ramă interioară ca bara globală. */
+body.ev-unified[data-ev-page="pedepse"] .ev-shell__module {
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: var(--ev-shell-max, 1240px) !important;
+  margin: 0 auto 16px !important;
+  padding: 10px max(var(--ev-shell-pad, 18px), env(safe-area-inset-left, 0px)) !important;
+  text-align: left;
+}
+
+body.ev-unified[data-ev-page="pedepse"] .ev-shell__module h1 {
+  margin: 0 !important;
+  text-align: left !important;
+  line-height: 1.2 !important;
+}
+
+/* Nu permite ca titlul și conținutul să depășească rama paginii pe ecrane mici. */
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-shell__module {
+    padding: 9px max(14px, env(safe-area-inset-left, 0px)) !important;
+    margin-bottom: 12px !important;
+  }
+}
