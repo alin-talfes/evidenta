@@ -73,10 +73,10 @@ assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare contr
 assert.ok(rootHtml.includes('onclick="calculatePedepseSafely()"'), 'Butonul de calcul trebuie să intre prin dispatcherul sigur curent.');
 assert.ok(!rootHtml.includes('class="hamburger"'), 'Modul Pedepse nu trebuie să afișeze buton hamburger.');
 assert.ok(['id="saveBtn"','id="loadBtn"','id="resetBtn"'].every(marker => rootHtml.includes(marker)), 'Toolbar-ul Pedepse trebuie să păstreze acțiunile SALVEAZĂ, ÎNCARCĂ și RESET.');
-assert.ok(rootHtml.includes('<h1 id="page-title">Calcul pedepse</h1>'), 'Titlul paginii trebuie să fie compact.');
-assert.ok(rootHtml.includes('Liberare condiționată · Regim · Prelungiri măsuri preventive'), 'Descrierea trebuie să enumere numai funcțiile principale.');
+assert.ok(!rootHtml.includes('id="page-title"'), 'Titlul redundant al paginii Pedepse trebuie să rămână eliminat.');
+assert.ok(!rootHtml.includes('Liberare condiționată · Regim · Prelungiri măsuri preventive'), 'Descrierea redundantă eliminată nu trebuie reintrodusă.');
 assert.ok(rootHtml.includes('css/pedepse-header-v1.css?v=1'), 'CSS-ul compact al antetului trebuie declarat static.');
-assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=6'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
+assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=8'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
 assert.ok(!rootHtml.includes('pedepse-prison-date.js'), 'Controllerul dinamic pentru data intrării trebuie eliminat.');
 for (const marker of [
   'class="ev-calc-mode" data-ev-two-modes="true"',
