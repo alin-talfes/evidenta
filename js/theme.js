@@ -123,7 +123,7 @@
     }
 
     function ensureVersionController() {
-        const expected = new URL('../js/version.js?v=44', scriptUrl).href;
+        const expected = new URL('../js/version.js?v=45', scriptUrl).href;
         if ([...document.scripts].some(script => script.src === expected || /\/js\/version\.js(?:\?|$)/.test(script.src))) return;
         const script = document.createElement('script');
         script.src = expected;
@@ -412,4 +412,4 @@
 })();
 
 /* Shared CSS is loaded blocking by the module wrappers: unified-shell.css, visual-audit.css.
-   Compatibility marker retained for the footer audit: version.js?v=39. */
+   Compatibility marker retained for the footer audit: version.js?v=45. */
