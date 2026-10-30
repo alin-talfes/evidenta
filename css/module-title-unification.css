@@ -97,3 +97,18 @@ body .module-intro,
 body > .container > header.header .subtitle {
   margin-top: 6px !important;
 }
+
+/* Transfer pages: the title is nested in a dedicated header shell. */
+body > main.committee-page > header.header,
+body > .container > header.header {
+  margin: 0 0 16px !important;
+}
+body > main.committee-page > header.header .header-inner,
+body > .container > header.header .header-inner {
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
