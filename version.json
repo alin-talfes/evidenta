@@ -1,5 +1,5 @@
 {
-  "version": "1.2.18",
+  "version": "1.2.19",
   "updated": "2026-10-30",
   "changes": [
     "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
@@ -19,6 +19,7 @@
     "Arhitectură CSS separată: desktop.css și mobile.css sunt straturile vizuale comune, încărcate ultimele în module; vechile reguli mobile generale au fost mutate în mobile.css, iar module-responsive.css păstrează numai excepții de componente.",
     "Separarea CSS a fost consolidată: desktop.css și mobile.css conțin regulile globale pentru fiecare mediu; module-responsive.css păstrează numai excepțiile de layout ale componentelor. Cache-ul a fost invalidat în toate paginile operaționale.",
     "Eliminat importul global responsive.css; regulile responsive generale pentru desktop, tabletă și mobil sunt centralizate în desktop.css și mobile.css. responsive.css nu mai este încărcat de style.css.",
-    "Corecție mobilă: titlurile din antetul comun păstrează marginea laterală, aliniată cu conținutul; antetul Comisiei de transfer folosește același gutter. Actualizate controlerele de versiune și cache-ul CSS."
+    "Corecție mobilă: titlurile din antetul comun păstrează marginea laterală, aliniată cu conținutul; antetul Comisiei de transfer folosește același gutter. Actualizate controlerele de versiune și cache-ul CSS.",
+    "Eliminat responsive.css și din foile CSS ale modulelor Semnalmente și Instructaj; responsive-ul global este încărcat numai din desktop.css/mobile.css."
   ]
 }
