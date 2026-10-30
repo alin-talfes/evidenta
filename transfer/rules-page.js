@@ -276,7 +276,7 @@
             return String(value || '')
                 .toLocaleLowerCase('ro')
                 .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[\u0300-\u036f\u0326\u0327]/g, '')
                 .replace(/ș/g, 's')
                 .replace(/ț/g, 't')
                 .trim();
