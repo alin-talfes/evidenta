@@ -253,6 +253,7 @@ const rootCacheVersion = sw.match(/const VERSION = ['"](v\d+)['"]/);
 assert.ok(rootCacheVersion, 'Root service worker trebuie să declare o versiune numerică de cache.');
 assert.ok(sw.includes('const STATIC_CACHE = `ipc-static-${VERSION}`'), 'Cache-ul static trebuie să derive din VERSION.');
 assert.ok(sw.includes('const RUNTIME_CACHE = `ipc-runtime-${VERSION}`'), 'Cache-ul runtime trebuie să derive din VERSION.');
+assert.ok(sw.includes("if (url.pathname.endsWith('/version.json')) return true;"), 'Metadatele versiunii trebuie revalidate din rețea, nu servite prima dată din cache-ul PWA.');
 assert.ok(sw.includes("['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-']"), 'Activarea trebuie să curețe și cache-urile cu prefixul legacy.');
 assert.ok(sw.includes("isCriticalRuntime(url) || ['script', 'style'].includes(request.destination)"), 'Scripturile și stilurile trebuie revalidate din rețea înainte de folosirea cache-ului.');
 assert.ok(sw.includes('const cached = await caches.match(request);'), 'Potrivirea normală din cache trebuie să respecte cheia de versiune din URL.');
