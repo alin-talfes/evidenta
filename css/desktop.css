@@ -257,3 +257,74 @@
     margin-top: 5px !important;
   }
 }
+
+/* Chrome comun pentru shell, status offline și comportamentul desktop. */
+/* Inmate Pocket Calculator — canonical mobile policy.
+ * Principiu: pagina se derulează normal; singurul element persistent este bottom nav.
+ * Acest fișier înlocuiește straturile legacy pwa-mobile / no-floating / bottom-nav-clearance / runtime-fixes.
+ */
+
+.ev-shell__brand-copy {
+  display:flex;
+  align-items:baseline;
+  gap:0;
+  min-width:0;
+  white-space:nowrap;
+}
+.ev-shell__brand-home {
+  color:inherit;
+  text-decoration:none;
+  flex:0 0 auto;
+}
+.ev-shell__brand-home:hover,
+.ev-shell__brand-home:focus-visible {
+  color:var(--ev-accent-strong, #7aa7ff);
+}
+.ev-shell__brand-meta {
+  margin-left:2px;
+  color:var(--ev-text-secondary, #94a3b8);
+  font-size:.66rem;
+  font-weight:650;
+}
+.ev-shell__brand-meta a {
+  color:inherit;
+  text-decoration:none;
+}
+.ev-shell__brand-meta a:hover,
+.ev-shell__brand-meta a:focus-visible {
+  color:var(--ev-accent-strong, #7aa7ff);
+  text-decoration:underline;
+}
+
+/* Offline status is ordinary content, not a floating overlay. */
+.ev-offline-badge {
+  position:static !important;
+  max-width:calc(100% - 24px);
+  margin:8px auto;
+  padding:7px 11px;
+  border:1px solid rgba(245,158,11,.5);
+  border-radius:10px;
+  background:rgba(15,23,42,.94);
+  color:#fbbf24;
+  box-shadow:none;
+  font-size:.7rem;
+  font-weight:850;
+  letter-spacing:.02em;
+  text-align:center;
+}
+html.ev-offline .ev-shell__brand::after {
+  content:'offline';
+  margin-left:6px;
+  font-size:.62rem;
+  font-weight:800;
+  color:#f59e0b;
+}
+
+@media (min-width:761px) {
+  html.ev-mobile-nav-layout,
+  html.ev-mobile-nav-layout body {
+    height:auto !important;
+    max-height:none !important;
+    overflow:visible !important;
+  }
+}
