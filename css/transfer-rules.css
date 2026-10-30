@@ -1,239 +1,68 @@
 /* Transfer — pagina anexelor. Folosește exclusiv tokenurile comune ale PWA. */
-body.ev-unified .rules-filter-card {
-  position: relative;
-  padding: 18px 20px !important;
-}
-body.ev-unified .rules-filter-card h3 {
-  margin: 0 0 12px !important;
-  color: var(--ev-text) !important;
-  font-size: 1rem !important;
-  font-weight: 800 !important;
-  letter-spacing: .01em;
-}
-body.ev-unified .filter-container {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 10px;
-}
-body.ev-unified .search-wrapper {
-  position: relative;
-  min-width: 0;
-}
-body.ev-unified .search-wrapper .search-icon {
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: .55;
-  pointer-events: none;
-}
-body.ev-unified .search-wrapper input {
-  padding-left: 42px !important;
-  margin: 0;
-}
-body.ev-unified .filter-clear {
-  min-height: 44px;
-  padding: 9px 14px;
-  color: var(--ev-text);
-  background: var(--ev-surface-2);
-  border: 1px solid var(--ev-border-strong);
-  border-radius: 10px;
-  font: inherit;
-  font-size: .78rem;
-  font-weight: 780;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-body.ev-unified .filter-stats {
-  grid-column: 1 / -1;
-  color: var(--ev-muted);
-  font-size: .78rem;
-  line-height: 1.4;
-}
-body.ev-unified .rules-empty {
-  padding: 14px 16px;
-  margin: 0 0 16px;
-  color: var(--ev-text-secondary);
-  background: var(--ev-surface-2);
-  border: 1px solid var(--ev-border);
-  border-radius: 12px;
-}
-body.ev-unified .rules-container {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  border: 1px solid var(--ev-border);
-  border-radius: 12px;
-  background: var(--ev-surface);
-}
-body.ev-unified .rules-table {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  border-collapse: separate;
-  border-spacing: 0;
-}
+body.ev-unified .rules-filter-card { position:relative; padding:18px 20px !important; }
+body.ev-unified .rules-filter-card h3 { margin:0 0 12px !important; color:var(--ev-text) !important; font-size:1rem !important; font-weight:800 !important; letter-spacing:.01em; }
+body.ev-unified .filter-container { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:10px; }
+body.ev-unified .search-wrapper { position:relative; min-width:0; }
+body.ev-unified .search-wrapper .search-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); opacity:.55; pointer-events:none; }
+body.ev-unified .search-wrapper input { padding-left:42px !important; margin:0; }
+body.ev-unified .filter-clear { min-height:44px; padding:9px 14px; color:var(--ev-text); background:var(--ev-surface-2); border:1px solid var(--ev-border-strong); border-radius:10px; font:inherit; font-size:.78rem; font-weight:780; text-transform:uppercase; cursor:pointer; }
+body.ev-unified .filter-stats { grid-column:1/-1; color:var(--ev-muted); font-size:.78rem; line-height:1.4; }
+body.ev-unified .rules-empty { padding:14px 16px; margin:0 0 16px; color:var(--ev-text-secondary); background:var(--ev-surface-2); border:1px solid var(--ev-border); border-radius:12px; }
+body.ev-unified .rules-container { width:100%; max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; border:1px solid var(--ev-border); border-radius:12px; background:var(--ev-surface); }
+body.ev-unified .rules-table { width:100%; min-width:0; margin:0; border-collapse:separate; border-spacing:0; }
 body.ev-unified .rules-table th,
-body.ev-unified .rules-table td {
-  padding: 12px 14px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--ev-border);
-  text-align: left;
-  line-height: 1.45;
-}
-body.ev-unified .rules-table th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  color: var(--ev-text-secondary);
-  background: var(--ev-surface-2);
-  font-size: .72rem;
-  font-weight: 800;
-  letter-spacing: .035em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-body.ev-unified .rules-table tbody tr:last-child td { border-bottom: 0; }
-body.ev-unified .rules-table tbody tr:hover td {
-  background: color-mix(in srgb, var(--ev-surface) 90%, var(--ev-accent) 10%);
-}
+body.ev-unified .rules-table td { padding:12px 14px; vertical-align:top; border-bottom:1px solid var(--ev-border); text-align:left; line-height:1.45; }
+body.ev-unified .rules-table th { position:sticky; top:0; z-index:1; color:var(--ev-text-secondary); background:var(--ev-surface-2); font-size:.72rem; font-weight:800; letter-spacing:.035em; text-transform:uppercase; white-space:nowrap; }
+body.ev-unified .rules-table tbody tr:last-child td { border-bottom:0; }
+body.ev-unified .rules-table tbody tr:hover td { background:color-mix(in srgb,var(--ev-surface) 90%,var(--ev-accent) 10%); }
 body.ev-unified .rules-table [hidden],
 body.ev-unified .annex-card[hidden],
 body.ev-unified .rules-container[hidden],
-body.ev-unified .rules-empty[hidden] {
-  display: none !important;
-}
-body.ev-unified .anexa-box {
-  padding: 13px 15px !important;
-  color: var(--ev-text-secondary) !important;
-  background: var(--ev-surface-2) !important;
-  border: 1px solid var(--ev-border) !important;
-  border-radius: 12px !important;
-  line-height: 1.55;
-}
+body.ev-unified .rules-empty[hidden] { display:none !important; }
+body.ev-unified .anexa-box { padding:13px 15px !important; color:var(--ev-text-secondary) !important; background:var(--ev-surface-2) !important; border:1px solid var(--ev-border) !important; border-radius:12px !important; line-height:1.55; }
 body.ev-unified .judet-tag,
-body.ev-unified .regim-tag {
-  display: inline-flex;
-  align-items: center;
-  margin: 2px 3px 2px 0;
-  padding: 3px 8px;
-  color: var(--ev-text-secondary);
-  background: var(--ev-surface-2);
-  border: 1px solid var(--ev-border);
-  border-radius: 999px;
-  font-size: .76rem;
-  line-height: 1.35;
-}
-body.ev-unified .unitate-nume { color: var(--ev-text); font-weight: 750; }
-@media (max-width: 640px) {
-  body.ev-unified .filter-container { grid-template-columns: minmax(0, 1fr); }
-  body.ev-unified .filter-clear { width: 100%; }
-  body.ev-unified .rules-table { min-width: 0; }
-  body.ev-unified .rules-table th,
-  body.ev-unified .rules-table td { padding: 10px 11px; }
-}
+body.ev-unified .regim-tag { display:inline-flex; align-items:center; margin:2px 3px 2px 0; padding:3px 8px; color:var(--ev-text-secondary); background:var(--ev-surface-2); border:1px solid var(--ev-border); border-radius:999px; font-size:.76rem; line-height:1.35; }
+body.ev-unified .unitate-nume { color:var(--ev-text); font-weight:750; }
 
-/* Anexe transfer — pe mobil, fiecare rând devine un card vertical.
-   Desktopul păstrează tabelul clasic; telefonul nu necesită scroll orizontal. */
-@media (max-width: 640px) {
-  body.ev-unified[data-ev-page="transfer-rules"] .rules-container {
-    overflow: visible !important;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-  }
+@media (max-width:640px) {
+  body.ev-unified .filter-container { grid-template-columns:minmax(0,1fr); }
+  body.ev-unified .filter-clear { width:100%; }
+
+  /* Pe mobil, tabelele anexelor devin carduri verticale, nu zone scrollabile. */
+  body.ev-unified[data-ev-page="transfer-rules"] .rules-container { overflow:visible !important; border:0; border-radius:0; background:transparent; }
   body.ev-unified[data-ev-page="transfer-rules"] .rules-table,
-  body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-  body.ev-unified[data-ev-page="transfer-rules"] .rules-table thead {
-    display: none !important;
-  }
-  body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody {
-    display: grid !important;
-    gap: 10px;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody { display:block !important; width:100% !important; min-width:0 !important; }
+  body.ev-unified[data-ev-page="transfer-rules"] .rules-table thead { display:none !important; }
+  body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody { display:grid !important; gap:10px; }
   body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody tr {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 0;
-    width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 10px 12px !important;
-    overflow: hidden;
-    background: var(--ev-surface) !important;
-    border: 1px solid var(--ev-border) !important;
-    border-radius: 13px !important;
-    box-shadow: var(--ev-shadow-soft);
+    display:grid !important; grid-template-columns:minmax(0,1fr) !important; gap:0;
+    width:100% !important; min-width:0 !important; margin:0 !important; padding:10px 12px !important;
+    overflow:hidden; background:var(--ev-surface) !important; border:1px solid var(--ev-border) !important;
+    border-radius:13px !important; box-shadow:var(--ev-shadow-soft);
   }
-  body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody tr:hover td {
-    background: transparent !important;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .rules-table tbody tr:hover td { background:transparent !important; }
   body.ev-unified[data-ev-page="transfer-rules"] .rules-table td {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 5px;
-    width: 100% !important;
-    min-width: 0 !important;
-    padding: 9px 2px !important;
-    border: 0 !important;
-    border-bottom: 1px solid var(--ev-border) !important;
-    text-align: left !important;
-    white-space: normal !important;
-    overflow-wrap: anywhere;
-    word-break: normal;
-    line-height: 1.5;
-    color: var(--ev-text);
+    display:grid !important; grid-template-columns:minmax(0,1fr); gap:5px;
+    width:100% !important; min-width:0 !important; padding:9px 2px !important;
+    border:0 !important; border-bottom:1px solid var(--ev-border) !important;
+    text-align:left !important; white-space:normal !important; overflow-wrap:anywhere;
+    word-break:normal; line-height:1.5; color:var(--ev-text);
   }
-  body.ev-unified[data-ev-page="transfer-rules"] .rules-table td:last-child {
-    border-bottom: 0 !important;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .rules-table td:last-child { border-bottom:0 !important; }
   body.ev-unified[data-ev-page="transfer-rules"] .rules-table td::before {
-    content: attr(data-label);
-    display: block;
-    color: var(--ev-muted);
-    font-size: .66rem;
-    font-weight: 850;
-    letter-spacing: .065em;
-    line-height: 1.25;
-    text-transform: uppercase;
+    content:attr(data-label); display:block; color:var(--ev-muted); font-size:.66rem;
+    font-weight:850; letter-spacing:.065em; line-height:1.25; text-transform:uppercase;
   }
-  body.ev-unified[data-ev-page="transfer-rules"] .unitate-nume {
-    display: inline-block;
-    overflow-wrap: anywhere;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .unitate-nume { display:inline-block; overflow-wrap:anywhere; }
   body.ev-unified[data-ev-page="transfer-rules"] .judete-list,
-  body.ev-unified[data-ev-page="transfer-rules"] .regim-wrapper {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 6px;
-    min-width: 0;
-    white-space: normal !important;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .regim-wrapper { display:flex !important; flex-wrap:wrap !important; gap:6px; min-width:0; white-space:normal !important; }
   body.ev-unified[data-ev-page="transfer-rules"] .regim-tag,
-  body.ev-unified[data-ev-page="transfer-rules"] .judet-tag {
-    max-width: 100%;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    border-radius: 9px;
-    line-height: 1.4;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .judet-tag { max-width:100%; white-space:normal; overflow-wrap:anywhere; border-radius:9px; line-height:1.4; }
   body.ev-unified[data-ev-page="transfer-rules"] .rules-filter-card,
-  body.ev-unified[data-ev-page="transfer-rules"] .card {
-    min-width: 0;
-    max-width: 100%;
-  }
+  body.ev-unified[data-ev-page="transfer-rules"] .card { min-width:0; max-width:100%; }
 }
-
 @media print {
-  body.ev-unified .rules-filter-card,
-  body.ev-unified .filter-empty { display: none !important; }
-  body.ev-unified .rules-container { overflow: visible; border: 0; }
-  body.ev-unified .rules-table { min-width: 0; }
+  body.ev-unified .rules-filter-card, body.ev-unified .filter-empty { display:none !important; }
+  body.ev-unified .rules-container { overflow:visible; border:0; }
+  body.ev-unified .rules-table { min-width:0; }
 }
