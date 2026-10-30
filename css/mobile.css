@@ -840,3 +840,16 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     grid-template-columns: minmax(0, 1fr) auto !important;
   }
 }
+
+/* Aliniere finală: titlul injectat de shell și antetul Comisiei folosesc același gutter ca pagina. */
+@media (max-width: 760px) {
+  body.ev-unified .ev-shell__module {
+    padding-left: max(var(--ev-shell-pad, 14px), env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(var(--ev-shell-pad, 14px), env(safe-area-inset-right, 0px)) !important;
+  }
+
+  body.ev-unified > main.committee-page > header.header {
+    padding-left: max(var(--ev-shell-pad, 14px), env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(var(--ev-shell-pad, 14px), env(safe-area-inset-right, 0px)) !important;
+  }
+}
