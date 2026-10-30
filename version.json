@@ -1,11 +1,12 @@
 {
-  "version": "1.2.5",
+  "version": "1.2.6",
   "updated": "2026-10-30",
   "changes": [
     "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
     "Câmpul Zile din perioadele deduse are acum aceeași dimensiune ca la perioadele adăugate, cu butonul de ștergere separat.",
     "Câmpuri pentru numărul de zile extinse pentru valori de 4+ cifre la deduceri și zile suplimentare.",
     "Submodul Comisie transfer: ghid operațional, verificări, avize și calculator termene petiții.",
-    "Modul Pedepse: redenumire Măsuri preventive în Alte calcule și calculator automat pentru amânarea liberării condiționate."
+    "Modul Pedepse: redenumire Măsuri preventive în Alte calcule și calculator automat pentru amânarea liberării condiționate.",
+    "Uniformizare vizuală pentru module: eliminarea cardurilor decorative de titlu și corectarea regulilor CSS comune."
   ]
 }
