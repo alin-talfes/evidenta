@@ -150,10 +150,10 @@
   }
   .ev-contopiri-result-details { margin:10px 0 0; }
 
-  body.ev-unified[data-ev-page="transfer"] .ev-transfer-compact { padding:12px !important; }
-  body.ev-unified[data-ev-page="transfer"] .form-grid { gap:10px !important; }
-  body.ev-unified[data-ev-page="transfer"] .radio-group { gap:6px !important; }
-  body.ev-unified[data-ev-page="transfer"] .radio-btn { min-height:44px; }
+  body.ev-unified[data-ev-page^="transfer"] .ev-transfer-compact { padding:12px !important; }
+  body.ev-unified[data-ev-page^="transfer"] .form-grid { gap:10px !important; }
+  body.ev-unified[data-ev-page^="transfer"] .radio-group { gap:6px !important; }
+  body.ev-unified[data-ev-page^="transfer"] .radio-btn { min-height:44px; }
   .ev-transfer-help-details { margin:0 0 10px; }
 
   body.ev-unified[data-ev-page^="semnalmente"] .upload-zone { min-height:160px !important; }
