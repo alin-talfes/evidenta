@@ -23,7 +23,7 @@ for (const marker of [
   assert.ok(theme.includes(marker), `Theme controller missing expected adaptive-theme behavior: ${marker}`);
 }
 
-assert.ok(theme.includes("localStorage.setItem(THEME_MODE_STORAGE_KEY, mode)"), 'The selected theme mode must persist separately.');
+assert.ok(theme.includes("storageSet(THEME_MODE_STORAGE_KEY, mode)"), 'The selected theme mode must persist separately.');
 assert.ok(theme.includes("document.documentElement.dataset.theme = resolved"), 'CSS must continue receiving the resolved light/dark theme.');
 assert.ok(theme.includes("document.documentElement.dataset.themeMode = initialMode"), 'The selected mode must be exposed on the document root.');
 assert.ok(theme.includes("colorSchemeQuery.addEventListener('change', handleSystemThemeChange)") || theme.includes("colorSchemeQuery?.addListener?.(handleSystemThemeChange)"), 'System preference changes must update the active theme.');
@@ -42,4 +42,4 @@ assert.ok(contextSource.includes("'ai': ['ai', 'AI Documente'"), 'AI Documente m
 assert.ok(read('instructaj/styles.css').includes('final-layer.css?v=7'), 'Instructaj must load the refreshed shared final visual layer.');
 assert.ok(read('semnalmente/style.css').includes('final-layer.css?v=7'), 'Semnalmente must load the refreshed shared final visual layer.');
 assert.ok(read('css/style.css').includes('final-layer.css?v=7'), 'Shared pages must refresh the final visual layer URL.');
-assert.ok(read('ai/index.html').includes('js/theme.js?v=43'), 'AI Documente must load the updated page-context controller.');
+assert.ok(read('ai/index.html').includes('js/theme.js?v=47'), 'AI Documente must load the updated page-context controller.');
