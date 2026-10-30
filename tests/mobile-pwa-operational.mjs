@@ -86,13 +86,13 @@ for (const marker of [
   'MĂSURI PREVENTIVE',
   'class="ev-preventive-mode-panel"',
   'class="ev-mobile-lc-details"',
-  '<h2 class="ev-mobile-lc-details__title">Liberare condiționată și date PPL</h2>',
   'class="card ev-lc-controls-card"',
   'class="ev-optional-tools card"',
   'id="recursCard"',
   'id="nonExecCard"',
   'id="restCard"'
 ]) assert.ok(rootHtml.includes(marker), `Markup-ul declarativ Pedepse trebuie să includă ${marker}`);
+assert.ok(!rootHtml.includes('Liberare condiționată și date PPL'), 'Titlul redundant eliminat din Pedepse nu trebuie reintrodus.');
 assert.ok(aiHtml.includes('operational-ai.js?v=3'));
 assert.ok(aiHtml.includes('ai/result-pedepse.js?v=1'));
 assert.ok(contopiriHtml.includes('operational-contopiri.js?v=2'));
