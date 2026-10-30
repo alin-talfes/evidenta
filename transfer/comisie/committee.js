@@ -66,6 +66,7 @@ function addCalendarDays(date, days) {
  return result;
 }
 function iso(date) { return date.toISOString().slice(0,10); }
+function localTodayIso() { const now = new Date(); return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0,10); }
 function roDate(date) { return new Intl.DateTimeFormat('ro-RO',{timeZone:'UTC',day:'2-digit',month:'2-digit',year:'numeric'}).format(date); }
 function calculate() {
  const useTransferred = $('wronglyForwarded').value === 'yes';
@@ -95,7 +96,7 @@ function calculate() {
  result.innerHTML = '<div class="committee-kpis"><div class="committee-kpi"><strong>' + roDate(base) + '</strong><span>Termen standard (30 zile)</span></div><div class="committee-kpi"><strong>' + roDate(finalDate) + '</strong><span>Termen calculat</span></div><div class="committee-kpi"><strong>' + (remaining < 0 ? 'Depășit cu ' + Math.abs(remaining) : remaining===0 ? 'Astăzi' : remaining + ' zile') + '</strong><span>Raportat la data curentă</span></div></div><p>Data de referință: ' + roDate(start) + (useTransferred ? ' — înregistrarea la autoritatea competentă, conform art. 8 alin. (2).' : ' — înregistrarea petiției.') + '</p>' + (extension ? '<p>Prelungire: ' + extension + ' zile, cu notificare prealabilă indicată ca efectuată.</p>' : '<p>Nu a fost introdusă prelungire.</p>') + '<p><strong>Verifică ultima zi calendaristică și eventualele reguli generale de calcul al termenelor.</strong></p>';
 }
 $('calculateDeadline').addEventListener('click',calculate);
-$('todayDeadline').addEventListener('click',()=>{$('receivedDate').value=iso(new Date());$('wronglyForwarded').value='no';calculate();});
+$('todayDeadline').addEventListener('click',()=>{$('receivedDate').value=localTodayIso();$('wronglyForwarded').value='no';calculate();});
 
 $('generateOpinion').addEventListener('click',()=>{
  const positive=$('opinionType').value==='positive';
