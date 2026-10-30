@@ -13,12 +13,12 @@ const serviceWorker = read('sw.js');
 
 assert.doesNotMatch(html, /class=["']site-header["']/, 'Instructaj must not keep the retired top navigation markup.');
 assert.doesNotMatch(html, /class=["']app-nav["']/, 'Instructaj must not own a parallel suite navigation implementation.');
-assert.match(html, /styles\\.css\\?v=9/, 'Instructaj must load the current module stylesheet.');
-assert.match(html, /\.\.\/js\/theme\\.js\\?v=48/, 'Instructaj must declare the shared theme controller.');
+assert.match(html, /styles\.css\?v=9/, 'Instructaj must load the current module stylesheet.');
+assert.match(html, /\.\.\/js\/theme\.js\?v=48/, 'Instructaj must declare the shared theme controller.');
 assert.match(html, /\.\.\/js\/operational-navigation\.js\?v=5/, 'Instructaj must declare the shared navigation controller.');
 assert.match(html, /\.\.\/js\/operational-instructaj\.js\?v=1/, 'Instructaj must declare its operational controller.');
 assert.match(html, /\.\.\/js\/pwa-register\.js\?v=3/, 'Instructaj must declare the shared PWA lifecycle.');
-assert.match(html, /\.\.\/js\/version\\.js\\?v=47/, 'Instructaj must declare the shared version controller.');
+assert.match(html, /\.\.\/js\/version\.js\?v=47/, 'Instructaj must declare the shared version controller.');
 
 assert.match(styles, /operational-upgrades\.css/, 'Instructaj must load the shared operational mobile styles.');
 assert.match(styles, /mobile\.css/, 'Instructaj must load the canonical mobile positioning policy.');
