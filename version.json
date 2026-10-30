@@ -1,5 +1,5 @@
 {
-  "version": "1.2.20",
+  "version": "1.2.21",
   "updated": "2026-10-30",
   "changes": [
     "Spațiere uniformă între etichete și câmpuri în cardurile de perioade deduse, adăugate și neexecutate.",
@@ -21,6 +21,7 @@
     "Eliminat importul global responsive.css; regulile responsive generale pentru desktop, tabletă și mobil sunt centralizate în desktop.css și mobile.css. responsive.css nu mai este încărcat de style.css.",
     "Corecție mobilă: titlurile din antetul comun păstrează marginea laterală, aliniată cu conținutul; antetul Comisiei de transfer folosește același gutter. Actualizate controlerele de versiune și cache-ul CSS.",
     "Eliminat responsive.css și din foile CSS ale modulelor Semnalmente și Instructaj; responsive-ul global este încărcat numai din desktop.css/mobile.css.",
-    "Pagina Pedepse: eliminat titlul secundar „Calcul pedepse” și subtitlul descriptiv; zona nu mai ocupă spațiu și nu mai dispare la comutarea între tipurile de calcul."
+    "Pagina Pedepse: eliminat titlul secundar „Calcul pedepse” și subtitlul descriptiv; zona nu mai ocupă spațiu și nu mai dispare la comutarea între tipurile de calcul.",
+    "Uniformizată geometria titlurilor din header: aceeași lățime, gutter lateral, aliniere la stânga și scară tipografică în desktop.css și mobile.css pentru toate modulele."
   ]
 }
