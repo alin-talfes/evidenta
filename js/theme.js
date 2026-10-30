@@ -132,7 +132,7 @@
     }
 
     function ensureVersionController() {
-        const expected = new URL('../js/version.js?v=45', scriptUrl).href;
+        const expected = new URL('../js/version.js?v=46', scriptUrl).href;
         if ([...document.scripts].some(script => script.src === expected || /\/js\/version\.js(?:\?|$)/.test(script.src))) return;
         const script = document.createElement('script');
         script.src = expected;
