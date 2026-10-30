@@ -1,16 +1,58 @@
 <!doctype html>
 <html lang="ro">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Politica de confidențialitate a aplicației Evidență PPL."><title>Politica de confidențialitate — Evidență PPL</title><link rel="stylesheet" href="css/style.css?v=43"><link rel="stylesheet" href="css/design-system.css"><link rel="stylesheet" href="css/legal-pages.css"></head>
-<body><a class="skip-link" href="#main">Sari la conținutul principal</a><main id="main" class="legal-page"><p class="eyebrow">EVIDENȚĂ PPL</p><h1>Politica de confidențialitate</h1><p class="updated">Ultima actualizare: 10 octombrie 2026</p>
-<h2>1. Cine operează aplicația</h2><p>„Evidență PPL / Inmate Pocket Calculator” este publicată pe GitHub Pages la <a href="https://alin-talfes.github.io/evidenta/">alin-talfes.github.io/evidenta</a>. Înainte de utilizarea publică în scop comercial sau instituțional, operatorul trebuie să completeze și să publice identitatea sa juridică, adresa poștală și datele de contact: <strong>[DE COMPLETAT: nume/denumire juridică, adresă și e-mail]</strong>. Aceste date nu pot fi deduse în mod fiabil din repository și nu sunt inventate aici.</p>
-<p>Această pagină descrie funcționarea tehnică observată în repository. Nu înlocuiește informarea specifică necesară dacă aplicația este integrată într-un sistem instituțional sau prelucrează date reale în numele unei autorități.</p>
-<h2>2. Ce date sunt prelucrate</h2><h3>Date introduse în modulele obișnuite</h3><p>Modulele de calcul rulează în browser. Unele funcții pot salva local cazuri sau preferințe în browser. Evită introducerea datelor reale, identificabile ori confidențiale despre persoane private de libertate într-o aplicație publică găzduită pe GitHub Pages, cu excepția cazului în care folosirea a fost evaluată și autorizată de operatorul competent.</p>
-<h3>Modulul AI Documente</h3><p>Arhitectura documentată în repository este proiectată pentru procesarea PDF-urilor și imaginilor selectate local, în browser. Fișierele selectate și textul OCR nu ar trebui să fie transmise către un backend al aplicației sau salvate în <code>localStorage</code>/<code>sessionStorage</code>. Procesarea locală nu elimină riscurile dispozitivului, browserului, extensiilor sau accesului fizic la sesiune. Nu folosi documente reale decât într-un mediu autorizat.</p>
-<h3>Statistici opționale de utilizare</h3><p>Sistemul analytics este dezactivat până când utilizatorul alege „ACCEPT”. După acceptare, browserul poate salva în <code>localStorage</code> un identificator aleatoriu de dispozitiv și unul de sesiune, iar aplicația transmite către Supabase evenimente limitate: deschiderea aplicației, vizualizarea unei rute normalizate, versiunea aplicației, modul de afișare (browser/PWA) și o categorie aproximativă a ecranului (mobil/tabletă/desktop). Dashboard-ul analytics nu se auto-contorizează.</p><p>Codul analytics examinat nu include în evenimente câmpurile de calcul, documentele selectate sau textul OCR. Infrastructura de găzduire și furnizorii rețelei pot prelucra date tehnice necesare livrării paginii conform propriilor politici.</p>
-<h2>3. Scop și temei</h2><p>Funcțiile locale sunt furnizate pentru a răspunde acțiunii solicitate de utilizator. Analytics opțional este folosit pentru statistici de utilizare numai după alegerea afirmativă a utilizatorului. Consimțământul poate fi retras oricând din controlul „Setări statistici”. Operatorul trebuie să stabilească și să documenteze temeiul juridic și responsabilitățile pentru GitHub/Supabase înainte de utilizarea comercială sau instituțională.</p>
-<h2>4. Furnizori și destinatari</h2><p>Pagina este găzduită prin GitHub Pages. Dacă utilizatorul acceptă analytics, evenimentele sunt trimise către proiectul Supabase configurat în aplicație. Configurația tehnică nu stabilește singură rolurile juridice, locurile de stocare, transferurile internaționale sau perioadele de păstrare; acestea trebuie verificate în setările și contractele furnizorilor.</p><p>Nu sunt introduse intenționat pixeli publicitari sau formulare de marketing în paginile principale examinate. Dependențele tehnice ale modulului AI trebuie reevaluate la fiecare actualizare.</p>
-<h2>5. Păstrare și securitate</h2><p>Identificatorii analytics sunt păstrați în browser până la ștergerea datelor site-ului sau retragerea consimțământului; sesiunea este reînnoită după 30 de minute de inactivitate. Durata de păstrare a evenimentelor în baza de date trebuie stabilită și documentată de administratorul backendului; nu poate fi confirmată numai din frontend.</p><p>Sunt folosite mecanisme de procesare locală pentru documente și controale tehnice pentru dependențele modulului AI. Nicio aplicație web nu poate garanta securitate absolută. Nu introduce informații clasificate, secrete profesionale, date speciale sau date despre persoane private de libertate fără autorizare și măsuri instituționale adecvate.</p>
-<h2>6. Drepturile persoanelor</h2><p>În măsura în care se aplică Regulamentul (UE) 2016/679, persoanele vizate pot avea drepturi de acces, rectificare, ștergere, restricționare, opoziție și portabilitate, precum și dreptul de a retrage consimțământul. Exercitarea drepturilor necesită date reale de contact ale operatorului, care trebuie completate mai sus. Există și dreptul de a depune o plângere la autoritatea de supraveghere competentă. Aplicabilitatea GDPR și regimul special al datelor prelucrate de autorități depind de scop și context.</p>
-<h2>7. Minori și date sensibile</h2><p>Aplicația nu este proiectată să solicite date ale minorilor. Datele privind condamnări și infracțiuni beneficiază de protecție specifică; nu le introduce într-o instanță publică fără temei, autorizare și măsuri adecvate.</p>
-<h2>8. Modificări și contact</h2><p>Politica poate fi actualizată când se modifică aplicația sau practicile de date. Pentru solicitări, completează și publică datele operatorului înainte de lansarea finală: <strong>[DE COMPLETAT: e-mail și adresă de contact]</strong>.</p>
-<h2>9. Referințe legale</h2><p>În funcție de scenariu, pot fi relevante Regulamentul (UE) 2016/679, Directiva 2002/58/CE și legislația națională privind comunicațiile electronice; pentru prelucrarea în scopuri de aplicare a legii, cadrul special național poate fi aplicabil în funcție de operator, scop și natura prelucrării. Această listă nu reprezintă o concluzie că un anumit regim se aplică automat tuturor utilizărilor.</p><p><a href="./">Înapoi la aplicație</a></p></main><script src="js/legal-footer.js" defer></script></body></html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Informare privind datele și funcționarea tehnică a aplicației Evidență PPL.">
+  <title>Politica de confidențialitate — Evidență PPL</title>
+  <link rel="stylesheet" href="css/style.css?v=43">
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/legal-pages.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Sari la conținutul principal</a>
+  <main id="main" class="legal-page">
+    <p class="eyebrow">EVIDENȚĂ PPL</p>
+    <h1>Informare privind confidențialitatea</h1>
+    <p class="updated">Ultima actualizare: 30 octombrie 2026</p>
+
+    <h2>1. Despre această informare</h2>
+    <p>„Evidență PPL / Inmate Pocket Calculator” este o aplicație web publicată la <a href="https://alin-talfes.github.io/evidenta/">alin-talfes.github.io/evidenta</a>. Această pagină descrie, la nivel tehnic, funcțiile observate în codul public al aplicației. Nu reprezintă o confirmare că toate prelucrările efectuate de furnizorii de hosting sau de rețea au fost inventariate.</p>
+    <p><strong>Identitatea juridică și datele de contact ale operatorului de date nu sunt publicate în repository și nu pot fi deduse în mod sigur din acesta.</strong> În consecință, această pagină nu este o informare GDPR completă pentru o prelucrare în care operatorul trebuie identificat. Înainte de o utilizare instituțională sau de prelucrarea datelor personale ale altor persoane, operatorul real trebuie identificat, iar scopurile, temeiurile, destinatarii, durata de păstrare și modalitățile de exercitare a drepturilor trebuie documentate pentru scenariul concret.</p>
+
+    <h2>2. Date introduse în module</h2>
+    <p>Modulele de calcul și organizare rulează în browser. În funcție de funcția utilizată, unele valori, preferințe sau cazuri pot fi păstrate în stocarea locală a browserului. Nu presupune că datele introduse sunt sincronizate sau salvate într-un cont centralizat.</p>
+    <p>Nu introduce în versiunea publică date clasificate, informații protejate de secret profesional sau date reale și identificabile despre persoane private de libertate, cu excepția situației în care utilizarea a fost evaluată, autorizată și securizată de autoritatea competentă. Stocarea locală nu înseamnă automat stocare sigură: datele pot fi accesibile persoanelor care folosesc dispozitivul, profilul de browser ori copiile sale de siguranță.</p>
+
+    <h2>3. Modulul AI Documente</h2>
+    <p>Modulul este proiectat să prelucreze în browser documentele PDF și imaginile selectate de utilizator, inclusiv pentru extragerea textului prin OCR. În arhitectura frontend examinată, fișierele selectate și textul OCR nu sunt trimise către un backend propriu al aplicației. Pot exista totuși solicitări de rețea pentru încărcarea paginii și a dependențelor software. Comportamentul trebuie reverificat după modificări ale modulului sau ale dependențelor.</p>
+    <p>Procesarea în browser nu elimină riscurile locale ale dispozitivului, extensiilor, sesiunii sau accesului neautorizat. Nu utiliza documente reale ori confidențiale într-un mediu care nu a fost aprobat pentru acel scop.</p>
+
+    <h2>4. Statistici opționale de utilizare</h2>
+    <p>Funcția de statistici este oprită până când utilizatorul selectează „ACCEPT”. Dacă acceptă, codul transmite către proiectul Supabase configurat în aplicație evenimente de tip deschidere aplicație și vizualizare pagină. Datele incluse în eveniment sunt: identificator aleatoriu al dispozitivului, identificator al sesiunii, tipul evenimentului, ruta normalizată, versiunea aplicației, modul de afișare (browser/PWA) și categoria aproximativă a dispozitivului (mobil/tabletă/desktop).</p>
+    <p>Identificatorii aleatorii permit corelarea unor evenimente și trebuie considerați identificatori pseudonimi, nu o garanție de anonimat. Codul frontend examinat nu include în payload-ul analytics valorile introduse în calculatoare, documentele selectate sau textul OCR. De asemenea, payload-ul nu include explicit adresa IP sau user-agentul; furnizorii de hosting, rețea ori infrastructură pot prelucra separat date tehnice necesare furnizării serviciului.</p>
+    <p>Dashboardul de statistici nu își înregistrează propria vizualizare. Evenimentele sunt trimise numai după acceptarea opțiunii, potrivit implementării frontend examinate.</p>
+
+    <h2>5. Scop, temei și destinatari</h2>
+    <p>Funcțiile locale răspund acțiunilor inițiate de utilizator. Statistica opțională urmărește măsurarea utilizării aplicației și este activată în implementarea curentă numai după alegerea afirmativă. Stabilirea temeiului juridic și a rolurilor operatorului și furnizorilor nu poate fi făcută doar din codul frontend; aceasta depinde de persoana care stabilește scopurile și mijloacele prelucrării și de contractele efective cu furnizorii.</p>
+    <p>Pagina este găzduită prin GitHub Pages. Dacă statistica este acceptată, evenimentele sunt transmise către proiectul Supabase configurat în aplicație. Regiunea bazei de date, perioadele de păstrare, contractele, măsurile de securitate și eventualele transferuri trebuie verificate în configurația și documentația furnizorilor; nu sunt confirmate de această pagină.</p>
+
+    <h2>6. Păstrare, retragere și securitate</h2>
+    <p>În browser, implementarea analytics utilizează chei de stocare pentru alegerea utilizatorului, identificatorul dispozitivului și sesiune. Sesiunea este reînnoită după 30 de minute de inactivitate. La refuz sau retragerea opțiunii, identificatorii analytics locali sunt eliminați și nu ar trebui trimise evenimente noi. Retragerea nu șterge automat evenimentele deja transmise în Supabase.</p>
+    <p>Durata de păstrare a evenimentelor din backend nu poate fi confirmată din codul frontend și trebuie stabilită de administratorul proiectului. Nicio aplicație web nu poate garanta securitate absolută. Nu folosi aplicația publică pentru informații clasificate, date speciale sau date despre persoane private de libertate fără temei, autorizare și măsuri instituționale adecvate.</p>
+
+    <h2>7. Drepturile persoanelor vizate</h2>
+    <p>Drepturile aplicabile — inclusiv accesul, rectificarea, ștergerea, restricționarea, opoziția, portabilitatea sau retragerea consimțământului, după caz — depind de regimul juridic al prelucrării și de rolul operatorului. Pentru exercitarea lor este necesară identificarea operatorului real și a unui canal de contact adecvat. Nu trimite solicitări care conțin date personale sau documente printr-un issue public GitHub.</p>
+    <p>Prelucrările efectuate de o autoritate competentă în scopuri de prevenire, investigare, depistare sau urmărire penală ori de executare a pedepselor pot intra sub un regim juridic distinct de GDPR. Aplicabilitatea se stabilește în funcție de operator, scop și context, nu doar după tipul datelor.</p>
+
+    <h2>8. Contact tehnic</h2>
+    <p>Pentru raportarea unei erori tehnice fără date personale sau confidențiale poți utiliza <a href="https://github.com/alin-talfes/evidenta/issues">secțiunea Issues a repository-ului</a>. Acest canal public nu este destinat solicitărilor privind drepturile persoanelor vizate, incidentelor care conțin date personale sau informațiilor instituționale.</p>
+
+    <h2>9. Repere normative</h2>
+    <p>În funcție de scenariu, pot fi relevante <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">Regulamentul (UE) 2016/679</a> și <a href="https://legislatie.just.ro/Public/DetaliiDocument/56973">Legea nr. 506/2004</a>. Pentru prelucrările realizate de autorități competente în scopuri de aplicare a legii poate fi relevantă și Legea nr. 363/2018. Enumerarea nu stabilește automat regimul juridic aplicabil fiecărei utilizări.</p>
+
+    <p><a href="./">Înapoi la aplicație</a></p>
+  </main>
+  <script src="js/legal-footer.js" defer></script>
+</body>
+</html>
