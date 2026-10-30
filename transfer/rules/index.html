@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../css/mobile-modules.css?v=1" />
     <link rel="stylesheet" href="../css/disclosure-hardening.css?v=4" />
     <link rel="stylesheet" href="../css/mobile.css?v=5" />
+    <link rel="stylesheet" href="../css/transfer-rules.css?v=1" />
     <script src="../js/theme.js?v=47" defer></script>
     <script src="../js/ux-upgrades.js?v=3" defer></script>
     <script src="../js/operational-navigation.js?v=5" defer></script>
@@ -32,17 +33,19 @@
         <a class="btn btn-outline" href="./">ÎNAPOI LA TRANSFER</a>
     </div>
 
-    <div class="card">
-        <h3>Filtrare rapidă</h3>
+    <div class="card rules-filter-card">
+        <h3>FILTRARE RAPIDĂ</h3>
         <div class="filter-container">
             <div class="search-wrapper">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="filterInput" placeholder="Caută după unitate, județ, regim..." />
+                <input type="search" id="filterInput" placeholder="Caută unitate, județ, regim, categorie..." aria-label="Caută în toate anexele" autocomplete="off" />
             </div>
             <button class="filter-clear" id="filterClear">✕ Resetează</button>
-            <span class="filter-stats" id="filterStats">0 afișate / <strong>0</strong> total</span>
+            <span class="filter-stats" id="filterStats" role="status" aria-live="polite">Se încarcă anexele…</span>
         </div>
     </div>
+
+    <p class="rules-empty" id="filterEmpty" role="status" hidden>Nu există rezultate pentru termenul căutat.</p>
 
     <div class="card" id="anexa1Card">
         <h3>Anexa 1 – Profilarea unităților</h3>
@@ -118,6 +121,6 @@
 </div>
 
 <script src="rules.js"></script>
-<script src="rules-page.js?v=34"></script>
+<script src="rules-page.js?v=35"></script>
 </body>
 </html>
