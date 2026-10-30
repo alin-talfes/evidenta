@@ -160,3 +160,16 @@
 @media (min-width:761px) and (max-width:1050px) {
  body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns:76px 76px 76px minmax(240px,1fr) 44px !important; gap:9px !important; }
 }
+
+/* Select compact pe mobil, păstrând pragul de 16px pentru evitarea zoomului iOS. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row select {
+    box-sizing:border-box !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    padding-inline:5px !important;
+    text-overflow:ellipsis;
+    letter-spacing:-.02em;
+  }
+}
