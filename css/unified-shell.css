@@ -36,7 +36,7 @@ body > .app-shell .suite-links {
   padding-top: env(safe-area-inset-top, 0px);
   color: var(--ev-text);
   background: var(--ev-bg);
-  background: rgba(248, 250, 252, .96);
+  background: var(--ev-bg, #f8fafc);
   background: color-mix(in srgb, var(--ev-bg) 92%, transparent);
   border-bottom: 1px solid var(--ev-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
