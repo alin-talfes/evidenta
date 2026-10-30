@@ -22,7 +22,7 @@ for (const marker of [
   'evidenta-theme-toggle',
   'unified-shell.css',
   'visual-audit.css',
-  'version.js?v=39',
+  'version.js?v=46',
   "'footer:not(.ev-footer)'"
 ]) {
   assert.ok(theme.includes(marker), `Controllerul universal trebuie să conțină ${marker}`);
@@ -137,3 +137,14 @@ assert.ok(!fs.existsSync(path.join(root, 'js/termene.js')), 'js/termene.js trebu
 assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-core.js trebuie eliminat');
 
 console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea IPC versiune/copyright mutată în header.');
+
+// Compatibilitate browser mobil: storage privat, viewport safe-area și fallback JS/CSS.
+assert.ok(!theme.includes('localStorage.getItem'), 'Controllerul nu trebuie să acceseze direct localStorage');
+assert.ok(!theme.includes('localStorage.setItem'), 'Controllerul nu trebuie să scrie direct în localStorage');
+assert.ok(!theme.includes('?.'), 'Controllerul comun trebuie să evite optional chaining pentru WebView-uri mai vechi');
+assert.ok(theme.includes('storageGet') && theme.includes('storageSet'), 'Preferințele trebuie să aibă fallback când Storage este blocat');
+assert.ok(shell.includes('constant(safe-area-inset-top)'), 'Headerul trebuie să aibă fallback safe-area pentru WebKit vechi');
+assert.ok(shell.includes('env(safe-area-inset-top'), 'Headerul trebuie să respecte safe-area pe iOS modern');
+for (const file of ['index.html','contopiri/index.html','transfer/index.html','instructaj/index.html','semnalmente/index.html','transfer/rules/index.html','semnalmente/benchmark/index.html']) {
+  assert.match(read(file), /viewport-fit=cover/, file + ' trebuie să permită calculul corect al safe-area');
+}
