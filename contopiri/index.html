@@ -26,7 +26,7 @@
     <meta property="og:title" content="Calcul contopiri pedepse">
     <meta property="og:description" content="Calcul contopiri pedepse.">
     <meta property="og:type" content="website">
-    <link rel="stylesheet" href="css/contopiri-desktop.css?v=7">
+    <link rel="stylesheet" href="css/contopiri-desktop.css?v=8">
   <link rel="stylesheet" href="css/desktop.css?v=7">
   <link rel="stylesheet" href="css/mobile.css?v=7">
 </head>
@@ -39,8 +39,8 @@
             <h3>ADAUGĂ PEDEPSE</h3>
             <p class="section-help">Adaugă fiecare pedeapsă și selectează tipul juridic. Rezultatul este calculat și explicat mai jos.</p>
             <div id="penaltyRowsContainer"></div>
-            <button class="btn btn-outline btn-sm" onclick="addPenaltyRow()">+ Adaugă pedeapsă</button>
-            <button class="btn btn-gold" onclick="calculateMergedPenalties()">CALCULEAZĂ</button>
+            <div class="ev-contopiri-actions"><button class="btn btn-outline btn-sm" onclick="addPenaltyRow()">+ Adaugă pedeapsă</button><button class="btn btn-gold" onclick="calculateMergedPenalties()">CALCULEAZĂ</button></div>
+            <div id="contopiriEmptyState" class="ev-contopiri-empty" role="status"><span class="ev-contopiri-empty__mark" aria-hidden="true">Σ</span><strong>Rezultatul contopirii va apărea aici</strong><p>Adaugă pedepsele, selectează categoria juridică și apasă „Calculează” pentru a vedea pedeapsa rezultantă și explicațiile.</p></div>
             <div id="mergeResult" class="result-box" style="display:none;"></div>
         </div>
 
