@@ -7,9 +7,13 @@ const contopiri = fs.readFileSync('contopiri/index.html','utf8');
 const transfer = fs.readFileSync('transfer/index.html','utf8');
 const uppercaseButtonStyles = [
   'css/style.css',
-  'semnalmente/style.css'
+  'semnalmente/style.css',
+  'instructaj/styles.css',
+  'ofiter/styles.css'
 ].map(file => [file, fs.readFileSync(file,'utf8')]);
 const officerCss = fs.readFileSync('ofiter/styles.css','utf8');
+const instructajCss = fs.readFileSync('instructaj/styles.css','utf8');
+const visualAuditCss = fs.readFileSync('css/visual-audit.css','utf8');
 
 assert.match(ai, /<h2 id="upload-title">ÎNCARCĂ DOCUMENTUL<\/h2>/);
 assert.match(ai, /<h2 id="text-title">TEXT EXTRAS<\/h2>/);
@@ -32,4 +36,4 @@ for (const [file, css] of uppercaseButtonStyles) {
 assert.match(officerCss, /:where\([\s\S]*?button,[\s\S]*?a\.btn,[\s\S]*?\.btn,[\s\S]*?\.toggle-btn,[\s\S]*?\.access-submit[\s\S]*?\)\s*\{/, 'ofiter/styles.css: lipsește selectorul comun pentru controalele tip buton.');
 assert.match(officerCss, /text-transform:\s*none\s*!important;/, 'ofiter/styles.css: modulul de studiu trebuie să păstreze capitalizarea naturală a textului.');
 
-console.log('Consistență UI: titluri, butoane AZI și capitalizarea intenționată pe fiecare modul sunt verificate.');
+console.log('Consistență UI: titluri, butoane AZI și capitalizarea comună a controalelor sunt verificate.');
