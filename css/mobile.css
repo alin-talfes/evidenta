@@ -602,3 +602,29 @@ body.ev-unified[data-ev-page="pedepse"] #manualDeductionsContainer .period-row >
     min-width: 0;
   }
 }
+
+
+/* Deduceri: câmpul Zile folosește aceeași lățime ca perioadele adăugate, cu X separat. */
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row {
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:nth-child(4) {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > div:nth-child(4) .ded-days {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .deduction-row > .btn-danger {
+    grid-column: 2 !important;
+    grid-row: 4 !important;
+    justify-self: end;
+  }
+}
