@@ -13,7 +13,8 @@
     const THEME_MODE_STORAGE_KEY = 'evidenta-theme-mode';
     const LEGACY_KEYS = ['anpTheme', 'descriere-semnalmente-theme'];
     const THEME_CONTROL_SELECTOR = '#themeToggle, #btn-theme, #theme-btn, #evidenta-theme-toggle';
-    const scriptUrl = new URL(document.currentScript?.src || location.href, location.href);
+    const activeScript = document.currentScript;
+    const scriptUrl = new URL((activeScript && activeScript.src) ? activeScript.src : location.href, location.href);
     const rootUrl = new URL('../', scriptUrl);
 
     function validTheme(value) {
@@ -24,16 +25,24 @@
         return value === 'system' || value === 'light' || value === 'dark' ? value : null;
     }
 
+    function storageGet(key) {
+        try { return window.localStorage.getItem(key); } catch (error) { return null; }
+    }
+
+    function storageSet(key, value) {
+        try { window.localStorage.setItem(key, value); } catch (error) { /* Storage poate fi indisponibil în mod privat/restricționat. */ }
+    }
+
     function readThemeMode() {
-        const savedMode = validThemeMode(localStorage.getItem(THEME_MODE_STORAGE_KEY));
+        const savedMode = validThemeMode(storageGet(THEME_MODE_STORAGE_KEY));
         if (savedMode) return savedMode;
 
         // Migration: a previously saved light/dark value remains an explicit user preference.
-        const canonical = validTheme(localStorage.getItem(THEME_STORAGE_KEY));
+        const canonical = validTheme(storageGet(THEME_STORAGE_KEY));
         if (canonical) return canonical;
 
         for (const key of LEGACY_KEYS) {
-            const legacy = validTheme(localStorage.getItem(key));
+            const legacy = validTheme(storageGet(key));
             if (legacy) return legacy;
         }
 
@@ -42,7 +51,7 @@
 
     function resolveTheme(mode = readThemeMode()) {
         if (mode === 'light' || mode === 'dark') return mode;
-        return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        return (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
     }
 
     function readTheme() {
@@ -50,12 +59,12 @@
     }
 
     function persistTheme(theme) {
-        localStorage.setItem(THEME_STORAGE_KEY, theme);
-        for (const key of LEGACY_KEYS) localStorage.setItem(key, theme);
+        storageSet(THEME_STORAGE_KEY, theme);
+        for (const key of LEGACY_KEYS) storageSet(key, theme);
     }
 
     function persistThemeMode(mode, theme) {
-        localStorage.setItem(THEME_MODE_STORAGE_KEY, mode);
+        storageSet(THEME_MODE_STORAGE_KEY, mode);
         persistTheme(theme);
     }
 
@@ -266,7 +275,7 @@
         ]);
 
         document.querySelectorAll('.help-text').forEach(element => {
-            if (element.textContent?.includes('Rezultatul se actualizează automat')) element.remove();
+            if (element.textContent && element.textContent.includes('Rezultatul se actualizează automat')) element.remove();
         });
 
         document.querySelectorAll('.modal p').forEach(element => {
@@ -276,9 +285,10 @@
 
         const sectionHub = document.querySelector('.section-hub');
         if (sectionHub) {
-            document.querySelector('body > main > .hero')?.remove();
+            const oldHero = document.querySelector('body > main > .hero');
+            if (oldHero) oldHero.remove();
             const hubHelp = sectionHub.querySelector('.section-hub-head > p:last-child');
-            if (hubHelp?.textContent?.includes('Deschide o singură categorie')) hubHelp.remove();
+            if (hubHelp && hubHelp.textContent && hubHelp.textContent.includes('Deschide o singură categorie')) hubHelp.remove();
         }
     }
 
@@ -315,7 +325,7 @@
                 ${context.isOfficer ? '<span class="ev-shell__badge">Acces restricționat</span>' : ''}
             </div>`;
 
-        const skipLink = document.body.querySelector(':scope > .skip-link');
+        const skipLink = Array.prototype.slice.call(document.body.children).filter(function (node) { return node.classList && node.classList.contains('skip-link'); })[0] || null;
         if (skipLink) skipLink.insertAdjacentElement('afterend', shell);
         else document.body.prepend(shell);
 
@@ -326,12 +336,16 @@
         updateThemeButtons(validTheme(document.documentElement.dataset.theme) || readTheme());
 
         const currentNav = shell.querySelector('.ev-shell__nav a[aria-current="page"]');
-        requestAnimationFrame(() => currentNav?.scrollIntoView({ block: 'nearest', inline: 'center' }));
+        if (currentNav && currentNav.scrollIntoView) {
+            const schedule = window.requestAnimationFrame || function (callback) { window.setTimeout(callback, 0); };
+            schedule(function () { currentNav.scrollIntoView({ block: 'nearest', inline: 'center' }); });
+        }
         window.dispatchEvent(new CustomEvent('evidenta:shellready'));
     }
 
     document.addEventListener('click', event => {
-        const button = event.target.closest?.(THEME_CONTROL_SELECTOR);
+        const target = event.target;
+        const button = target && target.closest ? target.closest(THEME_CONTROL_SELECTOR) : null;
         if (!button) return;
         event.preventDefault();
         event.stopPropagation();
@@ -375,14 +389,14 @@
         applyTheme(resolveTheme(mode), { mode });
     });
 
-    const colorSchemeQuery = window.matchMedia?.('(prefers-color-scheme: light)');
+    const colorSchemeQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
     const handleSystemThemeChange = () => {
         if (readThemeMode() !== 'system') return;
         document.documentElement.dataset.themeMode = 'system';
         applyTheme(resolveTheme('system'), { mode: 'system' });
     };
-    if (colorSchemeQuery?.addEventListener) colorSchemeQuery.addEventListener('change', handleSystemThemeChange);
-    else colorSchemeQuery?.addListener?.(handleSystemThemeChange);
+    if (colorSchemeQuery && colorSchemeQuery.addEventListener) colorSchemeQuery.addEventListener('change', handleSystemThemeChange);
+    else if (colorSchemeQuery && colorSchemeQuery.addListener) colorSchemeQuery.addListener(handleSystemThemeChange);
 
     window.applyTheme = theme => applyTheme(theme || readTheme());
     window.toggleTheme = toggleTheme;
