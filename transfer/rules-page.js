@@ -264,80 +264,86 @@
         anexa8Container.innerHTML = html8;
 
         // ============================================================
-        // 7. FILTRARE GLOBALĂ
+        // 7. FILTRARE GLOBALĂ — caută atât în text, cât și în tabele
         // ============================================================
         const filterInput = document.getElementById('filterInput');
         const filterClear = document.getElementById('filterClear');
         const filterStats = document.getElementById('filterStats');
+        const filterEmpty = document.getElementById('filterEmpty');
+        const cards = Array.from(document.querySelectorAll('.annex-card'));
 
-        function getFilterableText(row) {
-            let text = '';
-            row.querySelectorAll('td').forEach(td => {
-                text += td.textContent + ' ';
-            });
-            return text.toLowerCase();
-        }
-
-        function countVisibleRows() {
-            const allTables = document.querySelectorAll('.rules-table');
-            let visible = 0;
-            let total = 0;
-            allTables.forEach(table => {
-                const rows = table.querySelectorAll('tbody tr');
-                total += rows.length;
-                rows.forEach(row => {
-                    if (row.style.display !== 'none') visible++;
-                });
-            });
-            return { visible, total };
-        }
-
-        function updateStats() {
-            const stats = countVisibleRows();
-            filterStats.innerHTML = `${stats.visible} afișate / <strong>${stats.total}</strong> total`;
+        function normalizeSearch(value) {
+            return String(value || '')
+                .toLocaleLowerCase('ro')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/ș/g, 's')
+                .replace(/ț/g, 't')
+                .trim();
         }
 
         function filterTables() {
-            const filterText = filterInput.value.toLowerCase().trim();
-            const allTables = document.querySelectorAll('.rules-table');
-            let hasVisible = false;
+            const query = normalizeSearch(filterInput.value);
+            let visibleRows = 0;
+            let totalRows = 0;
+            let visibleAnnexes = 0;
 
-            allTables.forEach(table => {
-                const rows = table.querySelectorAll('tbody tr');
-                rows.forEach(row => {
-                    const rowText = getFilterableText(row);
-                    if (filterText === '' || rowText.includes(filterText)) {
-                        row.style.display = '';
-                        hasVisible = true;
-                    } else {
-                        row.style.display = 'none';
+            cards.forEach(card => {
+                const tables = Array.from(card.querySelectorAll('.rules-table'));
+                const staticText = Array.from(card.children)
+                    .filter(el => !el.matches('.rules-container, [data-filter-generated="true"]'))
+                    .map(el => el.textContent || '')
+                    .join(' ');
+                const staticMatch = query !== '' && normalizeSearch(staticText).includes(query);
+                let cardHasMatch = query === '' || staticMatch;
+                let cardRows = 0;
+                let cardTotal = 0;
+
+                tables.forEach(table => {
+                    const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    rows.forEach(row => {
+                        cardTotal++;
+                        totalRows++;
+                        const matches = query === '' || staticMatch || normalizeSearch(row.textContent).includes(query);
+                        row.hidden = !matches;
+                        if (matches) {
+                            cardRows++;
+                            visibleRows++;
+                            cardHasMatch = true;
+                        }
+                    });
+                    const wrapper = table.closest('.rules-container');
+                    if (wrapper) wrapper.hidden = query !== '' && !cardHasMatch;
+                });
+
+                card.hidden = !cardHasMatch;
+                if (cardHasMatch) visibleAnnexes++;
+            });
+
+            filterStats.textContent = query
+                ? visibleAnnexes + ' anexe / ' + visibleRows + ' rânduri găsite din ' + totalRows
+                : visibleAnnexes + ' anexe / ' + totalRows + ' rânduri disponibile';
+            filterEmpty.hidden = query === '' || visibleAnnexes > 0;
+        }
+
+        if (filterInput && filterClear && filterStats && filterEmpty) {
+            filterInput.addEventListener('input', filterTables);
+            filterClear.addEventListener('click', () => {
+                filterInput.value = '';
+                filterTables();
+                filterInput.focus();
+            });
+            cards.forEach(card => {
+                card.classList.add('annex-card');
+                card.querySelectorAll('.rules-table').forEach(table => {
+                    if (!table.parentElement.classList.contains('rules-container')) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'rules-container';
+                        table.parentNode.insertBefore(wrapper, table);
+                        wrapper.appendChild(table);
                     }
                 });
             });
-
-            const cards = document.querySelectorAll('.card[id$="Card"]');
-            cards.forEach(card => {
-                const tables = card.querySelectorAll('.rules-table');
-                let cardHasVisible = false;
-                tables.forEach(table => {
-                    const rows = table.querySelectorAll('tbody tr');
-                    rows.forEach(row => {
-                        if (row.style.display !== 'none') cardHasVisible = true;
-                    });
-                });
-                card.style.display = cardHasVisible ? '' : 'none';
-            });
-
-            updateStats();
-        }
-
-        filterInput.addEventListener('input', filterTables);
-
-        filterClear.addEventListener('click', function() {
-            filterInput.value = '';
             filterTables();
-            filterInput.focus();
-        });
-
-        setTimeout(updateStats, 100);
+        }
     })();
