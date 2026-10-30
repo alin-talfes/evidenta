@@ -507,3 +507,23 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   }
 }
 }
+
+
+/* Header module titles: same horizontal axis as the brand/navigation container. */
+body.ev-unified .ev-shell__module {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: var(--ev-shell-max, 1240px) !important;
+  margin-inline: auto !important;
+  padding-left: max(var(--ev-shell-pad, 18px), env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(var(--ev-shell-pad, 18px), env(safe-area-inset-right, 0px)) !important;
+  text-align: left !important;
+}
+body.ev-unified .ev-shell__module h1 {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  text-align: left !important;
+  line-height: 1.18 !important;
+}
