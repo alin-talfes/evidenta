@@ -115,3 +115,51 @@ body.ev-preventive-mode .ev-preventive-mode-panel { display:block !important; }
     font-size:.64rem;
   }
 }
+
+/* Calculator amânări liberare condiționată — aliniat cu cardurile modulului. */
+.ev-deferral-calculator {
+  margin-top: 12px;
+}
+.ev-deferral-calculator .form-grid {
+  align-items: end;
+  gap: 12px;
+}
+.ev-deferral-calculator .date-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+.ev-deferral-calculator .date-wrapper input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.ev-deferral-calculator .btn-today {
+  flex: 0 0 auto;
+  min-width: 58px;
+}
+.ev-deferral-calculator #lcDeferralMonths {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+.ev-deferral-calculator #lcDeferralResult {
+  width: 100%;
+  font-weight: 800;
+}
+.ev-deferral-calculator #lcDeferralError:empty {
+  display: none;
+}
+.ev-deferral-calculator #lcDeferralError:not(:empty) {
+  color: var(--danger, #dc5555);
+  margin-top: 8px;
+}
+@media (max-width:600px) {
+  .ev-deferral-calculator .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .ev-deferral-calculator .date-wrapper .btn-today {
+    min-width: 62px;
+  }
+}
+
