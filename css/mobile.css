@@ -1130,3 +1130,31 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     margin-bottom:4px !important;
   }
 }
+
+
+/* Corecție vizuală mobil — cardurile Pedepse nu trebuie încadrate de un al doilea card. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details {
+    display:contents !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    overflow:visible !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    display:contents !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card {
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 0 12px !important;
+  }
+}
