@@ -1,6 +1,7 @@
 /* Inmate Pocket Calculator — shell vizual universal */
 :root {
   --ev-shell-max: 1240px;
+  --ev-shell-pad: 18px;
   --ev-shell-pad: clamp(14px, 2.6vw, 28px);
   --ev-shell-header-h: 64px;
 }
@@ -8,6 +9,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   font-family: var(--ev-font) !important;
   font-size: 15px;
   line-height: 1.55;
@@ -29,8 +31,12 @@ body > .app-shell .suite-links {
   position: relative;
   z-index: 80;
   width: 100%;
+  padding-top: 0;
+  padding-top: constant(safe-area-inset-top);
   padding-top: env(safe-area-inset-top, 0px);
   color: var(--ev-text);
+  background: var(--ev-bg);
+  background: rgba(248, 250, 252, .96);
   background: color-mix(in srgb, var(--ev-bg) 92%, transparent);
   border-bottom: 1px solid var(--ev-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
@@ -41,17 +47,24 @@ body > .app-shell .suite-links {
 .ev-shell__bar,
 .ev-shell__module,
 .ev-footer__inner {
-  width: min(100%, var(--ev-shell-max));
+  width: 100%;
+  max-width: var(--ev-shell-max);
+  box-sizing: border-box;
   margin: 0 auto;
-  padding-inline: var(--ev-shell-pad);
+  padding-left: var(--ev-shell-pad);
+  padding-right: var(--ev-shell-pad);
+  padding-left: max(var(--ev-shell-pad), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--ev-shell-pad), env(safe-area-inset-right, 0px));
 }
 
 .ev-shell__bar {
   min-height: var(--ev-shell-header-h);
+  display: flex;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 18px;
+  box-sizing: border-box;
 }
 
 .ev-shell__brand {
@@ -416,7 +429,7 @@ textarea,
 
 @media (max-width: 680px) {
   :root { --ev-shell-pad: 14px; }
-  .ev-shell__bar { min-height: 58px; }
+  .ev-shell__bar { min-height: 58px; padding-top: 6px; padding-bottom: 6px; }
   .ev-shell__brand { max-width: 100%; overflow: hidden; }
   .ev-shell__brand-copy strong { font-size: 13px; }
   .ev-shell__brand-meta { font-size: 9px; }
