@@ -1,0 +1,34 @@
+/* Submodul Comisie transfer — stil comun PWA */
+body.ev-unified .committee-page .committee-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+body.ev-unified .committee-page .committee-tabs button{min-height:42px;padding:9px 13px;border:1px solid var(--ev-border-strong);border-radius:10px;background:var(--ev-surface-2);color:var(--ev-text);font-weight:750;cursor:pointer}
+body.ev-unified .committee-page .committee-tabs button[aria-selected="true"]{background:var(--ev-accent-soft);border-color:var(--ev-accent);color:var(--ev-text)}
+body.ev-unified .committee-page .committee-pane[hidden]{display:none!important}
+body.ev-unified .committee-page .committee-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+body.ev-unified .committee-page .committee-grid .full{grid-column:1/-1}
+body.ev-unified .committee-page .committee-field{display:grid;gap:6px;min-width:0}
+body.ev-unified .committee-page .committee-field label{font-size:.83rem;font-weight:750;color:var(--ev-text-secondary)}
+body.ev-unified .committee-page input,body.ev-unified .committee-page select,body.ev-unified .committee-page textarea{width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--ev-border-strong);border-radius:10px;background:var(--ev-input-bg);color:var(--ev-text)}
+body.ev-unified .committee-page textarea{min-height:100px;resize:vertical}
+body.ev-unified .committee-page .committee-choice{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;border:1px solid var(--ev-border);border-radius:10px;background:var(--ev-surface-2);color:var(--ev-text-secondary);line-height:1.45}
+body.ev-unified .committee-page .committee-choice input{width:18px;min-height:18px;height:18px;flex:0 0 18px;margin:2px 0 0}
+body.ev-unified .committee-page .committee-result{padding:14px 16px;border:1px solid var(--ev-border);border-radius:12px;background:var(--ev-surface-2);line-height:1.55}
+body.ev-unified .committee-page .committee-result.success{border-color:var(--ev-success)}
+body.ev-unified .committee-page .committee-result.warning{border-color:var(--ev-warning)}
+body.ev-unified .committee-page .committee-result.error{border-color:var(--ev-danger)}
+body.ev-unified .committee-page .committee-step{display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;align-items:start;padding:12px 0;border-bottom:1px solid var(--ev-border)}
+body.ev-unified .committee-page .committee-step:last-child{border-bottom:0}
+body.ev-unified .committee-page .committee-step-number{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--ev-accent-soft);color:var(--ev-accent-strong);font-weight:850}
+body.ev-unified .committee-page .committee-muted{color:var(--ev-muted);font-size:.85rem}
+body.ev-unified .committee-page .committee-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+body.ev-unified .committee-page .committee-actions button{min-height:42px}
+body.ev-unified .committee-page .committee-checklist{display:grid;gap:9px}
+body.ev-unified .committee-page .committee-checklist .committee-choice{align-items:center}
+body.ev-unified .committee-page .committee-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+body.ev-unified .committee-page .committee-kpi{padding:13px;border:1px solid var(--ev-border);border-radius:12px;background:var(--ev-surface-2)}
+body.ev-unified .committee-page .committee-kpi strong{display:block;font-size:1.18rem;font-weight:850}
+body.ev-unified .committee-page .committee-kpi span{display:block;font-size:.76rem;color:var(--ev-muted)}
+body.ev-unified .committee-page .committee-table{width:100%;border-collapse:collapse}
+body.ev-unified .committee-page .committee-table th,body.ev-unified .committee-page .committee-table td{padding:10px;border-bottom:1px solid var(--ev-border);text-align:left;vertical-align:top}
+body.ev-unified .committee-page .committee-table th{color:var(--ev-text-secondary);font-size:.75rem;text-transform:uppercase}
+@media(max-width:680px){body.ev-unified .committee-page .committee-grid{grid-template-columns:1fr}body.ev-unified .committee-page .committee-kpis{grid-template-columns:1fr}body.ev-unified .committee-page .committee-grid .full{grid-column:auto}}
+@media print{body.ev-unified .committee-page .committee-tabs,body.ev-unified .committee-page .committee-actions,body.ev-unified .page-actions{display:none!important}body.ev-unified .committee-page .committee-pane[hidden]{display:block!important}}
