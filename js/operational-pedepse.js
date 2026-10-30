@@ -222,14 +222,19 @@
   }
 
   function addDeferralMonths(date, months) {
-    // Luni calendaristice, cu limitarea zilei la ultima zi a lunii-țintă.
+    // Regula: ziua anterioară zilei corespondente; dacă ziua corespondentă
+    // nu există în luna-țintă, termenul se încheie în ultima zi a acelei luni.
     const result = new Date(date);
     const originalDay = result.getDate();
     result.setDate(1);
     result.setMonth(result.getMonth() + months);
     const lastDay = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
-    result.setDate(Math.min(originalDay, lastDay));
-    result.setDate(result.getDate() - 1);
+
+    if (originalDay > lastDay) {
+      result.setDate(lastDay);
+    } else {
+      result.setDate(originalDay - 1);
+    }
     return result;
   }
 
