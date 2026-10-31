@@ -421,7 +421,17 @@ function calculateAll() {
     validTimelineItems.forEach(item => {
         const diff = daysBetween(t, item.date);
         const passed = diff < 0;
-        timelineHtml += `<li class="${passed ? 'passed' : ''}"><span class="tl-date">${fmtDate(item.date)}</span> <span class="tl-label">${item.label}</span></li>`;
+        const imminent = !passed && diff <= 14;
+        const countdownText = diff === 0
+            ? 'Se împlinește ASTĂZI'
+            : diff === 1
+                ? 'Se împlinește MÂINE'
+                : `Se împlinește în ${diff} zile`;
+        const statusHtml = imminent
+            ? `<span class="tl-countdown" aria-label="${countdownText}">${countdownText}</span>`
+            : '';
+        const classes = [passed ? 'passed' : '', imminent ? 'imminent' : ''].filter(Boolean).join(' ');
+        timelineHtml += `<li class="${classes}"><span class="tl-date">${fmtDate(item.date)}</span><span class="tl-label">${item.label}</span>${statusHtml}</li>`;
     });
     const timelineList = document.getElementById('timelineList');
     const timelineContainer = document.getElementById('timelineContainer');
