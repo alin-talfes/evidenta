@@ -90,8 +90,10 @@ function validateInputs(birthDate, startDate, life, art, y, m, d) {
     if (life && !LIFE_ARTICLES.has(art)) err.push('Pentru detențiunea pe viață selectați NCP art. 99 sau VCP art. 55¹.');
     if (!life && LIFE_ARTICLES.has(art)) err.push('Articolul selectat se utilizează numai pentru detențiunea pe viață.');
 
-    for (const [label, value] of [['Ani', y], ['Luni', m], ['Zile', d]]) {
-        if (!Number.isSafeInteger(value) || value < 0) err.push(`${label}: introduceți un număr întreg pozitiv sau zero.`);
+    if (!life) {
+        for (const [label, value] of [['Ani', y], ['Luni', m], ['Zile', d]]) {
+            if (!Number.isSafeInteger(value) || value < 0) err.push(`${label}: introduceți un număr întreg pozitiv sau zero.`);
+        }
     }
     if (!life && y === 0 && m === 0 && d === 0) err.push('Introduceți durata pedepsei.');
     if (birthDate && startDate && birthDate > startDate) err.push('Data nașterii este ulterioară începerii executării.');
@@ -664,22 +666,40 @@ function syncLifeArticleUI(source) {
     const sentenceDuration = document.getElementById('sentenceDuration');
     if (!lifeSentence || !article || !sentenceDuration) return;
 
+    const durationInputs = ['durYears', 'durMonths', 'durDays']
+        .map(id => document.getElementById(id)).filter(Boolean);
+    const setLifeDurationState = enabled => {
+        durationInputs.forEach(input => {
+            if (enabled) {
+                if (input.type !== 'text') input.dataset.previousDuration = input.value;
+                input.type = 'text';
+                input.value = '∞';
+                input.disabled = true;
+                input.setAttribute('aria-label', `${input.id === 'durYears' ? 'Ani' : input.id === 'durMonths' ? 'Luni' : 'Zile'} - detențiune pe viață`);
+            } else {
+                input.disabled = false;
+                input.type = 'number';
+                input.value = input.dataset.previousDuration ?? '0';
+                delete input.dataset.previousDuration;
+                input.removeAttribute('aria-label');
+            }
+        });
+    };
+
     if (source === 'life') {
         if (lifeSentence.checked) {
             if (!LIFE_ARTICLES.has(article.value)) article.value = 'NCP99';
-            sentenceDuration.classList.add('hidden');
-        } else {
-            if (LIFE_ARTICLES.has(article.value)) article.value = '';
-            sentenceDuration.classList.remove('hidden');
+        } else if (LIFE_ARTICLES.has(article.value)) {
+            article.value = '';
         }
+        setLifeDurationState(lifeSentence.checked);
     } else if (source === 'article') {
         if (LIFE_ARTICLES.has(article.value)) {
             lifeSentence.checked = true;
-            sentenceDuration.classList.add('hidden');
         } else if (lifeSentence.checked) {
             lifeSentence.checked = false;
-            sentenceDuration.classList.remove('hidden');
         }
+        setLifeDurationState(lifeSentence.checked);
     }
     article.disabled = false;
     updAgeTag();
