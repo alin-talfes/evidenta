@@ -2258,3 +2258,192 @@ body.ev-unified :is(.card, .panel, .upload-panel, .legal-box, .result-box, .ai-c
     font-size: .7rem;
   }
 }
+
+
+/* Pedepse — cronologie în format timeline vertical, cu noduri și axă continuă. */
+body.ev-unified[data-ev-page="pedepse"] #timelineContainer {
+  --tl-axis: var(--ev-accent, #2563eb);
+  margin-top: 20px !important;
+  padding: 0 clamp(14px, 3vw, 22px) 8px !important;
+  min-width: 0;
+}
+body.ev-unified[data-ev-page="pedepse"] #timeline-heading {
+  margin: 0 0 20px !important;
+  font-size: .94rem !important;
+  line-height: 1.3;
+  letter-spacing: .045em;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList {
+  --tl-date-width: 112px;
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin: 0 !important;
+  padding: 0 0 0 26px !important;
+  list-style: none !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 15px;
+  bottom: 16px;
+  left: 7px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--tl-axis), color-mix(in srgb, var(--tl-axis) 30%, var(--ev-border)));
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(98px, var(--tl-date-width)) minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+  min-width: 0;
+  min-height: 68px;
+  margin: 0 !important;
+  padding: 13px 16px !important;
+  border: 1px solid var(--ev-border, #d7e0ec) !important;
+  border-left: 1px solid var(--ev-border, #d7e0ec) !important;
+  border-radius: 13px !important;
+  background: var(--ev-surface-2, #f3f6fb) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .035);
+  color: var(--ev-text-secondary);
+  list-style: none !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li + li {
+  margin-top: 12px !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translateY(-50%);
+  border: 3px solid var(--ev-surface, #fff);
+  border-radius: 50%;
+  background: var(--tl-axis);
+  box-shadow: 0 0 0 2px var(--tl-axis);
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li:first-child::before,
+body.ev-unified[data-ev-page="pedepse"] #timelineList li:last-child::before {
+  width: 15px;
+  height: 15px;
+  left: -27px;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: var(--ev-accent-strong, #1d4ed8) !important;
+  font-size: .83rem;
+  font-weight: 850;
+  line-height: 1.25;
+  letter-spacing: .035em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-label {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: var(--ev-text-secondary);
+  font-size: .94rem;
+  font-weight: 550;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed {
+  opacity: .66;
+  background: var(--ev-surface, #fff) !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed::before {
+  background: var(--ev-muted, #94a3b8);
+  box-shadow: 0 0 0 2px var(--ev-muted, #94a3b8);
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed .tl-date {
+  color: var(--ev-muted) !important;
+}
+@media (max-width: 640px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineContainer {
+    margin-top: 16px !important;
+    padding-right: 2px !important;
+    padding-left: 2px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timeline-heading {
+    margin-bottom: 17px !important;
+    font-size: .9rem !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList {
+    --tl-date-width: 104px;
+    gap: 0;
+    padding-left: 23px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList::before {
+    left: 6px;
+    top: 14px;
+    bottom: 15px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+    grid-template-columns: minmax(88px, var(--tl-date-width)) minmax(0, 1fr);
+    column-gap: 10px;
+    min-height: 62px;
+    padding: 11px 12px !important;
+    border-radius: 12px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li + li {
+    margin-top: 10px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li::before {
+    left: -23px;
+    width: 11px;
+    height: 11px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li:first-child::before,
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li:last-child::before {
+    left: -24px;
+    width: 13px;
+    height: 13px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+    font-size: .76rem;
+    white-space: nowrap;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-label {
+    font-size: .88rem;
+    line-height: 1.35;
+  }
+}
+@media (max-width: 380px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineList {
+    --tl-date-width: 88px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+    column-gap: 8px;
+    padding-right: 9px !important;
+    padding-left: 10px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+    font-size: .7rem;
+    letter-spacing: .01em;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-label {
+    font-size: .83rem;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li {
+    animation: pedepseTimelineIn .28s ease both;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li:nth-child(2) { animation-delay: 25ms; }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li:nth-child(3) { animation-delay: 50ms; }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li:nth-child(4) { animation-delay: 75ms; }
+  body.ev-unified[data-ev-page="pedepse"] #timelineList li:nth-child(5) { animation-delay: 100ms; }
+  @keyframes pedepseTimelineIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
