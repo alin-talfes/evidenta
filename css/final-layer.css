@@ -2447,3 +2447,92 @@ body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed .tl-date {
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
+
+/* Pedepse — rezultate permanente: timeline și calculatorul zilelor muncite. */
+body.ev-unified[data-ev-page="pedepse"] #timelineDetails.timeline-results {
+  display: block;
+  margin-top: 18px !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineDetails.timeline-results.hidden {
+  display: none !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineContainer {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timeline-heading {
+  display: none !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysContainer {
+  display: block;
+  min-width: 0;
+  margin: 22px 0 0;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection {
+  margin: 0 !important;
+  padding: 18px !important;
+  border: 1px solid var(--ev-border, #d7e0ec) !important;
+  border-radius: 15px !important;
+  background: var(--ev-surface, #fff) !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, .045);
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection h4 {
+  margin: 0 0 14px !important;
+  color: var(--ev-text-primary, #172033);
+  font-size: .92rem;
+  line-height: 1.35;
+  font-weight: 850;
+  letter-spacing: .015em;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection .form-grid > div {
+  min-width: 0;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: .8rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection #workDaysResult {
+  color: var(--ev-accent-strong, #1d4ed8);
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysSection #workDaysNote {
+  margin: 12px 0 0;
+  font-size: .8rem;
+  line-height: 1.45;
+}
+@media (max-width: 520px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineDetails.timeline-results {
+    margin-top: 14px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #workDaysContainer {
+    margin-top: 17px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #workDaysSection {
+    padding: 14px !important;
+    border-radius: 13px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #workDaysSection .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 11px;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #workDaysSection h4 {
+    font-size: .86rem;
+  }
+}
