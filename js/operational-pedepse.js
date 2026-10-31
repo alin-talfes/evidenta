@@ -147,7 +147,7 @@
       const totalDays = daysBetweenSafe(start, theoretical) + 1;
       const deductions = quickDeductionData();
       const nonExecuted = quickNonExecutedDays();
-      if (deductions.total > totalDays) throw new Error('Deducerile depășesc durata totală a mandatului.');
+      const deductionsExceedMandate = deductions.total > totalDays;
       const real = new Date(theoretical);
       real.setDate(real.getDate() - deductions.total + nonExecuted);
 
@@ -180,13 +180,15 @@
         </section>`;
       card?.classList.remove('hidden');
       if (alerts) {
-        if (deductions.overlaps.length) {
-          alerts.innerHTML = deductions.overlaps.map(([a,b]) => `<div class="alert warning"><strong>Suprapunere deduceri ${a} și ${b}.</strong> Ambele intervale au fost calculate integral. Verifică dacă suprapunerea este intenționată.</div>`).join('');
-          alerts.classList.remove('hidden');
-        } else {
-          alerts.innerHTML = '';
-          alerts.classList.add('hidden');
-        }
+        const warningHtml = deductionsExceedMandate
+          ? `<div class="alert warning deduction-mandate-warning" role="alert">
+              <strong>ATENȚIE – DEDUCERILE DEPĂȘESC MANDATUL TOTAL</strong>
+              <p>Valoarea totală a deducerilor introduse depășește durata mandatului. Verificați perioadele și documentele justificative. Calculul este afișat pe baza datelor introduse și necesită verificarea situației juridice.</p>
+            </div>`
+          : '';
+        const overlapHtml = deductions.overlaps.map(([a,b]) => `<div class="alert warning"><strong>Suprapunere deduceri ${a} și ${b}.</strong> Ambele intervale au fost calculate integral. Verifică dacă suprapunerea este intenționată.</div>`).join('');
+        alerts.innerHTML = warningHtml + overlapHtml;
+        alerts.classList.toggle('hidden', !warningHtml && !overlapHtml);
       }
       syncQuickResultControls();
       card?.scrollIntoView({ behavior: 'smooth', block: 'start' });
