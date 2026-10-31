@@ -31,7 +31,7 @@ for (const [file, html] of [
 }
 assert.ok(rootHtml.includes('pedepse-ux.js?v=6'), 'Ruta Pedepse trebuie să declare versiunea curentă a controllerului UX.');
 assert.ok(rootHtml.includes('pedepse-optional.js?v=2'), 'Ruta Pedepse trebuie să declare controllerul unic pentru Situații suplimentare.');
-assert.ok(rootHtml.includes('EvidentaPedepseOperational.calculate()'), 'Fluxul de calcul Pedepse trebuie să intre prin dispatcherul operațional unic.');
+assert.ok(rootHtml.includes('operational-pedepse.js?v=12'), 'Ruta Pedepse trebuie să încarce dispatcherul operațional unic.');
 assert.ok(pedepseOperational.includes('EvidentaPedepseUx.runCalculation(window.calculateAll)'), 'Dispatcherul operațional trebuie să delege calculul complet către fluxul UX explicit.');
 assert.ok(!version.includes('ux-upgrades.js'), 'version.js nu trebuie să mai încarce controllerul UX dinamic');
 assert.ok(!fs.existsSync(path.join(root, 'css/ux-upgrades.css')), 'CSS-ul UX separat trebuie eliminat după consolidarea în final-layer.css');
