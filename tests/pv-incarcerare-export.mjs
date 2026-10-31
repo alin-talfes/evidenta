@@ -12,7 +12,7 @@ assert.ok(exp.includes('PROCES-VERBAL DE CONFIRMARE'), 'PV title missing');
 assert.ok(exp.includes('const arrestText=deductionRows.length?deductionRows.map') && exp.includes('${arrestText}'), 'PV trebuie să prezinte distinct toate perioadele deduse, cu intervalele și zilele aferente');
 assert.ok(exp.includes('const recursText=manualRows.length?manualRows.map') && exp.includes('pvEsc(recursText)'), 'PV trebuie să defalce separat fiecare tranșă de recurs compensatoriu');
 assert.ok(exp.includes('const nonText=(c.nonRowsData||[])') && exp.includes('+nonText+'), 'PV trebuie să defalce perioadele adăugate și numărul de zile aferent');
-assert.ok(exp.includes('Instanța emitentă a mandatului de executare'), 'PV trebuie să păstreze adresarea către instanța emitentă');
+assert.ok(exp.includes('Instanța (emitentă a mandatului de executare/detențiunii pe viață)'), 'PV trebuie să păstreze adresarea către instanța emitentă');
 assert.ok(!exp.includes('expirarea teoretică') && !exp.includes('expirării teoretice'), 'PV și nota internă nu trebuie să menționeze expirarea teoretică');
 assert.ok(exp.includes('expiry=pvDate(c.realExp)'), 'Data expirării din PV trebuie să provină din expirarea reală, fără fallback teoretic');
 assert.ok(exp.includes('art. 557 alin. (7) și (8)'), 'legal reference missing');
