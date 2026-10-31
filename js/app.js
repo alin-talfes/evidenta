@@ -285,12 +285,11 @@ function calculateAll() {
         if (Number.isSafeInteger(v) && v > 0) ded += v;
     });
 
-    if (ded > totalDays) {
-        errC.innerHTML = '• Deducerile depășesc mandatul total.';
-        errC.classList.add('visible');
-        return;
-    }
+    const deductionsExceedMandate = ded > totalDays;
     steps.push(`Perioadele deduse însumează ${ded} zile prin însumarea integrală a intervalelor introduse; eventualele suprapuneri sunt semnalate separat.`);
+    if (deductionsExceedMandate) {
+        steps.push(`ATENȚIE: deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile). Rezultatele se afișează pe baza datelor introduse și necesită verificarea situației juridice.`);
+    }
 
     const nonRawRows = [];
     const nonRowsData = [];
@@ -389,6 +388,12 @@ function calculateAll() {
     });
 
     let alertsHtml = '';
+    if (typeof deductionsExceedMandate !== 'undefined' && deductionsExceedMandate) {
+        alertsHtml += `<div class="alert warning deduction-mandate-warning" role="alert">
+            <strong>ATENȚIE – DEDUCERILE DEPĂȘESC MANDATUL TOTAL</strong>
+            <p>Valoarea totală a deducerilor introduse depășește durata mandatului. Verificați perioadele și documentele justificative. Calculul este afișat pe baza datelor introduse și necesită verificarea situației juridice.</p>
+        </div>`;
+    }
     if (alerts.length > 0) {
         alertsHtml = '<div class="alerts-container"><h4>ALERTE – Termene apropiate</h4><ul>';
         alerts.forEach(a => {
