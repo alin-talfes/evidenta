@@ -38,10 +38,11 @@ for (const route of redesignedRoutes) {
   });
 }
 
-test('comutatorul de temă parcurge sistem, luminos, întunecat și revine la sistem', async ({ page }) => {
+test('comutatorul schimbă tema între luminos și întunecat', async ({ page }) => {
   await page.goto('/');
   const themeButton = page.locator('.ev-shell__theme');
 
+  await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'system');
   await themeButton.click();
   await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'light');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
@@ -49,40 +50,16 @@ test('comutatorul de temă parcurge sistem, luminos, întunecat și revine la si
   await themeButton.click();
   await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-
-  await themeButton.click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'system');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('evidenta-theme-mode'))).toBe('system');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('evidenta-theme-mode'))).toBe('dark');
 });
 
-
-test('navigația mobilă indică modul activ și deschide/închide meniul Mai multe', async ({ page }) => {
+test('navigația mobilă indică modul activ și afișează toate cele cinci module', async ({ page }) => {
   await page.goto('/instructaj/');
 
   const nav = page.locator('.ev-mobile-nav');
-  const more = nav.locator('[data-ev-more]');
-  const sheet = page.locator('#ev-mobile-more-sheet');
-
   await expect(nav).toBeVisible();
-  await expect(more).toHaveClass(/is-active/);
-  await expect(more).toHaveAttribute('aria-expanded', 'false');
-  await expect(sheet).toBeHidden();
-
-  await more.click();
-  await expect(more).toHaveAttribute('aria-expanded', 'true');
-  await expect(sheet).toBeVisible();
-  await expect(sheet.locator('a')).toHaveCount(2);
-  await expect(sheet.locator('a[aria-current="page"]')).toHaveText('Instructaj');
-
-  await page.keyboard.press('Escape');
-  await expect(more).toHaveAttribute('aria-expanded', 'false');
-  await expect(sheet).toBeHidden();
-
-  await more.click();
-  await expect(sheet).toBeVisible();
-  await sheet.locator('[data-ev-more-close]').click();
-  await expect(more).toHaveAttribute('aria-expanded', 'false');
-  await expect(sheet).toBeHidden();
+  await expect(nav.locator('a')).toHaveCount(5);
+  await expect(nav.locator('a[aria-current="page"]')).toHaveText('Instructaj');
 });
 
 test('bara fixă lasă spațiu de derulare pentru ultimul conținut pe mobil', async ({ page }) => {

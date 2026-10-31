@@ -78,6 +78,18 @@
         meta.content = theme === 'light' ? '#f8fafc' : '#0b1220';
     }
 
+    function bindThemeControls(root = document) {
+        root.querySelectorAll(THEME_CONTROL_SELECTOR).forEach(button => {
+            if (button.dataset.evThemeBound === 'true') return;
+            button.dataset.evThemeBound = 'true';
+            button.addEventListener('click', event => {
+                event.preventDefault();
+                event.stopPropagation();
+                toggleTheme();
+            });
+        });
+    }
+
     function updateThemeButtons(theme) {
         const mode = validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode();
         const labels = { system: 'Sistem', light: 'Luminos', dark: 'Întunecat' };
@@ -347,16 +359,6 @@
         window.dispatchEvent(new CustomEvent('evidenta:shellready'));
     }
 
-    document.addEventListener('click', event => {
-        const target = event.target;
-        const button = target && target.closest ? target.closest(THEME_CONTROL_SELECTOR) : null;
-        if (!button) return;
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-        toggleTheme();
-    }, true);
-
     function initThemeAndShell() {
         try {
             const mode = readThemeMode();
@@ -365,6 +367,7 @@
             removeRetiredModuleLinks();
             pruneEditorialNoise();
             buildUniversalShell();
+            bindThemeControls(document);
             pruneEditorialNoise();
             updateThemeButtons(readTheme());
             ensureVersionController();

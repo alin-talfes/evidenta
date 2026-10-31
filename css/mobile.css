@@ -1210,3 +1210,94 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     text-wrap:pretty;
   }
 }
+
+
+/* Pedepse — cronologie compactă, aliniată și lizibilă pe ecrane tactile. */
+@media (max-width: 760px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineContainer {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 10px 0 0 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList.timeline {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList.timeline::before,
+  body.ev-unified[data-ev-page="pedepse"] #timelineList.timeline > li::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList.timeline > li {
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: minmax(6.5rem, 29%) minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 12px 13px !important;
+    border: 1px solid var(--border-color, #34445d) !important;
+    border-left: 3px solid var(--accent, #638cff) !important;
+    border-radius: 11px !important;
+    background: var(--surface, #1c2940) !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+    min-width: 0 !important;
+    color: var(--accent, #86a8ff) !important;
+    font-size: .8rem !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-label {
+    min-width: 0 !important;
+    color: var(--text-primary, #eef3ff) !important;
+    font-size: .9rem !important;
+    line-height: 1.4 !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList > li.passed {
+    border-color: var(--border-color, #34445d) !important;
+    border-left-color: var(--text-muted, #77849a) !important;
+    background: var(--surface-muted, #202b40) !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList > li.passed .tl-date,
+  body.ev-unified[data-ev-page="pedepse"] #timelineList > li.passed .tl-label {
+    color: var(--text-secondary, #aebbd0) !important;
+  }
+}
+
+@media (max-width: 390px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineList.timeline > li {
+    grid-template-columns: minmax(6rem, 31%) minmax(0, 1fr) !important;
+    gap: 8px !important;
+    padding: 11px 10px !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-date {
+    font-size: .76rem !important;
+  }
+
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-label {
+    font-size: .86rem !important;
+  }
+}
