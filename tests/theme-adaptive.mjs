@@ -42,4 +42,4 @@ assert.ok(contextSource.includes("'ai': ['ai', 'AI Documente'"), 'AI Documente m
 assert.ok(read('instructaj/styles.css').includes('final-layer.css?v=7'), 'Instructaj must load the refreshed shared final visual layer.');
 assert.ok(read('semnalmente/style.css').includes('final-layer.css?v=7'), 'Semnalmente must load the refreshed shared final visual layer.');
 assert.ok(read('css/style.css').includes('final-layer.css?v=7'), 'Shared pages must refresh the final visual layer URL.');
-assert.ok(read('ai/index.html').includes('js/theme.js?v=48'), 'AI Documente must load the current page-context controller.');
+assert.ok(read('ai/index.html').includes('js/theme.js?v=50'), 'AI Documente must load the current page-context controller.');
