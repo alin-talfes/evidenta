@@ -254,10 +254,12 @@
                 <h3 id="results-heading">REZULTATE</h3>
                 <div id="resultsContent"></div>
                 <div id="alertsContainer" class="alerts-container hidden" role="alert" aria-live="polite"></div>
-                <details id="timelineDetails" class="ev-result-details hidden mt-16" data-ev-optional="true"><summary>AFIȘEAZĂ CRONOLOGIA TERMENELOR</summary><div id="timelineContainer" class="mt-16">
-                    <h4 style="color:var(--accent-strong);" id="timeline-heading">CRONOLOGIE TERMENE</h4>
-                    <ul id="timelineList" class="timeline" aria-labelledby="timeline-heading"></ul>
-                </div></details>
+                <div id="timelineDetails" class="timeline-results hidden mt-16">
+                    <div id="timelineContainer" class="mt-16">
+                        <ul id="timelineList" class="timeline" aria-label="Cronologia termenelor"></ul>
+                    </div>
+                    <div id="workDaysContainer"></div>
+                </div>
                 
                 <details id="stepsDetails" class="ev-result-details hidden" data-ev-optional="true"><summary>AFIȘEAZĂ PAȘII CALCULULUI</summary><div id="stepsContainer" class="steps-container" aria-labelledby="steps-heading">
                     <h4 id="steps-heading">PAȘII CALCULULUI</h4>
