@@ -2856,3 +2856,47 @@ body.ev-unified[data-ev-page="pedepse"] #timelineList li.passed::after {
     font-size: .8rem;
   }
 }
+
+
+/* Evidențiere termene apropiate: astăzi – următoarele 14 zile. */
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.imminent {
+  border-color: color-mix(in srgb, var(--ev-accent, #2563eb) 38%, var(--ev-border)) !important;
+  background: color-mix(in srgb, var(--ev-accent, #2563eb) 6%, var(--ev-surface, #fff)) !important;
+  box-shadow: 0 2px 9px color-mix(in srgb, var(--ev-accent, #2563eb) 10%, transparent);
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.imminent .tl-date {
+  color: var(--ev-accent-strong, #1d4ed8) !important;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.imminent::before {
+  width: 13px;
+  height: 13px;
+  background: var(--ev-accent, #2563eb);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ev-accent, #2563eb) 18%, transparent);
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-countdown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  margin-top: 2px;
+  padding: 5px 9px;
+  border: 1px solid color-mix(in srgb, var(--ev-accent, #2563eb) 25%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ev-accent, #2563eb) 10%, var(--ev-surface, #fff));
+  color: var(--ev-accent-strong, #1d4ed8);
+  font-size: .72rem;
+  font-weight: 850;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+body.ev-unified[data-ev-page="pedepse"] #timelineList li.imminent .tl-label {
+  color: var(--ev-text-primary, #334155);
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  body.ev-unified[data-ev-page="pedepse"] #timelineList .tl-countdown {
+    padding: 4px 6px;
+    font-size: .64rem;
+  }
+}
