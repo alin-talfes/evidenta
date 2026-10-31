@@ -25,7 +25,7 @@ test('afișează identitatea IPC fără overflow pe iPhone', async ({ page }) =>
 test('navighează spre reguli și înapoi fără rute rupte', async ({ page }) => {
   const assertNoPageErrors = watchPageErrors(page);
   await page.goto('/transfer/');
-  await page.getByRole('link', { name: 'REGULI TRANSFER' }).click();
+  await page.getByRole('link', { name: 'DECIZIE PROFILARE' }).click();
 
   await expect(page).toHaveURL(/\/transfer\/rules\/$/);
   await expect(page).toHaveTitle(/Inmate Pocket Calculator$/);
