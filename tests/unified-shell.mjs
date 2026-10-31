@@ -22,7 +22,7 @@ for (const marker of [
   'evidenta-theme-toggle',
   'unified-shell.css',
   'visual-audit.css',
-  'version.js?v=46',
+  'version.js?v=47',
   "'footer:not(.ev-footer)'"
 ]) {
   assert.ok(theme.includes(marker), `Controllerul universal trebuie să conțină ${marker}`);
