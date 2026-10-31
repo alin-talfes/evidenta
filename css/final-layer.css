@@ -2945,3 +2945,50 @@ body.ev-unified[data-ev-page="pedepse"] .deduction-mandate-warning p {
     font-size: .92rem !important;
   }
 }
+
+
+/* Indicator temporal inline pentru datele din secțiunea REZULTATE. */
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator,
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator-slot .result-date-indicator {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  margin: 3px 0 3px 8px;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: .7rem;
+  font-weight: 850;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator.today {
+  color: #b42318;
+  background: #fff0ee;
+  border-color: #f2b8b2;
+}
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator.tomorrow {
+  color: #a65308;
+  background: #fff4e5;
+  border-color: #f2cf9b;
+}
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator.soon {
+  color: var(--ev-text-secondary, #526174);
+  background: var(--ev-surface-2, #f1f4f8);
+  border-color: var(--ev-border, #d7e0ec);
+}
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator-slot {
+  display: block;
+  min-height: 0;
+}
+body.ev-unified[data-ev-page="pedepse"] #workDaysDateIndicator .result-date-indicator {
+  margin-left: 0;
+}
+@media (max-width: 520px) {
+  body.ev-unified[data-ev-page="pedepse"] .result-date-indicator {
+    margin-left: 5px;
+    padding: 4px 7px;
+    font-size: .65rem;
+    white-space: normal;
+  }
+}
