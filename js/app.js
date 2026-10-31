@@ -241,7 +241,12 @@ function temporalIndicator(date) {
     const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const current = today();
     const diff = Math.round((target.getTime() - current.getTime()) / 86400000);
-    if (diff < 0 || diff > 14) return '';
+
+    if (diff < 0) {
+        return '<span class="result-date-indicator expired" role="status">!!! TERMEN ÎMPLINIT !!!</span>';
+    }
+    if (diff > 14) return '';
+
     const label = diff === 0 ? 'Se împlinește ASTĂZI'
         : diff === 1 ? 'Se împlinește MÂINE'
         : `Se împlinește în ${diff} zile`;
@@ -303,7 +308,7 @@ function calculateAll() {
     const deductionsExceedMandate = ded > totalDays;
     steps.push(`Perioadele deduse însumează ${ded} zile prin însumarea integrală a intervalelor introduse; eventualele suprapuneri sunt semnalate separat.`);
     if (deductionsExceedMandate) {
-        steps.push(`ATENȚIE: deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile). Rezultatele se afișează pe baza datelor introduse și necesită verificarea situației juridice.`);
+        steps.push(`ATENȚIE: deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile), iar expirarea reală calculată (${fmtDate(new Date(theorExp.getTime() - ded * 86400000 + non * 86400000))}) este anterioară datei începerii executării (${fmtDate(startDate)}). Verificați perioadele și documentele justificative.`);
     }
 
     const nonRawRows = [];
@@ -405,12 +410,12 @@ function calculateAll() {
     let alertsHtml = '';
     if (typeof deductionsExceedMandate !== 'undefined' && deductionsExceedMandate) {
         alertsHtml += `<div class="alert warning deduction-mandate-warning" role="alert">
-            <strong>ATENȚIE – DEDUCERILE DEPĂȘESC MANDATUL TOTAL</strong>
-            <p>Valoarea totală a deducerilor introduse depășește durata mandatului. Verificați perioadele și documentele justificative. Calculul este afișat pe baza datelor introduse și necesită verificarea situației juridice.</p>
+            <strong>!!! ATENȚIE – DEDUCERILE DEPĂȘESC DATA EXPIRĂRII PEDEPSEI !!!</strong>
+            <p>Deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile), astfel încât expirarea reală calculată (${fmtDate(realExp)}) este anterioară datei începerii executării (${fmtDate(startDate)}). Verificați perioadele și documentele justificative. Calculul rămâne afișat pe baza datelor introduse.</p>
         </div>`;
     }
     if (alerts.length > 0) {
-        alertsHtml = '<div class="alerts-container"><h4>ALERTE – Termene apropiate</h4><ul>';
+        alertsHtml += '<div class="alerts-container"><h4>ALERTE – Termene apropiate</h4><ul>';
         alerts.forEach(a => {
             const found = alertDates.find(x => x.label === a.label);
             alertsHtml += `<li>${a.label} expiră în <strong>${a.diff} zile</strong> (${fmtDate(found.date)})</li>`;
@@ -418,7 +423,7 @@ function calculateAll() {
         alertsHtml += '</ul></div>';
     }
     document.getElementById('alertsContainer').innerHTML = alertsHtml;
-    document.getElementById('alertsContainer').classList.toggle('hidden', alerts.length === 0);
+    document.getElementById('alertsContainer').classList.toggle('hidden', !alertsHtml.trim());
 
     const timelineItems = [
         { label: 'Început executare', date: startDate },
