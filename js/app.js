@@ -305,7 +305,7 @@ function calculateAll() {
         if (Number.isSafeInteger(v) && v > 0) ded += v;
     });
 
-    const deductionsExceedMandate = ded > totalDays;
+    const deductionsExceedMandate = !life && ded > totalDays;
     steps.push(`Perioadele deduse însumează ${ded} zile prin însumarea integrală a intervalelor introduse; eventualele suprapuneri sunt semnalate separat.`);
     if (deductionsExceedMandate) {
         steps.push(`ATENȚIE: deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile). Verificați perioadele și documentele justificative; calculul rămâne afișat pe baza datelor introduse.`);
