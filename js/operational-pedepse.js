@@ -147,9 +147,9 @@
       const totalDays = daysBetweenSafe(start, theoretical) + 1;
       const deductions = quickDeductionData();
       const nonExecuted = quickNonExecutedDays();
-      const deductionsExceedMandate = deductions.total > totalDays;
       const real = new Date(theoretical);
       real.setDate(real.getDate() - deductions.total + nonExecuted);
+      const deductionsExceedExpiry = real < start;
 
       window.lastCalculation = {
         quick: true,
@@ -183,7 +183,7 @@
         </section>`;
       card?.classList.remove('hidden');
       if (alerts) {
-        const warningHtml = deductionsExceedMandate
+        const warningHtml = deductionsExceedExpiry
           ? `<div class="alert warning deduction-mandate-warning" role="alert">
               <strong>!!! ATENȚIE – DEDUCERILE DEPĂȘESC DATA EXPIRĂRII PEDEPSEI !!!</strong>
               <p>Deducerile introduse (${deductions.total} zile) depășesc durata mandatului (${totalDays} zile), astfel încât expirarea reală calculată (${fmtDateSafe(real)}) este anterioară datei începerii executării (${fmtDateSafe(start)}). Verificați perioadele și documentele justificative. Calculul rămâne afișat pe baza datelor introduse.</p>
