@@ -227,7 +227,8 @@
 @media (min-width:761px) {
   /* Wrapper-ul <details> există pentru compactarea pe mobil; pe desktop nu trebuie să fie un card exterior. */
   body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details {
-    display:contents !important;
+    display:block !important;
+    width:100% !important;
     margin:0 !important;
     padding:0 !important;
     border:0 !important;
@@ -243,9 +244,11 @@
     background:transparent !important;
   }
   body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
-    display:contents !important;
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    align-items:stretch !important;
+    gap:12px !important;
     padding:0 !important;
-    gap:0 !important;
   }
 
   /* Trei controale pe o singură linie: 30 zile, 60 zile și valoare personalizată. */
@@ -372,3 +375,60 @@
   }
 }
 
+
+/* Desktop audit: ritm, titluri și aliniere pentru calculatoarele auxiliare. */
+@media (min-width:761px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-mode-panel .form-grid + .help-text,
+  body.ev-unified[data-ev-page="pedepse"] .ev-deferral-calculator > .help-text:not(:empty) {
+    display:block !important;
+    margin-top:8px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-mode-panel [data-ev-preventive-card="true"] > .form-grid,
+  body.ev-unified[data-ev-page="pedepse"] [data-ev-preventive-card="true"] > .form-grid {
+    align-items:end !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-field > label,
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom > label,
+  body.ev-unified[data-ev-page="pedepse"] [data-ev-preventive-card="true"] > .form-grid > div > label {
+    display:block !important;
+    min-height:1.3em !important;
+    margin-bottom:6px !important;
+    text-transform:uppercase !important;
+    letter-spacing:.045em !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-preventive-days-custom > label {
+    white-space:nowrap !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card {
+    height:100% !important;
+    align-self:stretch !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__head h3 {
+    display:flex !important;
+    align-items:center !important;
+    min-height:1.3em !important;
+    margin:0 0 10px !important;
+    padding-left:12px !important;
+    border-left:4px solid var(--ev-accent,#2563eb) !important;
+    font-size:1rem !important;
+    line-height:1.3 !important;
+    font-weight:850 !important;
+    text-transform:uppercase !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .top-bar {
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    align-items:stretch !important;
+    gap:10px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .top-bar > button {
+    width:100% !important;
+    min-width:0 !important;
+  }
+}
+
+@media (min-width:761px) and (max-width:1023px) {
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+}

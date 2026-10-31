@@ -22,7 +22,7 @@ for (const marker of [
   'evidenta-theme-toggle',
   'unified-shell.css',
   'visual-audit.css',
-  'version.js?v=46',
+  'version.js?v=47',
   "'footer:not(.ev-footer)'"
 ]) {
   assert.ok(theme.includes(marker), `Controllerul universal trebuie să conțină ${marker}`);
@@ -139,8 +139,13 @@ assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-cor
 console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea IPC versiune/copyright mutată în header.');
 
 // Compatibilitate browser mobil: storage privat, viewport safe-area și fallback JS/CSS.
-assert.ok(!theme.includes('localStorage.getItem'), 'Controllerul nu trebuie să acceseze direct localStorage');
-assert.ok(!theme.includes('localStorage.setItem'), 'Controllerul nu trebuie să scrie direct în localStorage');
+const storageGetStart = theme.indexOf('function storageGet(key) {');
+const storageSetStart = theme.indexOf('function storageSet(key, value) {');
+const storageGetBody = theme.slice(storageGetStart, theme.indexOf('\\n    }', storageGetStart));
+const storageSetBody = theme.slice(storageSetStart, theme.indexOf('\\n    }', storageSetStart));
+assert.ok(storageGetBody.includes('window.localStorage.getItem'), 'Citirea Storage trebuie izolată în storageGet');
+assert.ok(storageSetBody.includes('window.localStorage.setItem'), 'Scrierea Storage trebuie izolată în storageSet');
+assert.equal(theme.split('window.localStorage.getItem').length - 1 + theme.split('window.localStorage.setItem').length - 1, 2, 'Accesul Storage trebuie limitat la cele două funcții defensive');
 assert.ok(!theme.includes('?.'), 'Controllerul comun trebuie să evite optional chaining pentru WebView-uri mai vechi');
 assert.ok(theme.includes('storageGet') && theme.includes('storageSet'), 'Preferințele trebuie să aibă fallback când Storage este blocat');
 assert.ok(shell.includes('constant(safe-area-inset-top)'), 'Headerul trebuie să aibă fallback safe-area pentru WebKit vechi');

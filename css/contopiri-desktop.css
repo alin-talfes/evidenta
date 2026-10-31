@@ -3,7 +3,7 @@
 @media (min-width: 761px) {
   body.ev-unified[data-ev-page="contopiri"] > .container {
     box-sizing: border-box !important;
-    width: min(calc(100% - 48px), 1240px) !important;
+    width: min(calc(100% - 36px), 1240px) !important;
     max-width: 1240px !important;
     margin: 0 auto !important;
     padding: 18px 0 24px !important;
@@ -11,7 +11,7 @@
 
   body.ev-unified[data-ev-page="contopiri"] .ev-shell__module {
     box-sizing: border-box !important;
-    width: min(calc(100% - 48px), 1240px) !important;
+    width: min(calc(100% - 36px), 1240px) !important;
     max-width: 1240px !important;
     margin: 0 auto 8px !important;
     padding: 0 !important;
@@ -30,7 +30,7 @@
   }
 
   body.ev-unified[data-ev-page="contopiri"] .ev-module-intro h1 {
-    font-size: clamp(1.65rem, 2.2vw, 2rem) !important;
+    font-size: clamp(1.25rem, 1.7vw, 1.55rem) !important;
     line-height: 1.12 !important;
   }
 
@@ -159,4 +159,30 @@
 }
 @media (min-width:761px) and (max-width:1050px) {
  body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns:76px 76px 76px minmax(240px,1fr) 44px !important; gap:9px !important; }
+}
+
+/* Select compact pe mobil, păstrând pragul de 16px pentru evitarea zoomului iOS. */
+@media (max-width:760px) {
+  body.ev-unified[data-ev-page^="contopiri"] .penalty-row select {
+    box-sizing:border-box !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    padding-inline:5px !important;
+    text-overflow:ellipsis;
+    letter-spacing:-.02em;
+  }
+}
+
+/* Desktop audit: aceeași axă pentru conținut și shell, titlu la scara modulelor. */
+@media (min-width:761px) {
+  body.ev-unified[data-ev-page="contopiri"] > .container {
+    width:min(calc(100% - 36px),1240px) !important;
+    max-width:1240px !important;
+    margin-inline:auto !important;
+  }
+  body.ev-unified[data-ev-page="contopiri"] .ev-module-intro h1 {
+    font-size:clamp(1.25rem,1.7vw,1.55rem) !important;
+    line-height:1.2 !important;
+  }
 }

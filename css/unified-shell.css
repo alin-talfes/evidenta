@@ -72,6 +72,7 @@ body > .app-shell .suite-links {
   align-items: center;
   gap: 10px;
   min-width: 0;
+  min-height:44px;
   color: var(--ev-text) !important;
   text-decoration: none;
 }
@@ -139,7 +140,7 @@ body > .app-shell .suite-links {
 
 .ev-shell__nav a {
   gap:5px;
-  min-height: 38px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -189,8 +190,9 @@ body > .app-shell .suite-links {
 
 .ev-shell__theme,
 .ev-shell__actions .access-logout {
-  min-width: 40px;
-  min-height: 40px;
+  box-sizing:border-box;
+  min-width: 44px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -200,7 +202,9 @@ body > .app-shell .suite-links {
   color: var(--ev-text);
   background: var(--ev-surface-2);
   font: inherit;
-  font-size: 13px;
+  font-family: "Segoe UI Symbol", "Apple Symbols", sans-serif;
+  font-size: 19px;
+  line-height:1;
   font-weight: 800;
   cursor: pointer;
 }
@@ -455,3 +459,20 @@ textarea,
 /* Marcă unificată: pictogramă calculator în toate modulele. */
 .ev-shell__mark { width: 44px; height: 44px; border-radius: 13px; }
 .ev-shell__calculator { display:block; width:25px; height:25px; }
+
+@media (min-width:761px) {
+  body.ev-unified .ev-shell__theme {
+    box-sizing:border-box !important;
+    width:44px !important;
+    min-width:44px !important;
+    height:44px !important;
+    min-height:44px !important;
+    padding:0 !important;
+  }
+  body.ev-unified .ev-shell__theme svg {
+    display:block !important;
+    width:20px !important;
+    height:20px !important;
+    flex:0 0 20px !important;
+  }
+}

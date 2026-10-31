@@ -453,20 +453,7 @@ function downloadReport() {
   URL.revokeObjectURL(url);
 }
 
-function initTheme() {
-  const key = 'descriere-semnalmente-theme';
-  const saved = localStorage.getItem(key);
-  const preferred = saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  document.documentElement.dataset.theme = preferred;
-  $('btn-theme').addEventListener('click', () => {
-    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem(key, next);
-  });
-}
-
 function init() {
-  initTheme();
   ensureAdvancedUi();
   const input = $('benchmark-files');
   const drop = $('benchmark-drop');

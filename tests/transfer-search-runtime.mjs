@@ -18,7 +18,7 @@ assert(source.includes('class="match-name"'), 'Transfer result name must use a d
 assert(!source.includes('class="primary"'), 'Transfer result name must not reuse the global .primary button class');
 assert(css.includes('[data-ev-page="transfer"] #resultArea .match-name'), 'Transfer result name needs scoped presentation rules');
 assert(css.includes('[data-ev-page="transfer"] #resultArea .ev-match-why > summary'), 'Transfer explainability disclosure needs scoped presentation rules');
-assert(html.includes('style.css?v=44'), 'Transfer stylesheet cache key must be bumped after the visual fix');
+assert(html.includes('style.css?v=52'), 'Transfer stylesheet cache key must be bumped after the visual fix');
 assert(html.includes('app.js?v=20260910-4'), 'Transfer app cache key must be bumped after the result class fix');
 
 console.log('Transfer search and result UI regression checks passed.');

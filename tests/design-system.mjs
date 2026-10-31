@@ -150,7 +150,7 @@ assert.ok(htmlFiles.length >= 9, "Auditul trebuie să identifice toate paginile 
 function isCoveredByDesignSystem(relativePath, html) {
   if (html.includes("design-system.css")) return true;
 
-  if (["index.html", "contopiri/index.html", "transfer/index.html", "transfer/rules/index.html"].includes(relativePath)) {
+  if (["index.html", "contopiri/index.html", "transfer/index.html", "transfer/rules/index.html", "transfer/comisie.html", "transfer/comisie/index.html"].includes(relativePath)) {
     return /(?:\.\.\/)?js\/theme\.js/.test(html);
   }
 
@@ -177,9 +177,9 @@ assert.ok(read("descriere-semnalmente/index.html").includes("design-system.css")
 assert.ok(!fs.existsSync(path.join(repoDir, "termene.html")), "Pagina Termene trebuie eliminată din inventarul repo-ului");
 
 const pedepseHtml = read("index.html");
-assert.ok(pedepseHtml.includes('class="ev-page-intro"'), "Pedepse trebuie să aibă o introducere vizuală proprie");
-assert.ok(pedepseHtml.includes('id="page-title"'), "Titlul principal Pedepse trebuie să fie semantic");
-assert.ok(finalLayer.includes('.ev-page-intro__copy'), "Redesignul Pedepse trebuie să definească hero-ul");
+assert.ok(pedepseHtml.includes('id="main-content"'), "Pedepse trebuie să păstreze containerul semantic principal");
+assert.ok(pedepseHtml.includes('class="ev-calc-mode"'), "Pedepse trebuie să păstreze selectorul semantic al modului de calcul");
+assert.ok(pedepseHtml.includes('id="date-ppl-heading"'), "Cardul cu date generale PPL trebuie să aibă un titlu semantic");
 assert.ok(finalLayer.includes('grid-template-columns: repeat(3, minmax(0, 1fr))'), "Modurile Pedepse trebuie să rămână într-o grilă adaptivă");
 assert.ok(finalLayer.includes('@media (max-width: 640px)'), "Redesignul Pedepse trebuie să includă reguli mobile");
 

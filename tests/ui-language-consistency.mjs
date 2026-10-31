@@ -29,11 +29,11 @@ assert.match(contopiri, /<h3>ADAUGĂ PEDEPSE<\/h3>/);
 assert.match(transfer, /<h3>CRITERII DE CĂUTARE<\/h3>/);
 
 for (const [file, css] of uppercaseButtonStyles) {
-  assert.match(css, /visual-audit\\.css\\?v=4/, `${file}: trebuie să încarce stratul vizual comun v4.`);
+  assert.ok(css.includes('visual-audit.css?v=4'), `${file}: trebuie să încarce stratul vizual comun v4.`);
 }
 
-assert.match(visualAuditCss, /text-transform:\\s*uppercase\\s*!important;/, 'Stratul vizual comun trebuie să normalizeze capitalizarea butoanelor.');
-assert.doesNotMatch(instructajCss, /text-transform:\\s*none\\s*!important;/, 'Instructaj nu trebuie să anuleze capitalizarea comună a butoanelor.');
-assert.doesNotMatch(officerCss, /text-transform:\\s*none\\s*!important;/, 'Ofițer nu trebuie să anuleze capitalizarea comună a butoanelor.');
+assert.match(visualAuditCss, /text-transform:\s*uppercase\s*!important;/, 'Stratul vizual comun trebuie să normalizeze capitalizarea butoanelor.');
+assert.doesNotMatch(instructajCss, /text-transform:\s*none\s*!important;/, 'Instructaj nu trebuie să anuleze capitalizarea comună a butoanelor.');
+assert.doesNotMatch(officerCss, /text-transform:\s*none\s*!important;/, 'Ofițer nu trebuie să anuleze capitalizarea comună a butoanelor.');
 
 console.log('Consistență UI: titluri, butoane AZI și capitalizarea comună a controalelor sunt verificate.');

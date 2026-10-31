@@ -81,9 +81,13 @@
     function updateThemeButtons(theme) {
         const mode = validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode();
         const labels = { system: 'Sistem', light: 'Luminos', dark: 'Întunecat' };
-        const icons = { system: '◐', light: '☀️', dark: '🌙' };
+        const icons = {
+            system: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor"/></svg>',
+            light: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            dark: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.5 15.2A8.8 8.8 0 0 1 8.8 3.5 9 9 0 1 0 20.5 15.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
+        };
         document.querySelectorAll(THEME_CONTROL_SELECTOR).forEach(button => {
-            button.textContent = icons[mode];
+            button.innerHTML = icons[mode];
             button.dataset.themeMode = mode;
             button.setAttribute('aria-pressed', String(theme === 'light'));
             button.setAttribute('aria-label', `Tema: ${labels[mode]}. Apasă pentru următoarea opțiune.`);
@@ -297,7 +301,7 @@
 
         const context = pageContext();
         document.body.classList.add('ev-unified');
-        document.body.dataset.evPage = context.page || context.navKey || 'evidenta';
+        document.body.dataset.evPage = context.page === 'index.html' ? 'pedepse' : (context.page || context.navKey || 'evidenta');
         updateDescription(context);
 
         const shell = document.createElement('header');

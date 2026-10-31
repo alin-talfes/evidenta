@@ -49,7 +49,7 @@ for (const marker of ['bootstrap()', 'initVersionIdentity()', 'renderBrandIdenti
 }
 assert.equal((version.match(/initVersionIdentity\(\);/g) || []).length, 1, 'Identitatea versiunii trebuie pornită o singură dată din bootstrap.');
 
-const sharedStyles = ['operational-upgrades.css?v=3', 'mobile-modules.css?v=1', 'disclosure-hardening.css?v=4', 'mobile.css?v=5'];
+const sharedStyles = ['operational-upgrades.css', 'mobile-modules.css', 'disclosure-hardening.css', 'mobile.css'];
 const sharedScripts = ['ux-upgrades.js?v=3', 'operational-navigation.js?v=5', 'no-nonoptional-disclosures-v1.js?v=4', 'disclosure-hardening-v2.js?v=2', 'pwa-register.js?v=3', 'version.js'];
 for (const [file, html] of [
   ['index.html', rootHtml],
@@ -62,7 +62,7 @@ for (const [file, html] of [
   for (const script of sharedScripts) assert.ok(html.includes(script), `${file} trebuie să declare ${script}`);
 }
 
-for (const marker of ['operational-pedepse.js?v=10', 'pedepse-optional.js?v=2', 'pedepse-ux.js?v=6', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
+for (const marker of ['operational-pedepse.js?v=12', 'pedepse-optional.js?v=2', 'pedepse-ux.js?v=6', 'quarantine-ui.js?v=3', 'deduction-ui.js?v=2']) {
   assert.ok(rootHtml.includes(marker), `Pedepse trebuie să declare ${marker}`);
 }
 assert.ok(!rootHtml.includes('pedepse-optional-fix-v2.js'), 'Pedepse nu trebuie să mai încarce controllerul optional de compatibilitate.');
@@ -72,11 +72,11 @@ assert.ok(!fs.existsSync(path.join(root, 'js/pedepse-modes-v5.js')), 'Controller
 assert.ok(rootHtml.includes('js/ui.js?v=39'), 'Pedepse trebuie să declare controllerul UI general curent.');
 assert.ok(rootHtml.includes('onclick="calculatePedepseSafely()"'), 'Butonul de calcul trebuie să intre prin dispatcherul sigur curent.');
 assert.ok(!rootHtml.includes('class="hamburger"'), 'Modul Pedepse nu trebuie să afișeze buton hamburger.');
-assert.ok(rootHtml.includes('class="top-actions" aria-label="Informații și legislație"'), 'Acțiunile Informații și OMJ trebuie să fie vizibile permanent sub toolbar.');
-assert.ok(rootHtml.includes('<h1 id="page-title">Calcul pedepse</h1>'), 'Titlul paginii trebuie să fie compact.');
-assert.ok(rootHtml.includes('Liberare condiționată · Regim · Prelungiri măsuri preventive'), 'Descrierea trebuie să enumere numai funcțiile principale.');
+assert.ok(['id="saveBtn"','id="loadBtn"','id="resetBtn"'].every(marker => rootHtml.includes(marker)), 'Toolbar-ul Pedepse trebuie să păstreze acțiunile SALVEAZĂ, ÎNCARCĂ și RESET.');
+assert.ok(!rootHtml.includes('id="page-title"'), 'Titlul redundant al paginii Pedepse trebuie să rămână eliminat.');
+assert.ok(!rootHtml.includes('Liberare condiționată · Regim · Prelungiri măsuri preventive'), 'Descrierea redundantă eliminată nu trebuie reintrodusă.');
 assert.ok(rootHtml.includes('css/pedepse-header-v1.css?v=1'), 'CSS-ul compact al antetului trebuie declarat static.');
-assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=6'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
+assert.ok(rootHtml.includes('css/pedepse-modes-v3.css?v=8'), 'CSS-ul modurilor Pedepse trebuie declarat static.');
 assert.ok(!rootHtml.includes('pedepse-prison-date.js'), 'Controllerul dinamic pentru data intrării trebuie eliminat.');
 for (const marker of [
   'class="ev-calc-mode" data-ev-two-modes="true"',
@@ -86,13 +86,13 @@ for (const marker of [
   'MĂSURI PREVENTIVE',
   'class="ev-preventive-mode-panel"',
   'class="ev-mobile-lc-details"',
-  '<h2 class="ev-mobile-lc-details__title">Liberare condiționată și date PPL</h2>',
   'class="card ev-lc-controls-card"',
   'class="ev-optional-tools card"',
   'id="recursCard"',
   'id="nonExecCard"',
   'id="restCard"'
 ]) assert.ok(rootHtml.includes(marker), `Markup-ul declarativ Pedepse trebuie să includă ${marker}`);
+assert.ok(!rootHtml.includes('Liberare condiționată și date PPL'), 'Titlul redundant eliminat din Pedepse nu trebuie reintrodus.');
 assert.ok(aiHtml.includes('operational-ai.js?v=3'));
 assert.ok(aiHtml.includes('ai/result-pedepse.js?v=1'));
 assert.ok(contopiriHtml.includes('operational-contopiri.js?v=2'));
@@ -257,7 +257,7 @@ assert.ok(sw.includes("if (url.pathname.endsWith('/version.json')) return true;"
 assert.ok(sw.includes("['ipc-static-', 'ipc-runtime-', 'evidenta-static-', 'evidenta-runtime-']"), 'Activarea trebuie să curețe și cache-urile cu prefixul legacy.');
 assert.ok(sw.includes("isCriticalRuntime(url) || ['script', 'style'].includes(request.destination)"), 'Scripturile și stilurile trebuie revalidate din rețea înainte de folosirea cache-ului.');
 assert.ok(sw.includes('const cached = await caches.match(request);'), 'Potrivirea normală din cache trebuie să respecte cheia de versiune din URL.');
-assert.ok(sw.includes('operational-upgrades|mobile|mobile-modules|pedepse-modes-v3|disclosure-hardening'));
+for (const stylesheet of ['operational-upgrades','mobile','mobile-modules','pedepse-modes-v3','disclosure-hardening']) assert.ok(sw.includes(stylesheet), `SW trebuie să recunoască ${stylesheet}.css`);
 assert.ok(sw.includes('./js/pedepse-optional.js'));
 assert.ok(sw.includes('pedepse-optional|deduction-ui'));
 assert.ok(!sw.includes('pedepse-optional-fix-v2'));

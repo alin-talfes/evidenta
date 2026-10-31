@@ -527,3 +527,22 @@ body.ev-unified .ev-shell__module h1 {
   text-align: left !important;
   line-height: 1.18 !important;
 }
+
+/* Tipografie desktop: lizibilitate unitară fără a modifica modulul Ofițer. */
+@media (min-width:761px) {
+  body.ev-unified:not([data-ev-page^="ofiter"]) label:not(
+    .toggle-switch,.radio-btn,.builder-check,.ai-check-row,
+    .ev-prison-same-check,.sex-label,.life-label
+  ) { font-size:.82rem !important; }
+  body.ev-unified:not([data-ev-page^="ofiter"]) :is(
+    input[type="text"],input[type="search"],input[type="number"],
+    input[type="date"],input[type="time"],input[type="password"],select,textarea
+  ) { font-size:.95rem !important; }
+  body.ev-unified:not([data-ev-page^="ofiter"]) :is(
+    button,.btn,.btn-utility,.btn-big,.btn-today,.button,.primary,.secondary,.toggle-btn,.filter
+  ) { font-size:.88rem !important; }
+  body.ev-unified:not([data-ev-page^="ofiter"]) :is(
+    .card > h2,.card > h3,.panel > h2,.panel > h3,
+    .analysis-panel > h2,.analysis-panel > h3,.results-section > h2,.results-section > h3
+  ) { font-size:1.05rem !important; }
+}

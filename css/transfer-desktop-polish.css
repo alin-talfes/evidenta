@@ -3,8 +3,9 @@
   body.ev-unified[data-ev-page="transfer"] .page-actions,
   body.ev-transfer-auto .page-actions {
     display:flex !important;
-    width:100% !important;
-    max-width:none !important;
+    width:max-content !important;
+    max-width:100% !important;
+    margin-left:auto !important;
     justify-content:flex-end !important;
     align-items:center !important;
     gap:10px !important;
@@ -25,9 +26,20 @@
     gap:8px !important;
   }
   body.ev-unified[data-ev-page="transfer"] #sexGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
-  body.ev-unified[data-ev-page="transfer"] #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
   body.ev-transfer-auto #sexGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
-  body.ev-transfer-auto #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  body.ev-transfer-auto #varstaGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  body.ev-unified[data-ev-page="transfer"] #sexGroup,
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup,
+  body.ev-transfer-auto #sexGroup,
+  body.ev-transfer-auto #varstaGroup {
+    width:100% !important;
+    min-width:0 !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup > .radio-btn:nth-child(3),
+  body.ev-transfer-auto #varstaGroup > .radio-btn:nth-child(3) {
+    grid-column:1 / -1 !important;
+  }
   body.ev-unified[data-ev-page="transfer"] .radio-btn,
   body.ev-transfer-auto .radio-btn {
     display:flex !important; align-items:center !important; justify-content:center !important;
