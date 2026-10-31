@@ -7,7 +7,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(here);
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
-const responsive = `${read('css/desktop.css')}\n${read('css/mobile.css')}`;
+const responsive = `${read('css/responsive.css')}\n${read('css/desktop.css')}\n${read('css/mobile.css')}`;
 
 for (const marker of [
   '@media (min-width: 900px) and (max-width: 1100px)',
