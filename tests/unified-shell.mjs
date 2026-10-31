@@ -139,8 +139,10 @@ assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-cor
 console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea IPC versiune/copyright mutată în header.');
 
 // Compatibilitate browser mobil: storage privat, viewport safe-area și fallback JS/CSS.
-const storageGetBody = theme.match(/function storageGet\\(key\\) \\{([\\s\\S]*?)\\n    \\}/)?.[1] || '';
-const storageSetBody = theme.match(/function storageSet\\(key, value\\) \\{([\\s\\S]*?)\\n    \\}/)?.[1] || '';
+const storageGetStart = theme.indexOf('function storageGet(key) {');
+const storageSetStart = theme.indexOf('function storageSet(key, value) {');
+const storageGetBody = theme.slice(storageGetStart, theme.indexOf('\\n    }', storageGetStart));
+const storageSetBody = theme.slice(storageSetStart, theme.indexOf('\\n    }', storageSetStart));
 assert.ok(storageGetBody.includes('window.localStorage.getItem'), 'Citirea Storage trebuie izolată în storageGet');
 assert.ok(storageSetBody.includes('window.localStorage.setItem'), 'Scrierea Storage trebuie izolată în storageSet');
 assert.equal((theme.match(/window\\.localStorage\\.(?:getItem|setItem)/g) || []).length, 2, 'Accesul Storage trebuie limitat la cele două funcții defensive');
