@@ -35,6 +35,14 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         browserName: 'chromium'
       }
+    },
+    {
+      name: 'firefox-theme-audit',
+      testMatch: '**/theme-dark-light.spec.mjs',
+      use: {
+        ...devices['Desktop Firefox'],
+        browserName: 'firefox'
+      }
     }
   ],
   webServer: {
