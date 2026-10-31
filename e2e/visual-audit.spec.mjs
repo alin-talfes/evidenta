@@ -4,7 +4,7 @@ const routes = [
   { path: '/', name: 'pedepse', title: /Pedepse și liberare condiționată/ },
   { path: '/contopiri/', name: 'contopiri', title: /Contopiri/ },
   { path: '/transfer/', name: 'transfer', title: /Transfer și profilare/ },
-  { path: '/transfer/rules/', name: 'transfer-reguli', title: /Reguli transfer/ },
+  { path: '/transfer/rules/', name: 'transfer-reguli', title: /Decizie profilare/ },
   { path: '/instructaj/', name: 'instructaj', title: /Instructaj/ },
   { path: '/semnalmente/', name: 'semnalmente', title: /Semnalmente/ },
   { path: '/semnalmente/benchmark/', name: 'semnalmente-benchmark', title: /Semnalmente · Benchmark/ },
