@@ -22,5 +22,5 @@ assert.ok(exp.includes('Către Compartimentul Organizarea Muncii'), 'internal no
 assert.ok(exp.includes("['Nume și prenume','']") && exp.includes("['Mandat de executare nr.','']") && exp.includes('Situația juridică și executarea pedepsei'), 'internal note identification and legal-status fields missing');
 assert.ok(exp.includes('grid-template-columns:39% 61%'), 'two-column internal note layout missing');
 assert.ok(app.includes('dedRowsData: (window.ManualDeductionRules?.collectRows?.() || [])'), 'typed deduction data missing');
-assert.ok(sw.includes("const VERSION = 'v103'"), 'service-worker cache version missing');
+assert.ok(sw.includes("const VERSION = 'v104'"), 'service-worker cache version missing');
 console.log('PV incarceration export checks passed');
