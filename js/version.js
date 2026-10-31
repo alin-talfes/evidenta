@@ -29,7 +29,7 @@
         removeLegacyFooters();
         const brand = normalizeBrandContainer();
         const copy = (brand && brand.querySelector('.ev-shell__brand-copy')) || document.querySelector('.ev-shell__brand-copy');
-        if (!copy) return;
+        if (!copy) return false;
         const mark = brand ? brand.querySelector('.ev-shell__mark') : null;
         if (mark) {
             mark.innerHTML = '<svg class="ev-shell__calculator" viewBox="0 0 24 24" focusable="false" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="2.5"></rect><rect x="7" y="5.5" width="10" height="4" rx="1"></rect><path d="M7.5 13h.01M12 13h.01M16.5 13h.01M7.5 16.5h.01M12 16.5h.01M16.5 16.5h.01"></path></svg>';
@@ -56,6 +56,7 @@
         author.setAttribute('aria-label', 'Alin Talfeș pe WhatsApp');
         meta.appendChild(author);
         copy.append(home, meta);
+        return true;
     }
 
     async function initVersionIdentity() {
@@ -72,6 +73,8 @@
             currentVersion = '—';
         }
         renderBrandIdentity(currentVersion);
+        // Shell-ul poate fi recreat de navigarea modulară; reaplicăm identitatea fără a depinde de ordinea evenimentelor.
+        requestAnimationFrame(() => renderBrandIdentity(currentVersion));
     }
 
     function bootstrap() {
