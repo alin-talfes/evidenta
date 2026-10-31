@@ -22,7 +22,7 @@ export default defineConfig({
     },
     {
       name: 'android-chromium',
-      testMatch: '**/visual-audit.spec.mjs',
+      testMatch: ['**/visual-audit.spec.mjs', '**/pedepse-expired-terms.spec.mjs'],
       use: {
         ...devices['Pixel 7'],
         browserName: 'chromium'
