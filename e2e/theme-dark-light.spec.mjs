@@ -69,3 +69,50 @@ test('sincronizează preferința între file și păstrează modul Sistem', asyn
   await expect(first.locator('html')).toHaveAttribute('data-theme', 'dark');
   await context.close();
 });
+
+test('contrastul tokenurilor text respectă WCAG AA în temele light și dark', async ({ page }) => {
+  await clearTheme(page);
+  await page.goto('/');
+  const ratios = await page.evaluate(() => {
+    const luminance = hex => {
+      const values = hex.replace('#', '').match(/.{2}/g).map(value => parseInt(value, 16) / 255);
+      const linear = values.map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+    };
+    const ratio = (foreground, background) => {
+      const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+      return (values[0] + 0.05) / (values[1] + 0.05);
+    };
+    const read = () => {
+      const css = getComputedStyle(document.documentElement);
+      const muted = css.getPropertyValue('--ev-muted').trim();
+      const surface = css.getPropertyValue('--ev-surface').trim();
+      const surface3 = css.getPropertyValue('--ev-surface-3').trim();
+      return { surface: ratio(muted, surface), surface3: ratio(muted, surface3) };
+    };
+    return { light: read() };
+  });
+
+  expect(ratios.light.surface).toBeGreaterThanOrEqual(4.5);
+  expect(ratios.light.surface3).toBeGreaterThanOrEqual(4.5);
+
+  await page.evaluate(() => window.EVIDENTA_THEME.setMode('dark'));
+  const dark = await page.evaluate(() => {
+    const luminance = hex => {
+      const values = hex.replace('#', '').match(/.{2}/g).map(value => parseInt(value, 16) / 255);
+      const linear = values.map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+    };
+    const css = getComputedStyle(document.documentElement);
+    const muted = css.getPropertyValue('--ev-muted').trim();
+    const surface = css.getPropertyValue('--ev-surface').trim();
+    const surface3 = css.getPropertyValue('--ev-surface-3').trim();
+    const ratio = (a, b) => {
+      const values = [luminance(a), luminance(b)].sort((x, y) => y - x);
+      return (values[0] + 0.05) / (values[1] + 0.05);
+    };
+    return { surface: ratio(muted, surface), surface3: ratio(muted, surface3) };
+  });
+  expect(dark.surface).toBeGreaterThanOrEqual(4.5);
+  expect(dark.surface3).toBeGreaterThanOrEqual(4.5);
+});
