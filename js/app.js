@@ -488,7 +488,7 @@ function calculateAll() {
         </div>`;
     }
 
-    if (!life) html += `<div class="result-section">
+    if (!life) html += `<div id="workDaysSection" class="result-section">
         <h4>SCĂDERE ZILE MUNCITE DIN DATA PROPOZABILĂ</h4>
         <div class="form-grid">
             <div>
@@ -527,6 +527,15 @@ function calculateAll() {
     html += restHtml;
 
     document.getElementById('resultsContent').innerHTML = html;
+
+    // Calculatorul zilelor muncite este afișat imediat sub cronologie, nu în detaliile secundare.
+    const workDaysContainer = document.getElementById('workDaysContainer');
+    const workDaysSection = document.getElementById('workDaysSection');
+    if (workDaysContainer) {
+        workDaysContainer.replaceChildren();
+        if (workDaysSection) workDaysContainer.appendChild(workDaysSection);
+    }
+
     document.getElementById('stepsList').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
     document.getElementById('stepsContainer').classList.add('hidden');
     const toggleStepsBtn = document.getElementById('toggleStepsBtn');
