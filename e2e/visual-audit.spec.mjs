@@ -56,15 +56,16 @@ for (const route of routes) {
 
       if (route.name === 'pedepse' && (await page.evaluate(() => window.innerWidth)) <= 640) {
         const spacing = await page.locator('#main-content').evaluate(main => {
-          const intro = main.querySelector('.ev-page-intro');
+          const toolbar = document.querySelector('.top-bar');
           const mode = main.querySelector('.ev-calc-mode');
-          const introRect = intro.getBoundingClientRect();
+          if (!toolbar || !mode) return { distance: Number.NaN };
+          const toolbarRect = toolbar.getBoundingClientRect();
           const modeRect = mode.getBoundingClientRect();
           return {
-            distance: modeRect.top - introRect.bottom
+            distance: modeRect.top - toolbarRect.bottom
           };
         });
-        expect(spacing.distance, 'Selectorul de mod trebuie separat vizual de antet').toBeGreaterThanOrEqual(8);
+        expect(spacing.distance, 'Selectorul de mod trebuie separat vizual de bara de acțiuni').toBeGreaterThanOrEqual(8);
         expect(spacing.distance, 'Spațiul dintre antet și selector nu trebuie să fie excesiv').toBeLessThanOrEqual(32);
       }
 
