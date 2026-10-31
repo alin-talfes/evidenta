@@ -5,7 +5,7 @@
 /* Surse consolidate în final-layer.css: "./consistency.css?v=1" */
 /* Regulile responsive globale sunt consolidate în desktop.css și mobile.css. */
 /* Compatibilitate/audit: "./hotfix.css?v=1" "./ux-upgrades.css?v=1" */
-@import url("./final-layer.css?v=7");
+@import url("./final-layer.css?v=8");
 @import url("./browser-compat.css?v=1");
 
 /* Pedepse — ritm vertical uniform în rezultatul operațional. */
