@@ -308,7 +308,7 @@ function calculateAll() {
     const deductionsExceedMandate = ded > totalDays;
     steps.push(`Perioadele deduse însumează ${ded} zile prin însumarea integrală a intervalelor introduse; eventualele suprapuneri sunt semnalate separat.`);
     if (deductionsExceedMandate) {
-        steps.push(`ATENȚIE: deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile), iar expirarea reală calculată (${fmtDate(new Date(theorExp.getTime() - ded * 86400000 + non * 86400000))}) este anterioară datei începerii executării (${fmtDate(startDate)}). Verificați perioadele și documentele justificative.`);
+        steps.push(`ATENȚIE: deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile). Verificați perioadele și documentele justificative; calculul rămâne afișat pe baza datelor introduse.`);
     }
 
     const nonRawRows = [];
