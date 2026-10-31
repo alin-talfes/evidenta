@@ -19,6 +19,7 @@ for (const route of routes) {
     const root = page.locator('html');
     const toggle = page.locator('#evidenta-theme-toggle');
     await expect(toggle).toBeVisible();
+    expect(await toggle.getAttribute('aria-pressed')).toBeNull();
     await expect(root).toHaveAttribute('data-theme-mode', 'system');
     await expect(root).toHaveAttribute('data-theme', 'light');
     await expect(root).toHaveCSS('color-scheme', 'light');
@@ -72,6 +73,7 @@ test('sincronizează preferința între file și păstrează modul Sistem', asyn
 
 test('contrastul tokenurilor text respectă WCAG AA în temele light și dark', async ({ page }) => {
   await clearTheme(page);
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/');
   const ratios = await page.evaluate(() => {
     const luminance = hex => {
