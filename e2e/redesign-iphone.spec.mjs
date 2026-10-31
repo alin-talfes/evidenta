@@ -38,10 +38,11 @@ for (const route of redesignedRoutes) {
   });
 }
 
-test('comutatorul de temă parcurge sistem, luminos, întunecat și revine la sistem', async ({ page }) => {
+test('comutatorul schimbă tema între luminos și întunecat', async ({ page }) => {
   await page.goto('/');
   const themeButton = page.locator('.ev-shell__theme');
 
+  await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'system');
   await themeButton.click();
   await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'light');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
@@ -49,12 +50,17 @@ test('comutatorul de temă parcurge sistem, luminos, întunecat și revine la si
   await themeButton.click();
   await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-
-  await themeButton.click();
-  await expect(page.locator('html')).toHaveAttribute('data-theme-mode', 'system');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('evidenta-theme-mode'))).toBe('system');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('evidenta-theme-mode'))).toBe('dark');
 });
 
+test('navigația mobilă indică modul activ și afișează toate cele cinci module', async ({ page }) => {
+  await page.goto('/instructaj/');
+
+  const nav = page.locator('.ev-mobile-nav');
+  await expect(nav).toBeVisible();
+  await expect(nav.locator('a')).toHaveCount(5);
+  await expect(nav.locator('a[aria-current="page"]')).toHaveText('Instructaj');
+});
 
 test('navigația mobilă indică modul activ și deschide/închide meniul Mai multe', async ({ page }) => {
   await page.goto('/instructaj/');
