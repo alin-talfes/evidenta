@@ -29,11 +29,11 @@ for (const marker of [
 
 
 assert.ok(
-  responsive.includes('/* NAVIGAȚIE PUBLICĂ CENTRATĂ — mobil și tabletă */') &&
   responsive.includes('body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav') &&
-  responsive.includes('flex-wrap: wrap') &&
-  responsive.includes('justify-content: center'),
-  'Meniul public trebuie să fie centrat și uniform pe mobil/tabletă'
+  responsive.includes('flex-wrap: nowrap') &&
+  responsive.includes('justify-content: center') &&
+  responsive.includes('display: none !important'),
+  'Navigația publică trebuie centrată pe tabletă și înlocuită de bara inferioară pe telefon'
 );
 
 assert.ok(
