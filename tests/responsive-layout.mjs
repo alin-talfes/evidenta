@@ -7,7 +7,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(here);
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 
-const responsive = read('css/responsive.css');
+const responsive = `${read('css/desktop.css')}\n${read('css/mobile.css')}`;
 
 for (const marker of [
   '@media (min-width: 900px) and (max-width: 1100px)',
@@ -61,20 +61,20 @@ assert.ok(
 );
 
 const wrappers = {
-  'nucleu/Transfer': read('css/style.css'),
-  'Instructaj': read('instructaj/styles.css'),
-  'Semnalmente': read('semnalmente/style.css'),
-  'Ofițer': read('ofiter/styles.css')
+  'Pedepse': read('index.html'),
+  'Transfer': read('transfer/index.html'),
+  'Instructaj': read('instructaj/index.html'),
+  'Semnalmente': read('semnalmente/index.html')
 };
 
 for (const [module, source] of Object.entries(wrappers)) {
-  const responsiveRef = source.match(/responsive\.css\?v=\d+/)?.[0];
-  assert.ok(responsiveRef, `${module} trebuie să încarce responsive.css`);
-  assert.ok(
-    source.indexOf(responsiveRef) > source.indexOf('consistency.css?v=1'),
-    `${module}: responsive.css trebuie să fie după consistency.css`
-  );
+  const desktopRef = source.match(/desktop\.css\?v=\d+/)?.[0];
+  const mobileRef = source.match(/mobile\.css\?v=\d+/)?.[0];
+  assert.ok(desktopRef, `${module} trebuie să încarce desktop.css`);
+  assert.ok(mobileRef, `${module} trebuie să încarce mobile.css`);
+  assert.ok(source.indexOf(mobileRef) > source.indexOf(desktopRef), `${module}: mobile.css trebuie să fie după desktop.css`);
 }
+assert.ok(read('ofiter/styles.css').includes('responsive.css'), 'Ofițer trebuie să păstreze stratul său responsive dedicat');
 
 const officerAudit = read('ofiter/scripts/audit-css.mjs');
 assert.ok(officerAudit.includes("../css/responsive.css"), 'Auditul CSS Ofițer trebuie să permită responsive.css');
