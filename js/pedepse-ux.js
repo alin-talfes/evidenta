@@ -88,15 +88,17 @@
       ['#durDays', 'Zile']
     ];
     let durationTotal = 0;
-    durationControls.forEach(([selector, label]) => {
-      const control = $(selector);
-      const value = Number(control?.value || 0);
-      if (!Number.isSafeInteger(value) || value < 0) {
-        addIssue(issues, control, `${label}: introdu un număr întreg pozitiv sau zero.`);
-      } else {
-        durationTotal += value;
-      }
-    });
+    if (!life) {
+      durationControls.forEach(([selector, label]) => {
+        const control = $(selector);
+        const value = Number(control?.value || 0);
+        if (!Number.isSafeInteger(value) || value < 0) {
+          addIssue(issues, control, `${label}: introdu un număr întreg pozitiv sau zero.`);
+        } else {
+          durationTotal += value;
+        }
+      });
+    }
     if (!life && durationTotal === 0) {
       addIssue(issues, $('#durYears'), 'Durata pedepsei trebuie să fie mai mare de zero.');
     }
