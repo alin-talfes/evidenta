@@ -44,6 +44,11 @@ for (const route of routes) {
       await page.goto(route.path);
       await expect(page.locator('.ev-shell')).toBeVisible();
       await expect(page.locator('.ev-shell__brand-copy strong')).toHaveText('Inmate Pocket Calculator');
+      const brandMeta = page.locator('.ev-shell__brand-meta');
+      await expect(brandMeta).toBeVisible();
+      await expect(brandMeta).toContainText(/versiune\\s+\\d/);
+      await expect(brandMeta).toContainText(/copyright \\(c\\)/i);
+      await expect(brandMeta).toContainText('Alin Talfeș');
       await expect(page.locator('.ev-shell__theme')).toBeVisible();
       await expect(page).toHaveTitle(route.title);
       await expect.poll(() => compatibilityStylesheetRequested, { message: 'Stratul de compatibilitate CSS trebuie încărcat în fiecare modul' }).toBe(true);
