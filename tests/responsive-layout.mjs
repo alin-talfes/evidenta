@@ -88,4 +88,13 @@ assert.ok(
   'Pe telefoane trebuie să existe o singură navigare principală, fără meniu duplicat în antet.'
 );
 
+assert.ok(read('index.html').includes('aria-label="Cronologia termenelor"') && !read('index.html').includes('id="timeline-heading"'), 'Cronologia trebuie să aibă un singur titlu vizibil, fără heading duplicat.');
+assert.ok(
+  responsive.includes('#timelineList.timeline::before') &&
+  responsive.includes('grid-template-columns: minmax(6.5rem, 29%) minmax(0, 1fr)') &&
+  responsive.includes('#timelineList .tl-date') &&
+  responsive.includes('opacity: 1 !important'),
+  'Cronologia mobilă trebuie să fie aliniată fără indent, cu date și etichete lizibile.'
+);
+
 console.log('Responsive: desktop, tabletă, mobil, safe-area, overflow și Ofițer ascuns verificate.');
