@@ -16,7 +16,7 @@ assert.ok(exp.includes('Instanța (emitentă a mandatului de executare/detențiu
 assert.ok(!exp.includes('expirarea teoretică') && !exp.includes('expirării teoretice'), 'PV și nota internă nu trebuie să menționeze expirarea teoretică');
 assert.ok(exp.includes('expiry=pvDate(c.realExp)'), 'Data expirării din PV trebuie să provină din expirarea reală, fără fallback teoretic');
 assert.ok(exp.includes('art. 557 alin. (7) și (8)'), 'legal reference missing');
-assert.ok(exp.includes('ȘEF STRUCTURĂ EVIDENȚĂ DEȚINUȚI') && exp.includes('DIRECTOR'), 'signature fields missing');
+assert.ok(exp.toLowerCase().includes('șef structură evidență deținuți') && exp.toLowerCase().includes('director'), 'signature fields missing');
 assert.ok(exp.includes('function buildNotaInternaHTML()'), 'internal note builder missing');
 assert.ok(exp.includes('Către Compartimentul Organizarea Muncii'), 'internal note addressee missing');
 assert.ok(exp.includes('AM PRIMIT') && exp.includes('AM PREDAT'), 'receipt/hand-over fields missing');
