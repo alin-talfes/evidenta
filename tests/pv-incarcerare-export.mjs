@@ -19,7 +19,7 @@ assert.ok(exp.includes('art. 557 alin. (7) și (8)'), 'legal reference missing')
 assert.ok(exp.toLowerCase().includes('șef structură evidență deținuți') && exp.toLowerCase().includes('director'), 'signature fields missing');
 assert.ok(exp.includes('function buildNotaInternaHTML()'), 'internal note builder missing');
 assert.ok(exp.includes('Către Compartimentul Organizarea Muncii'), 'internal note addressee missing');
-assert.ok(exp.includes('AM PRIMIT') && exp.includes('AM PREDAT'), 'receipt/hand-over fields missing');
+assert.ok(exp.includes("['Nume și prenume','']") && exp.includes("['Mandat de executare nr.','']") && exp.includes('Situația juridică și executarea pedepsei'), 'internal note identification and legal-status fields missing');
 assert.ok(exp.includes('grid-template-columns:39% 61%'), 'two-column internal note layout missing');
 assert.ok(app.includes('dedRowsData: (window.ManualDeductionRules?.collectRows?.() || [])'), 'typed deduction data missing');
 assert.ok(sw.includes("const VERSION = 'v103'"), 'service-worker cache version missing');
