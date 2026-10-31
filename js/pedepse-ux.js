@@ -360,7 +360,7 @@
       </section>
 
       <details class="ev-result-details" data-ev-optional="true">
-        <summary>Vezi toate detaliile și explicațiile calculului</summary>
+        <summary>>>> APASĂ AICI PENTRU DETALII SUPLIMENTARE <<<</summary>
         <div class="ev-result-details__content">${detailsHtml}</div>
       </details>`;
 
