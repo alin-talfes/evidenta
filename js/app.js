@@ -334,6 +334,10 @@ function calculateAll() {
         realExp.setDate(realExp.getDate() - ded + non);
         steps.push(`Expirarea reală = ${fmtDate(theorExp)} − ${ded} zile deduse + ${non} zile neexecutate = ${fmtDate(realExp)}.`);
     }
+    const deductionsExceedExpiry = Boolean(realExp && realExp < startDate);
+    if (deductionsExceedExpiry) {
+        steps.push(`ATENȚIE: după aplicarea deducerilor și a perioadelor neexecutate, expirarea reală calculată (${fmtDate(realExp)}) este anterioară datei începerii executării (${fmtDate(startDate)}). Verificați documentele justificative.`);
+    }
 
     const sentenceOver10 = life ? false : (y * 12 + m + d / 30) > 120;
     const schedule = calculateLiberationSchedule({
@@ -408,7 +412,7 @@ function calculateAll() {
     });
 
     let alertsHtml = '';
-    if (typeof deductionsExceedMandate !== 'undefined' && deductionsExceedMandate) {
+    if (deductionsExceedExpiry) {
         alertsHtml += `<div class="alert warning deduction-mandate-warning" role="alert">
             <strong>!!! ATENȚIE – DEDUCERILE DEPĂȘESC DATA EXPIRĂRII PEDEPSEI !!!</strong>
             <p>Deducerile introduse (${ded} zile) depășesc durata mandatului (${totalDays} zile), astfel încât expirarea reală calculată (${fmtDate(realExp)}) este anterioară datei începerii executării (${fmtDate(startDate)}). Verificați perioadele și documentele justificative. Calculul rămâne afișat pe baza datelor introduse.</p>
