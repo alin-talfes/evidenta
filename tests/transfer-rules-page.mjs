@@ -15,7 +15,8 @@ assert(js.includes("!el.querySelector('.rules-table')"), 'Static annex text must
 assert(js.includes('row.hidden = !matches'), 'Non-matching rows must be hidden without removing their annex');
 assert(js.includes('filterEmpty.hidden = query === \'\' || visibleAnnexes > 0'), 'No-results message must reflect actual annex matches');
 assert(css.includes('var(--ev-surface)'), 'Annex styles must use shared PWA design tokens');
-assert(css.includes('overflow-x: auto'), 'Wide annex tables must scroll horizontally on small screens');
+assert(css.includes('overflow-x:auto'), 'Annex table container must support horizontal overflow where required');
+assert(css.includes('tbody { display:grid'), 'Annex rows must become readable cards on small screens');
 assert(css.includes('@media (max-width: 640px)'), 'Annex layout must include mobile-specific rules');
 
 console.log('Transfer annex search and responsive UI regression checks passed.');
