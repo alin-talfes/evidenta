@@ -150,7 +150,7 @@ assert.ok(htmlFiles.length >= 9, "Auditul trebuie să identifice toate paginile 
 function isCoveredByDesignSystem(relativePath, html) {
   if (html.includes("design-system.css")) return true;
 
-  if (["index.html", "contopiri/index.html", "transfer/index.html", "transfer/rules/index.html"].includes(relativePath)) {
+  if (["index.html", "contopiri/index.html", "transfer/index.html", "transfer/rules/index.html", "transfer/comisie.html", "transfer/comisie/index.html"].includes(relativePath)) {
     return /(?:\.\.\/)?js\/theme\.js/.test(html);
   }
 
