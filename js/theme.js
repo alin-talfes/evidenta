@@ -89,7 +89,7 @@
         document.querySelectorAll(THEME_CONTROL_SELECTOR).forEach(button => {
             button.innerHTML = icons[mode];
             button.dataset.themeMode = mode;
-            button.setAttribute('aria-pressed', String(theme === 'light'));
+            button.removeAttribute('aria-pressed');
             button.setAttribute('aria-label', `Tema: ${labels[mode]}. Apasă pentru următoarea opțiune.`);
             button.setAttribute('title', `Temă: ${labels[mode]}`);
         });
@@ -129,10 +129,12 @@
     }
 
     function toggleTheme() {
-        // Butonul este un comutator vizual: fiecare apăsare trebuie să schimbe imediat
-        // tema afișată, fără o oprire intermediară în modul „system”.
-        const currentTheme = validTheme(document.documentElement.dataset.theme) || readTheme();
-        return setThemeMode(currentTheme === 'light' ? 'dark' : 'light');
+        // Ciclul păstrează accesibilă și preferința „system”: system → light → dark → system.
+        const modes = ['system', 'light', 'dark'];
+        const currentMode = validThemeMode(document.documentElement.dataset.themeMode) || readThemeMode();
+        const currentIndex = modes.indexOf(currentMode);
+        const nextMode = modes[(currentIndex + 1) % modes.length];
+        return setThemeMode(nextMode);
     }
 
     function ensureVersionController() {
