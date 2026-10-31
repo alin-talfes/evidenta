@@ -139,8 +139,11 @@ assert.ok(!fs.existsSync(path.join(root, 'js/termene-core.js')), 'js/termene-cor
 console.log('Unified shell: 5 module publice, Ofițer ascuns și identitatea IPC versiune/copyright mutată în header.');
 
 // Compatibilitate browser mobil: storage privat, viewport safe-area și fallback JS/CSS.
-assert.ok(!theme.includes('localStorage.getItem'), 'Controllerul nu trebuie să acceseze direct localStorage');
-assert.ok(!theme.includes('localStorage.setItem'), 'Controllerul nu trebuie să scrie direct în localStorage');
+const storageGetBody = theme.match(/function storageGet\\(key\\) \\{([\\s\\S]*?)\\n    \\}/)?.[1] || '';
+const storageSetBody = theme.match(/function storageSet\\(key, value\\) \\{([\\s\\S]*?)\\n    \\}/)?.[1] || '';
+assert.ok(storageGetBody.includes('window.localStorage.getItem'), 'Citirea Storage trebuie izolată în storageGet');
+assert.ok(storageSetBody.includes('window.localStorage.setItem'), 'Scrierea Storage trebuie izolată în storageSet');
+assert.equal((theme.match(/window\\.localStorage\\.(?:getItem|setItem)/g) || []).length, 2, 'Accesul Storage trebuie limitat la cele două funcții defensive');
 assert.ok(!theme.includes('?.'), 'Controllerul comun trebuie să evite optional chaining pentru WebView-uri mai vechi');
 assert.ok(theme.includes('storageGet') && theme.includes('storageSet'), 'Preferințele trebuie să aibă fallback când Storage este blocat');
 assert.ok(shell.includes('constant(safe-area-inset-top)'), 'Headerul trebuie să aibă fallback safe-area pentru WebKit vechi');
