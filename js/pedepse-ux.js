@@ -360,7 +360,7 @@
       </section>
 
       <details class="ev-result-details" data-ev-optional="true">
-        <summary>>>> APASĂ AICI PENTRU DETALII SUPLIMENTARE <<<</summary>
+        <summary>> Apasă AICI pentru detalii suplimentare <</summary>
         <div class="ev-result-details__content">${detailsHtml}</div>
       </details>`;
 
