@@ -428,11 +428,7 @@ function calculateAll() {
     const timelineDetails = document.getElementById('timelineDetails');
     if (timelineList) timelineList.innerHTML = timelineHtml;
     if (timelineContainer) timelineContainer.classList.remove('hidden');
-    if (timelineDetails) {
-        timelineDetails.classList.remove('hidden');
-        timelineDetails.open = true;
-        timelineDetails.setAttribute('aria-expanded', 'true');
-    }
+    if (timelineDetails) timelineDetails.classList.remove('hidden');
 
     let restHtml = '';
     const condReleaseStr = document.getElementById('conditionalReleaseDate').value.trim();
