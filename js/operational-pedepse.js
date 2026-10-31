@@ -164,13 +164,16 @@
         dedRowsData: deductions.intervals.map(item => ({ type:item.type, start:item.startRaw, end:item.endRaw, days:item.days }))
       };
 
+      const realDateIndicator = typeof window.temporalIndicator === 'function'
+        ? window.temporalIndicator(real)
+        : '';
       const content = document.getElementById('resultsContent');
       const card = document.getElementById('resultsCard');
       const alerts = document.getElementById('alertsContainer');
       if (content) content.innerHTML = `
         <section class="ev-quick-result">
           <span>EXPIRARE REALĂ</span>
-          <strong>${fmtDateSafe(real)}</strong>
+          <strong>${fmtDateSafe(real)}${realDateIndicator}</strong>
           <div class="ev-quick-result__grid">
             <div><small>Expirare teoretică</small><b>${fmtDateSafe(theoretical)}</b></div>
             <div><small>Deduceri</small><b>${deductions.total} zile</b></div>
@@ -182,8 +185,8 @@
       if (alerts) {
         const warningHtml = deductionsExceedMandate
           ? `<div class="alert warning deduction-mandate-warning" role="alert">
-              <strong>ATENȚIE – DEDUCERILE DEPĂȘESC MANDATUL TOTAL</strong>
-              <p>Valoarea totală a deducerilor introduse depășește durata mandatului. Verificați perioadele și documentele justificative. Calculul este afișat pe baza datelor introduse și necesită verificarea situației juridice.</p>
+              <strong>!!! ATENȚIE – DEDUCERILE DEPĂȘESC DATA EXPIRĂRII PEDEPSEI !!!</strong>
+              <p>Deducerile introduse (${deductions.total} zile) depășesc durata mandatului (${totalDays} zile), astfel încât expirarea reală calculată (${fmtDateSafe(real)}) este anterioară datei începerii executării (${fmtDateSafe(start)}). Verificați perioadele și documentele justificative. Calculul rămâne afișat pe baza datelor introduse.</p>
             </div>`
           : '';
         const overlapHtml = deductions.overlaps.map(([a,b]) => `<div class="alert warning"><strong>Suprapunere deduceri ${a} și ${b}.</strong> Ambele intervale au fost calculate integral. Verifică dacă suprapunerea este intenționată.</div>`).join('');
