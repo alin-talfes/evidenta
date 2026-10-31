@@ -2967,6 +2967,14 @@ body.ev-unified[data-ev-page="pedepse"] .result-date-indicator.today {
   background: #fff0ee;
   border-color: #f2b8b2;
 }
+body.ev-unified[data-ev-page="pedepse"] .result-date-indicator.expired {
+  color: #991b1b;
+  background: #fee2e2;
+  border: 2px solid #dc2626;
+  font-weight: 950;
+  letter-spacing: .015em;
+  box-shadow: 0 1px 4px rgba(153, 27, 27, .12);
+}
 body.ev-unified[data-ev-page="pedepse"] .result-date-indicator.tomorrow {
   color: #a65308;
   background: #fff4e5;
