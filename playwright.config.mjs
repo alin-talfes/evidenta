@@ -22,7 +22,7 @@ export default defineConfig({
     },
     {
       name: 'android-chromium',
-      testMatch: ['**/visual-audit.spec.mjs', '**/pedepse-expired-terms.spec.mjs'],
+      testMatch: ['**/visual-audit.spec.mjs', '**/pedepse-expired-terms.spec.mjs', '**/theme-dark-light.spec.mjs'],
       use: {
         ...devices['Pixel 7'],
         browserName: 'chromium'
@@ -30,7 +30,7 @@ export default defineConfig({
     },
     {
       name: 'desktop-chromium',
-      testMatch: '**/visual-audit.spec.mjs',
+      testMatch: ['**/visual-audit.spec.mjs', '**/theme-dark-light.spec.mjs'],
       use: {
         ...devices['Desktop Chrome'],
         browserName: 'chromium'
