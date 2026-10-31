@@ -191,7 +191,7 @@
 
 
 /* On narrow phones, show every operational shortcut without a clipped horizontal row. */
-@media (max-width: 400px) {
+@media (max-width: 430px) {
   body.ev-unified[data-ev-page="instructaj"] .ev-operational-search__chips {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
