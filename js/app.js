@@ -152,6 +152,8 @@ function updateProposedDateWithWorkDays() {
     const newDate = new Date(window.lastProposedDate);
     newDate.setDate(newDate.getDate() - applied);
     result.value = fmtDate(newDate);
+    const dateIndicator = document.getElementById('workDaysDateIndicator');
+    if (dateIndicator) dateIndicator.innerHTML = temporalIndicator(newDate);
 
     const ageFloorActive = reductionFloor > window.lastMinimumDate;
     if (note) {
@@ -232,6 +234,19 @@ function buildLcDetails({ life, art, schedule, sentenceOver10, sex }) {
         minimum: `${fracStr(schedule.mR)} → ${schedule.mDays} zile. Fracția minimă este limita efectivă și nu poate fi redusă prin zile muncite.`,
         proposed: `${fracStr(schedule.tR)} → ${schedule.tDays} zile. Zilele considerate executate contribuie la realizarea fracției totale, fără depășirea limitei efective aplicabile.`
     };
+}
+
+function temporalIndicator(date) {
+    if (!(date instanceof Date) || Number.isNaN(date.getTime())) return '';
+    const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const current = today();
+    const diff = Math.round((target.getTime() - current.getTime()) / 86400000);
+    if (diff < 0 || diff > 14) return '';
+    const label = diff === 0 ? 'Se împlinește ASTĂZI'
+        : diff === 1 ? 'Se împlinește MÂINE'
+        : `Se împlinește în ${diff} zile`;
+    const tone = diff === 0 ? 'today' : diff === 1 ? 'tomorrow' : 'soon';
+    return `<span class="result-date-indicator ${tone}" role="status">${label}</span>`;
 }
 
 function calculateAll() {
@@ -453,7 +468,7 @@ function calculateAll() {
             const restDays = Math.max(0, daysBetween(condReleaseDate, realExp));
             restHtml = `<div class="result-section"><h4>REST RĂMAS DE EXECUTAT (după liberarea condiționată)</h4>
                 <div class="result-grid">
-                    <div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${formatDateWithWarning(condReleaseDate)}</div></div>
+                    <div class="result-item"><div class="result-label">Data liberării</div><div class="result-value">${formatDateWithWarning(condReleaseDate)}${temporalIndicator(condReleaseDate)}</div></div>
                     <div class="result-item important"><div class="result-label">Rest rămas</div><div class="result-value">${restDays} zile</div></div>
                 </div></div>`;
         }
@@ -471,8 +486,8 @@ function calculateAll() {
             <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
         </div></div>`
         : `<div class="result-section"><h4>DETALII MANDAT</h4><div class="result-grid">
-            <div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}</div></div>
-            <div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}</div></div>
+            <div class="result-item"><div class="result-label">Expirare teoretică</div><div class="result-value">${formatDateWithWarning(theorExp)}${temporalIndicator(theorExp)}</div></div>
+            <div class="result-item important"><div class="result-label">Expirare REALĂ</div><div class="result-value">${formatDateWithWarning(realExp)}${temporalIndicator(realExp)}</div></div>
             <div class="result-item"><div class="result-label">Zile deduse</div><div class="result-value">${ded} zile</div></div>
             <div class="result-item"><div class="result-label">Zile neexecutate</div><div class="result-value">${non} zile</div></div>
             <div class="result-item"><div class="result-label">Zile calendaristice de la începere</div><div class="result-value">${calendarDaysSinceStart} zile</div></div>
@@ -483,12 +498,12 @@ function calculateAll() {
         <div class="result-item">
             <div class="result-label">FRACȚIE MINIMĂ OBLIGATORIE</div>
             <div class="result-value">${life ? `${lifeThresholdName}: ${mDays} zile` : `<span class="fraction">${fracStr(mR)}</span> → ${mDays} zile`}</div>
-            <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}</div>
+            <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(mDate)}${temporalIndicator(mDate)}</div>
         </div>
         <div class="result-item">
             <div class="result-label">DATA ÎMPLINIRII FRACȚIEI TOTALE / PROPOZABILĂ</div>
             <div class="result-value">${life ? `${lifeThresholdName}: ${tDays} zile` : `<span class="fraction">${fracStr(tR)}</span> → ${tDays} zile`}</div>
-            <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}</div>
+            <div class="result-label" style="margin-top:4px;">Data</div><div class="result-value">${formatDateWithWarning(tDate)}${temporalIndicator(tDate)}</div>
         </div>
     </div></div>`;
 
@@ -508,7 +523,7 @@ function calculateAll() {
             </div>
             <div>
                 <label>Noua dată propozabilă</label>
-                <input type="text" id="workDaysResult" readonly class="result-input" tabindex="-1">
+                <input type="text" id="workDaysResult" readonly class="result-input" tabindex="-1"><span id="workDaysDateIndicator" class="result-date-indicator-slot"></span>
             </div>
         </div>
         <p id="workDaysNote" class="help-text"><em>Zilele considerate executate contribuie la realizarea fracției totale, cu respectarea limitei efective și, după caz, a pragului de vârstă.</em></p>
@@ -518,7 +533,7 @@ function calculateAll() {
         html += `<div class="result-section"><h4>REANALIZARE REGIM</h4><div class="result-grid">
             <div class="result-item"><div class="result-label">${reanalysisLabel}</div>
                 <div class="result-value">${life ? 'Prag temporal: 6 ani și 6 luni, ajustat cu perioadele deduse/neexecutate.' : `(fără deduceri: ${fifth}z / după ajustări: ${daysBetween(startDate, fDate) + 1}z)`}</div>
-                <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}</div>
+                <div class="result-label" style="margin-top:4px;">Data împlinirii</div><div class="result-value">${formatDateWithWarning(fDate)}${temporalIndicator(fDate)}</div>
             </div>
         </div></div>`;
     } else if (isEducationalMeasure) {
@@ -531,8 +546,8 @@ function calculateAll() {
         <div class="result-item"><div class="result-label">Fracția / pragul minim</div><div class="result-value result-value-small">${lcDetails.minimum}</div></div>
         <div class="result-item"><div class="result-label">Fracția / data propozabilă</div><div class="result-value result-value-small">${lcDetails.proposed}</div></div>
         <div class="result-item"><div class="result-label">${life ? lifeThresholdName : 'Mandat total'}</div><div class="result-value">${life ? `${mDays} zile` : `${totalDays} zile`}</div></div>
-        ${reanalysisLabel ? `<div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}</div></div>` : ''}
-        ${quarantineEnd ? `<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}</div><div class="result-note">calculată de la primirea în penitenciar/centru</div></div>` : ''}
+        ${reanalysisLabel ? `<div class="result-item"><div class="result-label">${reanalysisLabel}</div><div class="result-value">${formatDateWithWarning(fDate)}${temporalIndicator(fDate)}</div></div>` : ''}
+        ${quarantineEnd ? `<div class="result-item"><div class="result-label">Carantină expiră</div><div class="result-value">${formatDateWithWarning(quarantineEnd)}${temporalIndicator(quarantineEnd)}</div><div class="result-note">calculată de la primirea în penitenciar/centru</div></div>` : ''}
     </div></div>`;
 
     html += restHtml;
