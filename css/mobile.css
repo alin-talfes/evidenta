@@ -981,8 +981,23 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     padding-bottom:4px !important;
     row-gap:4px !important;
   }
+  /* Versiunea și copyright-ul rămân vizibile și pe telefon. */
+  body.ev-unified .ev-shell__brand-copy {
+    display:grid !important;
+    align-items:start !important;
+    gap:2px !important;
+    min-width:0 !important;
+    white-space:normal !important;
+  }
   body.ev-unified .ev-shell__brand-meta {
-    display:none !important;
+    display:block !important;
+    max-width:54vw !important;
+    margin:0 !important;
+    overflow:visible !important;
+    font-size:9px !important;
+    line-height:1.2 !important;
+    white-space:normal !important;
+    text-overflow:clip !important;
   }
   body.ev-unified .ev-shell__mark {
     width:36px !important;
