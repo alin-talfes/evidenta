@@ -93,6 +93,40 @@
 }
 
 @media (min-width: 1024px) {
+  body.ev-unified[data-ev-page="transfer"] .page-actions.transfer-page-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: max-content;
+    max-width: 100%;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--ev-border);
+    border-radius: var(--ev-radius-md);
+    background: var(--ev-surface-2);
+    box-shadow: none;
+  }
+  body.ev-unified[data-ev-page="transfer"] .page-actions.transfer-page-actions > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 190px;
+    min-height: var(--ev-control-height);
+    height: var(--ev-control-height);
+    padding-inline: 12px;
+    border: 1px solid transparent;
+    border-radius: var(--ev-radius-sm);
+    background: transparent;
+    color: var(--ev-text-secondary);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  body.ev-unified[data-ev-page="transfer"] .page-actions.transfer-page-actions > a.is-active {
+    border-color: var(--ev-accent);
+    background: var(--ev-accent-soft);
+    color: var(--ev-accent-strong);
+  }
+
   body.ev-unified[data-ev-page="transfer"] #sexGroup,
   body.ev-transfer-auto #sexGroup { grid-template-columns: repeat(2,minmax(0,1fr)); }
   body.ev-unified[data-ev-page="transfer"] #varstaGroup,
