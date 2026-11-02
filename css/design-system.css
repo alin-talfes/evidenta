@@ -196,8 +196,10 @@ a { color: var(--ev-accent-strong); }
 
 /* Butoane */
 :where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout) {
-  border-radius: 10px;
-  font-weight: 760;
+  min-height: var(--ev-control-height);
+  border-radius: var(--ev-radius-sm);
+  font-size: 15px;
+  font-weight: 600;
   transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
 }
 
@@ -211,7 +213,7 @@ a { color: var(--ev-accent-strong); }
   color: #fff;
   background: var(--ev-accent);
   border-color: var(--ev-accent);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--ev-accent) 22%, transparent);
+  box-shadow: none;
 }
 
 :where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout):hover {
@@ -302,6 +304,13 @@ body {
 
 h1, h2, h3, .page-heading h1, .panel h2, .panel h3, .law-card h2, .official-set h2, .learning-module-card strong, .workflow-card strong, .basic-card summary, .reference-grid h3 {
   color: var(--ev-text);
+}
+
+:where(.card > h2, .card > h3, .panel > h2, .panel > h3, .analysis-panel h2, .results-section h2) {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-transform: none;
 }
 
 
