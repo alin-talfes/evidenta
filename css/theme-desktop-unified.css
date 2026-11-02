@@ -48,7 +48,7 @@
   }
 
   :root[data-theme="light"],
-  html[data-theme="light],
+  html[data-theme="light"],
   body.light {
     --primary: #2563eb;
     --primary-hover: #1d4ed8;
