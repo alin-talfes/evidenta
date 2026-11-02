@@ -158,7 +158,7 @@
  body.ev-unified[data-ev-page="contopiri"] .ev-analytics-settings button { color:var(--ev-muted); text-decoration:none; text-underline-offset:3px; cursor:pointer; }
  body.ev-unified[data-ev-page="contopiri"] .ev-analytics-settings button:hover { text-decoration:underline; }
 }
-@media (min-width:761px) and (max-width:1050px) {
+@media (min-width:761px) and (max-width:1023px) {
  body.ev-unified[data-ev-page="contopiri"] .penalty-row { grid-template-columns:repeat(3,minmax(0,1fr)) minmax(180px,1.6fr) 44px !important; gap:12px !important; }
 }
 
