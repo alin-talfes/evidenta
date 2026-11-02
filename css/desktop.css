@@ -526,13 +526,13 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
 
 /* Header module titles: same horizontal axis as the brand/navigation container. */
 body.ev-unified .ev-shell__module {
-  box-sizing: border-box !important;
-  width: 100% !important;
-  max-width: var(--ev-shell-max, 1240px) !important;
-  margin-inline: auto !important;
-  padding-left: max(var(--ev-shell-pad, 18px), env(safe-area-inset-left, 0px)) !important;
-  padding-right: max(var(--ev-shell-pad, 18px), env(safe-area-inset-right, 0px)) !important;
-  text-align: left !important;
+  box-sizing: border-box;
+  width: min(calc(100% - 64px), var(--ev-shell-max));
+  max-width: var(--ev-shell-max);
+  min-height: 68px;
+  margin-inline: auto;
+  padding: 12px 0 16px;
+  text-align: left;
 }
 body.ev-unified .ev-shell__module h1 {
   display: block !important;
