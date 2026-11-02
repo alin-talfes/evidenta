@@ -375,3 +375,8 @@ body.ev-unified > footer {
 body.ev-unified label:not(.toggle-switch):not(.radio-btn):not(.builder-check):not(.ai-check-row):not(.ev-prison-same-check):not(.sex-label):not(.life-label) {
   text-transform: uppercase;
 }
+
+@media (max-width: 1023px) {
+  body.ev-unified :is(button,input[type="button"],input[type="submit"],input[type="reset"],a.btn,.btn,.btn-utility,.btn-big,.button,.toggle-btn,.filter,.access-submit,.access-logout,.text-btn,.back-to-categories) { text-transform: uppercase !important; }
+  body.ev-unified :is(.card > h3,.panel > h2,.section-heading h2,.analysis-panel h2,.notice-panel h2,.results-heading h2) { text-transform: uppercase; }
+}
