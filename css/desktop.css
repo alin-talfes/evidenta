@@ -3,7 +3,7 @@
 @media (min-width: 761px) {
   :root {
     --ev-shell-max: 1240px;
-    --ev-shell-pad: clamp(18px, 2vw, 26px);
+    --ev-shell-pad: 0px;
     --ev-layout-gap: 12px;
     --ev-card-pad-x: 18px;
     --ev-card-pad-y: 16px;
@@ -25,15 +25,15 @@
   body.ev-unified > .container,
   body.ev-unified > main,
   body.ev-unified > .app-shell {
-    width: min(100%, var(--ev-shell-max)) !important;
-    max-width: var(--ev-shell-max) !important;
+    width: min(calc(100% - 64px), var(--ev-shell-max));
+    max-width: var(--ev-shell-max);
     margin-inline: auto !important;
   }
 
   body.ev-unified > .container,
   body.ev-unified > main,
   body.ev-unified > .app-shell > main {
-    padding: 18px var(--ev-shell-pad) 30px !important;
+    padding: 18px 0 30px;
   }
 
   body.ev-unified > .app-shell {
@@ -49,10 +49,10 @@
   body.ev-unified .ev-shell__bar,
   body.ev-unified .ev-shell__module,
   body.ev-unified .ev-footer__inner {
-    width: 100% !important;
-    max-width: var(--ev-shell-max) !important;
-    margin-inline: auto !important;
-    padding-inline: var(--ev-shell-pad) !important;
+    width: min(calc(100% - 64px), var(--ev-shell-max));
+    max-width: var(--ev-shell-max);
+    margin-inline: auto;
+    padding-inline: 0;
   }
 
   body.ev-unified .ev-shell__module {
@@ -73,8 +73,8 @@
     margin: 0 !important;
     color: var(--ev-text) !important;
     font-family: var(--ev-font) !important;
-    font-size: clamp(1.35rem, 1.8vw, 1.65rem) !important;
-    font-weight: 850 !important;
+    font-size: 28px;
+    font-weight: 600;
     line-height: 1.18 !important;
     letter-spacing: -.035em !important;
     text-align: left !important;
@@ -93,8 +93,8 @@
   body.ev-unified .container > h1 {
     margin: 0 0 6px !important;
     color: var(--ev-text) !important;
-    font-size: clamp(1.55rem, 2.1vw, 1.95rem) !important;
-    font-weight: 850 !important;
+    font-size: 28px;
+    font-weight: 600;
     line-height: 1.12 !important;
     letter-spacing: -.035em !important;
   }
@@ -471,43 +471,58 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   }
 }
 
-@media (min-width: 761px) and (max-width: 1040px) {
-@media (max-width: 1040px) {
+@media (min-width: 761px) and (max-width: 1023px) {
   body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__bar {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    column-gap: 10px !important;
-    row-gap: 8px !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 10px;
+    row-gap: 8px;
   }
 
   body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav {
     grid-column: 1 / -1;
     width: 100%;
-    display: flex !important;
+    display: flex;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    gap: 6px !important;
+    gap: 6px;
     margin-inline: auto;
-    padding: 0 0 10px !important;
-    overflow: visible !important;
+    padding: 0 0 10px;
+    overflow: visible;
     scroll-snap-type: none;
   }
 
   body.ev-unified:not([data-ev-page^="ofiter"]) .ev-shell__nav a {
-    display: inline-flex !important;
-    flex:1 1 0;
-    min-width:0;
-    gap:4px;
+    display: inline-flex;
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 4px;
     align-items: center;
     justify-content: center;
     text-align: center;
     margin: 0;
-    padding-inline:5px !important;
-    font-size:clamp(10px, 1.15vw, 12px) !important;
+    padding-inline: 5px;
+    font-size: clamp(10px, 1.15vw, 12px);
   }
 }
-}
 
+
+@media (min-width: 1024px) {
+  body.ev-unified .ev-shell__bar {
+    min-height: 68px;
+    height: 68px;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  body.ev-unified .ev-shell__bar > * { min-width: 0; }
+  body.ev-unified .ev-shell__brand { max-width: 100%; }
+  body.ev-unified .ev-shell__brand-copy { display: block; overflow: hidden; }
+  body.ev-unified .ev-shell__brand-meta { display: none; }
+  body.ev-unified .ev-shell__nav { justify-content: center; flex-wrap: nowrap; gap: 6px; }
+  body.ev-unified .ev-shell__nav a { flex: 0 1 auto; min-width: 0; padding-inline: 10px; font-weight: 600; }
+  body.ev-unified .ev-shell__actions { justify-self: end; }
+  body.ev-unified .ev-shell__module { padding-inline: 0; }
+}
 
 /* Header module titles: same horizontal axis as the brand/navigation container. */
 body.ev-unified .ev-shell__module {
