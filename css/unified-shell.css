@@ -478,3 +478,26 @@ textarea,
     flex:0 0 20px !important;
   }
 }
+
+@media (min-width: 1024px) {
+  body.ev-unified .ev-analytics-settings {
+    display: flex;
+    justify-content: center;
+    width: min(calc(100% - 64px), var(--ev-shell-max));
+    max-width: var(--ev-shell-max);
+    margin: 48px auto 0;
+    padding: 0 0 32px;
+  }
+  body.ev-unified .ev-analytics-settings :is(a, button) {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--ev-muted);
+    font-size: 13px;
+    font-weight: 400;
+    text-decoration: none;
+  }
+  body.ev-unified .ev-analytics-settings :is(a, button):hover { text-decoration: underline; }
+}
