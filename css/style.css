@@ -387,9 +387,12 @@ body.ev-unified[data-ev-page="transfer"] #resultArea .result-detail {
 }
 
 /* Convenție tipografică unitară — module operaționale */
+.container .card > h2,
+.container .card > h3,
+.container .legal-box > h4,
 .ai-page .ai-card > h2,
 .ai-page .ai-inline > h3 {
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 /* Contopiri — layout desktop: câmpuri echilibrate și acțiune de ștergere separată. */
@@ -544,4 +547,8 @@ body.ev-unified[data-ev-page="transfer"] #resultArea .result-detail {
   }
   .timeline li::before { left: -18px; width: 8px; height: 8px; }
   .timeline .tl-date, .timeline .tl-label { font-size: .88rem; }
+}
+
+@media (max-width: 1023px) {
+  :where(button,input[type="button"],input[type="submit"],input[type="reset"],a.btn,.btn,.btn-utility,.btn-big,.toggle-btn,.filter,.access-submit,.access-logout,.text-btn,.icon-btn,.back-to-categories) { text-transform: uppercase !important; }
 }
