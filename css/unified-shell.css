@@ -61,12 +61,11 @@ body > .app-shell .suite-links {
   min-height: var(--ev-shell-header-h);
   display: flex;
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
+  gap: 18px;
   box-sizing: border-box;
 }
-.ev-shell__bar > * { min-width: 0; }
 
 .ev-shell__brand {
   display: inline-flex;
@@ -111,9 +110,8 @@ body > .app-shell .suite-links {
 .ev-shell__brand-copy strong {
   color: var(--ev-text);
   font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0;
-  white-space: nowrap;
+  font-weight: 900;
+  letter-spacing: .02em;
 }
 
 .ev-shell__brand-meta {
@@ -180,7 +178,7 @@ body > .app-shell .suite-links {
   color: #fff !important;
   border-color: var(--ev-accent);
   background: var(--ev-accent);
-  box-shadow: none;
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--ev-accent) 20%, transparent);
 }
 
 .ev-shell__actions {
@@ -246,7 +244,7 @@ body > .app-shell .suite-links {
   font-size: 10px;
   font-weight: 850;
   letter-spacing: .06em;
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 body > .container,
