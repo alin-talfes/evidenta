@@ -10,6 +10,8 @@
 
 @media (min-width: 1024px) {
   body.ev-unified[data-ev-page^="semnalmente"] .desktop-analysis-hint { display: block; }
+  body.ev-unified[data-ev-page^="semnalmente"] .section-heading h2 { margin: 0 0 8px; font-size: 18px; font-weight: 600; text-transform: none; }
+  body.ev-unified[data-ev-page^="semnalmente"] .section-heading p { margin: 0; color: var(--ev-text-secondary); font-size: 14px; font-weight: 400; }
   body.ev-unified[data-ev-page^="semnalmente"] .workflow { padding: 12px 24px; gap: 0; justify-content: stretch; }
   body.ev-unified[data-ev-page^="semnalmente"] .workflow-step { flex: 0 0 auto; min-width: 0; }
   body.ev-unified[data-ev-page^="semnalmente"] .workflow-line { flex: 1 1 0; min-width: 16px; height: 1px; }
