@@ -624,6 +624,12 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     border-radius: var(--ev-radius-sm);
     background: var(--ev-accent);
   }
+  body.ev-unified label:not(.toggle-switch):not(.radio-btn):not(.builder-check):not(.ai-check-row):not(.ev-prison-same-check):not(.sex-label):not(.life-label) {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
   body.ev-unified :is(.card > h2,.card > h3,.panel > h2,.panel > h3,.section-heading h2,.analysis-panel h2,.results-section h2,.notice-panel h2) {
     margin: 0 0 16px;
     color: var(--ev-text);
