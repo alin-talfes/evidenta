@@ -269,7 +269,7 @@ body.ev-unified :is(input, select, textarea).ev-field-warning {
   font-size: .66rem;
   font-weight: 850;
   letter-spacing: .08em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .ev-result-overview__primary strong {
@@ -1653,10 +1653,10 @@ body.ev-unified[data-ev-page="contopiri"] > .container > .card {
 }
 body.ev-unified[data-ev-page="contopiri"] > .container > .card > h3 {
   display: flex; align-items: center; gap: 10px; margin: 0 0 8px;
-  color: var(--ev-text); font-size: 1rem; font-weight: 850; letter-spacing: -.015em;
+  color: var(--ev-text); font-size: 18px; font-weight: 600; letter-spacing: 0; text-transform: none;
 }
 body.ev-unified[data-ev-page="contopiri"] > .container > .card > h3::before {
-  width: 4px; height: 22px; flex: 0 0 4px; border-radius: 4px; background: var(--ev-accent); content: "";
+  content: none;
 }
 body.ev-unified[data-ev-page="contopiri"] .section-help {
   max-width: 68ch; margin: 0 0 18px; color: var(--ev-text-secondary); font-size: .88rem; line-height: 1.6;
