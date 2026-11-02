@@ -412,8 +412,8 @@
     border-left:4px solid var(--ev-accent,#2563eb) !important;
     font-size:1.125rem !important;
     line-height:1.3 !important;
-    font-weight:850 !important;
-    text-transform:uppercase !important;
+    font-weight:600 !important;
+    text-transform:none !important;
   }
   body.ev-unified[data-ev-page="pedepse"] .top-bar {
     display:grid !important;
