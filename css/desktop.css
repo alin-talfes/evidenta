@@ -757,6 +757,10 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   body.ev-unified[data-ev-page="pedepse"] .sex-toggle-wrapper { width: max-content; max-width: 100%; overflow: visible; }
   body.ev-unified[data-ev-page="pedepse"] .sex-label { min-width: max-content; flex: 0 0 auto; text-transform: none; white-space: nowrap; }
   body.ev-unified[data-ev-page="pedepse"] #loadBtn .badge {
+    position: static;
+    top: auto;
+    right: auto;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -765,7 +769,7 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     margin-inline-start: 6px;
     border-radius: 50%;
     background: var(--ev-accent);
-    color: var(--ev-surface);
+    color: #fff;
     font-size: 11px;
     line-height: 1;
   }
