@@ -309,6 +309,7 @@
   /* Single control sizing and sentence-case treatment. */
   body.ev-unified :is(button,.btn,.btn-utility,.btn-big,.btn-today,.button,.primary,.secondary,.toggle-btn,.filter,.icon-btn,.text-btn),
   body:not(.ev-unified) :is(button,.btn,.button,.primary,.secondary,.toggle-btn,.back-to-categories) {
+    /* Preserve keyboard focus and disabled semantics while replacing legacy uppercase. */
     min-height: var(--control-h) !important;
     height: var(--control-h) !important;
     padding: 0 20px !important;
