@@ -795,6 +795,17 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   body.ev-unified[data-ev-page^="semnalmente"] .saved-list .btn-ghost { color: var(--ev-text); background: var(--ev-surface-2); border: 1px solid var(--ev-border); min-height: var(--ev-control-height); border-radius: var(--ev-radius-sm); font-size: 15px; font-weight: 600; }
   body.ev-unified[data-ev-page^="semnalmente"] .saved-list #btn-clear-saved:hover { background: var(--ev-danger-soft); }
 
+  body.ev-unified[data-ev-page="transfer"] .header-inner {
+    max-width: none;
+    margin: 0;
+  }
+  body.ev-unified[data-ev-page="transfer"] .header h1,
+  body.ev-unified[data-ev-page="transfer"] .header-inner h1 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.18;
+    letter-spacing: 0;
+  }
   body.ev-unified[data-ev-page="pedepse"] .ev-page-intro h1,
   body.ev-unified[data-ev-page="instructaj"] .hero h1 {
     font-size: 28px;
