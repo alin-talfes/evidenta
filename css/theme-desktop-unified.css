@@ -33,7 +33,7 @@
 
   :root[data-theme="dark"],
   html[data-theme="dark"],
-  body:not(.light):not([data-theme="light"]) {
+  body.dark {
     --primary: #60a5fa;
     --primary-hover: #93c5fd;
     --primary-soft: #172b4d;
