@@ -127,11 +127,11 @@
   }
 
   body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) > :is(h2, h3),
-  body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) .section-heading > h2 {
-    margin: 0 0 9px !important;
-    font-size: .96rem !important;
-    font-weight: 820 !important;
-    line-height: 1.28 !important;
+  body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) .section-heading h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
   }
 
   body.ev-unified :is(.card, .panel, .analysis-panel, .results-section) > p {
