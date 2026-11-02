@@ -1,11 +1,11 @@
 @import url("./style-legacy.css?v=42");
 @import url("./design-system.css?v=6");
-@import url("./unified-shell.css?v=9");
+@import url("./unified-shell.css?v=10");
 @import url("./visual-audit.css?v=6");
 /* Surse consolidate în final-layer.css: "./consistency.css?v=1" */
 /* Regulile responsive globale sunt consolidate în desktop.css și mobile.css. */
 /* Compatibilitate/audit: "./hotfix.css?v=1" "./ux-upgrades.css?v=1" */
-@import url("./final-layer.css?v=10");
+@import url("./final-layer.css?v=11");
 @import url("./browser-compat.css?v=1");
 
 /* Pedepse — ritm vertical uniform în rezultatul operațional. */
