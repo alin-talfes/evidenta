@@ -17,6 +17,10 @@
   body.ev-unified[data-ev-page^="semnalmente"] .workflow-line { flex: 1 1 0; min-width: 16px; height: 1px; }
   body.ev-unified[data-ev-page^="semnalmente"] .upload-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: stretch; gap: 24px; }
   body.ev-unified[data-ev-page^="semnalmente"] .upload-zone { display: grid; grid-template-rows: auto 1fr; min-height: 260px; padding: 20px; }
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-placeholder { grid-template-rows: auto auto auto 1fr; }
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-type { text-transform: none; letter-spacing: 0; }
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .label { font-size: 14px; font-weight: 600; }
+  body.ev-unified[data-ev-page^="semnalmente"] .upload-zone .hint { font-size: 14px; font-weight: 400; }
   body.ev-unified[data-ev-page^="semnalmente"] .upload-placeholder { display: grid; grid-template-rows: auto auto auto 1fr; align-content: start; justify-items: center; gap: 8px; min-height: 100%; }
   body.ev-unified[data-ev-page^="semnalmente"] .upload-placeholder .upload-type { grid-row: 1; }
   body.ev-unified[data-ev-page^="semnalmente"] .upload-placeholder .upload-symbol { grid-row: 2; margin: 0; }
