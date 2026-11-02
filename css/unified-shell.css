@@ -246,7 +246,7 @@ body > .app-shell .suite-links {
   font-size: 10px;
   font-weight: 850;
   letter-spacing: .06em;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 body > .container,
