@@ -816,6 +816,7 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   body.ev-unified[data-ev-page="pedepse"] .ev-optional-tools__head h3 { text-transform: none; font-size: 18px; font-weight: 600; }
   body.ev-unified[data-ev-page="pedepse"] .sex-label { text-transform: none; }
   body.ev-unified[data-ev-page="pedepse"] .ev-lc-controls-card .toggle-slider { background: var(--ev-surface-2); border-color: var(--ev-border-strong); }
+  body.ev-unified[data-ev-page="pedepse"] .ev-lc-controls-card .life-label { display: none; }
   body.ev-unified[data-ev-page="pedepse"] .ev-lc-controls-card .toggle-switch input:checked + .toggle-slider { background: var(--ev-accent); border-color: var(--ev-accent); }
   body.ev-unified .ev-analytics-settings { margin-top: 48px; }
 }
