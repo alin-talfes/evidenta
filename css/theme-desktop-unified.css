@@ -1,0 +1,595 @@
+/*
+ * IPC — unified desktop visual layer
+ * Scope: desktop web only (>= 1024px). Mobile cascade and runtime remain untouched.
+ */
+@media (min-width: 1024px) {
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-soft: #e8f0ff;
+    --danger: #dc2626;
+    --danger-soft: #fef2f2;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --border: #d7deea;
+    --surface: #ffffff;
+    --bg: #f4f6fb;
+    --s1: 4px;
+    --s2: 8px;
+    --s3: 12px;
+    --s4: 16px;
+    --s5: 24px;
+    --s6: 32px;
+    --s7: 48px;
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 16px;
+    --r-pill: 999px;
+    --shadow-card: 0 1px 2px rgba(15,23,42,.06), 0 4px 12px rgba(15,23,42,.04);
+    --control-h: 44px;
+    --desktop-shell-max: 1200px;
+    --desktop-shell-pad: 32px;
+  }
+
+  :root[data-theme="dark"],
+  html[data-theme="dark"],
+  body:not(.light):not([data-theme="light"]) {
+    --primary: #60a5fa;
+    --primary-hover: #93c5fd;
+    --primary-soft: #172b4d;
+    --danger: #f87171;
+    --danger-soft: #3a1d25;
+    --text: #f1f5f9;
+    --text-muted: #cbd5e1;
+    --border: #334155;
+    --surface: #172235;
+    --bg: #0b1220;
+    --shadow-card: 0 1px 2px rgba(0,0,0,.24), 0 4px 12px rgba(0,0,0,.16);
+  }
+
+  :root[data-theme="light"],
+  html[data-theme="light],
+  body.light {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-soft: #e8f0ff;
+    --danger: #dc2626;
+    --danger-soft: #fef2f2;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --border: #d7deea;
+    --surface: #ffffff;
+    --bg: #f4f6fb;
+    --shadow-card: 0 1px 2px rgba(15,23,42,.06), 0 4px 12px rgba(15,23,42,.04);
+  }
+
+  html { background: var(--bg); }
+  body {
+    color: var(--text);
+    background: var(--bg);
+    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  body.ev-unified,
+  body.ev-unified * {
+    box-sizing: border-box;
+  }
+
+  /* Common desktop content axis: page shell and module content share 1200px. */
+  body > .container,
+  body > .app-shell,
+  body > main,
+  body.ev-unified > .container,
+  body.ev-unified > .app-shell,
+  body.ev-unified > main,
+  body.ev-unified .ev-shell__bar,
+  body.ev-unified .ev-shell__module,
+  body.ev-unified .ev-footer__inner {
+    width: min(100% - 64px, var(--desktop-shell-max)) !important;
+    max-width: var(--desktop-shell-max) !important;
+    margin-inline: auto !important;
+  }
+
+  body > .container,
+  body > main,
+  body > .app-shell > main,
+  body.ev-unified > .container,
+  body.ev-unified > main,
+  body.ev-unified > .app-shell > main {
+    padding-inline: 0 !important;
+  }
+
+  body.ev-unified .ev-shell__bar,
+  body.ev-unified .ev-shell__module,
+  body.ev-unified .ev-footer__inner {
+    padding-inline: 0 !important;
+  }
+
+  body.ev-unified .ev-shell__bar {
+    min-height: 72px !important;
+    height: 72px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) auto minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 24px !important;
+  }
+  body.ev-unified .ev-shell__brand { justify-self: start !important; }
+  body.ev-unified .ev-shell__nav {
+    justify-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+  }
+  body.ev-unified .ev-shell__actions { justify-self: end !important; }
+  body.ev-unified .ev-shell__nav a,
+  body.ev-unified .ev-shell__nav button {
+    min-height: 44px !important;
+    height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: var(--r-md) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+  body.ev-unified .ev-shell__module {
+    min-height: 0 !important;
+    padding-top: 24px !important;
+    padding-bottom: 16px !important;
+    gap: 8px !important;
+  }
+  body.ev-unified .ev-shell__module h1,
+  body > .container h1,
+  body > main h1,
+  body > .app-shell h1 {
+    margin: 0 !important;
+    color: var(--text) !important;
+    font-size: 28px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: -.02em !important;
+    text-transform: none !important;
+  }
+
+  /* Page rhythm and card system. */
+  body.ev-unified #main-content,
+  body.ev-unified > .container > main,
+  body > .app-shell > main,
+  body:not(.ev-unified) > main {
+    display: grid !important;
+    grid-auto-flow: row !important;
+    align-content: start !important;
+    align-items: stretch !important;
+    gap: 24px !important;
+  }
+  body.ev-unified #main-content > .card,
+  body.ev-unified #main-content > .panel,
+  body.ev-unified #main-content > section.card,
+  body.ev-unified > .container > .card,
+  body.ev-unified .panel,
+  body.ev-unified .analysis-panel,
+  body.ev-unified .results-section,
+  body:not(.ev-unified) .panel,
+  body:not(.ev-unified) .results-section,
+  body:not(.ev-unified) .analysis-panel,
+  body:not(.ev-unified) .section-hub,
+  body:not(.ev-unified) .learning-section,
+  body:not(.ev-unified) .notice-panel,
+  body:not(.ev-unified) .notice,
+  body:not(.ev-unified) .legal-strip {
+    min-width: 0 !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r-lg) !important;
+    background: var(--surface) !important;
+    box-shadow: var(--shadow-card) !important;
+    color: var(--text) !important;
+  }
+  body.ev-unified #main-content > .card,
+  body.ev-unified #main-content > .panel,
+  body.ev-unified > .container > .card,
+  body.ev-unified .panel,
+  body.ev-unified .analysis-panel,
+  body.ev-unified .results-section,
+  body:not(.ev-unified) .panel,
+  body:not(.ev-unified) .results-section,
+  body:not(.ev-unified) .analysis-panel,
+  body:not(.ev-unified) .learning-section,
+  body:not(.ev-unified) .section-hub {
+    padding: 24px !important;
+  }
+  body.ev-unified #main-content > .card > h2,
+  body.ev-unified #main-content > .card > h3,
+  body.ev-unified #main-content > .panel > h2,
+  body.ev-unified #main-content > .panel > h3,
+  body.ev-unified .section-heading h2,
+  body.ev-unified .panel h2,
+  body:not(.ev-unified) .section-heading h2,
+  body:not(.ev-unified) .panel h2,
+  body:not(.ev-unified) .learning-section h2 {
+    color: var(--text) !important;
+    margin: 0 0 16px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+  body.ev-unified p,
+  body:not(.ev-unified) p { color: inherit; }
+  body.ev-unified .section-help,
+  body.ev-unified .hint,
+  body.ev-unified .help-text,
+  body:not(.ev-unified) .hint,
+  body:not(.ev-unified) .lead,
+  body:not(.ev-unified) .section-help {
+    color: var(--text-muted) !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Form grids expand to available space without arbitrary fixed widths. */
+  body.ev-unified .form-grid,
+  body.ev-unified .form-row,
+  body.ev-unified .form-group-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 16px 24px !important;
+    min-width: 0 !important;
+  }
+  body.ev-unified .form-grid > *,
+  body.ev-unified .form-row > *,
+  body.ev-unified .form-group-grid > * { min-width: 0 !important; }
+  body.ev-unified .form-grid input:not([type="checkbox"]):not([type="radio"]),
+  body.ev-unified .form-grid select,
+  body.ev-unified .form-grid textarea,
+  body.ev-unified .form-group input:not([type="checkbox"]):not([type="radio"]),
+  body.ev-unified .form-group select,
+  body.ev-unified .form-group textarea {
+    width: 100% !important;
+    max-width: none !important;
+    text-align: left !important;
+  }
+
+  /* Labels and controls. */
+  body.ev-unified label,
+  body:not(.ev-unified) .form-group > label,
+  body:not(.ev-unified) .section-hub label {
+    display: block;
+    color: var(--text-muted) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+  }
+  body.ev-unified input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  body.ev-unified select,
+  body.ev-unified textarea,
+  body:not(.ev-unified) input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  body:not(.ev-unified) select,
+  body:not(.ev-unified) textarea {
+    min-height: var(--control-h) !important;
+    height: var(--control-h) !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r-sm) !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    font: 400 15px/1.4 Inter, "Segoe UI", system-ui, sans-serif !important;
+    text-align: left !important;
+  }
+  body.ev-unified textarea,
+  body:not(.ev-unified) textarea { height: auto !important; min-height: 96px !important; padding-block: 10px !important; }
+  body.ev-unified input::placeholder,
+  body.ev-unified textarea::placeholder,
+  body:not(.ev-unified) input::placeholder,
+  body:not(.ev-unified) textarea::placeholder { color: var(--text-muted) !important; opacity: 1 !important; }
+  body.ev-unified input:focus,
+  body.ev-unified select:focus,
+  body.ev-unified textarea:focus,
+  body:not(.ev-unified) input:focus,
+  body:not(.ev-unified) select:focus,
+  body:not(.ev-unified) textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent) !important;
+    outline: none !important;
+  }
+  body.ev-unified :where(button,a,input,select,textarea,[tabindex]):focus-visible,
+  body:not(.ev-unified) :where(button,a,input,select,textarea,[tabindex]):focus-visible {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Single control sizing and sentence-case treatment. */
+  body.ev-unified :is(button,.btn,.btn-utility,.btn-big,.btn-today,.button,.primary,.secondary,.toggle-btn,.filter,.icon-btn,.text-btn),
+  body:not(.ev-unified) :is(button,.btn,.button,.primary,.secondary,.toggle-btn,.back-to-categories) {
+    min-height: var(--control-h) !important;
+    height: var(--control-h) !important;
+    padding: 0 20px !important;
+    border-radius: var(--r-sm) !important;
+    font: 600 15px/1.2 Inter, "Segoe UI", system-ui, sans-serif !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    box-shadow: none !important;
+    transition: color 150ms ease, background 150ms ease, border-color 150ms ease, transform 150ms ease !important;
+    white-space: nowrap !important;
+  }
+  body.ev-unified :is(button,.btn,.btn-utility,.btn-big,.btn-today,.button,.primary,.secondary,.toggle-btn,.filter):hover:not(:disabled),
+  body:not(.ev-unified) :is(button,.btn,.button,.primary,.secondary,.toggle-btn):hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  body.ev-unified :is(button,.btn,.btn-utility,.btn-big,.btn-today,.button,.primary,.secondary,.toggle-btn,.filter):disabled,
+  body:not(.ev-unified) :is(button,.btn,.button,.primary,.secondary,.toggle-btn):disabled {
+    background: #e5e7eb !important;
+    color: #64748b !important;
+    border-color: #cbd5e1 !important;
+    cursor: not-allowed !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+  }
+  body.ev-unified :is(.btn-primary,.primary,.btn-utility.primary,.access-submit),
+  body:not(.ev-unified) :is(.btn-primary,.primary,.access-submit) {
+    background: var(--primary) !important;
+    border: 1px solid var(--primary) !important;
+    color: #fff !important;
+  }
+  body.ev-unified :is(.btn-primary,.primary,.btn-utility.primary,.access-submit):hover:not(:disabled),
+  body:not(.ev-unified) :is(.btn-primary,.primary,.access-submit):hover:not(:disabled) {
+    background: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+  }
+  body.ev-unified :is(.btn-secondary,.secondary,.btn-outline,.btn-utility:not(.primary)),
+  body:not(.ev-unified) :is(.btn-secondary,.secondary,.btn-outline) {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+  }
+  body.ev-unified :is(.btn-danger,.btn-danger-ghost),
+  body:not(.ev-unified) :is(.btn-danger,.btn-danger-ghost) {
+    background: var(--surface) !important;
+    color: var(--danger) !important;
+    border: 1px solid var(--danger) !important;
+  }
+  body.ev-unified :is(.btn-danger,.btn-danger-ghost):hover:not(:disabled),
+  body:not(.ev-unified) :is(.btn-danger,.btn-danger-ghost):hover:not(:disabled) {
+    background: var(--danger-soft) !important;
+    border-color: var(--danger) !important;
+  }
+  body.ev-unified :is(.btn-ghost,.text-btn),
+  body:not(.ev-unified) :is(.btn-ghost,.text-btn,.back-to-categories) {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    border: 1px solid transparent !important;
+  }
+  body.ev-unified .btn-today { flex: 0 0 58px !important; }
+  body.ev-unified .penalty-row .btn-danger,
+  body:not(.ev-unified) .remove-btn {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+  }
+
+  /* Segmented controls and selected states. */
+  body.ev-unified .ev-calc-mode,
+  body.ev-unified .toggle-group,
+  body.ev-unified .radio-group,
+  body:not(.ev-unified) .toggle-group,
+  body:not(.ev-unified) .radio-group {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    padding: 4px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r-md) !important;
+    background: var(--bg) !important;
+  }
+  body.ev-unified .ev-calc-mode > button,
+  body.ev-unified .toggle-group > .toggle-btn,
+  body.ev-unified .radio-group > .radio-btn,
+  body:not(.ev-unified) .toggle-group > .toggle-btn,
+  body:not(.ev-unified) .radio-group > .radio-btn {
+    min-height: 44px !important;
+    height: 44px !important;
+    flex: 1 1 0 !important;
+    justify-content: center !important;
+    border: 1px solid transparent !important;
+    border-radius: 9px !important;
+    background: transparent !important;
+    color: var(--text) !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+  }
+  body.ev-unified .ev-calc-mode > button.is-active,
+  body.ev-unified .toggle-group > .toggle-btn.active,
+  body.ev-unified .radio-group > .radio-btn:has(input:checked),
+  body:not(.ev-unified) .toggle-group > .toggle-btn.active,
+  body:not(.ev-unified) .radio-group > .radio-btn:has(input:checked) {
+    background: var(--primary-soft) !important;
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    box-shadow: none !important;
+  }
+  body.ev-unified .radio-btn input,
+  body:not(.ev-unified) .radio-btn input { accent-color: var(--primary); }
+
+  /* Checkboxes, switches, chips and accordions. */
+  body.ev-unified input[type="checkbox"],
+  body:not(.ev-unified) input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    accent-color: var(--primary) !important;
+    border-radius: 4px !important;
+  }
+  body.ev-unified .toggle-switch .toggle-slider {
+    width: 44px !important;
+    height: 24px !important;
+    border-radius: var(--r-pill) !important;
+    background: #cbd5e1 !important;
+  }
+  body.ev-unified .toggle-switch .toggle-slider::before {
+    width: 20px !important;
+    height: 20px !important;
+    left: 2px !important;
+    bottom: 2px !important;
+    background: #fff !important;
+  }
+  body.ev-unified .toggle-switch input:checked + .toggle-slider { background: var(--primary) !important; }
+  body.ev-unified .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px) !important; }
+  body.ev-unified :is(.badge,.chip,.upload-type,.quality-legend span,.quality-checklist span) {
+    min-height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 12px !important;
+    border-radius: var(--r-pill) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+  body.ev-unified details > summary,
+  body:not(.ev-unified) details > summary {
+    min-height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    border-radius: var(--r-sm) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+  }
+
+  /* Pedepse: aligned top cards, sentence duration and start date. */
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    align-items: stretch !important;
+    gap: 24px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body > .card { height: 100% !important; }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 16px !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] #sentenceDuration input { max-width: none !important; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-start-date-field .date-wrapper { display: flex !important; gap: 8px !important; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-start-date-field .date-wrapper input { flex: 1 1 auto !important; }
+  body.ev-unified[data-ev-page="pedepse"] .ev-prison-same-check { text-transform: none !important; }
+  body.ev-unified[data-ev-page="pedepse"] #main-content > .card { margin: 0 !important; }
+
+  /* Contopiri: full-width penalty editor and consistent row. */
+  body.ev-unified[data-ev-page="contopiri"] > .container > .card { width: 100% !important; }
+  body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer { display: grid !important; gap: 12px !important; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row {
+    display: grid !important;
+    grid-template-columns: minmax(96px,.72fr) minmax(96px,.72fr) minmax(96px,.72fr) minmax(240px,1.8fr) 44px !important;
+    gap: 12px !important;
+    align-items: end !important;
+    padding: 12px !important;
+  }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row input,
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row select { width: 100% !important; height: 44px !important; min-height: 44px !important; }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row .btn-danger { width: 44px !important; height: 44px !important; }
+  body.ev-unified[data-ev-page="contopiri"] > .container > .card { margin-block: 0 24px !important; }
+
+  /* Transfer: one-line age choices, four-column regime grid, consistent helper text. */
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup,
+  body.ev-transfer-auto #varstaGroup {
+    display: grid !important;
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 6px !important;
+  }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup > .radio-btn:nth-child(3),
+  body.ev-transfer-auto #varstaGroup > .radio-btn:nth-child(3) { grid-column: auto !important; }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup .radio-btn,
+  body.ev-transfer-auto #varstaGroup .radio-btn { white-space: nowrap !important; font-size: 13px !important; padding-inline: 8px !important; }
+  body.ev-unified[data-ev-page="transfer"] #regimGroupRadio,
+  body.ev-transfer-auto #regimGroupRadio { grid-template-columns: repeat(4,minmax(0,1fr)) !important; }
+  body.ev-unified[data-ev-page="transfer"] #modeHint,
+  body.ev-transfer-auto #modeHint { margin-top: 8px !important; color: var(--text-muted) !important; }
+  body.ev-unified[data-ev-page="transfer"] .empty-state,
+  body.ev-transfer-auto .empty-state { background: var(--bg) !important; color: var(--text-muted) !important; border-color: var(--border) !important; }
+
+  /* Instructaj: hub cards have equal height and top-aligned content. */
+  body:not(.ev-unified) .section-hub,
+  body:not(.ev-unified) .section-hub-grid { width: 100% !important; max-width: none !important; margin-inline: auto !important; }
+  body:not(.ev-unified) .section-hub-grid { display: grid !important; grid-template-columns: repeat(3,minmax(0,1fr)) !important; align-items: stretch !important; gap: 24px !important; }
+  body:not(.ev-unified) .section-hub-card {
+    min-height: 180px !important;
+    height: 100% !important;
+    grid-template-columns: minmax(0,1fr) auto !important;
+    grid-template-rows: auto 1fr !important;
+    align-content: start !important;
+    align-items: start !important;
+    padding: 24px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--r-lg) !important;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+  }
+  body:not(.ev-unified) .section-hub-card:hover { border-color: var(--primary) !important; transform: translateY(-2px) !important; }
+  body:not(.ev-unified) .section-hub-card strong { font-size: 18px !important; font-weight: 600 !important; }
+  body:not(.ev-unified) .section-hub-card small { grid-column: 1 / -1 !important; color: var(--text-muted) !important; font-size: 14px !important; font-weight: 400 !important; }
+  body:not(.ev-unified) .section-hub-card::after { content: "→"; grid-column: 2; grid-row: 1; color: var(--text-muted); font-size: 18px; }
+  body:not(.ev-unified) .section-hub { padding: 0 !important; }
+  body:not(.ev-unified) .section-hub-head { max-width: none !important; }
+
+  /* Semnalmente: equal upload zones, workflow connector, clear primary action. */
+  body.ev-unified .workflow { width: 100% !important; justify-content: stretch !important; gap: 0 !important; padding: 8px 0 !important; }
+  body.ev-unified .workflow-step { flex: 0 0 auto !important; min-width: 0 !important; }
+  body.ev-unified .workflow-line { flex: 1 1 auto !important; width: auto !important; margin: 0 12px !important; }
+  body.ev-unified .upload-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 24px !important; align-items: stretch !important; }
+  body.ev-unified .upload-zone {
+    min-height: 280px !important;
+    display: grid !important;
+    grid-template-rows: auto auto auto 1fr !important;
+    align-content: start !important;
+    justify-items: center !important;
+    gap: 10px !important;
+    padding: 24px !important;
+  }
+  body.ev-unified .upload-placeholder { display: contents !important; }
+  body.ev-unified .upload-type { grid-row: 1; }
+  body.ev-unified .upload-symbol { grid-row: 2; margin: 0 !important; }
+  body.ev-unified .upload-zone .label { grid-row: 3; }
+  body.ev-unified .upload-zone .hint { grid-row: 4; }
+  body.ev-unified .analysis-panel { display: flex !important; align-items: center !important; justify-content: space-between !important; padding: 24px !important; }
+  body.ev-unified .analysis-panel .btn { min-width: 210px !important; }
+  body.ev-unified .remove-btn { border-radius: var(--r-sm) !important; }
+
+  /* Footer settings links use one calm, centered treatment. */
+  body.ev-unified .ev-analytics-settings,
+  body:not(.ev-unified) .ev-analytics-settings {
+    width: min(100%, var(--desktop-shell-max)) !important;
+    max-width: var(--desktop-shell-max) !important;
+    display: flex !important;
+    justify-content: center !important;
+    margin: 48px auto 0 !important;
+    padding: 0 0 32px !important;
+  }
+  body.ev-unified .ev-analytics-settings button,
+  body:not(.ev-unified) .ev-analytics-settings button {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    text-decoration: none !important;
+  }
+  body.ev-unified .ev-analytics-settings button:hover,
+  body:not(.ev-unified) .ev-analytics-settings button:hover { text-decoration: underline !important; }
+}
