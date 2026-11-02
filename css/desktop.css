@@ -56,16 +56,18 @@
   }
 
   body.ev-unified .ev-shell__module {
-    display: block !important;
-    min-height: 0 !important;
-    margin-bottom: 12px !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    text-align: left !important;
+    display: block;
+    box-sizing: border-box;
+    width: min(calc(100% - 64px), var(--ev-shell-max));
+    max-width: var(--ev-shell-max);
+    min-height: 68px;
+    margin: 0 auto 12px;
+    padding: 12px 0 16px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    text-align: left;
   }
 
   body.ev-unified .ev-shell__module h1 {
