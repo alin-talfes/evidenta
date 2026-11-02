@@ -471,6 +471,14 @@
   }
 
   /* Pedepse: aligned top cards, sentence duration and start date. */
+  /* Keep the common shell layout; prevent legacy body backgrounds from leaking into light mode. */
+  body.ev-unified:not([data-ev-page^="ofiter"]) {
+    background: var(--bg) !important;
+  }
+  body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body,
+  body.ev-unified[data-ev-page="transfer"] .form-grid {
+    min-width: 0 !important;
+  }
   body.ev-unified[data-ev-page="pedepse"] .ev-mobile-lc-details__body {
     display: grid !important;
     grid-template-columns: repeat(2,minmax(0,1fr)) !important;
