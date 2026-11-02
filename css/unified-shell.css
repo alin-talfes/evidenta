@@ -61,11 +61,12 @@ body > .app-shell .suite-links {
   min-height: var(--ev-shell-header-h);
   display: flex;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 18px;
+  gap: 8px;
   box-sizing: border-box;
 }
+.ev-shell__bar > * { min-width: 0; }
 
 .ev-shell__brand {
   display: inline-flex;
