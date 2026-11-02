@@ -1646,7 +1646,7 @@ body.ev-unified[data-ev-page="ai"] #resultCard { border-color: color-mix(in srgb
 
 
 /* Contopiri — introducere pedeapsă și rezultat cu ierarhie vizuală mobil-first. */
-body.ev-unified[data-ev-page="contopiri"] > .container { width: min(100% - 28px, 1080px); margin-inline: auto; }
+body.ev-unified[data-ev-page="contopiri"] > .container { width: min(calc(100% - 64px), var(--ev-shell-max)); max-width: var(--ev-shell-max); margin-inline: auto; }
 body.ev-unified[data-ev-page="contopiri"] > .container > .card {
   padding: clamp(16px, 2.4vw, 26px); border: 1px solid var(--ev-border);
   border-radius: 18px; background: var(--ev-surface); box-shadow: var(--ev-shadow-soft);
@@ -1663,8 +1663,8 @@ body.ev-unified[data-ev-page="contopiri"] .section-help {
 }
 body.ev-unified[data-ev-page="contopiri"] #penaltyRowsContainer { display: grid; gap: 10px; margin: 14px 0; }
 body.ev-unified[data-ev-page="contopiri"] .penalty-row {
-  display: grid; grid-template-columns: repeat(3, minmax(0, .58fr)) minmax(230px, 1.8fr) 44px;
-  align-items: end; gap: 10px; min-width: 0; padding: 14px;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(180px, 1.6fr) 44px;
+  align-items: end; gap: 16px; min-width: 0; padding: 14px;
   border: 1px solid var(--ev-border); border-radius: 14px; background: var(--ev-surface-2);
 }
 body.ev-unified[data-ev-page="contopiri"] .penalty-row > div { display: grid; gap: 6px; min-width: 0; }
@@ -1733,7 +1733,7 @@ body.ev-unified[data-ev-page="contopiri"] .legal-box p strong { color: var(--ev-
 
 
 /* Transfer — criterii de profilare, selecții și rezultate cu ierarhie operațională. */
-body.ev-unified[data-ev-page="transfer"] > .container { width: min(100% - 28px, 1120px); margin-inline: auto; }
+body.ev-unified[data-ev-page="transfer"] > .container { width: min(calc(100% - 64px), var(--ev-shell-max)); max-width: var(--ev-shell-max); margin-inline: auto; }
 body.ev-unified[data-ev-page="transfer"] .transfer-page-actions { display: flex; justify-content: flex-end; margin: 0 0 12px; }
 body.ev-unified[data-ev-page="transfer"] .transfer-page-actions .btn {
   min-height: 44px; padding: 10px 14px; border-radius: 11px; font-size: .76rem; font-weight: 820;
@@ -1928,11 +1928,11 @@ body.ev-unified[data-ev-page="instructaj"] .legal-flow small { display: block; m
 
 /* Semnalmente — upload states, workflow and photo guidance. */
 body.ev-unified[data-ev-page^="semnalmente"] .workflow {
-  display: flex; align-items: center; justify-content: center; gap: 10px; margin: 16px 0;
-  padding: 13px; border: 1px solid var(--ev-border); border-radius: 15px; background: var(--ev-surface);
+  display: flex; align-items: center; justify-content: stretch; gap: 0; margin: 16px 0;
+  padding: 12px 24px; border: 1px solid var(--ev-border); border-radius: var(--ev-radius-lg); background: var(--ev-surface);
 }
 body.ev-unified[data-ev-page^="semnalmente"] .workflow-step {
-  display: flex; align-items: center; gap: 9px; min-width: 0; padding: 6px 9px; border-radius: 10px;
+  display: flex; align-items: center; gap: 9px; flex: 0 0 auto; min-width: 0; padding: 6px 9px; border-radius: var(--ev-radius-md);
 }
 body.ev-unified[data-ev-page^="semnalmente"] .workflow-step > span {
   display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 32px;
@@ -1942,7 +1942,7 @@ body.ev-unified[data-ev-page^="semnalmente"] .workflow-step.is-active { backgrou
 body.ev-unified[data-ev-page^="semnalmente"] .workflow-step.is-active > span { background: var(--ev-accent); color: #fff; }
 body.ev-unified[data-ev-page^="semnalmente"] .workflow-step strong { display: block; color: var(--ev-text); font-size: .8rem; }
 body.ev-unified[data-ev-page^="semnalmente"] .workflow-step small { display: block; color: var(--ev-text-secondary); font-size: .68rem; }
-body.ev-unified[data-ev-page^="semnalmente"] .workflow-line { width: clamp(12px, 5vw, 60px); height: 1px; flex: 0 1 60px; background: var(--ev-border-strong); }
+body.ev-unified[data-ev-page^="semnalmente"] .workflow-line { width: auto; height: 1px; flex: 1 1 0; min-width: 12px; background: var(--ev-border-strong); }
 body.ev-unified[data-ev-page^="semnalmente"] .notice-panel {
   display: grid; grid-template-columns: 42px minmax(0,1fr); gap: 14px; padding: 16px;
   border: 1px solid color-mix(in srgb, var(--ev-warning) 36%, var(--ev-border)); border-radius: 15px;
