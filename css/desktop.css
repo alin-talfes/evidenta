@@ -550,6 +550,22 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
     margin-inline: auto;
   }
 
+  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) > :is(h2,h3),
+  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) .section-heading > h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) > :is(h2,h3)::before,
+  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) .section-heading > h2::before {
+    content: "";
+    display: block;
+    width: 4px;
+    height: 22px;
+    flex: 0 0 4px;
+    border-radius: var(--ev-radius-sm);
+    background: var(--ev-accent);
+  }
   body.ev-unified :is(.card > h2,.card > h3,.panel > h2,.panel > h3,.section-heading h2,.analysis-panel h2,.results-section h2,.notice-panel h2) {
     margin: 0 0 16px;
     color: var(--ev-text);
