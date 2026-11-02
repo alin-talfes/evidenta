@@ -636,10 +636,11 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   body.ev-unified[data-ev-page="contopiri"] > .container > .card > h3::before { content: ""; display: block; width: 4px; height: 22px; flex: 0 0 4px; border-radius: var(--ev-radius-sm); background: var(--ev-accent); }
   body.ev-unified[data-ev-page="contopiri"] .ev-module-intro #contopiri-title {
     margin: 0;
-    color: var(--ev-text-secondary);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.4;
+    color: var(--ev-text);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.18;
+    letter-spacing: 0;
   }
 
   body.ev-unified :is(button,.btn,.btn-utility,.btn-big,.btn-today,.button,.primary,.secondary,.toggle-btn,.filter,.icon-btn,.text-btn) {
