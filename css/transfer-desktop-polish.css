@@ -26,9 +26,9 @@
     gap:8px !important;
   }
   body.ev-unified[data-ev-page="transfer"] #sexGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
-  body.ev-unified[data-ev-page="transfer"] #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; min-width:360px !important; }
   body.ev-transfer-auto #sexGroup { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
-  body.ev-transfer-auto #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+  body.ev-transfer-auto #varstaGroup { grid-template-columns:repeat(3,minmax(0,1fr)) !important; min-width:360px !important; }
   body.ev-unified[data-ev-page="transfer"] #sexGroup,
   body.ev-unified[data-ev-page="transfer"] #varstaGroup,
   body.ev-transfer-auto #sexGroup,
@@ -43,7 +43,7 @@
   body.ev-unified[data-ev-page="transfer"] .radio-btn,
   body.ev-transfer-auto .radio-btn {
     display:flex !important; align-items:center !important; justify-content:center !important;
-    min-height:42px !important; padding:9px 12px !important; text-align:center !important;
+    min-height:44px !important; height:44px !important; padding:8px 8px !important; text-align:center !important;
     white-space:nowrap !important; border-radius:var(--ev-radius-md) !important;
   }
   body.ev-unified[data-ev-page="transfer"] .radio-btn:has(input:checked),
@@ -90,4 +90,15 @@
   }
   body.ev-unified[data-ev-page="transfer"] .empty-state p,
   body.ev-transfer-auto .empty-state p { margin:0 !important; font-weight:500 !important; }
+}
+
+@media (min-width: 1024px) {
+  body.ev-unified[data-ev-page="transfer"] #sexGroup,
+  body.ev-transfer-auto #sexGroup { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup,
+  body.ev-transfer-auto #varstaGroup { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  body.ev-unified[data-ev-page="transfer"] #regimGroupRadio,
+  body.ev-transfer-auto #regimGroupRadio { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  body.ev-unified[data-ev-page="transfer"] #varstaGroup .radio-btn,
+  body.ev-transfer-auto #varstaGroup .radio-btn { min-width: 0; white-space: nowrap; font-size: 12px; }
 }
