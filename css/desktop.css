@@ -551,13 +551,13 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   }
 
   body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) > :is(h2,h3),
-  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) .section-heading > h2 {
+  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) .section-heading h2 {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) > :is(h2,h3)::before,
-  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) .section-heading > h2::before {
+  body.ev-unified :is(.card,.panel,.analysis-panel,.results-section) .section-heading h2::before {
     content: "";
     display: block;
     width: 4px;
