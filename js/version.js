@@ -56,6 +56,7 @@
         author.setAttribute('aria-label', 'Alin Talfeș pe WhatsApp');
         meta.appendChild(author);
         copy.append(home, meta);
+        if (brand) brand.title = meta.textContent.trim();
         return true;
     }
 
