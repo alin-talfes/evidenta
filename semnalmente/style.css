@@ -29,3 +29,7 @@
   body.ev-unified[data-ev-page^="semnalmente"] .saved-list #btn-export-all { color: var(--ev-text); background: var(--ev-surface); border: 1px solid var(--ev-border); }
   body.ev-unified[data-ev-page^="semnalmente"] .saved-list #btn-clear-saved { margin-inline-start: auto; color: var(--ev-danger); background: transparent; border: 1px solid var(--ev-danger); }
 }
+
+@media (max-width: 1023px) {
+  :where(button,input[type="button"],input[type="submit"],input[type="reset"],a.btn,.btn,.btn-utility,.btn-big,.toggle-btn,.filter,.access-submit,.access-logout,.text-btn,.icon-btn,.back-to-categories) { text-transform: uppercase !important; }
+}
