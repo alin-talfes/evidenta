@@ -521,17 +521,23 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
   body.ev-unified .ev-shell__nav { justify-content: center; flex-wrap: nowrap; gap: 6px; }
   body.ev-unified .ev-shell__nav a { flex: 0 1 auto; min-width: 0; padding-inline: 10px; font-weight: 600; }
   body.ev-unified .ev-shell__actions { justify-self: end; }
-  body.ev-unified .ev-shell__module { padding-inline: 0; }
+  body.ev-unified .ev-shell__module {
+    width: min(calc(100% - 64px), var(--ev-shell-max));
+    max-width: var(--ev-shell-max);
+    min-height: 68px;
+    padding: 12px 0 16px;
+  }
+  body.ev-unified .ev-shell__module h1 { font-size: 28px; font-weight: 600; }
 }
 
 /* Header module titles: same horizontal axis as the brand/navigation container. */
 body.ev-unified .ev-shell__module {
   box-sizing: border-box;
-  width: min(calc(100% - 64px), var(--ev-shell-max));
+  width: 100%;
   max-width: var(--ev-shell-max);
-  min-height: 68px;
   margin-inline: auto;
-  padding: 12px 0 16px;
+  padding-left: max(var(--ev-shell-pad, 18px), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--ev-shell-pad, 18px), env(safe-area-inset-right, 0px));
   text-align: left;
 }
 body.ev-unified .ev-shell__module h1 {
