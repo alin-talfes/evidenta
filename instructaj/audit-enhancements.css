@@ -357,7 +357,8 @@ body:has(.learning-section[aria-labelledby="glosar-heading"]:not([hidden])) .leg
   .section-hub-head { max-width: none; }
   .section-hub-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: 24px; }
   .section-hub-card { grid-template-columns: 2.2rem minmax(0,1fr); min-height: 120px; padding: 20px; }
-  .section-hub-card:hover, .section-hub-card:focus-visible, .section-hub-card.is-active { border-color: var(--accent); }
+  .section-hub-card:hover, .section-hub-card:focus-visible, .section-hub-card.is-active { border-color: var(--ev-accent); }
+  .section-hub-card { cursor: pointer; }
   .section-hub-card strong { font-size: 18px; font-weight: 600; white-space: normal; overflow-wrap: anywhere; }
   .section-hub-card small { color: var(--muted); font-size: 14px; font-weight: 400; white-space: normal; overflow-wrap: anywhere; }
   .section-hub-card strong, .section-hub-card small { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
