@@ -510,6 +510,64 @@ body.ev-unified :is(.quality-legend, .official-actions, .legal-act-actions) {
 
 
 @media (min-width: 1024px) {
+  body.ev-unified .toggle-group {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--ev-border);
+    border-radius: var(--ev-radius-md);
+    background: var(--ev-surface-2);
+  }
+  body.ev-unified .toggle-group .toggle-btn {
+    min-width: 0;
+    min-height: var(--ev-control-height);
+    height: var(--ev-control-height);
+    padding-inline: 8px;
+    border: 1px solid transparent;
+    border-radius: var(--ev-radius-sm);
+    background: transparent;
+    color: var(--ev-text-secondary);
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: none;
+  }
+  body.ev-unified .toggle-group .toggle-btn.active {
+    border-color: var(--ev-accent);
+    background: var(--ev-accent-soft);
+    color: var(--ev-accent-strong);
+    box-shadow: none;
+  }
+  body.ev-unified .radio-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid var(--ev-border);
+    border-radius: var(--ev-radius-md);
+    background: var(--ev-surface-2);
+  }
+  body.ev-unified .radio-btn {
+    min-width: 0;
+    min-height: var(--ev-control-height);
+    height: var(--ev-control-height);
+    border: 1px solid var(--ev-border);
+    border-radius: var(--ev-radius-sm);
+    background: var(--ev-surface-2);
+    color: var(--ev-text);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  body.ev-unified .radio-btn:has(input:checked) {
+    border-color: var(--ev-accent);
+    background: var(--ev-accent-soft);
+    color: var(--ev-accent-strong);
+    box-shadow: none;
+  }
+}
+@media (min-width: 1024px) {
   :root { --ev-shell-pad: 0px; }
   body.ev-unified .ev-shell__bar {
     width: min(calc(100% - 64px), var(--ev-shell-max));
