@@ -13,10 +13,39 @@
     button.dataset.transferCopy = 'true';
     button.textContent = 'COPIAZĂ REZULTATUL';
     button.addEventListener('click', async () => {
-      const text = resultArea.innerText.trim();
-      try { await navigator.clipboard.writeText(text); } catch (_) {}
-      button.textContent = 'COPIAT';
-      setTimeout(() => { button.textContent = 'COPIAZĂ REZULTATUL'; }, 1200);
+      // Copiază numai rezultatul, fără butonul de acțiune.
+      const resultCard = resultArea.querySelector('.result-card.success');
+      const text = resultCard?.innerText?.trim();
+      if (!text) return;
+
+      const originalLabel = 'COPIAZĂ REZULTATUL';
+      button.disabled = true;
+      button.setAttribute('aria-live', 'polite');
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const temporary = document.createElement('textarea');
+          temporary.value = text;
+          temporary.setAttribute('readonly', '');
+          temporary.style.position = 'fixed';
+          temporary.style.opacity = '0';
+          document.body.appendChild(temporary);
+          temporary.select();
+          const copied = document.execCommand('copy');
+          temporary.remove();
+          if (!copied) throw new Error('Clipboard unavailable');
+        }
+        button.textContent = 'COPIAT';
+      } catch (error) {
+        console.error('Nu s-a putut copia rezultatul Transfer:', error);
+        button.textContent = 'COPIERE EȘUATĂ';
+      } finally {
+        button.disabled = false;
+        window.setTimeout(() => {
+          button.textContent = originalLabel;
+        }, 1600);
+      }
     });
     resultArea.appendChild(button);
   }
