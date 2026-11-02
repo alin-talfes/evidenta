@@ -121,7 +121,7 @@
     font-weight: 600;
     text-decoration: none;
   }
-  body.ev-unified[data-ev-page="transfer"] .page-actions.transfer-page-actions > a.is-active {
+  body.ev-unified[data-ev-page="transfer"] .page-actions.transfer-page-actions > a.ev-segment-active {
     border-color: var(--ev-accent);
     background: var(--ev-accent-soft);
     color: var(--ev-accent-strong);
