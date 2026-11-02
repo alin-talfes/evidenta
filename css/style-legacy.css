@@ -263,7 +263,7 @@ input:disabled, select:disabled, textarea:disabled { opacity: .66; cursor: not-a
 .toggle-switch input:checked + .toggle-slider::before { transform: translateX(21px); background: #fff; }
 .sex-toggle-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
 .sex-label, .life-label { color: var(--label-color); font-size: .78rem; }
-.sex-label { font-weight: 650; text-transform: none; }
+.sex-label { font-weight: 650; text-transform: uppercase; }
 .sex-label.active { color: var(--accent-strong); font-weight: 800; }
 .toggle-group, .radio-group { display: flex; gap: 5px; width: 100%; padding: 5px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; }
 .toggle-group .toggle-btn { flex: 1 1 0; background: transparent; border-color: transparent; }
