@@ -4,9 +4,12 @@
   if (window.__EVIDENTA_NO_NONOPTIONAL_DISCLOSURES_V1__) return;
   window.__EVIDENTA_NO_NONOPTIONAL_DISCLOSURES_V1__ = true;
 
+// Transfer: explicația „De ce apare?” este un disclosure opțional real.
+  // Nu trebuie forțată în stare deschisă de normalizarea globală.
   const OPTIONAL_DETAILS_SELECTOR = [
     'details.ev-mobile-advanced-details',
     'details.ev-result-details',
+    'details.ev-match-why',
     '.ev-optional-tools details',
     'details[data-ev-optional="true"]'
   ].join(',');
