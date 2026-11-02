@@ -263,7 +263,7 @@ function updateAnalyzeButton() {
     const text = $("analyze-text");
     button.disabled = isAnalyzing || !frontalFile;
     if (isAnalyzing) text.textContent = "Se analizează…";
-    else text.textContent = frontalFile ? "Analizează fotografiile" : "Încarcă poza din față";
+    else text.textContent = "Rulează analiza";
 }
 
 async function decodeImage(file) {
