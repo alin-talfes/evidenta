@@ -187,3 +187,11 @@
     line-height:1.2 !important;
   }
 }
+
+@media (min-width: 1024px) {
+  body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 16px; }
+  body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-actions > button { min-height: var(--ev-control-height); padding-inline: 20px; border-radius: var(--ev-radius-sm); font-size: 15px; font-weight: 600; }
+  body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-actions > button:first-child { color: var(--ev-text); background: var(--ev-surface); border: 1px solid var(--ev-border); }
+  body.ev-unified[data-ev-page="contopiri"] .ev-contopiri-actions > button:last-child { color: var(--ev-surface); background: var(--ev-accent); border: 1px solid var(--ev-accent); }
+  body.ev-unified[data-ev-page="contopiri"] .penalty-row .btn-danger:hover { background: var(--ev-danger-soft); }
+}
