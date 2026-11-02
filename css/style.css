@@ -386,13 +386,15 @@ body.ev-unified[data-ev-page="transfer"] #resultArea .result-detail {
   }
 }
 
-/* Convenție tipografică unitară — module operaționale */
-.container .card > h2,
-.container .card > h3,
-.container .legal-box > h4,
-.ai-page .ai-card > h2,
-.ai-page .ai-inline > h3 {
-  text-transform: uppercase;
+/* Capitalizarea istorică se păstrează doar pe mobil; desktopul folosește sentence case. */
+@media (max-width: 1023px) {
+  .container .card > h2,
+  .container .card > h3,
+  .container .legal-box > h4,
+  .ai-page .ai-card > h2,
+  .ai-page .ai-inline > h3 {
+    text-transform: uppercase;
+  }
 }
 
 /* Contopiri — layout desktop: câmpuri echilibrate și acțiune de ștergere separată. */
