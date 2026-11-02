@@ -154,9 +154,9 @@ a { color: var(--ev-accent-strong); }
 
 :where(.eyebrow, .section-kicker, .panel-label) {
   color: var(--ev-accent-strong);
-  font-weight: 850;
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: none;
 }
 
 :where(.subtitle, .lead, .section-help, .setup-help, .source-note, .hint, .help-text, .section-copy) {
@@ -197,6 +197,8 @@ a { color: var(--ev-accent-strong); }
 /* Butoane */
 :where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout) {
   min-height: var(--ev-control-height);
+  height: var(--ev-control-height);
+  padding-inline: 20px;
   border-radius: var(--ev-radius-sm);
   font-size: 15px;
   font-weight: 600;
