@@ -154,9 +154,9 @@ a { color: var(--ev-accent-strong); }
 
 :where(.eyebrow, .section-kicker, .panel-label) {
   color: var(--ev-accent-strong);
-  font-weight: 600;
-  letter-spacing: .02em;
-  text-transform: none;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
 :where(.subtitle, .lead, .section-help, .setup-help, .source-note, .hint, .help-text, .section-copy) {
@@ -196,12 +196,8 @@ a { color: var(--ev-accent-strong); }
 
 /* Butoane */
 :where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout) {
-  min-height: var(--ev-control-height);
-  height: var(--ev-control-height);
-  padding-inline: 20px;
-  border-radius: var(--ev-radius-sm);
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 10px;
+  font-weight: 760;
   transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
 }
 
@@ -215,7 +211,7 @@ a { color: var(--ev-accent-strong); }
   color: #fff;
   background: var(--ev-accent);
   border-color: var(--ev-accent);
-  box-shadow: none;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--ev-accent) 22%, transparent);
 }
 
 :where(.btn, .primary, .secondary, .icon-btn, .text-btn, .filter, .toggle-btn, .nav-item, .section-hub-card, .back-to-categories, .access-submit, .access-logout):hover {
@@ -232,7 +228,7 @@ a { color: var(--ev-accent-strong); }
   color: var(--ev-text);
   background: var(--ev-input-bg);
   border: 1px solid var(--ev-border-strong);
-  border-radius: var(--ev-radius-sm);
+  border-radius: 10px;
 }
 
 :where(input, select, textarea)::placeholder { color: var(--ev-muted); opacity: 1; }
@@ -308,12 +304,6 @@ h1, h2, h3, .page-heading h1, .panel h2, .panel h3, .law-card h2, .official-set 
   color: var(--ev-text);
 }
 
-:where(.card > h2, .card > h3, .panel > h2, .panel > h3, .analysis-panel h2, .results-section h2) {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 1.3;
-  text-transform: none;
-}
 
 .eyebrow,
 .section-kicker,
