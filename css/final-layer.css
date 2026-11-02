@@ -1605,9 +1605,9 @@ body.ev-unified[data-ev-page="transfer"] .header .subtitle {
 body.ev-unified[data-ev-page="transfer"] .container > .card,
 body.ev-unified[data-ev-page="transfer"] #resultsCard { border-radius: 18px; box-shadow: var(--ev-shadow-soft); }
 body.ev-unified[data-ev-page="transfer"] .toggle-group {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; padding: 5px; border: 1px solid var(--ev-border); border-radius: 14px; background: var(--ev-surface-2);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border: 1px solid var(--ev-border); border-radius: var(--ev-radius-md); background: var(--ev-surface-2);
 }
-body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn { min-width: 0; min-height: 46px; border-radius: 10px; line-height: 1.3; }
+body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn { min-width: 0; min-height: 44px; height: 44px; border-radius: var(--ev-radius-sm); line-height: 1.3; font-size: 15px; font-weight: 600; }
 body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn.active {
   border-color: var(--ev-accent); background: var(--ev-accent-soft); color: var(--ev-accent-strong); box-shadow: none;
 }
@@ -1782,11 +1782,11 @@ body.ev-unified[data-ev-page="transfer"] #transferForm select {
   width: 100%; min-height: 48px; padding: 10px 12px; border-radius: 11px;
 }
 body.ev-unified[data-ev-page="transfer"] .toggle-group {
-  gap: 7px; padding: 5px; border: 1px solid var(--ev-border); border-radius: 14px; background: var(--ev-surface-2);
+  gap: 4px; padding: 4px; border: 1px solid var(--ev-border); border-radius: var(--ev-radius-md); background: var(--ev-surface-2);
 }
 body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn {
-  min-height: 46px; border: 1px solid transparent; border-radius: 10px;
-  font-size: .76rem; font-weight: 790; line-height: 1.3;
+  min-height: 44px; height: 44px; border: 1px solid transparent; border-radius: var(--ev-radius-sm);
+  font-size: 15px; font-weight: 600; line-height: 1.3;
 }
 body.ev-unified[data-ev-page="transfer"] .toggle-group .toggle-btn.active {
   border-color: var(--ev-accent); background: var(--ev-accent-soft); color: var(--ev-accent-strong); box-shadow: none;
