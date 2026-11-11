@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="../../css/mobile-modules.css?v=2">
 <link rel="stylesheet" href="../../css/disclosure-hardening.css?v=4">
 <link rel="stylesheet" href="../../css/module-responsive.css?v=3">
-<link rel="stylesheet" href="./committee.css?v=1">
+<link rel="stylesheet" href="./committee.css?v=2">
 <script src="../../js/theme.js?v=48" defer></script>
 <script src="../../js/ux-upgrades.js?v=3" defer></script>
 <script src="../../js/operational-navigation.js?v=5" defer></script>
@@ -157,6 +157,155 @@
       <label class="committee-choice"><input type="checkbox">Răspunsul este comunicat în termen și nu confundă avizul cu dispoziția finală.</label>
     </div>
   </div>
+
+  <div class="card" id="ims-procedure">
+    <h3>PROCEDURA OPERAȚIONALĂ IMS — COMISIA DE TRANSFER</h3>
+    <p class="section-help">Fluxul de lucru săptămânal pentru lucrătorul de evidență / secretarul comisiei și membrii comisiei. Respectă distincția dintre verificarea preliminară și analiza de fond.</p>
+    <div class="committee-result warning">
+      <strong>Principiu esențial</strong>
+      <p>Avizul preliminar favorabil permite analizarea solicitării. Nu reprezintă aprobarea transferului și nu anticipează soluția comisiei. În etapa preliminară nu se acordă aviz nefavorabil.</p>
+    </div>
+
+    <div class="committee-tabs" role="tablist" aria-label="Procedura IMS">
+      <button type="button" data-tab="ims-week" aria-selected="true">Calendar săptămânal</button>
+      <button type="button" data-tab="ims-requests" aria-selected="false">Cereri în IMS</button>
+      <button type="button" data-tab="ims-petitions" aria-selected="false">Petiții și propuneri</button>
+      <button type="button" data-tab="ims-docs" aria-selected="false">Documente și tabele</button>
+      <button type="button" data-tab="ims-review" aria-selected="false">Analiza comisiei</button>
+      <button type="button" data-tab="ims-after" aria-selected="false">După ședință</button>
+    </div>
+
+    <section class="committee-pane" id="pane-ims-week">
+      <h4>Calendar operațional săptămânal</h4>
+      <div class="committee-step"><span class="committee-step-number">L</span><div><strong>Luni — prima oră</strong><p>Se creează comisia în aplicația IMS.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">L</span><div><strong>Luni — verificarea cererilor</strong><p>Se filtrează cererile înregistrate de luni până duminică inclusiv din săptămâna precedentă. Se verifică duplicatele exacte și se acordă aviz preliminar favorabil sau se clasează cererea duplicată.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">L</span><div><strong>Luni — pregătirea evidențelor</strong><p>Se notează pe tabelul tipărit constatările preliminare relevante pentru analiza comisiei.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">M</span><div><strong>Marți — mutarea cererilor</strong><p>Cererile selectate se mută în comisie prin butonul existent în fiecare cerere. Mutarea se realizează automat în aplicație.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">M</span><div><strong>Miercuri — ședința comisiei</strong><p>Se analizează fiecare poziție, se stabilește avizul pozitiv sau negativ și se consemnează motivarea. Propunerile și petițiile se introduc manual, potrivit circuitului.</p></div></div>
+      <div class="anexa-box"><strong>Dacă programul ședinței se modifică:</strong> se păstrează succesiunea operațiunilor — verificare preliminară, completarea documentelor, tipărirea tabelelor, trimiterea în avizarea internă și analiza comisiei.</div>
+    </section>
+
+    <section class="committee-pane" id="pane-ims-requests" hidden>
+      <h4>Verificarea preliminară a cererilor în aplicația IMS</h4>
+      <ol>
+        <li>Accesează <strong>„Unitatea mea” → „Cereri”</strong>.</li>
+        <li>Setează filtrul <strong>„Data înregistrării”</strong> pentru intervalul luni–duminică inclusiv din săptămâna precedentă.</li>
+        <li>La câmpul <strong>„Obiect”</strong>, selectează „Solicită transfer la o altă unitate penitenciară”.</li>
+        <li>Sortează rezultatele în ordine alfabetică.</li>
+        <li>Pentru fiecare persoană, verifică dacă există deja o cerere cu <strong>exact același obiect</strong>, aflată în curs de aprobare.</li>
+        <li>Pentru solicitările aflate în lucru, accesează <strong>„Unitatea mea” → „Comisii” → „Răspunsuri transfer”</strong>, apasă „Resetează”, apoi selectează statusul corespunzător solicitărilor aflate în curs de aprobare.</li>
+      </ol>
+      <div class="committee-result warning"><strong>Testul duplicatului:</strong> trebuie să coincidă identitatea persoanei și obiectul exact al cererii. Nu sunt duplicate doar pentru că ambele solicitări privesc, în general, transferul.</div>
+      <div class="committee-step"><span class="committee-step-number">1</span><div><strong>Dacă există cerere anterioară identică în curs de aprobare</strong><p>Cererea nouă se clasează direct în IMS, prin butonul <strong>„Clasare”</strong> din cererea respectivă. Înainte de clasare, reverifică identitatea persoanei și identitatea exactă a obiectului. Clasarea se operează în aplicație, nu doar printr-o mențiune pe tabel.</p></div></div>
+      <div class="committee-step"><span class="committee-step-number">2</span><div><strong>Dacă nu există duplicat</strong><p>Se acordă <strong>aviz preliminar favorabil</strong>, pentru intrarea solicitării în analiza comisiei.</p></div></div>
+      <div class="committee-result"><strong>Ce se notează pentru comisie:</strong> activitatea lucrativă, zilele câștigate prin muncă, transferurile anterioare, domiciliul, garanțiile, interdicțiile și orice altă împrejurare relevantă. Notările se fac indiferent de soluția pe care comisia o va adopta ulterior.</div>
+      <p>Avizul preliminar favorabil nu împiedică un aviz negativ ulterior, dacă analiza comisiei justifică această soluție.</p>
+    </section>
+
+    <section class="committee-pane" id="pane-ims-petitions" hidden>
+      <h4>Petiții privind transferul</h4>
+      <ul>
+        <li>Petițiile formulate de aparținători, avocați sau alte persoane se <strong>introduc manual</strong> în aplicație, dar urmează circuitul cererilor.</li>
+        <li>Parcurg aceeași verificare preliminară: clasare dacă există solicitare duplicată cu exact același obiect aflată în curs de aprobare sau aviz preliminar favorabil pentru analiza comisiei.</li>
+        <li>Când petiția este formulată de un terț, verifică însușirea expresă de către persoana privată de libertate.</li>
+      </ul>
+      <div class="committee-result warning"><strong>Mențiune obligatorie pentru însușire:</strong><p>„ÎMI MENȚIN CEREREA” — urmată obligatoriu de dată și semnătură.</p><p>Mențiunea trebuie să fie clară și atribuibilă persoanei. Verifică existența datei și semnăturii înainte de continuarea circuitului. În lipsa însușirii, nu prezuma acordul persoanei cu solicitarea terțului.</p></div>
+      <p>Petițiile se introduc manual chiar dacă sunt gestionate în circuitul cererilor. Nu confunda introducerea manuală a petiției cu mutarea automată în comisie a unei cereri deja înregistrate.</p>
+      <div class="committee-result warning"><strong>Termenul petiției:</strong> răspunsul către petent se transmite după comunicarea soluției asupra solicitării, dar termenul legal de soluționare continuă să curgă. Așteptarea soluției asupra transferului nu suspendă automat termenul. Dacă sunt îndeplinite condițiile legale, se utilizează mecanismul de prelungire prevăzut de OG nr. 27/2002.</div>
+
+      <h4 style="margin-top:18px">Propunerile de transfer — art. 108 alin. (1) din HG nr. 157/2016</h4>
+      <p>Propunerile de transfer se introduc manual de persoana desemnată. La introducere se selectează motivul legal concret; nu se alege generic lit. g) dacă situația este reglementată expres la una dintre literele anterioare.</p>
+      <div class="rules-container">
+        <table class="committee-table">
+          <thead><tr><th>Temei</th><th>Situația avută în vedere</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Lit. a)</strong></td><td>Executarea pedepsei într-un regim de executare sau schimbarea regimului, când locul de deținere nu este profilat pentru acel regim.</td></tr>
+            <tr><td><strong>Lit. b)</strong></td><td>Depășirea capacității de cazare, în condițiile prevăzute de regulament.</td></tr>
+            <tr><td><strong>Lit. c)</strong></td><td>Înscrierea la cursuri de formare profesională sau de instruire școlară.</td></tr>
+            <tr><td><strong>Lit. d)</strong></td><td>Solicitări de forță de muncă formulate de alte locuri de deținere.</td></tr>
+            <tr><td><strong>Lit. e)</strong></td><td>Situații în care măsurile de siguranță, ordine și disciplină sunt neîndestulătoare la nivelul locului de deținere.</td></tr>
+            <tr><td><strong>Lit. f)</strong></td><td>Încheierea căsătoriei.</td></tr>
+            <tr><td><strong>Lit. g)</strong></td><td>Alte motive temeinic justificate.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="committee-result warning"><strong>Bursa locurilor de muncă:</strong> propunerile aferente sunt tot propuneri de transfer, dar sunt preluate automat printr-un mecanism distinct. Nu le introduce manual și nu crea o înregistrare suplimentară pentru o propunere deja preluată automat.</div>
+      <p><strong>Distincție:</strong> cererea PPL este cea prevăzută la art. 108 alin. (2), iar propunerea comisiei este cea de la alin. (1). Nu înregistra o cerere ca propunere și nici o propunere ca cerere.</p>
+    </section>
+
+    <section class="committee-pane" id="pane-ims-docs" hidden>
+      <h4>Pregătirea documentelor și transmiterea în avizarea internă</h4>
+      <ol>
+        <li>Introdu manual propunerile de transfer întemeiate pe art. 108 alin. (1) lit. a)–g).</li>
+        <li>Introdu manual petițiile privind transferul, în circuitul cererilor.</li>
+        <li>Verifică cererile selectate și mută-le automat în comisie, prin butonul din fiecare cerere.</li>
+        <li>Verifică propunerile preluate automat din mecanismul bursei locurilor de muncă; nu le introduce manual.</li>
+        <li>Generează separat cele două tabele: <strong>„Tabelul de propuneri”</strong> și <strong>„Tabelul de cereri”</strong>.</li>
+        <li>Tipărește ambele tabele și verifică concordanța dintre documentele tipărite și înregistrările din aplicație.</li>
+        <li>Numai după tipărirea și verificarea ambelor tabele, apasă <strong>„Trimitere în avizare internă”</strong>.</li>
+      </ol>
+      <div class="committee-result error"><strong>ATENȚIE — ORDINE OBLIGATORIE</strong><p>Cele două tabele se tipăresc înainte de apăsarea butonului „Trimitere în avizare internă”. Nu apăsa butonul înainte de tipărirea și verificarea atât a tabelului de propuneri, cât și a tabelului de cereri.</p></div>
+      <p>Sunt două documente distincte, nu un tabel comun. Înainte de transmitere, verifică să nu lipsească persoane, să nu existe dubluri și să fie consemnate corect datele disponibile. Cererile se mută automat prin funcția disponibilă în fiecare cerere; propunerile și petițiile se introduc manual.</p>
+    </section>
+
+    <section class="committee-pane" id="pane-ims-review" hidden>
+      <h4>Analiza de fond în comisie</h4>
+      <p>Comisia analizează fiecare solicitare sau propunere individual. Verificările de mai jos se raportează la situația concretă și nu reprezintă motive automate de respingere.</p>
+      <div class="committee-checklist">
+        <label class="committee-choice"><input type="checkbox">Activitatea lucrativă: existența, natura activității și numărul zilelor câștigate prin muncă; efectul transferului asupra activității și situației persoanei.</label>
+        <label class="committee-choice"><input type="checkbox">Transferul recent: data și motivul ultimului transfer; atenție specială transferurilor din ultimele 3 luni și verificarea împrejurărilor noi.</label>
+        <label class="committee-choice"><input type="checkbox">Garanțiile: existența și relevanța lor pentru transferul solicitat.</label>
+        <label class="committee-choice"><input type="checkbox">Interdicții și incompatibilități: interdicții de contact cu alte PPL și incompatibilități care pot influența destinația.</label>
+        <label class="committee-choice"><input type="checkbox">Domiciliul și legăturile familiale: domiciliul, posibilitatea menținerii legăturilor și impactul transferului.</label>
+        <label class="committee-choice"><input type="checkbox">Transferuri anterioare: temeiul juridic, motivarea, unitatea de proveniență și persistența împrejurărilor inițiale.</label>
+        <label class="committee-choice"><input type="checkbox">Situația juridică și regimul: regimul de executare, situația juridică și compatibilitatea cu profilarea locului de deținere.</label>
+        <label class="committee-choice"><input type="checkbox">Conduita și situația individuală: situația disciplinară, date medicale relevante, participarea la activități și alte elemente legate de motivul transferului.</label>
+      </div>
+      <div class="committee-result warning"><strong>Reperul de 3 luni:</strong> intervalul de la transferul anterior este un reper operațional de verificare, nu un motiv legal autonom de respingere. Comisia indică împrejurările concrete care justifică avizul.</div>
+      <div class="committee-result"><strong>Transferuri anterioare în temeiul art. 108 alin. (1) lit. e):</strong> verifică dacă motivele inițiale persistă și dacă au apărut elemente noi. Nu se propune automat repetarea transferului fără o analiză actuală.</div>
+      <div class="committee-result"><strong>Transferuri anterioare în temeiul art. 108 alin. (1) lit. g):</strong> verifică motivul concret și unitatea de proveniență. O eventuală revenire la locul de deținere care a solicitat transferul inițial necesită justificare actuală și temeinică.</div>
+      <div class="committee-result"><strong>Art. 108 alin. (1) lit. b):</strong> verifică încadrarea reală în motivul privind capacitatea de cazare și criteriile specifice aplicabile. Lit. b) nu se confundă cu lit. g).</div>
+      <h4 style="margin-top:18px">Avizul și motivarea</h4>
+      <p>Comisia acordă aviz pozitiv sau negativ, consultativ și motivat în raport cu elementele concrete analizate.</p>
+      <ul>
+        <li><strong>Aviz pozitiv:</strong> motivele solicitării/propunerii, situația individuală și criteriile verificate susțin oportunitatea transferului.</li>
+        <li><strong>Aviz negativ:</strong> există împrejurări concrete care fac transferul inoportun sau justifică neînsușirea propunerii, raportat la motivul legal și situația persoanei.</li>
+      </ul>
+      <p>Motivarea trebuie să explice de ce datele verificate conduc la soluție. Nu sunt suficiente expresii precum „nu se impune transferul”, „nu îndeplinește condițiile” sau simpla mențiune „aviz negativ”.</p>
+      <div class="committee-result warning"><strong>Rolul secretarului:</strong> lucrătorul de evidență consemnează în tabele avizul și motivarea stabilite de comisie. Consemnarea reflectă soluția comisiei, nu opinia personală a secretarului. Avizul preliminar favorabil nu obligă comisia să acorde aviz pozitiv.</div>
+    </section>
+
+    <section class="committee-pane" id="pane-ims-after" hidden>
+      <h4>Operațiuni după ședință și comunicarea soluțiilor</h4>
+      <ol>
+        <li>Verifică dacă fiecare poziție din ambele tabele a fost analizată și dacă avizul și motivarea sunt consemnate.</li>
+        <li>Verifică exactitatea datelor, completitudinea documentelor și semnăturile necesare potrivit circuitului intern.</li>
+        <li>Transmite documentația prin circuitul stabilit pentru soluționarea solicitărilor.</li>
+        <li>Urmărește comunicarea soluției autorității competente.</li>
+        <li>Comunică persoanei private de libertate potrivit circuitului și modalității aplicabile și păstrează dovada comunicării.</li>
+        <li>Transmite răspunsul către petent după comunicarea soluției asupra solicitării, cu respectarea termenelor legale.</li>
+      </ol>
+      <div class="committee-result error"><strong>Nu pune în aplicare transferul</strong> în baza avizului preliminar sau a avizului comisiei. Punerea în aplicare are loc numai după comunicarea soluției autorității competente.</div>
+      <div class="committee-result warning"><strong>Termenul petiției continuă să curgă.</strong> Așteptarea soluției asupra transferului nu îl suspendă automat. Dacă sunt îndeplinite condițiile legale, se utilizează mecanismul de prelungire prevăzut de OG nr. 27/2002.</div>
+    </section>
+  </div>
+
+  <div class="card">
+    <h3>ERORI OPERAȚIONALE DE EVITAT</h3>
+    <ul>
+      <li>Nu acorda aviz nefavorabil în etapa preliminară și nu confunda avizul preliminar favorabil cu avizul pozitiv al comisiei.</li>
+      <li>Nu clasa o cerere fără o cerere anterioară a aceleiași persoane, cu exact același obiect, aflată în curs de aprobare.</li>
+      <li>Nu considera duplicate cereri cu obiecte diferite doar pentru că ambele privesc transferul.</li>
+      <li>Nu omite verificările privind munca, zilele câștigate, transferurile anterioare, domiciliul, garanțiile și interdicțiile.</li>
+      <li>Nu introduce manual propunerea aferentă bursei locurilor de muncă, deja preluată automat.</li>
+      <li>Nu confunda propunerile de la art. 108 alin. (1) cu cererile formulate potrivit alin. (2).</li>
+      <li>Nu continua circuitul unei solicitări formulate de un terț fără verificarea însușirii, atunci când aceasta este necesară.</li>
+      <li>Nu apăsa „Trimitere în avizare internă” înainte de tipărirea și verificarea ambelor tabele.</li>
+      <li>Nu motiva avizul negativ prin formule stereotipe sau prin simpla enumerare a criteriilor, fără raportare la situația persoanei.</li>
+      <li>Nu pune în aplicare transferul și nu comunica soluția finală înainte de momentul procedural corespunzător.</li>
+    </ul>
+  </div>
+
   <div class="card">
     <h3>BAZĂ NORMATIVĂ INDICATĂ ÎN MATERIALUL DE LUCRU</h3>
     <ul>
@@ -169,7 +318,7 @@
     <p><a href="https://legislatie.just.ro/Public/FormaPrintabila/00000G2D6GPC695OJKX1EXX6K2W0RT1P" target="_blank" rel="noopener">Legea nr. 254/2013 — Portal Legislativ</a> · <a href="https://legislatie.just.ro/Public/DetaliiDocumentAfis/290817" target="_blank" rel="noopener">OG nr. 27/2002 — Portal Legislativ</a></p>
   </div>
 </main>
-<script src="./committee.js?v=1" defer></script>
+<script src="./committee.js?v=2" defer></script>
 <script src="../../js/legal-footer.js?v=2" defer></script>
 </body>
 </html>
