@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="../../css/mobile-modules.css?v=2">
 <link rel="stylesheet" href="../../css/disclosure-hardening.css?v=4">
 <link rel="stylesheet" href="../../css/module-responsive.css?v=3">
-<link rel="stylesheet" href="./committee.css?v=2">
+<link rel="stylesheet" href="./committee.css?v=3">
 <script src="../../js/theme.js?v=48" defer></script>
 <script src="../../js/ux-upgrades.js?v=3" defer></script>
 <script src="../../js/operational-navigation.js?v=5" defer></script>
@@ -79,17 +79,17 @@
     <section class="committee-pane" id="pane-criteria" hidden>
       <h4>Criterii de analiză individualizată</h4>
       <p>Art. 71 din Instrucțiuni indică analiza cumulativă și individualizată a elementelor relevante. Apropierea de domiciliu este un criteriu important, dar formularea „de regulă” nu conferă un drept absolut la unitatea aleasă.</p>
-      <div class="committee-checklist" id="criteriaChecklist">
-        <label class="committee-choice"><input type="checkbox">Profilarea penitenciarului solicitată, potrivit deciziei ANP aplicabile</label>
-        <label class="committee-choice"><input type="checkbox">Capacitatea / posibilitatea de primire – numai pe baza datelor actuale disponibile</label>
-        <label class="committee-choice"><input type="checkbox">Sexul, vârsta și categoria persoanei</label>
-        <label class="committee-choice"><input type="checkbox">Situația juridică și regimul de executare</label>
-        <label class="committee-choice"><input type="checkbox">Domiciliul și legătura familială invocată</label>
-        <label class="committee-choice"><input type="checkbox">Motivul concret al solicitării și documentele/datele care îl susțin</label>
-        <label class="committee-choice"><input type="checkbox">Motivele transferurilor anterioare și eventuale schimbări intervenite</label>
-        <label class="committee-choice"><input type="checkbox">Impactul asupra cursurilor, muncii, tratamentului și siguranței</label>
-        <label class="committee-choice"><input type="checkbox">Alte elemente individuale relevante, inclusiv date contradictorii</label>
-      </div>
+      <ul class="committee-list-grid">
+        <li>Profilarea penitenciarului solicitată, potrivit deciziei ANP aplicabile</li>
+        <li>Capacitatea / posibilitatea de primire – numai pe baza datelor actuale disponibile</li>
+        <li>Sexul, vârsta și categoria persoanei</li>
+        <li>Situația juridică și regimul de executare</li>
+        <li>Domiciliul și legătura familială invocată</li>
+        <li>Motivul concret al solicitării și documentele/datele care îl susțin</li>
+        <li>Motivele transferurilor anterioare și eventuale schimbări intervenite</li>
+        <li>Impactul asupra cursurilor, muncii, tratamentului și siguranței</li>
+        <li>Alte elemente individuale relevante, inclusiv date contradictorii</li>
+      </ul>
       <div class="committee-result warning" style="margin-top:12px"><strong>Regulă de motivare:</strong> nu utiliza formule precum „nu se impune” sau „nu sunt motive întemeiate” fără descrierea faptelor verificate și legătura lor logică cu concluzia comisiei.</div>
     </section>
 
@@ -142,20 +142,20 @@
 
   <div class="card">
     <h3>LISTĂ DE CONTROL PENTRU SECRETARIAT</h3>
-    <div class="committee-checklist" id="secretariatChecklist">
-      <label class="committee-choice"><input type="checkbox">Cererea este înregistrată; termenul de răspuns este stabilit.</label>
-      <label class="committee-choice"><input type="checkbox">Solicitantul și însușirea cererii de către PPL au fost verificate, când este cazul.</label>
-      <label class="committee-choice"><input type="checkbox">Obiectul este un transfer efectiv, nu simpla menținere în unitatea actuală.</label>
-      <label class="committee-choice"><input type="checkbox">A fost identificat circuitul: cerere PPL, propunere administrativă, provizoriu sau judiciar.</label>
-      <label class="committee-choice"><input type="checkbox">Situația juridică, regimul și profilarea au fost verificate.</label>
-      <label class="committee-choice"><input type="checkbox">Au fost cerute doar consultările interstructurale relevante pentru motiv.</label>
-      <label class="committee-choice"><input type="checkbox">Lista a fost comunicată membrilor cu două zile lucrătoare înainte, potrivit procedurii.</label>
-      <label class="committee-choice"><input type="checkbox">Anexa utilizată este corectă: nr. 16 pentru cereri PPL; nr. 15 pentru propuneri comisie art. 68–70.</label>
-      <label class="committee-choice"><input type="checkbox">Avizul este motivat concret și semnat de membrii comisiei și secretar.</label>
-      <label class="committee-choice"><input type="checkbox">Tabelul/documentele au fost transmise ANP; cererea originală doar la solicitarea ANP.</label>
-      <label class="committee-choice"><input type="checkbox">Cererea a fost trecută în mapa de așteptare; stadiul este urmărit.</label>
-      <label class="committee-choice"><input type="checkbox">Răspunsul este comunicat în termen și nu confundă avizul cu dispoziția finală.</label>
-    </div>
+    <ul class="committee-list-grid">
+        <li>Cererea este înregistrată; termenul de răspuns este stabilit.</li>
+        <li>Solicitantul și însușirea cererii de către PPL au fost verificate, când este cazul.</li>
+        <li>Obiectul este un transfer efectiv, nu simpla menținere în unitatea actuală.</li>
+        <li>A fost identificat circuitul: cerere PPL, propunere administrativă, provizoriu sau judiciar.</li>
+        <li>Situația juridică, regimul și profilarea au fost verificate.</li>
+        <li>Au fost cerute doar consultările interstructurale relevante pentru motiv.</li>
+        <li>Lista a fost comunicată membrilor cu două zile lucrătoare înainte, potrivit procedurii.</li>
+        <li>Anexa utilizată este corectă: nr. 16 pentru cereri PPL; nr. 15 pentru propuneri comisie art. 68–70.</li>
+        <li>Avizul este motivat concret și semnat de membrii comisiei și secretar.</li>
+        <li>Tabelul/documentele au fost transmise ANP; cererea originală doar la solicitarea ANP.</li>
+        <li>Cererea a fost trecută în mapa de așteptare; stadiul este urmărit.</li>
+        <li>Răspunsul este comunicat în termen și nu confundă avizul cu dispoziția finală.</li>
+      </ul>
   </div>
 
   <div class="card" id="ims-procedure">
@@ -251,16 +251,16 @@
     <section class="committee-pane" id="pane-ims-review" hidden>
       <h4>Analiza de fond în comisie</h4>
       <p>Comisia analizează fiecare solicitare sau propunere individual. Verificările de mai jos se raportează la situația concretă și nu reprezintă motive automate de respingere.</p>
-      <div class="committee-checklist">
-        <label class="committee-choice"><input type="checkbox">Activitatea lucrativă: existența, natura activității și numărul zilelor câștigate prin muncă; efectul transferului asupra activității și situației persoanei.</label>
-        <label class="committee-choice"><input type="checkbox">Transferul recent: data și motivul ultimului transfer; atenție specială transferurilor din ultimele 3 luni și verificarea împrejurărilor noi.</label>
-        <label class="committee-choice"><input type="checkbox">Garanțiile: existența și relevanța lor pentru transferul solicitat.</label>
-        <label class="committee-choice"><input type="checkbox">Interdicții și incompatibilități: interdicții de contact cu alte PPL și incompatibilități care pot influența destinația.</label>
-        <label class="committee-choice"><input type="checkbox">Domiciliul și legăturile familiale: domiciliul, posibilitatea menținerii legăturilor și impactul transferului.</label>
-        <label class="committee-choice"><input type="checkbox">Transferuri anterioare: temeiul juridic, motivarea, unitatea de proveniență și persistența împrejurărilor inițiale.</label>
-        <label class="committee-choice"><input type="checkbox">Situația juridică și regimul: regimul de executare, situația juridică și compatibilitatea cu profilarea locului de deținere.</label>
-        <label class="committee-choice"><input type="checkbox">Conduita și situația individuală: situația disciplinară, date medicale relevante, participarea la activități și alte elemente legate de motivul transferului.</label>
-      </div>
+      <ul class="committee-list-grid">
+        <li>Activitatea lucrativă: existența, natura activității și numărul zilelor câștigate prin muncă; efectul transferului asupra activității și situației persoanei.</li>
+        <li>Transferul recent: data și motivul ultimului transfer; atenție specială transferurilor din ultimele 3 luni și verificarea împrejurărilor noi.</li>
+        <li>Garanțiile: existența și relevanța lor pentru transferul solicitat.</li>
+        <li>Interdicții și incompatibilități: interdicții de contact cu alte PPL și incompatibilități care pot influența destinația.</li>
+        <li>Domiciliul și legăturile familiale: domiciliul, posibilitatea menținerii legăturilor și impactul transferului.</li>
+        <li>Transferuri anterioare: temeiul juridic, motivarea, unitatea de proveniență și persistența împrejurărilor inițiale.</li>
+        <li>Situația juridică și regimul: regimul de executare, situația juridică și compatibilitatea cu profilarea locului de deținere.</li>
+        <li>Conduita și situația individuală: situația disciplinară, date medicale relevante, participarea la activități și alte elemente legate de motivul transferului.</li>
+      </ul>
       <div class="committee-result warning"><strong>Reperul de 3 luni:</strong> intervalul de la transferul anterior este un reper operațional de verificare, nu un motiv legal autonom de respingere. Comisia indică împrejurările concrete care justifică avizul.</div>
       <div class="committee-result"><strong>Transferuri anterioare în temeiul art. 108 alin. (1) lit. e):</strong> verifică dacă motivele inițiale persistă și dacă au apărut elemente noi. Nu se propune automat repetarea transferului fără o analiză actuală.</div>
       <div class="committee-result"><strong>Transferuri anterioare în temeiul art. 108 alin. (1) lit. g):</strong> verifică motivul concret și unitatea de proveniență. O eventuală revenire la locul de deținere care a solicitat transferul inițial necesită justificare actuală și temeinică.</div>
