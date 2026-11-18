@@ -6,7 +6,7 @@ const html = fs.readFileSync('transfer/rules/index.html', 'utf8');
 const js = fs.readFileSync('transfer/rules-page.js', 'utf8');
 const css = fs.readFileSync('css/transfer-rules.css', 'utf8');
 
-assert(html.includes('transfer-rules.css?v=3'), 'Annex page must load its dedicated unified stylesheet');
+assert(html.includes('transfer-rules.css?v=4'), 'Annex page must load its dedicated unified stylesheet');
 assert(html.includes('type="search"') && html.includes('aria-label="Caută în toate anexele"'), 'Global search must be accessible and use search semantics');
 assert(html.includes('id="filterEmpty"') && html.includes('aria-live="polite"'), 'Search must expose an accessible empty state and live status');
 assert(html.includes('rules-page.js?v=20261118-1'), 'Annex runtime must load the current cache-busted script');
