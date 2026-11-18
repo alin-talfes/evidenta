@@ -264,7 +264,7 @@
         anexa8Container.innerHTML = html8;
 
         // ============================================================
-        // 7. FILTRARE GLOBALĂ — caută atât în text, cât și în tabele
+        // 7. FILTRARE GLOBALĂ — caută în toate anexele și în fiecare tabel separat
         // ============================================================
         const filterInput = document.getElementById('filterInput');
         const filterClear = document.getElementById('filterClear');
@@ -276,9 +276,10 @@
             return String(value || '')
                 .toLocaleLowerCase('ro')
                 .normalize('NFD')
-                .replace(/[\u0300-\u036f\u0326\u0327]/g, '')
+                .replace(/[\\u0300-\\u036f\\u0326\\u0327]/g, '')
                 .replace(/ș/g, 's')
                 .replace(/ț/g, 't')
+                .replace(/\\s+/g, ' ')
                 .trim();
         }
 
@@ -296,43 +297,41 @@
                     .join(' ');
                 const staticMatch = query !== '' && normalizeSearch(staticText).includes(query);
                 let cardHasMatch = query === '' || staticMatch;
-                let cardRows = 0;
-                let cardTotal = 0;
 
                 tables.forEach(table => {
                     const rows = Array.from(table.querySelectorAll('tbody tr'));
+                    let tableHasMatch = query === '' || staticMatch;
+
                     rows.forEach(row => {
-                        cardTotal++;
                         totalRows++;
                         const matches = query === '' || staticMatch || normalizeSearch(row.textContent).includes(query);
                         row.hidden = !matches;
                         if (matches) {
-                            cardRows++;
                             visibleRows++;
+                            tableHasMatch = true;
                             cardHasMatch = true;
                         }
                     });
+
                     const wrapper = table.closest('.rules-container');
-                    if (wrapper) wrapper.hidden = query !== '' && !cardHasMatch;
+                    if (wrapper) wrapper.hidden = query !== '' && !tableHasMatch;
                 });
 
+                // Anexele fără tabel (de exemplu Anexa 2 și Anexa 4) sunt căutate în textul propriu.
                 card.hidden = !cardHasMatch;
                 if (cardHasMatch) visibleAnnexes++;
             });
 
-            filterStats.textContent = query
-                ? visibleAnnexes + ' anexe / ' + visibleRows + ' rânduri găsite din ' + totalRows
-                : visibleAnnexes + ' anexe / ' + totalRows + ' rânduri disponibile';
-            filterEmpty.hidden = query === '' || visibleAnnexes > 0;
+            if (filterStats) {
+                filterStats.textContent = query
+                    ? visibleAnnexes + ' anexe / ' + visibleRows + ' rânduri găsite din ' + totalRows
+                    : visibleAnnexes + ' anexe / ' + totalRows + ' rânduri disponibile';
+            }
+            if (filterEmpty) filterEmpty.hidden = query === '' || visibleAnnexes > 0;
         }
 
         if (filterInput && filterClear && filterStats && filterEmpty) {
-            filterInput.addEventListener('input', filterTables);
-            filterClear.addEventListener('click', () => {
-                filterInput.value = '';
-                filterTables();
-                filterInput.focus();
-            });
+            // Pregătește containerele înainte de prima filtrare, pentru vizibilitate independentă.
             cards.forEach(card => {
                 card.classList.add('annex-card');
                 card.querySelectorAll('.rules-table').forEach(table => {
@@ -344,6 +343,15 @@
                     }
                 });
             });
+
+            filterInput.addEventListener('input', filterTables);
+            filterInput.addEventListener('search', filterTables);
+            filterClear.addEventListener('click', () => {
+                filterInput.value = '';
+                filterTables();
+                filterInput.focus();
+            });
+
             filterTables();
         }
     })();
