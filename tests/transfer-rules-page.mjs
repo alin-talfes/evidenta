@@ -8,7 +8,7 @@ const css = fs.readFileSync('css/transfer-rules.css', 'utf8');
 assert(html.includes('transfer-rules.css?v=3'), 'Annex page must load its dedicated unified stylesheet');
 assert(html.includes('type="search"') && html.includes('aria-label="Caută în toate anexele"'), 'Global search must be accessible and use search semantics');
 assert(html.includes('id="filterEmpty"') && html.includes('aria-live="polite"'), 'Search must expose an accessible empty state and live status');
-assert(html.includes('rules-page.js?v=20261116-1'), 'Annex runtime must load the corrected cache-busted script');
+assert(html.includes('rules-page.js?v=20261116-1'), 'Annex runtime must load the current cache-busted script');
 assert(js.includes('normalizeSearch'), 'Search must normalize Romanian diacritics');
 assert(js.includes("querySelectorAll('.card[id^=\"anexa\"][id$=\"Card\"]')"), 'Filter must target all eight annex cards with a syntactically valid selector');
 assert(js.includes("!el.querySelector('.rules-table')"), 'Static annex text must be searched separately from generated table rows');
