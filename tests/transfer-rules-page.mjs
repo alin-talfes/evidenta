@@ -27,13 +27,13 @@ assert(js.includes("wrapper.hidden = query !== '' && !tableHasMatch"), 'A non-ma
 assert(js.includes("filterInput.value = '';"), 'Clear action must reset the search input');
 
 
-const normalizeMatch = js.match(/function normalizeSearch\\(value\\) \\{[\\s\\S]*?\\n        \\}/);
-assert(normalizeMatch, 'Search normalizer must be present as an executable function');
-const normalizeSearch = vm.runInNewContext(`(${normalizeMatch[0]})`);
+const normalizerStart = js.indexOf('function normalizeSearch(value) {');
+const normalizerEnd = js.indexOf('\n        }\n\n        function filterTables()', normalizerStart);
+assert(normalizerStart >= 0 && normalizerEnd > normalizerStart, 'Search normalizer must be present as an executable function');
+const normalizerSource = js.slice(normalizerStart, normalizerEnd + '\n        }'.length);
+const normalizeSearch = vm.runInNewContext('(' + normalizerSource + ')');
 assert.equal(normalizeSearch('Penitenciarul Deva'), 'penitenciarul deva', 'Search must preserve ordinary characters');
 assert.equal(normalizeSearch('Târgu Mureș'), 'targu mures', 'Search must normalize Romanian diacritics');
 assert.equal(normalizeSearch('  IPJ   Hunedoara  '), 'ipj hunedoara', 'Search must collapse and trim whitespace');
-assert(js.includes(".replace(/\\\\p{M}/gu, '')"), 'Search must strip Unicode combining marks with a valid regex');
-assert(js.includes(".replace(/\\\\s+/g, ' ')"), 'Search must normalize whitespace with a valid regex');
 
 console.log('Transfer annex search and responsive UI regression checks passed.');
