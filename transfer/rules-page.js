@@ -276,10 +276,10 @@
             return String(value || '')
                 .toLocaleLowerCase('ro')
                 .normalize('NFD')
-                .replace(/[\\u0300-\\u036f\\u0326\\u0327]/g, '')
+                .replace(/\p{M}/gu, '')
                 .replace(/ș/g, 's')
                 .replace(/ț/g, 't')
-                .replace(/\\s+/g, ' ')
+                .replace(/\s+/g, ' ')
                 .trim();
         }
 
