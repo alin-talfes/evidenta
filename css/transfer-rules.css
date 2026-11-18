@@ -103,3 +103,10 @@ body.ev-unified .unitate-nume { color:var(--ev-text); font-weight:750; }
   overflow-wrap:anywhere !important; border-radius:9px !important;
  }
 }
+
+/* Filtrul trebuie să poată ascunde rândurile chiar și când layout-ul mobil setează display:flex !important. */
+@media (max-width:640px) {
+  body.ev-unified[data-ev-page="transfer/rules"] .rules-table tbody tr[hidden] {
+    display: none !important;
+  }
+}
