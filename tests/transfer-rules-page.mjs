@@ -8,7 +8,7 @@ const css = fs.readFileSync('css/transfer-rules.css', 'utf8');
 assert(html.includes('transfer-rules.css?v=3'), 'Annex page must load its dedicated unified stylesheet');
 assert(html.includes('type="search"') && html.includes('aria-label="Caută în toate anexele"'), 'Global search must be accessible and use search semantics');
 assert(html.includes('id="filterEmpty"') && html.includes('aria-live="polite"'), 'Search must expose an accessible empty state and live status');
-assert(html.includes('rules-page.js?v=20261030-3'), 'Annex runtime must load the corrected cache-busted script');
+assert(html.includes('rules-page.js?v=20261116-1'), 'Annex runtime must load the corrected cache-busted script');
 assert(js.includes('normalizeSearch'), 'Search must normalize Romanian diacritics');
 assert(js.includes("querySelectorAll('.card[id^=\"anexa\"][id$=\"Card\"]')"), 'Filter must target all eight annex cards with a syntactically valid selector');
 assert(js.includes("!el.querySelector('.rules-table')"), 'Static annex text must be searched separately from generated table rows');
@@ -18,5 +18,11 @@ assert(css.includes('var(--ev-surface)'), 'Annex styles must use shared PWA desi
 assert(css.includes('overflow-x:auto'), 'Annex table container must support horizontal overflow where required');
 assert(css.includes('tbody { display:grid'), 'Annex rows must become readable cards on small screens');
 assert(css.includes('@media (max-width:640px)'), 'Annex layout must include mobile-specific rules');
+
+
+assert(js.includes("addEventListener('search', filterTables)"), 'Search input must also handle the native search/clear event');
+assert(js.includes('let tableHasMatch = query === \'\' || staticMatch'), 'Each annex table must track its own matching rows');
+assert(js.includes("wrapper.hidden = query !== '' && !tableHasMatch"), 'A non-matching table must not be hidden when another table in the same annex matches');
+assert(js.includes("filterInput.value = '';"), 'Clear action must reset the search input');
 
 console.log('Transfer annex search and responsive UI regression checks passed.');
